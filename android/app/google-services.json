@@ -1,0 +1,159 @@
+{
+  "project_info": {
+    "project_number": "192954205664",
+    "firebase_url": "https://eventevent-e6bf8.firebaseio.com",
+    "project_id": "eventevent-e6bf8",
+    "storage_bucket": "eventevent-e6bf8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192954205664:android:eb31198518882fd0",
+        "android_client_info": {
+          "package_name": "blabla.com.id"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192954205664-poefur3p1ssaevrl859r980vd48cjje0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDiAXxJg_gijrCw4bhcrEiINHYMh0VDdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192954205664-poefur3p1ssaevrl859r980vd48cjje0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "192954205664-bijm2c7k7kmueemlsdk3j5qksdoggsl2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.testing.eventaja"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192954205664:android:534f1b5abb1807d9",
+        "android_client_info": {
+          "package_name": "com.eventevent.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192954205664-l7ka0pdqj6755j1mqr1e3ch4ke8fn1ne.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eventevent.android",
+            "certificate_hash": "ed4942e8aa7e25889aa5328ed344f6ca0ba2ffec"
+          }
+        },
+        {
+          "client_id": "192954205664-oh5fldkr2nhjr2s4fvol2vp78e71hb0a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eventevent.android",
+            "certificate_hash": "8d0490fd3c94bf5738a81bcb9dc5ad81c518b0ce"
+          }
+        },
+        {
+          "client_id": "192954205664-in7mvk97iuojmt51hgc89ft59caov3f2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eventevent.android",
+            "certificate_hash": "bb55fb0a3320f83b7bb71c73a506b7b78a074579"
+          }
+        },
+        {
+          "client_id": "192954205664-26oqn7aekanbvb1d3o4vfvahvp2omaps.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eventevent.android",
+            "certificate_hash": "ed709be5bfe9f59b5093e340ca8e8abcaf27e650"
+          }
+        },
+        {
+          "client_id": "192954205664-poefur3p1ssaevrl859r980vd48cjje0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDiAXxJg_gijrCw4bhcrEiINHYMh0VDdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192954205664-poefur3p1ssaevrl859r980vd48cjje0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "192954205664-bijm2c7k7kmueemlsdk3j5qksdoggsl2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.testing.eventaja"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192954205664:android:cbc50316cc2b1443",
+        "android_client_info": {
+          "package_name": "com.eventevent2.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192954205664-3m8ncvg67b8lkqcecgrr4vgd1jo27fjo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eventevent2.android",
+            "certificate_hash": "ed4942e8aa7e25889aa5328ed344f6ca0ba2ffec"
+          }
+        },
+        {
+          "client_id": "192954205664-poefur3p1ssaevrl859r980vd48cjje0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDiAXxJg_gijrCw4bhcrEiINHYMh0VDdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192954205664-poefur3p1ssaevrl859r980vd48cjje0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "192954205664-bijm2c7k7kmueemlsdk3j5qksdoggsl2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.testing.eventaja"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

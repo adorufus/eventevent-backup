@@ -1,0 +1,367 @@
+import 'dart:convert';
+
+import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+class WaitingTransactionAlfamart extends StatefulWidget {
+  final String transactionID;
+  final String expDate;
+  final String paymentImage;
+
+  const WaitingTransactionAlfamart(
+      {Key key, this.transactionID, this.expDate, this.paymentImage})
+      : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _WaitingTransactionAlfamartState();
+  }
+}
+
+class _WaitingTransactionAlfamartState
+    extends State<WaitingTransactionAlfamart> {
+  String month;
+  String hour;
+  String min;
+  String sec;
+
+  DateTime dateTime;
+
+  Map<String, dynamic> paymentData;
+
+  void startCounter(String expired) {
+    int hoursStart, minuteStart, secondStart;
+    String strHour, strMinute, strSecond;
+
+    dateTime = DateTime.parse(expired);
+
+    hoursStart = dateTime.hour;
+    minuteStart = dateTime.minute;
+    secondStart = dateTime.second;
+
+    setState(() {
+      hour = hoursStart.toString();
+      min = minuteStart.toString();
+      sec = secondStart.toString();
+    });
+
+    print(hoursStart.toString() +
+        minuteStart.toString() +
+        secondStart.toString());
+
+    // timer = new CountdownTimer();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getTransactionDetails();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white.withOpacity(0.9),
+      bottomNavigationBar: GestureDetector(
+        onTap: (){
+          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SuccessPage()));
+        },
+        child: Container(
+          height: 50,
+          width: MediaQuery.of(context).size.width,
+          color: Colors.orangeAccent,
+          child: Text('test succes page'),
+        ),
+      ),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 1,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Icon(
+            Icons.close,
+            size: 35,
+            color: eventajaGreenTeal,
+          ),
+        ),
+      ),
+      body: paymentData == null
+          ? Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : ListView(
+              children: <Widget>[
+                Container(
+                  height: 459,
+                  color: Colors.white,
+                  padding: EdgeInsets.only(left: 25, right: 25, top: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 200,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: eventajaGreenTeal),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text('Complete Payment In',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold)),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text('${hour}',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  ':',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  '$min',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  ':',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  '$sec',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text('H',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20)),
+                                SizedBox(
+                                  width: 35,
+                                ),
+                                Text('M',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20)),
+                                SizedBox(
+                                  width: 35,
+                                ),
+                                Text('S',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20)),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'Complete payment before ',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                Text('${widget.expDate}',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold))
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'PAYMENT',
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.black45),
+                          ),
+                          SizedBox(height: 15),
+                          Text(
+                            'Rp. ' + paymentData['amount'] == null
+                                ? '-'
+                                : 'Rp. ' + paymentData['amount'],
+                            style: TextStyle(
+                                fontSize: 50, fontWeight: FontWeight.bold),
+                          ),
+                          Divider(height: 5, color: Colors.black),
+                          SizedBox(height: 15),
+                          Container(
+                              height: 50,
+                              width: 200,
+                              child: Image.network(
+                                  "https://home.eventeventapp.com/assets/landing/img/payment/" +
+                                      paymentData['payment']['icon'])),
+                          SizedBox(height: 5),
+                          Text(
+                            'Kode pembayaran Alfamart',
+                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 15),
+                          Text(paymentData['payment_vendor_code'],
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                howToTab()
+              ],
+            ),
+    );
+  }
+
+  Widget howToTab() {
+    return Container(
+      color: Colors.white,
+      child: DefaultTabController(
+        length: 2,
+        child: Column(
+          children: <Widget>[
+            TabBar(
+              tabs: <Widget>[Tab(text: 'BAHASA'), Tab(text: 'ENGLISH')],
+            ),
+            Container(
+              color: Colors.white.withOpacity(0.9),
+              height: MediaQuery.of(context).size.height,
+              child: TabBarView(children: <Widget>[
+                ListView(children: <Widget>[
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 15, right: 15, top: 15),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(HEADER_ID,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(height: 10),
+                          Text(
+                            ALFAMART_HOWTO_LINE1_ID +
+                                paymentData['payment_vendor_code'],
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          Text(ALFAMART_HOWTO_LINE2_ID)
+                        ]),
+                  )
+                ]),
+                Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: ListView(children: <Widget>[
+                      Padding(
+                          padding:
+                              EdgeInsets.only(left: 15, right: 15, top: 15),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(HEADER_EN,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                SizedBox(height: 10),
+                                Text(
+                                  ALFAMART_HOWTO_LINE1_EN +
+                                      paymentData['payment_vendor_code'],
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                                Text(ALFAMART_HOWTO_LINE2_EN)
+                              ]))
+                    ])),
+              ]),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future getTransactionDetails() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var session;
+
+    setState(() {
+      session = preferences.getString('Session');
+    });
+
+    String url = BaseApi().apiUrl +
+        '/ticket_transaction/detail?transID=${widget.transactionID}&X-API-KEY=${API_KEY}';
+    final response = await http.get(url,
+        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session});
+
+    print(response.body);
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      var extractedData = json.decode(response.body);
+      setState(() {
+        paymentData = extractedData['data'];
+        //startCounter(paymentData['expired_Date']);
+        print(paymentData);
+      });
+    }
+  }
+}

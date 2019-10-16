@@ -1,0 +1,584 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:eventevent/Widgets/RecycleableWidget/PostMedia.dart';
+import 'package:eventevent/Widgets/loginRegisterWidget.dart';
+import 'package:eventevent/Widgets/profileWidget.dart';
+import 'package:eventevent/Widgets/timeline/TimelineDashboard.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/FirebaseMessagingHelper.dart';
+import 'package:eventevent/helper/PushNotification.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'PostEvent/PostEvent.dart';
+import 'eventCatalogWidget.dart';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
+import 'package:google_places_picker/google_places_picker.dart';
+import 'package:eventevent/Widgets/RecycleableWidget/OpenCamera.dart';
+
+FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+String pushToken;
+var initializationSettingsAndroid;
+var initializationSettingsIOS;
+var initializationSettings;
+var scaffoldGlobalKey = GlobalKey<ScaffoldState>();
+
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
+  if (message.containsKey('data')) {
+    // Handle data message
+    final dynamic data = message['data'];
+  }
+
+  if (message.containsKey('notification')) {
+    // Handle notification message
+    final dynamic notification = message['notification'];
+  }
+
+  // Or do other work.
+}
+
+class DashboardWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _DashboardWidgetState();
+  }
+}
+
+class _DashboardWidgetState extends State<DashboardWidget>
+    with WidgetsBindingObserver {
+  int _selectedPage = 0;
+  String currentUserId;
+  GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  _saveCurrentRoute(String lastRoute) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.setString('LastScreenRoute', lastRoute);
+  }
+
+  getProfileData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      currentUserId = prefs.getString('Last User ID');
+    });
+  }
+
+  @override
+  void initState() {
+    _saveCurrentRoute('/Dashboard');
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+    _firebaseMessaging.getToken().then((token) {
+      print(token);
+      setState(() {
+        pushToken = token;
+      });
+    });
+
+    getProfileData();
+
+    print('push token: $pushToken');
+
+    _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+          print('on message $message');
+          print(message['notification']);
+        },
+        onBackgroundMessage: myBackgroundMessageHandler,
+        onResume: (Map<String, dynamic> message) async {
+          print('on resume $message');
+        },
+        onLaunch: (Map<String, dynamic> message) async {
+          print('on launch $message');
+        });
+    getPopup().then((response) {
+      var extractedData = json.decode(response.body);
+
+      // showDialog(
+      //     context: context,
+      //     builder: (BuildContext context) {
+      //       return GestureDetector(
+      //         onTap: () {
+      //           Navigator.pop(context);
+      //         },
+      //         child: Material(
+      //           color: Colors.transparent,
+      //           child: Center(
+      //             child: Container(
+      //               height: MediaQuery.of(context).size.height,
+      //               width: MediaQuery.of(context).size.width,
+      //               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 77),
+      //               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      //               decoration: BoxDecoration(
+      //                   color: Colors.white,
+      //                   borderRadius: BorderRadius.circular(10),
+      //                   image: DecorationImage(
+      //                       image: NetworkImage(
+      //                           'https://home.eventeventapp.com/photo_asset/5d663b08aebcb_popup.jpg'),
+      //                       fit: BoxFit.fill)),
+      //               child: GestureDetector(
+      //                 onTap: (){
+      //                   Navigator.pop(context);
+      //                 },
+      //                   child: Align(
+      //                 alignment: Alignment.topRight,
+      //                 child: Icon(
+      //                   Icons.close,
+      //                   color: Colors.white,
+      //                   size: 30,
+      //                 ),
+      //               )),
+      //             ),
+      //           ),
+      //         ),
+      //       );
+      //     });
+
+      if (response.statusCode == 200) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Material(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 77),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                              image:
+                                  NetworkImage(extractedData['data']['photo']),
+                              fit: BoxFit.fill)),
+                      child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          )),
+                    ),
+                  ),
+                ),
+              );
+            });
+      } else {
+        print(response.statusCode);
+        print(response.body);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print('state = $state');
+    super.didChangeAppLifecycleState(state);
+  }
+
+  Future<bool> _onWillPop() {
+    if (_selectedPage == 0) {
+      exit(0);
+    } else {
+      setState(() {
+        _selectedPage = 0;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _pageOptions = [
+      EventCatalog(),
+      TimelineDashboard(),
+      Container(),
+      PushNotification(),
+      ProfileWidget(
+        initialIndex: 0,
+        userId: currentUserId,
+      ),
+    ];
+
+    return SafeArea(
+      child: WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          resizeToAvoidBottomPadding: false,
+          // appBar: AppBar(
+          //   leading: ,
+          // ),
+          key: scaffoldKey,
+          backgroundColor: Colors.grey[100],
+          bottomNavigationBar: SafeArea(
+            bottom: true,
+            child: CupertinoTabBar(
+                currentIndex: _selectedPage,
+                onTap: (int index) {
+                  setState(() {
+                    if (index == 2) {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                            color: Color(0xFF737373),
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                  top: 13, left: 25, right: 25, bottom: 30),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(15),
+                                    topRight: Radius.circular(15),
+                                  )),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 50),
+                                      child: SizedBox(
+                                          height: 5,
+                                          width: 50,
+                                          child: Image.asset(
+                                            'assets/icons/icon_line.png',
+                                            fit: BoxFit.fill,
+                                          ))),
+                                  SizedBox(height: 35),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  PostEvent()));
+                                    },
+                                    child: Container(
+                                      color: Colors.white,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                'New Event',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(height: 5),
+                                              Text(
+                                                'Create & sell your own event',
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          Container(
+                                            height: 44,
+                                            width: 50,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: AssetImage(
+                                                        'assets/icons/page_post_event.png'),
+                                                    fit: BoxFit.fill),
+                                                borderRadius: BorderRadius.circular(11),
+                                                boxShadow: <BoxShadow>[
+                                                  BoxShadow(
+                                                      blurRadius: 10,
+                                                      color: Colors.grey
+                                                          .withOpacity(0.3),
+                                                      spreadRadius: .5)
+                                                ]),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 19),
+                                  Divider(),
+                                  SizedBox(height: 16),
+                                  GestureDetector(
+                                    onTap: () {
+                                      // imageCaputreCamera();
+                                      Navigator.of(context)
+                                          .pushNamed('/CustomCamera');
+                                    },
+                                    child: Container(
+                                      color: Colors.white,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                'Post Media',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(height: 4),
+                                              Text(
+                                                  'Share your excitement to the others ',
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                  ))
+                                            ],
+                                          ),
+                                          Container(
+                                            height: 44,
+                                            width: 50,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: AssetImage(
+                                                        'assets/icons/page_post_media.png'),
+                                                    fit: BoxFit.fill),
+                                                borderRadius: BorderRadius.circular(11),
+                                                boxShadow: <BoxShadow>[
+                                                  BoxShadow(
+                                                      blurRadius: 10,
+                                                      color: Colors.grey
+                                                          .withOpacity(0.3),
+                                                      spreadRadius: .5)
+                                                ]),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        elevation: 1,
+                      );
+                    } else {
+                      _selectedPage = index;
+                    }
+                  });
+                },
+                items: <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                      title: Text(
+                        'Discover',
+                        style: TextStyle(color: Colors.black26, fontSize: 10),
+                      ),
+                      icon: Image.asset("assets/icons/aset_icon/eventevent.png",
+                          height: 25, width: 25),
+                      activeIcon: Image.asset(
+                        "assets/icons/aset_icon/eventevent.png",
+                        height: 25,
+                        width: 25,
+                        color: eventajaGreenTeal,
+                      )),
+                  BottomNavigationBarItem(
+                      title: Text(
+                        'Timeline',
+                        style: TextStyle(color: Colors.black26, fontSize: 10),
+                      ),
+                      icon: Image.asset(
+                        "assets/icons/aset_icon/timeline.png",
+                        height: 25,
+                        width: 25,
+                      ),
+                      activeIcon: Image.asset(
+                        "assets/icons/aset_icon/timeline.png",
+                        height: 25,
+                        width: 25,
+                        color: eventajaGreenTeal,
+                      )),
+                  BottomNavigationBarItem(
+                      title: Text(
+                        'Post',
+                        style: TextStyle(color: Colors.black26, fontSize: 10),
+                      ),
+                      icon: Image.asset("assets/icons/aset_icon/post.png",
+                          height: 25, width: 25),
+                      activeIcon: Image.asset(
+                        "assets/icons/aset_icon/post.png",
+                        height: 25,
+                        width: 25,
+                        color: eventajaGreenTeal,
+                      )),
+                  BottomNavigationBarItem(
+                    title: Text(
+                      'Notification',
+                      style: TextStyle(color: Colors.black26, fontSize: 10),
+                    ),
+                    icon: Image.asset("assets/icons/aset_icon/notif.png",
+                        height: 25, width: 25),
+                    activeIcon: Image.asset(
+                      "assets/icons/aset_icon/notif.png",
+                      height: 25,
+                      width: 25,
+                      color: eventajaGreenTeal,
+                    ),
+                  ),
+                  BottomNavigationBarItem(
+                    title: Text(
+                      'Profile',
+                      style: TextStyle(color: Colors.black26, fontSize: 10),
+                    ),
+                    icon: Image.asset("assets/icons/aset_icon/profile.png",
+                        height: 25, width: 25),
+                    activeIcon: Image.asset(
+                      "assets/icons/aset_icon/profile.png",
+                      height: 25,
+                      width: 25,
+                      color: eventajaGreenTeal,
+                    ),
+                  )
+                ]),
+          ),
+          body: _pageOptions[_selectedPage],
+        ),
+      ),
+    );
+  }
+
+  Future<http.Response> getPopup() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String url = BaseApi().apiUrl + '/announcement?X-API-KEY=$API_KEY';
+
+    final response = await http.get(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session')
+    });
+
+    return response;
+  }
+
+  void imageCaputreCamera() async {
+    var galleryFile = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+    );
+
+    print(galleryFile.path);
+    cropImage(galleryFile);
+  }
+
+  Future<Null> cropImage(File image) async {
+    File croppedImage = await ImageCropper.cropImage(
+      sourcePath: image.path,
+      ratioX: 2.0,
+      ratioY: 3.0,
+      maxHeight: 512,
+      maxWidth: 512,
+    );
+
+    print(croppedImage.path);
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => PostMedia(
+                  imagePath: croppedImage,
+                )));
+  }
+
+  void initLocalNotification() {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        new FlutterLocalNotificationsPlugin();
+    initializationSettingsAndroid =
+        new AndroidInitializationSettings('app_icon');
+    initializationSettingsIOS =
+        new IOSInitializationSettings(defaultPresentBadge: true);
+    initializationSettings = new InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
+  }
+
+  Future<void> onSelectNotification(String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: ' + payload);
+    }
+  }
+
+  Future<void> _showNotification(String title, String body,
+      {String payload}) async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'channel id', 'channel name', 'channel desc',
+        importance: Importance.Max, priority: Priority.High);
+    var iosPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iosPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin
+        .show(0, title, body, platformChannelSpecifics, payload: 'item x');
+  }
+
+  Future saveDeviceToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url = BaseApi().apiUrl + 'device/token';
+
+    final response = await http.post(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session')
+    }, body: {
+      'X-API-KEY': API_KEY,
+      'token': pushToken
+    });
+
+    print(response.statusCode);
+    print(response.body);
+    print(prefs.getKeys());
+  }
+
+  settingBottomSheet() {
+    showModalBottomSheet<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return new Container(
+            child: Wrap(
+              children: <Widget>[
+                new ListTile(
+                  leading: new Icon(
+                    Icons.add_circle_outline,
+                    color: eventajaGreenTeal,
+                  ),
+                )
+              ],
+            ),
+          );
+        });
+  }
+}

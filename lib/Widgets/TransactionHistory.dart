@@ -1,0 +1,170 @@
+import 'dart:convert';
+
+import 'package:eventevent/Widgets/RecycleableWidget/WaitTransaction.dart';
+import 'package:eventevent/Widgets/Transaction/ExpiredPage.dart';
+import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
+import 'package:eventevent/Widgets/notification/TransactionHistoryItem.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+class TransactionHistory extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return TransactionHistoryState();
+  }
+}
+
+class TransactionHistoryState extends State<TransactionHistory> {
+  List transactionList = [];
+  Color paymentStatusColor;
+  String paymentStatusText;
+
+  @override
+  void initState() {
+    if(!mounted){
+      return;
+    }
+    else{
+      getTransactionHistory();
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: Container(
+            child: AppBar(
+              elevation: 0,
+              backgroundColor: Colors.white,
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 13.0),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 15.49,
+                        width: 9.73,
+                        child: Image.asset(
+                          'assets/icons/icon_apps/arrow.png',
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              centerTitle: true,
+              title: Text(
+                'Transaction History',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              ),
+            ),
+          )),
+      body: transactionList == null
+          ? Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: ListView.builder(
+                itemCount:
+                    transactionList.length == null ? 0 : transactionList.length,
+                itemBuilder: (BuildContext context, i) {
+                  if (transactionList[i]['status_transaksi'] == 'completed') {
+                    paymentStatusColor = eventajaGreenTeal;
+                    paymentStatusText = 'Payment Success';
+                  } else if (transactionList[i]['status_transaksi'] ==
+                      'expired') {
+                    paymentStatusColor = Colors.red[500];
+                    paymentStatusText = 'Transaction Expired';
+                  } else if (transactionList[i]['status_transaksi'] ==
+                      'pending') {
+                    paymentStatusColor = Colors.yellow[600];
+                    paymentStatusText = 'Waiting for payment';
+                  }
+
+                  return GestureDetector(
+                      onTap: () {
+                        if (transactionList[i]['status_transaksi'] ==
+                            'pending') {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      WaitTransaction(
+                                        transactionID: transactionList[i]['id'],
+                                        expDate: transactionList[i]
+                                            ['expired_time'],
+                                        finalPrice: transactionList[i]
+                                            ['amount'],
+                                      )));
+                        } else if (transactionList[i]['status_transaksi'] ==
+                            'completed') {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      SuccessPage()));
+                        } else if (transactionList[i]['status_transaksi'] ==
+                            'expired') {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ExpiredPage()));
+                        }
+                      },
+                      child: TransactionHistoryItem(
+                        image: transactionList[i]['ticket_image']['secure_url'],
+                        ticketCode: transactionList[i]['transaction_code'],
+                        ticketName: transactionList[i]['ticket']['ticket_name'],
+                        ticketStatus: paymentStatusText,
+                        ticketColor: paymentStatusColor,
+                        quantity: transactionList[i]['quantity'],
+                        timeStart: transactionList[i]['updated_at'],
+                        price: transactionList[i]['amount'],
+                      ));
+                },
+              ),
+            ),
+    );
+  }
+
+  Future getTransactionHistory() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url =
+        BaseApi().apiUrl + '/ticket_transaction/list?X-API-KEY=$API_KEY&page=1';
+
+    final response = await http.get(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session')
+    });
+
+    print(response.statusCode);
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      setState(() {
+        var extractedData = json.decode(response.body);
+
+        transactionList = extractedData['data'];
+        print(transactionList);
+      });
+    }
+  }
+}

@@ -1,0 +1,397 @@
+import 'dart:convert';
+import 'dart:math' as math;
+
+import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+class PaymentBCA extends StatefulWidget {
+  final expDate;
+  final transactionID;
+
+  const PaymentBCA({Key key, this.transactionID, this.expDate})
+      : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return PaymentBcaState();
+  }
+}
+
+class PaymentBcaState extends State<PaymentBCA> {
+
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  String month;
+  String hour;
+  String min;
+  String sec;
+  String finalAmount;
+  String firstAmount;
+  String uniqueAmount;
+
+  String bank_number;
+  String bank_code;
+  String bank_acc;
+  String imageUriBank;
+
+  Text finalPriceString;
+
+  DateTime dateTime;
+  Map<String, dynamic> paymentData;
+
+  void startCounter(String expired) {
+    int hoursStart, minuteStart, secondStart;
+    String strHour, strMinute, strSecond;
+
+    dateTime = DateTime.parse(expired);
+
+    hoursStart = dateTime.hour;
+    minuteStart = dateTime.minute;
+    secondStart = dateTime.second;
+
+    setState(() {
+      hour = hoursStart.toString();
+      min = minuteStart.toString();
+      sec = secondStart.toString();
+    });
+
+    print(hoursStart.toString() +
+        minuteStart.toString() +
+        secondStart.toString());
+
+    // timer = new CountdownTimer();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPaymentData();
+    //getFinalAmount();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Icon(
+            Icons.close,
+            size: 35,
+            color: eventajaGreenTeal,
+          ),
+        ),
+      ),
+      body: paymentData == null
+          ? Container(
+              child: Center(child: CircularProgressIndicator()),
+            )
+          : Container(
+              height: MediaQuery.of(context).size.height,
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 200,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: eventajaGreenTeal),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text('Complete Payment In',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold)),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text('${hour}',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold)),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              ':',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              '$min',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              ':',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              '$sec',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text('H',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20)),
+                            SizedBox(
+                              width: 35,
+                            ),
+                            Text('M',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20)),
+                            SizedBox(
+                              width: 35,
+                            ),
+                            Text('S',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20)),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              'Complete payment before ',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            Text('${widget.expDate}',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold))
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'TRANSFER AMOUNT',
+                        style: TextStyle(fontSize: 20, color: Colors.black45),
+                      ),
+                      SizedBox(height: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Rp. ' + firstAmount + ',',
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
+                          ),
+                          Text(uniqueAmount, style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold)),
+                          Text(
+                            ',-',
+                            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 15),
+                      Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          margin: EdgeInsets.symmetric(horizontal: 0),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Center(
+                              child: Text(
+                            'IMPORTANT! Please transfer until the last 3 digits',
+                            style: TextStyle(color: Colors.white),
+                          ))),
+                      SizedBox(height: 15),
+                      Text(
+                        'Eventevent will automatically check your payment. It may take up to 1 hour to process',
+                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text('TRANSFER KE'),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Clipboard.setData(ClipboardData(text: bank_number));
+                            print(Clipboard.getData('text/plain'));
+                            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content: Text('Text Coppied!'),
+                            ));
+                        },
+                        child: Container(
+                          height: 100,
+                          margin: EdgeInsets.all(10),
+                          padding: EdgeInsets.only(
+                              left: 15, right: 7, top: 10, bottom: 10),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 1,
+                                    offset: Offset(1, 1))
+                              ],
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: SizedBox(
+                                  height: 20,
+                                  child: Image.asset('assets/drawable/bca.png'),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      bank_acc,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Colors.black54,),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(bank_code.toUpperCase(),
+                                        style: TextStyle(color: Colors.grey)),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      bank_number,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          color: Colors.black54),
+                                    ),
+                                  ])
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+    );
+  }
+
+  Future getPaymentData() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    String session;
+
+    setState(() {
+      session = preferences.getString('Session');
+    });
+
+    String url = BaseApi().apiUrl +
+        '/ticket_transaction/detail?transID=${widget.transactionID}&X-API-KEY=${API_KEY}';
+    final response = await http.get(url,
+        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session});
+
+    print(response.body);
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      var extractedData = json.decode(response.body);
+      setState(() {
+        paymentData = extractedData['data'];
+        startCounter(paymentData['expired_time']);
+        print(paymentData);
+
+        bank_number = paymentData['payment']['data_vendor']['account_number'];
+        bank_acc = paymentData['payment']['data_vendor']['account_name'];
+        bank_code = paymentData['payment']['vendor'];
+        imageUriBank = paymentData['payment']['data_vendor']['icon'];
+
+        int firstPrice = int.parse(paymentData['amount_detail']['total_price']);
+        int uniqueCode =
+            int.parse(paymentData['amount_detail']['unique_amount']);
+        finalAmount = (firstPrice + uniqueCode).toString();
+
+        firstAmount = finalAmount.substring(0, finalAmount.length - 3);
+          uniqueAmount = finalAmount.substring(finalAmount.length - 3, finalAmount.length);
+          print(firstAmount + uniqueAmount);
+
+        print(finalAmount);
+        
+      });
+    }
+  }
+
+  String get timerString {
+    Duration duration = new Duration(hours: 60, minutes: 10, seconds: 5);
+    return '${duration.inHours}:${duration.inMinutes % 60}:${duration.inSeconds % 60}'
+        .toString()
+        .padLeft(2, '0');
+  }
+}

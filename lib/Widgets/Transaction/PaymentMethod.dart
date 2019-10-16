@@ -1,0 +1,232 @@
+import 'dart:convert';
+
+import 'package:eventevent/Widgets/Transaction/Xendit/TicketReview.dart';
+import 'package:eventevent/Widgets/Transaction/Xendit/vaList.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flutter/material.dart';
+
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'Alfamart/WaitingTransactionAlfamart.dart';
+
+class PaymentMethod extends StatefulWidget {
+  
+
+  @override
+  State<StatefulWidget> createState() {
+    return PaymentMethodState();
+  }
+}
+
+class PaymentMethodState extends State<PaymentMethod> {
+  List paymentMethodList;
+
+  String paymentAmount = '0';
+
+  Future getPaymentData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String data = prefs.getString('ticket_price_total');
+    setState(() {
+      paymentAmount = data;
+    });
+
+    print(paymentAmount);
+  }
+
+  savePaymentInfo(String fee, String methodID, {String paymentCode}) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setString('ticket_fee', fee);
+    prefs.setString('payment_method_id', methodID);
+    prefs.setString('payment_code', paymentCode);
+  }
+
+  @override
+  void initState() {
+    getPaymentData();
+    super.initState();
+    getPaymentMethod();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: eventajaGreenTeal,
+              size: 40,
+            )),
+        centerTitle: true,
+        title: Text('PAYMENT', style: TextStyle(color: eventajaGreenTeal)),
+      ),
+      body: ListView(
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 100,
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text('Transfer Amount'.toUpperCase(),
+                        style: TextStyle(fontSize: 20, color: Colors.grey)),
+                    SizedBox(height: 20),
+                    Text('Rp. $paymentAmount',
+                        style: TextStyle(
+                            fontSize: 35, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+              paymentMethodList == null
+                  ? CircularProgressIndicator()
+                  : Container(
+                      height: MediaQuery.of(context).size.height * 1.5,
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: paymentMethodList == null
+                            ? 0
+                            : paymentMethodList.length,
+                        itemBuilder: (BuildContext context, i) {
+                          return GestureDetector(
+                            onTap: (){
+                              if(paymentMethodList[i]['vendor'] == 'xendit'.toLowerCase()){
+                                savePaymentInfo(paymentMethodList[i]['fee'], paymentMethodList[i]['id']);
+                                print(paymentMethodList[i]['id']);
+                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext contex) => VirtualAccountListWidget()));
+                              }
+                              else if(paymentMethodList[i]['id'] == '3'){
+                                savePaymentInfo(paymentMethodList[i]['fee'], paymentMethodList[i]['id']);
+                                print(paymentMethodList[i]['id']);
+                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TicketReview()));
+                              }
+                              else if(paymentMethodList[i]['vendor'] == 'midtrans'.toLowerCase()){
+                                if(paymentMethodList[i]['id'] == '1'){
+                                  savePaymentInfo(paymentMethodList[i]['fee'], paymentMethodList[i]['id']);
+                                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TicketReview()));
+                                }
+                                else if(paymentMethodList[i]['id'] == '5'){
+                                  savePaymentInfo(paymentMethodList[i]['fee'], paymentMethodList[i]['id']);
+                                  print('payment method used: ' + paymentMethodList[i]['id']);
+                                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TicketReview()));
+                                }
+                                else if(paymentMethodList[i]['id'] == '4'){
+                                  savePaymentInfo(paymentMethodList[i]['fee'], paymentMethodList[i]['id']);
+                                  print('payment method used: ' + paymentMethodList[i]['id']);
+                                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TicketReview()));
+                                }
+                              }
+                              else if(paymentMethodList[i]['id'] == '7'){
+                                  savePaymentInfo(paymentMethodList[i]['fee'], paymentMethodList[i]['id']);
+                                  print('payment method used: ' + paymentMethodList[i]['id']);
+                                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TicketReview()));
+                                }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      paymentMethodList[i]['method'] == null
+                                          ? ''
+                                          : paymentMethodList[i]['method'],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 80,
+                                    width: MediaQuery.of(context).size.width,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: SizedBox(
+                                              child: Image(
+                                            image: paymentMethodList[i]
+                                                        ['photo'] ==
+                                                    null
+                                                ? AssetImage('assets/white.png')
+                                                : NetworkImage(
+                                                    paymentMethodList[i]
+                                                        ['photo']),
+                                            width: 250,
+                                          )),
+                                        ),
+                                        SizedBox(
+                                          width: 50,
+                                        ),
+                                        Icon(
+                                          Icons.navigate_next,
+                                          color: Colors.black,
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Future getPaymentMethod() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var session;
+    setState(() {
+      session = preferences.getString('Session');
+    });
+
+    String paymentMethodURI = BaseApi().apiUrl +
+        '/payment_method/list?X-API-KEY=${API_KEY}&indomaret=true';
+
+    final response = await http.get(paymentMethodURI,
+        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session}).timeout(Duration(seconds: 30));
+
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      setState(() {
+        var extractedData = json.decode(response.body);
+        paymentMethodList = extractedData['data'];
+      });
+    }
+  }
+
+  Future getMidtransFee() async {
+    
+  }
+}

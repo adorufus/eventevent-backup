@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
+
+class MediaPlayer extends StatefulWidget {
+  final videoUri;
+
+  const MediaPlayer({Key key, this.videoUri}) : super(key: key);
+
+  @override
+  _MediaPlayerState createState() => _MediaPlayerState();
+}
+
+class _MediaPlayerState extends State<MediaPlayer> {
+  VideoPlayerController _controller;
+  ChewieController chewieController;
+
+  Future<void> _initializeVideoPlayerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.network(widget.videoUri)
+      ..initialize().then((_) {
+        setState(() {});
+      });
+
+      chewieController = ChewieController(
+        videoPlayerController: _controller,
+        aspectRatio: 3 / 2,
+        autoPlay: true,
+        looping: false,
+        fullScreenByDefault: true,
+      );
+
+      _initializeVideoPlayerFuture = _controller.initialize();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Center(
+            child: Chewie(
+              controller: chewieController,
+            )),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     setState(() {
+        //       _controller.value.isPlaying
+        //           ? _controller.pause()
+        //           : _controller.play();
+        //     });
+        //   },
+        //   child: Icon(
+        //     _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+        //   ),
+        // ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+}

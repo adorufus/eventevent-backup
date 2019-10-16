@@ -1,0 +1,404 @@
+import 'dart:convert';
+
+import 'package:eventevent/Widgets/Transaction/PaymentMethod.dart';
+import 'package:eventevent/Widgets/Transaction/Xendit/TicketReview.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/ColumnBuilder.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+class TransactionForm extends StatefulWidget {
+  final eventID;
+  final ticketType;
+
+  const TransactionForm({Key key, this.eventID, this.ticketType}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _TransactionFormState();
+  }
+}
+
+class _TransactionFormState extends State<TransactionForm> {
+  Map<String, dynamic> formData;
+  Map<String, dynamic> customFormData;
+  List customFormList;
+
+  String firstname;
+  String lastname;
+  String email;
+  String phone;
+
+  bool isRequired;
+
+  TextEditingController firstnameController;
+  TextEditingController lastnameController;
+  TextEditingController emailController;
+  TextEditingController phoneController;
+  TextEditingController aditionalNotesController;
+
+  Future getFormData() async {
+    var cookie;
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    setState(() {
+      cookie = preferences.getString('Session');
+    });
+
+    var formDataAPI =
+        BaseApi().apiUrl + '/form_filling/user?X-API-KEY=' + API_KEY;
+    final response = await http.get(formDataAPI,
+        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': cookie});
+
+    print(response.body);
+    if (response.statusCode == 200) {
+      setState(() {
+        var extractedData = json.decode(response.body);
+        formData = extractedData['data'];
+        preferences.setString('firstname', formData['firstname']);
+        preferences.setString('lastname', formData['lastname']);
+        preferences.setString('email', formData['email']);
+        preferences.setString('phone', formData['phone']);
+        firstname = preferences.getString('firstname');
+        lastname = preferences.getString('lastname');
+        email = preferences.getString('email');
+        phone = preferences.getString('phone');
+        firstnameController.text = firstname;
+        lastnameController.text = lastname;
+        emailController.text = email;
+        phoneController.text = phone;
+        print(firstname + lastname + email + phone);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getFormData();
+    getCustomForm();
+    firstnameController = TextEditingController();
+    lastnameController = TextEditingController();
+    emailController = TextEditingController();
+    phoneController = TextEditingController();
+    aditionalNotesController = TextEditingController();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return formData == null
+        ? Container(
+            child: Center(child: CircularProgressIndicator()),
+          )
+        : Scaffold(
+            bottomNavigationBar: GestureDetector(
+              onTap: (){
+                saveInput();
+                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => widget.ticketType == 'free_limited' ? TicketReview(ticketType: widget.ticketType) : PaymentMethod()));
+              },
+              child: Container(
+                  height: 50,
+                  color: Colors.deepOrangeAccent,
+                  child: Center(
+                    child: Text(
+                      'OK',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  )),
+            ),
+            appBar: AppBar(
+              elevation: 1,
+              backgroundColor: Colors.white,
+              leading: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: eventajaGreenTeal,
+                  size: 30,
+                ),
+              ),
+              centerTitle: true,
+              title: Text(
+                'ABOUT YOU',
+                style: TextStyle(color: eventajaGreenTeal),
+              ),
+            ),
+            body: Container(
+              color: Colors.black.withOpacity(0.05),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: ListView(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.all(15),
+                    child: Text(
+                      'Tell us about yourself, these information will be useful for connecting event organisers and attendees.',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'First Name',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          TextFormField(
+                            controller: firstnameController,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Put your first name...'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Last Name',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          TextFormField(
+                            controller: lastnameController,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Put your last name...'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'E-mail',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          TextFormField(
+                            controller: emailController,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Put your e-mail'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Phone Number',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          TextFormField(
+                            controller: phoneController,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: '(e.g. 0818123456)'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Aditional Notes',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          TextFormField(
+                            controller: aditionalNotesController,
+                            keyboardType: TextInputType.multiline,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintMaxLines: 100,
+                                hintText:
+                                    'Additional notes for event organizer... Example: Please find the best seat for me.'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  customFormData['status'] == null ? Container() : customForm()
+                ],
+              ),
+            ),
+          );
+  }
+
+  Widget customForm(){
+    if(customFormData['status'] == 'OK' && customFormData['data']['isCustomForm'] == '1'){
+      return ColumnBuilder(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        itemCount: customFormList == null ? 0 : customFormList.length,
+        itemBuilder: (BuildContext context, i){
+          if(customFormList[i]['isRequired'] == "1"){
+            isRequired = true;
+          }
+          else{
+            isRequired = false;
+          }
+
+          return customFormList == null ? Container() : Container(
+            margin: EdgeInsets.only(bottom: 30),
+            padding: EdgeInsets.all(15),
+            alignment: Alignment.centerLeft,
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget> [
+                  Row(
+                    children: <Widget> [
+                      isRequired == false ? Container() : Text('*', style: TextStyle(color: Colors.red, fontSize: 20)),
+                      SizedBox(width: 5),
+                      Text(customFormList[i]['name'] == null ? '' : customFormList[i]['name'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+                    ]
+                  ),
+                  formType(i)
+                ]
+              ),
+          );
+        },
+      );
+    }
+    // else if(customFormData['status'] == ['NOK']){
+    //   return Container();
+    // }
+
+    return Container();
+  }
+
+  int _radioValue = 0;
+
+  Widget formType(int index){
+    if(customFormList[index]['type'] == '2'){
+      return ColumnBuilder(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        itemCount: customFormList[index]['option'] == null ? 0 : customFormList[index]['option'].length,
+        itemBuilder: (BuildContext context, i){
+          return Row(
+            children: <Widget> [
+              Radio(
+                value: int.parse(customFormList[index]['option'][i]['order']),
+                groupValue: _radioValue,
+                onChanged: (int i) => setState(() => _radioValue = i)
+              ),
+              Text(customFormList[index]['option'][i]['name'])
+            ]
+          );
+        }
+      );
+    }
+    else if(customFormList[index]['type'] == '1'){
+      return TextFormField(
+                            controller: aditionalNotesController,
+                            keyboardType: TextInputType.multiline,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintMaxLines: 100,
+                                hintText:
+                                    'Put your answers....'),
+                          );
+    }
+  }
+
+  Future saveInput() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    preferences.setString('ticket_about_firstname', firstnameController.text);
+    preferences.setString('ticket_about_lastname', lastnameController.text);
+    preferences.setString('ticket_about_email', emailController.text);
+    preferences.setString('ticket_about_phone', phoneController.text);
+    preferences.setString(
+        'ticket_about_aditional', aditionalNotesController.text);
+
+    print(preferences.getString('ticket_about_firstname'));
+    print(preferences.getString('ticket_about_lastname'));
+    print(preferences.getString('ticket_about_email'));
+    print(preferences.getString('ticket_about_phone'));
+    print(preferences.getString('ticket_about_aditional'));
+  }
+
+  Future getCustomForm() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var session;
+    setState(() {
+     session = preferences.getString('Session'); 
+    });
+
+    String customFormURI = BaseApi().apiUrl + '/custom_form/get?X-API-KEY=${API_KEY}&id=' + preferences.getString('eventID');
+    print(customFormURI.toString());
+    final response = await http.get(customFormURI, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': session
+    });
+
+    print(response.body);
+
+    if(response.statusCode == 200){
+      setState(() {
+       var extractedData = json.decode(response.body);
+       customFormData = json.decode(response.body);
+       customFormList = extractedData['data']['question'];
+
+       
+      });
+    }
+    else if(response.statusCode == 400){
+      setState((){
+        customFormData = json.decode(response.body);
+      });
+    }
+  }
+}

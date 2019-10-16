@@ -1,0 +1,7 @@
+<resources>
+    <string name = "app_name"> EventEvent </string>
+    <string name="facebook_app_id">482210258650577</string>
+    <string name="fb_login_protocol_scheme"> fb482210258650577 </string>
+    <string name="clevertap_id">WR9-Z48-7Z5Z</string>
+    <string name="clevertap_token">b41-c20</string>
+</resources>

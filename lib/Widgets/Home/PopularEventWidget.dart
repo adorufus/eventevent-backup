@@ -1,0 +1,108 @@
+import 'package:eventevent/Widgets/Home/MiniDate.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flutter/material.dart';
+
+class PopularEventWidget extends StatelessWidget {
+  final imageUrl;
+  final title;
+  final location;
+  final String price;
+  final Color color;
+  final type;
+  final isAvailable;
+
+  const PopularEventWidget(
+      {Key key, this.imageUrl, this.title, this.location, this.price, this.color, this.type, this.isAvailable})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    print(MediaQuery.of(context).size.width);
+    return Stack(
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(left: 13, top: 8, bottom: 8, right: 3),
+          width: 133,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 2,
+                    spreadRadius: 1.5)
+              ]),
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: 199.5,
+                decoration: BoxDecoration(
+                    color: Color(0xFFB5B5B5),
+                    image: DecorationImage(
+                        image: NetworkImage(imageUrl), fit: BoxFit.fill),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
+                    )),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 7, top: 20),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                        width: 133,
+                        child: Text(
+                          title,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        )),
+                    SizedBox(height: 4),
+                    Row(
+                      children: <Widget>[
+                        Image.asset(
+                          'assets/icons/icon_apps/location.png',
+                          scale: 7,
+                        ),
+                        SizedBox(width: 3),
+                        Container(
+                          width: 112,
+                          child: Text(location,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontSize: 13)),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 11),
+              Container(
+                  height: 28,
+                  width: 133,
+                  decoration: BoxDecoration(
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: color.withOpacity(0.4),
+                        blurRadius: 2,
+                        spreadRadius: 1.5
+                      )
+                    ],
+                      color: color,
+                      borderRadius: BorderRadius.circular(15)),
+                      child: Center(
+                        child: Text(type == 'paid' || type == 'paid_seating' ? isAvailable == '1' ? 'Rp. ' + price.toUpperCase() + ',-' : price.toUpperCase() : price.toUpperCase() , style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),)
+                      ),
+                ),
+            ],
+          ),
+        ),
+        Positioned(
+          top: 194,
+          left: 21,
+          child: MiniDate(),
+        ),
+      ],
+    );
+  }
+}
