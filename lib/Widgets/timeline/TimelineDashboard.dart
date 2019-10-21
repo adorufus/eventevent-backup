@@ -5,6 +5,7 @@ import 'package:eventevent/Widgets/timeline/LatestMediaItem.dart';
 import 'package:eventevent/Widgets/timeline/MediaDetails.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/SeeAllMediaItem.dart';
+import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:eventevent/Widgets/timeline/popularMediaItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -65,6 +66,8 @@ class TimelineDashboardState extends State<TimelineDashboard> {
       print(response.statusCode);
       print(response.body);
       var extractedData = json.decode(response.body);
+
+      print('Timeline List -> ${response.body.toString()}');
 
       if (response.statusCode == 200) {
         setState(() {
@@ -766,17 +769,47 @@ class TimelineDashboardState extends State<TimelineDashboard> {
           List impressions = new List();
           bool isLiked;
 
-          for(i = 0; i < impressionList.length; i++){
-            if(impressionList != null){
-              impressions.addAll(impressionList);
-              print(impressions);
-              if(impressions.contains({'userID': currentUserId})){
-                isLiked = true;
-              }else{
+//          for(i = 0; i < impressionList.length; i++){
+//            if(impressionList != null){
+//              impressions = impressionList;
+//              print('impressions: ' + impressions.toString());
+//              if(impressions.contains({'userID': currentUserId})){
+//                isLiked = true;
+//              }else{
+//                isLiked = false;
+//              }
+//            }
+//          }
+//          print(timelineList);
+//          print(impressionList);
+
+//          Map impressionLists = Map.fromIterable(impressionList);
+//          print('impression map: ' + impressionLists.toString());
+//          print('userID map: ' + impressionLists['data'].toString());
+
+
+            for(int i = 0; i < impressionList.length; i++ ){
+              List impression = impressionList;
+
+              print(impression);
+
+              if(impression != null){
+                if(impression[i]['userID'].contains(currentUserId)){
+                  isLiked = false;
+                  print('not yet liked');
+                }
+                else{
+                  isLiked = true;
+                  print('you already liked');
+                }
+              }
+              else{
                 isLiked = false;
               }
             }
-          }
+
+
+
 
           return Container(
               margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
@@ -895,7 +928,12 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                                 timelineList[i]['type'] == 'eventgoing'
                             ? GestureDetector(
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => MediaPlayer(videoUri: timelineList[i]['pictureFull'])));
+                                if(timelineList[i]['type'] == 'photo'){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserMediaDetail(postID: timelineList[i]['id'], imageUri: timelineList[i]['pictureFull'], articleDetail: timelineList[i]['description'], mediaTitle: timelineList[i]['description'], autoFocus: false, username: timelineList[i]['fullName'], userPicture: timelineList[i]['photo'], imageCount: 1,)));
+                                }
+                                else{
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => MediaPlayer(videoUri: timelineList[i]['pictureFull'])));
+                                }
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -1013,17 +1051,57 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                         children: <Widget>[
                           GestureDetector(
                             onTap: (){
-                              if (isLiked == false) {
-                                    doLove(timelineList[i]['id'], '5').then((response){
-                                      print(response.statusCode);
-                                      print(response.body);
-                                      setState((){});
-                                    });
-                                    isLiked = true;
-                                  } else {
-                                    print('unloved');
+//                              for(int i = 0; i < impressionList.length; i++ ){
+//                                List impression = impressionList;
+//
+//                                if(impression[i]['userID'].contains(currentUserId)){
+//                                  isLiked = false;
+//                                  print('not yet liked');
+//                                }
+//                                else{
+//                                  isLiked = true;
+//                                  print('you already liked');
+//                                }
+//                              }
+
+                              if(timelineList[i]['impression']['data'] == null){
+                                isLiked = false;
+                                for(int i = 0; i < impressionList.length; i++ ){
+                                  List impression = impressionList;
+
+                                  if(impression[i]['userID'].contains(currentUserId)){
                                     isLiked = false;
+                                    print('not yet liked');
                                   }
+                                  else{
+                                    isLiked = true;
+                                    print('you already liked');
+                                  }
+                                }
+                              }
+                              else{
+                                for(int i = 0; i < impressionList.length; i++ ){
+                                  List impression = impressionList;
+
+                                  if(impression[i]['userID'].contains(currentUserId)){
+                                    isLiked = false;
+                                    print('not yet liked');
+                                  }
+                                  else{
+                                    isLiked = true;
+                                    print('you already liked');
+                                  }
+                                }
+                              }
+
+                              if(isLiked == false){
+                                isLiked = !isLiked;
+                                print('liked');
+                              }
+                              else{
+                                isLiked = !isLiked;
+                                print('disliked');
+                              }
                             },
                                                       child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 10),
