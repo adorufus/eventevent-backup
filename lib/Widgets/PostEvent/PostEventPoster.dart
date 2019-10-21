@@ -104,115 +104,115 @@ class PostEventPosterState extends State<PostEventPoster> {
                 height: posterFile == null ? 100 : 30,
               ),
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   _showDialog();
                 },
-                child: posterFile == null ? SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: Image.asset(
-                    'assets/bottom-bar/new-something-white.png',
-                    color: Colors.grey,
-                  ),
-                ) : Container(
-                  height: 300, width: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    image: DecorationImage(
-                      image: ExactAssetImage(posterFile.path),
-                      fit: BoxFit.fill
-                    )
-                  ),
-                ),
+                child: posterFile == null
+                    ? SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: Image.asset(
+                          'assets/bottom-bar/new-something-white.png',
+                          color: Colors.grey,
+                        ),
+                      )
+                    : Container(
+                        height: 300,
+                        width: 200,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            image: DecorationImage(
+                                image: ExactAssetImage(posterFile.path),
+                                fit: BoxFit.fill)),
+                      ),
               )
             ],
           ),
         ));
   }
 
-  void _showDialog(){
+  void _showDialog() {
     showModalBottomSheet<void>(
       context: context,
-      builder: (BuildContext context){
+      builder: (BuildContext context) {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             new ListTile(
-            leading: new Icon(Icons.photo_library),
-            title: new Text('Choose Photo from Library'),
-            onTap: () {
-              imageSelectorGalery();
-              Navigator.pop(context);
-            },          
-          ),
-          new ListTile(
-            leading: new Icon(Icons.camera_alt),
-            title: new Text('Take Photo from Camera'),
-            onTap: (){
-              imageCaptureCamera();
-            }          
-          ),
-          new ListTile(
-            leading: new Icon(Icons.close),
-            title: new Text('Cancel'),
-            onTap: (){
-              Navigator.pop(context);
-            },          
-          ),
+              leading: new Icon(Icons.photo_library),
+              title: new Text('Choose Photo from Library'),
+              onTap: () {
+                imageSelectorGalery();
+                Navigator.pop(context);
+              },
+            ),
+            new ListTile(
+                leading: new Icon(Icons.camera_alt),
+                title: new Text('Take Photo from Camera'),
+                onTap: () {
+                  imageCaptureCamera();
+                }),
+            new ListTile(
+              leading: new Icon(Icons.close),
+              title: new Text('Cancel'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
           ],
         );
       },
     );
   }
 
-  imageSelectorGalery() async{
-    var galleryFile = await ImagePicker.pickImage(
-      source: ImageSource.gallery
-    );
+  imageSelectorGalery() async {
+    var galleryFile = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     print(galleryFile.path);
     cropImage(galleryFile);
   }
 
-  imageCaptureCamera() async{
+  imageCaptureCamera() async {
     var galleryFile = await ImagePicker.pickImage(
       source: ImageSource.camera,
     );
 
-    if(!mounted)
-      return;
+    if (!mounted) return;
 
     //cropImage(galleryFile);
   }
 
-  Future cropImage(File image) async{
+  Future cropImage(File image) async {
     File croppedImage = await ImageCropper.cropImage(
-      sourcePath: image.path,
-      ratioX: 2.0,
-      ratioY: 3.0,
-      maxWidth: 512,
-      maxHeight: 512
-    );
+        sourcePath: image.path,
+        aspectRatio: CropAspectRatio(
+          ratioX: 2.0,
+          ratioY: 3.0,
+        ),
+        maxWidth: 512,
+        maxHeight: 512);
 
     print(croppedImage.path);
-    setState((){
+    setState(() {
       posterFile = croppedImage;
     });
   }
 
   void navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if(posterFile == null){
+    if (posterFile == null) {
       thisScaffold.currentState.showSnackBar(SnackBar(
         content: Text('Choose poster!'),
         backgroundColor: Colors.red,
       ));
-    }
-    else{
-      setState((){
+    } else {
+      setState(() {
         prefs.setString('POST_EVENT_POSTER', posterFile.path);
       });
-      Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => PostEventMap()));
+      Navigator.push(
+          context,
+          CupertinoPageRoute(
+              builder: (BuildContext context) => PostEventMap()));
     }
   }
 }

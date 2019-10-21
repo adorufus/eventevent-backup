@@ -6,6 +6,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyTicketWidget extends StatefulWidget {
@@ -24,88 +25,151 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
 
   List ticketDetailData;
 
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
+  int newPage = 0;
+
+  void _onLoading() async {
+    await Future.delayed(Duration(milliseconds: 2000));
+    setState(() {
+      newPage += 1;
+    });
+
+    getDataTicket(newPage: newPage).then((response) {
+      var extractedData = json.decode(response.body);
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          List updatedData = extractedData['data'];
+          if (updatedData == null) {
+            refreshController.loadNoData();
+          }
+          print('data: ' + updatedData.toString());
+          ticketDetailData.addAll(updatedData);
+        });
+        if (mounted) setState(() {});
+        refreshController.loadComplete();
+      } else {
+        refreshController.loadFailed();
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    getDataTicket();
+    getDataTicket().then((response) {
+      if (response.statusCode == 200) {
+        setState(() {
+          var extractedData = json.decode(response.body);
+          ticketDetailData = extractedData['data'];
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return ticketDetailData == null
-          ? Container(child: Center(child: CircularProgressIndicator()))
-          : Container(
-              color: Colors.black.withOpacity(0.05),
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: ListView.builder(
-                  itemCount:
-                      ticketDetailData == null ? 0 : ticketDetailData.length,
-                  itemBuilder: (BuildContext context, i) {
-                    Color ticketColor;
-                    String ticketStatusText;
+        ? Container(child: Center(child: CircularProgressIndicator()))
+        : SmartRefresher(
+            enablePullDown: false,
+            enablePullUp: true,
+            footer:
+                CustomFooter(builder: (BuildContext context, LoadStatus mode) {
+              Widget body;
+              if (mode == LoadStatus.idle) {
+                body = Text("Load data");
+              } else if (mode == LoadStatus.loading) {
+                body = CircularProgressIndicator();
+              } else if (mode == LoadStatus.failed) {
+                body = Text("Load Failed!");
+              } else if (mode == LoadStatus.canLoading) {
+                body = Text('More');
+              } else {
+                body = Container();
+              }
 
-                    if (ticketDetailData[i]['usedStatus'] == 'available') {
-                      ticketColor = eventajaGreenTeal;
-                      ticketStatusText = 'Available';
-                    } else if (ticketDetailData[i]['usedStatus'] == 'used') {
-                      ticketColor = Color(0xFFA6A8AB);
-                      ticketStatusText = 'Used';
-                    } else if (ticketDetailData[i]['usedStatus'] == 'expired') {
-                      ticketColor = Color(0xFF8E1E2D);
-                      ticketStatusText = 'Expired';
-                    }
+              return Container(height: 35, child: Center(child: body));
+            }),
+            controller: refreshController,
+            onLoading: _onLoading,
+            child: ListView.builder(
+                physics: AlwaysScrollableScrollPhysics(),
+                itemCount:
+                    ticketDetailData == null ? 0 : ticketDetailData.length,
+                itemBuilder: (BuildContext context, i) {
+                  Color ticketColor;
+                  String ticketStatusText;
 
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => UseTicket(
-                                  ticketTitle: ticketDetailData[i]['ticket']
-                                      ['ticket_name'],
-                                  ticketImage: ticketDetailData[i]
-                                      ['ticket_image']['url'],
-                                  ticketCode: ticketDetailData[i]
-                                      ['ticket_code'],
-                                  ticketDate: ticketDetailData[i]['event']
-                                      ['dateStart'],
-                                  ticketStartTime: ticketDetailData[i]['event']
-                                      ['timeStart'],
-                                  ticketEndTime: ticketDetailData[i]['event']
-                                      ['timeEnd'],
-                                  ticketDesc: ticketDetailData[i]['event']
-                                      ['name'],
-                                  ticketID: ticketDetailData[i]['id'],
-                                  usedStatus: ticketStatusText,
-                                )));
-                      },
-                      child: new MyTicketItem(
-                        image: ticketDetailData[i]['ticket_image']
-                            ['secure_url'],
-                        title: ticketDetailData[i]['event']['name'],
-                        ticketCode: ticketDetailData[i]['ticket_code'],
-                        ticketStatus: ticketStatusText,
-                        timeStart: ticketDetailData[i]['event']['timeStart'],
-                        timeEnd: ticketDetailData[i]['event']['timeEnd'],
-                        ticketName: ticketDetailData[i]['ticket']
-                            ['ticket_name'],
-                        ticketColor: ticketColor,
-                        // topPadding: i == 0 ? 13.0 : 0.0,
-                      ),
-                    );
-                  }),
-    );
+                  if (ticketDetailData[i]['usedStatus'] == 'available') {
+                    ticketColor = eventajaGreenTeal;
+                    ticketStatusText = 'Available';
+                  } else if (ticketDetailData[i]['usedStatus'] == 'used') {
+                    ticketColor = Color(0xFFA6A8AB);
+                    ticketStatusText = 'Used';
+                  } else if (ticketDetailData[i]['usedStatus'] == 'expired') {
+                    ticketColor = Color(0xFF8E1E2D);
+                    ticketStatusText = 'Expired';
+                  }
+
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => UseTicket(
+                                ticketTitle: ticketDetailData[i]['ticket']
+                                    ['ticket_name'],
+                                ticketImage: ticketDetailData[i]['ticket_image']
+                                    ['url'],
+                                ticketCode: ticketDetailData[i]['ticket_code'],
+                                ticketDate: ticketDetailData[i]['event']
+                                    ['dateStart'],
+                                ticketStartTime: ticketDetailData[i]['event']
+                                    ['timeStart'],
+                                ticketEndTime: ticketDetailData[i]['event']
+                                    ['timeEnd'],
+                                ticketDesc: ticketDetailData[i]['event']
+                                    ['name'],
+                                ticketID: ticketDetailData[i]['id'],
+                                usedStatus: ticketStatusText,
+                              )));
+                    },
+                    child: new MyTicketItem(
+                      image: ticketDetailData[i]['ticket_image']['secure_url'],
+                      title: ticketDetailData[i]['event']['name'],
+                      ticketCode: ticketDetailData[i]['ticket_code'],
+                      ticketStatus: ticketStatusText,
+                      timeStart: ticketDetailData[i]['event']['timeStart'],
+                      timeEnd: ticketDetailData[i]['event']['timeEnd'],
+                      ticketName: ticketDetailData[i]['ticket']['ticket_name'],
+                      ticketColor: ticketColor,
+                      // topPadding: i == 0 ? 13.0 : 0.0,
+                    ),
+                  );
+                }),
+          );
   }
 
-  Future getDataTicket() async {
+  Future<http.Response> getDataTicket({int newPage}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    int currentPage = 1;
 
     setState(() {
       session = prefs.getString('Session');
       userId = prefs.getString('Last User ID');
+      if (newPage != null) {
+        currentPage += newPage;
+      }
+
+      print(currentPage);
     });
 
     var urlApi =
-        BaseApi().apiUrl + '/tickets/all?X-API-KEY=${API_KEY}&page=1&search=';
+        BaseApi().apiUrl + '/tickets/all?X-API-KEY=$API_KEY&page=$currentPage';
     final response = await http.get(urlApi, headers: {
       'Authorization': 'Basic YWRtaW46MTIzNA==',
       'cookie': session
@@ -114,11 +178,6 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
     print(response.statusCode);
     print(response.body);
 
-    if (response.statusCode == 200) {
-      setState(() {
-        var extractedData = json.decode(response.body);
-        ticketDetailData = extractedData['data'];
-      });
-    }
+    return response;
   }
 }

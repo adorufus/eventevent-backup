@@ -57,7 +57,7 @@ dependencies:
   clevertap_flutter: ^0.0.5
   firebase_messaging: 5.1.5
   firebase_analytics: ^5.0.2
-  webview_flutter: ^0.3.11
+  webview_flutter: ^0.3.15+1
   flutter_html: ^0.8.2
   flutter_barcode_scanner: ^0.1.5+1
   #  qrcode_reader: ^0.4.4

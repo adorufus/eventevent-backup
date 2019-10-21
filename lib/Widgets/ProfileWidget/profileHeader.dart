@@ -11,6 +11,7 @@ import 'package:eventevent/helper/FollowUnfollow.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'MyTicketWidget.dart';
@@ -70,6 +71,9 @@ class _ProfileHeaderState extends State<ProfileHeader>
   String userId;
   bool isFollowed;
   List userTimelineList;
+
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
 
   getUserProfile() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -152,7 +156,16 @@ class _ProfileHeaderState extends State<ProfileHeader>
             ),
           ),
         ),
-        body: profileDetails(context, widget, userId, isFollowed));
+        body: SmartRefresher(
+            controller: refreshController,
+            enablePullUp: false,
+            enablePullDown: true,
+            onRefresh: () async {
+              await Future.delayed(Duration(milliseconds: 5000));
+              if (mounted) setState(() {});
+              refreshController.refreshCompleted();
+            },
+            child: profileDetails(context, widget, userId, isFollowed)));
   }
 
   Widget profileDetails(BuildContext context, ProfileHeader widget,
@@ -218,7 +231,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         height: 4,
                       ),
                       Text(
-                        widget.fullName == null ? 'loading' : widget.bio,
+                        widget.bio == null ? '-' : widget.bio,
                         style: TextStyle(fontSize: 12),
                       ),
                       SizedBox(
@@ -233,7 +246,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                           }
                         },
                         child: Text(
-                          widget.fullName == null ? 'loading' : widget.website,
+                          widget.website == null ? '-' : widget.website,
                           style:
                               TextStyle(color: eventajaGreenTeal, fontSize: 12),
                         ),
@@ -682,8 +695,60 @@ class _ProfileHeaderState extends State<ProfileHeader>
     );
   }
 
+  int newPage = 0;
+
+  void _onLoading() async {
+    await Future.delayed(Duration(milliseconds: 2000));
+    setState(() {
+      newPage += 1;
+    });
+
+    timelineList(newPage: newPage).then((response) {
+      var extractedData = json.decode(response.body);
+
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          List updatedData = extractedData['data'];
+          if (updatedData == null) {
+            refreshController.loadNoData();
+          }
+          print('data: ' + updatedData.toString());
+          userTimelineList.addAll(updatedData);
+        });
+        if (mounted) setState(() {});
+        refreshController.loadComplete();
+      } else {
+        refreshController.loadFailed();
+      }
+    });
+  }
+
   Widget timeline() {
-    return ListView.builder(
+    return SmartRefresher(
+            controller: refreshController,
+            enablePullUp: true,
+            enablePullDown: false,
+            footer:
+                CustomFooter(builder: (BuildContext context, LoadStatus mode) {
+              Widget body;
+              if (mode == LoadStatus.idle) {
+                body = Text("Load data");
+              } else if (mode == LoadStatus.loading) {
+                body = CircularProgressIndicator();
+              } else if (mode == LoadStatus.failed) {
+                body = Text("Load Failed!");
+              } else if (mode == LoadStatus.canLoading) {
+                body = Text('More');
+              } else {
+                body = Container();
+              }
+
+              return Container(height: 35, child: Center(child: body));
+            }),
+            onLoading: _onLoading,
+            child: ListView.builder(
       itemCount: userTimelineList == null ? 0 : userTimelineList.length,
       itemBuilder: (context, i) {
         List impressionList = userTimelineList[i]['impression']['data'];
@@ -1013,7 +1078,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
               ],
             ));
       },
-    );
+    ));
   }
 
   Widget showMoreOption(String id, String postType) {
@@ -1334,11 +1399,20 @@ class _ProfileHeaderState extends State<ProfileHeader>
     return response;
   }
 
-  Future<http.Response> timelineList() async {
+  Future<http.Response> timelineList({int newPage}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentPage = 1;
+
+    setState((){
+      if(newPage != null){
+        currentPage += newPage;
+      }
+
+      print(currentPage);
+    });
 
     String url = BaseApi().apiUrl +
-        '/timeline/user?X-API-KEY=$API_KEY&page=1&userID=${widget.currentUserId}';
+        '/timeline/user?X-API-KEY=$API_KEY&page=$currentPage&userID=${widget.currentUserId}';
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,
       'cookie': prefs.getString('Session')

@@ -499,8 +499,10 @@ class _DashboardWidgetState extends State<DashboardWidget>
   Future<Null> cropImage(File image) async {
     File croppedImage = await ImageCropper.cropImage(
       sourcePath: image.path,
-      ratioX: 2.0,
-      ratioY: 3.0,
+      aspectRatio: CropAspectRatio(
+        ratioX: 2.0,
+        ratioY: 3.0,
+      ),
       maxHeight: 512,
       maxWidth: 512,
     );

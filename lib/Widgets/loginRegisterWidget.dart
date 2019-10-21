@@ -288,13 +288,13 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                             'LOGIN',
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 12,
+                                fontSize: ScreenUtil.instance.setSp(12),
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(width: 13),
+                    SizedBox(width: ScreenUtil.instance.setWidth(13)),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -320,7 +320,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                             'REGISTER',
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 12,
+                                fontSize: ScreenUtil.instance.setSp(12),
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -329,19 +329,14 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                   ],
                 ),
               ),
-              Divider(
-                color: Colors.black,
-                height: 10,
-                indent: 5,
-              ),
               GestureDetector(
                 onTap: () {
                   initiateFacebookLogin();
                 },
                 child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 26),
+                  margin: EdgeInsets.symmetric(horizontal: ScreenUtil.instance.setWidth(26)),
                   width: MediaQuery.of(context).size.width,
-                  height: 37.02,
+                  height: ScreenUtil.instance.setHeight(37.02),
                   decoration: BoxDecoration(
                       color: Color(0xFF4C64B5),
                       borderRadius: BorderRadius.circular(180),
@@ -354,8 +349,8 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                   child: Row(
                     children: <Widget>[
                       Container(
-                          height: 37,
-                          width: 37,
+                          height: ScreenUtil.instance.setHeight(37),
+                          width: ScreenUtil.instance.setWidth(37),
                           decoration: BoxDecoration(
                               shape: BoxShape.circle, color: Color(0xFF324b9c)),
                           child: Center(
@@ -367,7 +362,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                             'LOGIN WITH FACEBOOK',
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 12,
+                                fontSize: ScreenUtil.instance.setSp(12),
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -376,7 +371,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: ScreenUtil.instance.setHeight(10)),
               GestureDetector(
                 onTap: () {
                   goLoginGoogle().then((result) {
@@ -388,9 +383,9 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                   });
                 },
                 child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 26),
+                  margin: EdgeInsets.symmetric(horizontal: ScreenUtil.instance.setWidth(26)),
                   width: MediaQuery.of(context).size.width,
-                  height: 37.02,
+                  height: ScreenUtil.instance.setHeight(37.02),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(180),
@@ -404,8 +399,8 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
                       Container(
-                        height: 37,
-                        width: 37,
+                        height: ScreenUtil.instance.setHeight(37),
+                        width: ScreenUtil.instance.setWidth(37),
                         decoration: BoxDecoration(
                               shape: BoxShape.circle, color: Color(0xFFf9f9f9)),
                         child: Image.asset('assets/drawable/google.png', scale: 3),
@@ -415,7 +410,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                           child: Text(
                             'LOGIN WITH GOOGLE',
                             style: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.bold),
+                                fontSize: ScreenUtil.instance.setSp(12), fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
@@ -430,7 +425,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text('By registering, you are agree with',
-                        style: TextStyle(fontSize: 8)),
+                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(11))),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context,
@@ -439,10 +434,10 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                       child: Text(
                         ' Terms',
                         style:
-                            TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                            TextStyle(fontSize: ScreenUtil.instance.setSp(12), fontWeight: FontWeight.bold),
                       ),
                     ),
-                    Text(' and', style: TextStyle(fontSize: 8)),
+                    Text(' and', style: TextStyle(fontSize: ScreenUtil.instance.setSp(11))),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -453,7 +448,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                       child: Text(
                         ' Privacy Policy',
                         style:
-                            TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                            TextStyle(fontSize: ScreenUtil.instance.setSp(12), fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],

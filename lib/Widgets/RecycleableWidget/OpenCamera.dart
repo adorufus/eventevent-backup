@@ -18,8 +18,8 @@ class OpenCamera{
   Future<Null> cropImage(File image) async{
     File croppedImage = await ImageCropper.cropImage(
       sourcePath: image.path,
-      ratioX: 2.0,
-      ratioY: 3.0,
+      // ratioX: 2.0,
+      // ratioY: 3.0,
       maxHeight: 512,
       maxWidth: 512
     );

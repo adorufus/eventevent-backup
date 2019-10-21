@@ -9,24 +9,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'PostEventReview.dart';
 
-class PostEventAdditionalMedia extends StatefulWidget{
+class PostEventAdditionalMedia extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return PostEventAdditionalMediaState();
   }
 }
 
-class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia>{
-
+class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
   GlobalKey<ScaffoldState> thisScaffold = new GlobalKey<ScaffoldState>();
 
-    List<String> additionalMediaList = <String>['', '', '', '', ''];
+  List<String> additionalMediaList = <String>['', '', '', '', ''];
 
-    File additional1;
-    File additional2;
-    File additional3;
-    File additional4;
-    File additional5;
+  File additional1;
+  File additional2;
+  File additional3;
+  File additional4;
+  File additional5;
 
   @override
   Widget build(BuildContext context) {
@@ -106,9 +105,13 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia>{
                     fontWeight: FontWeight.bold,
                     fontSize: 20),
               ),
-              Text('Add your event\'s video and picture', style: TextStyle(
-                  fontSize: 18),),
-              SizedBox(height: 20,),
+              Text(
+                'Add your event\'s video and picture',
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(
+                height: 20,
+              ),
               Container(
                 height: 200,
                 width: MediaQuery.of(context).size.width,
@@ -118,51 +121,79 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia>{
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(right: 10),
-                      child: additionalMediaList[0] == '' ? Container() : Container(
-                        child: Image.file(File(additionalMediaList[0]), fit: BoxFit.fill,),
-                      ),
+                      child: additionalMediaList[0] == ''
+                          ? Container()
+                          : Container(
+                              child: Image.file(
+                                File(additionalMediaList[0]),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: additionalMediaList[1] == '' ? Container() : Container(
-                        child: Image.file(File(additionalMediaList[1]), fit: BoxFit.fill,),
-                      ),
+                      child: additionalMediaList[1] == ''
+                          ? Container()
+                          : Container(
+                              child: Image.file(
+                                File(additionalMediaList[1]),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: additionalMediaList[2] == '' ? Container() : Container(
-                        child: Image.file(File(additionalMediaList[2]), fit: BoxFit.fill,),
-                      ),
+                      child: additionalMediaList[2] == ''
+                          ? Container()
+                          : Container(
+                              child: Image.file(
+                                File(additionalMediaList[2]),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: additionalMediaList[3] == '' ? Container() : Container(
-                        child: Image.file(File(additionalMediaList[3]), fit: BoxFit.fill,),
-                      ),
+                      child: additionalMediaList[3] == ''
+                          ? Container()
+                          : Container(
+                              child: Image.file(
+                                File(additionalMediaList[3]),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: additionalMediaList[4] == '' ? Container() : Container(
-                        child: Image.file(File(additionalMediaList[4]), fit: BoxFit.fill,),
-                      ),
+                      child: additionalMediaList[4] == ''
+                          ? Container()
+                          : Container(
+                              child: Image.file(
+                                File(additionalMediaList[4]),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
                     ),
-                    additionalMediaList[4] == '' ? GestureDetector(
-                      onTap: (){
-                        _showDialog();
-                      },
-                      child: Container(
-                        color: Colors.grey,
-                        height: 200,
-                        width: 150,
-                        child: Center(
-                          child: SizedBox(
-                            height: 50,
-                            width: 50,
-                            child: Image.asset('assets/bottom-bar/new-something-white.png'),
-                          ),
-                        ),
-                      ),
-                    ) : Container(),
+                    additionalMediaList[4] == ''
+                        ? GestureDetector(
+                            onTap: () {
+                              _showDialog();
+                            },
+                            child: Container(
+                              color: Colors.grey,
+                              height: 200,
+                              width: 150,
+                              child: Center(
+                                child: SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: Image.asset(
+                                      'assets/bottom-bar/new-something-white.png'),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
                   ],
                 ),
               )
@@ -171,10 +202,10 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia>{
         ));
   }
 
-  void _showDialog(){
+  void _showDialog() {
     showModalBottomSheet<void>(
         context: context,
-        builder: (BuildContext context){
+        builder: (BuildContext context) {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -197,36 +228,30 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia>{
               new ListTile(
                   leading: new Icon(Icons.camera_alt),
                   title: new Text('Take Photo from Camera'),
-                  onTap: (){
+                  onTap: () {
                     imageCaptureCamera();
-                  }
-              ),
+                  }),
               new ListTile(
                 leading: new Icon(Icons.close),
                 title: new Text('Cancel'),
-                onTap: (){
+                onTap: () {
                   Navigator.pop(context);
                 },
               ),
             ],
           );
-        }
-    );
+        });
   }
 
   imageSelectorGalery() async {
-    var galleryFile = await ImagePicker.pickImage(
-        source: ImageSource.gallery
-    );
+    var galleryFile = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     print(galleryFile.path);
     cropImage(galleryFile);
   }
 
   videoSelectorGalery() async {
-    var galleryFile = await ImagePicker.pickImage(
-        source: ImageSource.gallery
-    );
+    var galleryFile = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     print(galleryFile.path);
     setState(() {
@@ -243,31 +268,28 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia>{
   cropImage(File galleryFile) async {
     File croppedImage = await ImageCropper.cropImage(
         sourcePath: galleryFile.path,
-        ratioX: 2.0,
-        ratioY: 3.0,
+        aspectRatio: CropAspectRatio(
+          ratioX: 2.0,
+          ratioY: 3.0,
+        ),
         maxWidth: 512,
-        maxHeight: 512
-    );
+        maxHeight: 512);
 
     print(croppedImage.path);
-    setState((){
-      if(additionalMediaList[0] == ''){
+    setState(() {
+      if (additionalMediaList[0] == '') {
         additionalMediaList[0] = croppedImage.path;
-      }
-      else{
-        if(additionalMediaList[1] == ''){
+      } else {
+        if (additionalMediaList[1] == '') {
           additionalMediaList[1] = croppedImage.path;
-        }
-        else{
-          if(additionalMediaList[2] == ''){
+        } else {
+          if (additionalMediaList[2] == '') {
             additionalMediaList[2] = croppedImage.path;
-          }
-          else{
-            if(additionalMediaList[3] == ''){
+          } else {
+            if (additionalMediaList[3] == '') {
               additionalMediaList[3] = croppedImage.path;
-            }
-            else{
-              if(additionalMediaList[4] == ''){
+            } else {
+              if (additionalMediaList[4] == '') {
                 additionalMediaList[4] = croppedImage.path;
               }
             }
@@ -278,19 +300,29 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia>{
 
     print(additionalMediaList);
   }
-  
-  saveAndContinue() async{
+
+  saveAndContinue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    
+
     prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_1', additionalMediaList[0]);
     prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_2', additionalMediaList[1]);
     prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_3', additionalMediaList[2]);
     prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_4', additionalMediaList[3]);
     prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_5', additionalMediaList[4]);
 
-    print(prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_1') + ' ' + prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_2') + ' ' + prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_3') + ' ' + prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_4') + ' ' + prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_5'));
+    print(prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_1') +
+        ' ' +
+        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_2') +
+        ' ' +
+        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_3') +
+        ' ' +
+        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_4') +
+        ' ' +
+        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_5'));
 
-    Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => PostEventReview()));
+    Navigator.push(
+        context,
+        CupertinoPageRoute(
+            builder: (BuildContext context) => PostEventReview()));
   }
-
 }

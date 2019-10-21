@@ -28,7 +28,7 @@ class _ScanBarcodeState extends State<ScanBarcode> {
   }
 
   startBarcodeScanStream() async {
-    FlutterBarcodeScanner.getBarcodeStreamReceiver("#ff6666", "Cancel", true)
+    FlutterBarcodeScanner.getBarcodeStreamReceiver("#ff6666", "Cancel", true, ScanMode.QR)
         .listen((barcode) => print(barcode));
   }
 
@@ -38,7 +38,7 @@ class _ScanBarcodeState extends State<ScanBarcode> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       barcodeScanRes =
-      await FlutterBarcodeScanner.scanBarcode("#ff6666", "Cancel", true);
+      await FlutterBarcodeScanner.scanBarcode("#ff6666", "Cancel", true, ScanMode.QR);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }

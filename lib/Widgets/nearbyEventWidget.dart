@@ -25,7 +25,8 @@ class ListenPage extends StatefulWidget {
 }
 
 class _ListenPageState extends State<ListenPage> {
-  RefreshController refreshController = RefreshController(initialRefresh: false);
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
   Location location = new Location();
 
   LocationData currentLocation;
@@ -43,18 +44,23 @@ class _ListenPageState extends State<ListenPage> {
     if (!mounted) {
       return;
     } else {
-      fetchCurrentLocationEvent();
+      fetchCurrentLocationEvent().then((response) {
+        if (response.statusCode == 200) {
+          setState(() {
+            var extractedData = json.decode(response.body);
+            nearbyEventData = extractedData['data'];
+          });
+        }
+      });
     }
     //getLocationName();
 
     initPlatformState();
-    locationSubcription =
-        location.onLocationChanged().listen((LocationData result) async {
-      getAddress(result.latitude, result.longitude);
-
+    location.onLocationChanged().listen((LocationData result) async {
       if (!mounted) return;
       setState(() {
         currentLocation = result;
+        getAddress(currentLocation.latitude, currentLocation.longitude);
       });
       print(currentLocation.heading);
     });
@@ -62,7 +68,7 @@ class _ListenPageState extends State<ListenPage> {
 
   void _onLoading() async {
     await Future.delayed(Duration(milliseconds: 2000));
-    setState((){
+    setState(() {
       newPage += 1;
     });
 
@@ -83,10 +89,9 @@ class _ListenPageState extends State<ListenPage> {
   getAddress(double lat, double long) async {
     print(lat);
     print(long);
-    final coord = new Coordinates(lat, long);
+    final coord = new Coordinates(-6.1799679, 106.7101003);
     final getAdresses =
         await Geocoder.local.findAddressesFromCoordinates(coord);
-
     if (!mounted) return;
     setState(() {
       adresses = getAdresses.first;
@@ -94,25 +99,25 @@ class _ListenPageState extends State<ListenPage> {
 
     print(adresses.featureName);
 
-    print('${adresses.addressLine}');
+    // print('${adresses.addressLine}');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          child: nearbyEventData == null
-              ? Center(
-                  child: Container(
-                    width: 25,
-                    height: 25,
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: CircularProgressIndicator(),
-                    ),
+        child: nearbyEventData == null
+            ? Center(
+                child: Container(
+                  width: 25,
+                  height: 25,
+                  child: FittedBox(
+                    fit: BoxFit.fill,
+                    child: CircularProgressIndicator(),
                   ),
-                )
-              : SmartRefresher(
+                ),
+              )
+            : SmartRefresher(
                 enablePullDown: true,
                 enablePullUp: true,
                 footer: CustomFooter(
@@ -134,7 +139,7 @@ class _ListenPageState extends State<ListenPage> {
                 }),
                 controller: refreshController,
                 onRefresh: () {
-                  setState((){
+                  setState(() {
                     newPage = 0;
                   });
                   fetchCurrentLocationEvent().then((response) {
@@ -186,7 +191,7 @@ class _ListenPageState extends State<ListenPage> {
                           Container(
                             width: MediaQuery.of(context).size.width - 71,
                             child: Text(
-                              adresses.addressLine,
+                              'null',
                               style: TextStyle(fontSize: 12),
                               maxLines: 2,
                             ),
@@ -226,7 +231,7 @@ class _ListenPageState extends State<ListenPage> {
                               itemPriceText = 'EVENT HAS ENDED';
                             }
                             itemPriceText = 'SALES ENDED';
-                          }  else {
+                          } else {
                             itemColor = Color(0xFF8E1E2D);
                             itemPriceText = 'SOLD OUT';
                           }
@@ -299,8 +304,8 @@ class _ListenPageState extends State<ListenPage> {
                       );
                     },
                   )
-                ])
-              ),),
+                ])),
+      ),
     );
   }
 
@@ -327,14 +332,14 @@ class _ListenPageState extends State<ListenPage> {
     });
   }
 
-  Future fetchCurrentLocationEvent({int page}) async {
+  Future<http.Response> fetchCurrentLocationEvent({int page}) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     int currentPage = 1;
     print(preferences.getString('latitude'));
     print(preferences.getString('longitude'));
     setState(() {
       session = preferences.getString('Session');
-      if(page != null){
+      if (page != null) {
         currentPage += page;
       }
     });
@@ -347,12 +352,6 @@ class _ListenPageState extends State<ListenPage> {
 
     print(response.body);
 
-    if (response.statusCode == 200) {
-      setState(() {
-        var extractedData = json.decode(response.body);
-        nearbyEventData = extractedData['data'];
-        page += 1;
-      });
-    }
+    return response;
   }
 }

@@ -80,7 +80,7 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 6.2)
     - Protobuf (~> 3.1)
   - Flutter (1.0.0)
-  - "flutter_barcode_scanner (0.1.5+2)":
+  - flutter_barcode_scanner (0.1.7):
     - Flutter
   - flutter_facebook_login (0.0.1):
     - FBSDKCoreKit (= 4.39.1)
@@ -152,7 +152,7 @@ PODS:
   - GTMSessionFetcher/Core (1.2.2)
   - image_cropper (0.0.1):
     - Flutter
-    - TOCropViewController (~> 2.5.0)
+    - TOCropViewController (~> 2.5.1)
   - image_picker (0.0.1):
     - Flutter
   - launch_review (0.0.1):
@@ -325,7 +325,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   background_fetch: 385552e57d3bde2c7a3abd6b1edc76b87823b6c4
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  camera: d56ad165545ae5a0ffb892376033760a969c68c8
+  camera: 38cc83ae9a5667bb5a71c7d9edaf60a91920fd4e
   CleverTap-iOS-SDK: 664ae5dccfe2673c21a842b624f2558d34f76d14
   clevertap_flutter: a35b2b54bac7bcf5a743eeea3e385853fb374b75
   FBSDKCoreKit: f442aa96179cc9b382bb4abeb7e340a47cca8f91
@@ -342,8 +342,8 @@ SPEC CHECKSUMS:
   FirebaseCore: aecf02fb2274ec361b9bebeac112f5daa18273bd
   FirebaseInstanceID: 662b8108a09fe9ed01aafdedba100fde8536b0f6
   FirebaseMessaging: 6bb0bdaf64c55fef7a219b7bb1e94e94a0855ced
-  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
-  flutter_barcode_scanner: c749cf2c0661124c2e269e9ba4cae9f068509cab
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_barcode_scanner: b3d8246e13f26f9a1ed686c4e7e4cd0893d58eb4
   flutter_facebook_login: be61e24a4b7d621515353c6b4583d1981bdaa3d6
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   flutter_money_formatter: d0d18ddc5be333fad8d09964d741b59fa11a91dc
@@ -359,8 +359,8 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: b3553629623a3b1bff17f555e736cd5a6d95ad55
   GoogleUtilities: d2b0e277a95962e09bb27f5cd42f5f0b6a506c7d
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
-  image_cropper: f25bdfbf1ef970c9a0a0f78306fb6a0aaac7229e
-  image_picker: 16e5fec1fbc87fd3b297c53e4048521eaf17cd06
+  image_cropper: 966bf742cd9cee8d78010ec5c67dd9e7826e6b19
+  image_picker: e3eacd46b94694dde7cf2705955cece853aa1a8f
   launch_review: 75d5a956ba8eaa493e9c9d4bf4c05e505e8d5ed0
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
@@ -376,9 +376,9 @@ SPEC CHECKSUMS:
   sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a
   thumbnails: bb4f4e9bb4b51c8ae4e6ad9a2fa81373f9b634ad
   TOCropViewController: 00dc36c4e4a0f4a45efa91adbf22df8a4fae01d3
-  url_launcher: 0067ddb8f10d36786672aa0722a21717dba3a298
+  url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
   video_player: 3964090a33353060ed7f58aa6427c7b4b208ec21
-  webview_flutter: 1aa7604e6cdb451a9b7ed2c37d5454c0b440246b
+  webview_flutter: db3aba222b23e4dc432e0c5882834123dc50ff9f
 
 PODFILE CHECKSUM: fdaf066c1642ddb31a2f5bceaf566537172fb3e7
 

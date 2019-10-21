@@ -763,6 +763,20 @@ class TimelineDashboardState extends State<TimelineDashboard> {
         itemBuilder: (BuildContext context, i) {
           List impressionList = timelineList[i]['impression']['data'];
           List commentList = timelineList[i]['comment']['data'];
+          List impressions = new List();
+          bool isLiked;
+
+          for(i = 0; i < impressionList.length; i++){
+            if(impressionList != null){
+              impressions.addAll(impressionList);
+              print(impressions);
+              if(impressions.contains({'userID': currentUserId})){
+                isLiked = true;
+              }else{
+                isLiked = false;
+              }
+            }
+          }
 
           return Container(
               margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
@@ -997,34 +1011,49 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            height: 30,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 2,
-                                      spreadRadius: 1.5)
-                                ]),
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Image.asset(
-                                    'assets/icons/icon_apps/love.png',
-                                    color: impressionList.length > 0
-                                        ? Colors.red
-                                        : Colors.grey,
-                                    scale: 3.5,
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(impressionList.length.toString(),
-                                      style: TextStyle(
-                                          color: Color(
-                                              0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
-                                ]),
+                          GestureDetector(
+                            onTap: (){
+                              if (isLiked == false) {
+                                    doLove(timelineList[i]['id'], '5').then((response){
+                                      print(response.statusCode);
+                                      print(response.body);
+                                      setState((){});
+                                    });
+                                    isLiked = true;
+                                  } else {
+                                    print('unloved');
+                                    isLiked = false;
+                                  }
+                            },
+                                                      child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        blurRadius: 2,
+                                        spreadRadius: 1.5)
+                                  ]),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Image.asset(
+                                      'assets/icons/icon_apps/love.png',
+                                      color: impressionList.length > 0
+                                          ? Colors.red
+                                          : Colors.grey,
+                                      scale: 3.5,
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(impressionList.length.toString(),
+                                        style: TextStyle(
+                                            color: Color(
+                                                0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
+                                  ]),
+                            ),
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -1385,6 +1414,27 @@ class TimelineDashboardState extends State<TimelineDashboard> {
         ),
       ),
     );
+  }
+
+  Future<http.Response> doLove(var postId, var impressionID) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String url = BaseApi().apiUrl + '/photo_impression/post';
+
+    final response = await http.post(
+      url,
+      body: {
+        'X-API-KEY': API_KEY,
+        'id': postId,
+        'impressionID': impressionID
+      },
+      headers: {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': prefs.getString('Session'),
+      }
+    );
+
+    return response;
   }
 
   Future<http.Response> getTimelineList({int newPage}) async {
