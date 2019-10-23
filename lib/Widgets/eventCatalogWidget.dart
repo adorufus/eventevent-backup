@@ -1211,6 +1211,7 @@ class _EventCatalogState extends State<EventCatalog>
                               height: 70,
                               width: 150,
                               decoration: BoxDecoration(
+                                color: Color(0xff8a8a8b),
                                   borderRadius: BorderRadius.circular(5),
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(

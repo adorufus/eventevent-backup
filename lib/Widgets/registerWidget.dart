@@ -25,6 +25,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  bool hidePassword = true;
+  Widget validationEmailIcon;
+  Widget validationUsernameIcon;
+  String usernameStatus = '';
+  String emailStatus = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,13 +78,42 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           controller: _usernameController,
           keyboardType: TextInputType.text,
           autofocus: false,
-          onEditingComplete: (){
-            checkUsername(_usernameController.text).then((response){
+          onFieldSubmitted: (i) async {
+            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                backgroundColor: Colors.grey,
+                content: Text('Checking username...',
+                    style: TextStyle(color: Colors.white)),
+                duration: Duration(seconds: 1),
+              ));
+            checkUsername(_usernameController.text).then((response) async {
               var extractedData = json.decode(response.body);
-              if(extractedData['status'] == 'NOK'){
+              
+              if (extractedData['status'] == 'NOK') {
+                setState(() {
+                  usernameStatus = 'nonavail';
+                  validationUsernameIcon = Icon(
+                    Icons.close,
+                    color: Colors.red,
+                  );
+                });
                 _scaffoldKey.currentState.showSnackBar(SnackBar(
                   backgroundColor: Colors.red,
-                  content: Text(extractedData['desc'], style: TextStyle(color: Colors.white)),
+                  content: Text(extractedData['desc'],
+                      style: TextStyle(color: Colors.white)),
+                  duration: Duration(seconds: 2),
+                ));
+              } else if (response.statusCode == 200) {
+                setState(() {
+                  usernameStatus = 'avail';
+                  validationUsernameIcon = Icon(
+                    Icons.check,
+                    color: eventajaGreenTeal,
+                  );
+                });
+                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                  backgroundColor: eventajaGreenTeal,
+                  content: Text('Username available',
+                      style: TextStyle(color: Colors.white)),
                   duration: Duration(seconds: 2),
                 ));
               }
@@ -88,7 +123,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               fillColor: Colors.white,
               filled: true,
               hintText: 'Username',
-              border: InputBorder.none),
+              border: InputBorder.none,
+              suffixIcon: validationUsernameIcon),
         ),
         SizedBox(
           height: 15,
@@ -97,37 +133,109 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           controller: _emailController,
           keyboardType: TextInputType.text,
           autofocus: false,
-          onEditingComplete: (){
-            checkEmail(_emailController.text).then((response){
+          onFieldSubmitted: (i) {
+            Pattern pattern =
+                r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+            RegExp regex = new RegExp(pattern);
+            if(!regex.hasMatch(i)){
+              setState((){
+                validationEmailIcon = Icon(
+                    Icons.close,
+                    color: Colors.red,
+                  );
+              });
+              _scaffoldKey.currentState.showSnackBar(SnackBar(
+                  backgroundColor: Colors.red,
+                  content: Text(
+                    'Invalid Email Format',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ));
+            }
+            else{
+              _scaffoldKey.currentState.showSnackBar(SnackBar(
+                backgroundColor: Colors.grey,
+                content: Text('Checking email...',
+                    style: TextStyle(color: Colors.white)),
+                duration: Duration(seconds: 1),
+              ));
+              checkEmail(_emailController.text).then((response) {
               var extractedData = json.decode(response.body);
-              if(extractedData['status'] == 'NOK'){
+              
+              if (extractedData['status'] == 'NOK') {
+                setState(() {
+                  emailStatus = 'nonavail';
+                  validationEmailIcon = Icon(
+                    Icons.close,
+                    color: Colors.red,
+                  );
+                });
                 _scaffoldKey.currentState.showSnackBar(SnackBar(
                   backgroundColor: Colors.red,
-                  content: Text(extractedData['desc'], style: TextStyle(color: Colors.white)),
+                  content: Text(extractedData['desc'],
+                      style: TextStyle(color: Colors.white)),
+                  duration: Duration(seconds: 2),
+                ));
+              } else if (response.statusCode == 200) {
+                setState(() {
+                  emailStatus = 'avail';
+                  validationEmailIcon = Icon(
+                    Icons.check,
+                    color: eventajaGreenTeal,
+                  );
+                });
+                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                  backgroundColor: eventajaGreenTeal,
+                  content: Text('Email available',
+                      style: TextStyle(color: Colors.white)),
                   duration: Duration(seconds: 2),
                 ));
               }
             });
+            }
           },
           decoration: InputDecoration(
               fillColor: Colors.white,
               filled: true,
               hintText: 'Email',
-              border: InputBorder.none),
+              border: InputBorder.none,
+              suffixIcon: validationEmailIcon),
         ),
         SizedBox(
           height: 15,
         ),
-        TextFormField(
-          controller: _passwordController,
-          keyboardType: TextInputType.text,
-          autofocus: false,
-          obscureText: true,
-          decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              hintText: 'Password',
-              border: InputBorder.none),
+        Row(
+          children: <Widget>[
+            Container(
+              width: 250,
+              child: TextFormField(
+                controller: _passwordController,
+                keyboardType: TextInputType.text,
+                autofocus: false,
+                obscureText: hidePassword,
+                decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    hintText: 'Password',
+                    border: InputBorder.none),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  hidePassword = !hidePassword;
+                });
+              },
+              child: Container(
+                  height: 20,
+                  width: 20,
+                  child: Icon(
+                    Icons.remove_red_eye,
+                    color:
+                        hidePassword == true ? Colors.grey : eventajaGreenTeal,
+                  )),
+            )
+          ],
         ),
         SizedBox(height: 15),
         ButtonTheme(
@@ -170,12 +278,23 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   ),
                   backgroundColor: Colors.red,
                 ));
-              } else {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => AfterRegister(
-                  username: _usernameController.text,
-                  email: _emailController.text,
-                  password: _passwordController.text
-                )));
+              } else if (usernameStatus == 'nonavail' ||
+                  emailStatus == 'nonavail') {
+                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                  content: Text(
+                    'Please check your input',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  backgroundColor: Colors.red,
+                ));
+              } else if(usernameStatus == 'avail' && emailStatus == 'avail') {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AfterRegister(
+                            username: _usernameController.text,
+                            email: _emailController.text,
+                            password: _passwordController.text)));
               }
             },
           ),
@@ -190,32 +309,28 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     );
   }
 
-  Future<http.Response> checkUsername(String username) async{
+  Future<http.Response> checkUsername(String username) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/signup/check_username?username=$username&X-API-KEY=$API_KEY';
+    String url = BaseApi().apiUrl +
+        '/signup/check_username?username=$username&X-API-KEY=$API_KEY';
 
-    final response = await http.get(
-      url,
-      headers: {
-        'Authorization': AUTHORIZATION_KEY,
-      }
-    );
+    final response = await http.get(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+    });
 
     return response;
   }
 
-  Future<http.Response> checkEmail(String email) async{
+  Future<http.Response> checkEmail(String email) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/signup/check_email?email=$email&X-API-KEY=$API_KEY';
+    String url = BaseApi().apiUrl +
+        '/signup/check_email?email=$email&X-API-KEY=$API_KEY';
 
-    final response = await http.get(
-      url,
-      headers: {
-        'Authorization': AUTHORIZATION_KEY,
-      }
-    );
+    final response = await http.get(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+    });
 
     return response;
   }

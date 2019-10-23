@@ -80,6 +80,9 @@ class TimelineDashboardState extends State<TimelineDashboard> {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
+  RefreshController homeRefreshController =
+      RefreshController(initialRefresh: false);
+
   int newPage = 0;
 
   void _onLoading() async {
@@ -130,144 +133,159 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                     return bannerData == null
                         ? Center(child: CircularProgressIndicator())
                         : GestureDetector(
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => OpenMedia(articleID: bannerData['id'],)));
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).devicePixelRatio *
-                                2645.0,
-                            margin: EdgeInsets.only(
-                                left: 13, right: 13, bottom: 15, top: 13),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.rectangle,
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      offset: Offset(0, 0),
-                                      blurRadius: 2,
-                                      spreadRadius: 1.5)
-                                ],
-                                borderRadius: BorderRadius.circular(15),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: CachedNetworkImageProvider(
-                                    bannerData["banner"],
-                                  ),
-                                )),
-                          ),
-                        );
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => OpenMedia(
+                                            articleID: bannerData['id'],
+                                          )));
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).devicePixelRatio *
+                                  2645.0,
+                              margin: EdgeInsets.only(
+                                  left: 13, right: 13, bottom: 15, top: 13),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.rectangle,
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        offset: Offset(0, 0),
+                                        blurRadius: 2,
+                                        spreadRadius: 1.5)
+                                  ],
+                                  borderRadius: BorderRadius.circular(15),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: CachedNetworkImageProvider(
+                                      bannerData["banner"],
+                                    ),
+                                  )),
+                            ),
+                          );
                   },
                 );
         })?.toList() ??
         [];
 
-    return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(null, 100),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 75,
-            child: Container(
-              color: Colors.white,
-              child: Container(
-                margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 23,
-                          width: 93,
-                          child: Image.asset(
-                            'assets/icons/aset_icon/emedia.png',
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                        height: 35,
-                        width: 35,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  offset: Offset(0, 0),
-                                  spreadRadius: 1.5,
-                                  blurRadius: 2)
-                            ]),
-                        child: Image.asset(
-                          'assets/icons/ticket.png',
-                          scale: 3,
-                        ))
-                  ],
-                ),
+    return SafeArea(
+          child: mediaData == null
+          ? Container(
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
-            ),
-          ),
-        ),
-        backgroundColor: Colors.white.withOpacity(0.5),
-        body: DefaultTabController(
-          initialIndex: 0,
-          length: 2,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Container(
-                color: Colors.white,
-                child: TabBar(
-                  tabs: <Widget>[
-                    Tab(
+            )
+          : Scaffold(
+              appBar: PreferredSize(
+                preferredSize: Size(null, 100),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 75,
+                  child: Container(
+                    color: Colors.white,
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Image.asset(
-                            'assets/icons/icon_apps/home.png',
-                            scale: 4.5,
+                          Row(
+                            children: <Widget>[
+                              SizedBox(
+                                height: 23,
+                                width: 93,
+                                child: Image.asset(
+                                  'assets/icons/aset_icon/emedia.png',
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 8),
-                          Text('Home',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 12.5)),
+                          Container(
+                              height: 35,
+                              width: 35,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        offset: Offset(0, 0),
+                                        spreadRadius: 1.5,
+                                        blurRadius: 2)
+                                  ]),
+                              child: Image.asset(
+                                'assets/icons/ticket.png',
+                                scale: 3,
+                              ))
                         ],
                       ),
                     ),
-                    Tab(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Image.asset(
-                            'assets/icons/icon_apps/public_timeline.png',
-                            scale: 4.5,
+                  ),
+                ),
+              ),
+              backgroundColor: Colors.white.withOpacity(0.5),
+              body: DefaultTabController(
+                initialIndex: 0,
+                length: 2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Container(
+                      color: Colors.white,
+                      child: TabBar(
+                        tabs: <Widget>[
+                          Tab(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Image.asset(
+                                  'assets/icons/icon_apps/home.png',
+                                  scale: 4.5,
+                                ),
+                                SizedBox(width: 8),
+                                Text('Home',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12.5)),
+                              ],
+                            ),
                           ),
-                          SizedBox(width: 8),
-                          Text('Public Timeline',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 12.5)),
+                          Tab(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Image.asset(
+                                  'assets/icons/icon_apps/public_timeline.png',
+                                  scale: 4.5,
+                                ),
+                                SizedBox(width: 8),
+                                Text('Public Timeline',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12.5)),
+                              ],
+                            ),
+                          )
                         ],
+                        unselectedLabelColor: Colors.grey,
+                      ),
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height - 191,
+                      child: TabBarView(
+                        children: <Widget>[emedia(), userMedia()],
                       ),
                     )
                   ],
-                  unselectedLabelColor: Colors.grey,
                 ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height - 191,
-                child: TabBarView(
-                  children: <Widget>[emedia(), userMedia()],
-                ),
-              )
-            ],
-          ),
-        ));
+              )),
+    );
   }
 
   getSize() {}
@@ -278,18 +296,69 @@ class TimelineDashboardState extends State<TimelineDashboard> {
   }
 
   Widget emedia() {
-    return ListView(
-      children: <Widget>[
-        banner(),
-        mediaHeader(),
-        mediaContent(),
-        latestMediaHeader(),
-        latestMediaContent(),
-        popularVideoHeader(),
-        popularVideoContent(),
-        latestVideoHeader(),
-        latestVideoContent()
-      ],
+    return SmartRefresher(
+      controller: homeRefreshController,
+      enablePullDown: true,
+      enablePullUp: false,
+      onRefresh: () async {
+        await Future.delayed(Duration(seconds: 5), () {
+          setState(() {
+            getUserData();
+            getMedia().then((response) {
+              var extractedData = json.decode(response.body);
+
+              print(response.statusCode);
+              print(response.body);
+
+              if (response.statusCode == 200) {
+                setState(() {
+                  mediaData = extractedData['data']['data'];
+                });
+              }
+            });
+            getBanner().then((response) {
+              var extractedData = json.decode(response.body);
+
+              print(response.statusCode);
+              print(response.body);
+
+              if (response.statusCode == 200) {
+                setState(() {
+                  bannerData = extractedData['data']['data'];
+                });
+              }
+            });
+            getTimelineList().then((response) {
+              print(response.statusCode);
+              print(response.body);
+              var extractedData = json.decode(response.body);
+
+              print('Timeline List -> ${response.body.toString()}');
+
+              if (response.statusCode == 200) {
+                setState(() {
+                  timelineList = extractedData['data'];
+                });
+              }
+            });
+          });
+          if (mounted == true) setState(() {});
+          homeRefreshController.refreshCompleted();
+        });
+      },
+      child: ListView(
+        children: <Widget>[
+          banner(),
+          mediaHeader(),
+          mediaContent(),
+          latestMediaHeader(),
+          latestMediaContent(),
+          popularVideoHeader(),
+          popularVideoContent(),
+          latestVideoHeader(),
+          latestVideoContent()
+        ],
+      ),
     );
   }
 
@@ -544,18 +613,23 @@ class TimelineDashboardState extends State<TimelineDashboard> {
   }
 
   Widget latestMediaContent() {
-    return ColumnBuilder(
-      itemCount: 3,
-      itemBuilder: (BuildContext context, i) {
-        return LatestMediaItem(
-          isVideo: false,
-          image: mediaData[i]['banner'],
-          title: mediaData[i]['title'],
-          username: mediaData[i]['creator']['username'],
-          userImage: mediaData[i]['creator']['photo'],
-        );
-      },
-    );
+    return mediaData == null
+        ? Container(
+            child: Center(
+            child: CircularProgressIndicator(),
+          ))
+        : ColumnBuilder(
+            itemCount: mediaData == null ? 0 : mediaData.length,
+            itemBuilder: (BuildContext context, i) {
+              return LatestMediaItem(
+                isVideo: false,
+                image: mediaData[i]['banner'],
+                title: mediaData[i]['title'],
+                username: mediaData[i]['creator']['username'],
+                userImage: mediaData[i]['creator']['photo'],
+              );
+            },
+          );
   }
 
   Widget popularVideoHeader() {
@@ -601,37 +675,42 @@ class TimelineDashboardState extends State<TimelineDashboard> {
   Widget popularVideoContent() {
     return Container(
       height: 247,
-      child: ListView.builder(
-        itemCount: 10,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (BuildContext context, i) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MediaDetails(
-                            userPicture: mediaData[i]['creator']['photo'],
-                            articleDetail: mediaData[i]['description'],
-                            imageCount: 'img' + i.toString(),
-                            username: mediaData[i]['creator']['username'],
-                            imageUri: mediaData[i]['banner'],
-                            mediaTitle: mediaData[i]['title'],
-                            autoFocus: false,
-                          )));
-            },
-            child: MediaItem(
-              isVideo: true,
-              image: mediaData[i]['banner'],
-              title: mediaData[i]['title'],
-              username: mediaData[i]['creator']['username'],
-              userPicture: mediaData[i]['creator']['photo'],
-              articleDetail: mediaData[i]['description'],
-              imageIndex: i,
+      child: mediaData == null
+          ? Container(
+              child: Center(
+              child: CircularProgressIndicator(),
+            ))
+          : ListView.builder(
+              itemCount: mediaData == null ? 0 : mediaData.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (BuildContext context, i) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MediaDetails(
+                                  userPicture: mediaData[i]['creator']['photo'],
+                                  articleDetail: mediaData[i]['description'],
+                                  imageCount: 'img' + i.toString(),
+                                  username: mediaData[i]['creator']['username'],
+                                  imageUri: mediaData[i]['banner'],
+                                  mediaTitle: mediaData[i]['title'],
+                                  autoFocus: false,
+                                )));
+                  },
+                  child: MediaItem(
+                    isVideo: true,
+                    image: mediaData[i]['banner'],
+                    title: mediaData[i]['title'],
+                    username: mediaData[i]['creator']['username'],
+                    userPicture: mediaData[i]['creator']['photo'],
+                    articleDetail: mediaData[i]['description'],
+                    imageIndex: i,
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 
@@ -677,7 +756,7 @@ class TimelineDashboardState extends State<TimelineDashboard> {
 
   Widget latestVideoContent() {
     return ColumnBuilder(
-      itemCount: 3,
+      itemCount: mediaData == null ? 0 : mediaData.length,
       itemBuilder: (BuildContext context, i) {
         return LatestMediaItem(
           isVideo: true,
@@ -787,29 +866,23 @@ class TimelineDashboardState extends State<TimelineDashboard> {
 //          print('impression map: ' + impressionLists.toString());
 //          print('userID map: ' + impressionLists['data'].toString());
 
+          for (int i = 0; i < impressionList.length; i++) {
+            List impression = impressionList;
 
-            for(int i = 0; i < impressionList.length; i++ ){
-              List impression = impressionList;
+            print(impression);
 
-              print(impression);
-
-              if(impression != null){
-                if(impression[i]['userID'].contains(currentUserId)){
-                  isLiked = false;
-                  print('not yet liked');
-                }
-                else{
-                  isLiked = true;
-                  print('you already liked');
-                }
-              }
-              else{
+            if (impression != null) {
+              if (impression[i]['userID'].contains(currentUserId)) {
                 isLiked = false;
+                print('not yet liked');
+              } else {
+                isLiked = true;
+                print('you already liked');
               }
+            } else {
+              isLiked = false;
             }
-
-
-
+          }
 
           return Container(
               margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
@@ -927,36 +1000,59 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                                 timelineList[i]['type'] == 'event' ||
                                 timelineList[i]['type'] == 'eventgoing'
                             ? GestureDetector(
-                              onTap: (){
-                                if(timelineList[i]['type'] == 'photo'){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserMediaDetail(postID: timelineList[i]['id'], imageUri: timelineList[i]['pictureFull'], articleDetail: timelineList[i]['description'], mediaTitle: timelineList[i]['description'], autoFocus: false, username: timelineList[i]['fullName'], userPicture: timelineList[i]['photo'], imageCount: 1,)));
-                                }
-                                else{
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => MediaPlayer(videoUri: timelineList[i]['pictureFull'])));
-                                }
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                          timelineList[i]['type'] == 'video'
-                                              ? timelineList[i]['picture']
-                                              : timelineList[i]['pictureFull'],
-                                        ),
-                                        fit: BoxFit.cover)),
-                                height: 400,
-                                width: MediaQuery.of(context).size.width,
-                                child: Center(
-                                  child: timelineList[i]['type'] == 'video'
-                                      ? Icon(
-                                          Icons.play_circle_filled,
-                                          size: 80,
-                                          color: Colors.white,
-                                        )
-                                      : Container(),
-                                ),
-                              ))
+                                onTap: () {
+                                  if (timelineList[i]['type'] == 'photo') {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                UserMediaDetail(
+                                                  postID: timelineList[i]['id'],
+                                                  imageUri: timelineList[i]
+                                                      ['pictureFull'],
+                                                  articleDetail: timelineList[i]
+                                                      ['description'],
+                                                  mediaTitle: timelineList[i]
+                                                      ['description'],
+                                                  autoFocus: false,
+                                                  username: timelineList[i]
+                                                      ['fullName'],
+                                                  userPicture: timelineList[i]
+                                                      ['photo'],
+                                                  imageCount: 1,
+                                                )));
+                                  } else {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => MediaPlayer(
+                                                videoUri: timelineList[i]
+                                                    ['pictureFull'])));
+                                  }
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                            timelineList[i]['type'] == 'video'
+                                                ? timelineList[i]['picture']
+                                                : timelineList[i]
+                                                    ['pictureFull'],
+                                          ),
+                                          fit: BoxFit.cover)),
+                                  height: 400,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Center(
+                                    child: timelineList[i]['type'] == 'video'
+                                        ? Icon(
+                                            Icons.play_circle_filled,
+                                            size: 80,
+                                            color: Colors.white,
+                                          )
+                                        : Container(),
+                                  ),
+                                ))
                             : Container(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1050,7 +1146,7 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
 //                              for(int i = 0; i < impressionList.length; i++ ){
 //                                List impression = impressionList;
 //
@@ -1064,46 +1160,49 @@ class TimelineDashboardState extends State<TimelineDashboard> {
 //                                }
 //                              }
 
-                              if(timelineList[i]['impression']['data'] == null){
+                              if (timelineList[i]['impression']['data'] ==
+                                  null) {
                                 isLiked = false;
-                                for(int i = 0; i < impressionList.length; i++ ){
+                                for (int i = 0;
+                                    i < impressionList.length;
+                                    i++) {
                                   List impression = impressionList;
 
-                                  if(impression[i]['userID'].contains(currentUserId)){
+                                  if (impression[i]['userID']
+                                      .contains(currentUserId)) {
                                     isLiked = false;
                                     print('not yet liked');
+                                  } else {
+                                    isLiked = true;
+                                    print('you already liked');
                                   }
-                                  else{
+                                }
+                              } else {
+                                for (int i = 0;
+                                    i < impressionList.length;
+                                    i++) {
+                                  List impression = impressionList;
+
+                                  if (impression[i]['userID']
+                                      .contains(currentUserId)) {
+                                    isLiked = false;
+                                    print('not yet liked');
+                                  } else {
                                     isLiked = true;
                                     print('you already liked');
                                   }
                                 }
                               }
-                              else{
-                                for(int i = 0; i < impressionList.length; i++ ){
-                                  List impression = impressionList;
 
-                                  if(impression[i]['userID'].contains(currentUserId)){
-                                    isLiked = false;
-                                    print('not yet liked');
-                                  }
-                                  else{
-                                    isLiked = true;
-                                    print('you already liked');
-                                  }
-                                }
-                              }
-
-                              if(isLiked == false){
+                              if (isLiked == false) {
                                 isLiked = !isLiked;
                                 print('liked');
-                              }
-                              else{
+                              } else {
                                 isLiked = !isLiked;
                                 print('disliked');
                               }
                             },
-                                                      child: Container(
+                            child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               height: 30,
                               decoration: BoxDecoration(
@@ -1494,23 +1593,19 @@ class TimelineDashboardState extends State<TimelineDashboard> {
     );
   }
 
-  Future<http.Response> doLove(var postId, var impressionID) async{
+  Future<http.Response> doLove(var postId, var impressionID) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String url = BaseApi().apiUrl + '/photo_impression/post';
 
-    final response = await http.post(
-      url,
-      body: {
-        'X-API-KEY': API_KEY,
-        'id': postId,
-        'impressionID': impressionID
-      },
-      headers: {
-        'Authorization': AUTHORIZATION_KEY,
-        'cookie': prefs.getString('Session'),
-      }
-    );
+    final response = await http.post(url, body: {
+      'X-API-KEY': API_KEY,
+      'id': postId,
+      'impressionID': impressionID
+    }, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session'),
+    });
 
     return response;
   }
@@ -1519,15 +1614,16 @@ class TimelineDashboardState extends State<TimelineDashboard> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int currentPage = 1;
 
-    setState((){
-      if(newPage != null){
+    setState(() {
+      if (newPage != null) {
         currentPage += newPage;
       }
 
       print(currentPage);
     });
 
-    String url = BaseApi().apiUrl + '/timeline/list?X-API-KEY=$API_KEY&page=$currentPage';
+    String url = BaseApi().apiUrl +
+        '/timeline/list?X-API-KEY=$API_KEY&page=$currentPage';
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,
@@ -1588,5 +1684,12 @@ class TimelineDashboardState extends State<TimelineDashboard> {
     });
 
     return response;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    homeRefreshController.dispose();
+    refreshController.dispose();
   }
 }

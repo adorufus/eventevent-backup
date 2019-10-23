@@ -175,7 +175,7 @@ class _CollectionPageState extends State<CollectionPage> {
                                         id: eventByCategoryList[i]['id'])));
                       },
                       child: new LatestEventItem(
-                        image: eventByCategoryList[i]['picture_timeline'],
+                        image: eventByCategoryList[i]['picture'],
                         title: eventByCategoryList[i]['name'],
                         location: eventByCategoryList[i]['address'],
                         itemColor: itemColor,

@@ -1,4 +1,6 @@
 import 'package:eventevent/Widgets/Home/MiniDate.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'PopularEventWidget.dart';
 
@@ -59,7 +61,7 @@ class LatestEventItem extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 Container(
-                  height: 20,
+                  height: 10,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -80,6 +82,13 @@ class LatestEventItem extends StatelessWidget {
                           )),
                     ],
                   ),
+                ),
+                SizedBox(height: 7),
+                Row(
+                  children: <Widget>[
+                    type == 'paid' || type == 'paid_seating' ? isAvailable == '1' ? Icon(CupertinoIcons.circle_filled, color: eventajaGreenTeal, size: 15,) : Icon(CupertinoIcons.circle_filled, color: itemPrice == 'sales_ended' ? Colors.yellowAccent : Colors.red, size: 15,) : Container(),
+                    type == 'paid' || type == 'paid_seating' ? isAvailable == '1' ? Text('Available', style: TextStyle(fontSize: 12),) : Text(itemPrice, style: TextStyle(fontSize: 12),) : Container(),
+                  ],
                 ),
                 SizedBox(height: 10),
                 Container(

@@ -56,106 +56,108 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(null, 100),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: 75,
+    return SafeArea(
+          child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size(null, 100),
           child: Container(
-            color: Colors.white,
+            width: MediaQuery.of(context).size.width,
+            height: 75,
             child: Container(
-              margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
-              child: Row(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        SizedBox(
-                          height: 15.49,
-                          width: 9.73,
-                          child: Image.asset(
-                            'assets/icons/icon_apps/arrow.png',
-                            fit: BoxFit.fill,
+              color: Colors.white,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
+                child: Row(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 15.49,
+                            width: 9.73,
+                            child: Image.asset(
+                              'assets/icons/icon_apps/arrow.png',
+                              fit: BoxFit.fill,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(width: MediaQuery.of(context).size.width / 2.8),
-                  Text(
-                    'All People',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                  )
-                ],
+                    SizedBox(width: MediaQuery.of(context).size.width / 2.8),
+                    Text(
+                      'All People',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-      body: DefaultTabController(
-        initialIndex: widget.initialIndex,
-        length: 2,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Container(
-              color: Colors.white,
-              child: TabBar(
-                tabs: <Widget>[
-                  Tab(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset(
-                          'assets/icons/icon_apps/popular.png',
-                          scale: 4.5,
-                        ),
-                        SizedBox(width: 8),
-                        Text('Popular',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 12.5)),
-                      ],
+        body: DefaultTabController(
+          initialIndex: widget.initialIndex,
+          length: 2,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Container(
+                color: Colors.white,
+                child: TabBar(
+                  tabs: <Widget>[
+                    Tab(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            'assets/icons/icon_apps/popular.png',
+                            scale: 4.5,
+                          ),
+                          SizedBox(width: 8),
+                          Text('Popular',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 12.5)),
+                        ],
+                      ),
                     ),
-                  ),
-                  Tab(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset(
-                          'assets/icons/icon_apps/discover.png',
-                          scale: 4.5,
-                        ),
-                        SizedBox(width: 8),
-                        Text('Discover',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 12.5)),
-                      ],
+                    Tab(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            'assets/icons/icon_apps/discover.png',
+                            scale: 4.5,
+                          ),
+                          SizedBox(width: 8),
+                          Text('Discover',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 12.5)),
+                        ],
+                      ),
+                    )
+                  ],
+                  unselectedLabelColor: Colors.grey,
+                ),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height - 136,
+                child: TabBarView(
+                  children: <Widget>[
+                    Container(
+                      child: popularEvent(),
                     ),
-                  )
-                ],
-                unselectedLabelColor: Colors.grey,
-              ),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height - 136,
-              child: TabBarView(
-                children: <Widget>[
-                  Container(
-                    child: popularEvent(),
-                  ),
-                  discoverEvent()
-                ],
-              ),
-            )
-          ],
+                    discoverEvent()
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

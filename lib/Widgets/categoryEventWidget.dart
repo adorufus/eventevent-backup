@@ -101,10 +101,9 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
           : ListView(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              physics: NeverScrollableScrollPhysics(),
               children: <Widget>[
                 Container(
-                  width: 340,
+                  width: 800,
                   height: 220,
                   child: Wrap(
                       direction: Axis.horizontal, children: mappedCategoryData),
@@ -136,8 +135,6 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
       if (!mounted) return;
       setState(() {
         categoryEventData = extractedData['data'];
-        categoryEventData.removeAt(0);
-        categoryEventData.removeRange(8, categoryEventData.length);
         print(categoryEventData.length);
       });
     }

@@ -1237,7 +1237,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                 child: GestureDetector(
                   onTap: () {
                     if (ticketStat['salesStatus'] == null) {
-                      return;
+                      
                     } else if (ticketType['type'] == 'free') {
                       showCupertinoDialog(
                           context: context,
@@ -1424,6 +1424,30 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         _dDay = DateTime.parse(detailData['ticket']['sales_start_date']);
 
         print(_dDay.toString());
+        // setState((){
+        //   if(detailData['status'] == 'active'){
+        //     if(detailData['ticket_type']['type'] == 'free'){
+        //       ticketTypeURI = 'assets/btn_ticket/free.png';
+        //     }
+        //     else if(detailData['ticket_type']['type'] == 'free_limited'){
+        //       ticketTypeURI = 'assets/btn_ticket/free-limited.png';
+        //     }
+        //     else if(detailData['ticket_type']['type'] == 'on_the_spot'){
+        //       ticketTypeURI = 'assets/btn_ticket/paid-value.png';
+        //     }
+        //     else if(detailData['ticket_type']['type'] == 'paid'){
+        //       ticketTypeURI = 'assets/btn_ticket/paid-value.png';
+        //     }
+        //     else if(detailData['ticketTypeID'] == '2'){
+        //       ticketTypeURI = 'assets/btn_ticket/paid-value.png';
+        //     }
+        //   }
+
+        //   if(detailData['ticket_type']['type'] == 'no_ticket'){
+        //       ticketTypeURI = 'assets/btn_ticket/paid-value.png';
+        //     }
+        // });
+        
 
         if (detailData['status'] == 'active') {
           if (ticketType['isSetupTicket'].toString() == "1") {
@@ -1443,8 +1467,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               isTicketUnavailable = false;
             }
           } else {
-            if (ticketType['type'].toString() == 'free') {
-              ticketTypeURI = "assets/btn_ticket/free";
+            if (ticketType['type'] == 'free') {
+              ticketTypeURI = "assets/btn_ticket/free.png";
             } else if (ticketType['type'].toString() == 'no_ticket') {
               ticketTypeURI = "assets/btn_ticket/no-ticket.png";
             } else if (ticketType['type'].toString() == 'on_the_spot') {
@@ -1473,6 +1497,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       print(creatorImageUri);
       print(startTime);
       print(endTime);
+      print(ticketTypeURI);
       print(ticketType['isSetupTicket']);
       print(ticketStat);
     }

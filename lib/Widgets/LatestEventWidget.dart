@@ -63,157 +63,159 @@ class _LatestEventWidget extends State<LatestEventWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: latestEventData == null
-            ? Center(
-                child: Container(
-                  width: 25,
-                  height: 25,
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: CircularProgressIndicator(),
+    return SafeArea(
+          child: Scaffold(
+        body: Container(
+          child: latestEventData == null
+              ? Center(
+                  child: Container(
+                    width: 25,
+                    height: 25,
+                    child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                )
+              : SmartRefresher(
+                  enablePullDown: true,
+                  enablePullUp: true,
+                  footer: CustomFooter(
+                      builder: (BuildContext context, LoadStatus mode) {
+                    Widget body;
+                    if (mode == LoadStatus.idle) {
+                      body = Text("Load data");
+                    } else if (mode == LoadStatus.loading) {
+                      body = CircularProgressIndicator();
+                    } else if (mode == LoadStatus.failed) {
+                      body = Text("Load Failed!");
+                    } else if (mode == LoadStatus.canLoading) {
+                      body = Text('More');
+                    } else {
+                      body = Container();
+                    }
+
+                    return Container(height: 35, child: Center(child: body));
+                  }),
+                  controller: refreshController,
+                  onRefresh: () {
+                    setState((){
+                      newPage = 0;
+                    });
+                    fetchLatestEvent(newPage: newPage).then((response) {
+                      if (response.statusCode == 200) {
+                        setState(() {
+                          var extractedData = json.decode(response.body);
+                          latestEventData = extractedData['data'];
+                        });
+                        if (mounted) setState(() {});
+                        refreshController.refreshCompleted();
+                      }
+                    });
+                  },
+                  onLoading: _onLoading,
+                  child: ListView.builder(
+                    physics: ClampingScrollPhysics(),
+                    itemCount:
+                        latestEventData == null ? 0 : latestEventData.length,
+                    itemBuilder: (BuildContext context, i) {
+                      Color itemColor;
+                      String itemPriceText;
+
+                      if (latestEventData[i]['ticket_type']['type'] == 'paid' ||
+                          latestEventData[i]['ticket_type']['type'] ==
+                              'paid_seating') {
+                        if (latestEventData[i]['ticket']
+                                ['availableTicketStatus'] ==
+                            '1') {
+                          itemColor = Color(0xFF34B323);
+                          itemPriceText =
+                              latestEventData[i]['ticket']['cheapestTicket'];
+                        } else {
+                          if (latestEventData[i]['ticket']['salesStatus'] ==
+                              'comingSoon') {
+                            itemColor = Color(0xFF34B323).withOpacity(0.3);
+                            itemPriceText = 'COMING SOON';
+                          } else if (latestEventData[i]['ticket']
+                                  ['salesStatus'] ==
+                              'endSales') {
+                            itemColor = Color(0xFF8E1E2D);
+                            if (latestEventData[i]['status'] == 'ended') {
+                              itemPriceText = 'EVENT HAS ENDED';
+                            }
+                            itemPriceText = 'SALES ENDED';
+                          } else {
+                            itemColor = Color(0xFF8E1E2D);
+                            itemPriceText = 'SOLD OUT';
+                          }
+                        }
+                      } else if (latestEventData[i]['ticket_type']['type'] ==
+                          'no_ticket') {
+                        itemColor = Color(0xFFA6A8AB);
+                        itemPriceText = 'NO TICKET';
+                      } else if (latestEventData[i]['ticket_type']['type'] ==
+                          'on_the_spot') {
+                        itemColor = Color(0xFF652D90);
+                        itemPriceText = latestEventData[i]['ticket_type']['name'];
+                      } else if (latestEventData[i]['ticket_type']['type'] ==
+                          'free') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText = latestEventData[i]['ticket_type']['name'];
+                      } else if (latestEventData[i]['ticket_type']['type'] ==
+                          'free') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText = latestEventData[i]['ticket_type']['name'];
+                      } else if (latestEventData[i]['ticket_type']['type'] ==
+                          'free_limited') {
+                        if (latestEventData[i]['ticket']
+                                ['availableTicketStatus'] ==
+                            '1') {
+                          itemColor = Color(0xFFFFAA00);
+                          itemPriceText =
+                              latestEventData[i]['ticket_type']['name'];
+                        } else {
+                          if (latestEventData[i]['ticket']['salesStatus'] ==
+                              'comingSoon') {
+                            itemColor = Color(0xFFFFAA00).withOpacity(0.3);
+                            itemPriceText = 'COMING SOON';
+                          } else if (latestEventData[i]['ticket']
+                                  ['salesStatus'] ==
+                              'endSales') {
+                            itemColor = Color(0xFF8E1E2D);
+                            if (latestEventData[i]['status'] == 'ended') {
+                              itemPriceText = 'EVENT HAS ENDED';
+                            }
+                            itemPriceText = 'SALES ENDED';
+                          } else {
+                            itemColor = Color(0xFF8E1E2D);
+                            itemPriceText = 'SOLD OUT';
+                          }
+                        }
+                      }
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      EventDetailsConstructView(
+                                          id: latestEventData[i]['id'])));
+                        },
+                        child: new LatestEventItem(
+                          image: latestEventData[i]['picture_timeline'],
+                          title: latestEventData[i]['name'],
+                          location: latestEventData[i]['address'],
+                          itemColor: itemColor,
+                          itemPrice: itemPriceText,
+                          type: latestEventData[i]['ticket_type']['type'],
+                          isAvailable: latestEventData[i]['ticket']
+                              ['availableTicketStatus'],
+                        ),
+                      );
+                    },
                   ),
                 ),
-              )
-            : SmartRefresher(
-                enablePullDown: true,
-                enablePullUp: true,
-                footer: CustomFooter(
-                    builder: (BuildContext context, LoadStatus mode) {
-                  Widget body;
-                  if (mode == LoadStatus.idle) {
-                    body = Text("Load data");
-                  } else if (mode == LoadStatus.loading) {
-                    body = CircularProgressIndicator();
-                  } else if (mode == LoadStatus.failed) {
-                    body = Text("Load Failed!");
-                  } else if (mode == LoadStatus.canLoading) {
-                    body = Text('More');
-                  } else {
-                    body = Container();
-                  }
-
-                  return Container(height: 35, child: Center(child: body));
-                }),
-                controller: refreshController,
-                onRefresh: () {
-                  setState((){
-                    newPage = 0;
-                  });
-                  fetchLatestEvent(newPage: newPage).then((response) {
-                    if (response.statusCode == 200) {
-                      setState(() {
-                        var extractedData = json.decode(response.body);
-                        latestEventData = extractedData['data'];
-                      });
-                      if (mounted) setState(() {});
-                      refreshController.refreshCompleted();
-                    }
-                  });
-                },
-                onLoading: _onLoading,
-                child: ListView.builder(
-                  physics: ClampingScrollPhysics(),
-                  itemCount:
-                      latestEventData == null ? 0 : latestEventData.length,
-                  itemBuilder: (BuildContext context, i) {
-                    Color itemColor;
-                    String itemPriceText;
-
-                    if (latestEventData[i]['ticket_type']['type'] == 'paid' ||
-                        latestEventData[i]['ticket_type']['type'] ==
-                            'paid_seating') {
-                      if (latestEventData[i]['ticket']
-                              ['availableTicketStatus'] ==
-                          '1') {
-                        itemColor = Color(0xFF34B323);
-                        itemPriceText =
-                            latestEventData[i]['ticket']['cheapestTicket'];
-                      } else {
-                        if (latestEventData[i]['ticket']['salesStatus'] ==
-                            'comingSoon') {
-                          itemColor = Color(0xFF34B323).withOpacity(0.3);
-                          itemPriceText = 'COMING SOON';
-                        } else if (latestEventData[i]['ticket']
-                                ['salesStatus'] ==
-                            'endSales') {
-                          itemColor = Color(0xFF8E1E2D);
-                          if (latestEventData[i]['status'] == 'ended') {
-                            itemPriceText = 'EVENT HAS ENDED';
-                          }
-                          itemPriceText = 'SALES ENDED';
-                        } else {
-                          itemColor = Color(0xFF8E1E2D);
-                          itemPriceText = 'SOLD OUT';
-                        }
-                      }
-                    } else if (latestEventData[i]['ticket_type']['type'] ==
-                        'no_ticket') {
-                      itemColor = Color(0xFFA6A8AB);
-                      itemPriceText = 'NO TICKET';
-                    } else if (latestEventData[i]['ticket_type']['type'] ==
-                        'on_the_spot') {
-                      itemColor = Color(0xFF652D90);
-                      itemPriceText = latestEventData[i]['ticket_type']['name'];
-                    } else if (latestEventData[i]['ticket_type']['type'] ==
-                        'free') {
-                      itemColor = Color(0xFFFFAA00);
-                      itemPriceText = latestEventData[i]['ticket_type']['name'];
-                    } else if (latestEventData[i]['ticket_type']['type'] ==
-                        'free') {
-                      itemColor = Color(0xFFFFAA00);
-                      itemPriceText = latestEventData[i]['ticket_type']['name'];
-                    } else if (latestEventData[i]['ticket_type']['type'] ==
-                        'free_limited') {
-                      if (latestEventData[i]['ticket']
-                              ['availableTicketStatus'] ==
-                          '1') {
-                        itemColor = Color(0xFFFFAA00);
-                        itemPriceText =
-                            latestEventData[i]['ticket_type']['name'];
-                      } else {
-                        if (latestEventData[i]['ticket']['salesStatus'] ==
-                            'comingSoon') {
-                          itemColor = Color(0xFFFFAA00).withOpacity(0.3);
-                          itemPriceText = 'COMING SOON';
-                        } else if (latestEventData[i]['ticket']
-                                ['salesStatus'] ==
-                            'endSales') {
-                          itemColor = Color(0xFF8E1E2D);
-                          if (latestEventData[i]['status'] == 'ended') {
-                            itemPriceText = 'EVENT HAS ENDED';
-                          }
-                          itemPriceText = 'SALES ENDED';
-                        } else {
-                          itemColor = Color(0xFF8E1E2D);
-                          itemPriceText = 'SOLD OUT';
-                        }
-                      }
-                    }
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    EventDetailsConstructView(
-                                        id: latestEventData[i]['id'])));
-                      },
-                      child: new LatestEventItem(
-                        image: latestEventData[i]['picture_timeline'],
-                        title: latestEventData[i]['name'],
-                        location: latestEventData[i]['address'],
-                        itemColor: itemColor,
-                        itemPrice: itemPriceText,
-                        type: latestEventData[i]['ticket_type']['type'],
-                        isAvailable: latestEventData[i]['ticket']
-                            ['availableTicketStatus'],
-                      ),
-                    );
-                  },
-                ),
-              ),
+        ),
       ),
     );
   }

@@ -23,7 +23,14 @@ class PostEventPosterState extends State<PostEventPoster> {
   File posterFile;
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () => _showDialog());
+  }
+
+  @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(

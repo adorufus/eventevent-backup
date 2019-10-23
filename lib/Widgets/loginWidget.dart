@@ -42,10 +42,13 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   String _userID;
   String googleTokenID;
+  bool hidePassword = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       appBar: CupertinoNavigationBar(
         padding:
@@ -111,17 +114,32 @@ class _LoginWidgetState extends State<LoginWidget> {
         SizedBox(
           height: 15,
         ),
-        TextFormField(
-          controller: _passwordController,
-          keyboardType: TextInputType.text,
-          autofocus: false,
-          obscureText: true,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            // fillColor: Colors.white,
-            // filled: true,
-            hintText: 'Password',
-          ),
+        Row(
+          children: <Widget>[
+            Container(
+              width: 250,
+              child: TextFormField(
+                controller: _passwordController,
+                keyboardType: TextInputType.text,
+                autofocus: false,
+                obscureText: hidePassword,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  // fillColor: Colors.white,
+                  // filled: true,
+                  hintText: 'Password',
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: (){
+                setState(() {
+                  hidePassword = !hidePassword;
+                });
+              },
+              child: Container(height: 20, width: 20, child: Icon(Icons.remove_red_eye, color: hidePassword == true ? Colors.grey : eventajaGreenTeal,)),
+            )
+          ],
         ),
         SizedBox(
           height: 40,

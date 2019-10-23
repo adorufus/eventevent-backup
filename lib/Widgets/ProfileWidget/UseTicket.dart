@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/Widgets/ProfileWidget/ScanBarcode.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsWidget.dart';
+import 'package:eventevent/Widgets/ProfileWidget/UseTicketSuccess.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -77,7 +78,7 @@ class UseTicketState extends State<UseTicket>{
 
             if(response.statusCode == 200 || response.statusCode == 201){
               print(extractedData['desc']);
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SuccessPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => UseTicketSuccess(eventName: 'test',)));
             }
             else{
               scaffoldKey.currentState.showSnackBar(SnackBar(

@@ -104,207 +104,209 @@ class _ListenPageState extends State<ListenPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: nearbyEventData == null
-            ? Center(
-                child: Container(
-                  width: 25,
-                  height: 25,
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-              )
-            : SmartRefresher(
-                enablePullDown: true,
-                enablePullUp: true,
-                footer: CustomFooter(
-                    builder: (BuildContext context, LoadStatus mode) {
-                  Widget body;
-                  if (mode == LoadStatus.idle) {
-                    body = Text("Load data");
-                  } else if (mode == LoadStatus.loading) {
-                    body = CircularProgressIndicator();
-                  } else if (mode == LoadStatus.failed) {
-                    body = Text("Load Failed!");
-                  } else if (mode == LoadStatus.canLoading) {
-                    body = Text('More');
-                  } else {
-                    body = Container();
-                  }
-
-                  return Container(height: 35, child: Center(child: body));
-                }),
-                controller: refreshController,
-                onRefresh: () {
-                  setState(() {
-                    newPage = 0;
-                  });
-                  fetchCurrentLocationEvent().then((response) {
-                    if (response.statusCode == 200) {
-                      setState(() {
-                        var extractedData = json.decode(response.body);
-                        nearbyEventData = extractedData['data'];
-                      });
-                      if (mounted) setState(() {});
-                      refreshController.refreshCompleted();
-                    }
-                  });
-                },
-                onLoading: _onLoading,
-                child: ListView(children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    margin: EdgeInsets.only(left: 13, right: 13, top: 13),
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              blurRadius: 2,
-                              color: Colors.black.withOpacity(0.1),
-                              spreadRadius: 1.5)
-                        ]),
-                    child: Center(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              SizedBox(height: 3),
-                              Container(
-                                height: 10,
-                                width: 10,
-                                child: Image.asset(
-                                    'assets/icons/icon_apps/location.png'),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 9,
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width - 71,
-                            child: Text(
-                              'null',
-                              style: TextStyle(fontSize: 12),
-                              maxLines: 2,
-                            ),
-                          )
-                        ],
-                      ),
+    return SafeArea(
+          child: Scaffold(
+        body: Container(
+          child: nearbyEventData == null
+              ? Center(
+                  child: Container(
+                    width: 25,
+                    height: 25,
+                    child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: CircularProgressIndicator(),
                     ),
                   ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: ScrollPhysics(),
-                    itemCount:
-                        nearbyEventData == null ? 0 : nearbyEventData.length,
-                    itemBuilder: (BuildContext context, i) {
-                      Color itemColor;
-                      String itemPriceText;
+                )
+              : SmartRefresher(
+                  enablePullDown: true,
+                  enablePullUp: true,
+                  footer: CustomFooter(
+                      builder: (BuildContext context, LoadStatus mode) {
+                    Widget body;
+                    if (mode == LoadStatus.idle) {
+                      body = Text("Load data");
+                    } else if (mode == LoadStatus.loading) {
+                      body = CircularProgressIndicator();
+                    } else if (mode == LoadStatus.failed) {
+                      body = Text("Load Failed!");
+                    } else if (mode == LoadStatus.canLoading) {
+                      body = Text('More');
+                    } else {
+                      body = Container();
+                    }
 
-                      if (nearbyEventData[i]['ticket_type']['type'] == 'paid' ||
-                          nearbyEventData[i]['ticket_type']['type'] ==
-                              'paid_seating') {
-                        if (nearbyEventData[i]['ticket']
-                                ['availableTicketStatus'] ==
-                            '1') {
-                          itemColor = Color(0xFF34B323);
-                          itemPriceText =
-                              nearbyEventData[i]['ticket']['cheapestTicket'];
-                        } else {
-                          if (nearbyEventData[i]['ticket']['salesStatus'] ==
-                              'comingSoon') {
-                            itemColor = Color(0xFF34B323).withOpacity(0.3);
-                            itemPriceText = 'COMING SOON';
-                          } else if (nearbyEventData[i]['ticket']
-                                  ['salesStatus'] ==
-                              'endSales') {
-                            itemColor = Color(0xFF8E1E2D);
-                            if (nearbyEventData[i]['status'] == 'ended') {
-                              itemPriceText = 'EVENT HAS ENDED';
-                            }
-                            itemPriceText = 'SALES ENDED';
+                    return Container(height: 35, child: Center(child: body));
+                  }),
+                  controller: refreshController,
+                  onRefresh: () {
+                    setState(() {
+                      newPage = 0;
+                    });
+                    fetchCurrentLocationEvent().then((response) {
+                      if (response.statusCode == 200) {
+                        setState(() {
+                          var extractedData = json.decode(response.body);
+                          nearbyEventData = extractedData['data'];
+                        });
+                        if (mounted) setState(() {});
+                        refreshController.refreshCompleted();
+                      }
+                    });
+                  },
+                  onLoading: _onLoading,
+                  child: ListView(children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      margin: EdgeInsets.only(left: 13, right: 13, top: 13),
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                blurRadius: 2,
+                                color: Colors.black.withOpacity(0.1),
+                                spreadRadius: 1.5)
+                          ]),
+                      child: Center(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                SizedBox(height: 3),
+                                Container(
+                                  height: 10,
+                                  width: 10,
+                                  child: Image.asset(
+                                      'assets/icons/icon_apps/location.png'),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              width: 9,
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width - 71,
+                              child: Text(
+                                'null',
+                                style: TextStyle(fontSize: 12),
+                                maxLines: 2,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                      itemCount:
+                          nearbyEventData == null ? 0 : nearbyEventData.length,
+                      itemBuilder: (BuildContext context, i) {
+                        Color itemColor;
+                        String itemPriceText;
+
+                        if (nearbyEventData[i]['ticket_type']['type'] == 'paid' ||
+                            nearbyEventData[i]['ticket_type']['type'] ==
+                                'paid_seating') {
+                          if (nearbyEventData[i]['ticket']
+                                  ['availableTicketStatus'] ==
+                              '1') {
+                            itemColor = Color(0xFF34B323);
+                            itemPriceText =
+                                nearbyEventData[i]['ticket']['cheapestTicket'];
                           } else {
-                            itemColor = Color(0xFF8E1E2D);
-                            itemPriceText = 'SOLD OUT';
+                            if (nearbyEventData[i]['ticket']['salesStatus'] ==
+                                'comingSoon') {
+                              itemColor = Color(0xFF34B323).withOpacity(0.3);
+                              itemPriceText = 'COMING SOON';
+                            } else if (nearbyEventData[i]['ticket']
+                                    ['salesStatus'] ==
+                                'endSales') {
+                              itemColor = Color(0xFF8E1E2D);
+                              if (nearbyEventData[i]['status'] == 'ended') {
+                                itemPriceText = 'EVENT HAS ENDED';
+                              }
+                              itemPriceText = 'SALES ENDED';
+                            } else {
+                              itemColor = Color(0xFF8E1E2D);
+                              itemPriceText = 'SOLD OUT';
+                            }
                           }
-                        }
-                      } else if (nearbyEventData[i]['ticket_type']['type'] ==
-                          'no_ticket') {
-                        itemColor = Color(0xFFA6A8AB);
-                        itemPriceText = 'NO TICKET';
-                      } else if (nearbyEventData[i]['ticket_type']['type'] ==
-                          'on_the_spot') {
-                        itemColor = Color(0xFF652D90);
-                        itemPriceText =
-                            nearbyEventData[i]['ticket_type']['name'];
-                      } else if (nearbyEventData[i]['ticket_type']['type'] ==
-                          'free') {
-                        itemColor = Color(0xFFFFAA00);
-                        itemPriceText =
-                            nearbyEventData[i]['ticket_type']['name'];
-                      } else if (nearbyEventData[i]['ticket_type']['type'] ==
-                          'free') {
-                        itemColor = Color(0xFFFFAA00);
-                        itemPriceText =
-                            nearbyEventData[i]['ticket_type']['name'];
-                      } else if (nearbyEventData[i]['ticket_type']['type'] ==
-                          'free_limited') {
-                        if (nearbyEventData[i]['ticket']
-                                ['availableTicketStatus'] ==
-                            '1') {
+                        } else if (nearbyEventData[i]['ticket_type']['type'] ==
+                            'no_ticket') {
+                          itemColor = Color(0xFFA6A8AB);
+                          itemPriceText = 'NO TICKET';
+                        } else if (nearbyEventData[i]['ticket_type']['type'] ==
+                            'on_the_spot') {
+                          itemColor = Color(0xFF652D90);
+                          itemPriceText =
+                              nearbyEventData[i]['ticket_type']['name'];
+                        } else if (nearbyEventData[i]['ticket_type']['type'] ==
+                            'free') {
                           itemColor = Color(0xFFFFAA00);
                           itemPriceText =
                               nearbyEventData[i]['ticket_type']['name'];
-                        } else {
-                          if (nearbyEventData[i]['ticket']['salesStatus'] ==
-                              'comingSoon') {
-                            itemColor = Color(0xFFFFAA00).withOpacity(0.3);
-                            itemPriceText = 'COMING SOON';
-                          } else if (nearbyEventData[i]['ticket']
-                                  ['salesStatus'] ==
-                              'endSales') {
-                            itemColor = Color(0xFF8E1E2D);
-                            if (nearbyEventData[i]['status'] == 'ended') {
-                              itemPriceText = 'EVENT HAS ENDED';
-                            }
-                            itemPriceText = 'SALES ENDED';
+                        } else if (nearbyEventData[i]['ticket_type']['type'] ==
+                            'free') {
+                          itemColor = Color(0xFFFFAA00);
+                          itemPriceText =
+                              nearbyEventData[i]['ticket_type']['name'];
+                        } else if (nearbyEventData[i]['ticket_type']['type'] ==
+                            'free_limited') {
+                          if (nearbyEventData[i]['ticket']
+                                  ['availableTicketStatus'] ==
+                              '1') {
+                            itemColor = Color(0xFFFFAA00);
+                            itemPriceText =
+                                nearbyEventData[i]['ticket_type']['name'];
                           } else {
-                            itemColor = Color(0xFF8E1E2D);
-                            itemPriceText = 'SOLD OUT';
+                            if (nearbyEventData[i]['ticket']['salesStatus'] ==
+                                'comingSoon') {
+                              itemColor = Color(0xFFFFAA00).withOpacity(0.3);
+                              itemPriceText = 'COMING SOON';
+                            } else if (nearbyEventData[i]['ticket']
+                                    ['salesStatus'] ==
+                                'endSales') {
+                              itemColor = Color(0xFF8E1E2D);
+                              if (nearbyEventData[i]['status'] == 'ended') {
+                                itemPriceText = 'EVENT HAS ENDED';
+                              }
+                              itemPriceText = 'SALES ENDED';
+                            } else {
+                              itemColor = Color(0xFF8E1E2D);
+                              itemPriceText = 'SOLD OUT';
+                            }
                           }
                         }
-                      }
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      EventDetailsConstructView(
-                                          id: nearbyEventData[i]['id'])));
-                        },
-                        child: new LatestEventItem(
-                          image: nearbyEventData[i]['picture_timeline'],
-                          title: nearbyEventData[i]['name'],
-                          location: nearbyEventData[i]['address'],
-                          itemColor: itemColor,
-                          itemPrice: itemPriceText,
-                          type: nearbyEventData[i]['ticket_type']['type'],
-                          isAvailable: nearbyEventData[i]['ticket']
-                              ['availableTicketStatus'],
-                        ),
-                      );
-                    },
-                  )
-                ])),
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        EventDetailsConstructView(
+                                            id: nearbyEventData[i]['id'])));
+                          },
+                          child: new LatestEventItem(
+                            image: nearbyEventData[i]['picture_timeline'],
+                            title: nearbyEventData[i]['name'],
+                            location: nearbyEventData[i]['address'],
+                            itemColor: itemColor,
+                            itemPrice: itemPriceText,
+                            type: nearbyEventData[i]['ticket_type']['type'],
+                            isAvailable: nearbyEventData[i]['ticket']
+                                ['availableTicketStatus'],
+                          ),
+                        );
+                      },
+                    )
+                  ])),
+        ),
       ),
     );
   }
