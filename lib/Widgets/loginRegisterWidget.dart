@@ -34,7 +34,6 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
 
   String _userID;
   String googleTokenID;
-  
 
   void initiateFacebookLogin() async {
     var facebookLogin = FacebookLogin();
@@ -225,7 +224,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
     )..init(context);
 
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
         body: Container(
           alignment: Alignment.center,
           padding: EdgeInsets.only(top: ScreenUtil.instance.setWidth(20)),
@@ -234,11 +233,15 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: ScreenUtil.instance.setWidth(100)),
+                padding:
+                    EdgeInsets.only(top: ScreenUtil.instance.setWidth(100)),
               ),
-              Image.asset(
-                'assets/icons/logo_company.png',
-                scale: 4,
+              Hero(
+                tag: 'eventeventlogo',
+                child: Image.asset(
+                  'assets/icons/logo_company.png',
+                  scale: 4,
+                ),
               ),
               SizedBox(height: ScreenUtil.instance.setHeight(30)),
               FractionallySizedBox(
@@ -251,14 +254,19 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                     )),
               ),
               Padding(
-                padding: EdgeInsets.only(top: ScreenUtil.instance.setWidth(100)),
+                padding:
+                    EdgeInsets.only(top: ScreenUtil.instance.setWidth(100)),
               ),
               Center(
                 child: Text('DAFTAR DAN MULAI',
-                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(10.0), color: Colors.grey)),
+                    style: TextStyle(
+                        fontSize: ScreenUtil.instance.setSp(10.0),
+                        color: Colors.grey)),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: ScreenUtil.instance.setWidth(10), horizontal: ScreenUtil.instance.setWidth(26)),
+                margin: EdgeInsets.symmetric(
+                    vertical: ScreenUtil.instance.setWidth(10),
+                    horizontal: ScreenUtil.instance.setWidth(26)),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -276,7 +284,8 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         height: ScreenUtil.instance.setHeight(37.02),
                         decoration: BoxDecoration(
                             color: eventajaGreenTeal,
-                            borderRadius: BorderRadius.circular(ScreenUtil.instance.setWidth(180)),
+                            borderRadius: BorderRadius.circular(
+                                ScreenUtil.instance.setWidth(180)),
                             boxShadow: <BoxShadow>[
                               BoxShadow(
                                   blurRadius: 2,
@@ -308,7 +317,8 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         height: ScreenUtil.instance.setHeight(37.02),
                         decoration: BoxDecoration(
                             color: eventajaGreenTeal,
-                            borderRadius: BorderRadius.circular(ScreenUtil.instance.setWidth(180)),
+                            borderRadius: BorderRadius.circular(
+                                ScreenUtil.instance.setWidth(180)),
                             boxShadow: <BoxShadow>[
                               BoxShadow(
                                   blurRadius: 2,
@@ -334,7 +344,8 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                   initiateFacebookLogin();
                 },
                 child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: ScreenUtil.instance.setWidth(26)),
+                  margin: EdgeInsets.symmetric(
+                      horizontal: ScreenUtil.instance.setWidth(26)),
                   width: MediaQuery.of(context).size.width,
                   height: ScreenUtil.instance.setHeight(37.02),
                   decoration: BoxDecoration(
@@ -383,7 +394,8 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                   });
                 },
                 child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: ScreenUtil.instance.setWidth(26)),
+                  margin: EdgeInsets.symmetric(
+                      horizontal: ScreenUtil.instance.setWidth(26)),
                   width: MediaQuery.of(context).size.width,
                   height: ScreenUtil.instance.setHeight(37.02),
                   decoration: BoxDecoration(
@@ -402,15 +414,17 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         height: ScreenUtil.instance.setHeight(37),
                         width: ScreenUtil.instance.setWidth(37),
                         decoration: BoxDecoration(
-                              shape: BoxShape.circle, color: Color(0xFFf9f9f9)),
-                        child: Image.asset('assets/drawable/google.png', scale: 3),
+                            shape: BoxShape.circle, color: Color(0xFFf9f9f9)),
+                        child:
+                            Image.asset('assets/drawable/google.png', scale: 3),
                       ),
                       Flexible(
                         child: Center(
                           child: Text(
                             'LOGIN WITH GOOGLE',
                             style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(12), fontWeight: FontWeight.bold),
+                                fontSize: ScreenUtil.instance.setSp(12),
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
@@ -425,7 +439,8 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text('By registering, you are agree with',
-                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(11))),
+                        style:
+                            TextStyle(fontSize: ScreenUtil.instance.setSp(11))),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context,
@@ -433,11 +448,14 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                       },
                       child: Text(
                         ' Terms',
-                        style:
-                            TextStyle(fontSize: ScreenUtil.instance.setSp(12), fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: ScreenUtil.instance.setSp(12),
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
-                    Text(' and', style: TextStyle(fontSize: ScreenUtil.instance.setSp(11))),
+                    Text(' and',
+                        style:
+                            TextStyle(fontSize: ScreenUtil.instance.setSp(11))),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -447,8 +465,9 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                       },
                       child: Text(
                         ' Privacy Policy',
-                        style:
-                            TextStyle(fontSize: ScreenUtil.instance.setSp(12), fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: ScreenUtil.instance.setSp(12),
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],

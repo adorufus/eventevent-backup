@@ -251,7 +251,7 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
   }
 
   videoSelectorGalery() async {
-    var galleryFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var galleryFile = await ImagePicker.pickVideo(source: ImageSource.gallery);
 
     print(galleryFile.path);
     setState(() {
@@ -263,6 +263,7 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
     var galleryFile = await ImagePicker.pickImage(
       source: ImageSource.camera,
     );
+    if (!mounted) return;
   }
 
   cropImage(File galleryFile) async {

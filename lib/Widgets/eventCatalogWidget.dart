@@ -242,9 +242,12 @@ class _EventCatalogState extends State<EventCatalog>
                     SizedBox(
                       height: 23,
                       width: 140,
-                      child: Image.asset(
-                        'assets/icons/logo_company.png',
-                        fit: BoxFit.fill,
+                      child: Hero(
+                        tag: 'eventeventlogo',
+                                              child: Image.asset(
+                          'assets/icons/logo_company.png',
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                   ],
@@ -1195,6 +1198,7 @@ class _EventCatalogState extends State<EventCatalog>
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => CollectionPage(
+                              headerImage: collectionData[i]['image'],
                                   categoryId: collectionData[i]['id'],
                                   collectionName: collectionData[i]['name'],
                                 )));

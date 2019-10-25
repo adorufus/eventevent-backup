@@ -8,6 +8,8 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,8 +26,13 @@ class AfterRegister extends StatefulWidget {
   _AfterRegisterState createState() => _AfterRegisterState();
 }
 
+const String MIN_DATETIME = '1685-05-12';
+const String MAX_DATETIME = '2020-11-25';
+const String INIT_DATETIME = '2019-05-17';
+
 class _AfterRegisterState extends State<AfterRegister> {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  File _image;
 
   var usernameController = new TextEditingController();
   var phoneController = new TextEditingController();
@@ -34,13 +41,30 @@ class _AfterRegisterState extends State<AfterRegister> {
   var firstNameController = new TextEditingController();
   var lastNameController = new TextEditingController();
 
-  File profilePictureFile;
+  File profilePictureFile = File('aofkafoa');
   String profilePictureURI = 'fa';
   int currentValue = 0;
   String birthDate;
   String gender = 'Male';
 
+  DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
+  List<DateTimePickerLocale> _locales = DateTimePickerLocale.values;
+
+  String _format = 'yyyy-MMMM-dd';
+
+  DateTime _dateTime;
+
+  
+
   bool isPasswordObsecure = true;
+
+  Future getImage() async{
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState((){
+      profilePictureFile = image;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,12 +104,16 @@ class _AfterRegisterState extends State<AfterRegister> {
       children: <Widget>[
         SizedBox(height: 10,),
         GestureDetector(
+          onTap: (){
+            getImage();
+          },
           child: Column(
             children: <Widget>[
               CircleAvatar(
                 radius: 80,
-                backgroundImage: NetworkImage(
-                  profilePictureURI
+                backgroundColor: eventajaGreenTeal,
+                backgroundImage: FileImage(
+                  profilePictureFile
                 ),
               ),
               SizedBox(height: 10,),
@@ -109,6 +137,9 @@ class _AfterRegisterState extends State<AfterRegister> {
         ),
         SizedBox(height: 15,),
         TextFormField(
+          onTap: (){
+            showDatePicker();
+          },
           controller: birthdateController,
           decoration: InputDecoration(
             hintText: 'Birth Date',
@@ -117,6 +148,7 @@ class _AfterRegisterState extends State<AfterRegister> {
         SizedBox(height: 15,),
         TextFormField(
           controller: phoneController,
+          keyboardType: TextInputType.phone,
           decoration: InputDecoration(
             hintText: '(Phone, e.g. 0818123456)',
           ),
@@ -274,5 +306,36 @@ class _AfterRegisterState extends State<AfterRegister> {
         ),
       ));
     }
+  }
+  
+
+  void showDatePicker(){
+    DatePicker.showDatePicker(
+      context,
+      pickerTheme: DateTimePickerTheme(
+        showTitle: true,
+        confirm: Text('Done', style: TextStyle(color: eventajaGreenTeal),),
+        cancel: Text('Cancel', style: TextStyle(color: Colors.red),)
+      ),
+      minDateTime: DateTime.parse(MIN_DATETIME),
+      maxDateTime: DateTime.parse(MAX_DATETIME),
+      initialDateTime: _dateTime,
+      dateFormat: _format,
+      locale: _locale,
+      onClose: () => {},
+      onCancel: () => {},
+      onChange: (dateTime, List<int> index){
+        setState((){
+          _dateTime = dateTime;
+          birthdateController.text = '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+        });
+      },
+      onConfirm: (dateTime, List<int> index){
+        setState((){
+          _dateTime = dateTime;
+          birthdateController.text = '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+        });
+      }
+    );
   }
 }

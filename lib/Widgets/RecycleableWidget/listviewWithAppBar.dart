@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/Home/PeopleItem.dart';
+import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/helper/FollowUnfollow.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class _ListViewWithAppBar extends State<ListViewWithAppBar> {
   String fullName;
   String isApproved;
   String imageURI;
+  bool isEmpty = false;
 
   List profileData;
 
@@ -61,7 +63,10 @@ class _ListViewWithAppBar extends State<ListViewWithAppBar> {
           style: TextStyle(color: eventajaGreenTeal),
         ),
       ),
-      body: ListView.builder(
+      body: isEmpty == true ? EmptyState(
+        emptyImage: 'assets/drawable/profile_empty_state.png',
+        reasonText: 'You Have No Friends Yet',
+      ) : ListView.builder(
         itemCount: profileData == null ? 0 : profileData.length,
         itemBuilder: (BuildContext, i) {
           return PeopleItem(
@@ -161,10 +166,18 @@ class _ListViewWithAppBar extends State<ListViewWithAppBar> {
       'cookie': session
     });
 
+    var extractedData = json.decode(response.body);
+
     if (response.statusCode == 200) {
       setState(() {
-        var extractedData = json.decode(response.body);
-        profileData = extractedData['data'];
+        
+        if(extractedData['data'].length == 0){
+          isEmpty = true;
+        }
+        else{
+          isEmpty = false;
+          profileData = extractedData['data'];
+        }
       });
     }
   }

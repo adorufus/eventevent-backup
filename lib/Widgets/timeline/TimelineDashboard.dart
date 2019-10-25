@@ -992,13 +992,15 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                             height: timelineList[i]['type'] == 'video' ||
                                     timelineList[i]['type'] == 'photo' ||
                                     timelineList[i]['type'] == 'event' ||
-                                    timelineList[i]['type'] == 'eventgoing'
+                                    timelineList[i]['type'] == 'eventgoing' ||
+                                    timelineList[i]['eventID'] != null && timelineList[i]['type'] == 'love'
                                 ? 15
                                 : 0),
                         timelineList[i]['type'] == 'video' ||
                                 timelineList[i]['type'] == 'photo' ||
                                 timelineList[i]['type'] == 'event' ||
-                                timelineList[i]['type'] == 'eventgoing'
+                                timelineList[i]['type'] == 'eventgoing' ||
+                                timelineList[i]['eventID'] != null && timelineList[i]['type'] == 'love'
                             ? GestureDetector(
                                 onTap: () {
                                   if (timelineList[i]['type'] == 'photo') {
@@ -1106,15 +1108,18 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                                                           color: Color(
                                                               0xFF8A8A8B))),
                                                 )
-                                              : Text(
+                                              : Container(
+                                                width: 150,
+                                                child: Text(
                                                   timelineList[i]['name'] ==
                                                           null
                                                       ? ''
                                                       : timelineList[i]['name'],
-                                                  maxLines: 10,
+                                                  maxLines: 1,
                                                   style: TextStyle(
                                                       color:
-                                                          Color(0xFF8A8A8B))),
+                                                          Color(0xFF8A8A8B)), overflow: TextOverflow.ellipsis,),
+                                              )
                                         ],
                                       )
                                     ])),
@@ -1134,7 +1139,7 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                                           scale: 7,
                                         ),
                                       )
-                                    : Container()
+                                    : timelineList[i]['type'] == 'relationship' ? CircleAvatar(backgroundColor: Color(0xff8a8a8b), backgroundImage: NetworkImage(timelineList[i]['picture']),) : Container()
                           ],
                         )
                       ],
@@ -1279,7 +1284,7 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                                     builder: (BuildContext context) {
                                       return showMoreOptionReport(
                                           timelineList[i]['id'],
-                                          timelineList[i]['type']);
+                                          timelineList[i]['type'],);
                                     });
                               }
                             },
@@ -1467,7 +1472,10 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => ReportPost()));
+                        builder: (BuildContext context) => ReportPost(
+                          postId: id,
+                          postType: postType,
+                        )));
                 // Navigator.push(
                 //     context,
                 //     MaterialPageRoute(

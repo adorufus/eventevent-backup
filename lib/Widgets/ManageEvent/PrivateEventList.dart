@@ -1,3 +1,4 @@
+import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -19,6 +20,7 @@ class PrivateEventList extends StatefulWidget {
 class PrivateEventListState extends State<PrivateEventList> {
   List privateData;
   String imageUri;
+  bool isEmpty = false;
 
   @override
   void initState() {
@@ -29,86 +31,103 @@ class PrivateEventListState extends State<PrivateEventList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 300,
+        
         width: MediaQuery.of(context).size.width,
-        child: privateData == null
-            ? Container(
-                child: Center(
-                child: CircularProgressIndicator(),
-              ))
-            : ListView.builder(
-                itemCount:
-                    privateData.length == null ? '0' : privateData.length,
-                itemBuilder: (BuildContext context, i) {
-                  if(privateData.length == null){
-                    return Container(child: Center(child: Text('No Data'),),);
-                  }
-                  return GestureDetector(
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => EventDetailsConstructView(id: privateData[i]['id'],)));
-                    },
-                    child: Container(
-                      color: Colors.white,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      width: MediaQuery.of(context).size.width,
-                      height: 300,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
+        child: isEmpty == true
+            ? EmptyState(
+                emptyImage: 'assets/drawable/event_empty_state.png',
+                reasonText: 'You Have No Event Created Yet',
+              )
+            : privateData == null
+                ? Container(
+                    child: Center(
+                    child: CircularProgressIndicator(),
+                  ))
+                : ListView.builder(
+                  shrinkWrap: true,
+                    itemCount:
+                        privateData.length == null ? '0' : privateData.length,
+                    itemBuilder: (BuildContext context, i) {
+                      if (privateData.length == null) {
+                        return Container(
+                          child: Center(
+                            child: Text('No Data'),
+                          ),
+                        );
+                      }
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  EventDetailsConstructView(
+                                    id: privateData[i]['id'],
+                                  )));
+                        },
+                        child: Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          width: MediaQuery.of(context).size.width,
+                          height: 300,
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              SizedBox(
-                                width: 150,
-                                child: Image.network(privateData[i]['picture'],
-                                    fit: BoxFit.fill),
-                              ),
-                              SizedBox(width: 20),
-                              Column(
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(
-                                    privateData[i]['dateStart'],
-                                    style: TextStyle(color: eventajaGreenTeal),
-                                  ),
                                   SizedBox(
-                                    height: 20,
+                                    width: 150,
+                                    child: Image.network(
+                                        privateData[i]['picture'],
+                                        fit: BoxFit.fill),
                                   ),
-                                  Text(
-                                    privateData[i]['name'],
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    privateData[i]['isPrivate'] == '0'
-                                        ? 'PUBLIC EVENT'
-                                        : 'PRIVATE EVENT',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  SizedBox(
-                                    height: 50,
-                                  ),
-                                  buttonType(i)
+                                  SizedBox(width: 20),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        privateData[i]['dateStart'],
+                                        style:
+                                            TextStyle(color: eventajaGreenTeal),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text(
+                                        privateData[i]['name'],
+                                        style: TextStyle(
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text(
+                                        privateData[i]['isPrivate'] == '0'
+                                            ? 'PUBLIC EVENT'
+                                            : 'PRIVATE EVENT',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                      SizedBox(
+                                        height: 50,
+                                      ),
+                                      buttonType(i)
+                                    ],
+                                  )
                                 ],
-                              )
+                              ),
+                              SizedBox(height: 20),
+                              Divider()
                             ],
                           ),
-                          SizedBox(height: 20),
-                          Divider()
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ));
+                        ),
+                      );
+                    },
+                  ));
   }
 
   Widget buttonType(int index) {
@@ -121,8 +140,7 @@ class PrivateEventListState extends State<PrivateEventList> {
       imageUri = 'assets/btn_ticket/no-ticket.png';
     } else if (privateData[index]['ticket_type']['id'] == '3') {
       imageUri = 'assets/btn_ticket/ots-800px.png';
-    }
-    else if(privateData[index]['ticket_type']['id'] == '4'){
+    } else if (privateData[index]['ticket_type']['id'] == '4') {
       imageUri = 'assets/btn_ticket/paid.png';
     }
 
@@ -150,13 +168,20 @@ class PrivateEventListState extends State<PrivateEventList> {
     );
 
     print(response.statusCode);
+    var extractedData = json.decode(response.body);
 
     if (response.statusCode == 200) {
       print(response.body);
-      setState(() {
-        var extractedData = json.decode(response.body);
-        privateData = extractedData['data']['private']['data'];
-      });
+      if (extractedData['data']['private']['data'].length == 0) {
+        setState(() {
+          isEmpty = true;
+        });
+      } else {
+        setState(() {
+          isEmpty = false;
+          privateData = extractedData['data']['private']['data'];
+        });
+      }
     } else {
       print(response.body);
     }

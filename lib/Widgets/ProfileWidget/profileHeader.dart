@@ -749,6 +749,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
             }),
             onLoading: _onLoading,
             child: ListView.builder(
+              shrinkWrap: true,
       itemCount: userTimelineList == null ? 0 : userTimelineList.length,
       itemBuilder: (context, i) {
         List impressionList = userTimelineList[i]['impression']['data'];

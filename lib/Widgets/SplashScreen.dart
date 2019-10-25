@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +11,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final int splashDuration = 2;
+  final int splashDuration = 3;
   startTime() async {
     return Timer(Duration(seconds: splashDuration), () async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -23,7 +24,8 @@ class _SplashScreenState extends State<SplashScreen> {
           } else {
             Navigator.of(context).pushReplacementNamed('/LoginRegister');
           }
-        } else if (preferences.getString('LastScreenRoute') == '/LoginRegister') {
+        } else if (preferences.getString('LastScreenRoute') ==
+            '/LoginRegister') {
           Navigator.pushReplacementNamed(context, '/LoginRegister');
         }
       }
@@ -38,8 +40,20 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          color: Colors.white,
+          child: Center(
+            child: Hero(
+              tag: 'eventeventlogo',
+                child: Image.asset(
+              'assets/icons/logo_company.png',
+              scale: 2,
+            )),
+          ),
+        ),
+      ),
     );
   }
 }
