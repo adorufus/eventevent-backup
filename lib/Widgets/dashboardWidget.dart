@@ -76,6 +76,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
     _saveCurrentRoute('/Dashboard');
     WidgetsBinding.instance.addObserver(this);
     super.initState();
+    _firebaseMessaging.requestNotificationPermissions();
     _firebaseMessaging.getToken().then((token) {
       print(token);
       setState(() {
@@ -276,6 +277,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
+                                            settings: RouteSettings(name: 'PostEvent'),
                                               builder: (BuildContext context) =>
                                                   PostEvent()));
                                     },

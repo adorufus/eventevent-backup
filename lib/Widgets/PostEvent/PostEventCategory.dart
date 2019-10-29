@@ -18,6 +18,7 @@ class PostEvent7 extends StatefulWidget {
 class PostEvent7State extends State<PostEvent7> {
   var thisScaffold = new GlobalKey<ScaffoldState>();
   DateTime _selectedDate;
+  String selectedCategoryId;
 
   Color selectedDateStyleColor;
   Color selectedSingleDateDecorationColor;
@@ -142,16 +143,23 @@ class PostEvent7State extends State<PostEvent7> {
                             return ListTile(
                               onTap: () {
                                 setState(() {
+                                  selectedCategoryId = i.toString();
                                   idCategory = categoryEventData[i]['id'];
                                   categoryName = categoryEventData[i]['name'];
                                 });
                                 //categoryListId.add(categoryEventData[i]['id']);
                                 //print(categoryListId);
+
+                                if(selectedCategoryId == i.toString()){
+                                  isSelected = !isSelected;
+                                }
+                                
                                 onCategorySelected();
                               },
                               leading:
                                   Image.network(categoryEventData[i]['logo']),
                               subtitle: Text(categoryEventData[i]['name']),
+                              trailing: isSelected == true ? Container(child: Icon(Icons.check, color: eventajaGreenTeal,),) : Container(height: 10, width: 10,),
                             );
                           }),
                     )
@@ -189,8 +197,7 @@ class PostEvent7State extends State<PostEvent7> {
     } else {
       if (myList.contains(idCategory) && myListName.contains(categoryName)) {
         imageWidget = Container();
-        counter--;
-        myList.remove(idCategory);
+        counter--;       myList.remove(idCategory);
         myListName.remove(categoryName);
         if(myListName[0] == null){
           setState(() {
@@ -280,4 +287,10 @@ class PostEvent7State extends State<PostEvent7> {
       Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => PostEventPoster()));
     }
   }
+}
+
+class ListItem<T>{
+  bool isSelected = false;
+  T data;
+  ListItem(this.data);
 }

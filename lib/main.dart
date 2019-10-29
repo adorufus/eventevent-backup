@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:eventevent/CrashlyticsTester.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEvent.dart';
 import 'package:eventevent/Widgets/ProfileWidget/editProfile.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/CustomCamera.dart';
@@ -12,6 +13,7 @@ import 'package:eventevent/Widgets/registerWidget.dart';
 import 'package:eventevent/helper/PushNotification.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:camera/camera.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +25,9 @@ import 'package:firebase_analytics/observer.dart';
 List<CameraDescription> cameras;
 
 Future<Null> main() async {
+  Crashlytics.instance.enableInDevMode = true;
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
   // HttpOverrides.global = MyHttpOverrides();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.white, statusBarIconBrightness: Brightness.dark));
@@ -48,7 +53,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
 
   Widget homeScreenWidget = LoginRegisterWidget();
-  FirebaseAnalytics analytics = new FirebaseAnalytics();
+  static FirebaseAnalytics analytics = new FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +64,15 @@ class MyApp extends StatelessWidget {
       // ],
       title: 'EventEvent',
       debugShowCheckedModeBanner: false,
+      navigatorObservers: <NavigatorObserver> [
+        observer
+      ],
       theme: ThemeData(
           fontFamily: 'Proxima',
           primarySwatch: eventajaGreen,
           backgroundColor: Colors.white),
-      home: SplashScreen(),
+      // home: CrashlyticsTester(),
+      home: SplashScreen(analytics: analytics, observer: observer),
       routes: <String, WidgetBuilder>{
         '/LoginRegister': (BuildContext context) => LoginRegisterWidget(),
         '/Login': (BuildContext context) => LoginWidget(),

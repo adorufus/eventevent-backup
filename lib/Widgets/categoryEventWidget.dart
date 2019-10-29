@@ -38,7 +38,7 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
                   builder: (BuildContext context) {
                     return GestureDetector(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryPage(categoryId: categoryData['id'],)));
+                        Navigator.push(context, MaterialPageRoute(settings: RouteSettings(name: 'CategoryList'), builder: (context) => CategoryPage(categoryId: categoryData['id'],)));
                       },
                         child: SizedBox(
                             height: 85,

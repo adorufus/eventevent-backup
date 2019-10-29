@@ -271,6 +271,7 @@ class _CollectionPageState extends State<CollectionPage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
+                                      settings: RouteSettings(name: 'EventDetails'),
                                         builder: (BuildContext context) =>
                                             EventDetailsConstructView(
                                                 id: eventByCategoryList[i]

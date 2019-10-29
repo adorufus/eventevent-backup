@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/openMedia.dart';
+import 'package:eventevent/Widgets/timeline/EditPost.dart';
 import 'package:eventevent/Widgets/timeline/LatestMediaItem.dart';
 import 'package:eventevent/Widgets/timeline/MediaDetails.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
@@ -1389,8 +1390,7 @@ class TimelineDashboardState extends State<TimelineDashboard> {
             SizedBox(height: 16),
             GestureDetector(
               onTap: () {
-                // imageCaputreCamera();
-                // Navigator.of(context).pushNamed('/CustomCamera');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => EditPost(postId: id)));
               },
               child: Container(
                 color: Colors.white,

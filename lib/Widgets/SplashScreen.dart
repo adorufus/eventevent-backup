@@ -1,41 +1,66 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+
+  const SplashScreen({Key key, this.analytics, this.observer}) : super(key: key);
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
   final int splashDuration = 3;
+
+  Future<Null> getCurrentScreen() async{
+    await widget.analytics.setCurrentScreen(screenName: 'SplashScreen', screenClassOverride: 'SplashScreen');
+  }
+
+  Future<Null> sendAnalytics(String nextScreen) async{
+    await widget.analytics.logEvent(name: 'navigate_to_$nextScreen', parameters: {'Navigate': nextScreen});
+    
+  }
+
   startTime() async {
     return Timer(Duration(seconds: splashDuration), () async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       if (preferences.getString('LastScreenRoute') == null) {
+        sendAnalytics('LoginRegister');
         Navigator.of(context).pushReplacementNamed('/LoginRegister');
       } else {
         if (preferences.getString('LastScreenRoute') == "/Dashboard") {
+          sendAnalytics(preferences.getString('LastScreenRoute'));
           if (preferences.getString('Session') != null) {
+            sendAnalytics('Dashboard');
             Navigator.of(context).pushReplacementNamed('/Dashboard');
           } else {
+            sendAnalytics('LoginRegister');
             Navigator.of(context).pushReplacementNamed('/LoginRegister');
           }
         } else if (preferences.getString('LastScreenRoute') ==
             '/LoginRegister') {
+              sendAnalytics('LoginRegister');
           Navigator.pushReplacementNamed(context, '/LoginRegister');
         }
       }
     });
   }
 
+  
+
   @override
   void initState() {
     startTime();
     super.initState();
+    getCurrentScreen();
+
   }
 
   @override
