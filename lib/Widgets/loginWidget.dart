@@ -7,6 +7,7 @@ import 'package:eventevent/Widgets/RegisterGoogle.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/API/loginModel.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -487,6 +488,10 @@ class _LoginWidgetState extends State<LoginWidget> {
       setState(() {
         prefs.setString('Session', response.headers['set-cookie']);
       });
+
+      var extractedData = json.decode(response.body);
+
+      ClevertapHandler.pushUserProfile(extractedData['data']['fullName'], "", extractedData['data']['email'], extractedData['data']['pictureNormalURL'], extractedData['data']['birthday'], extractedData['data']['username'], extractedData['data']['gender'], extractedData['data']['phone']);
 
       SharedPrefs().saveCurrentSession(response, responseJson);
       Navigator.pushReplacementNamed(context, '/Dashboard');
