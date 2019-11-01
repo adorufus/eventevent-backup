@@ -2,33 +2,35 @@ import 'dart:convert';
 
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/PrivacyPolicy.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/Terms.dart';
+import 'package:eventevent/Widgets/RegisterFacebook.dart';
 import 'package:eventevent/Widgets/RegisterGoogle.dart';
+import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/Widgets/loginWidget.dart';
 import 'package:eventevent/Widgets/registerWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:eventevent/helper/FirebaseMessagingHelper.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:package_info/package_info.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:package_info/package_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
-import 'RegisterFacebook.dart';
-import 'dashboardWidget.dart';
+class RestPageNeedLogin extends StatefulWidget {
+  final selectedPage;
 
-class LoginRegisterWidget extends StatefulWidget {
+  const RestPageNeedLogin({Key key, this.selectedPage}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() {
-    return _LoginRegisterWidget();
-  }
+  _RestPageNeedLoginState createState() => _RestPageNeedLoginState();
 }
 
-class _LoginRegisterWidget extends State<LoginRegisterWidget> {
+class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
+  String textMessage = '';
+  String imageUri = '';
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = new GoogleSignIn();
 
@@ -199,95 +201,34 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
     prefs.setString('app_version', packageVersion);
   }
 
-  _saveCurrentRoute(String lastRoute) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    await preferences.setString('LastScreenRoute', lastRoute);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getPackageInfo();
-    FirebaseMessagingHelper();
-    _saveCurrentRoute('/LoginRegister');
-  }
-
   @override
   Widget build(BuildContext context) {
-    double defaultScreenWidth = 400.0;
-    double defaultScreenHeight = 810.0;
-
-    ScreenUtil.instance = ScreenUtil(
-      width: defaultScreenWidth,
-      height: defaultScreenHeight,
-      allowFontScaling: true,
-    )..init(context);
-
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.only(top: ScreenUtil.instance.setWidth(20)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Flexible(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  DashboardWidget(isRest: true)));
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(right: 15),
-                      width: 30,
-                      child: Text(
-                        'SKIP',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff8a8a8b)),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding:
-                    EdgeInsets.only(top: ScreenUtil.instance.setWidth(100)),
-              ),
-              Hero(
-                tag: 'eventeventlogo',
-                child: Image.asset(
-                  'assets/icons/logo_company.png',
-                  scale: 4,
-                ),
-              ),
-              SizedBox(height: ScreenUtil.instance.setHeight(30)),
-              FractionallySizedBox(
-                child: Container(
-                    width: ScreenUtil.instance.setWidth(306.93),
-                    height: ScreenUtil.instance.setHeight(197.18),
-                    child: Image.asset(
-                      'assets/icons/icon_apps/illustrasi.png',
-                      fit: BoxFit.fill,
-                    )),
-              ),
-              Padding(
-                padding:
-                    EdgeInsets.only(top: ScreenUtil.instance.setWidth(100)),
-              ),
-              Center(
-                child: Text('DAFTAR DAN MULAI',
-                    style: TextStyle(
-                        fontSize: ScreenUtil.instance.setSp(10.0),
-                        color: Colors.grey)),
-              ),
-              Container(
+    return Scaffold(
+      body: Container(
+         child: ListView(
+           children: <Widget>[
+             Row(
+               children: <Widget>[
+                 Text(widget.selectedPage),
+                 Flexible(
+                   child: SizedBox(),
+                 ),
+                 GestureDetector(
+                   onTap: (){
+                     Navigator.pop(context);
+                   },
+                   child: Icon(Icons.close),
+                 )
+               ],
+             ),
+             SizedBox(
+               height: 10,
+             ),
+             Text('Sign in to start using timeline and get updates from your friends and organizers', textAlign: TextAlign.center,),
+             SizedBox(
+               height: 15,
+             ),
+             Container(
                 margin: EdgeInsets.symmetric(
                     vertical: ScreenUtil.instance.setWidth(10),
                     horizontal: ScreenUtil.instance.setWidth(26)),
@@ -497,9 +438,8 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
+           ],
+         ),
       ),
     );
   }

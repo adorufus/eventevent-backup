@@ -523,6 +523,9 @@ class PostEvent3State extends State<PostEvent3> {
 }
 
 class PostEvent4 extends StatefulWidget {
+  final firstDate;
+
+  const PostEvent4({Key key, this.firstDate}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return PostEvent4State();

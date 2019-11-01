@@ -150,16 +150,14 @@ class PostEvent7State extends State<PostEvent7> {
                                 //categoryListId.add(categoryEventData[i]['id']);
                                 //print(categoryListId);
 
-                                if(selectedCategoryId == i.toString()){
-                                  isSelected = !isSelected;
-                                }
+                                isSelected = !isSelected;
                                 
                                 onCategorySelected();
                               },
                               leading:
                                   Image.network(categoryEventData[i]['logo']),
                               subtitle: Text(categoryEventData[i]['name']),
-                              trailing: isSelected == true ? Container(child: Icon(Icons.check, color: eventajaGreenTeal,),) : Container(height: 10, width: 10,),
+                              trailing: myListName.contains(categoryEventData[i]['name']) ? Container(child: Icon(Icons.check, color: eventajaGreenTeal,),) : Container(height: 10, width: 10,),
                             );
                           }),
                     )
@@ -289,8 +287,4 @@ class PostEvent7State extends State<PostEvent7> {
   }
 }
 
-class ListItem<T>{
-  bool isSelected = false;
-  T data;
-  ListItem(this.data);
-}
+//  

@@ -1,5 +1,6 @@
 const API_KEY = '47d32cb10889cbde94e5f5f28ab461e52890034b';
 const AUTHORIZATION_KEY = 'Basic YWRtaW46MTIzNA==';
+const signature = '9029c9b70f13ba8329bdc57df3e1cd8ad94fcdc0';
 const CLINET_ID = "VT-client-Rstbf0xkIEkYi9P_";
 
 const ALFAMART_HOWTO_LINE1_ID = "1. Catat kode pembayaran di atas dan datang ke gerai Alfamart, Alfa Midi, Alfa Express, Lawson atau DAN+DAN terdekat.\n\n2. Beritahukan ke kasir bahwa anda ingin melakukan pembayaran DOKU.\n\n3. Jika kasir tidak mengetahui mengenai pembayaran DOKU, informasikan ke kasir untuk membuka terminal e-transaction, pilih \"2\", lalu \"2\", lalu \"2\" yang akan menampilkan pilihan DOKU.\n\n4. Kasir akan menanyakan kode pembayaran. Berikan kode pembayaran anda ";

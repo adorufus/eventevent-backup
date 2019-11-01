@@ -45,6 +45,9 @@ import 'timeline/TimelineDashboard.dart';
 //}
 
 class EventCatalog extends StatefulWidget {
+  final isRest;
+
+  const EventCatalog({Key key, this.isRest}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _EventCatalogState();
@@ -70,6 +73,7 @@ class _EventCatalogState extends State<EventCatalog>
   Widget errReasonWidget = Container();
 
   String ticketPriceImageURI = 'assets/btn_ticket/paid-value.png';
+  String urlType = '';
 
   int _current = 0;
 
@@ -104,6 +108,14 @@ class _EventCatalogState extends State<EventCatalog>
         }
       });
     }
+
+    setState(() {
+      if (widget.isRest == true) {
+        urlType = BaseApi().restUrl;
+      } else {
+        urlType = BaseApi().apiUrl;
+      }
+    });
 
     // timelineState.getMedia().then((response){
     //   var extractedData = json.decode(response.body);
@@ -244,7 +256,7 @@ class _EventCatalogState extends State<EventCatalog>
                       width: 140,
                       child: Hero(
                         tag: 'eventeventlogo',
-                                              child: Image.asset(
+                        child: Image.asset(
                           'assets/icons/logo_company.png',
                           fit: BoxFit.fill,
                         ),
@@ -939,8 +951,8 @@ class _EventCatalogState extends State<EventCatalog>
                                           spreadRadius: 1.5)
                                     ],
                                     image: DecorationImage(
-                                        image:
-                                            NetworkImage(data[i]['picture_timeline'])),
+                                        image: NetworkImage(
+                                            data[i]['picture_timeline'])),
                                     borderRadius: BorderRadius.circular(15)),
                               ),
                             ),
@@ -1198,7 +1210,7 @@ class _EventCatalogState extends State<EventCatalog>
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => CollectionPage(
-                              headerImage: collectionData[i]['image'],
+                                  headerImage: collectionData[i]['image'],
                                   categoryId: collectionData[i]['id'],
                                   collectionName: collectionData[i]['name'],
                                 )));
@@ -1215,7 +1227,7 @@ class _EventCatalogState extends State<EventCatalog>
                               height: 70,
                               width: 150,
                               decoration: BoxDecoration(
-                                color: Color(0xff8a8a8b),
+                                  color: Color(0xff8a8a8b),
                                   borderRadius: BorderRadius.circular(5),
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(
@@ -1595,8 +1607,28 @@ class _EventCatalogState extends State<EventCatalog>
   Future<http.Response> getMediaData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl +
+    String url = urlType +
         '/media?X-API-KEY=$API_KEY&search=&page=1&limit=10&type=photo&status=popular';
+
+    Map<String, dynamic> headerType = {};
+
+    Map<String, dynamic> headerProd = {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session')
+    };
+
+    Map<String, dynamic> headerRest = {
+      'Authorization': AUTHORIZATION_KEY,
+      'signature': signature
+    };
+
+    setState(() {
+      if (widget.isRest == true) {
+        headerType = headerRest;
+      } else if (widget.isRest == false) {
+        headerType = headerProd;
+      }
+    });
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,
@@ -1619,12 +1651,30 @@ class _EventCatalogState extends State<EventCatalog>
       session = preferences.getString('Session');
     });
 
-    final bannerApiUrl = BaseApi().apiUrl +
+    final bannerApiUrl = urlType +
         '/banner/timeline?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b';
-    final response = await http.get(bannerApiUrl, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': session
+
+    Map headerType = {};
+
+    Map headerProd = {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': preferences.getString('Session')
+    };
+
+    Map headerRest = {
+      'Authorization': AUTHORIZATION_KEY,
+      'signature': signature
+    };
+
+    setState(() {
+      if (widget.isRest == true) {
+        headerType = headerRest;
+      } else if (widget.isRest == false) {
+        headerType = headerProd;
+      }
     });
+
+    final response = await http.get(bannerApiUrl, headers: headerType);
 
     print(
         'event catalog widget - fetchBanner' + response.statusCode.toString());
@@ -1662,12 +1712,29 @@ class _EventCatalogState extends State<EventCatalog>
       session = preferences.getString('Session');
     });
 
-    final collectionUrl =
-        'https://home.eventeventapp.com/api/collections/list?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&page=1';
-    final response = await http.get(collectionUrl, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': session
+    final collectionUrl = urlType +
+        '/collections/list?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&page=1';
+    Map<String, dynamic> headerType = {};
+
+    Map<String, dynamic> headerProd = {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': preferences.getString('Session')
+    };
+
+    Map<String, dynamic> headerRest = {
+      'Authorization': AUTHORIZATION_KEY,
+      'signature': signature
+    };
+
+    setState(() {
+      if (widget.isRest == true) {
+        headerType = headerRest;
+      } else if (widget.isRest == false) {
+        headerType = headerProd;
+      }
     });
+
+    final response = await http.get(collectionUrl, headers: headerType);
 
     print('eventCatalogWidget - fetch collection ' +
         response.statusCode.toString());
@@ -1714,9 +1781,29 @@ class _EventCatalogState extends State<EventCatalog>
     });
 
     final popularPeopleUrl =
-        BaseApi().apiUrl + '/user/popular?X-API-KEY=$API_KEY&page=1&total=20';
-    final response = await http.get(popularPeopleUrl,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session});
+        urlType + '/user/popular?X-API-KEY=$API_KEY&page=1&total=20';
+
+    Map<String, dynamic> headerType = {};
+
+    Map<String, dynamic> headerProd = {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': preferences.getString('Session')
+    };
+
+    Map<String, dynamic> headerRest = {
+      'Authorization': AUTHORIZATION_KEY,
+      'signature': signature
+    };
+
+    setState(() {
+      if (widget.isRest == true) {
+        headerType = headerRest;
+      } else if (widget.isRest == false) {
+        headerType = headerProd;
+      }
+    });
+
+    final response = await http.get(popularPeopleUrl, headers: headerType);
 
     print('eventCatalogWidget - fetch pop people' +
         response.statusCode.toString());
@@ -1757,12 +1844,30 @@ class _EventCatalogState extends State<EventCatalog>
       session = preferences.getString('Session');
     });
 
-    final popularPeopleUrl = BaseApi().apiUrl +
+    final popularPeopleUrl = urlType +
         '/user/discover?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&page=1&total=20';
-    final response = await http.get(popularPeopleUrl, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': session
+
+    Map<String, dynamic> headerType = {};
+
+    Map<String, dynamic> headerProd = {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': preferences.getString('Session')
+    };
+
+    Map<String, dynamic> headerRest = {
+      'Authorization': AUTHORIZATION_KEY,
+      'signature': signature
+    };
+
+    setState(() {
+      if (widget.isRest == true) {
+        headerType = headerRest;
+      } else if (widget.isRest == false) {
+        headerType = headerProd;
+      }
     });
+
+    final response = await http.get(popularPeopleUrl, headers: headerType);
 
     print('eventCatalogWidget - fetch discover people ' +
         response.statusCode.toString());
@@ -1803,12 +1908,30 @@ class _EventCatalogState extends State<EventCatalog>
       session = preferences.getString('Session');
     });
 
-    final discoverApiUrl = BaseApi().apiUrl +
+    final discoverApiUrl = urlType +
         '/event/discover?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&page=1&total=20';
-    final response = await http.get(discoverApiUrl, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': session
+
+    Map<String, dynamic> headerType = {};
+
+    Map<String, dynamic> headerProd = {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': preferences.getString('Session')
+    };
+
+    Map<String, dynamic> headerRest = {
+      'Authorization': AUTHORIZATION_KEY,
+      'signature': signature
+    };
+
+    setState(() {
+      if (widget.isRest == true) {
+        headerType = headerRest;
+      } else if (widget.isRest == false) {
+        headerType = headerProd;
+      }
     });
+
+    final response = await http.get(discoverApiUrl, headers: headerType);
 
     print('eventCatalogWidget - discover widget ' +
         response.statusCode.toString());
@@ -1845,12 +1968,30 @@ class _EventCatalogState extends State<EventCatalog>
       session = preferences.getString('Session');
     });
 
-    final catalogApiUrl = BaseApi().apiUrl +
+    final catalogApiUrl = urlType +
         '/event/popular?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&page=1&total=20';
-    final response = await http.get(catalogApiUrl, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': session
+
+    Map<String, dynamic> headerType = {};
+
+    Map<String, dynamic> headerProd = {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': preferences.getString('Session')
+    };
+
+    Map<String, dynamic> headerRest = {
+      'Authorization': AUTHORIZATION_KEY,
+      'signature': signature
+    };
+
+    setState(() {
+      if (widget.isRest == true) {
+        headerType = headerRest;
+      } else if (widget.isRest == false) {
+        headerType = headerProd;
+      }
     });
+
+    final response = await http.get(catalogApiUrl, headers: headerType);
 
     print('eventCatalogWidget' + response.statusCode.toString());
 

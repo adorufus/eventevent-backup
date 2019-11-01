@@ -46,6 +46,9 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
 }
 
 class DashboardWidget extends StatefulWidget {
+  final isRest;
+
+  const DashboardWidget({Key key, this.isRest}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _DashboardWidgetState();
@@ -57,6 +60,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
   int _selectedPage = 0;
   String currentUserId;
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  String urlPrefix = '';
 
   _saveCurrentRoute(String lastRoute) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -83,6 +87,16 @@ class _DashboardWidgetState extends State<DashboardWidget>
         pushToken = token;
       });
     });
+
+    if(widget.isRest == true){
+      setState((){
+        urlPrefix = 'rest';
+      }); 
+    }else{
+      setState((){
+        urlPrefix = 'home';
+      }); 
+    }
 
     getProfileData();
 
@@ -217,7 +231,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
   @override
   Widget build(BuildContext context) {
     final _pageOptions = [
-      EventCatalog(),
+      EventCatalog(isRest: widget.isRest),
       TimelineDashboard(),
       Container(),
       PushNotification(),
