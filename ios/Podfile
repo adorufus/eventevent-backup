@@ -37,6 +37,7 @@ target 'Runner' do
 
   pod 'FBSDKLoginKit', '~> 4.39.1'
   pod 'FBSDKCoreKit', '~> 4.39.1'
+  pod 'Branch'
 
   # Prepare symlinks folder. We use symlinks to avoid having Podfile.lock
   # referring to absolute paths on developers' machines.
