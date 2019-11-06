@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class FinishPostEvent extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return FinishPostEventState();
   }
 }
@@ -15,7 +15,7 @@ class FinishPostEventState extends State<FinishPostEvent>{
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
     getData();
   }
@@ -30,7 +30,7 @@ class FinishPostEventState extends State<FinishPostEvent>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,

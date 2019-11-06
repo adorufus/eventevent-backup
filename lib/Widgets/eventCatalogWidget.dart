@@ -47,7 +47,7 @@ import 'timeline/TimelineDashboard.dart';
 class EventCatalog extends StatefulWidget {
   final isRest;
 
-  const EventCatalog({Key key, this.isRest}) : super(key: key);
+  const EventCatalog({Key key, this.isRest: true}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _EventCatalogState();
@@ -163,6 +163,8 @@ class _EventCatalogState extends State<EventCatalog>
                                         builder: (context) =>
                                             EventDetailsConstructView(
                                               id: bannerData['eventID'],
+                                              name: bannerData['name'],
+                                              image: bannerData['photoFull']
                                             )));
                               } else if (bannerData['type'] == 'nolink') {
                                 return;
@@ -173,6 +175,8 @@ class _EventCatalogState extends State<EventCatalog>
                                         builder: (context) =>
                                             EventDetailsConstructView(
                                               id: bannerData['categoryID'],
+                                              name: bannerData['name'],
+                                              image: bannerData['photoFull']
                                             )));
                               }
                             },
@@ -653,6 +657,8 @@ class _EventCatalogState extends State<EventCatalog>
                                       builder: (BuildContext context) =>
                                           EventDetailsConstructView(
                                             id: data[i]['id'],
+                                            name: data[i]['name'],
+                                            image: data[i]['photoFull']
                                           )));
                             },
                             child: PopularEventWidget(
@@ -813,6 +819,8 @@ class _EventCatalogState extends State<EventCatalog>
                                 builder: (BuildContext context) =>
                                     EventDetailsConstructView(
                                       id: discoverData[i]['id'],
+                                      name: discoverData[i]['name'],
+                                      image: discoverData[i]['photoFull']
                                     )));
                       },
                       child: PopularEventWidget(
@@ -937,6 +945,8 @@ class _EventCatalogState extends State<EventCatalog>
                                             EventDetailsConstructView(
                                               eventDetailsData: data[i],
                                               id: data[i]['id'],
+                                              name: data[i]['name'],
+                                              image: data[i]['photoFull']
                                             )));
                               },
                               child: Container(
@@ -1610,14 +1620,14 @@ class _EventCatalogState extends State<EventCatalog>
     String url = urlType +
         '/media?X-API-KEY=$API_KEY&search=&page=1&limit=10&type=photo&status=popular';
 
-    Map<String, dynamic> headerType = {};
+    Map<String, String> headerType = {};
 
-    Map<String, dynamic> headerProd = {
+    Map<String, String> headerProd = {
       'Authorization': AUTHORIZATION_KEY,
       'cookie': prefs.getString('Session')
     };
 
-    Map<String, dynamic> headerRest = {
+    Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
       'signature': signature
     };
@@ -1654,14 +1664,14 @@ class _EventCatalogState extends State<EventCatalog>
     final bannerApiUrl = urlType +
         '/banner/timeline?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b';
 
-    Map headerType = {};
+    Map<String, String> headerType = {};
 
-    Map headerProd = {
+    Map<String, String> headerProd = {
       'Authorization': AUTHORIZATION_KEY,
       'cookie': preferences.getString('Session')
     };
 
-    Map headerRest = {
+    Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
       'signature': signature
     };
@@ -1714,14 +1724,14 @@ class _EventCatalogState extends State<EventCatalog>
 
     final collectionUrl = urlType +
         '/collections/list?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&page=1';
-    Map<String, dynamic> headerType = {};
+    Map<String, String> headerType = {};
 
-    Map<String, dynamic> headerProd = {
+    Map<String, String> headerProd = {
       'Authorization': AUTHORIZATION_KEY,
       'cookie': preferences.getString('Session')
     };
 
-    Map<String, dynamic> headerRest = {
+    Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
       'signature': signature
     };
@@ -1783,14 +1793,14 @@ class _EventCatalogState extends State<EventCatalog>
     final popularPeopleUrl =
         urlType + '/user/popular?X-API-KEY=$API_KEY&page=1&total=20';
 
-    Map<String, dynamic> headerType = {};
+    Map<String, String> headerType = {};
 
-    Map<String, dynamic> headerProd = {
+    Map<String, String> headerProd = {
       'Authorization': AUTHORIZATION_KEY,
       'cookie': preferences.getString('Session')
     };
 
-    Map<String, dynamic> headerRest = {
+    Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
       'signature': signature
     };
@@ -1847,14 +1857,14 @@ class _EventCatalogState extends State<EventCatalog>
     final popularPeopleUrl = urlType +
         '/user/discover?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&page=1&total=20';
 
-    Map<String, dynamic> headerType = {};
+    Map<String, String> headerType = {};
 
-    Map<String, dynamic> headerProd = {
+    Map<String, String> headerProd = {
       'Authorization': AUTHORIZATION_KEY,
       'cookie': preferences.getString('Session')
     };
 
-    Map<String, dynamic> headerRest = {
+    Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
       'signature': signature
     };
@@ -1911,14 +1921,14 @@ class _EventCatalogState extends State<EventCatalog>
     final discoverApiUrl = urlType +
         '/event/discover?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&page=1&total=20';
 
-    Map<String, dynamic> headerType = {};
+    Map<String, String> headerType = {};
 
-    Map<String, dynamic> headerProd = {
+    Map<String, String> headerProd = {
       'Authorization': AUTHORIZATION_KEY,
       'cookie': preferences.getString('Session')
     };
 
-    Map<String, dynamic> headerRest = {
+    Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
       'signature': signature
     };
@@ -1971,14 +1981,14 @@ class _EventCatalogState extends State<EventCatalog>
     final catalogApiUrl = urlType +
         '/event/popular?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&page=1&total=20';
 
-    Map<String, dynamic> headerType = {};
+    Map<String, String> headerType = {};
 
-    Map<String, dynamic> headerProd = {
+    Map<String, String> headerProd = {
       'Authorization': AUTHORIZATION_KEY,
       'cookie': preferences.getString('Session')
     };
 
-    Map<String, dynamic> headerRest = {
+    Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
       'signature': signature
     };

@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 class AddNewTicket extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return AddNewTicketState();
   }
 }
@@ -25,7 +25,7 @@ class AddNewTicketState extends State<AddNewTicket>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
         key: thisState,
         appBar: AppBar(

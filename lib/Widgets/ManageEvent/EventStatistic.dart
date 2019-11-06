@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 class EventStatistic extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return EventStatisticState();
   }
 }
@@ -53,7 +53,7 @@ class EventStatisticState extends State<EventStatistic>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

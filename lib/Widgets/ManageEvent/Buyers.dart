@@ -30,7 +30,7 @@ class BuyersState extends State<Buyers> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
     getBuyerList().then((response) {
       var extractedData = json.decode(response.body);
@@ -52,7 +52,7 @@ class BuyersState extends State<Buyers> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(

@@ -376,6 +376,7 @@ class PostEvent2State extends State<PostEvent2> {
 }
 
 class PostEvent3 extends StatefulWidget {
+  
   @override
   State<StatefulWidget> createState() {
     return PostEvent3State();
@@ -488,6 +489,7 @@ class PostEvent3State extends State<PostEvent3> {
                 height: 50,
               ),
               dp.DayPicker(
+                currentDate: DateTime.now(),
                 selectedDate: _selectedDate,
                 onChanged: onDateChanged,
                 firstDate: _firstDate,
@@ -498,6 +500,13 @@ class PostEvent3State extends State<PostEvent3> {
           ),
         ));
   }
+
+  // testPicker()async{
+  //   final DateTime picked = await showDatePicker(
+  //     context: context,
+
+  //   )
+  // }
 
   void onDateChanged(DateTime newDate) {
     setState(() {
@@ -517,7 +526,7 @@ class PostEvent3State extends State<PostEvent3> {
     } else {
       prefs.setString('POST_EVENT_START_DATE', _selectedDate.year.toString() + '-' + _selectedDate.month.toString() + '-' + _selectedDate.day.toString());
       Navigator.push(
-          context, CupertinoPageRoute(builder: (context) => PostEvent4()));
+          context, CupertinoPageRoute(builder: (context) => PostEvent4(firstDate: _selectedDate,)));
     }
   }
 }
@@ -540,11 +549,12 @@ class PostEvent4State extends State<PostEvent4> {
 
   Color selectedDateStyleColor;
   Color selectedSingleDateDecorationColor;
+  Color currentDateColor;
 
   @override
   void initState() {
     super.initState();
-    _selectedDate = DateTime.now();
+    _selectedDate = widget.firstDate;
     _firstDate = DateTime.now().subtract(Duration(days: 45));
     _lastDate = DateTime(2030);
   }
@@ -552,7 +562,8 @@ class PostEvent4State extends State<PostEvent4> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
+    
+    currentDateColor = eventajaGreenTeal;
     selectedDateStyleColor = Theme.of(context).accentTextTheme.body2.color;
     selectedSingleDateDecorationColor = Theme.of(context).accentColor;
   }
@@ -560,6 +571,7 @@ class PostEvent4State extends State<PostEvent4> {
   @override
   Widget build(BuildContext context) {
     dp.DatePickerStyles styles = dp.DatePickerStyles(
+      currentDateStyle: Theme.of(context).accentTextTheme.body2.copyWith(color: currentDateColor),
         selectedDateStyle: Theme.of(context)
             .accentTextTheme
             .body2
@@ -638,6 +650,7 @@ class PostEvent4State extends State<PostEvent4> {
                 height: 50,
               ),
               dp.DayPicker(
+                currentDate: widget.firstDate,
                 selectedDate: _selectedDate,
                 onChanged: onDateChanged,
                 firstDate: _firstDate,

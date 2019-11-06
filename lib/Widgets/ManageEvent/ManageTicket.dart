@@ -15,7 +15,7 @@ class ManageTicket extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return ManageTicketState();
   }
 }
@@ -28,14 +28,14 @@ class ManageTicketState extends State<ManageTicket> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
     getTicketList();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
       appBar: AppBar(
         leading: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal, size: 15),

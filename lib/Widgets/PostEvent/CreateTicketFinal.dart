@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CreateTicketFinal extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return CreateTicketFinalState();
   }
 }
@@ -58,14 +58,14 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
     getData();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:eventevent/Widgets/ManageEvent/EditEvent.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventStatistic.dart';
@@ -15,6 +16,7 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_branch_io_plugin/flutter_branch_io_plugin.dart';
 import 'dart:ui';
 import 'package:marquee/marquee.dart';
 //import 'package:eventevent/helper/MarqueeWidget.dart';
@@ -25,11 +27,15 @@ import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_android_lifecycle/flutter_android_lifecycle.dart';
 
 class EventDetailsConstructView extends StatefulWidget {
   final Map<String, dynamic> eventDetailsData;
   final String id;
-  EventDetailsConstructView({Key key, this.eventDetailsData, this.id})
+  final String name;
+  final String image;
+  EventDetailsConstructView(
+      {Key key, this.eventDetailsData, this.id, this.name, this.image})
       : super(key: key);
 
   @override
@@ -83,6 +89,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
   var session;
 
+  String _data = '-';
+  String generatedLink = '-';
+  String error = '-';
+
   @override
   bool get wantKeepAlive => true;
 
@@ -90,11 +100,86 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   void initState() {
     super.initState();
     //testGetData();
+    try {
+      setUpBranch();
+    } catch (error) {
+      setState(() {
+        this.error = error.toString();
+      });
+      print("Branch Error ${error.toString()}");
+    }
+
+    branchIoInit();
+
     getEventDetailsSpecificInfo();
     getInvitedUser();
     getData();
     _currentTime = DateTime.now();
     _timer = Timer.periodic(Duration(seconds: 1), _onTimeChange);
+  }
+
+  void setUpBranch() {
+    FlutterBranchIoPlugin.setupBranchIO();
+
+    FlutterBranchIoPlugin.listenToDeepLinkStream().listen((string) {
+      print("DEEPLINK $string");
+      setState(() {
+        this._data = string;
+      });
+    });
+
+    FlutterAndroidLifecycle.listenToOnStartStream().listen((string) {
+      print("ONSTART");
+      FlutterBranchIoPlugin.setupBranchIO();
+    });
+
+    FlutterBranchIoPlugin.listenToGeneratedLinkStream().listen((link) {
+      print('GET LINK IN FLUTTER');
+      print('thelink' + link);
+      setState(() {
+        this.generatedLink = link;
+
+        print('thisgeneratedlink: ' + generatedLink);
+      });
+    });
+
+    FlutterBranchIoPlugin.generateLink(
+        FlutterBranchUniversalObject()
+            .setCanonicalIdentifier('event_' + widget.id)
+            .setTitle(widget.name)
+            .setContentDescription('')
+            .setContentImageUrl(widget.image)
+            .setContentIndexingMode(BUO_CONTENT_INDEX_MODE.PUBLIC)
+            .setLocalIndexMode(BUO_CONTENT_INDEX_MODE.PUBLIC),
+        lpFeature: 'sharing',
+        lpControlParams: {
+          '\$desktop_url': 'http://eventevent.com/event/${widget.id}'
+        });
+  }
+
+  Future branchIoInit() async {
+    String url = 'https://api2.branch.io/v1/url';
+
+    var body = json.encode({
+      'branch_key': 'key_live_ijCwqgMyqksKHN0YEnvjJiocuzi2ciR4',
+      'feature': 'sharing',
+      'data': {
+        "\$canonical_identifier": "event_${widget.id}",
+        "\$og_title": "",
+        "\$og_image_url": widget.image,
+        "\$desktop_url": "http://eventevent.com/event/${widget.id}",
+      }});
+    
+    final response = await http.post(url, body: body, headers: {'Content-Type': 'application/json'});
+
+    print(response.statusCode);
+    print(response.body);
+
+    var extractedData = json.decode(response.body);
+
+    setState(() {
+      generatedLink = extractedData['url'];
+    });
   }
 
   @override
@@ -127,353 +212,363 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   @override
   Widget build(BuildContext context) {
     return detailData == null
-            ? Container(color: Colors.white, child: Center(child: CircularProgressIndicator())) : Scaffold(
-        backgroundColor: Colors.white,
-        appBar: PreferredSize(
-          preferredSize: Size(null, 100),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 75,
-            padding: EdgeInsets.symmetric(horizontal: 13),
+        ? Container(
             color: Colors.white,
-            child: AppBar(
-              elevation: 0,
-              backgroundColor: Colors.white,
-              leading: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Image.asset(
-                  'assets/icons/icon_apps/arrow.png',
-                  scale: 5.5,
-                  alignment: Alignment.centerLeft,
-                ),
-              ),
-              actions: <Widget>[
-                GestureDetector(
-                  onTap: () async {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    prefs.setString('EVENT_VIEWED', detailData['countView']);
-                    prefs.setString('EVENT_LOVED', detailData['countLove']);
-                    prefs.setString('EVENT_NAME', detailData['name']);
-
-                    print(prefs.getString('EVENT_VIEWED'));
-                    print(prefs.getString('EVENT_LOVED'));
-                    print(prefs.getString('EVENT_NAME'));
-
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => EventStatistic()));
-                  },
-                  child: detailData['createdByID'] == null
-                      ? Container(
-                        child: Center(
-                          child: CircularProgressIndicator()
-                        ),
-                      )
-                      : detailData['createdByID'] != currentUserId
-                          ? Container()
-                          : Icon(
-                              Icons.insert_chart,
-                              color: eventajaGreenTeal,
-                              size: 30,
-                            ),
-                ),
-                SizedBox(width: 8),
-                Icon(
-                  Icons.person_add,
-                  color: eventajaGreenTeal,
-                  size: 30,
-                ),
-                SizedBox(width: 8),
-                Icon(
-                  Icons.share,
-                  color: eventajaGreenTeal,
-                  size: 30,
-                ),
-                SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                RaisedButton(
-                                  onPressed: () async {
-                                    SharedPreferences prefs =
-                                        await SharedPreferences.getInstance();
-
-                                    List<String> categoryList =
-                                        new List<String>();
-                                    List<String> categoryIdList =
-                                        new List<String>();
-                                    for (var i = 0;
-                                        i <
-                                            detailData['category']['data']
-                                                .length;
-                                        i++) {
-                                      print(i.toString());
-                                      categoryList.add(detailData['category']
-                                          ['data'][i]['name']);
-                                      categoryIdList.add(detailData['category']
-                                          ['data'][i]['id']);
-                                    }
-
-                                    prefs.setString(
-                                        'NEW_EVENT_ID', detailData['id']);
-                                    prefs.setString(
-                                        'EVENT_NAME', detailData['name']);
-                                    prefs.setString(
-                                        'EVENT_TYPE', detailData['isPrivate']);
-                                    prefs.setStringList(
-                                        'EVENT_CATEGORY', categoryList);
-                                    prefs.setStringList(
-                                        'EVENT_CATEGORY_ID_LIST',
-                                        categoryIdList);
-                                    prefs.setString(
-                                        'DATE_START', detailData['dateStart']);
-                                    prefs.setString(
-                                        'DATE_END', detailData['dateEnd']);
-                                    prefs.setString(
-                                        'TIME_START', detailData['timeStart']);
-                                    prefs.setString(
-                                        'TIME_END', detailData['timeEnd']);
-                                    prefs.setString('EVENT_DESCRIPTION',
-                                        detailData['description']);
-                                    prefs.setString(
-                                        'EVENT_PHONE', detailData['phone']);
-                                    prefs.setString(
-                                        'EVENT_EMAIL', detailData['email']);
-                                    prefs.setString(
-                                        'EVENT_WEBSITE', detailData['website']);
-                                    prefs.setString(
-                                        'EVENT_LAT', detailData['latitude']);
-                                    prefs.setString(
-                                        'EVENT_LONG', detailData['longitude']);
-                                    prefs.setString(
-                                        'EVENT_ADDRESS', detailData['address']);
-                                    prefs.setString(
-                                        'EVENT_IMAGE', detailData['photoFull']);
-
-                                    print(prefs
-                                        .getStringList('EVENT_CATEGORY')
-                                        .toString());
-
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                EditEvent()));
-                                  },
-                                  child: Text('Edit Event'),
-                                )
-                              ],
-                            ),
-                          );
-                        });
-                  },
-                  child: Icon(
-                    Icons.more_vert,
-                    color: eventajaGreenTeal,
-                    size: 30,
+            child: Center(child: CircularProgressIndicator()))
+        : Scaffold(
+            backgroundColor: Colors.white,
+            appBar: PreferredSize(
+              preferredSize: Size(null, 100),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 75,
+                padding: EdgeInsets.symmetric(horizontal: 13),
+                color: Colors.white,
+                child: AppBar(
+                  elevation: 0,
+                  backgroundColor: Colors.white,
+                  leading: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Image.asset(
+                      'assets/icons/icon_apps/arrow.png',
+                      scale: 5.5,
+                      alignment: Alignment.centerLeft,
+                    ),
                   ),
+                  actions: <Widget>[
+                    GestureDetector(
+                      onTap: () async {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.setString(
+                            'EVENT_VIEWED', detailData['countView']);
+                        prefs.setString('EVENT_LOVED', detailData['countLove']);
+                        prefs.setString('EVENT_NAME', detailData['name']);
+
+                        print(prefs.getString('EVENT_VIEWED'));
+                        print(prefs.getString('EVENT_LOVED'));
+                        print(prefs.getString('EVENT_NAME'));
+
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                EventStatistic()));
+                      },
+                      child: detailData['createdByID'] == null
+                          ? Container(
+                              child: Center(child: CircularProgressIndicator()),
+                            )
+                          : detailData['createdByID'] != currentUserId
+                              ? Container()
+                              : Icon(
+                                  Icons.insert_chart,
+                                  color: eventajaGreenTeal,
+                                  size: 30,
+                                ),
+                    ),
+                    SizedBox(width: 8),
+                    Icon(
+                      Icons.person_add,
+                      color: eventajaGreenTeal,
+                      size: 30,
+                    ),
+                    SizedBox(width: 8),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Icon(
+                        Icons.share,
+                        color: eventajaGreenTeal,
+                        size: 30,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    RaisedButton(
+                                      onPressed: () async {
+                                        SharedPreferences prefs =
+                                            await SharedPreferences
+                                                .getInstance();
+
+                                        List<String> categoryList =
+                                            new List<String>();
+                                        List<String> categoryIdList =
+                                            new List<String>();
+                                        for (var i = 0;
+                                            i <
+                                                detailData['category']['data']
+                                                    .length;
+                                            i++) {
+                                          print(i.toString());
+                                          categoryList.add(
+                                              detailData['category']['data'][i]
+                                                  ['name']);
+                                          categoryIdList.add(
+                                              detailData['category']['data'][i]
+                                                  ['id']);
+                                        }
+
+                                        prefs.setString(
+                                            'NEW_EVENT_ID', detailData['id']);
+                                        prefs.setString(
+                                            'EVENT_NAME', detailData['name']);
+                                        prefs.setString('EVENT_TYPE',
+                                            detailData['isPrivate']);
+                                        prefs.setStringList(
+                                            'EVENT_CATEGORY', categoryList);
+                                        prefs.setStringList(
+                                            'EVENT_CATEGORY_ID_LIST',
+                                            categoryIdList);
+                                        prefs.setString('DATE_START',
+                                            detailData['dateStart']);
+                                        prefs.setString(
+                                            'DATE_END', detailData['dateEnd']);
+                                        prefs.setString('TIME_START',
+                                            detailData['timeStart']);
+                                        prefs.setString(
+                                            'TIME_END', detailData['timeEnd']);
+                                        prefs.setString('EVENT_DESCRIPTION',
+                                            detailData['description']);
+                                        prefs.setString(
+                                            'EVENT_PHONE', detailData['phone']);
+                                        prefs.setString(
+                                            'EVENT_EMAIL', detailData['email']);
+                                        prefs.setString('EVENT_WEBSITE',
+                                            detailData['website']);
+                                        prefs.setString('EVENT_LAT',
+                                            detailData['latitude']);
+                                        prefs.setString('EVENT_LONG',
+                                            detailData['longitude']);
+                                        prefs.setString('EVENT_ADDRESS',
+                                            detailData['address']);
+                                        prefs.setString('EVENT_IMAGE',
+                                            detailData['photoFull']);
+
+                                        print(prefs
+                                            .getStringList('EVENT_CATEGORY')
+                                            .toString());
+
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        EditEvent()));
+                                      },
+                                      child: Text('Edit Event'),
+                                    )
+                                  ],
+                                ),
+                              );
+                            });
+                      },
+                      child: Icon(
+                        Icons.more_vert,
+                        color: eventajaGreenTeal,
+                        size: 30,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        ),
-        body: detailData == null
-            ? Container(child: Center(child: CircularProgressIndicator())) :
-            // : Container(
-            //     color: Colors.white,
-            //     margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
-            //     child: ListView(
-            //       children: <Widget>[
-            //         Row(
-            //           crossAxisAlignment: CrossAxisAlignment.start,
-            //           children: <Widget>[
-            //             Container(
-            //               width: 122.86,
-            //               height: 184.06,
-            //               decoration: BoxDecoration(
-            //                   borderRadius: BorderRadius.circular(12),
-            //                   image: DecorationImage(
-            //                       image: detailData['photo'] == null
-            //                           ? AssetImage('assets/grey-fade.jpg')
-            //                           : NetworkImage(detailData['photo']),
-            //                       fit: BoxFit.fill)),
-            //             ),
-            //             Container(
-            //                 margin: EdgeInsets.symmetric(horizontal: 13),
-            //                 child: Column(
-            //                     mainAxisAlignment: MainAxisAlignment.start,
-            //                     crossAxisAlignment: CrossAxisAlignment.start,
-            //                     children: <Widget>[
-            //                       Row(
-            //                         mainAxisAlignment: MainAxisAlignment.start,
-            //                         crossAxisAlignment:
-            //                             CrossAxisAlignment.start,
-            //                         children: <Widget>[
-            //                           SizedBox(
-            //                             height: 30,
-            //                             width: 30,
-            //                             child: Container(
-            //                               height: 30,
-            //                               width: 30,
-            //                               decoration: BoxDecoration(
-            //                                   shape: BoxShape.circle,
-            //                                   image: DecorationImage(
-            //                                       image: NetworkImage(
-            //                                           creatorImageUri
-            //                                               .toString()))),
-            //                             ),
-            //                           ),
-            //                           SizedBox(
-            //                             width: 5,
-            //                           ),
-            //                           Column(
-            //                             crossAxisAlignment:
-            //                                 CrossAxisAlignment.start,
-            //                             children: <Widget>[
-            //                               Text(
-            //                                 creatorFullName == null
-            //                                     ? 'loading'
-            //                                     : creatorFullName.toString(),
-            //                                 style: TextStyle(
-            //                                     fontSize: 12,
-            //                                     color: eventajaGreenTeal,
-            //                                     fontWeight: FontWeight.bold),
-            //                               ),
-            //                               Text(
-            //                                   creatorName == null
-            //                                       ? 'loading'
-            //                                       : creatorName.toString(),
-            //                                   style: TextStyle(
-            //                                       color: Colors.grey,
-            //                                       fontSize: 11)),
-            //                             ],
-            //                           )
-            //                         ],
-            //                       ),
-            //                       SizedBox(height: 10),
-            //                       Container(
-            //                           height: 35,
-            //                           width: 180,
-            //                           child: Text(
-            //                             detailData['name'] == null
-            //                                 ? '-'
-            //                                 : detailData['name'].toUpperCase(),
-            //                             style: TextStyle(
-            //                                 fontSize: 15,
-            //                                 fontWeight: FontWeight.bold,
-            //                                 color: Colors.grey),
-            //                           )),
-            //                       SizedBox(height: 17),
-            //                       Row(
-            //                         crossAxisAlignment:
-            //                             CrossAxisAlignment.start,
-            //                         children: <Widget>[
-            //                           SizedBox(
-            //                             width: 10,
-            //                             height: 12,
-            //                             child: Image.asset(
-            //                                 'assets/icons/location-transparent.png'),
-            //                           ),
-            //                           SizedBox(width: 5),
-            //                           Container(
-            //                             height: 16,
-            //                             width: 170,
-            //                             child: MarqueeWidget(
-            //                               text: detailData['address'] == null
-            //                                   ? '-'
-            //                                   : detailData['address'],
-            //                               scrollAxis: Axis.horizontal,
-            //                               textStyle: TextStyle(fontSize: 11),
-            //                             ),
-            //                           )
-            //                         ],
-            //                       ),
-            //                       SizedBox(height: 5),
-            //                       Row(
-            //                         crossAxisAlignment:
-            //                             CrossAxisAlignment.start,
-            //                         children: <Widget>[
-            //                           SizedBox(
-            //                             width: 10,
-            //                             height: 12,
-            //                             child: Image.asset(
-            //                                 'assets/icons/btn_time_green.png'),
-            //                           ),
-            //                           SizedBox(width: 5),
-            //                           Text(
-            //                               startTime.toString() +
-            //                                   ' to ' +
-            //                                   endTime.toString(),
-            //                               style: TextStyle(fontSize: 11)),
-            //                           Container(
-            //                             height: 28,
-            //                             width: 133,
-            //                             decoration: BoxDecoration(
-            //                                 boxShadow: <BoxShadow>[
-            //                                   BoxShadow(
-            //                                       color: itemColor
-            //                                           .withOpacity(0.4),
-            //                                       blurRadius: 2,
-            //                                       spreadRadius: 1.5)
-            //                                 ],
-            //                                 color: itemColor,
-            //                                 borderRadius:
-            //                                     BorderRadius.circular(15)),
-            //                             child: Center(
-            //                                 child: Text(
-            //                               type == 'paid' ||
-            //                                       type == 'paid_seating'
-            //                                   ? isAvailable == '1'
-            //                                       ? 'Rp. ' +
-            //                                           itemPrice.toUpperCase() +
-            //                                           ',-'
-            //                                       : itemPrice.toUpperCase()
-            //                                   : itemPrice.toUpperCase(),
-            //                               style: TextStyle(
-            //                                   color: Colors.white,
-            //                                   fontSize: 10,
-            //                                   fontWeight: FontWeight.bold),
-            //                             )),
-            //                           ),
-            //                         ],
-            //                       )
-            //                     ]))
-            //           ],
-            //         )
-            //       ],
-            //     ))
-        Stack(
-          children: <Widget>[
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  detailData == null
-                      ? Container(
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        )
-                      : bannerDetails()
-                ],
               ),
             ),
-          ),
-        ]),
-        );
+            body: detailData == null
+                ? Container(child: Center(child: CircularProgressIndicator()))
+                :
+                // : Container(
+                //     color: Colors.white,
+                //     margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+                //     child: ListView(
+                //       children: <Widget>[
+                //         Row(
+                //           crossAxisAlignment: CrossAxisAlignment.start,
+                //           children: <Widget>[
+                //             Container(
+                //               width: 122.86,
+                //               height: 184.06,
+                //               decoration: BoxDecoration(
+                //                   borderRadius: BorderRadius.circular(12),
+                //                   image: DecorationImage(
+                //                       image: detailData['photo'] == null
+                //                           ? AssetImage('assets/grey-fade.jpg')
+                //                           : NetworkImage(detailData['photo']),
+                //                       fit: BoxFit.fill)),
+                //             ),
+                //             Container(
+                //                 margin: EdgeInsets.symmetric(horizontal: 13),
+                //                 child: Column(
+                //                     mainAxisAlignment: MainAxisAlignment.start,
+                //                     crossAxisAlignment: CrossAxisAlignment.start,
+                //                     children: <Widget>[
+                //                       Row(
+                //                         mainAxisAlignment: MainAxisAlignment.start,
+                //                         crossAxisAlignment:
+                //                             CrossAxisAlignment.start,
+                //                         children: <Widget>[
+                //                           SizedBox(
+                //                             height: 30,
+                //                             width: 30,
+                //                             child: Container(
+                //                               height: 30,
+                //                               width: 30,
+                //                               decoration: BoxDecoration(
+                //                                   shape: BoxShape.circle,
+                //                                   image: DecorationImage(
+                //                                       image: NetworkImage(
+                //                                           creatorImageUri
+                //                                               .toString()))),
+                //                             ),
+                //                           ),
+                //                           SizedBox(
+                //                             width: 5,
+                //                           ),
+                //                           Column(
+                //                             crossAxisAlignment:
+                //                                 CrossAxisAlignment.start,
+                //                             children: <Widget>[
+                //                               Text(
+                //                                 creatorFullName == null
+                //                                     ? 'loading'
+                //                                     : creatorFullName.toString(),
+                //                                 style: TextStyle(
+                //                                     fontSize: 12,
+                //                                     color: eventajaGreenTeal,
+                //                                     fontWeight: FontWeight.bold),
+                //                               ),
+                //                               Text(
+                //                                   creatorName == null
+                //                                       ? 'loading'
+                //                                       : creatorName.toString(),
+                //                                   style: TextStyle(
+                //                                       color: Colors.grey,
+                //                                       fontSize: 11)),
+                //                             ],
+                //                           )
+                //                         ],
+                //                       ),
+                //                       SizedBox(height: 10),
+                //                       Container(
+                //                           height: 35,
+                //                           width: 180,
+                //                           child: Text(
+                //                             detailData['name'] == null
+                //                                 ? '-'
+                //                                 : detailData['name'].toUpperCase(),
+                //                             style: TextStyle(
+                //                                 fontSize: 15,
+                //                                 fontWeight: FontWeight.bold,
+                //                                 color: Colors.grey),
+                //                           )),
+                //                       SizedBox(height: 17),
+                //                       Row(
+                //                         crossAxisAlignment:
+                //                             CrossAxisAlignment.start,
+                //                         children: <Widget>[
+                //                           SizedBox(
+                //                             width: 10,
+                //                             height: 12,
+                //                             child: Image.asset(
+                //                                 'assets/icons/location-transparent.png'),
+                //                           ),
+                //                           SizedBox(width: 5),
+                //                           Container(
+                //                             height: 16,
+                //                             width: 170,
+                //                             child: MarqueeWidget(
+                //                               text: detailData['address'] == null
+                //                                   ? '-'
+                //                                   : detailData['address'],
+                //                               scrollAxis: Axis.horizontal,
+                //                               textStyle: TextStyle(fontSize: 11),
+                //                             ),
+                //                           )
+                //                         ],
+                //                       ),
+                //                       SizedBox(height: 5),
+                //                       Row(
+                //                         crossAxisAlignment:
+                //                             CrossAxisAlignment.start,
+                //                         children: <Widget>[
+                //                           SizedBox(
+                //                             width: 10,
+                //                             height: 12,
+                //                             child: Image.asset(
+                //                                 'assets/icons/btn_time_green.png'),
+                //                           ),
+                //                           SizedBox(width: 5),
+                //                           Text(
+                //                               startTime.toString() +
+                //                                   ' to ' +
+                //                                   endTime.toString(),
+                //                               style: TextStyle(fontSize: 11)),
+                //                           Container(
+                //                             height: 28,
+                //                             width: 133,
+                //                             decoration: BoxDecoration(
+                //                                 boxShadow: <BoxShadow>[
+                //                                   BoxShadow(
+                //                                       color: itemColor
+                //                                           .withOpacity(0.4),
+                //                                       blurRadius: 2,
+                //                                       spreadRadius: 1.5)
+                //                                 ],
+                //                                 color: itemColor,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(15)),
+                //                             child: Center(
+                //                                 child: Text(
+                //                               type == 'paid' ||
+                //                                       type == 'paid_seating'
+                //                                   ? isAvailable == '1'
+                //                                       ? 'Rp. ' +
+                //                                           itemPrice.toUpperCase() +
+                //                                           ',-'
+                //                                       : itemPrice.toUpperCase()
+                //                                   : itemPrice.toUpperCase(),
+                //                               style: TextStyle(
+                //                                   color: Colors.white,
+                //                                   fontSize: 10,
+                //                                   fontWeight: FontWeight.bold),
+                //                             )),
+                //                           ),
+                //                         ],
+                //                       )
+                //                     ]))
+                //           ],
+                //         )
+                //       ],
+                //     ))
+                Stack(children: <Widget>[
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            detailData == null
+                                ? Container(
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  )
+                                : bannerDetails()
+                          ],
+                        ),
+                      ),
+                    ),
+                  ]),
+          );
   }
 
   Widget customAppbar() {
@@ -569,6 +664,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         child: ListView(
           controller: _scrollController,
           children: <Widget>[
+            Text(generatedLink + _data),
             Stack(children: <Widget>[
               Container(
                 width: MediaQuery.of(context).size.width,
@@ -581,14 +677,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     Container(
                         height: 230,
                         width: 500,
-                        decoration: BoxDecoration(
-                          color: Colors.white
+                        decoration: BoxDecoration(color: Colors.white
                             // image: DecorationImage(
                             //     image: detailData['photoFull'] == null
                             //         ? AssetImage('assets/grey-fade.jpg')
                             //         : NetworkImage(detailData['photoFull']),
                             //     fit: BoxFit.cover)
-                                ),
+                            ),
                         child: BackdropFilter(
                           filter: new ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                           child: Container(
@@ -1182,8 +1277,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                             ? '-'
                             : detailData['name'].toUpperCase(),
                         textStyle: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                         scrollAxis: Axis.horizontal,
                       ),
                     ),
@@ -1206,8 +1302,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                 ? '-'
                                 : detailData['address'],
                             scrollAxis: Axis.horizontal,
-                            textStyle:
-                                TextStyle(fontSize: 11),
+                            textStyle: TextStyle(fontSize: 11),
                           ),
                         )
                       ],
@@ -1237,7 +1332,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                 child: GestureDetector(
                   onTap: () {
                     if (ticketStat['salesStatus'] == null) {
-                      
                     } else if (ticketType['type'] == 'free') {
                       showCupertinoDialog(
                           context: context,
@@ -1447,7 +1541,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         //       ticketTypeURI = 'assets/btn_ticket/paid-value.png';
         //     }
         // });
-        
 
         if (detailData['status'] == 'active') {
           if (ticketType['isSetupTicket'].toString() == "1") {

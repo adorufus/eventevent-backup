@@ -5,7 +5,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 class Terms extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return TermsState();
   }
 }
@@ -13,7 +13,7 @@ class Terms extends StatefulWidget{
 class TermsState extends State<Terms>{
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
       appBar: AppBar(
         elevation: 1,

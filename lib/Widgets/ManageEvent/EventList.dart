@@ -13,7 +13,7 @@ class EventList extends StatefulWidget{
   const EventList({Key key, this.type}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return EventListState();
   }
 }
@@ -22,7 +22,7 @@ class EventListState extends State<EventList>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

@@ -29,7 +29,7 @@ class DayPicker extends StatefulWidget {
       @required this.lastDate,
       this.datePickerLayoutSettings = const DatePickerLayoutSettings(),
       this.datePickerKeys,
-      this.datePickerStyles})
+      this.datePickerStyles, this.currentDate})
       : assert(selectedDate != null),
         assert(onChanged != null),
         assert(!firstDate.isAfter(lastDate)),
@@ -59,6 +59,9 @@ class DayPicker extends StatefulWidget {
 
   /// Some keys useful for integration tests
   final DatePickerKeys datePickerKeys;
+
+  /// current date
+  final DateTime currentDate;
 
      
 
@@ -150,7 +153,7 @@ class _DayPickerState extends State<DayPicker> {
     return _DayPicker(
       key: ValueKey<DateTime>(targetDate),
       selectedDate: widget.selectedDate,
-      currentDate: _todayDate,
+      currentDate: widget.currentDate,
       onChanged: widget.onChanged,
       firstDate: widget.firstDate,
       lastDate: widget.lastDate,

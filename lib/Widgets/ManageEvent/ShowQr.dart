@@ -12,7 +12,7 @@ import 'package:eventevent/helper/ColumnBuilder.dart';
 class ShowQr extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return ShowQrState();
   }
 }
@@ -38,7 +38,7 @@ class ShowQrState extends State<ShowQr>{
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
     getData();
 
@@ -55,7 +55,7 @@ class ShowQrState extends State<ShowQr>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

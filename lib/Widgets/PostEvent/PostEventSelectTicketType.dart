@@ -20,7 +20,7 @@ import 'PostEventInvitePeople.dart';
 class SelectTicketType extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return SelectTicketTypeState();
   }
 }
@@ -58,7 +58,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
         key: thisState,
         appBar: AppBar(

@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 class WithdrawBank extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return WithdrawBankState();
   }
 }

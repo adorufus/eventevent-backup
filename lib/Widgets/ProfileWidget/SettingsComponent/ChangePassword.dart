@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 class ChangePassword extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return ChangePasswordState();
   }
 }
@@ -24,7 +24,7 @@ class ChangePasswordState extends State<ChangePassword>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
       key: thisScaffold,
       appBar: AppBar(

@@ -353,7 +353,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget()));
+              builder: (BuildContext context) => DashboardWidget(isRest: false,)));
     } else {
       var extractedData = json.decode(response.body);
       if (extractedData['desc'] == 'User is not register') {
@@ -387,7 +387,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget()));
+              builder: (BuildContext context) => DashboardWidget(isRest: false,)));
     } else {
       var extractedData = json.decode(response.body);
       String message = extractedData['desc'];
@@ -494,7 +494,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       ClevertapHandler.pushUserProfile(extractedData['data']['fullName'], "", extractedData['data']['email'], extractedData['data']['pictureNormalURL'], extractedData['data']['birthday'], extractedData['data']['username'], extractedData['data']['gender'], extractedData['data']['phone']);
 
       SharedPrefs().saveCurrentSession(response, responseJson);
-      Navigator.pushReplacementNamed(context, '/Dashboard');
+      Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false,)));
       return LoginModel.fromJson(responseJson);
     }
 

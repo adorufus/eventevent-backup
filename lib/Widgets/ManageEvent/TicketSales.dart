@@ -17,7 +17,7 @@ class TicketSales extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return TicketSalesState();
   }
 }
@@ -44,7 +44,7 @@ class TicketSalesState extends State<TicketSales> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

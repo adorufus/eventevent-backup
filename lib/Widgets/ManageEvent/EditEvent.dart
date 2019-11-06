@@ -17,7 +17,7 @@ import 'package:location/location.dart';
 class EditEvent extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return EditEventState();
   }
 }

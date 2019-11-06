@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 class WithdrawConfirmation extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return WithdrawConfirmationState();
   }
 }

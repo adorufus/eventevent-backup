@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 class TransactionHistory extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return TransactionHistoryState();
   }
 }
@@ -36,7 +36,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(50),

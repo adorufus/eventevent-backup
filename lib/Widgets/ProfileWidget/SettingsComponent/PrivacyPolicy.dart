@@ -5,7 +5,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 class PrivacyPolicy extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return PrivacyPolicyState();
   }
 }
@@ -13,7 +13,7 @@ class PrivacyPolicy extends StatefulWidget{
 class PrivacyPolicyState extends State<PrivacyPolicy>{
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
