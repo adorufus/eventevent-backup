@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -39,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
           sendAnalytics(preferences.getString('LastScreenRoute'));
           if (preferences.getString('Session') != null) {
             sendAnalytics('Dashboard');
-            Navigator.of(context).pushReplacementNamed('/Dashboard');
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false,)));
           } else {
             sendAnalytics('LoginRegister');
             Navigator.of(context).pushReplacementNamed('/LoginRegister');

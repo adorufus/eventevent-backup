@@ -21,6 +21,8 @@ import 'dart:ui';
 import 'package:marquee/marquee.dart';
 //import 'package:eventevent/helper/MarqueeWidget.dart';
 import 'package:marquee_flutter/marquee_flutter.dart';
+import 'package:share/share.dart';
+import 'package:share_extend/share_extend.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
@@ -168,9 +170,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         "\$og_title": "",
         "\$og_image_url": widget.image,
         "\$desktop_url": "http://eventevent.com/event/${widget.id}",
-      }});
-    
-    final response = await http.post(url, body: body, headers: {'Content-Type': 'application/json'});
+      }
+    });
+
+    final response = await http
+        .post(url, body: body, headers: {'Content-Type': 'application/json'});
 
     print(response.statusCode);
     print(response.body);
@@ -275,7 +279,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     ),
                     SizedBox(width: 8),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        ShareExtend.share(generatedLink, 'text');
+                      },
                       child: Icon(
                         Icons.share,
                         color: eventajaGreenTeal,
@@ -1327,71 +1333,73 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               Positioned(
                 left: 205,
                 top: 205,
-                height: 50,
-                width: 150,
-                child: GestureDetector(
-                  onTap: () {
-                    if (ticketStat['salesStatus'] == null) {
-                    } else if (ticketType['type'] == 'free') {
-                      showCupertinoDialog(
-                          context: context,
-                          builder: (BuildContext context) => SuccessPage());
-                    } else if (ticketType['type'] == 'no_ticket') {
-                      print('no ticket');
-                      showDialog(
-                          context: context,
-                          child: new CupertinoAlertDialog(
-                            title: new Text("Dialog Title"),
-                            content: new Text("This is my content"),
-                            actions: <Widget>[
-                              CupertinoDialogAction(
-                                isDefaultAction: true,
-                                child: Text("Yes"),
-                              ),
-                              CupertinoDialogAction(
-                                child: Text("No"),
-                              )
-                            ],
-                          ));
-                    } else {
-                      if (ticketStat['salesStatus'] == 'endSales' ||
-                          ticketStat['availableTicketStatus'] == '0') {
-                        return;
+                child: Container(
+                  height: 50,
+                  width: 150,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (ticketStat['salesStatus'] == null) {
+                      } else if (ticketType['type'] == 'free') {
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (BuildContext context) => SuccessPage());
+                      } else if (ticketType['type'] == 'no_ticket') {
+                        print('no ticket');
+                        showDialog(
+                            context: context,
+                            child: new CupertinoAlertDialog(
+                              title: new Text("Dialog Title"),
+                              content: new Text("This is my content"),
+                              actions: <Widget>[
+                                CupertinoDialogAction(
+                                  isDefaultAction: true,
+                                  child: Text("Yes"),
+                                ),
+                                CupertinoDialogAction(
+                                  child: Text("No"),
+                                )
+                              ],
+                            ));
                       } else {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                SelectTicketWidget(
-                                  eventID: detailData['id'],
-                                  eventDate: detailData['dateStart'],
-                                )));
+                        if (ticketStat['salesStatus'] == 'endSales' ||
+                            ticketStat['availableTicketStatus'] == '0') {
+                          return;
+                        } else {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  SelectTicketWidget(
+                                    eventID: detailData['id'],
+                                    eventDate: detailData['dateStart'],
+                                  )));
+                        }
                       }
-                    }
-                  },
-                  child: Container(
-                    height: 26,
-                    width: 80,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25),
-                        image: DecorationImage(
-                          colorFilter: isTicketUnavailable == true
-                              ? new ColorFilter.mode(
-                                  Colors.black.withOpacity(0.4),
-                                  BlendMode.dstATop)
-                              : ColorFilter.mode(
-                                  Colors.white, BlendMode.dstATop),
-                          image: AssetImage(ticketTypeURI),
-                          fit: BoxFit.fill,
-                        )),
-                    child: FractionallySizedBox(
-                      alignment: Alignment.center,
-                      heightFactor: .4,
-                      child: Text(
-                        ticketPrice,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
+                    },
+                    child: Container(
+                      height: 26,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          image: DecorationImage(
+                            colorFilter: isTicketUnavailable == true
+                                ? new ColorFilter.mode(
+                                    Colors.black.withOpacity(0.4),
+                                    BlendMode.dstATop)
+                                : ColorFilter.mode(
+                                    Colors.white, BlendMode.dstATop),
+                            image: AssetImage(ticketTypeURI),
+                            fit: BoxFit.fill,
+                          )),
+                      child: FractionallySizedBox(
+                        alignment: Alignment.center,
+                        heightFactor: .4,
+                        child: Text(
+                          ticketPrice,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
@@ -1559,14 +1567,16 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             } else {
               isTicketUnavailable = false;
             }
-          } else {
-            if (ticketType['type'] == 'free') {
-              ticketTypeURI = "assets/btn_ticket/free.png";
-            } else if (ticketType['type'].toString() == 'no_ticket') {
-              ticketTypeURI = "assets/btn_ticket/no-ticket.png";
-            } else if (ticketType['type'].toString() == 'on_the_spot') {
-              ticketTypeURI = "assets/btn_ticket/ots.png";
-            }
+          } else if (ticketType['isSetupTicket'] == "0" && ticketStat['cheapestTicket'] == "" && ticketStat['availableTicketStatus'] == "") {
+            setState(() {
+              if (ticketType['type'] == 'free') {
+                ticketTypeURI = "assets/btn_ticket/free.png";
+              } else if (ticketType['type'] == 'no_ticket') {
+                ticketTypeURI = "assets/btn_ticket/no-ticket.png";
+              } else if (ticketType['type'] == 'on_the_spot') {
+                ticketTypeURI = "assets/btn_ticket/ots.png";
+              }
+            });
           }
 
           if (isGoing == "1" && ticketType['isSetupTicket'].toString() == "0") {

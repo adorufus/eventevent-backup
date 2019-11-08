@@ -3,8 +3,9 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class OpenMedia extends StatefulWidget {
   final articleID;
+  final url;
 
-  const OpenMedia({Key key, this.articleID}) : super(key: key);
+  const OpenMedia({Key key, this.articleID, this.url}) : super(key: key);
   @override
   _OpenMediaState createState() => _OpenMediaState();
 }
@@ -49,7 +50,7 @@ class _OpenMediaState extends State<OpenMedia> {
           Expanded(
             child: WebView(
               javascriptMode: JavascriptMode.unrestricted,
-              initialUrl: 'https://media.eventevent.com/medias/${widget.articleID}'
+              initialUrl: widget.url
             ),
           )
         ],

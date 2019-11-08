@@ -140,6 +140,7 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                                   MaterialPageRoute(
                                       builder: (context) => OpenMedia(
                                             articleID: bannerData['id'],
+                                            url: bannerData['link'],
                                           )));
                             },
                             child: Container(

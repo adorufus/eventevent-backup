@@ -186,7 +186,7 @@ class PostEventPosterState extends State<PostEventPoster> {
 
     if (!mounted) return;
 
-    //cropImage(galleryFile);
+    cropImage(galleryFile);
   }
 
   Future cropImage(File image) async {

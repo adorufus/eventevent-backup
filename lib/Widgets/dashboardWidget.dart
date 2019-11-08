@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:eventevent/Widgets/Home/RestPageNeedLogin.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/PostMedia.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
@@ -232,10 +233,10 @@ class _DashboardWidgetState extends State<DashboardWidget>
   Widget build(BuildContext context) {
     final _pageOptions = [
       EventCatalog(isRest: widget.isRest),
-      TimelineDashboard(),
-      Container(),
-      PushNotification(),
-      ProfileWidget(
+      widget.isRest == true ? LoginRegisterWidget() : TimelineDashboard(),
+      widget.isRest == true ? LoginRegisterWidget() : Container(),
+      widget.isRest == true ? LoginRegisterWidget() : PushNotification(),
+      widget.isRest == true ? LoginRegisterWidget() : ProfileWidget(
         initialIndex: 0,
         userId: currentUserId,
       ),

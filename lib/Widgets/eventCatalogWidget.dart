@@ -720,15 +720,15 @@ class _EventCatalogState extends State<EventCatalog>
           Container(
               height: 180,
               padding: EdgeInsets.only(top: 5, left: 6.5),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        blurRadius: 2,
-                        color: Colors.black.withOpacity(0.1),
-                        spreadRadius: 1.5)
-                  ]),
+              // decoration: BoxDecoration(
+              //     color: Colors.white,
+              //     borderRadius: BorderRadius.circular(15),
+              //     boxShadow: <BoxShadow>[
+              //       BoxShadow(
+              //           blurRadius: 2,
+              //           color: Colors.black.withOpacity(0.1),
+              //           spreadRadius: 1.5)
+              //     ]),
               margin: EdgeInsets.symmetric(vertical: 13, horizontal: 13),
               child: Center(child: CategoryEventWidget())),
           collection(),
