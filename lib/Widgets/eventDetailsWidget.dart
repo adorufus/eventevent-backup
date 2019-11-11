@@ -387,193 +387,193 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             ),
             body: detailData == null
                 ? Container(child: Center(child: CircularProgressIndicator()))
-                :
-                // : Container(
-                //     color: Colors.white,
-                //     margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
-                //     child: ListView(
-                //       children: <Widget>[
-                //         Row(
-                //           crossAxisAlignment: CrossAxisAlignment.start,
-                //           children: <Widget>[
-                //             Container(
-                //               width: 122.86,
-                //               height: 184.06,
-                //               decoration: BoxDecoration(
-                //                   borderRadius: BorderRadius.circular(12),
-                //                   image: DecorationImage(
-                //                       image: detailData['photo'] == null
-                //                           ? AssetImage('assets/grey-fade.jpg')
-                //                           : NetworkImage(detailData['photo']),
-                //                       fit: BoxFit.fill)),
-                //             ),
-                //             Container(
-                //                 margin: EdgeInsets.symmetric(horizontal: 13),
-                //                 child: Column(
-                //                     mainAxisAlignment: MainAxisAlignment.start,
-                //                     crossAxisAlignment: CrossAxisAlignment.start,
-                //                     children: <Widget>[
-                //                       Row(
-                //                         mainAxisAlignment: MainAxisAlignment.start,
-                //                         crossAxisAlignment:
-                //                             CrossAxisAlignment.start,
-                //                         children: <Widget>[
-                //                           SizedBox(
-                //                             height: 30,
-                //                             width: 30,
-                //                             child: Container(
-                //                               height: 30,
-                //                               width: 30,
-                //                               decoration: BoxDecoration(
-                //                                   shape: BoxShape.circle,
-                //                                   image: DecorationImage(
-                //                                       image: NetworkImage(
-                //                                           creatorImageUri
-                //                                               .toString()))),
-                //                             ),
-                //                           ),
-                //                           SizedBox(
-                //                             width: 5,
-                //                           ),
-                //                           Column(
-                //                             crossAxisAlignment:
-                //                                 CrossAxisAlignment.start,
-                //                             children: <Widget>[
-                //                               Text(
-                //                                 creatorFullName == null
-                //                                     ? 'loading'
-                //                                     : creatorFullName.toString(),
-                //                                 style: TextStyle(
-                //                                     fontSize: 12,
-                //                                     color: eventajaGreenTeal,
-                //                                     fontWeight: FontWeight.bold),
-                //                               ),
-                //                               Text(
-                //                                   creatorName == null
-                //                                       ? 'loading'
-                //                                       : creatorName.toString(),
-                //                                   style: TextStyle(
-                //                                       color: Colors.grey,
-                //                                       fontSize: 11)),
-                //                             ],
-                //                           )
-                //                         ],
-                //                       ),
-                //                       SizedBox(height: 10),
-                //                       Container(
-                //                           height: 35,
-                //                           width: 180,
-                //                           child: Text(
-                //                             detailData['name'] == null
-                //                                 ? '-'
-                //                                 : detailData['name'].toUpperCase(),
-                //                             style: TextStyle(
-                //                                 fontSize: 15,
-                //                                 fontWeight: FontWeight.bold,
-                //                                 color: Colors.grey),
-                //                           )),
-                //                       SizedBox(height: 17),
-                //                       Row(
-                //                         crossAxisAlignment:
-                //                             CrossAxisAlignment.start,
-                //                         children: <Widget>[
-                //                           SizedBox(
-                //                             width: 10,
-                //                             height: 12,
-                //                             child: Image.asset(
-                //                                 'assets/icons/location-transparent.png'),
-                //                           ),
-                //                           SizedBox(width: 5),
-                //                           Container(
-                //                             height: 16,
-                //                             width: 170,
-                //                             child: MarqueeWidget(
-                //                               text: detailData['address'] == null
-                //                                   ? '-'
-                //                                   : detailData['address'],
-                //                               scrollAxis: Axis.horizontal,
-                //                               textStyle: TextStyle(fontSize: 11),
-                //                             ),
-                //                           )
-                //                         ],
-                //                       ),
-                //                       SizedBox(height: 5),
-                //                       Row(
-                //                         crossAxisAlignment:
-                //                             CrossAxisAlignment.start,
-                //                         children: <Widget>[
-                //                           SizedBox(
-                //                             width: 10,
-                //                             height: 12,
-                //                             child: Image.asset(
-                //                                 'assets/icons/btn_time_green.png'),
-                //                           ),
-                //                           SizedBox(width: 5),
-                //                           Text(
-                //                               startTime.toString() +
-                //                                   ' to ' +
-                //                                   endTime.toString(),
-                //                               style: TextStyle(fontSize: 11)),
-                //                           Container(
-                //                             height: 28,
-                //                             width: 133,
-                //                             decoration: BoxDecoration(
-                //                                 boxShadow: <BoxShadow>[
-                //                                   BoxShadow(
-                //                                       color: itemColor
-                //                                           .withOpacity(0.4),
-                //                                       blurRadius: 2,
-                //                                       spreadRadius: 1.5)
-                //                                 ],
-                //                                 color: itemColor,
-                //                                 borderRadius:
-                //                                     BorderRadius.circular(15)),
-                //                             child: Center(
-                //                                 child: Text(
-                //                               type == 'paid' ||
-                //                                       type == 'paid_seating'
-                //                                   ? isAvailable == '1'
-                //                                       ? 'Rp. ' +
-                //                                           itemPrice.toUpperCase() +
-                //                                           ',-'
-                //                                       : itemPrice.toUpperCase()
-                //                                   : itemPrice.toUpperCase(),
-                //                               style: TextStyle(
-                //                                   color: Colors.white,
-                //                                   fontSize: 10,
-                //                                   fontWeight: FontWeight.bold),
-                //                             )),
-                //                           ),
-                //                         ],
-                //                       )
-                //                     ]))
-                //           ],
-                //         )
-                //       ],
-                //     ))
-                Stack(children: <Widget>[
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                // :
+                : Container(
+                    color: Colors.white,
+                    margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+                    child: ListView(
+                      children: <Widget>[
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            detailData == null
-                                ? Container(
-                                    child: Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  )
-                                : bannerDetails()
+                            Container(
+                              width: 122.86,
+                              height: 184.06,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  image: DecorationImage(
+                                      image: detailData['photo'] == null
+                                          ? AssetImage('assets/grey-fade.jpg')
+                                          : NetworkImage(detailData['photo']),
+                                      fit: BoxFit.fill)),
+                            ),
+                            Container(
+                                margin: EdgeInsets.symmetric(horizontal: 13),
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: 30,
+                                            width: 30,
+                                            child: Container(
+                                              height: 30,
+                                              width: 30,
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          creatorImageUri
+                                                              .toString()))),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                creatorFullName == null
+                                                    ? 'loading'
+                                                    : creatorFullName.toString(),
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: eventajaGreenTeal,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                              Text(
+                                                  creatorName == null
+                                                      ? 'loading'
+                                                      : creatorName.toString(),
+                                                  style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 11)),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(height: 10),
+                                      Container(
+                                          height: 35,
+                                          width: 180,
+                                          child: Text(
+                                            detailData['name'] == null
+                                                ? '-'
+                                                : detailData['name'].toUpperCase(),
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey),
+                                          )),
+                                      SizedBox(height: 17),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          SizedBox(
+                                            width: 10,
+                                            height: 12,
+                                            child: Image.asset(
+                                                'assets/icons/location-transparent.png'),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Container(
+                                            height: 16,
+                                            width: 170,
+                                            child: MarqueeWidget(
+                                              text: detailData['address'] == null
+                                                  ? '-'
+                                                  : detailData['address'],
+                                              scrollAxis: Axis.horizontal,
+                                              textStyle: TextStyle(fontSize: 11),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(height: 5),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          SizedBox(
+                                            width: 10,
+                                            height: 12,
+                                            child: Image.asset(
+                                                'assets/icons/btn_time_green.png'),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text(
+                                              startTime.toString() +
+                                                  ' to ' +
+                                                  endTime.toString(),
+                                              style: TextStyle(fontSize: 11)),
+                                          Container(
+                                            height: 28,
+                                            width: 133,
+                                            decoration: BoxDecoration(
+                                                boxShadow: <BoxShadow>[
+                                                  BoxShadow(
+                                                      color: itemColor
+                                                          .withOpacity(0.4),
+                                                      blurRadius: 2,
+                                                      spreadRadius: 1.5)
+                                                ],
+                                                color: itemColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            child: Center(
+                                                child: Text('test',
+                                              // type == 'paid' ||
+                                              //         type == 'paid_seating'
+                                              //     ? isAvailable == '1'
+                                              //         ? 'Rp. ' +
+                                              //             itemPrice.toUpperCase() +
+                                              //             ',-'
+                                              //         : itemPrice.toUpperCase()
+                                              //     : itemPrice.toUpperCase(),
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                          ),
+                                        ],
+                                      )
+                                    ]))
                           ],
-                        ),
-                      ),
-                    ),
-                  ]),
+                        )
+                      ],
+                    ))
+                // Stack(children: <Widget>[
+                //     Positioned(
+                //       top: 0,
+                //       left: 0,
+                //       right: 0,
+                //       child: Container(
+                //         width: MediaQuery.of(context).size.width,
+                //         height: MediaQuery.of(context).size.height,
+                //         child: Column(
+                //           mainAxisAlignment: MainAxisAlignment.start,
+                //           children: <Widget>[
+                //             detailData == null
+                //                 ? Container(
+                //                     child: Center(
+                //                       child: CircularProgressIndicator(),
+                //                     ),
+                //                   )
+                //                 : bannerDetails()
+                //           ],
+                //         ),
+                //       ),
+                //     ),
+                //   ]),
           );
   }
 
@@ -1555,6 +1555,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             if (ticketStat['cheapestTicket'].toString() == "0") {
               setState(() {
                 ticketPriceStringVisibility = false;
+                itemColor = Colors.green;
                 ticketTypeURI = 'assets/btn_ticket/free-limited.png';
               });
             } else {

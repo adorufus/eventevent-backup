@@ -26,8 +26,12 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
       RefreshController(initialRefresh: false);
 
   List popularEventList;
-  List discoverEventList;
-  List mediaData;
+  List latestMedia;
+  List popularMedia;
+
+  String imageUrl = '';
+  
+  int currentTabIndex = 0;
 
   int newPage = 0;
 
@@ -37,7 +41,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
       newPage += 1;
     });
 
-    getMedia(newPage: newPage).then((response) {
+    getPopularMedia(newPage: newPage).then((response) {
       var extractedData = json.decode(response.body);
       List updatedData = extractedData['data'];
 
@@ -47,7 +51,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
             refreshController.loadNoData();
           }
           print('data: ' + updatedData.toString());
-          mediaData.addAll(updatedData);
+          popularMedia.addAll(updatedData);
         });
         if (mounted) setState(() {});
         refreshController.loadComplete();
@@ -63,7 +67,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
   @override
   void initState() {
     super.initState();
-    getMedia().then((response) {
+    getPopularMedia().then((response) {
       var extractedData = json.decode(response.body);
 
       print(response.statusCode);
@@ -71,7 +75,20 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
 
       if (response.statusCode == 200) {
         setState(() {
-          mediaData = extractedData['data']['data'];
+          popularMedia = extractedData['data']['data'];
+        });
+      }
+    });
+
+    getLatestMedia().then((response) {
+      var extractedData = json.decode(response.body);
+
+      print(response.statusCode);
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          latestMedia = extractedData['data']['data'];
         });
       }
     });
@@ -131,6 +148,11 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
               Container(
                 color: Colors.white,
                 child: TabBar(
+                  onTap: (index){
+                    setState(() {
+                      currentTabIndex = index;
+                    });
+                  },
                   tabs: <Widget>[
                     Tab(
                       child: Row(
@@ -183,7 +205,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
 
   Widget popularEvent() {
     return Container(
-        child: mediaData == null
+        child: popularMedia == null
             ? Center(
                 child: Container(
                   width: 25,
@@ -219,7 +241,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                   setState(() {
                     newPage = 0;
                   });
-                  getMedia(newPage: newPage).then((response) {
+                  getPopularMedia(newPage: newPage).then((response) {
                     var extractedData = json.decode(response.body);
 
                     print(response.statusCode);
@@ -227,7 +249,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
 
                     if (response.statusCode == 200) {
                       setState(() {
-                        mediaData = extractedData['data']['data'];
+                        popularMedia = extractedData['data']['data'];
                       });
                       if (mounted) setState(() {});
                       refreshController.refreshCompleted();
@@ -239,7 +261,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                 },
                 onLoading: _onLoading,
                 child: ListView.builder(
-                  itemCount: mediaData == null ? 0 : mediaData.length,
+                  itemCount: popularMedia == null ? 0 : popularMedia.length,
                   itemBuilder: (BuildContext context, i) {
                     return GestureDetector(
                       onTap: () {
@@ -247,24 +269,24 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => MediaDetails(
-                                      userPicture: mediaData[i]['creator']
+                                      userPicture: popularMedia[i]['creator']
                                           ['photo'],
-                                      articleDetail: mediaData[i]
+                                      articleDetail: popularMedia[i]
                                           ['description'],
                                       imageCount: 'img' + i.toString(),
-                                      username: mediaData[i]['creator']
+                                      username: popularMedia[i]['creator']
                                           ['username'],
-                                      imageUri: mediaData[i]['banner'],
-                                      mediaTitle: mediaData[i]['title'],
+                                      imageUri: popularMedia[i]['banner'],
+                                      mediaTitle: popularMedia[i]['title'],
                                       autoFocus: false,
                                     )));
                       },
                       child: new LatestMediaItem(
                         isVideo: widget.isVideo,
-                        image: mediaData[i]['banner_avatar'],
-                        title: mediaData[i]['title'],
-                        username: mediaData[i]['creator']['username'],
-                        userImage: mediaData[i]['creator']['photo'],
+                        image: widget.isVideo == true ? popularMedia[i]['thumbnail_timeline'] : popularMedia[i]['banner_timeline'],
+                        title: popularMedia[i]['title'],
+                        username: popularMedia[i]['creator']['username'],
+                        userImage: popularMedia[i]['creator']['photo'],
                       ),
                     );
                   },
@@ -273,7 +295,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
 
   Widget discoverEvent() {
     return Container(
-        child: mediaData == null
+        child: popularMedia == null
             ? Center(
                 child: Container(
                   width: 25,
@@ -309,7 +331,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                   setState(() {
                     newPage = 0;
                   });
-                  getMedia(newPage: newPage).then((response) {
+                  getLatestMedia(newPage: newPage).then((response) {
                     var extractedData = json.decode(response.body);
 
                     print(response.statusCode);
@@ -317,7 +339,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
 
                     if (response.statusCode == 200) {
                       setState(() {
-                        mediaData = extractedData['data']['data'];
+                        latestMedia = extractedData['data']['data'];
                       });
                       if (mounted) setState(() {});
                       refreshController.refreshCompleted();
@@ -329,7 +351,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                 },
                 onLoading: _onLoading,
                 child: ListView.builder(
-                  itemCount: mediaData == null ? 0 : mediaData.length,
+                  itemCount: latestMedia == null ? 0 : latestMedia.length,
                   itemBuilder: (BuildContext context, i) {
                     return GestureDetector(
                       onTap: () {
@@ -337,47 +359,95 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => MediaDetails(
-                                      userPicture: mediaData[i]['creator']
+                                      userPicture: latestMedia[i]['creator']
                                           ['photo'],
-                                      articleDetail: mediaData[i]
+                                      articleDetail: latestMedia[i]
                                           ['description'],
                                       imageCount: 'img' + i.toString(),
-                                      username: mediaData[i]['creator']
+                                      username: latestMedia[i]['creator']
                                           ['username'],
-                                      imageUri: mediaData[i]['banner'],
-                                      mediaTitle: mediaData[i]['title'],
+                                      imageUri: latestMedia[i]['banner'],
+                                      mediaTitle: latestMedia[i]['title'],
                                       autoFocus: false,
                                     )));
                       },
                       child: new LatestMediaItem(
                         isVideo: widget.isVideo,
-                        image: mediaData[i]['banner_timeline'],
-                        title: mediaData[i]['title'],
-                        username: mediaData[i]['creator']['username'],
-                        userImage: mediaData[i]['creator']['photo'],
+                        image: widget.isVideo == true ? latestMedia[i]['thumbnail_timeline'] : latestMedia[i]['banner_timeline'],
+                        title: latestMedia[i]['title'],
+                        username: latestMedia[i]['creator']['username'],
+                        userImage: latestMedia[i]['creator']['photo'],
                       ),
                     );
                   },
                 )));
   }
 
-  Future<http.Response> getMedia({int newPage}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<http.Response> getPopularMedia({int newPage}) async {
     int currentPage = 1;
+    String type = 'photo';
+    String status = 'popular';
 
     setState(() {
       if (newPage != null) {
         currentPage += newPage;
       }
       print(currentPage);
-    });
 
-    String url = BaseApi().apiUrl +
-        '/media?X-API-KEY=$API_KEY&search=&page=$currentPage&limit=10&type=photo&status=popular';
+    });
+    
+    if(widget.isVideo == true){
+      setState((){
+        type = 'video';
+      });
+    }
+    else{
+      setState((){
+        type = 'photo';
+      });
+    }
+
+    String url = BaseApi().restUrl +
+        '/media?X-API-KEY=$API_KEY&search=&page=$currentPage&limit=10&type=$type&status=popular';
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
+      'signature': signature
+    });
+
+    return response;
+  }
+
+  Future<http.Response> getLatestMedia({int newPage}) async {
+    int currentPage = 1;
+    String type = 'photo';
+    String status = 'popular';
+
+    setState(() {
+      if (newPage != null) {
+        currentPage += newPage;
+      }
+      print(currentPage);
+
+    });
+    
+    if(widget.isVideo == true){
+      setState((){
+        type = 'video';
+      });
+    }
+    else{
+      setState((){
+        type = 'photo';
+      });
+    }
+
+    String url = BaseApi().restUrl +
+        '/media?X-API-KEY=$API_KEY&search=&page=$currentPage&limit=10&type=$type&status=latest';
+
+    final response = await http.get(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'signature': signature
     });
 
     return response;
