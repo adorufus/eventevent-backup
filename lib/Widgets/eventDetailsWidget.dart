@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:eventevent/Widgets/LoveItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EditEvent.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventStatistic.dart';
 import 'package:eventevent/Widgets/ManageEvent/ManageTicket.dart';
@@ -9,6 +10,7 @@ import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
 import 'package:eventevent/Widgets/ManageEvent/TicketSales.dart';
 import 'package:eventevent/Widgets/Transaction/SelectTicket.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
+import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -87,7 +89,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   DateTime _currentTime;
   DateTime _dDay;
 
-  Color itemColor;
+  Color itemColor = Colors.red;
 
   var session;
 
@@ -411,10 +413,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                 margin: EdgeInsets.symmetric(horizontal: 13),
                                 child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
@@ -442,11 +446,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               Text(
                                                 creatorFullName == null
                                                     ? 'loading'
-                                                    : creatorFullName.toString(),
+                                                    : creatorFullName
+                                                        .toString(),
                                                 style: TextStyle(
                                                     fontSize: 12,
                                                     color: eventajaGreenTeal,
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                               Text(
                                                   creatorName == null
@@ -466,7 +472,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           child: Text(
                                             detailData['name'] == null
                                                 ? '-'
-                                                : detailData['name'].toUpperCase(),
+                                                : detailData['name']
+                                                    .toUpperCase(),
                                             style: TextStyle(
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.bold,
@@ -488,11 +495,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             height: 16,
                                             width: 170,
                                             child: MarqueeWidget(
-                                              text: detailData['address'] == null
-                                                  ? '-'
-                                                  : detailData['address'],
+                                              text:
+                                                  detailData['address'] == null
+                                                      ? '-'
+                                                      : detailData['address'],
                                               scrollAxis: Axis.horizontal,
-                                              textStyle: TextStyle(fontSize: 11),
+                                              textStyle:
+                                                  TextStyle(fontSize: 11),
                                             ),
                                           )
                                         ],
@@ -514,67 +523,419 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   ' to ' +
                                                   endTime.toString(),
                                               style: TextStyle(fontSize: 11)),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 15,
+                                      ),
+                                      Container(
+                                        height: 28,
+                                        width: 133,
+                                        decoration: BoxDecoration(
+                                            boxShadow: <BoxShadow>[
+                                              BoxShadow(
+                                                  color: itemColor
+                                                      .withOpacity(0.4),
+                                                  blurRadius: 2,
+                                                  spreadRadius: 1.5)
+                                            ],
+                                            color: itemColor,
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        child: Center(
+                                            child: Text(
+                                          'test',
+                                          // type == 'paid' ||
+                                          //         type == 'paid_seating'
+                                          //     ? isAvailable == '1'
+                                          //         ? 'Rp. ' +
+                                          //             itemPrice.toUpperCase() +
+                                          //             ',-'
+                                          //         : itemPrice.toUpperCase()
+                                          //     : itemPrice.toUpperCase(),
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                      ),
+                                    ])),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        Container(
+                          width: 333.7,
+                          height: 59.1,
+                          padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    blurRadius: 2,
+                                    spreadRadius: 1.5,
+                                    color: Color(0xff8a8a8b).withOpacity(.5))
+                              ]),
+                          child: Row(
+                            children: <Widget>[
+                              LoveItem(isComment: false),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              LoveItem(isComment: true),
+                              Expanded(
+                                child: SizedBox(),
+                              ),
+                              GestureDetector(
+                                onTap: phoneNumber == null || phoneNumber == ""
+                                    ? () {}
+                                    : () =>
+                                        launch("tel:" + phoneNumber.toString()),
+                                child: SizedBox(
+                                  height: 33,
+                                  width: 33,
+                                  child: Image.asset(phoneNumber == null ||
+                                          phoneNumber == ""
+                                      ? 'assets/icons/btn_phone.png'
+                                      : 'assets/icons/btn_phone_active.png'),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: email == null || email == ""
+                                    ? () {}
+                                    : () =>
+                                        launch("mailto:" + email.toString()),
+                                child: SizedBox(
+                                  height: 33,
+                                  width: 33,
+                                  child: Image.asset(
+                                      email == null || email == ""
+                                          ? 'assets/icons/btn_mail.png'
+                                          : 'assets/icons/btn_mail_active.png'),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: website == null || website == ""
+                                    ? () {}
+                                    : () => launch(website.toString()),
+                                child: SizedBox(
+                                  height: 33,
+                                  width: 33,
+                                  child: Image.asset(
+                                    website == null || website == ""
+                                        ? 'assets/icons/btn_web.png'
+                                        : 'assets/icons/btn_web_active.png',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        isPrivate == "0"
+                            ? Container()
+                            : Padding(
+                                padding: EdgeInsets.only(left: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      'Who\'s Invited'.toUpperCase(),
+                                      style:
+                                          TextStyle(color: eventajaGreenTeal),
+                                    ),
+                                    SizedBox(height: 10),
+                                    invitedUserList == null
+                                        ? Container()
+                                        : Container(
+                                            height: 30,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: invitedUserList == null
+                                                  ? 0
+                                                  : invitedUserList.length,
+                                              itemBuilder:
+                                                  (BuildContext context, i) {
+                                                return Padding(
+                                                  padding: EdgeInsets.only(
+                                                      right: 10),
+                                                  child: Container(
+                                                    constraints: BoxConstraints(
+                                                        maxHeight: 30,
+                                                        maxWidth: 30,
+                                                        minHeight: 30,
+                                                        minWidth: 30),
+                                                    height: 30,
+                                                    width: 30,
+                                                    decoration: BoxDecoration(
+                                                        boxShadow: <BoxShadow>[
+                                                          BoxShadow(
+                                                              color:
+                                                                  Colors.black,
+                                                              blurRadius: 8,
+                                                              offset: Offset(
+                                                                  1.0, 1.0))
+                                                        ],
+                                                        shape: BoxShape.circle,
+                                                        image: DecorationImage(
+                                                            image: invitedUserList[
+                                                                            i][
+                                                                        'photo'] ==
+                                                                    null
+                                                                ? AssetImage(
+                                                                    'assets/grey-fade.jpg')
+                                                                : NetworkImage(
+                                                                    invitedUserList[
+                                                                            i][
+                                                                        'photo']),
+                                                            fit: BoxFit.fill)),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          )
+                                  ],
+                                ),
+                              ),
+                        detailData['ticket']['salesStatus'] == 'comingSoon'
+                            ? countdownTimer()
+                            : Container(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Who\'s Going',
+                              style: TextStyle(
+                                  color: Color(0xff8a8a8b), fontSize: 11),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              height: 50,
+                              width: MediaQuery.of(context).size.width,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount:
+                                    goingData == null ? 0 : goingData.length,
+                                itemBuilder: (BuildContext context, i) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  ProfileWidget(
+                                                    initialIndex: 0,
+                                                    userId: detailData['going']
+                                                        ['data'][i]['id']['id'],
+                                                  )));
+                                    },
+                                    child: new Container(
+                                      padding: i == 0
+                                          ? EdgeInsets.only(left: 13)
+                                          : EdgeInsets.only(left: 13),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
                                           Container(
-                                            height: 28,
-                                            width: 133,
+                                            height: 30,
+                                            width: 30,
                                             decoration: BoxDecoration(
                                                 boxShadow: <BoxShadow>[
                                                   BoxShadow(
-                                                      color: itemColor
-                                                          .withOpacity(0.4),
-                                                      blurRadius: 2,
-                                                      spreadRadius: 1.5)
+                                                      color: Colors.black26,
+                                                      offset: Offset(1.0, 1.0),
+                                                      blurRadius: 3)
                                                 ],
-                                                color: itemColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            child: Center(
-                                                child: Text('test',
-                                              // type == 'paid' ||
-                                              //         type == 'paid_seating'
-                                              //     ? isAvailable == '1'
-                                              //         ? 'Rp. ' +
-                                              //             itemPrice.toUpperCase() +
-                                              //             ',-'
-                                              //         : itemPrice.toUpperCase()
-                                              //     : itemPrice.toUpperCase(),
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.bold),
-                                            )),
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                  image:
+                                                      CachedNetworkImageProvider(
+                                                          detailData['going']
+                                                                  ['data'][i]
+                                                              ['photo']),
+                                                  fit: BoxFit.fill,
+                                                )),
                                           ),
                                         ],
-                                      )
-                                    ]))
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            )
                           ],
-                        )
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          width: 333.7,
+                          height: 95.4,
+                          padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                  blurRadius: 2,
+                                  spreadRadius: 1.5,
+                                  color: Color(0xff8a8a8b).withOpacity(.5))
+                            ],
+                          ),
+                          child: detailData['createdByID'] != currentUserId
+                              ? Container()
+                              : Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () {
+                                        saveId(detailData['id']);
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        ManageTicket(
+                                                          eventID:
+                                                              detailData['id'],
+                                                        )));
+                                      },
+                                      child: SizedBox(
+                                        width: 100,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            SizedBox(
+                                                height: 30,
+                                                width: 30,
+                                                child: Image.asset(
+                                                    'assets/icons/btn_manage_ticket.png',
+                                                    fit: BoxFit.fill)),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text(
+                                              'MANAGE TICKET',
+                                              style: TextStyle(fontSize: 10),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Container(
+                                      width: 0,
+                                      height: 100,
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              right: createBorderSide(context,
+                                                  color: Colors.black))),
+                                    ),
+                                    SizedBox(width: 10),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        SharedPreferences prefs =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        prefs.setString(
+                                            'NEW_EVENT_ID', detailData['id']);
+                                        prefs.setString('QR_URI',
+                                            detailData['qrcode']['secure_url']);
+                                        prefs.setString(
+                                            'EVENT_NAME', detailData['name']);
+                                        print(prefs.getString('NEW_EVENT_ID'));
+                                        print(prefs.getString('QR_URI'));
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        ShowQr()));
+                                      },
+                                      child: SizedBox(
+                                        width: 100,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            SizedBox(
+                                                height: 30,
+                                                width: 30,
+                                                child: Image.asset(
+                                                  'assets/icons/btn_show_qr.png',
+                                                  fit: BoxFit.fill,
+                                                )),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text('SHOW QR CODE',
+                                                style: TextStyle(fontSize: 10))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Container(
+                                      width: 0,
+                                      height: 100,
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              right: createBorderSide(context,
+                                                  color: Colors.black))),
+                                    ),
+                                    SizedBox(width: 10),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    TicketSales(
+                                                      eventID: detailData['id'],
+                                                      eventName:
+                                                          detailData['name'],
+                                                    )));
+                                      },
+                                      child: SizedBox(
+                                        width: 100,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            SizedBox(
+                                                height: 30,
+                                                width: 30,
+                                                child: Image.asset(
+                                                    'assets/icons/btn_ticket_sales.png',
+                                                    fit: BoxFit.fill)),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text('TICKET SALES',
+                                                style: TextStyle(fontSize: 10))
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                        ),
                       ],
-                    ))
-                // Stack(children: <Widget>[
-                //     Positioned(
-                //       top: 0,
-                //       left: 0,
-                //       right: 0,
-                //       child: Container(
-                //         width: MediaQuery.of(context).size.width,
-                //         height: MediaQuery.of(context).size.height,
-                //         child: Column(
-                //           mainAxisAlignment: MainAxisAlignment.start,
-                //           children: <Widget>[
-                //             detailData == null
-                //                 ? Container(
-                //                     child: Center(
-                //                       child: CircularProgressIndicator(),
-                //                     ),
-                //                   )
-                //                 : bannerDetails()
-                //           ],
-                //         ),
-                //       ),
-                //     ),
-                //   ]),
-          );
+                    )));
   }
 
   Widget customAppbar() {
@@ -641,7 +1002,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                   )
                 ],
               ),
-            )
+            ),
           ],
         ));
   }
@@ -805,128 +1166,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       : 'assets/icons/btn_web_active.png'),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    isPrivate == "0"
-                        ? Container()
-                        : Padding(
-                            padding: EdgeInsets.only(left: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  'Who\'s Invited'.toUpperCase(),
-                                  style: TextStyle(color: eventajaGreenTeal),
-                                ),
-                                SizedBox(height: 10),
-                                invitedUserList == null
-                                    ? Container()
-                                    : Container(
-                                        height: 30,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: invitedUserList == null
-                                              ? 0
-                                              : invitedUserList.length,
-                                          itemBuilder:
-                                              (BuildContext context, i) {
-                                            return Padding(
-                                              padding:
-                                                  EdgeInsets.only(right: 10),
-                                              child: Container(
-                                                constraints: BoxConstraints(
-                                                    maxHeight: 30,
-                                                    maxWidth: 30,
-                                                    minHeight: 30,
-                                                    minWidth: 30),
-                                                height: 30,
-                                                width: 30,
-                                                decoration: BoxDecoration(
-                                                    boxShadow: <BoxShadow>[
-                                                      BoxShadow(
-                                                          color: Colors.black,
-                                                          blurRadius: 8,
-                                                          offset:
-                                                              Offset(1.0, 1.0))
-                                                    ],
-                                                    shape: BoxShape.circle,
-                                                    image: DecorationImage(
-                                                        image: invitedUserList[
-                                                                        i]
-                                                                    ['photo'] ==
-                                                                null
-                                                            ? AssetImage(
-                                                                'assets/grey-fade.jpg')
-                                                            : NetworkImage(
-                                                                invitedUserList[
-                                                                        i]
-                                                                    ['photo']),
-                                                        fit: BoxFit.fill)),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      )
-                              ],
-                            ),
-                          ),
-                    detailData['ticket']['salesStatus'] == 'comingSoon'
-                        ? countdownTimer()
-                        : Container(),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Who\'s Going'.toUpperCase(),
-                            style: TextStyle(color: eventajaGreenTeal),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            height: 30,
-                            width: MediaQuery.of(context).size.width,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount:
-                                  goingData == null ? 0 : goingData.length,
-                              itemBuilder: (BuildContext context, i) {
-                                return Padding(
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: Container(
-                                    constraints: BoxConstraints(
-                                        maxHeight: 30,
-                                        maxWidth: 30,
-                                        minHeight: 30,
-                                        minWidth: 30),
-                                    height: 30,
-                                    width: 30,
-                                    decoration: BoxDecoration(
-                                        boxShadow: <BoxShadow>[
-                                          BoxShadow(
-                                              color: Colors.black,
-                                              blurRadius: 8,
-                                              offset: Offset(1.0, 1.0))
-                                        ],
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            image: detailData['going']['data']
-                                                        [i]['photo'] ==
-                                                    null
-                                                ? AssetImage(
-                                                    'assets/grey-fade.jpg')
-                                                : NetworkImage(
-                                                    detailData['going']['data']
-                                                        [i]['photo']),
-                                            fit: BoxFit.fill)),
-                                  ),
-                                );
-                              },
-                            ),
-                          )
                         ],
                       ),
                     ),
@@ -1568,7 +1807,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             } else {
               isTicketUnavailable = false;
             }
-          } else if (ticketType['isSetupTicket'] == "0" && ticketStat['cheapestTicket'] == "" && ticketStat['availableTicketStatus'] == "") {
+          } else if (ticketType['isSetupTicket'] == "0" &&
+              ticketStat['cheapestTicket'] == "" &&
+              ticketStat['availableTicketStatus'] == "") {
             setState(() {
               if (ticketType['type'] == 'free') {
                 ticketTypeURI = "assets/btn_ticket/free.png";

@@ -737,7 +737,7 @@ class _EventCatalogState extends State<EventCatalog>
           popularPeopleImage(),
           SizedBox(height: 15),
           discoverEvent(),
-          Container(
+          discoverData == null ? Container() : Container(
               height: 310,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,

@@ -230,9 +230,14 @@ class _ProfileHeaderState extends State<ProfileHeader>
                       SizedBox(
                         height: 4,
                       ),
-                      Text(
-                        widget.bio == null ? '-' : widget.bio,
-                        style: TextStyle(fontSize: 12),
+                      Container(
+                        width: 180,
+                        child: Text(
+                          widget.bio == null ? '-' : widget.bio,
+                          style: TextStyle(fontSize: 12),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       SizedBox(
                         height: 4,
@@ -354,12 +359,14 @@ class _ProfileHeaderState extends State<ProfileHeader>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => EventList(
-                                  type: 'created',
-                                )));
-                      },
+                      onTap: widget.eventCreatedCount == '0'
+                          ? () {}
+                          : () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) => EventList(
+                                        type: 'created',
+                                      )));
+                            },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -407,11 +414,13 @@ class _ProfileHeaderState extends State<ProfileHeader>
                       width: 18,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                EventList(type: 'going')));
-                      },
+                      onTap: widget.eventGoingCount == '0'
+                          ? () {}
+                          : () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      EventList(type: 'going')));
+                            },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -458,15 +467,17 @@ class _ProfileHeaderState extends State<ProfileHeader>
                       width: 23,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                ListViewWithAppBar(
-                                  title: 'FOLLOWER',
-                                  apiURL: BaseApi().apiUrl +
-                                      '/user/follower?X-API-KEY=${API_KEY}&userID=${widget.currentUserId}&page=1',
-                                )));
-                      },
+                      onTap: widget.follower == '0'
+                          ? () {}
+                          : () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ListViewWithAppBar(
+                                        title: 'FOLLOWER',
+                                        apiURL: BaseApi().apiUrl +
+                                            '/user/follower?X-API-KEY=${API_KEY}&userID=${widget.currentUserId}&page=1',
+                                      )));
+                            },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -510,15 +521,17 @@ class _ProfileHeaderState extends State<ProfileHeader>
                       width: 23,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                ListViewWithAppBar(
-                                  title: 'FOLLOWING',
-                                  apiURL: BaseApi().apiUrl +
-                                      '/user/following?X-API-KEY=${API_KEY}&userID=${widget.currentUserId}&page=1',
-                                )));
-                      },
+                      onTap: widget.following == '0'
+                          ? () {}
+                          : () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ListViewWithAppBar(
+                                        title: 'FOLLOWING',
+                                        apiURL: BaseApi().apiUrl +
+                                            '/user/following?X-API-KEY=${API_KEY}&userID=${widget.currentUserId}&page=1',
+                                      )));
+                            },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -727,218 +740,243 @@ class _ProfileHeaderState extends State<ProfileHeader>
 
   Widget timeline() {
     return SmartRefresher(
-            controller: refreshController,
-            enablePullUp: true,
-            enablePullDown: false,
-            footer:
-                CustomFooter(builder: (BuildContext context, LoadStatus mode) {
-              Widget body;
-              if (mode == LoadStatus.idle) {
-                body = Text("Load data");
-              } else if (mode == LoadStatus.loading) {
-                body = CircularProgressIndicator();
-              } else if (mode == LoadStatus.failed) {
-                body = Text("Load Failed!");
-              } else if (mode == LoadStatus.canLoading) {
-                body = Text('More');
-              } else {
-                body = Container();
-              }
+        controller: refreshController,
+        enablePullUp: true,
+        enablePullDown: false,
+        footer: CustomFooter(builder: (BuildContext context, LoadStatus mode) {
+          Widget body;
+          if (mode == LoadStatus.idle) {
+            body = Text("Load data");
+          } else if (mode == LoadStatus.loading) {
+            body = CircularProgressIndicator();
+          } else if (mode == LoadStatus.failed) {
+            body = Text("Load Failed!");
+          } else if (mode == LoadStatus.canLoading) {
+            body = Text('More');
+          } else {
+            body = Container();
+          }
 
-              return Container(height: 35, child: Center(child: body));
-            }),
-            onLoading: _onLoading,
-            child: ListView.builder(
-              shrinkWrap: true,
-      itemCount: userTimelineList == null ? 0 : userTimelineList.length,
-      itemBuilder: (context, i) {
-        List impressionList = userTimelineList[i]['impression']['data'];
-        List commentList = userTimelineList[i]['comment']['data'];
+          return Container(
+            margin: EdgeInsets.only(bottom: 25),
+            height: 35, child: Center(child: body));
+        }),
+        onLoading: _onLoading,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: userTimelineList == null ? 0 : userTimelineList.length,
+          itemBuilder: (context, i) {
+            List impressionList = userTimelineList[i]['impression']['data'];
+            List commentList = userTimelineList[i]['comment']['data'];
 
-        return Container(
-            margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
-            decoration: BoxDecoration(
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 2,
-                      spreadRadius: 1.5)
-                ],
-                color: Color(0xFFF9F9F9),
-                borderRadius: BorderRadius.circular(15)),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15)),
-                  padding: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return Container(
+                margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+                decoration: BoxDecoration(
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 2,
+                          spreadRadius: 1.5)
+                    ],
+                    color: Color(0xFFF9F9F9),
+                    borderRadius: BorderRadius.circular(15)),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15)),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
-                                CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      userTimelineList[i]['photo']),
-                                ),
-                                SizedBox(
-                                  width: 8,
-                                ),
-                                Container(
-                                    width: 200.0 - 32.0,
-                                    child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                          userTimelineList[i]['photo']),
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Container(
+                                        width: 200.0 - 32.0,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Row(
+                                              children: <Widget>[
+                                                userTimelineList[i]
+                                                            ['isVerified'] ==
+                                                        '1'
+                                                    ? Container(
+                                                        height: 18,
+                                                        width: 18,
+                                                        child: Image.asset(
+                                                            'assets/icons/icon_apps/verif.png'))
+                                                    : Container(),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                    userTimelineList[i]
+                                                        ['fullName'],
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Row(
+                                              children: <Widget>[
+                                                userTimelineList[i]['type'] ==
+                                                        'love'
+                                                    ? Image.asset(
+                                                        'assets/icons/icon_apps/love.png',
+                                                        scale: 3,
+                                                      )
+                                                    : Container(),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                    userTimelineList[i]
+                                                                ['type'] ==
+                                                            'love'
+                                                        ? 'Loved'
+                                                        : userTimelineList[i]
+                                                                    ['type'] ==
+                                                                'relationship'
+                                                            ? userTimelineList[
+                                                                i]['name']
+                                                            : 'Post a ' +
+                                                                userTimelineList[
+                                                                    i]['type'],
+                                                    style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 10)),
+                                              ],
+                                            ),
+                                          ],
+                                        )),
+                                  ]),
+                              Column(
+                                children: <Widget>[
+                                  Text(
+                                    'a minute ago',
+                                    style: TextStyle(fontSize: 10),
+                                  ),
+                                  SizedBox(height: 4),
+                                ],
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                              height: userTimelineList[i]['type'] == 'video' ||
+                                      userTimelineList[i]['type'] == 'photo' ||
+                                      userTimelineList[i]['type'] == 'event' ||
+                                      userTimelineList[i]['type'] ==
+                                          'eventgoing'
+                                  ? 15
+                                  : 0),
+                          userTimelineList[i]['type'] == 'video' ||
+                                  userTimelineList[i]['type'] == 'photo' ||
+                                  userTimelineList[i]['type'] == 'event' ||
+                                  userTimelineList[i]['type'] == 'eventgoing'
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                            userTimelineList[i]['type'] ==
+                                                    'video'
+                                                ? userTimelineList[i]['picture']
+                                                : userTimelineList[i]
+                                                    ['pictureFull'],
+                                          ),
+                                          fit: BoxFit.cover)),
+                                  height: 400,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Center(
+                                    child:
+                                        userTimelineList[i]['type'] == 'video'
+                                            ? Icon(
+                                                Icons.play_circle_filled,
+                                                size: 80,
+                                                color: Colors.white,
+                                              )
+                                            : Container(),
+                                  ),
+                                )
+                              : Container(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                  margin: EdgeInsets.only(top: 15),
+                                  child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            userTimelineList[i]['isVerified'] ==
-                                                    '1'
-                                                ? Container(
-                                                    height: 18,
-                                                    width: 18,
-                                                    child: Image.asset(
-                                                        'assets/icons/icon_apps/verif.png'))
-                                                : Container(),
-                                            SizedBox(width: 5),
-                                            Text(
-                                                userTimelineList[i]['fullName'],
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
+                                        Text(userTimelineList[i]['fullName'],
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15)),
+                                        SizedBox(height: 8),
                                         Row(
                                           children: <Widget>[
                                             userTimelineList[i]['type'] ==
                                                     'love'
                                                 ? Image.asset(
-                                                    'assets/icons/icon_apps/love.png',
+                                                    'assets/icons/aset_icon/like.png',
                                                     scale: 3,
                                                   )
                                                 : Container(),
-                                            SizedBox(width: 5),
-                                            Text(
-                                                userTimelineList[i]['type'] ==
+                                            SizedBox(
+                                                width: userTimelineList[i]
+                                                            ['type'] ==
                                                         'love'
-                                                    ? 'Loved'
-                                                    : userTimelineList[i]
-                                                                ['type'] ==
-                                                            'relationship'
-                                                        ? userTimelineList[i]
-                                                            ['name']
-                                                        : 'Post a ' +
-                                                            userTimelineList[i]
-                                                                ['type'],
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 10)),
-                                          ],
-                                        ),
-                                      ],
-                                    )),
-                              ]),
-                          Column(
-                            children: <Widget>[
-                              Text(
-                                'a minute ago',
-                                style: TextStyle(fontSize: 10),
-                              ),
-                              SizedBox(height: 4),
-                            ],
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                          height: userTimelineList[i]['type'] == 'video' ||
-                                  userTimelineList[i]['type'] == 'photo' ||
-                                  userTimelineList[i]['type'] == 'event' ||
-                                  userTimelineList[i]['type'] == 'eventgoing'
-                              ? 15
-                              : 0),
-                      userTimelineList[i]['type'] == 'video' ||
-                              userTimelineList[i]['type'] == 'photo' ||
-                              userTimelineList[i]['type'] == 'event' ||
-                              userTimelineList[i]['type'] == 'eventgoing'
-                          ? Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                        userTimelineList[i]['type'] == 'video'
-                                            ? userTimelineList[i]['picture']
-                                            : userTimelineList[i]
-                                                ['pictureFull'],
-                                      ),
-                                      fit: BoxFit.cover)),
-                              height: 400,
-                              width: MediaQuery.of(context).size.width,
-                              child: Center(
-                                child: userTimelineList[i]['type'] == 'video'
-                                    ? Icon(
-                                        Icons.play_circle_filled,
-                                        size: 80,
-                                        color: Colors.white,
-                                      )
-                                    : Container(),
-                              ),
-                            )
-                          : Container(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                              margin: EdgeInsets.only(top: 15),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(userTimelineList[i]['fullName'],
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15)),
-                                    SizedBox(height: 8),
-                                    Row(
-                                      children: <Widget>[
-                                        userTimelineList[i]['type'] == 'love'
-                                            ? Image.asset(
-                                                'assets/icons/aset_icon/like.png',
-                                                scale: 3,
-                                              )
-                                            : Container(),
-                                        SizedBox(
-                                            width: userTimelineList[i]
-                                                        ['type'] ==
+                                                    ? 8
+                                                    : 0),
+                                            userTimelineList[i]['type'] ==
                                                     'love'
-                                                ? 8
-                                                : 0),
-                                        userTimelineList[i]['type'] == 'love'
-                                            ? Text('Loved')
-                                            : Container(),
-                                        SizedBox(
-                                            width: userTimelineList[i]
-                                                        ['type'] ==
-                                                    'love'
-                                                ? 8
-                                                : 0),
-                                        userTimelineList[i]['type'] ==
-                                                    'video' ||
-                                                userTimelineList[i]['type'] ==
-                                                    'photo'
-                                            ? Container(
-                                                width: 360 - 70.0,
-                                                child: Text(
+                                                ? Text('Loved')
+                                                : Container(),
+                                            SizedBox(
+                                                width: userTimelineList[i]
+                                                            ['type'] ==
+                                                        'love'
+                                                    ? 8
+                                                    : 0),
+                                            userTimelineList[i]['type'] ==
+                                                        'video' ||
+                                                    userTimelineList[i]
+                                                            ['type'] ==
+                                                        'photo'
+                                                ? Container(
+                                                    width: 360 - 70.0,
+                                                    child: Text(
+                                                        userTimelineList[i]
+                                                                    ['name'] ==
+                                                                null
+                                                            ? ''
+                                                            : userTimelineList[
+                                                                i]['name'],
+                                                        maxLines: 10,
+                                                        style: TextStyle(
+                                                            color: Color(
+                                                                0xFF8A8A8B))),
+                                                  )
+                                                : Text(
                                                     userTimelineList[i]
                                                                 ['name'] ==
                                                             null
@@ -949,137 +987,128 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                                     style: TextStyle(
                                                         color:
                                                             Color(0xFF8A8A8B))),
-                                              )
-                                            : Text(
-                                                userTimelineList[i]['name'] ==
-                                                        null
-                                                    ? ''
-                                                    : userTimelineList[i]
-                                                        ['name'],
-                                                maxLines: 10,
-                                                style: TextStyle(
-                                                    color: Color(0xFF8A8A8B))),
-                                      ],
-                                    )
-                                  ])),
-                          // Container(
-                          //   child: Image.asset('assets/btn_ticket/free-limited.png', scale: 7,),)
-                          userTimelineList[i]['type'] == 'event'
-                              ? Container(
-                                  child: Image.asset(
-                                    'assets/btn_ticket/free-limited.png',
-                                    scale: 7,
-                                  ),
-                                )
-                              : userTimelineList[i]['type'] == 'eventgoing'
+                                          ],
+                                        )
+                                      ])),
+                              // Container(
+                              //   child: Image.asset('assets/btn_ticket/free-limited.png', scale: 7,),)
+                              userTimelineList[i]['type'] == 'event'
                                   ? Container(
                                       child: Image.asset(
-                                        'assets/btn_ticket/going.png',
+                                        'assets/btn_ticket/free-limited.png',
                                         scale: 7,
                                       ),
                                     )
-                                  : Container()
+                                  : userTimelineList[i]['type'] == 'eventgoing'
+                                      ? Container(
+                                          child: Image.asset(
+                                            'assets/btn_ticket/going.png',
+                                            scale: 7,
+                                          ),
+                                        )
+                                      : Container()
+                            ],
+                          )
                         ],
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 13, top: 13, bottom: 13),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          height: 30,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 2,
-                                    spreadRadius: 1.5)
-                              ]),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Image.asset(
-                                  'assets/icons/icon_apps/love.png',
-                                  color: impressionList.length > 0
-                                      ? Colors.red
-                                      : Colors.grey,
-                                  scale: 3.5,
-                                ),
-                                SizedBox(width: 5),
-                                Text(impressionList.length.toString(),
-                                    style: TextStyle(
-                                        color: Color(
-                                            0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
-                              ]),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          height: 30,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 2,
-                                    spreadRadius: 1.5)
-                              ]),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Image.asset(
-                                  'assets/icons/icon_apps/comment.png',
-                                  scale: 3.5,
-                                ),
-                                SizedBox(width: 5),
-                                Text(commentList.length.toString(),
-                                    style: TextStyle(
-                                        color: Color(
-                                            0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
-                              ]),
-                        ),
-                        SizedBox(width: impressionList.length > 99 ? 100 : 150),
-                        GestureDetector(
-                          onTap: () async {
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            if (userTimelineList[i]['userID'] ==
-                                prefs.getString('Last User ID')) {
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return showMoreOption(
-                                        userTimelineList[i]['id'],
-                                        userTimelineList[i]['type']);
-                                  });
-                            } else {
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return showMoreOptionReport(
-                                        userTimelineList[i]['id'],
-                                        userTimelineList[i]['type']);
-                                  });
-                            }
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            height: 30,
-                            child: Icon(Icons.more_horiz),
-                          ),
-                        )
-                      ]),
-                )
-              ],
-            ));
-      },
-    ));
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 13, top: 13, bottom: 13),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        blurRadius: 2,
+                                        spreadRadius: 1.5)
+                                  ]),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Image.asset(
+                                      'assets/icons/icon_apps/love.png',
+                                      color: impressionList.length > 0
+                                          ? Colors.red
+                                          : Colors.grey,
+                                      scale: 3.5,
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(impressionList.length.toString(),
+                                        style: TextStyle(
+                                            color: Color(
+                                                0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
+                                  ]),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        blurRadius: 2,
+                                        spreadRadius: 1.5)
+                                  ]),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Image.asset(
+                                      'assets/icons/icon_apps/comment.png',
+                                      scale: 3.5,
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(commentList.length.toString(),
+                                        style: TextStyle(
+                                            color: Color(
+                                                0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
+                                  ]),
+                            ),
+                            SizedBox(
+                                width: impressionList.length > 99 ? 100 : 150),
+                            GestureDetector(
+                              onTap: () async {
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                if (userTimelineList[i]['userID'] ==
+                                    prefs.getString('Last User ID')) {
+                                  showModalBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return showMoreOption(
+                                            userTimelineList[i]['id'],
+                                            userTimelineList[i]['type']);
+                                      });
+                                } else {
+                                  showModalBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return showMoreOptionReport(
+                                            userTimelineList[i]['id'],
+                                            userTimelineList[i]['type']);
+                                      });
+                                }
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                height: 30,
+                                child: Icon(Icons.more_horiz),
+                              ),
+                            )
+                          ]),
+                    )
+                  ],
+                ));
+          },
+        ));
   }
 
   Widget showMoreOption(String id, String postType) {
@@ -1404,8 +1433,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int currentPage = 1;
 
-    setState((){
-      if(newPage != null){
+    setState(() {
+      if (newPage != null) {
         currentPage += newPage;
       }
 

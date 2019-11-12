@@ -339,9 +339,8 @@ class TimelineDashboardState extends State<TimelineDashboard> {
               body: DefaultTabController(
                 initialIndex: 0,
                 length: 2,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
+                child: ListView(
+                  
                   children: <Widget>[
                     Container(
                       color: Colors.white,
@@ -386,7 +385,7 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                       ),
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.height - 191,
+                      height: MediaQuery.of(context).size.height - 197,
                       child: TabBarView(
                         children: <Widget>[emedia(), userMedia()],
                       ),
@@ -558,6 +557,7 @@ class TimelineDashboardState extends State<TimelineDashboard> {
         });
       },
       child: ListView(
+        shrinkWrap: true,
         children: <Widget>[
           banner(),
           mediaHeader(),
@@ -1025,7 +1025,9 @@ class TimelineDashboardState extends State<TimelineDashboard> {
           body = Container();
         }
 
-        return Container(height: 35, child: Center(child: body));
+        return Container(
+          margin: EdgeInsets.only(bottom: 25),
+          height: 35, child: Center(child: body));
       }),
       controller: refreshController,
       onRefresh: () {
@@ -1052,6 +1054,7 @@ class TimelineDashboardState extends State<TimelineDashboard> {
       },
       onLoading: _onLoading,
       child: ListView.builder(
+        shrinkWrap: true,
         itemCount: timelineList == null ? 0 : timelineList.length,
         itemBuilder: (BuildContext context, i) {
           List impressionList = timelineList[i]['impression']['data'];
