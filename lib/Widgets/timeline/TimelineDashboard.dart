@@ -28,7 +28,8 @@ class TimelineDashboard extends StatefulWidget {
   }
 }
 
-class TimelineDashboardState extends State<TimelineDashboard> {
+class TimelineDashboardState extends State<TimelineDashboard>
+    with WidgetsBindingObserver {
   List timelineList = [];
   List mediaData = [];
   List popularMediaVideo = [];
@@ -36,12 +37,14 @@ class TimelineDashboardState extends State<TimelineDashboard> {
   List latestMediaVideo = [];
   List bannerData;
   String currentUserId;
+  bool isLoading = false;
 
   GlobalKey modalBottomSheetKey = new GlobalKey();
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     getUserData();
     getPopularMediaPhoto().then((response) {
       var extractedData = json.decode(response.body);
@@ -89,6 +92,13 @@ class TimelineDashboardState extends State<TimelineDashboard> {
         ),
       ));
     });
+
+    @override
+    void didChangeAppLifecycleState(AppLifecycleState state) {
+      if (state == AppLifecycleState.resumed) {
+        setState(() {});
+      }
+    }
 
     getLatestMediaPhoto().then((response) {
       var extractedData = json.decode(response.body);
@@ -340,7 +350,6 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                 initialIndex: 0,
                 length: 2,
                 child: ListView(
-                  
                   children: <Widget>[
                     Container(
                       color: Colors.white,
@@ -386,8 +395,20 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                     ),
                     Container(
                       height: MediaQuery.of(context).size.height - 197,
-                      child: TabBarView(
-                        children: <Widget>[emedia(), userMedia()],
+                      child: Stack(
+                        children: <Widget>[
+                          TabBarView(
+                            children: <Widget>[emedia(), userMedia()],
+                          ),
+                          Positioned(
+                              child: isLoading == true
+                                  ? Container(
+                                      child: Center(
+                                          child: CircularProgressIndicator()),
+                                      color: Colors.black.withOpacity(0.5),
+                                    )
+                                  : Container())
+                        ],
                       ),
                     )
                   ],
@@ -403,171 +424,191 @@ class TimelineDashboardState extends State<TimelineDashboard> {
     // return ;
   }
 
+  Future doRefresh() async {
+    await Future.delayed(Duration(seconds: 5), () {
+      setState(() {
+        getPopularMediaVideo().then((response) {
+          var extractedData = json.decode(response.body);
+
+          if (response.statusCode == 200) {
+            isLoading = false;
+            setState(() {
+              popularMediaVideo = extractedData['data']['data'];
+            });
+          } else if (response.statusCode == 404) {
+            isLoading = false;
+            scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+              content: Text(
+                '404: something not found',
+                style: TextStyle(color: Colors.white),
+              ),
+              backgroundColor: Colors.red,
+            ));
+          }
+        }).catchError((e) {
+          isLoading = false;
+          scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              'Error Occured: ' + e.toString(),
+              style: TextStyle(color: Colors.white),
+            ),
+          ));
+        }).timeout(Duration(seconds: 10), onTimeout: () {
+          isLoading = false;
+          scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              'Request Timeout',
+              style: TextStyle(color: Colors.white),
+            ),
+          ));
+        });
+
+        getLatestMediaPhoto().then((response) {
+          var extractedData = json.decode(response.body);
+
+          if (response.statusCode == 200) {
+            isLoading = false;
+            setState(() {
+              latestMediaPhoto = extractedData['data']['data'];
+            });
+          } else if (response.statusCode == 404) {
+            isLoading = false;
+            scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+              content: Text(
+                '404: something not found',
+                style: TextStyle(color: Colors.white),
+              ),
+              backgroundColor: Colors.red,
+            ));
+          }
+        }).catchError((e) {
+          isLoading = false;
+          scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              'Error Occured: ' + e.toString(),
+              style: TextStyle(color: Colors.white),
+            ),
+          ));
+        }).timeout(Duration(seconds: 10), onTimeout: () {
+          isLoading = false;
+          scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              'Request Timeout',
+              style: TextStyle(color: Colors.white),
+            ),
+          ));
+        });
+
+        getLatestMediaVideo().then((response) {
+          var extractedData = json.decode(response.body);
+
+          if (response.statusCode == 200) {
+            isLoading = false;
+            setState(() {
+              latestMediaVideo = extractedData['data']['data'];
+            });
+          } else if (response.statusCode == 404) {
+            isLoading = false;
+            scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+              content: Text(
+                '404: something not found',
+                style: TextStyle(color: Colors.white),
+              ),
+              backgroundColor: Colors.red,
+            ));
+          }
+        }).catchError((e) {
+          isLoading = false;
+          scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              'Error Occured: ' + e.toString(),
+              style: TextStyle(color: Colors.white),
+            ),
+          ));
+        }).timeout(Duration(seconds: 10), onTimeout: () {
+          isLoading = false;
+          scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(
+              'Request Timeout',
+              style: TextStyle(color: Colors.white),
+            ),
+          ));
+        });
+        isLoading = false;
+        getUserData();
+        getPopularMediaPhoto().then((response) {
+          var extractedData = json.decode(response.body);
+
+          print(response.statusCode);
+          print(response.body);
+
+          if (response.statusCode == 200) {
+            isLoading = false;
+            setState(() {
+              mediaData = extractedData['data']['data'];
+            });
+          }
+        });
+
+        getBanner().then((response) {
+          var extractedData = json.decode(response.body);
+
+          print(response.statusCode);
+          print(response.body);
+
+          if (response.statusCode == 200) {
+            isLoading = false;
+            setState(() {
+              bannerData = extractedData['data']['data'];
+            });
+          }
+        });
+        getTimelineList().then((response) {
+          print(response.statusCode);
+          print(response.body);
+          var extractedData = json.decode(response.body);
+
+          print('Timeline List -> ${response.body.toString()}');
+
+          if (response.statusCode == 200) {
+            isLoading = false;
+            setState(() {
+              timelineList = extractedData['data'];
+            });
+          }
+        });
+      });
+      if (mounted == true) setState(() {});
+      homeRefreshController.refreshCompleted();
+    });
+  }
+
   Widget emedia() {
     return SmartRefresher(
       controller: homeRefreshController,
       enablePullDown: true,
       enablePullUp: false,
-      onRefresh: () async {
-        await Future.delayed(Duration(seconds: 5), () {
-          setState(() {
-            getPopularMediaVideo().then((response) {
-              var extractedData = json.decode(response.body);
-
-              if (response.statusCode == 200) {
-                setState(() {
-                  popularMediaVideo = extractedData['data']['data'];
-                });
-              } else if (response.statusCode == 404) {
-                scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-                  content: Text(
-                    '404: something not found',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  backgroundColor: Colors.red,
-                ));
-              }
-            }).catchError((e) {
-              scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-                backgroundColor: Colors.red,
-                content: Text(
-                  'Error Occured: ' + e.toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ));
-            }).timeout(Duration(seconds: 10), onTimeout: () {
-              scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-                backgroundColor: Colors.red,
-                content: Text(
-                  'Request Timeout',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ));
-            });
-
-            getLatestMediaPhoto().then((response) {
-              var extractedData = json.decode(response.body);
-
-              if (response.statusCode == 200) {
-                setState(() {
-                  latestMediaPhoto = extractedData['data']['data'];
-                });
-              } else if (response.statusCode == 404) {
-                scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-                  content: Text(
-                    '404: something not found',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  backgroundColor: Colors.red,
-                ));
-              }
-            }).catchError((e) {
-              scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-                backgroundColor: Colors.red,
-                content: Text(
-                  'Error Occured: ' + e.toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ));
-            }).timeout(Duration(seconds: 10), onTimeout: () {
-              scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-                backgroundColor: Colors.red,
-                content: Text(
-                  'Request Timeout',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ));
-            });
-
-            getLatestMediaVideo().then((response) {
-              var extractedData = json.decode(response.body);
-
-              if (response.statusCode == 200) {
-                setState(() {
-                  latestMediaVideo = extractedData['data']['data'];
-                });
-              } else if (response.statusCode == 404) {
-                scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-                  content: Text(
-                    '404: something not found',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  backgroundColor: Colors.red,
-                ));
-              }
-            }).catchError((e) {
-              scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-                backgroundColor: Colors.red,
-                content: Text(
-                  'Error Occured: ' + e.toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ));
-            }).timeout(Duration(seconds: 10), onTimeout: () {
-              scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-                backgroundColor: Colors.red,
-                content: Text(
-                  'Request Timeout',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ));
-            });
-            getUserData();
-            getPopularMediaPhoto().then((response) {
-              var extractedData = json.decode(response.body);
-
-              print(response.statusCode);
-              print(response.body);
-
-              if (response.statusCode == 200) {
-                setState(() {
-                  mediaData = extractedData['data']['data'];
-                });
-              }
-            });
-
-            getBanner().then((response) {
-              var extractedData = json.decode(response.body);
-
-              print(response.statusCode);
-              print(response.body);
-
-              if (response.statusCode == 200) {
-                setState(() {
-                  bannerData = extractedData['data']['data'];
-                });
-              }
-            });
-            getTimelineList().then((response) {
-              print(response.statusCode);
-              print(response.body);
-              var extractedData = json.decode(response.body);
-
-              print('Timeline List -> ${response.body.toString()}');
-
-              if (response.statusCode == 200) {
-                setState(() {
-                  timelineList = extractedData['data'];
-                });
-              }
-            });
-          });
-          if (mounted == true) setState(() {});
-          homeRefreshController.refreshCompleted();
-        });
+      onRefresh: () {
+        doRefresh();
       },
       child: ListView(
         shrinkWrap: true,
         children: <Widget>[
           banner(),
+          popularVideoHeader(),
+          popularVideoContent(),
+          latestVideoHeader(),
+          latestVideoContent(),
           mediaHeader(),
           mediaContent(),
           latestMediaHeader(),
           latestMediaContent(),
-          popularVideoHeader(),
-          popularVideoContent(),
-          latestVideoHeader(),
-          latestVideoContent()
         ],
       ),
     );
@@ -629,7 +670,7 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                     MaterialPageRoute(
                         builder: (context) => MediaDetails(
                               userPicture: mediaData[i]['creator']['photo'],
-                              articleDetail: mediaData[i]['description'],
+                              articleDetail: mediaData[i]['content'],
                               imageCount: 'img' + i.toString(),
                               username: mediaData[i]['creator']['username'],
                               imageUri: mediaData[i]['banner'],
@@ -886,13 +927,14 @@ class TimelineDashboardState extends State<TimelineDashboard> {
   Widget popularVideoContent() {
     return Container(
       height: 247,
-      child: mediaData == null
+      child: popularMediaVideo == null
           ? Container(
               child: Center(
               child: CircularProgressIndicator(),
             ))
           : ListView.builder(
-              itemCount: mediaData == null ? 0 : mediaData.length,
+              itemCount:
+                  popularMediaVideo == null ? 0 : popularMediaVideo.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, i) {
                 return GestureDetector(
@@ -901,11 +943,18 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MediaDetails(
-                                  userPicture: popularMediaVideo[i]['creator']['photo'],
-                                  articleDetail: popularMediaVideo[i]['description'],
+                                  isVideo: true,
+                                  videoUrl: popularMediaVideo[i]['video'],
+                                  youtubeUrl: popularMediaVideo[i]['youtube'],
+                                  userPicture: popularMediaVideo[i]['creator']
+                                      ['photo'],
+                                  articleDetail: popularMediaVideo[i]
+                                      ['content'],
                                   imageCount: 'img' + i.toString(),
-                                  username: popularMediaVideo[i]['creator']['username'],
-                                  imageUri: popularMediaVideo[i]['thumbnail_timeline'],
+                                  username: popularMediaVideo[i]['creator']
+                                      ['username'],
+                                  imageUri: popularMediaVideo[i]
+                                      ['thumbnail_timeline'],
                                   mediaTitle: popularMediaVideo[i]['title'],
                                   autoFocus: false,
                                 )));
@@ -969,12 +1018,31 @@ class TimelineDashboardState extends State<TimelineDashboard> {
     return ColumnBuilder(
       itemCount: mediaData == null ? 0 : mediaData.length,
       itemBuilder: (BuildContext context, i) {
-        return LatestMediaItem(
-          isVideo: true,
-          image: latestMediaVideo[i]['thumbnail_timeline'],
-          title: latestMediaVideo[i]['title'],
-          username: latestMediaVideo[i]['creator']['username'],
-          userImage: latestMediaVideo[i]['creator']['photo'],
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MediaDetails(
+                          isVideo: true,
+                          videoUrl: latestMediaVideo[i]['video'],
+                          youtubeUrl: latestMediaVideo[i]['youtube'],
+                          userPicture: latestMediaVideo[i]['creator']['photo'],
+                          articleDetail: latestMediaVideo[i]['content'],
+                          imageCount: 'img' + i.toString(),
+                          username: latestMediaVideo[i]['creator']['username'],
+                          imageUri: latestMediaVideo[i]['thumbnail_timeline'],
+                          mediaTitle: latestMediaVideo[i]['title'],
+                          autoFocus: false,
+                        )));
+          },
+          child: LatestMediaItem(
+            isVideo: true,
+            image: latestMediaVideo[i]['thumbnail_timeline'],
+            title: latestMediaVideo[i]['title'],
+            username: latestMediaVideo[i]['creator']['username'],
+            userImage: latestMediaVideo[i]['creator']['photo'],
+          ),
         );
       },
     );
@@ -1026,8 +1094,9 @@ class TimelineDashboardState extends State<TimelineDashboard> {
         }
 
         return Container(
-          margin: EdgeInsets.only(bottom: 25),
-          height: 35, child: Center(child: body));
+            margin: EdgeInsets.only(bottom: 25),
+            height: 35,
+            child: Center(child: body));
       }),
       controller: refreshController,
       onRefresh: () {
@@ -1502,7 +1571,8 @@ class TimelineDashboardState extends State<TimelineDashboard> {
                                     builder: (BuildContext context) {
                                       return showMoreOption(
                                           timelineList[i]['id'],
-                                          timelineList[i]['type']);
+                                          timelineList[i]['type'],
+                                          imageUrl: timelineList[i]['picture']);
                                     });
                               } else {
                                 showModalBottomSheet(
@@ -1530,7 +1600,7 @@ class TimelineDashboardState extends State<TimelineDashboard> {
     );
   }
 
-  Widget showMoreOption(String id, String postType) {
+  Widget showMoreOption(String id, String postType, {String imageUrl}) {
     return Container(
       color: Color(0xFF737373),
       child: Container(
@@ -1616,10 +1686,20 @@ class TimelineDashboardState extends State<TimelineDashboard> {
             SizedBox(height: 16),
             GestureDetector(
               onTap: () {
+                Navigator.pop(context);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => EditPost(postId: id)));
+                        builder: (context) => EditPost(
+                              isVideo: postType == 'video' ? true : false,
+                              postId: id,
+                              thumbnailPath: imageUrl,
+                            ))).then((value) {
+                  setState(() {
+                    isLoading = true;
+                    doRefresh();
+                  });
+                });
               },
               child: Container(
                 color: Colors.white,
@@ -1964,6 +2044,7 @@ class TimelineDashboardState extends State<TimelineDashboard> {
   @override
   void dispose() {
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     homeRefreshController.dispose();
     refreshController.dispose();
   }

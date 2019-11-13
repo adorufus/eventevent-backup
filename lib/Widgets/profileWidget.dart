@@ -81,7 +81,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             bio: bio,
             initialIndex: widget.initialIndex,
             isVerified: isVerified,
-            isFollowing: isFollowing,
+            isFollowing: userData[0]['isFollowed'],
           );
   }
 

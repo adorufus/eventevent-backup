@@ -1,6 +1,9 @@
+import 'package:chewie/chewie.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class MediaDetails extends StatefulWidget {
   final username;
@@ -10,6 +13,9 @@ class MediaDetails extends StatefulWidget {
   final imageCount;
   final userPicture;
   final autoFocus;
+  final isVideo;
+  final youtubeUrl;
+  final videoUrl;
 
   const MediaDetails(
       {Key key,
@@ -18,7 +24,11 @@ class MediaDetails extends StatefulWidget {
       this.articleDetail,
       this.mediaTitle,
       this.imageCount,
-      this.userPicture, this.autoFocus})
+      this.userPicture,
+      this.autoFocus,
+      this.isVideo,
+      this.youtubeUrl: 'https://test.com/',
+      this.videoUrl})
       : super(key: key);
 
   @override
@@ -26,6 +36,44 @@ class MediaDetails extends StatefulWidget {
 }
 
 class _MediaDetailsState extends State<MediaDetails> {
+  YoutubePlayerController ytController;
+
+  VideoPlayerController videoPlayerController;
+
+  ChewieController chewieController;
+
+  String videoId = '';
+
+  @override
+  void initState() {
+    
+
+    if (widget.videoUrl == null) {
+      videoId = YoutubePlayer.convertUrlToId(widget.youtubeUrl == null
+        ? 'https://www.youtube.com/watch?v=6XNN6KFzLnE'
+        : widget.youtubeUrl);
+      ytController = YoutubePlayerController(
+          initialVideoId: videoId,
+          flags: YoutubePlayerFlags(
+            autoPlay: true,
+          ));
+    }
+
+    videoPlayerController = VideoPlayerController.network(
+        widget.videoUrl == null ? '' : widget.videoUrl)
+      ..initialize().then((_) {
+        setState(() {});
+      });
+
+    chewieController = ChewieController(
+        videoPlayerController: videoPlayerController,
+        aspectRatio: 3 / 2,
+        autoPlay: true,
+        looping: false,
+        fullScreenByDefault: false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,14 +144,17 @@ class _MediaDetailsState extends State<MediaDetails> {
       ),
       body: ListView(
         children: <Widget>[
-          Container(
-            height: 200,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                color: Color(0xff8a8a8b),
-                image: DecorationImage(
-                    image: NetworkImage(widget.imageUri), fit: BoxFit.fill)),
-          ),
+          widget.isVideo == true
+              ? videoType()
+              : Container(
+                  height: 200,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: Color(0xff8a8a8b),
+                      image: DecorationImage(
+                          image: NetworkImage(widget.imageUri),
+                          fit: BoxFit.fill)),
+                ),
           SizedBox(
             height: 15,
           ),
@@ -202,5 +253,22 @@ class _MediaDetailsState extends State<MediaDetails> {
       //   ),
       // ),
     );
+  }
+
+  Widget videoType() {
+    Widget typeWidget = Container();
+
+    if (widget.videoUrl == null) {
+      typeWidget = YoutubePlayer(
+        controller: ytController,
+        showVideoProgressIndicator: true,
+        progressIndicatorColor: eventajaGreenTeal,
+      );
+    } else {
+      typeWidget = Chewie(
+        controller: chewieController,
+      );
+    }
+    return typeWidget;
   }
 }

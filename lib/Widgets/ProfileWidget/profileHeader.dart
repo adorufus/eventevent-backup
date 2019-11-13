@@ -102,6 +102,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
     });
 
     getUserProfile();
+    print('isFollowing' + widget.isFollowing);
     if (widget.isFollowing == '0') {
       setState(() {
         isFollowed = false;
@@ -169,7 +170,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
   }
 
   Widget profileDetails(BuildContext context, ProfileHeader widget,
-      String userId, bool isFollowed) {
+      String userId, bool followed) {
     return ListView(
       children: <Widget>[
         Container(
@@ -298,16 +299,18 @@ class _ProfileHeaderState extends State<ProfileHeader>
                             )
                           : GestureDetector(
                               onTap: () {
-                                if (isFollowed == false) {
+                                print(this.isFollowed);
+                                if (this.isFollowed == false) {
                                   FollowUnfollow().follow(widget.currentUserId);
-                                  setState(() {
-                                    isFollowed = true;
+                                  setState((){
+                                    this.isFollowed = true;
                                   });
                                 } else {
                                   FollowUnfollow()
                                       .unfollow(widget.currentUserId);
-                                  setState(() {
-                                    isFollowed = false;
+
+                                  setState((){
+                                    this.isFollowed = false;
                                   });
                                 }
                               },
@@ -320,18 +323,18 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       color: Color(0xFF55B9E5),
                                     ),
                                     borderRadius: BorderRadius.circular(30),
-                                    color: isFollowed == false
+                                    color: this.isFollowed == false
                                         ? Color(0xFFFFFFFF)
                                         : Color(0xFF55B9E5)),
                                 child: Center(
                                     child: Text(
-                                        isFollowed == false
+                                        this.isFollowed == false
                                             ? 'Follow'
                                             : 'Following',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 10,
-                                          color: isFollowed == false
+                                          color: this.isFollowed == false
                                               ? Color(0xFF55B9E5)
                                               : Color(0xFFFFFFFF),
                                         ))),
@@ -758,8 +761,9 @@ class _ProfileHeaderState extends State<ProfileHeader>
           }
 
           return Container(
-            margin: EdgeInsets.only(bottom: 25),
-            height: 35, child: Center(child: body));
+              margin: EdgeInsets.only(bottom: 25),
+              height: 35,
+              child: Center(child: body));
         }),
         onLoading: _onLoading,
         child: ListView.builder(

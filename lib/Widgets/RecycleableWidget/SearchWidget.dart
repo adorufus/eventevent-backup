@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
+import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -194,142 +196,179 @@ class SearchState extends State<Search> {
       return ListView.builder(
           itemCount: events == null ? 0 : filteredEvents.length,
           itemBuilder: (BuildContext context, i) {
-            String priceImageUri;
-            double opacityValue = 1;
-            String salesStatus = '';
+            Color itemColor;
+                    String itemPriceText;
 
-            if (filteredEvents[i]['status'] == 'active') {
-              if (filteredEvents[i]['ticket']['salesStatus'] == 'soldOut' &&
-                  filteredEvents[i]['ticket_type']['type'] == 'paid') {
-                salesStatus = 'Sold Out';
-                opacityValue = 0.5;
-                priceImageUri = 'assets/btn_ticket/paid-value.png';
-              } else if (filteredEvents[i]['ticket']['salesStatus'] ==
-                      'available' &&
-                  filteredEvents[i]['ticket_type']['type'] == 'paid') {
-                opacityValue = 1;
-                salesStatus = 'Available';
-                priceImageUri = 'assets/btn_ticket/paid-value.png';
-              } else if (filteredEvents[i]['ticket_type']['type'] ==
-                  'no_ticket') {
-                opacityValue = 1;
-                priceImageUri = 'assets/btn_ticket/no-ticket.png';
-              } else if (filteredEvents[i]['ticket_type']['type'] ==
-                  'on_the_spot') {
-                opacityValue = 1;
-                priceImageUri = 'assets/btn_ticket/ots-800px.png';
-              } else if (filteredEvents[i]['ticket_type']['type'] ==
-                      'free_limited' &&
-                  filteredEvents[i]['ticket']['salesStatus'] == 'soldOut') {
-                salesStatus = 'Sold Out';
-                opacityValue = 0.5;
-                priceImageUri = 'assets/btn_ticket/free-limited.png';
-              } else if (filteredEvents[i]['ticket_type']['type'] ==
-                      'free_limited' &&
-                  filteredEvents[i]['ticket']['salesStatus'] == 'available') {
-                salesStatus = 'Available';
-                opacityValue = 1;
-                priceImageUri = 'assets/btn_ticket/free-limited.png';
-              } else if (filteredEvents[i]['ticket_type']['type'] == 'free') {
-                opacityValue = 1;
-                priceImageUri = 'assets/btn_ticket/free.png';
-              }
-            } else if (filteredEvents[i]['status'] == 'canceled') {
-              opacityValue = 1;
-              priceImageUri = 'assets/btn_ticket/canceled.png';
-            }
-            if (filteredEvents[i]['status'] == 'ended') {
-              opacityValue = 1;
-              priceImageUri = 'assets/btn_ticket/event-ended.png';
-            }
+                    if (filteredEvents[i]['ticket_type']['type'] == 'paid' ||
+                        filteredEvents[i]['ticket_type']['type'] ==
+                            'paid_seating') {
+                      if (filteredEvents[i]['ticket']
+                              ['availableTicketStatus'] ==
+                          '1') {
+                        itemColor = Color(0xFF34B323);
+                        itemPriceText =
+                            filteredEvents[i]['ticket']['cheapestTicket'];
+                      } else {
+                        if (filteredEvents[i]['ticket']['salesStatus'] ==
+                            'comingSoon') {
+                          itemColor = Color(0xFF34B323).withOpacity(0.3);
+                          itemPriceText = 'COMING SOON';
+                        } else if (filteredEvents[i]['ticket']
+                                ['salesStatus'] ==
+                            'endSales') {
+                          itemColor = Color(0xFF8E1E2D);
+                          if (filteredEvents[i]['status'] == 'ended') {
+                            itemPriceText = 'EVENT HAS ENDED';
+                          }
+                          itemPriceText = 'SALES ENDED';
+                        } else {
+                          itemColor = Color(0xFF8E1E2D);
+                          itemPriceText = 'SOLD OUT';
+                        }
+                      }
+                    } else if (filteredEvents[i]['ticket_type']['type'] ==
+                        'no_ticket') {
+                      itemColor = Color(0xFFA6A8AB);
+                      itemPriceText = 'NO TICKET';
+                    } else if (filteredEvents[i]['ticket_type']['type'] ==
+                        'on_the_spot') {
+                      itemColor = Color(0xFF652D90);
+                      itemPriceText =
+                          filteredEvents[i]['ticket_type']['name'];
+                    } else if (filteredEvents[i]['ticket_type']['type'] ==
+                        'free') {
+                      itemColor = Color(0xFFFFAA00);
+                      itemPriceText =
+                          filteredEvents[i]['ticket_type']['name'];
+                    } else if (filteredEvents[i]['ticket_type']['type'] ==
+                        'free') {
+                      itemColor = Color(0xFFFFAA00);
+                      itemPriceText =
+                          filteredEvents[i]['ticket_type']['name'];
+                    } else if (filteredEvents[i]['ticket_type']['type'] ==
+                        'free_limited') {
+                      if (filteredEvents[i]['ticket']
+                              ['availableTicketStatus'] ==
+                          '1') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText =
+                            filteredEvents[i]['ticket_type']['name'];
+                      } else {
+                        if (filteredEvents[i]['ticket']['salesStatus'] ==
+                            'comingSoon') {
+                          itemColor = Color(0xFFFFAA00).withOpacity(0.3);
+                          itemPriceText = 'COMING SOON';
+                        } else if (filteredEvents[i]['ticket']
+                                ['salesStatus'] ==
+                            'endSales') {
+                          itemColor = Color(0xFF8E1E2D);
+                          if (filteredEvents[i]['status'] == 'ended') {
+                            itemPriceText = 'EVENT HAS ENDED';
+                          }
+                          itemPriceText = 'SALES ENDED';
+                        } else {
+                          itemColor = Color(0xFF8E1E2D);
+                          itemPriceText = 'SOLD OUT';
+                        }
+                      }
+                    }
 
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            EventDetailsConstructView(
-                              id: filteredEvents[i]['id'],
-                            )));
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border(bottom: BorderSide(color: Colors.grey[300])),
-                ),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                        margin: EdgeInsets.all(10),
-                        height: 130,
-                        width: 100,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                  filteredEvents[i]['picture'],
-                                ),
-                                fit: BoxFit.fill))),
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            width: 230,
-                            child: Text(
-                              filteredEvents[i]['name'],
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Container(
-                            width: 230,
-                            child: Text(filteredEvents[i]['address'],
-                                overflow: TextOverflow.ellipsis),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Container(
-                            width: 230,
-                            child: Text(salesStatus,
-                                overflow: TextOverflow.ellipsis),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Container(
-                              width: 125,
-                              height: 45,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  image: DecorationImage(
-                                      colorFilter: ColorFilter.mode(
-                                          Colors.black
-                                              .withOpacity(opacityValue),
-                                          BlendMode.dstATop),
-                                      image: AssetImage(priceImageUri),
-                                      fit: BoxFit.fill)),
-                              child: Center(
-                                child: Text(
-                                    filteredEvents[i]['ticket_type']['type'] ==
-                                            'paid'
-                                        ? filteredEvents[i]['status'] == 'ended' ? '' : 'Rp. ' +
-                                            filteredEvents[i]['ticket']
-                                                ['cheapestTicket']
-                                        : '',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18)),
-                              ))
-                        ])
-                  ],
-                ),
-              ),
+            return LatestEventItem(
+              image: filteredEvents[i]['picture'],
+              isAvailable: filteredEvents[i]['ticket']['availableTicketStatus'],
+              itemPrice: itemPriceText,
+              itemColor: itemColor,
+              location: filteredEvents[i]['address'],
+              title: filteredEvents[i]['name'],
+              type: filteredEvents[i]['ticket_type']['type'],              
             );
+            // GestureDetector(
+            //   onTap: () {
+            //     Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //             builder: (BuildContext context) =>
+            //                 EventDetailsConstructView(
+            //                   id: filteredEvents[i]['id'],
+            //                 )));
+            //   },
+            //   child: Container(
+            //     width: MediaQuery.of(context).size.width,
+            //     decoration: BoxDecoration(
+            //       color: Colors.white,
+            //       border: Border(bottom: BorderSide(color: Colors.grey[300])),
+            //     ),
+            //     child: Row(
+            //       children: <Widget>[
+            //         Container(
+            //             margin: EdgeInsets.all(10),
+            //             height: 130,
+            //             width: 100,
+            //             decoration: BoxDecoration(
+            //                 image: DecorationImage(
+            //                     image: NetworkImage(
+            //                       filteredEvents[i]['picture'],
+            //                     ),
+            //                     fit: BoxFit.fill))),
+            //         Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: <Widget>[
+            //               Container(
+            //                 width: 230,
+            //                 child: Text(
+            //                   filteredEvents[i]['name'],
+            //                   overflow: TextOverflow.ellipsis,
+            //                 ),
+            //               ),
+            //               SizedBox(
+            //                 height: 15,
+            //               ),
+            //               Container(
+            //                 width: 230,
+            //                 child: Text(filteredEvents[i]['address'],
+            //                     overflow: TextOverflow.ellipsis),
+            //               ),
+            //               SizedBox(
+            //                 height: 15,
+            //               ),
+            //               Container(
+            //                 width: 230,
+            //                 child: Text(salesStatus,
+            //                     overflow: TextOverflow.ellipsis),
+            //               ),
+            //               SizedBox(
+            //                 height: 15,
+            //               ),
+            //               Container(
+            //                   width: 125,
+            //                   height: 45,
+            //                   decoration: BoxDecoration(
+            //                       borderRadius: BorderRadius.circular(25),
+            //                       image: DecorationImage(
+            //                           colorFilter: ColorFilter.mode(
+            //                               Colors.black
+            //                                   .withOpacity(opacityValue),
+            //                               BlendMode.dstATop),
+            //                           image: AssetImage(priceImageUri),
+            //                           fit: BoxFit.fill)),
+            //                   child: Center(
+            //                     child: Text(
+            //                         filteredEvents[i]['ticket_type']['type'] ==
+            //                                 'paid'
+            //                             ? filteredEvents[i]['status'] == 'ended' ? '' : 'Rp. ' +
+            //                                 filteredEvents[i]['ticket']
+            //                                     ['cheapestTicket']
+            //                             : '',
+            //                         style: TextStyle(
+            //                             color: Colors.white,
+            //                             fontWeight: FontWeight.bold,
+            //                             fontSize: 18)),
+            //                   ))
+            //             ])
+            //       ],
+            //     ),
+            //   ),
+            // );
           });
     } else {
       return Container();
@@ -353,7 +392,13 @@ class SearchState extends State<Search> {
       itemCount: filteredProfile == null ? 0 : filteredProfile.length,
       itemBuilder: (BuildContext context, i) {
         return GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => ProfileWidget(
+                              initialIndex: 0,
+                              userId: filteredProfile[i]['id'],
+                            )));
+          },
           child: Container(
             width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),

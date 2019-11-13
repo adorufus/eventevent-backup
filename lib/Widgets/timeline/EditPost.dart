@@ -14,8 +14,8 @@ import 'package:async/async.dart';
 import 'package:path/path.dart';
 
 class EditPost extends StatefulWidget {
-  final File imagePath;
-  final File thumbnailPath;
+  final String imagePath;
+  final String thumbnailPath;
   final bool isVideo;
   final postId;
 
@@ -64,11 +64,12 @@ class EditPostState extends State<EditPost> {
                           response.statusCode == 200) {
                         isLoading = false;
                         print('berhasil');
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    TimelineDashboard()));
+                        Navigator.pop(context, () => setState((){}));
+                        //push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (BuildContext context) =>
+                        //             TimelineDashboard()));
                       } else {
                         scaffoldKey.currentState.showSnackBar(SnackBar(
                             backgroundColor: Colors.red,
@@ -80,7 +81,7 @@ class EditPostState extends State<EditPost> {
                                   ', ' +
                                   response.body +
                                   ', ' +
-                                  widget.imagePath.path,
+                                  widget.imagePath,
                             )));
                       }
                     })..catchError((error) {
@@ -117,7 +118,7 @@ class EditPostState extends State<EditPost> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
-                              image: FileImage(widget.thumbnailPath),
+                              image: NetworkImage(widget.thumbnailPath),
                               fit: BoxFit.fill)),
                     ),
                     Container(
@@ -156,7 +157,7 @@ class EditPostState extends State<EditPost> {
     if (widget.isVideo == false) {
       theUrl = '/photo/update';
     } else {
-      theUrl = '/video/create';
+      theUrl = '/video/edit';
     }
 
     String url = BaseApi().apiUrl + theUrl;
