@@ -1,3 +1,4 @@
+import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -31,7 +32,6 @@ class PrivateEventListState extends State<PrivateEventList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        
         width: MediaQuery.of(context).size.width,
         child: isEmpty == true
             ? EmptyState(
@@ -44,7 +44,7 @@ class PrivateEventListState extends State<PrivateEventList> {
                     child: CircularProgressIndicator(),
                   ))
                 : ListView.builder(
-                  shrinkWrap: true,
+                    shrinkWrap: true,
                     itemCount:
                         privateData.length == null ? '0' : privateData.length,
                     itemBuilder: (BuildContext context, i) {
@@ -55,75 +55,94 @@ class PrivateEventListState extends State<PrivateEventList> {
                           ),
                         );
                       }
+                      Color itemColor;
+                      String itemPriceText;
+
+                      if (privateData[i]['ticket_type']['type'] == 'paid' ||
+                          privateData[i]['ticket_type']['type'] ==
+                              'paid_seating') {
+                        if (privateData[i]['ticket']['availableTicketStatus'] ==
+                            '1') {
+                          itemColor = Color(0xFF34B323);
+                          itemPriceText =
+                              privateData[i]['ticket']['cheapestTicket'];
+                        } else {
+                          if (privateData[i]['ticket']['salesStatus'] ==
+                              'comingSoon') {
+                            itemColor = Color(0xFF34B323).withOpacity(0.3);
+                            itemPriceText = 'COMING SOON';
+                          } else if (privateData[i]['ticket']['salesStatus'] ==
+                              'endSales') {
+                            itemColor = Color(0xFF8E1E2D);
+                            if (privateData[i]['status'] == 'ended') {
+                              itemPriceText = 'EVENT HAS ENDED';
+                            }
+                            itemPriceText = 'SALES ENDED';
+                          } else {
+                            itemColor = Color(0xFF8E1E2D);
+                            itemPriceText = 'SOLD OUT';
+                          }
+                        }
+                      } else if (privateData[i]['ticket_type']['type'] ==
+                          'no_ticket') {
+                        itemColor = Color(0xFFA6A8AB);
+                        itemPriceText = 'NO TICKET';
+                      } else if (privateData[i]['ticket_type']['type'] ==
+                          'on_the_spot') {
+                        itemColor = Color(0xFF652D90);
+                        itemPriceText = privateData[i]['ticket_type']['name'];
+                      } else if (privateData[i]['ticket_type']['type'] ==
+                          'free') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText = privateData[i]['ticket_type']['name'];
+                      } else if (privateData[i]['ticket_type']['type'] ==
+                          'free') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText = privateData[i]['ticket_type']['name'];
+                      } else if (privateData[i]['ticket_type']['type'] ==
+                              'free_limited' ||
+                          privateData[i]['ticket_type']['type'] ==
+                              'free_limited_seating') {
+                        if (privateData[i]['ticket']['availableTicketStatus'] ==
+                            '1') {
+                          itemColor = Color(0xFFFFAA00);
+                          itemPriceText = privateData[i]['ticket_type']['name'];
+                        } else {
+                          if (privateData[i]['ticket']['salesStatus'] ==
+                              'comingSoon') {
+                            itemColor = Color(0xFFFFAA00).withOpacity(0.3);
+                            itemPriceText = 'COMING SOON';
+                          } else if (privateData[i]['ticket']['salesStatus'] ==
+                              'endSales') {
+                            itemColor = Color(0xFF8E1E2D);
+                            if (privateData[i]['status'] == 'ended') {
+                              itemPriceText = 'EVENT HAS ENDED';
+                            }
+                            itemPriceText = 'SALES ENDED';
+                          } else {
+                            itemColor = Color(0xFF8E1E2D);
+                            itemPriceText = 'SOLD OUT';
+                          }
+                        }
+                      }
                       return GestureDetector(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  EventDetailsConstructView(
-                                    id: privateData[i]['id'],
-                                  )));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      EventDetailsConstructView(
+                                          id: privateData[i]['id'])));
                         },
-                        child: Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          width: MediaQuery.of(context).size.width,
-                          height: 300,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  SizedBox(
-                                    width: 150,
-                                    child: Image.network(
-                                        privateData[i]['picture'],
-                                        fit: BoxFit.fill),
-                                  ),
-                                  SizedBox(width: 20),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        privateData[i]['dateStart'],
-                                        style:
-                                            TextStyle(color: eventajaGreenTeal),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Text(
-                                        privateData[i]['name'],
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Text(
-                                        privateData[i]['isPrivate'] == '0'
-                                            ? 'PUBLIC EVENT'
-                                            : 'PRIVATE EVENT',
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                      SizedBox(
-                                        height: 50,
-                                      ),
-                                      buttonType(i)
-                                    ],
-                                  )
-                                ],
-                              ),
-                              SizedBox(height: 20),
-                              Divider()
-                            ],
-                          ),
+                        child: new LatestEventItem(
+                          image: privateData[i]['picture'],
+                          title: privateData[i]['name'],
+                          location: privateData[i]['address'],
+                          itemColor: itemColor,
+                          itemPrice: itemPriceText,
+                          type: privateData[i]['ticket_type']['type'],
+                          isAvailable: privateData[i]['ticket']
+                              ['availableTicketStatus'],
                         ),
                       );
                     },

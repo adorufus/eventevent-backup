@@ -33,7 +33,7 @@ class EventListState extends State<EventList>{
               Navigator.pop(context);
             },
         ),
-        title: Text('EVENT CREATED', style: TextStyle(color: eventajaGreenTeal),),
+        title: Text('event ${widget.type}', style: TextStyle(color: eventajaGreenTeal),),
         centerTitle: true,
       ),
       body: Container(

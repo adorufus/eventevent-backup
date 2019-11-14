@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:chewie/chewie.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:googleapis/docs/v1.dart' as prefix0;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class MediaDetails extends StatefulWidget {
   final username;
@@ -16,6 +22,7 @@ class MediaDetails extends StatefulWidget {
   final isVideo;
   final youtubeUrl;
   final videoUrl;
+  final mediaId;
 
   const MediaDetails(
       {Key key,
@@ -28,7 +35,8 @@ class MediaDetails extends StatefulWidget {
       this.autoFocus,
       this.isVideo,
       this.youtubeUrl: 'https://test.com/',
-      this.videoUrl})
+      this.videoUrl,
+      this.mediaId})
       : super(key: key);
 
   @override
@@ -42,16 +50,20 @@ class _MediaDetailsState extends State<MediaDetails> {
 
   ChewieController chewieController;
 
+  TextEditingController textEditingController = new TextEditingController();
+
   String videoId = '';
+
+  bool isLoading = false;
+
+  List commentList;
 
   @override
   void initState() {
-    
-
     if (widget.videoUrl == null) {
       videoId = YoutubePlayer.convertUrlToId(widget.youtubeUrl == null
-        ? 'https://www.youtube.com/watch?v=6XNN6KFzLnE'
-        : widget.youtubeUrl);
+          ? 'https://www.youtube.com/watch?v=6XNN6KFzLnE'
+          : widget.youtubeUrl);
       ytController = YoutubePlayerController(
           initialVideoId: videoId,
           flags: YoutubePlayerFlags(
@@ -118,6 +130,7 @@ class _MediaDetailsState extends State<MediaDetails> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: TextFormField(
+                  controller: textEditingController,
                   autofocus: widget.autoFocus,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -126,7 +139,28 @@ class _MediaDetailsState extends State<MediaDetails> {
                       hintText: 'Add a comment..',
                       suffix: GestureDetector(
                         onTap: () {
-                          print('sent');
+                          postComment(
+                                  widget.mediaId, textEditingController.text)
+                              .then((response) {
+                            var extractedData = json.decode(response.body);
+
+                            if (response.statusCode == 200 ||
+                                response.statusCode == 201) {
+                              print(response.body);
+                              isLoading = false;
+                              print('****Comment Posted!*****');
+                              setState(() {});
+                            } else {
+                              isLoading = false;
+                              print(response.body);
+                              print('****Comment Failed****');
+                              print('reason: ${extractedData['desc']}');
+                            }
+                          }).catchError((e) {
+                            isLoading = false;
+                            print('****Comment Failed****');
+                            print('reason: ' + e.toString());
+                          });
                         },
                         child: Container(
                             child: Text(
@@ -194,6 +228,55 @@ class _MediaDetailsState extends State<MediaDetails> {
           ),
           Divider(
             color: Colors.black,
+          ),
+          Text(
+            'Comments',
+            style: TextStyle(
+                color: Color(0xff8a8a8b),
+                fontSize: 12,
+                fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 12),
+          Container(
+            height: MediaQuery.of(context).size.height,
+            child: FutureBuilder(
+              future: getCommentList(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.none &&
+                    snapshot.hasData == null) {
+                  //print('project snapshot data is: ${projectSnap.data}');
+                  return Container();
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  isLoading = true;
+                } else {
+                  isLoading = false;
+                }
+                if (snapshot.data == null) {
+                  print('loading');
+                } else {
+                  // dataLength = snapshot.data['data'].length;
+                  print(snapshot.data);
+                  commentList = snapshot.data['data']['comment'];
+                }
+
+                if(snapshot.hasError){
+                  print(snapshot.error.toString());
+                }
+                
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: commentList == null ? 0 : commentList.length,
+                  itemBuilder: (context, i){
+                    return ListTile(
+                      leading: CircleAvatar(backgroundImage: commentList[i]['photo'],),
+                      title: Text(commentList[i]['fullName'] + commentList[i]['lastName']),
+                      subtitle: Text(commentList[i]['comment']),
+                    );
+                  },
+                );
+              },
+            ),
           )
         ],
       ),
@@ -270,5 +353,43 @@ class _MediaDetailsState extends State<MediaDetails> {
       );
     }
     return typeWidget;
+  }
+
+  Future getCommentList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String url = BaseApi().apiUrl +
+        '/media/detail?X-API-KEY=$API_KEY&id=${widget.mediaId}';
+
+    final response = await http.get(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session')
+    });
+
+    var extractedData = json.decode(response.body);
+
+    return extractedData;
+  }
+
+  Future<http.Response> postComment(String mediaId, String comment) async {
+    setState(() {
+      isLoading = true;
+    });
+    print('****Posting Comment...*****');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String url = BaseApi().apiUrl + '/media/comment';
+
+    final response = await http.post(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session')
+    }, body: {
+      'X-API-KEY': API_KEY,
+      'media_id': mediaId,
+      'comment': comment,
+      'comment_id': ''
+    });
+
+    return response;
   }
 }

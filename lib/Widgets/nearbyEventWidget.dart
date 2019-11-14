@@ -192,7 +192,7 @@ class _ListenPageState extends State<ListenPage> {
                             Container(
                               width: MediaQuery.of(context).size.width - 71,
                               child: Text(
-                                'null',
+                                adresses == null ? '-' : adresses.addressLine,
                                 style: TextStyle(fontSize: 12),
                                 maxLines: 2,
                               ),
@@ -257,7 +257,8 @@ class _ListenPageState extends State<ListenPage> {
                           itemPriceText =
                               nearbyEventData[i]['ticket_type']['name'];
                         } else if (nearbyEventData[i]['ticket_type']['type'] ==
-                            'free_limited') {
+                            'free_limited' || nearbyEventData[i]['ticket_type']['type'] ==
+                            'free_limited_seating') {
                           if (nearbyEventData[i]['ticket']
                                   ['availableTicketStatus'] ==
                               '1') {

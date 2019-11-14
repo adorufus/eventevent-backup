@@ -86,8 +86,8 @@ class LatestEventItem extends StatelessWidget {
                 SizedBox(height: 7),
                 Row(
                   children: <Widget>[
-                    type == 'paid' || type == 'paid_seating' ? isAvailable == '1' ? Icon(CupertinoIcons.circle_filled, color: eventajaGreenTeal, size: 15,) : Icon(CupertinoIcons.circle_filled, color: itemPrice == 'sales_ended' ? Colors.yellowAccent : Colors.red, size: 15,) : Container(),
-                    type == 'paid' || type == 'paid_seating' ? isAvailable == '1' ? Text('Available', style: TextStyle(fontSize: 12),) : Text(itemPrice, style: TextStyle(fontSize: 12),) : Container(),
+                    type == 'paid' || type == 'paid_seating' || type == 'free_limited' || type == 'free_limited_seating' ? isAvailable == '1' ? Icon(CupertinoIcons.circle_filled, color: eventajaGreenTeal, size: 15,) : Icon(CupertinoIcons.circle_filled, color: itemPrice == 'sales_ended' ? Colors.yellowAccent : Colors.red, size: 15,) : Container(),
+                    type == 'paid' || type == 'paid_seating' || type == 'free_limited' || type == 'free_limited_seating' ? isAvailable == '1' ? Text('Available', style: TextStyle(fontSize: 12),) : Text(itemPrice, style: TextStyle(fontSize: 12),) : Container(),
                   ],
                 ),
                 SizedBox(height: 10),
