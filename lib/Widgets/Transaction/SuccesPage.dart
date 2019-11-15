@@ -35,8 +35,8 @@ class SuccessPageState extends State<SuccessPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              height: 250,
-              width: 250,
+              height: 200,
+              width: 200,
               child: Image.asset('assets/drawable/success.png'),
             ),
             SizedBox(

@@ -600,7 +600,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
       child: ListView(
         shrinkWrap: true,
         children: <Widget>[
-          banner(),
+          // banner(),
           popularVideoHeader(),
           popularVideoContent(),
           latestVideoHeader(),
@@ -676,6 +676,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                               imageUri: mediaData[i]['banner'],
                               mediaTitle: mediaData[i]['title'],
                               autoFocus: false,
+                              mediaId: mediaData[i]['id'],
+                              isVideo: false,
                             )));
               },
               child: MediaItem(
@@ -686,6 +688,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 userPicture: mediaData[i]['creator']['photo'],
                 articleDetail: mediaData[i]['description'],
                 imageIndex: i,
+                likeCount: mediaData[i]['count_loved'],
+                commentCount: mediaData[i]['comment'],
               ),
             ),
           );
@@ -873,12 +877,32 @@ class TimelineDashboardState extends State<TimelineDashboard>
         : ColumnBuilder(
             itemCount: mediaData == null ? 0 : mediaData.length,
             itemBuilder: (BuildContext context, i) {
-              return LatestMediaItem(
-                isVideo: false,
-                image: latestMediaPhoto[i]['banner_timeline'],
-                title: latestMediaPhoto[i]['title'],
-                username: latestMediaPhoto[i]['creator']['username'],
-                userImage: latestMediaPhoto[i]['creator']['photo'],
+              return GestureDetector(
+                onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MediaDetails(
+                              userPicture: latestMediaPhoto[i]['creator']['photo'],
+                              articleDetail: latestMediaPhoto[i]['content'],
+                              imageCount: 'img' + i.toString(),
+                              username: latestMediaPhoto[i]['creator']['username'],
+                              imageUri: latestMediaPhoto[i]['banner'],
+                              mediaTitle: latestMediaPhoto[i]['title'],
+                              autoFocus: false,
+                              mediaId: latestMediaPhoto[i]['id'],
+                              isVideo: false,
+                            )));
+                },
+                child: LatestMediaItem(
+                  isVideo: false,
+                  image: latestMediaPhoto[i]['banner_timeline'],
+                  title: latestMediaPhoto[i]['title'],
+                  username: latestMediaPhoto[i]['creator']['username'],
+                  userImage: latestMediaPhoto[i]['creator']['photo'],
+                  likeCount: latestMediaPhoto[i]['count_loved'],
+                  commentCount: latestMediaPhoto[i]['comment'],
+                ),
               );
             },
           );
@@ -957,6 +981,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                       ['thumbnail_timeline'],
                                   mediaTitle: popularMediaVideo[i]['title'],
                                   autoFocus: false,
+                                  mediaId: popularMediaVideo[i]['id'],
                                 )));
                   },
                   child: MediaItem(
@@ -966,6 +991,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                     username: popularMediaVideo[i]['creator']['username'],
                     userPicture: popularMediaVideo[i]['creator']['photo'],
                     articleDetail: popularMediaVideo[i]['description'],
+                    likeCount: popularMediaVideo[i]['count_loved'],
+                    commentCount: popularMediaVideo[i]['comment'],
                     imageIndex: i,
                   ),
                 );
@@ -1034,6 +1061,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                           imageUri: latestMediaVideo[i]['thumbnail_timeline'],
                           mediaTitle: latestMediaVideo[i]['title'],
                           autoFocus: false,
+                          mediaId: latestMediaVideo[i]['id'],
                         )));
           },
           child: LatestMediaItem(
@@ -1042,6 +1070,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
             title: latestMediaVideo[i]['title'],
             username: latestMediaVideo[i]['creator']['username'],
             userImage: latestMediaVideo[i]['creator']['photo'],
+            likeCount: latestMediaVideo[i]['count_loved'],
+            commentCount: latestMediaVideo[i]['comment'],
           ),
         );
       },

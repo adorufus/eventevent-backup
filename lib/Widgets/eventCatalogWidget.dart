@@ -10,9 +10,11 @@ import 'package:eventevent/Widgets/RecycleableWidget/SearchWidget.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/Widgets/openMedia.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
+import 'package:eventevent/Widgets/timeline/LatestMediaItem.dart';
 import 'package:eventevent/Widgets/timeline/MediaDetails.dart';
 import 'package:eventevent/Widgets/timeline/SeeAllMediaItem.dart';
 import 'package:eventevent/Widgets/timeline/popularMediaItem.dart';
+import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/Models/PopularEventModels.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -68,6 +70,7 @@ class _EventCatalogState extends State<EventCatalog>
   List discoverPeopleData;
   List collectionData;
   List child;
+  List latestMediaVideo;
   ListenPage geoPage = new ListenPage();
   List mediaData = [];
   Widget errReasonWidget = Container();
@@ -104,6 +107,18 @@ class _EventCatalogState extends State<EventCatalog>
         if (response.statusCode == 200) {
           setState(() {
             mediaData = extractedData['data']['data'];
+          });
+        }
+      });
+      getLatestMediaData().then((response) {
+        var extractedData = json.decode(response.body);
+
+        print(response.statusCode);
+        print(response.body);
+
+        if (response.statusCode == 200) {
+          setState(() {
+            latestMediaVideo = extractedData['data']['data'];
           });
         }
       });
@@ -700,13 +715,15 @@ class _EventCatalogState extends State<EventCatalog>
                                       )));
                         },
                         child: MediaItem(
-                          isVideo: false,
-                          image: mediaData[i]['banner_avatar'],
+                          isVideo: true,
+                          image: mediaData[i]['thumbnail_timeline'],
                           title: mediaData[i]['title'],
                           username: mediaData[i]['creator']['username'],
                           userPicture: mediaData[i]['creator']['photo'],
                           articleDetail: mediaData[i]['description'],
                           imageIndex: i,
+                          commentCount: mediaData[i]['comment'],
+                          likeCount: mediaData[i]['count_loved'],
                         ),
                       );
                     },
@@ -715,6 +732,9 @@ class _EventCatalogState extends State<EventCatalog>
               ],
             ),
           ),
+          SizedBox(height: 20),
+          latestVideoHeader(),
+          latestVideoContent(),
           SizedBox(height: 20),
           categoryTitle(),
           Container(
@@ -1618,7 +1638,41 @@ class _EventCatalogState extends State<EventCatalog>
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String url = urlType +
-        '/media?X-API-KEY=$API_KEY&search=&page=1&limit=10&type=photo&status=popular';
+        '/media?X-API-KEY=$API_KEY&search=&page=1&limit=10&type=video&status=popular';
+
+    Map<String, String> headerType = {};
+
+    Map<String, String> headerProd = {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session')
+    };
+
+    Map<String, String> headerRest = {
+      'Authorization': AUTHORIZATION_KEY,
+      'signature': signature
+    };
+
+    setState(() {
+      if (widget.isRest == true) {
+        headerType = headerRest;
+      } else if (widget.isRest == false) {
+        headerType = headerProd;
+      }
+    });
+
+    final response = await http.get(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session')
+    });
+
+    return response;
+  }
+
+  Future<http.Response> getLatestMediaData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String url = urlType +
+        '/media?X-API-KEY=$API_KEY&search=&page=1&limit=5&type=video&status=latest';
 
     Map<String, String> headerType = {};
 
@@ -1775,6 +1829,83 @@ class _EventCatalogState extends State<EventCatalog>
         );
       });
     }
+  }
+
+  Widget latestVideoHeader() {
+    return new Padding(
+      padding: EdgeInsets.only(left: 13, right: 13, top: 25, bottom: 13),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text('Latest Video',
+                  style: TextStyle(
+                      color: eventajaBlack,
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold)),
+              Padding(
+                  padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width / 4.5,
+              )),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => SeeAllMediaItem(
+                                initialIndex: 1,
+                                isVideo: true,
+                              )));
+                },
+                child: Text(
+                  'See All',
+                  style: TextStyle(color: eventajaGreenTeal, fontSize: 12),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget latestVideoContent() {
+    return ColumnBuilder(
+      itemCount: mediaData == null ? 0 : mediaData.length,
+      itemBuilder: (BuildContext context, i) {
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MediaDetails(
+                          isVideo: true,
+                          videoUrl: latestMediaVideo[i]['video'],
+                          youtubeUrl: latestMediaVideo[i]['youtube'],
+                          userPicture: latestMediaVideo[i]['creator']['photo'],
+                          articleDetail: latestMediaVideo[i]['content'],
+                          imageCount: 'img' + i.toString(),
+                          username: latestMediaVideo[i]['creator']['username'],
+                          imageUri: latestMediaVideo[i]['thumbnail_timeline'],
+                          mediaTitle: latestMediaVideo[i]['title'],
+                          autoFocus: false,
+                          mediaId: latestMediaVideo[i]['id'],
+                        )));
+          },
+          child: LatestMediaItem(
+            isVideo: true,
+            image: latestMediaVideo[i]['thumbnail_timeline'],
+            title: latestMediaVideo[i]['title'],
+            username: latestMediaVideo[i]['creator']['username'],
+            userImage: latestMediaVideo[i]['creator']['photo'],
+            likeCount: latestMediaVideo[i]['count_loved'],
+            commentCount: latestMediaVideo[i]['comment'],
+          ),
+        );
+      },
+    );
   }
 
   ///Untuk Fetching gambar PopularPeople

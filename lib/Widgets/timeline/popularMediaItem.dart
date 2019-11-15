@@ -12,6 +12,9 @@ class MediaItem extends StatefulWidget {
   final userPicture;
   final int imageIndex;
   final articleDetail;
+  final mediaId;
+  final likeCount;
+  final commentCount;
 
   const MediaItem(
       {Key key,
@@ -19,7 +22,10 @@ class MediaItem extends StatefulWidget {
       this.image,
       this.title,
       this.username,
-      this.userPicture, this.imageIndex, this.articleDetail})
+      this.userPicture,
+      this.imageIndex,
+      this.articleDetail,
+      this.mediaId, this.likeCount, this.commentCount})
       : super(key: key);
 
   @override
@@ -29,12 +35,15 @@ class MediaItem extends StatefulWidget {
 class _MediaItemState extends State<MediaItem> {
   int likeCount;
   bool isLiked;
+  List commentCount;
 
   @override
   void initState() {
     super.initState();
+
     setState(() {
-      likeCount = 0;
+      commentCount = widget.commentCount;
+      likeCount = widget.likeCount;
       isLiked = false;
     });
   }
@@ -70,10 +79,7 @@ class _MediaItemState extends State<MediaItem> {
               child: widget.isVideo == false
                   ? Container()
                   : Center(
-                      child: Image.asset(
-                      'assets/icons/icon_apps/play.png',
-                      scale: 3,
-                    )),
+                      child: Icon(Icons.play_circle_filled, color: Colors.white.withOpacity(.7), size: 50,)),
             ),
             Align(
                 alignment: Alignment.bottomCenter,
@@ -99,7 +105,7 @@ class _MediaItemState extends State<MediaItem> {
                             ),
                             Container(
                                 width:
-                                    MediaQuery.of(context).size.width - 217.7,
+                                    125,
                                 child: Text(
                                   '@' + widget.username.toString(),
                                   style: TextStyle(
@@ -131,11 +137,21 @@ class _MediaItemState extends State<MediaItem> {
                               GestureDetector(
                                 onTap: () {
                                   if (isLiked == false) {
-                                    likeCount += 1;
-                                    isLiked = true;
+                                    doLove().then((response) {
+                                      print(response.statusCode);
+                                      print(response.body);
+                                      if (response.statusCode == 200) {
+                                        // likeCount += 1;
+                                        // isLiked = true;
+                                      }
+                                    });
                                   } else {
-                                    likeCount -= 1;
-                                    isLiked = false;
+                                    doLove().then((response) {
+                                      if (response.statusCode == 200) {
+                                        likeCount -= 1;
+                                        isLiked = false;
+                                      }
+                                    });
                                   }
                                 },
                                 child: Container(
@@ -177,15 +193,21 @@ class _MediaItemState extends State<MediaItem> {
                               SizedBox(width: 12),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>MediaDetails(
-                                    username: widget.username,
-                                    mediaTitle: widget.title,
-                                    userPicture: widget.userPicture,
-                                    imageUri: widget.image,
-                                    imageCount: 'img' + widget.imageIndex.toString(),
-                                    articleDetail: widget.articleDetail,
-                                    autoFocus: true,
-                                  )));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MediaDetails(
+                                                username: widget.username,
+                                                mediaTitle: widget.title,
+                                                userPicture: widget.userPicture,
+                                                imageUri: widget.image,
+                                                imageCount: 'img' +
+                                                    widget.imageIndex
+                                                        .toString(),
+                                                articleDetail:
+                                                    widget.articleDetail,
+                                                autoFocus: true,
+                                              )));
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(horizontal: 13),
@@ -209,7 +231,7 @@ class _MediaItemState extends State<MediaItem> {
                                           scale: 3.5,
                                         ),
                                         SizedBox(width: 5),
-                                        Text('0',
+                                        Text(commentCount.length.toString(),
                                             style: TextStyle(
                                                 color: Color(
                                                     0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
@@ -225,5 +247,21 @@ class _MediaItemState extends State<MediaItem> {
                 )),
           ],
         ));
+  }
+
+  Future<http.Response> doLove() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String url = BaseApi().apiUrl + '/media/love';
+
+    final response = await http.post(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session')
+    }, body: {
+      'X-API-KEY': API_KEY,
+      'id': widget.mediaId
+    });
+
+    return response;
   }
 }

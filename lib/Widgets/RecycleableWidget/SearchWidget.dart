@@ -442,12 +442,14 @@ class SearchState extends State<Search> {
                         height: 15,
                       ),
                     ]),
-                SizedBox(
-                    height: 40,
-                    width: 100,
+                    Expanded(child: SizedBox(),),
+                Container(
+                  margin: EdgeInsets.only(right: 20),
+                    height: 30,
+                    width: 80,
                     child: Image.asset(
                       'assets/icons/btn_follow.png',
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                     ))
               ],
             ),

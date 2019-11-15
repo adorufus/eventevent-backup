@@ -60,16 +60,19 @@ class _MediaDetailsState extends State<MediaDetails> {
 
   @override
   void initState() {
-    if (widget.videoUrl == null) {
-      videoId = YoutubePlayer.convertUrlToId(widget.youtubeUrl == null
-          ? 'https://www.youtube.com/watch?v=6XNN6KFzLnE'
-          : widget.youtubeUrl);
-      ytController = YoutubePlayerController(
-          initialVideoId: videoId,
-          flags: YoutubePlayerFlags(
-            autoPlay: true,
-          ));
-    }
+    setState(() {
+      if (widget.videoUrl == null) {
+        videoId = YoutubePlayer.convertUrlToId(widget.youtubeUrl == null
+            ? 'https://www.youtube.com/watch?v=6XNN6KFzLnE'
+            : widget.youtubeUrl);
+
+        ytController = YoutubePlayerController(
+            initialVideoId: videoId,
+            flags: YoutubePlayerFlags(
+              autoPlay: true,
+            ));
+      }
+    });
 
     videoPlayerController = VideoPlayerController.network(
         widget.videoUrl == null ? '' : widget.videoUrl)
@@ -149,6 +152,7 @@ class _MediaDetailsState extends State<MediaDetails> {
                               print(response.body);
                               isLoading = false;
                               print('****Comment Posted!*****');
+                              textEditingController.text = '';
                               setState(() {});
                             } else {
                               isLoading = false;
@@ -260,17 +264,20 @@ class _MediaDetailsState extends State<MediaDetails> {
                   commentList = snapshot.data['data']['comment'];
                 }
 
-                if(snapshot.hasError){
+                if (snapshot.hasError) {
                   print(snapshot.error.toString());
                 }
-                
+
                 return ListView.builder(
                   shrinkWrap: true,
                   itemCount: commentList == null ? 0 : commentList.length,
-                  itemBuilder: (context, i){
+                  itemBuilder: (context, i) {
                     return ListTile(
-                      leading: CircleAvatar(backgroundImage: commentList[i]['photo'],),
-                      title: Text(commentList[i]['fullName'] + commentList[i]['lastName']),
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(commentList[i]['photo']),
+                      ),
+                      title: Text(commentList[i]['fullName'] + ' ' +
+                          commentList[i]['lastName'] + ': ', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),),
                       subtitle: Text(commentList[i]['comment']),
                     );
                   },

@@ -129,7 +129,7 @@ class _MyTicketState extends State<MyTicket> {
                       }
                     },
                     style: TextStyle(fontSize: 12),
-                    autofocus: true,
+                    autofocus: false,
                     autocorrect: false,
                     decoration: InputDecoration(
                         prefixIcon: Image.asset(
@@ -213,9 +213,7 @@ class _MyTicketState extends State<MyTicket> {
                     });
                   },
                   onLoading: _onLoading,
-                  child: notFound == true
-                      ? Container(child: Center(child: Text('Ticket Not Found')))
-                      : ListView.builder(
+                  child: ListView.builder(
                       itemCount:
                           myTicketList == null ? 0 : myTicketList.length,
                       itemBuilder: (BuildContext context, i) {

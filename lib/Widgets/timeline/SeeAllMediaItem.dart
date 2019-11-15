@@ -12,9 +12,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SeeAllMediaItem extends StatefulWidget {
   final initialIndex;
-  final bool isVideo;
 
-  const SeeAllMediaItem({Key key, this.initialIndex, this.isVideo})
+  final bool isVideo;
+  final likeCount;
+  final commentCount;
+
+  const SeeAllMediaItem(
+      {Key key,
+      this.initialIndex,
+      this.isVideo,
+      this.likeCount,
+      this.commentCount})
       : super(key: key);
 
   @override
@@ -28,9 +36,11 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
   List popularEventList;
   List latestMedia;
   List popularMedia;
+  int likeCount;
+  List commentCount;
 
   String imageUrl = '';
-  
+
   int currentTabIndex = 0;
 
   int newPage = 0;
@@ -67,6 +77,10 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      commentCount = widget.commentCount;
+      likeCount = widget.likeCount;
+    });
     getPopularMedia().then((response) {
       var extractedData = json.decode(response.body);
 
@@ -97,7 +111,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
         appBar: PreferredSize(
           preferredSize: Size(null, 100),
           child: Container(
@@ -130,7 +144,8 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                     SizedBox(width: MediaQuery.of(context).size.width / 2.8),
                     Text(
                       'All Media',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     )
                   ],
                 ),
@@ -148,7 +163,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
               Container(
                 color: Colors.white,
                 child: TabBar(
-                  onTap: (index){
+                  onTap: (index) {
                     setState(() {
                       currentTabIndex = index;
                     });
@@ -279,14 +294,22 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                                       imageUri: popularMedia[i]['banner'],
                                       mediaTitle: popularMedia[i]['title'],
                                       autoFocus: false,
+                                      mediaId: popularMedia[i]['id'],
+                                      videoUrl: popularMedia[i]['video'],
+                                      youtubeUrl: popularMedia[i]['youtube'],
+                                      isVideo: widget.isVideo,
                                     )));
                       },
                       child: new LatestMediaItem(
                         isVideo: widget.isVideo,
-                        image: widget.isVideo == true ? popularMedia[i]['thumbnail_timeline'] : popularMedia[i]['banner_timeline'],
+                        image: widget.isVideo == true
+                            ? popularMedia[i]['thumbnail_timeline']
+                            : popularMedia[i]['banner_timeline'],
                         title: popularMedia[i]['title'],
                         username: popularMedia[i]['creator']['username'],
                         userImage: popularMedia[i]['creator']['photo'],
+                        likeCount: popularMedia[i]['count_loved'],
+                        commentCount: popularMedia[i]['comment'],
                       ),
                     );
                   },
@@ -369,14 +392,22 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                                       imageUri: latestMedia[i]['banner'],
                                       mediaTitle: latestMedia[i]['title'],
                                       autoFocus: false,
+                                      mediaId: latestMedia[i]['id'],
+                                      videoUrl: latestMedia[i]['video'],
+                                      youtubeUrl: latestMedia[i]['youtube'],
+                                      isVideo: widget.isVideo,
                                     )));
                       },
                       child: new LatestMediaItem(
                         isVideo: widget.isVideo,
-                        image: widget.isVideo == true ? latestMedia[i]['thumbnail_timeline'] : latestMedia[i]['banner_timeline'],
+                        image: widget.isVideo == true
+                            ? latestMedia[i]['thumbnail_timeline']
+                            : latestMedia[i]['banner_timeline'],
                         title: latestMedia[i]['title'],
                         username: latestMedia[i]['creator']['username'],
                         userImage: latestMedia[i]['creator']['photo'],
+                        likeCount: latestMedia[i]['count_loved'],
+                        commentCount: latestMedia[i]['comment'],
                       ),
                     );
                   },
@@ -393,16 +424,14 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
         currentPage += newPage;
       }
       print(currentPage);
-
     });
-    
-    if(widget.isVideo == true){
-      setState((){
+
+    if (widget.isVideo == true) {
+      setState(() {
         type = 'video';
       });
-    }
-    else{
-      setState((){
+    } else {
+      setState(() {
         type = 'photo';
       });
     }
@@ -410,10 +439,8 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
     String url = BaseApi().restUrl +
         '/media?X-API-KEY=$API_KEY&search=&page=$currentPage&limit=10&type=$type&status=popular';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
-    });
+    final response = await http.get(url,
+        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
 
     return response;
   }
@@ -428,16 +455,14 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
         currentPage += newPage;
       }
       print(currentPage);
-
     });
-    
-    if(widget.isVideo == true){
-      setState((){
+
+    if (widget.isVideo == true) {
+      setState(() {
         type = 'video';
       });
-    }
-    else{
-      setState((){
+    } else {
+      setState(() {
         type = 'photo';
       });
     }
@@ -445,10 +470,8 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
     String url = BaseApi().restUrl +
         '/media?X-API-KEY=$API_KEY&search=&page=$currentPage&limit=10&type=$type&status=latest';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
-    });
+    final response = await http.get(url,
+        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
 
     return response;
   }
