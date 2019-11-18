@@ -34,6 +34,8 @@ class SearchState extends State<Search> {
 
   bool notFound = false;
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     searchController.addListener(() {
@@ -90,6 +92,7 @@ class SearchState extends State<Search> {
                                     List tempList = new List();
 
                                     if (response.statusCode == 200) {
+                                      isLoading = false;
                                       notFound = false;
                                       for (int i = 0;
                                           i < resultData.length;
@@ -100,6 +103,7 @@ class SearchState extends State<Search> {
                                       profile = tempList;
                                       filteredProfile = profile;
                                     } else if (response.statusCode == 400) {
+                                      isLoading = false;
                                       notFound = true;
                                     }
                                   });
@@ -193,7 +197,7 @@ class SearchState extends State<Search> {
       }
       filteredEvents = tempList;
 
-      return ListView.builder(
+      return isLoading == true ? Container(child: Center(child: CircularProgressIndicator(),),) : ListView.builder(
           itemCount: events == null ? 0 : filteredEvents.length,
           itemBuilder: (BuildContext context, i) {
             Color itemColor;
@@ -388,7 +392,7 @@ class SearchState extends State<Search> {
       filteredProfile = tempList;
     }
 
-    return ListView.builder(
+    return isLoading == true ? Container(child: Center(child: CircularProgressIndicator(),),) : ListView.builder(
       itemCount: filteredProfile == null ? 0 : filteredProfile.length,
       itemBuilder: (BuildContext context, i) {
         return GestureDetector(
@@ -419,15 +423,20 @@ class SearchState extends State<Search> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Container(
-                        width: 150,
-                        child: Text(
-                          filteredProfile[i]['fullName'] == null
-                              ? filteredProfile[i]['username']
-                              : filteredProfile[i]['fullName'],
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      Row(
+                        children: <Widget>[
+                          filteredProfile[i]['isVerified'] == '0' ? Container() : Icon(Icons.check_circle, color: Colors.blue,),
+                          Container(
+                            width: 150,
+                            child: Text(
+                              filteredProfile[i]['fullName'] == null
+                                  ? filteredProfile[i]['username']
+                                  : filteredProfile[i]['fullName'],
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 15,
@@ -460,6 +469,9 @@ class SearchState extends State<Search> {
   }
 
   Future<http.Response> _getProfile() async {
+    setState(() {
+      isLoading = true;
+    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String url = BaseApi().apiUrl +
         '/user/search?X-API-KEY=$API_KEY&people=${searchController.text}&page=1';
@@ -475,6 +487,9 @@ class SearchState extends State<Search> {
   }
 
   Future _getEvents() async {
+    setState(() {
+      isLoading = true;
+    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String url = BaseApi().apiUrl +
         '/event/search?X-API-KEY=$API_KEY&event=${searchController.text}&page=1';
@@ -492,6 +507,7 @@ class SearchState extends State<Search> {
 
     if (response.statusCode == 200) {
       setState(() {
+        isLoading = false;
         notFound = false;
       });
       for (int i = 0; i < resultData.length; i++) {
@@ -504,6 +520,7 @@ class SearchState extends State<Search> {
       });
     } else if (response.statusCode == 400) {
       setState(() {
+        isLoading = false;
         notFound = true;
       });
     }
