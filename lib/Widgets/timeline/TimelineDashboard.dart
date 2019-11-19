@@ -688,8 +688,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 userPicture: mediaData[i]['creator']['photo'],
                 articleDetail: mediaData[i]['description'],
                 imageIndex: i,
-                likeCount: mediaData[i]['count_loved'],
+                likeCount: mediaData[i]['count_loved'].toString(),
                 commentCount: mediaData[i]['comment'],
+                mediaId: mediaData[i]['id'],
               ),
             ),
           );
@@ -994,6 +995,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                     likeCount: popularMediaVideo[i]['count_loved'],
                     commentCount: popularMediaVideo[i]['comment'],
                     imageIndex: i,
+                    mediaId: popularMediaVideo[i]['id'],
                   ),
                 );
               },

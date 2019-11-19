@@ -27,9 +27,10 @@ class _MediaPlayerState extends State<MediaPlayer> {
 
       chewieController = ChewieController(
         videoPlayerController: _controller,
-        aspectRatio: 3 / 2,
-        autoPlay: true,
+        aspectRatio: 16 / 9,
+        autoPlay: false,
         looping: false,
+        placeholder: Container(color: Colors.white,),
         fullScreenByDefault: true,
       );
 
@@ -39,6 +40,7 @@ class _MediaPlayerState extends State<MediaPlayer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
         body: Center(
             child: Chewie(
               controller: chewieController,

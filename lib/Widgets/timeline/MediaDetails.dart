@@ -142,6 +142,7 @@ class _MediaDetailsState extends State<MediaDetails> {
                       hintText: 'Add a comment..',
                       suffix: GestureDetector(
                         onTap: () {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           postComment(
                                   widget.mediaId, textEditingController.text)
                               .then((response) {
@@ -242,7 +243,6 @@ class _MediaDetailsState extends State<MediaDetails> {
           ),
           SizedBox(height: 12),
           Container(
-            height: MediaQuery.of(context).size.height,
             child: FutureBuilder(
               future: getCommentList(),
               builder: (context, snapshot) {
@@ -270,6 +270,7 @@ class _MediaDetailsState extends State<MediaDetails> {
 
                 return ListView.builder(
                   shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: commentList == null ? 0 : commentList.length,
                   itemBuilder: (context, i) {
                     return ListTile(

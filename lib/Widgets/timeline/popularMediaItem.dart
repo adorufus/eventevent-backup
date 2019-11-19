@@ -25,7 +25,9 @@ class MediaItem extends StatefulWidget {
       this.userPicture,
       this.imageIndex,
       this.articleDetail,
-      this.mediaId, this.likeCount, this.commentCount})
+      this.mediaId,
+      this.likeCount,
+      this.commentCount})
       : super(key: key);
 
   @override
@@ -79,7 +81,11 @@ class _MediaItemState extends State<MediaItem> {
               child: widget.isVideo == false
                   ? Container()
                   : Center(
-                      child: Icon(Icons.play_circle_filled, color: Colors.white.withOpacity(.7), size: 50,)),
+                      child: Icon(
+                      Icons.play_circle_filled,
+                      color: Colors.white.withOpacity(.7),
+                      size: 50,
+                    )),
             ),
             Align(
                 alignment: Alignment.bottomCenter,
@@ -104,8 +110,7 @@ class _MediaItemState extends State<MediaItem> {
                               width: 2.68,
                             ),
                             Container(
-                                width:
-                                    125,
+                                width: 125,
                                 child: Text(
                                   '@' + widget.username.toString(),
                                   style: TextStyle(
@@ -136,23 +141,25 @@ class _MediaItemState extends State<MediaItem> {
                             children: <Widget>[
                               GestureDetector(
                                 onTap: () {
-                                  if (isLiked == false) {
-                                    doLove().then((response) {
-                                      print(response.statusCode);
-                                      print(response.body);
-                                      if (response.statusCode == 200) {
-                                        // likeCount += 1;
-                                        // isLiked = true;
-                                      }
-                                    });
-                                  } else {
-                                    doLove().then((response) {
-                                      if (response.statusCode == 200) {
-                                        likeCount -= 1;
-                                        isLiked = false;
-                                      }
-                                    });
-                                  }
+                                  setState(() {
+                                    if (isLiked == false) {
+                                      doLove().then((response) {
+                                        print(response.statusCode);
+                                        print(response.body);
+                                        if (response.statusCode == 200) {
+                                          likeCount += 1;
+                                          isLiked = true;
+                                        }
+                                      });
+                                    } else {
+                                      doLove().then((response) {
+                                        if (response.statusCode == 200) {
+                                          likeCount -= 1;
+                                          isLiked = false;
+                                        }
+                                      });
+                                    }
+                                  });
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
