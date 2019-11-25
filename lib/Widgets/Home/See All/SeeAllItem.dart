@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -116,14 +116,21 @@ class _SeeAllItemState extends State<SeeAllItem> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return SafeArea(
           child: Scaffold(
         appBar: PreferredSize(
           preferredSize: Size(null, 100),
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 75,
+            height: ScreenUtil.instance.setWidth(75),
             child: Container(
               color: Colors.white,
               child: Container(
@@ -138,8 +145,8 @@ class _SeeAllItemState extends State<SeeAllItem> {
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
                           SizedBox(
-                            height: 15.49,
-                            width: 9.73,
+                            height: ScreenUtil.instance.setWidth(15.49),
+                            width: ScreenUtil.instance.setWidth(9.73),
                             child: Image.asset(
                               'assets/icons/icon_apps/arrow.png',
                               fit: BoxFit.fill,
@@ -151,7 +158,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     SizedBox(width: MediaQuery.of(context).size.width / 2.8),
                     Text(
                       'All Event',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
                     )
                   ],
                 ),
@@ -179,10 +186,10 @@ class _SeeAllItemState extends State<SeeAllItem> {
                             'assets/icons/icon_apps/popular.png',
                             scale: 4.5,
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(width: ScreenUtil.instance.setWidth(8)),
                           Text('Popular',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 12.5)),
+                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.5))),
                         ],
                       ),
                     ),
@@ -195,10 +202,10 @@ class _SeeAllItemState extends State<SeeAllItem> {
                             'assets/icons/icon_apps/discover.png',
                             scale: 4.5,
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(width: ScreenUtil.instance.setWidth(8)),
                           Text('Discover',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 12.5)),
+                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.5))),
                         ],
                       ),
                     )
@@ -224,8 +231,8 @@ class _SeeAllItemState extends State<SeeAllItem> {
         child: popularEventList == null
             ? Center(
                 child: Container(
-                  width: 25,
-                  height: 25,
+                  width: ScreenUtil.instance.setWidth(25),
+                  height: ScreenUtil.instance.setWidth(25),
                   child: FittedBox(
                     fit: BoxFit.fill,
                     child: CircularProgressIndicator(),
@@ -250,7 +257,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     body = Container();
                   }
 
-                  return Container(height: 35, child: Center(child: body));
+                  return Container(height: ScreenUtil.instance.setWidth(35), child: Center(child: body));
                 }),
                 controller: refreshController,
                 onRefresh: () {
@@ -312,7 +319,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                       }
                     } else if (popularEventList[i]['ticket_type']['type'] ==
                         'no_ticket') {
-                      itemColor = Color(0xFFA6A8AB);
+                      itemColor = Color(0xFF652D90);
                       itemPriceText = 'NO TICKET';
                     } else if (popularEventList[i]['ticket_type']['type'] ==
                         'on_the_spot') {
@@ -374,8 +381,8 @@ class _SeeAllItemState extends State<SeeAllItem> {
         child: discoverEventList == null
             ? Center(
                 child: Container(
-                  width: 25,
-                  height: 25,
+                  width: ScreenUtil.instance.setWidth(25),
+                  height: ScreenUtil.instance.setWidth(25),
                   child: FittedBox(
                     fit: BoxFit.fill,
                     child: CircularProgressIndicator(),
@@ -400,7 +407,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     body = Container();
                   }
 
-                  return Container(height: 35, child: Center(child: body));
+                  return Container(height: ScreenUtil.instance.setWidth(35), child: Center(child: body));
                 }),
                 controller: refreshController,
                 onRefresh: () {
@@ -462,7 +469,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     }
                   } else if (discoverEventList[i]['ticket_type']['type'] ==
                       'no_ticket') {
-                    itemColor = Color(0xFFA6A8AB);
+                    itemColor = Color(0xFF652D90);
                     itemPriceText = 'NO TICKET';
                   } else if (discoverEventList[i]['ticket_type']['type'] ==
                       'on_the_spot') {

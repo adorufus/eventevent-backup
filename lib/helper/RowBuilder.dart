@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RowBuilder extends StatelessWidget {
 	final IndexedWidgetBuilder itemBuilder;
@@ -19,7 +19,14 @@ class RowBuilder extends StatelessWidget {
 	}) : super(key: key);
 
 	@override
-	Widget build(BuildContext context) {
+	Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
 		return new Row(
 			children: new List.generate(this.itemCount,
 					(index) => this.itemBuilder(context, index)).toList(),

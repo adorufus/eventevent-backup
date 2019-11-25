@@ -10,7 +10,7 @@ import 'package:eventevent/Widgets/registerWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -202,7 +202,14 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       body: Container(
          child: ListView(
@@ -222,11 +229,11 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
                ],
              ),
              SizedBox(
-               height: 10,
+               height: ScreenUtil.instance.setWidth(10),
              ),
              Text('Sign in to start using timeline and get updates from your friends and organizers', textAlign: TextAlign.center,),
              SizedBox(
-               height: 15,
+               height: ScreenUtil.instance.setWidth(15),
              ),
              Container(
                 margin: EdgeInsets.symmetric(
@@ -246,7 +253,7 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
                       },
                       child: Container(
                         width: ScreenUtil.instance.setWidth(147.41),
-                        height: ScreenUtil.instance.setHeight(37.02),
+                        height: ScreenUtil.instance.setWidth(37.02),
                         decoration: BoxDecoration(
                             color: eventajaGreenTeal,
                             borderRadius: BorderRadius.circular(
@@ -279,7 +286,7 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
                       },
                       child: Container(
                         width: ScreenUtil.instance.setWidth(147.41),
-                        height: ScreenUtil.instance.setHeight(37.02),
+                        height: ScreenUtil.instance.setWidth(37.02),
                         decoration: BoxDecoration(
                             color: eventajaGreenTeal,
                             borderRadius: BorderRadius.circular(
@@ -312,7 +319,7 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
                   margin: EdgeInsets.symmetric(
                       horizontal: ScreenUtil.instance.setWidth(26)),
                   width: MediaQuery.of(context).size.width,
-                  height: ScreenUtil.instance.setHeight(37.02),
+                  height: ScreenUtil.instance.setWidth(37.02),
                   decoration: BoxDecoration(
                       color: Color(0xFF4C64B5),
                       borderRadius: BorderRadius.circular(180),
@@ -325,7 +332,7 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
                   child: Row(
                     children: <Widget>[
                       Container(
-                          height: ScreenUtil.instance.setHeight(37),
+                          height: ScreenUtil.instance.setWidth(37),
                           width: ScreenUtil.instance.setWidth(37),
                           decoration: BoxDecoration(
                               shape: BoxShape.circle, color: Color(0xFF324b9c)),
@@ -347,7 +354,7 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
                   ),
                 ),
               ),
-              SizedBox(height: ScreenUtil.instance.setHeight(10)),
+              SizedBox(height: ScreenUtil.instance.setWidth(10)),
               GestureDetector(
                 onTap: () {
                   goLoginGoogle().then((result) {
@@ -362,7 +369,7 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
                   margin: EdgeInsets.symmetric(
                       horizontal: ScreenUtil.instance.setWidth(26)),
                   width: MediaQuery.of(context).size.width,
-                  height: ScreenUtil.instance.setHeight(37.02),
+                  height: ScreenUtil.instance.setWidth(37.02),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(180),
@@ -376,7 +383,7 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
                       Container(
-                        height: ScreenUtil.instance.setHeight(37),
+                        height: ScreenUtil.instance.setWidth(37),
                         width: ScreenUtil.instance.setWidth(37),
                         decoration: BoxDecoration(
                             shape: BoxShape.circle, color: Color(0xFFf9f9f9)),

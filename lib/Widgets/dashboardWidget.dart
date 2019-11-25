@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io'; 
 
 import 'package:eventevent/Widgets/Home/RestPageNeedLogin.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/PostMedia.dart';
@@ -12,6 +12,7 @@ import 'package:eventevent/helper/PushNotification.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; 
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,26 +26,28 @@ import 'package:google_places_picker/google_places_picker.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/OpenCamera.dart';
 
 FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
 String pushToken;
 var initializationSettingsAndroid;
 var initializationSettingsIOS;
 var initializationSettings;
 var scaffoldGlobalKey = GlobalKey<ScaffoldState>();
 
-Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
-  if (message.containsKey('data')) {
-    // Handle data message
-    final dynamic data = message['data'];
-  }
+// Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
+//   if (message.containsKey('data')) {
+//     // Handle data message
+//     final dynamic data = message['data'];
+//   }
 
-  if (message.containsKey('notification')) {
-    // Handle notification message
-    final dynamic notification = message['notification'];
-  }
+//   if (message.containsKey('notification')) {
+//     // Handle notification message
+//     final dynamic notification = message['notification'];
+//   }
 
-  // Or do other work.
-}
+//   // Or do other work.
+// }
+
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async { return Future<void>.value(); }
 
 class DashboardWidget extends StatefulWidget {
   final isRest;
@@ -76,27 +79,78 @@ class _DashboardWidgetState extends State<DashboardWidget>
     });
   }
 
+  void registerNotification() {
+    _firebaseMessaging.requestNotificationPermissions();
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) {
+        print('onMessage: $message');
+        showNotification(message);
+        return;
+      },
+      onResume: (Map<String, dynamic> message){
+        print('onResume: $message');
+        return;
+      },
+      onLaunch: (Map<String, dynamic> message){
+        print('onResume: $message');
+        return;
+      },
+      onBackgroundMessage: Theme.of(context).platform == TargetPlatform.iOS ? null : myBackgroundMessageHandler
+    );
+
+    _firebaseMessaging.getToken().then((token){
+      print('firebase token: $token');
+      setState(() {
+        pushToken = token;
+        saveDeviceToken(token);
+      });
+    });
+  }
+
+  void configureNotification(){
+    var initializationSettingAndroid = new AndroidInitializationSettings('launch_background');
+    var initializationSettingIOS = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(initializationSettingAndroid, initializationSettingIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  void showNotification(message) async {
+    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+        'com.eventeven2.android',
+        'EventEvent notification channel',
+        'channel description',
+        playSound: true,
+        enableVibration: true,
+        importance: Importance.Max,
+        priority: Priority.High);
+
+    var iosPlatformChannelSpecifics = new IOSNotificationDetails();
+    var platformChannelSpecifics = new NotificationDetails(
+        androidPlatformChannelSpecifics, iosPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(0, message['title'].toString(),
+        message['body'].toString(), platformChannelSpecifics,
+        payload: json.encode(message));
+  }
+
   @override
   void initState() {
     _saveCurrentRoute('/Dashboard');
     WidgetsBinding.instance.addObserver(this);
     super.initState();
-    _firebaseMessaging.requestNotificationPermissions();
-    _firebaseMessaging.getToken().then((token) {
-      print(token);
-      setState(() {
-        pushToken = token;
-      });
-    });
+    
+    // registerNotification();
+    configureNotification();
 
-    if(widget.isRest == true){
-      setState((){
+    if (widget.isRest == true) {
+      setState(() {
         urlPrefix = 'rest';
-      }); 
-    }else{
-      setState((){
+      });
+    } else {
+      setState(() {
         urlPrefix = 'home';
-      }); 
+      });
     }
 
     getProfileData();
@@ -208,6 +262,12 @@ class _DashboardWidgetState extends State<DashboardWidget>
   }
 
   @override
+  void didChangeDependencies() {
+    registerNotification();
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
@@ -231,15 +291,26 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
   @override
   Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
+
     final _pageOptions = [
       EventCatalog(isRest: widget.isRest),
       widget.isRest == true ? LoginRegisterWidget() : TimelineDashboard(),
       widget.isRest == true ? LoginRegisterWidget() : Container(),
       widget.isRest == true ? LoginRegisterWidget() : PushNotification(),
-      widget.isRest == true ? LoginRegisterWidget() : ProfileWidget(
-        initialIndex: 0,
-        userId: currentUserId,
-      ),
+      widget.isRest == true
+          ? LoginRegisterWidget()
+          : ProfileWidget(
+              initialIndex: 0,
+              userId: currentUserId,
+            ),
     ];
 
     return SafeArea(
@@ -280,19 +351,20 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 50),
                                       child: SizedBox(
-                                          height: 5,
-                                          width: 50,
+                                          height: ScreenUtil.instance.setWidth(5),
+                                          width: ScreenUtil.instance.setWidth(50),
                                           child: Image.asset(
                                             'assets/icons/icon_line.png',
                                             fit: BoxFit.fill,
                                           ))),
-                                  SizedBox(height: 35),
+                                  SizedBox(height: ScreenUtil.instance.setWidth(35)),
                                   GestureDetector(
                                     onTap: () {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            settings: RouteSettings(name: 'PostEvent'),
+                                              settings: RouteSettings(
+                                                  name: 'PostEvent'),
                                               builder: (BuildContext context) =>
                                                   PostEvent()));
                                     },
@@ -310,22 +382,22 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                               Text(
                                                 'New Event',
                                                 style: TextStyle(
-                                                    fontSize: 16,
+                                                    fontSize: ScreenUtil.instance.setSp(16),
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              SizedBox(height: 5),
+                                              SizedBox(height: ScreenUtil.instance.setWidth(5)),
                                               Text(
                                                 'Create & sell your own event',
                                                 style: TextStyle(
-                                                  fontSize: 10,
+                                                  fontSize: ScreenUtil.instance.setSp(10),
                                                 ),
                                               )
                                             ],
                                           ),
                                           Container(
-                                            height: 44,
-                                            width: 50,
+                                            height: ScreenUtil.instance.setWidth(44),
+                                            width: ScreenUtil.instance.setWidth(50),
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                     image: AssetImage(
@@ -344,9 +416,9 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 19),
+                                  SizedBox(height: ScreenUtil.instance.setWidth(19)),
                                   Divider(),
-                                  SizedBox(height: 16),
+                                  SizedBox(height: ScreenUtil.instance.setWidth(16)),
                                   GestureDetector(
                                     onTap: () {
                                       // imageCaputreCamera();
@@ -367,21 +439,21 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                               Text(
                                                 'Post Media',
                                                 style: TextStyle(
-                                                    fontSize: 16,
+                                                    fontSize: ScreenUtil.instance.setSp(16),
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              SizedBox(height: 4),
+                                              SizedBox(height: ScreenUtil.instance.setWidth(4)),
                                               Text(
                                                   'Share your excitement to the others ',
                                                   style: TextStyle(
-                                                    fontSize: 10,
+                                                    fontSize: ScreenUtil.instance.setSp(10),
                                                   ))
                                             ],
                                           ),
                                           Container(
-                                            height: 44,
-                                            width: 50,
+                                            height: ScreenUtil.instance.setWidth(44),
+                                            width: ScreenUtil.instance.setWidth(50),
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                     image: AssetImage(
@@ -416,70 +488,70 @@ class _DashboardWidgetState extends State<DashboardWidget>
                   BottomNavigationBarItem(
                       title: Text(
                         'Discover',
-                        style: TextStyle(color: Colors.black26, fontSize: 10),
+                        style: TextStyle(color: Colors.black26, fontSize: ScreenUtil.instance.setSp(10)),
                       ),
                       icon: Image.asset("assets/icons/aset_icon/eventevent.png",
-                          height: 25, width: 25),
+                          height: ScreenUtil.instance.setWidth(25), width: ScreenUtil.instance.setWidth(25)),
                       activeIcon: Image.asset(
                         "assets/icons/aset_icon/eventevent.png",
-                        height: 25,
-                        width: 25,
+                        height: ScreenUtil.instance.setWidth(25),
+                        width: ScreenUtil.instance.setWidth(25),
                         color: eventajaGreenTeal,
                       )),
                   BottomNavigationBarItem(
                       title: Text(
                         'Timeline',
-                        style: TextStyle(color: Colors.black26, fontSize: 10),
+                        style: TextStyle(color: Colors.black26, fontSize: ScreenUtil.instance.setSp(10)),
                       ),
                       icon: Image.asset(
                         "assets/icons/aset_icon/timeline.png",
-                        height: 25,
-                        width: 25,
+                        height: ScreenUtil.instance.setWidth(25),
+                        width: ScreenUtil.instance.setWidth(25),
                       ),
                       activeIcon: Image.asset(
                         "assets/icons/aset_icon/timeline.png",
-                        height: 25,
-                        width: 25,
+                        height: ScreenUtil.instance.setWidth(25),
+                        width: ScreenUtil.instance.setWidth(25),
                         color: eventajaGreenTeal,
                       )),
                   BottomNavigationBarItem(
                       title: Text(
                         'Post',
-                        style: TextStyle(color: Colors.black26, fontSize: 10),
+                        style: TextStyle(color: Colors.black26, fontSize: ScreenUtil.instance.setSp(10)),
                       ),
                       icon: Image.asset("assets/icons/aset_icon/post.png",
-                          height: 25, width: 25),
+                          height: ScreenUtil.instance.setWidth(25), width: ScreenUtil.instance.setWidth(25)),
                       activeIcon: Image.asset(
                         "assets/icons/aset_icon/post.png",
-                        height: 25,
-                        width: 25,
+                        height: ScreenUtil.instance.setWidth(25),
+                        width: ScreenUtil.instance.setWidth(25),
                         color: eventajaGreenTeal,
                       )),
                   BottomNavigationBarItem(
                     title: Text(
                       'Notification',
-                      style: TextStyle(color: Colors.black26, fontSize: 10),
+                      style: TextStyle(color: Colors.black26, fontSize: ScreenUtil.instance.setSp(10)),
                     ),
                     icon: Image.asset("assets/icons/aset_icon/notif.png",
-                        height: 25, width: 25),
+                        height: ScreenUtil.instance.setWidth(25), width: ScreenUtil.instance.setWidth(25)),
                     activeIcon: Image.asset(
                       "assets/icons/aset_icon/notif.png",
-                      height: 25,
-                      width: 25,
+                      height: ScreenUtil.instance.setWidth(25),
+                      width: ScreenUtil.instance.setWidth(25),
                       color: eventajaGreenTeal,
                     ),
                   ),
                   BottomNavigationBarItem(
                     title: Text(
                       'Profile',
-                      style: TextStyle(color: Colors.black26, fontSize: 10),
+                      style: TextStyle(color: Colors.black26, fontSize: ScreenUtil.instance.setSp(10)),
                     ),
                     icon: Image.asset("assets/icons/aset_icon/profile.png",
-                        height: 25, width: 25),
+                        height: ScreenUtil.instance.setWidth(25), width: ScreenUtil.instance.setWidth(25)),
                     activeIcon: Image.asset(
                       "assets/icons/aset_icon/profile.png",
-                      height: 25,
-                      width: 25,
+                      height: ScreenUtil.instance.setWidth(25),
+                      width: ScreenUtil.instance.setWidth(25),
                       color: eventajaGreenTeal,
                     ),
                   )
@@ -520,8 +592,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
         ratioX: 2.0,
         ratioY: 3.0,
       ),
-      maxHeight: 512,
-      maxWidth: 512,
+      maxHeight: ScreenUtil.instance.setWidth(512),
+      maxWidth: ScreenUtil.instance.setWidth(512),
     );
 
     print(croppedImage.path);
@@ -565,20 +637,21 @@ class _DashboardWidgetState extends State<DashboardWidget>
         .show(0, title, body, platformChannelSpecifics, payload: 'item x');
   }
 
-  Future saveDeviceToken() async {
+  Future saveDeviceToken(String pushTokens) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String url = BaseApi().apiUrl + 'device/token';
+    String url = BaseApi().apiUrl + '/device/token';
 
     final response = await http.post(url, headers: {
       'Authorization': AUTHORIZATION_KEY,
       'cookie': prefs.getString('Session')
     }, body: {
       'X-API-KEY': API_KEY,
-      'token': pushToken
+      'token': pushTokens
     });
 
     print(response.statusCode);
     print(response.body);
+    print('token sent');
     print(prefs.getKeys());
   }
 

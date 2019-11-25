@@ -1,7 +1,7 @@
 import 'package:eventevent/Widgets/PostEvent/CreateTicketShowRemainingTicket.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'CreateTicketPrice.dart';
@@ -18,7 +18,14 @@ class CreateTicketMaxBoughtState extends State<CreateTicketMaxBought> {
   var thisScaffold = new GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
@@ -45,7 +52,7 @@ class CreateTicketMaxBoughtState extends State<CreateTicketMaxBought> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -74,17 +81,17 @@ class CreateTicketMaxBoughtState extends State<CreateTicketMaxBought> {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: ScreenUtil.instance.setWidth(20),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Divider(
                   color: Colors.grey,
-                  height: 10,
+                  height: ScreenUtil.instance.setWidth(10),
                 ),
               ),
               SizedBox(
-                height: 150,
+                height: ScreenUtil.instance.setWidth(150),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 50, left: 35),

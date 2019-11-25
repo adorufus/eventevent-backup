@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/ForgotPassword.dart';
 import 'package:eventevent/Widgets/RegisterFacebook.dart';
@@ -10,11 +10,12 @@ import 'package:eventevent/helper/API/loginModel.dart';
 import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -46,7 +47,17 @@ class _LoginWidgetState extends State<LoginWidget> {
   bool hidePassword = true;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+
+    double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
+
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: false,
@@ -63,7 +74,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         ),
         middle: Text(
           'Login',
-          style: TextStyle(fontSize: 20, color: eventajaGreenTeal),
+          style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: eventajaGreenTeal),
         ),
       ),
       backgroundColor: Colors.white,
@@ -113,12 +124,12 @@ class _LoginWidgetState extends State<LoginWidget> {
           ),
         ),
         SizedBox(
-          height: 15,
+          height: ScreenUtil.instance.setWidth(15),
         ),
         Row(
           children: <Widget>[
             Container(
-              width: 250,
+              width: ScreenUtil.instance.setWidth(250),
               child: TextFormField(
                 controller: _passwordController,
                 keyboardType: TextInputType.text,
@@ -138,21 +149,21 @@ class _LoginWidgetState extends State<LoginWidget> {
                   hidePassword = !hidePassword;
                 });
               },
-              child: Container(height: 20, width: 20, child: Icon(Icons.remove_red_eye, color: hidePassword == true ? Colors.grey : eventajaGreenTeal,)),
+              child: Container(height: ScreenUtil.instance.setWidth(20), width: ScreenUtil.instance.setWidth(20), child: Icon(Icons.remove_red_eye, color: hidePassword == true ? Colors.grey : eventajaGreenTeal,)),
             )
           ],
         ),
         SizedBox(
-          height: 40,
+          height: ScreenUtil.instance.setWidth(40),
         ),
         ButtonTheme(
-          minWidth: 500,
-          height: 50,
+          minWidth: ScreenUtil.instance.setWidth(500),
+          height: ScreenUtil.instance.setWidth(50),
           child: RaisedButton(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             child: Text('Login',
-                style: TextStyle(fontSize: 15, color: Colors.white)),
+                style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.white)),
             color: eventajaGreenTeal,
             onPressed: () {
               if (_usernameController.text.length == 0 ||
@@ -190,7 +201,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         GestureDetector(
           child: Text(
             'Forgot Your Password?',
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
           ),
           onTap: () {
             Navigator.push(
@@ -200,10 +211,10 @@ class _LoginWidgetState extends State<LoginWidget> {
           },
         ),
         SizedBox(
-          height: 25,
+          height: ScreenUtil.instance.setWidth(25),
         ),
         Divider(
-          height: 15,
+          height: ScreenUtil.instance.setWidth(15),
         ),
         GestureDetector(
               onTap: () {
@@ -212,7 +223,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 26),
                 width: MediaQuery.of(context).size.width,
-                height: 37.02,
+                height: ScreenUtil.instance.setWidth(37.02),
                 decoration: BoxDecoration(
                     color: Color(0xFF4C64B5),
                     borderRadius: BorderRadius.circular(180),
@@ -225,8 +236,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                 child: Row(
                   children: <Widget>[
                     Container(
-                        height: 37,
-                        width: 37,
+                        height: ScreenUtil.instance.setWidth(37),
+                        width: ScreenUtil.instance.setWidth(37),
                         decoration: BoxDecoration(
                             shape: BoxShape.circle, color: Color(0xFF324b9c)),
                         child: Center(
@@ -238,7 +249,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                           'LOGIN WITH FACEBOOK',
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 12,
+                              fontSize: ScreenUtil.instance.setSp(12),
                               fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -247,7 +258,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: ScreenUtil.instance.setWidth(10)),
             GestureDetector(
               onTap: () {
                 goLoginGoogle().then((result) {
@@ -261,7 +272,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 26),
                 width: MediaQuery.of(context).size.width,
-                height: 37.02,
+                height: ScreenUtil.instance.setWidth(37.02),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(180),
@@ -275,8 +286,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     Container(
-                      height: 37,
-                      width: 37,
+                      height: ScreenUtil.instance.setWidth(37),
+                      width: ScreenUtil.instance.setWidth(37),
                       decoration: BoxDecoration(
                             shape: BoxShape.circle, color: Color(0xFFf9f9f9)),
                       child: Image.asset('assets/drawable/google.png', scale: 3),
@@ -286,7 +297,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         child: Text(
                           'LOGIN WITH GOOGLE',
                           style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.bold),
+                              fontSize: ScreenUtil.instance.setSp(12), fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),

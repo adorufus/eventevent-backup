@@ -6,7 +6,7 @@ import 'package:eventevent/Widgets/ProfileWidget/UseTicketSuccess.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,7 +40,14 @@ class UseTicketState extends State<UseTicket>{
   Future<String> _barcodeString;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -92,10 +99,10 @@ class UseTicketState extends State<UseTicket>{
 //          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ScanBarcode()));
         },
         child: Container(
-          height: 50,
+          height: ScreenUtil.instance.setWidth(50),
           color: widget.usedStatus == 'USED' ? Colors.grey : widget.usedStatus == 'EXPIRED' ? Colors.red : Colors.deepOrangeAccent,
           child: Center(
-            child: Text(widget.usedStatus == 'USED' ? 'USED' : widget.usedStatus == 'EXPIRED' ? 'EXPIRED' :  'USE TICKET', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),),
+            child: Text(widget.usedStatus == 'USED' ? 'USED' : widget.usedStatus == 'EXPIRED' ? 'EXPIRED' :  'USE TICKET', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(20)),),
           ),
         ),
       ),
@@ -117,7 +124,7 @@ class UseTicketState extends State<UseTicket>{
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    height: 150,
+                    height: ScreenUtil.instance.setWidth(150),
                     width: MediaQuery.of(context).size.width,
                     color: Colors.white,
                     padding: EdgeInsets.symmetric(horizontal: 20),
@@ -125,15 +132,15 @@ class UseTicketState extends State<UseTicket>{
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(height: 15),
+                        SizedBox(height: ScreenUtil.instance.setWidth(15)),
                         Text(widget.ticketDate, style: TextStyle(color: eventajaGreenTeal),),
-                        SizedBox(height: 10),
+                        SizedBox(height: ScreenUtil.instance.setWidth(10)),
                         Text(widget.ticketTitle, style: TextStyle(fontWeight: FontWeight.bold)),
-                        SizedBox(height: 10),
-                        Text(widget.ticketCode, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                        SizedBox(height: 10),
+                        SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                        Text(widget.ticketCode, style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18))),
+                        SizedBox(height: ScreenUtil.instance.setWidth(10)),
                         Text(widget.ticketStartTime.toString() + ' - ' + widget.ticketEndTime.toString(), style: TextStyle(color: Colors.grey),),
-                        SizedBox(height: 10),
+                        SizedBox(height: ScreenUtil.instance.setWidth(10)),
                         Text(widget.ticketDesc)
                       ],
                     ),

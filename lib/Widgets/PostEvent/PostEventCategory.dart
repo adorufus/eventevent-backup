@@ -5,6 +5,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -55,6 +56,14 @@ class PostEvent7State extends State<PostEvent7> {
 
   @override
   Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
@@ -84,7 +93,7 @@ class PostEvent7State extends State<PostEvent7> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -92,15 +101,13 @@ class PostEvent7State extends State<PostEvent7> {
           ],
         ),
         body: categoryEventData == null
-            ? CircularProgressIndicator()
+            ? Center(child: CircularProgressIndicator())
             : Container(
                 color: Colors.white,
                 padding: EdgeInsets.only(left: 15, top: 15),
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                child: ListView(
                   children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -114,27 +121,26 @@ class PostEvent7State extends State<PostEvent7> {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Text(categoryName1 == null ? '' : categoryName1 + ', '),
-                        Text(categoryName2 == null ? '' : categoryName2 + ', '),
-                        Text(categoryName3 == null ? '' : categoryName3 + ', '),
-                      ]
-                    ),
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: <
+                        Widget>[
+                      Text(categoryName1 == null ? '' : categoryName1 + ', '),
+                      Text(categoryName2 == null ? '' : categoryName2 + ', '),
+                      Text(categoryName3 == null ? '' : categoryName3 + ', '),
+                    ]),
                     SizedBox(
-                      height: 10,
+                      height: ScreenUtil.instance.setWidth(10),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 15),
                       child: Divider(
                         color: Colors.grey,
-                        height: 5,
+                        height: ScreenUtil.instance.setWidth(5),
                       ),
                     ),
                     Container(
                       height: MediaQuery.of(context).size.height / 1.33,
                       child: ListView.builder(
+                        shrinkWrap: true,
                           itemCount: categoryEventData.length == null
                               ? 0
                               : categoryEventData.length,
@@ -151,13 +157,24 @@ class PostEvent7State extends State<PostEvent7> {
                                 //print(categoryListId);
 
                                 isSelected = !isSelected;
-                                
+
                                 onCategorySelected();
                               },
                               leading:
                                   Image.network(categoryEventData[i]['logo']),
                               subtitle: Text(categoryEventData[i]['name']),
-                              trailing: myListName.contains(categoryEventData[i]['name']) ? Container(child: Icon(Icons.check, color: eventajaGreenTeal,),) : Container(height: 10, width: 10,),
+                              trailing: myListName
+                                      .contains(categoryEventData[i]['name'])
+                                  ? Container(
+                                      child: Icon(
+                                        Icons.check,
+                                        color: eventajaGreenTeal,
+                                      ),
+                                    )
+                                  : Container(
+                                      height: ScreenUtil.instance.setWidth(10),
+                                      width: ScreenUtil.instance.setWidth(10),
+                                    ),
                             );
                           }),
                     )
@@ -195,19 +212,19 @@ class PostEvent7State extends State<PostEvent7> {
     } else {
       if (myList.contains(idCategory) && myListName.contains(categoryName)) {
         imageWidget = Container();
-        counter--;       myList.remove(idCategory);
+        counter--;
+        myList.remove(idCategory);
         myListName.remove(categoryName);
-        if(myListName[0] == null){
+        if (myListName[0] == null) {
           setState(() {
             categoryName1 = null;
           });
-        }
-        else if(myListName[1] == null){
+        } else if (myListName[1] == null) {
           setState(() {
             categoryName2 = null;
           });
         }
-        if(myListName[2] == null){
+        if (myListName[2] == null) {
           setState(() {
             categoryName3 = null;
           });
@@ -217,20 +234,22 @@ class PostEvent7State extends State<PostEvent7> {
         counter++;
         myList.add(idCategory);
         myListName.add(categoryName);
-        setState((){
+        setState(() {
           categoryName1 = myListName[0];
           categoryName2 = myListName[1];
-          categoryName3 = myListName[2]; 
+          categoryName3 = myListName[2];
         });
       }
     }
 
-
-    if(counter == 3){
+    if (counter == 3) {
       prefs.setStringList('POST_EVENT_CATEGORY', myListName);
       prefs.setStringList('POST_EVENT_CATEGORY_ID', myList);
       print(prefs.getStringList('POST_EVENT_CATEGORY'));
-      Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => PostEventPoster()));
+      Navigator.push(
+          context,
+          CupertinoPageRoute(
+              builder: (BuildContext context) => PostEventPoster()));
     }
     print(imageWidget.toString() +
         ' ' +
@@ -282,9 +301,12 @@ class PostEvent7State extends State<PostEvent7> {
       prefs.setStringList('POST_EVENT_CATEGORY', myListName);
       prefs.setStringList('POST_EVENT_CATEGORY_ID', myList);
       print(prefs.getStringList('POST_EVENT_CATEGORY'));
-      Navigator.push(context, CupertinoPageRoute(builder: (BuildContext context) => PostEventPoster()));
+      Navigator.push(
+          context,
+          CupertinoPageRoute(
+              builder: (BuildContext context) => PostEventPoster()));
     }
   }
 }
 
-//  
+//

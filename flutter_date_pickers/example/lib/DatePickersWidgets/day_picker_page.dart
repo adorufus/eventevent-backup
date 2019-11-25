@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:flutter_date_picker/color_picker_dialog.dart';
 import 'package:flutter_date_picker/color_selector_btn.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
@@ -35,7 +35,7 @@ class _DayPickerPageState extends State<DayPickerPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     // add selected colors to default settings
     dp.DatePickerStyles styles = dp.DatePickerStyles(
         selectedDateStyle: Theme.of(context)
@@ -82,7 +82,7 @@ class _DayPickerPageState extends State<DayPickerPage> {
                         colorBtnSize: 42.0,
                       ),
                       SizedBox(
-                        width: 12.0,
+                        height: 12.0,
                       ),
                       ColorSelectorBtn(
                         title: "Background",

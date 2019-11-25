@@ -1,5 +1,5 @@
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CrashlyticsTester extends StatefulWidget {
   CrashlyticsTester({
@@ -23,7 +23,7 @@ class _CrashlyticsTesterState extends State<CrashlyticsTester> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     //...YOUR WIDGET TREE HERE
 
     return ListView.builder(
@@ -60,7 +60,7 @@ class CustomItem extends StatefulWidget {
 
 class _CustomItemState extends State<CustomItem> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return Row(
       children: <Widget>[
         Text("${widget.isSelected ? "true" : "false"}"),
@@ -75,7 +75,7 @@ class _CustomItemState extends State<CustomItem> {
   }
 }
 
-// import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 // class CrashlyticsTester extends StatefulWidget {
@@ -94,7 +94,14 @@ class _CustomItemState extends State<CustomItem> {
 //   }
 
 //   @override
-//   Widget build(BuildContext context) {
+//   Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    // double defaultScreenHeight = 810.0;
+
+    // ScreenUtil.instance = ScreenUtil(
+    //   width: defaultScreenWidth,
+    //   height: defaultScreenHeight,
+    //   allowFontScaling: true,
+    // )..init(context);
 //     return new Row(
 //       children: <Widget>[
 //         new Text("test ${isSelected ? "true" : "false"}"),
@@ -116,7 +123,7 @@ class _CustomItemState extends State<CustomItem> {
 //     );
 //   }
 //   // @override
-//   // Widget build(BuildContext context) {
+//   // Widget build(BuildContext context) { 
 //   //   return Scaffold(
 //   //     appBar: AppBar(
 //   //       title: Text('Crashlytics tester'),

@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:flutter/material.dart';
+import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -29,7 +29,14 @@ class FirebaseMessagingHelperState extends State<FirebaseMessagingHelper> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Container();
   }
 

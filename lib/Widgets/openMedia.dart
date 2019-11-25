@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class OpenMedia extends StatefulWidget {
@@ -12,13 +12,20 @@ class OpenMedia extends StatefulWidget {
 
 class _OpenMediaState extends State<OpenMedia> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: 75,
+          height: ScreenUtil.instance.setWidth(75),
           padding: EdgeInsets.symmetric(horizontal: 13),
           color: Colors.white,
           child: AppBar(
@@ -39,7 +46,7 @@ class _OpenMediaState extends State<OpenMedia> {
             
             textTheme: TextTheme(title: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: ScreenUtil.instance.setSp(14),
               color: Colors.black,
             )),
           ),

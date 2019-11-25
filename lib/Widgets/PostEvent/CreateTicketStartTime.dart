@@ -1,6 +1,6 @@
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,7 +35,14 @@ class CreateTicketStartTimeState extends State<CreateTicketStartTime> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     dp.DatePickerStyles styles = dp.DatePickerStyles(
         selectedDateStyle: Theme.of(context)
             .accentTextTheme
@@ -73,7 +80,7 @@ class CreateTicketStartTimeState extends State<CreateTicketStartTime> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -102,28 +109,28 @@ class CreateTicketStartTimeState extends State<CreateTicketStartTime> {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: ScreenUtil.instance.setWidth(20),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Divider(
                   color: Colors.grey,
-                  height: 10,
+                  height: ScreenUtil.instance.setWidth(10),
                 ),
               ),
-              SizedBox(height: 30,),
+              SizedBox(height: ScreenUtil.instance.setWidth(30),),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('Start Time', style: TextStyle(color: Colors.black54, fontSize: 18, fontWeight: FontWeight.bold),),
+                  Text('Start Time', style: TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
                   SizedBox(
-                    width: 30,
+                    width: ScreenUtil.instance.setWidth(30),
                   ),
                   Container(
                     height: MediaQuery.of(context).copyWith().size.height / 2,
-                    width: 200,
+                    width: ScreenUtil.instance.setWidth(200),
                     child: DefaultTextStyle.merge(
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(18)),
                       child: CupertinoDatePicker(
                         mode: CupertinoDatePickerMode.time,
                         initialDateTime: DateTime.now(),

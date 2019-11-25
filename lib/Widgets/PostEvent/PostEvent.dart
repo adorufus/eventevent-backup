@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -22,8 +22,17 @@ class PostEventState extends State<PostEvent> {
   var thisScaffold = new GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
         key: thisScaffold,
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -49,7 +58,7 @@ class PostEventState extends State<PostEvent> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -78,17 +87,17 @@ class PostEventState extends State<PostEvent> {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: ScreenUtil.instance.setWidth(20),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Divider(
                   color: Colors.grey,
-                  height: 10,
+                  height: ScreenUtil.instance.setWidth(10),
                 ),
               ),
               SizedBox(
-                height: 150,
+                height: ScreenUtil.instance.setWidth(150),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 50, left: 35),
@@ -141,7 +150,14 @@ class PostEvent2State extends State<PostEvent2> {
   bool isPrivateChecked = null;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
@@ -171,7 +187,7 @@ class PostEvent2State extends State<PostEvent2> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -181,7 +197,7 @@ class PostEvent2State extends State<PostEvent2> {
         body: Container(
           color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
-          height: 400,
+          height: ScreenUtil.instance.setWidth(400),
           width: MediaQuery.of(context).size.width,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -203,17 +219,17 @@ class PostEvent2State extends State<PostEvent2> {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: ScreenUtil.instance.setWidth(20),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Divider(
                   color: Colors.grey,
-                  height: 10,
+                  height: ScreenUtil.instance.setWidth(10),
                 ),
               ),
               SizedBox(
-                height: 50,
+                height: ScreenUtil.instance.setWidth(50),
               ),
               Padding(
                   padding: const EdgeInsets.only(
@@ -232,22 +248,22 @@ class PostEvent2State extends State<PostEvent2> {
                           navigateToNextStep();
                         },
                         child: Container(
-                            height: 100,
-                            width: 320,
+                            height: ScreenUtil.instance.setWidth(100),
+                            width: ScreenUtil.instance.setWidth(320),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 SizedBox(
-                                  height: 60,
-                                  width: 60,
+                                  height: ScreenUtil.instance.setWidth(60),
+                                  width: ScreenUtil.instance.setWidth(60),
                                   child: Image.asset(
                                     'assets/icons/Event_public.png',
                                     fit: BoxFit.fill,
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 15,
+                                  width: ScreenUtil.instance.setWidth(15),
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -257,14 +273,14 @@ class PostEvent2State extends State<PostEvent2> {
                                       'Public Event',
                                       style: TextStyle(
                                           color: Colors.black54,
-                                          fontSize: 18,
+                                          fontSize: ScreenUtil.instance.setSp(18),
                                           fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(
-                                      height: 5,
+                                      height: ScreenUtil.instance.setWidth(5),
                                     ),
                                     Container(
-                                        height: 50,
+                                        height: ScreenUtil.instance.setWidth(50),
                                         child: Text(
                                           'Everyone can discover and get \naccess to your event',
                                           maxLines: 2,
@@ -272,14 +288,14 @@ class PostEvent2State extends State<PostEvent2> {
                                   ],
                                 ),
                                 SizedBox(
-                                  width: 20,
+                                  width: ScreenUtil.instance.setWidth(20),
                                 ),
                                 isPrivateChecked == null ||
                                         isPrivateChecked == true
                                     ? Container()
                                     : SizedBox(
-                                        height: 20,
-                                        width: 20,
+                                        height: ScreenUtil.instance.setWidth(20),
+                                        width: ScreenUtil.instance.setWidth(20),
                                         child: Image.asset(
                                             'assets/icons/checklist_green.png'))
                               ],
@@ -294,22 +310,22 @@ class PostEvent2State extends State<PostEvent2> {
                           navigateToNextStep();
                         },
                         child: Container(
-                            height: 100,
-                            width: 320,
+                            height: ScreenUtil.instance.setWidth(100),
+                            width: ScreenUtil.instance.setWidth(320),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 SizedBox(
-                                  height: 60,
-                                  width: 60,
+                                  height: ScreenUtil.instance.setWidth(60),
+                                  width: ScreenUtil.instance.setWidth(60),
                                   child: Image.asset(
                                     'assets/icons/Event_private.png',
                                     fit: BoxFit.fill,
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 15,
+                                  width: ScreenUtil.instance.setWidth(15),
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -319,14 +335,14 @@ class PostEvent2State extends State<PostEvent2> {
                                       'Private Event',
                                       style: TextStyle(
                                           color: Colors.black54,
-                                          fontSize: 18,
+                                          fontSize: ScreenUtil.instance.setSp(18),
                                           fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(
-                                      height: 5,
+                                      height: ScreenUtil.instance.setWidth(5),
                                     ),
                                     Container(
-                                        height: 50,
+                                        height: ScreenUtil.instance.setWidth(50),
                                         child: Text(
                                           'For events that can be find and \naccess only by your invitation',
                                           maxLines: 2,
@@ -334,14 +350,14 @@ class PostEvent2State extends State<PostEvent2> {
                                   ],
                                 ),
                                 SizedBox(
-                                  width: 20,
+                                  width: ScreenUtil.instance.setWidth(20),
                                 ),
                                 isPrivateChecked == null ||
                                         isPrivateChecked == false
                                     ? Container()
                                     : SizedBox(
-                                        height: 20,
-                                        width: 20,
+                                        height: ScreenUtil.instance.setWidth(20),
+                                        width: ScreenUtil.instance.setWidth(20),
                                         child: Image.asset(
                                             'assets/icons/checklist_green.png'))
                               ],
@@ -409,7 +425,14 @@ class PostEvent3State extends State<PostEvent3> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     dp.DatePickerStyles styles = dp.DatePickerStyles(
         selectedDateStyle: Theme.of(context)
             .accentTextTheme
@@ -447,7 +470,7 @@ class PostEvent3State extends State<PostEvent3> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -476,17 +499,17 @@ class PostEvent3State extends State<PostEvent3> {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: ScreenUtil.instance.setWidth(20),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Divider(
                   color: Colors.grey,
-                  height: 10,
+                  height: ScreenUtil.instance.setWidth(10),
                 ),
               ),
               SizedBox(
-                height: 50,
+                height: ScreenUtil.instance.setWidth(50),
               ),
               dp.DayPicker(
                 currentDate: DateTime.now(),
@@ -569,7 +592,14 @@ class PostEvent4State extends State<PostEvent4> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     dp.DatePickerStyles styles = dp.DatePickerStyles(
       currentDateStyle: Theme.of(context).accentTextTheme.body2.copyWith(color: currentDateColor),
         selectedDateStyle: Theme.of(context)
@@ -608,7 +638,7 @@ class PostEvent4State extends State<PostEvent4> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -637,17 +667,17 @@ class PostEvent4State extends State<PostEvent4> {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: ScreenUtil.instance.setWidth(20),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Divider(
                   color: Colors.grey,
-                  height: 10,
+                  height: ScreenUtil.instance.setWidth(10),
                 ),
               ),
               SizedBox(
-                height: 50,
+                height: ScreenUtil.instance.setWidth(50),
               ),
               dp.DayPicker(
                 currentDate: widget.firstDate,
@@ -715,7 +745,14 @@ class PostEvent5State extends State<PostEvent5> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     dp.DatePickerStyles styles = dp.DatePickerStyles(
         selectedDateStyle: Theme.of(context)
             .accentTextTheme
@@ -753,7 +790,7 @@ class PostEvent5State extends State<PostEvent5> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -782,28 +819,28 @@ class PostEvent5State extends State<PostEvent5> {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: ScreenUtil.instance.setWidth(20),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Divider(
                   color: Colors.grey,
-                  height: 10,
+                  height: ScreenUtil.instance.setWidth(10),
                 ),
               ),
-              SizedBox(height: 30,),
+              SizedBox(height: ScreenUtil.instance.setWidth(30),),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('Start Time', style: TextStyle(color: Colors.black54, fontSize: 18, fontWeight: FontWeight.bold),),
+                  Text('Start Time', style: TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
                   SizedBox(
-                    width: 30,
+                    width: ScreenUtil.instance.setWidth(30),
                   ),
                   Container(
                     height: MediaQuery.of(context).copyWith().size.height / 2,
-                    width: 200,
+                    width: ScreenUtil.instance.setWidth(200),
                     child: DefaultTextStyle.merge(
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(18)),
                       child: CupertinoDatePicker(
                         mode: CupertinoDatePickerMode.time,
                         initialDateTime: DateTime.now(),
@@ -872,7 +909,14 @@ class PostEvent6State extends State<PostEvent6> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     dp.DatePickerStyles styles = dp.DatePickerStyles(
         selectedDateStyle: Theme.of(context)
             .accentTextTheme
@@ -910,7 +954,7 @@ class PostEvent6State extends State<PostEvent6> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -939,28 +983,28 @@ class PostEvent6State extends State<PostEvent6> {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: ScreenUtil.instance.setWidth(20),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Divider(
                   color: Colors.grey,
-                  height: 10,
+                  height: ScreenUtil.instance.setWidth(10),
                 ),
               ),
-              SizedBox(height: 30,),
+              SizedBox(height: ScreenUtil.instance.setWidth(30),),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('End Time', style: TextStyle(color: Colors.black54, fontSize: 18, fontWeight: FontWeight.bold),),
+                  Text('End Time', style: TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
                   SizedBox(
-                    width: 30,
+                    width: ScreenUtil.instance.setWidth(30),
                   ),
                   Container(
                     height: MediaQuery.of(context).copyWith().size.height / 2,
-                    width: 200,
+                    width: ScreenUtil.instance.setWidth(200),
                     child: DefaultTextStyle.merge(
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(18)),
                       child: CupertinoDatePicker(
                         mode: CupertinoDatePickerMode.time,
                         initialDateTime: DateTime.now(),

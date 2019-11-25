@@ -1,13 +1,20 @@
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MiniDate extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Container(
-          padding: EdgeInsets.only(left: 5.5, right: 5.5, top: 2),
-          width: 27,
-          height: 27,
+          padding: EdgeInsets.only(left: 5.5, right: 2, top: 1),
+          width: ScreenUtil.instance.setWidth(27),
+          height: ScreenUtil.instance.setWidth(27),
           decoration: BoxDecoration(
               color: eventajaGreenTeal,
               boxShadow: <BoxShadow>[
@@ -25,14 +32,15 @@ class MiniDate extends StatelessWidget {
                     '08',
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 12,
+                        fontSize: ScreenUtil.instance.setSp(12),
                         fontWeight: FontWeight.bold),
+                        maxLines: 1,
                   ),
                   Text(
                     'sep',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 9,
+                      fontSize: ScreenUtil.instance.setSp(9),
                     ),
                   ),
                 ],

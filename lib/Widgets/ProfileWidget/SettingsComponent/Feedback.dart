@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,7 +20,14 @@ class GiveFeedbackState extends State<GiveFeedback>{
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -40,10 +47,10 @@ class GiveFeedbackState extends State<GiveFeedback>{
               postFeedback();
             },
             child: Center(
-              child: Text('Submit', style: TextStyle(color: eventajaGreenTeal, fontSize: 18),),
+              child: Text('Submit', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),),
             ),
           ),
-          SizedBox(width: 20,)
+          SizedBox(width: ScreenUtil.instance.setWidth(20),)
         ],
       ),
       body: Container(

@@ -5,7 +5,7 @@ import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/SetupBankAcco
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,7 +26,14 @@ class BankAccountListState extends State<BankAccountList> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -67,7 +74,7 @@ class BankAccountListState extends State<BankAccountList> {
                             )));
                   },
                   child: Container(
-                    height: 85,
+                    height: ScreenUtil.instance.setWidth(85),
                     width: MediaQuery.of(context).size.width,
                     margin: EdgeInsets.only(bottom: 3),
                     color: Colors.white,
@@ -89,22 +96,22 @@ class BankAccountListState extends State<BankAccountList> {
                                 overflow: TextOverflow.ellipsis,
                               )),
                               Container(
-                                  width: 200,
+                                  width: ScreenUtil.instance.setWidth(200),
                                   child: Text(
                                     bankList[i]['bank_name'],
-                                    style: TextStyle(fontSize: 15),
+                                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.end,
                                   )),
                               Text(
                                 bankList[i]['account_number'],
                                 style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                    fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(width: 15),
+                        SizedBox(width: ScreenUtil.instance.setWidth(15)),
                         Icon(
                           Icons.navigate_next,
                           size: 25,
@@ -126,7 +133,7 @@ class BankAccountListState extends State<BankAccountList> {
                                   SetupBankAccount()));
                     },
                     child: Container(
-                      height: 100,
+                      height: ScreenUtil.instance.setWidth(100),
                       color: Colors.white,
                       child: Center(
                         child: Icon(

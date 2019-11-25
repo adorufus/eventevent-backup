@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/CategoryPage.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,7 +30,14 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     mappedCategoryData = categoryEventData?.map((categoryData) {
           return categoryData == null
               ? CircularProgressIndicator()
@@ -41,8 +48,8 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
                         Navigator.push(context, MaterialPageRoute(settings: RouteSettings(name: 'CategoryList'), builder: (context) => CategoryPage(categoryId: categoryData['id'],)));
                       },
                         child: SizedBox(
-                            height: 85,
-                            width: 80,
+                            height: ScreenUtil.instance.setWidth(85),
+                            width: ScreenUtil.instance.setWidth(80),
                             child: Container(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,8 +57,8 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
                                 children: <Widget>[
                                   Container(
                                     padding: EdgeInsets.only(bottom: 20),
-                                    width: 41.50,
-                                    height: 41.50,
+                                    width: ScreenUtil.instance.setWidth(41.50),
+                                    height: ScreenUtil.instance.setWidth(40.50),
                                     decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         boxShadow: <BoxShadow>[
@@ -67,11 +74,11 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
                                           categoryData['logo'],
                                         ))),
                                   ),
-                                  SizedBox(height: 9),
+                                  SizedBox(height: ScreenUtil.instance.setWidth(9)),
                                   Text(
                                     categoryData['name'],
                                     style: TextStyle(
-                                        fontSize: 10, color: Color(0xFF8A8A8B)),
+                                        fontSize: ScreenUtil.instance.setSp(10), color: Color(0xFF8A8A8B)),
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.center,
                                   )
@@ -84,14 +91,14 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
         [];
 
     return Container(
-      height: 220,
+      height: ScreenUtil.instance.setWidth(220),
       padding: EdgeInsets.symmetric(horizontal: 0),
       width: MediaQuery.of(context).size.width,
       child: categoryEventData == null
           ? Center(
               child: Container(
-                width: 25,
-                height: 25,
+                width: ScreenUtil.instance.setWidth(25),
+                height: ScreenUtil.instance.setWidth(25),
                 child: FittedBox(
                   fit: BoxFit.fill,
                   child: CircularProgressIndicator(),
@@ -103,8 +110,8 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
               scrollDirection: Axis.horizontal,
               children: <Widget>[
                 Container(
-                  width: 800,
-                  height: 220,
+                  width: ScreenUtil.instance.setWidth(800),
+                  height: ScreenUtil.instance.setWidth(220),
                   child: Wrap(
                       direction: Axis.horizontal, children: mappedCategoryData),
                 )

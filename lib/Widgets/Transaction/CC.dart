@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -85,7 +85,14 @@ class CreditCardInputState extends State<CreditCardInput> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       bottomNavigationBar: GestureDetector(
         onTap: () {
@@ -98,12 +105,12 @@ class CreditCardInputState extends State<CreditCardInput> {
           // );
         },
         child: Container(
-            height: 50,
+            height: ScreenUtil.instance.setWidth(50),
             color: Colors.deepOrangeAccent,
             child: Center(
               child: Text(
                 'CONFIRM',
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                style: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(20)),
               ),
             )),
       ),
@@ -125,7 +132,7 @@ class CreditCardInputState extends State<CreditCardInput> {
           : ListView(
               children: <Widget>[
                 Container(
-                  height: 380,
+                  height: ScreenUtil.instance.setWidth(380),
                   color: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: Column(
@@ -134,7 +141,7 @@ class CreditCardInputState extends State<CreditCardInput> {
                     children: <Widget>[
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        height: 200,
+                        height: ScreenUtil.instance.setWidth(200),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: eventajaGreenTeal),
@@ -143,15 +150,15 @@ class CreditCardInputState extends State<CreditCardInput> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             SizedBox(
-                              height: 10,
+                              height: ScreenUtil.instance.setWidth(10),
                             ),
                             Text('Complete Payment In',
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 18,
+                                    fontSize: ScreenUtil.instance.setSp(18),
                                     fontWeight: FontWeight.bold)),
                             SizedBox(
-                              height: 20,
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -160,52 +167,52 @@ class CreditCardInputState extends State<CreditCardInput> {
                                 Text('${hour}',
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 20,
+                                        fontSize: ScreenUtil.instance.setSp(20),
                                         fontWeight: FontWeight.bold)),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   ':',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   '$min',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   ':',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   '$sec',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
                             SizedBox(
-                              height: 20,
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -213,23 +220,23 @@ class CreditCardInputState extends State<CreditCardInput> {
                               children: <Widget>[
                                 Text('H',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 20)),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                                 SizedBox(
-                                  width: 35,
+                                  width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('M',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 20)),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                                 SizedBox(
-                                  width: 35,
+                                  width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('S',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 20)),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                               ],
                             ),
                             SizedBox(
-                              height: 20,
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -249,7 +256,7 @@ class CreditCardInputState extends State<CreditCardInput> {
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: ScreenUtil.instance.setWidth(20),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -258,19 +265,19 @@ class CreditCardInputState extends State<CreditCardInput> {
                           Text(
                             'TRANSFER AMOUNT',
                             style:
-                                TextStyle(fontSize: 20, color: Colors.black45),
+                                TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.black45),
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
                             'Rp. ' +
                                 paymentData['amount_detail']['final_amount'],
                             style: TextStyle(
                                 fontSize: 50, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
                             'Eventevent will automatically check your payment. It may take up to 1 hour to process',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                            style: TextStyle(color: Colors.grey, fontSize: ScreenUtil.instance.setSp(12)),
                             textAlign: TextAlign.center,
                           )
                         ],
@@ -278,7 +285,7 @@ class CreditCardInputState extends State<CreditCardInput> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
@@ -308,7 +315,7 @@ class CreditCardInputState extends State<CreditCardInput> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
@@ -338,7 +345,7 @@ class CreditCardInputState extends State<CreditCardInput> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 Container(
                   width: MediaQuery.of(context).size.width,
                   child: Padding(
@@ -353,7 +360,7 @@ class CreditCardInputState extends State<CreditCardInput> {
                           children: <Widget>[
                             Container(
                               color: Colors.white,
-                              width: 100,
+                              height: ScreenUtil.instance.setWidth(100),
                               child: DropdownButtonFormField<int>(
                                   items: <int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30].map((int value){
                                 return new DropdownMenuItem<int>(
@@ -367,9 +374,9 @@ class CreditCardInputState extends State<CreditCardInput> {
                                   hint: Text('Month'),
                               ),
                             ),
-                            SizedBox(width: 15),
+                            SizedBox(width: ScreenUtil.instance.setWidth(15)),
                             Container(
-                              width: 100,
+                              height: ScreenUtil.instance.setWidth(100),
                               child: TextFormField(
                                 decoration: InputDecoration(
                                     hintText: 'Year',
@@ -384,10 +391,10 @@ class CreditCardInputState extends State<CreditCardInput> {
                                             color: Color.fromRGBO(0, 0, 0, 0)))),
                               ),
                             ),
-                            SizedBox(width: 15),
+                            SizedBox(width: ScreenUtil.instance.setWidth(15)),
                             Container(
                               color: Colors.white,
-                              width: 100,
+                              height: ScreenUtil.instance.setWidth(100),
                               child: TextFormField(
                                 decoration: InputDecoration(
                                     hintText: 'CVV',

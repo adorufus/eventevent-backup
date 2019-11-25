@@ -6,7 +6,7 @@ import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:flutter/services.dart';
@@ -103,15 +103,22 @@ class _ListenPageState extends State<ListenPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return SafeArea(
           child: Scaffold(
         body: Container(
           child: nearbyEventData == null
               ? Center(
                   child: Container(
-                    width: 25,
-                    height: 25,
+                    width: ScreenUtil.instance.setWidth(25),
+                    height: ScreenUtil.instance.setWidth(25),
                     child: FittedBox(
                       fit: BoxFit.fill,
                       child: CircularProgressIndicator(),
@@ -136,7 +143,7 @@ class _ListenPageState extends State<ListenPage> {
                       body = Container();
                     }
 
-                    return Container(height: 35, child: Center(child: body));
+                    return Container(height: ScreenUtil.instance.setWidth(35), child: Center(child: body));
                   }),
                   controller: refreshController,
                   onRefresh: () {
@@ -160,7 +167,7 @@ class _ListenPageState extends State<ListenPage> {
                       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       margin: EdgeInsets.only(left: 13, right: 13, top: 13),
                       width: MediaQuery.of(context).size.width,
-                      height: 50,
+                      height: ScreenUtil.instance.setWidth(50),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15),
@@ -177,23 +184,23 @@ class _ListenPageState extends State<ListenPage> {
                           children: <Widget>[
                             Column(
                               children: <Widget>[
-                                SizedBox(height: 3),
+                                SizedBox(height: ScreenUtil.instance.setWidth(3)),
                                 Container(
-                                  height: 10,
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
+                                  width: ScreenUtil.instance.setWidth(10),
                                   child: Image.asset(
                                       'assets/icons/icon_apps/location.png'),
                                 ),
                               ],
                             ),
                             SizedBox(
-                              width: 9,
+                              width: ScreenUtil.instance.setWidth(9),
                             ),
                             Container(
                               width: MediaQuery.of(context).size.width - 71,
                               child: Text(
                                 adresses == null ? '-' : adresses.addressLine,
-                                style: TextStyle(fontSize: 12),
+                                style: TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
                                 maxLines: 2,
                               ),
                             )
@@ -239,7 +246,7 @@ class _ListenPageState extends State<ListenPage> {
                           }
                         } else if (nearbyEventData[i]['ticket_type']['type'] ==
                             'no_ticket') {
-                          itemColor = Color(0xFFA6A8AB);
+                          itemColor = Color(0xFF652D90);
                           itemPriceText = 'NO TICKET';
                         } else if (nearbyEventData[i]['ticket_type']['type'] ==
                             'on_the_spot') {

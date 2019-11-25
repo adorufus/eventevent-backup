@@ -5,7 +5,7 @@ import 'package:eventevent/Widgets/Transaction/Xendit/TicketReview.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -87,7 +87,14 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return formData == null
         ? Container(
             child: Center(child: CircularProgressIndicator()),
@@ -99,12 +106,12 @@ class _TransactionFormState extends State<TransactionForm> {
                 Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => widget.ticketType == 'free_limited' ? TicketReview(ticketType: widget.ticketType) : PaymentMethod()));
               },
               child: Container(
-                  height: 50,
+                  height: ScreenUtil.instance.setWidth(50),
                   color: Colors.deepOrangeAccent,
                   child: Center(
                     child: Text(
                       'OK',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(20)),
                     ),
                   )),
             ),
@@ -138,7 +145,7 @@ class _TransactionFormState extends State<TransactionForm> {
                     child: Text(
                       'Tell us about yourself, these information will be useful for connecting event organisers and attendees.',
                       textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
                     ),
                   ),
                   Container(
@@ -151,7 +158,7 @@ class _TransactionFormState extends State<TransactionForm> {
                           Text(
                             'First Name',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                                fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold),
                           ),
                           TextFormField(
                             controller: firstnameController,
@@ -164,7 +171,7 @@ class _TransactionFormState extends State<TransactionForm> {
                     ),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: ScreenUtil.instance.setWidth(30),
                   ),
                   Container(
                     color: Colors.white,
@@ -176,7 +183,7 @@ class _TransactionFormState extends State<TransactionForm> {
                           Text(
                             'Last Name',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                                fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold),
                           ),
                           TextFormField(
                             controller: lastnameController,
@@ -189,7 +196,7 @@ class _TransactionFormState extends State<TransactionForm> {
                     ),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: ScreenUtil.instance.setWidth(30),
                   ),
                   Container(
                     color: Colors.white,
@@ -201,7 +208,7 @@ class _TransactionFormState extends State<TransactionForm> {
                           Text(
                             'E-mail',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                                fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold),
                           ),
                           TextFormField(
                             controller: emailController,
@@ -214,7 +221,7 @@ class _TransactionFormState extends State<TransactionForm> {
                     ),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: ScreenUtil.instance.setWidth(30),
                   ),
                   Container(
                     color: Colors.white,
@@ -226,7 +233,7 @@ class _TransactionFormState extends State<TransactionForm> {
                           Text(
                             'Phone Number',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                                fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold),
                           ),
                           TextFormField(
                             controller: phoneController,
@@ -239,7 +246,7 @@ class _TransactionFormState extends State<TransactionForm> {
                     ),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: ScreenUtil.instance.setWidth(30),
                   ),
                   Container(
                     color: Colors.white,
@@ -252,7 +259,7 @@ class _TransactionFormState extends State<TransactionForm> {
                           Text(
                             'Aditional Notes',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                                fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold),
                           ),
                           TextFormField(
                             controller: aditionalNotesController,
@@ -267,7 +274,7 @@ class _TransactionFormState extends State<TransactionForm> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(height: ScreenUtil.instance.setWidth(30)),
                   customFormData['status'] == null ? Container() : customForm()
                 ],
               ),
@@ -299,9 +306,9 @@ class _TransactionFormState extends State<TransactionForm> {
                 children: <Widget> [
                   Row(
                     children: <Widget> [
-                      isRequired == false ? Container() : Text('*', style: TextStyle(color: Colors.red, fontSize: 20)),
-                      SizedBox(width: 5),
-                      Text(customFormList[i]['name'] == null ? '' : customFormList[i]['name'], style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+                      isRequired == false ? Container() : Text('*', style: TextStyle(color: Colors.red, fontSize: ScreenUtil.instance.setSp(20))),
+                      SizedBox(width: ScreenUtil.instance.setWidth(5)),
+                      Text(customFormList[i]['name'] == null ? '' : customFormList[i]['name'], style: TextStyle(fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold))
                     ]
                   ),
                   formType(i)

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,14 +42,21 @@ class BankListState extends State<BankList>{
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       key: scaffoldKey,
       appBar: PreferredSize(
           preferredSize: Size(null, 100),
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 75,
+            height: ScreenUtil.instance.setWidth(75),
             child: Container(
               color: Colors.white,
               child: Container(
@@ -64,8 +71,8 @@ class BankListState extends State<BankList>{
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
                           SizedBox(
-                            height: 15.49,
-                            width: 9.73,
+                            height: ScreenUtil.instance.setWidth(15.49),
+                            width: ScreenUtil.instance.setWidth(9.73),
                             child: Image.asset(
                               'assets/icons/icon_apps/arrow.png',
                               fit: BoxFit.fill,
@@ -78,7 +85,7 @@ class BankListState extends State<BankList>{
                     Text(
                       'Bank List',
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
                     )
                   ],
                 ),
@@ -127,8 +134,8 @@ class BankListState extends State<BankList>{
               Navigator.pop(context, {'id':bankList[i]['id'], 'bank_name':bankList[i]['name']});
             },
             leading: SizedBox(
-              height: 50,
-              width: 50,
+              height: ScreenUtil.instance.setWidth(50),
+              width: ScreenUtil.instance.setWidth(50),
               child: Image.asset(bankImageUri)
             ),
             title: Text(bankList[i]['name'], style: TextStyle(fontWeight: FontWeight.bold),),

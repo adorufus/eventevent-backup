@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/Transaction/SelectedTicketQuantity.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -76,7 +76,14 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.90),
       appBar: AppBar(
@@ -126,7 +133,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                       )));
             },
             child: Container(
-                height: 170,
+                height: ScreenUtil.instance.setWidth(170),
                 width: MediaQuery.of(context).size.width,
                 margin: EdgeInsets.only(left: 20, right: 5, top: 10),
                 decoration: BoxDecoration(
@@ -139,8 +146,8 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        height: 150,
-                        width: 100,
+                        height: ScreenUtil.instance.setWidth(150),
+                        width: ScreenUtil.instance.setWidth(100),
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 image: ticketListData[i]['ticket_image']
@@ -151,7 +158,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                         ['ticket_image']['secure_url']))),
                       ),
                       SizedBox(
-                        width: 15,
+                        width: ScreenUtil.instance.setWidth(15),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 15),
@@ -161,7 +168,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                             Text(
                               ticketListData[i]['ticket_name'],
                               style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                                  fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),
                             ),
                             Text(
                                 ticketListData[i]['availableTicketStatus'] ==
@@ -172,7 +179,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.grey)),
                             SizedBox(
-                              height: 25,
+                              height: ScreenUtil.instance.setWidth(25),
                             ),
                             Container(
                               width: MediaQuery.of(context).size.width - 180,
@@ -187,11 +194,11 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                               ),
                             ),
                             SizedBox(
-                              height: 20,
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Container(
-                                height: 40,
-                                width: 130,
+                                height: ScreenUtil.instance.setWidth(40),
+                                width: ScreenUtil.instance.setWidth(130),
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
                                   image: AssetImage(ticketButtonImageURI),
@@ -204,7 +211,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                       : 'Rp. ' +
                                           ticketListData[i]['final_price'],
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 15),
+                                      color: Colors.white, fontSize: ScreenUtil.instance.setSp(15)),
                                 ))),
                             Text(ticketListData[i]['is_single_ticket'] == '0'
                                 ? ''

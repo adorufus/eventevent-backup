@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -31,7 +31,14 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     
     return Scaffold(
         appBar: AppBar(
@@ -41,7 +48,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
             onTap: (){
               Navigator.pop(context);
             },
-            child: Center(child: Text('back', style: TextStyle(color: eventajaGreenTeal, fontSize: 18),))
+            child: Center(child: Text('back', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),))
           ),
           centerTitle: true,
           title: Text(
@@ -58,7 +65,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),

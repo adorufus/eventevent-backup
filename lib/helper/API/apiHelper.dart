@@ -2,7 +2,7 @@ import 'dart:core';
 
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/helper/API/registerModel.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';

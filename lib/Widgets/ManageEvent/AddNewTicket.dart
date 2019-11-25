@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/PostEvent/CreateTicketName.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,7 +24,14 @@ class AddNewTicketState extends State<AddNewTicket>{
   String thisTicketTypeId;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     
     return Scaffold(
         key: thisState,
@@ -61,8 +68,8 @@ class AddNewTicketState extends State<AddNewTicket>{
                 },
                 contentPadding: EdgeInsets.symmetric(vertical: 20),
                 leading: SizedBox(
-                  height: 40,
-                  width: 140,
+                  height: ScreenUtil.instance.setWidth(40),
+                  width: ScreenUtil.instance.setWidth(140),
                   child: Image.asset(
                     'assets/btn_ticket/paid.png',
                     fit: BoxFit.fill,
@@ -70,7 +77,7 @@ class AddNewTicketState extends State<AddNewTicket>{
                 ),
                 title: Text(
                   'Paid',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text('Set-up and start selling your own paid ticket(s) to your attandees'),
               ),
@@ -82,8 +89,8 @@ class AddNewTicketState extends State<AddNewTicket>{
               },
                 contentPadding: EdgeInsets.symmetric(vertical: 20),
                 leading: SizedBox(
-                  height: 40,
-                  width: 140,
+                  height: ScreenUtil.instance.setWidth(40),
+                  width: ScreenUtil.instance.setWidth(140),
                   child: Image.asset(
                     'assets/btn_ticket/free-limited.png',
                     fit: BoxFit.fill,
@@ -91,7 +98,7 @@ class AddNewTicketState extends State<AddNewTicket>{
                 ),
                 title: Text(
                   'Free - Limited',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text('For free event that require form registrations and only offers limited slots \/ seats (i.e free seminar, workshop, class).'),
               ),
@@ -104,8 +111,8 @@ class AddNewTicketState extends State<AddNewTicket>{
                 },
                 contentPadding: EdgeInsets.symmetric(vertical: 20),
                 leading: SizedBox(
-                  height: 40,
-                  width: 140,
+                  height: ScreenUtil.instance.setWidth(40),
+                  width: ScreenUtil.instance.setWidth(140),
                   child: Image.asset(
                     'assets/btn_ticket/free-limited.png',
                     fit: BoxFit.fill,
@@ -113,7 +120,7 @@ class AddNewTicketState extends State<AddNewTicket>{
                 ),
                 title: Text(
                   'Free Live Stream',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text('For free online live event for anyone across places. The streaming is mobile friendly and available to be played back by attendees for certain period.'),
               ),
@@ -125,8 +132,8 @@ class AddNewTicketState extends State<AddNewTicket>{
               },
                 contentPadding: EdgeInsets.symmetric(vertical: 20),
                 leading: SizedBox(
-                  height: 40,
-                  width: 140,
+                  height: ScreenUtil.instance.setWidth(40),
+                  width: ScreenUtil.instance.setWidth(140),
                   child: Image.asset(
                     'assets/btn_ticket/free-limited.png',
                     fit: BoxFit.fill,
@@ -134,7 +141,7 @@ class AddNewTicketState extends State<AddNewTicket>{
                 ),
                 title: Text(
                   'Free Limited (Seating)',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text('For free event that require form registrations and only offers limited slots \/ seats (i.e free seminar, workshop, class)For free event that require form registrations and only offers limited slots \/ seats (i.e free seminar, workshop, class)'),
               )

@@ -1,12 +1,13 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io'; 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:async/async.dart';
 import 'package:eventevent/Widgets/PostEvent/FinishPostEvent.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
@@ -64,7 +65,14 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     
     return Scaffold(
         key: thisScaffold,
@@ -101,18 +109,18 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(
-                          height: 15,
+                          height: ScreenUtil.instance.setWidth(15),
                         ),
                         Container(
-                          height: 250,
+                          height: ScreenUtil.instance.setWidth(250),
                           width: MediaQuery.of(context).size.width,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Container(
-                                height: 225,
-                                width: 150,
+                                height: ScreenUtil.instance.setWidth(225),
+                                width: ScreenUtil.instance.setWidth(150),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: Image.file(File(imageUri),
@@ -120,7 +128,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                 ),
                               ),
                               SizedBox(
-                                width: 20,
+                                width: ScreenUtil.instance.setWidth(20),
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,40 +137,40 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                   Text(
                                     'Ticket Quantity',
                                     style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: ScreenUtil.instance.setSp(18),
                                         color: Colors.black54,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(height: 10),
+                                  SizedBox(height: ScreenUtil.instance.setWidth(10)),
                                   Container(
-                                      width: 170,
-                                      height: 40,
+                                      width: ScreenUtil.instance.setWidth(170),
+                                      height: ScreenUtil.instance.setWidth(40),
                                       child: Text(ticketQuantity)),
-                                  SizedBox(height: 7),
+                                  SizedBox(height: ScreenUtil.instance.setWidth(7)),
                                   Text(
                                     'Ticket Sales Starts',
                                     style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: ScreenUtil.instance.setSp(18),
                                         color: Colors.black54,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(height: 10),
+                                  SizedBox(height: ScreenUtil.instance.setWidth(10)),
                                   Container(
-                                      width: 170,
-                                      height: 40,
+                                      width: ScreenUtil.instance.setWidth(170),
+                                      height: ScreenUtil.instance.setWidth(40),
                                       child: Text(startDate + ' ' + startTime)),
-                                  SizedBox(height: 7),
+                                  SizedBox(height: ScreenUtil.instance.setWidth(7)),
                                   Text(
                                     'Ticket Sales Ends',
                                     style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: ScreenUtil.instance.setSp(18),
                                         color: Colors.black54,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(height: 10),
+                                  SizedBox(height: ScreenUtil.instance.setWidth(10)),
                                   Container(
-                                      width: 170,
-                                      height: 40,
+                                      width: ScreenUtil.instance.setWidth(170),
+                                      height: ScreenUtil.instance.setWidth(40),
                                       child: Text(endDate + ' ' + endTime)),
                                 ],
                               )
@@ -171,26 +179,26 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         ),
                         Divider(color: Colors.black),
                         SizedBox(
-                          height: 15,
+                          height: ScreenUtil.instance.setWidth(15),
                         ),
                         Text(
                           'Description',
                           style: TextStyle(
-                              fontSize: 18,
+                              fontSize: ScreenUtil.instance.setSp(18),
                               color: Colors.black54,
                               fontWeight: FontWeight.bold),
                         ),
                         Text(desc),
-                        SizedBox(height: 15),
+                        SizedBox(height: ScreenUtil.instance.setWidth(15)),
                         Divider(),
-                        SizedBox(height: 15),
+                        SizedBox(height: ScreenUtil.instance.setWidth(15)),
                         ticketTypeId == '5' || ticketTypeId == '10' ? Container() : serviceFee(context),
                         SizedBox(
-                          height: 15,
+                          height: ScreenUtil.instance.setWidth(15),
                         ),
                         Container(
                           width: MediaQuery.of(context).size.width,
-                          height: 50,
+                          height: ScreenUtil.instance.setWidth(50),
                           child: RaisedButton(
                             color: eventajaGreenTeal,
                             onPressed: () {
@@ -218,14 +226,14 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
         Text('Service Fee'),
         Text('Free applies at 3% or minimum Rp. 5000 / ticket sales.'),
         SizedBox(
-          height: 15,
+          height: ScreenUtil.instance.setWidth(15),
         ),
         Text('Choose who\'s going to pay the fee:'),
-        SizedBox(height: 10),
+        SizedBox(height: ScreenUtil.instance.setWidth(10)),
         Container(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 2),
             color: Colors.white,
-            height: 250,
+            height: ScreenUtil.instance.setWidth(250),
             width: MediaQuery.of(context).size.width,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,16 +249,16 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                             }),
                         value: 0,
                       ),
-                      SizedBox(width: 10),
+                      SizedBox(height: ScreenUtil.instance.setWidth(10)),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text('Paid by you',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20)),
-                          SizedBox(height: 10),
+                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(20))),
+                          SizedBox(height: ScreenUtil.instance.setWidth(10)),
                           Container(
-                              height: 50,
+                              height: ScreenUtil.instance.setWidth(50),
                               child: Text(
                                 'eventevent fee will be \npaid by you, \nplease see details.',
                                 maxLines: 3,
@@ -258,13 +266,13 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                               ))
                         ],
                       ),
-                      SizedBox(width: 20),
+                      SizedBox(width: ScreenUtil.instance.setWidth(20)),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Container(
-                            height: 40,
-                            width: 100,
+                            height: ScreenUtil.instance.setWidth(40),
+                            width: ScreenUtil.instance.setWidth(100),
                             decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage(
@@ -279,7 +287,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                             )),
                           ),
                           SizedBox(
-                            height: 8,
+                            height: ScreenUtil.instance.setWidth(8),
                           ),
                           Text(
                             'Displayed Price',
@@ -290,17 +298,17 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: ScreenUtil.instance.setWidth(20),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        width: 55,
+                        width: ScreenUtil.instance.setWidth(55),
                       ),
                       Text('Ticket Price    :'),
                       SizedBox(
-                        width: 55,
+                        width: ScreenUtil.instance.setWidth(55),
                       ),
                       Text('Rp. ' + price)
                     ],
@@ -309,11 +317,11 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        width: 55,
+                        width: ScreenUtil.instance.setWidth(55),
                       ),
                       Text('Fee                 :'),
                       SizedBox(
-                        width: 47,
+                        width: ScreenUtil.instance.setWidth(47),
                       ),
                       Text(
                         '- Rp. ' + '5,000',
@@ -322,7 +330,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                     ],
                   ),
                   SizedBox(
-                    height: 10,
+                    height: ScreenUtil.instance.setWidth(10),
                   ),
                   Divider(
                     color: Colors.black,
@@ -331,29 +339,29 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        width: 55,
+                        width: ScreenUtil.instance.setWidth(55),
                       ),
                       Text('You\'ll get       :'),
                       SizedBox(
-                        width: 55,
+                        width: ScreenUtil.instance.setWidth(55),
                       ),
                       Text(
                         'Rp. ' + (int.parse(price) - 5000).toString(),
                         style: TextStyle(
                             color: eventajaGreenTeal,
-                            fontSize: 18,
+                            fontSize: ScreenUtil.instance.setSp(18),
                             fontWeight: FontWeight.bold),
                       )
                     ],
                   )
                 ])),
         SizedBox(
-          height: 20,
+          height: ScreenUtil.instance.setWidth(20),
         ),
         Container(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 2),
             color: Colors.white,
-            height: 500,
+            height: ScreenUtil.instance.setWidth(500),
             width: MediaQuery.of(context).size.width,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -369,16 +377,16 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                             }),
                         value: 1,
                       ),
-                      SizedBox(width: 10),
+                      SizedBox(height: ScreenUtil.instance.setWidth(10)),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text('Paid by attendee',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20)),
-                          SizedBox(height: 10),
+                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(20))),
+                          SizedBox(height: ScreenUtil.instance.setWidth(10)),
                           Container(
-                              height: 50,
+                              height: ScreenUtil.instance.setWidth(50),
                               child: Text(
                                 'eventevent fee will be \npaid by your customers, \nplease see details.',
                                 maxLines: 3,
@@ -386,13 +394,13 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                               ))
                         ],
                       ),
-                      SizedBox(width: 20),
+                      SizedBox(width: ScreenUtil.instance.setWidth(20)),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Container(
-                            height: 40,
-                            width: 100,
+                            height: ScreenUtil.instance.setWidth(40),
+                            width: ScreenUtil.instance.setWidth(100),
                             decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage(
@@ -407,7 +415,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                             )),
                           ),
                           SizedBox(
-                            height: 8,
+                            height: ScreenUtil.instance.setWidth(8),
                           ),
                           Text(
                             'Displayed Price',
@@ -418,17 +426,17 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: ScreenUtil.instance.setWidth(20),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        width: 55,
+                        width: ScreenUtil.instance.setWidth(55),
                       ),
                       Text('Ticket Price    :'),
                       SizedBox(
-                        width: 55,
+                        width: ScreenUtil.instance.setWidth(55),
                       ),
                       Text('Rp. ' + price)
                     ],
@@ -437,11 +445,11 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        width: 55,
+                        width: ScreenUtil.instance.setWidth(55),
                       ),
                       Text('Fee                 :'),
                       SizedBox(
-                        width: 55,
+                        width: ScreenUtil.instance.setWidth(55),
                       ),
                       Text(
                         'Rp. ' + '5,000',
@@ -450,7 +458,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                     ],
                   ),
                   SizedBox(
-                    height: 10,
+                    height: ScreenUtil.instance.setWidth(10),
                   ),
                   Divider(
                     color: Colors.black,
@@ -459,23 +467,23 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        width: 55,
+                        width: ScreenUtil.instance.setWidth(55),
                       ),
                       Text('You\'ll get       :'),
                       SizedBox(
-                        width: 55,
+                        width: ScreenUtil.instance.setWidth(55),
                       ),
                       Text(
                         'Rp. ' + (int.parse(price) + 5000).toString(),
                         style: TextStyle(
                             color: eventajaGreenTeal,
-                            fontSize: 18,
+                            fontSize: ScreenUtil.instance.setSp(18),
                             fontWeight: FontWeight.bold),
                       )
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: ScreenUtil.instance.setWidth(20),
                   ),
                 ]))
       ],

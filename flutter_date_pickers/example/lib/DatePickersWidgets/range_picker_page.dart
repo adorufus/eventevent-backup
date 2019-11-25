@@ -40,7 +40,7 @@ class _RangePickerPageState extends State<RangePickerPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     // add selected colors to default settings
     DatePickerRangeStyles styles = DatePickerRangeStyles(
       selectedPeriodLastDecoration: BoxDecoration(
@@ -123,14 +123,14 @@ class _RangePickerPageState extends State<RangePickerPage> {
               color: selectedPeriodStartColor,
               showDialogFunction: _showSelectedStartColorDialog),
           SizedBox(
-            width: 12.0,
+            height: 12.0,
           ),
           ColorSelectorBtn(
               title: "Middle",
               color: selectedPeriodMiddleColor,
               showDialogFunction: _showSelectedMiddleColorDialog),
           SizedBox(
-            width: 12.0,
+            height: 12.0,
           ),
           ColorSelectorBtn(
               title: "End",

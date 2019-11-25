@@ -15,7 +15,7 @@ import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -242,7 +242,14 @@ class TimelineDashboardState extends State<TimelineDashboard>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     mappedDataBanner = bannerData?.map((bannerData) {
           return bannerData == null
               ? Center(child: CircularProgressIndicator())
@@ -301,7 +308,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 preferredSize: Size(null, 100),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  height: 75,
+                  height: ScreenUtil.instance.setWidth(75),
                   child: Container(
                     color: Colors.white,
                     child: Container(
@@ -313,8 +320,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                           Row(
                             children: <Widget>[
                               SizedBox(
-                                height: 23,
-                                width: 93,
+                                height: ScreenUtil.instance.setWidth(23),
+                                width: ScreenUtil.instance.setWidth(93),
                                 child: Image.asset(
                                   'assets/icons/aset_icon/emedia.png',
                                   fit: BoxFit.fill,
@@ -323,8 +330,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                             ],
                           ),
                           Container(
-                              height: 35,
-                              width: 35,
+                              height: ScreenUtil.instance.setWidth(35),
+                              width: ScreenUtil.instance.setWidth(35),
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   shape: BoxShape.circle,
@@ -364,11 +371,11 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                   'assets/icons/icon_apps/home.png',
                                   scale: 4.5,
                                 ),
-                                SizedBox(width: 8),
+                                SizedBox(width: ScreenUtil.instance.setWidth(8)),
                                 Text('Home',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 12.5)),
+                                        fontSize: ScreenUtil.instance.setSp(12.5))),
                               ],
                             ),
                           ),
@@ -381,11 +388,11 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                   'assets/icons/icon_apps/public_timeline.png',
                                   scale: 4.5,
                                 ),
-                                SizedBox(width: 8),
+                                SizedBox(width: ScreenUtil.instance.setWidth(8)),
                                 Text('Public Timeline',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 12.5)),
+                                        fontSize: ScreenUtil.instance.setSp(12.5))),
                               ],
                             ),
                           )
@@ -626,7 +633,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
               Text('Popular Media',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: 19,
+                      fontSize: ScreenUtil.instance.setSp(19),
                       fontWeight: FontWeight.bold)),
               Padding(
                   padding: EdgeInsets.symmetric(
@@ -644,7 +651,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 },
                 child: Text(
                   'See All',
-                  style: TextStyle(color: eventajaGreenTeal, fontSize: 12),
+                  style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
                 ),
               ),
             ],
@@ -656,7 +663,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
 
   Widget mediaContent() {
     return Container(
-      height: 247,
+      height: ScreenUtil.instance.setWidth(247),
       child: ListView.builder(
         itemCount: mediaData == null ? 0 : mediaData.length,
         scrollDirection: Axis.horizontal,
@@ -688,7 +695,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 userPicture: mediaData[i]['creator']['photo'],
                 articleDetail: mediaData[i]['description'],
                 imageIndex: i,
-                likeCount: mediaData[i]['count_loved'].toString(),
+                likeCount: mediaData[i]['count_loved'],
                 commentCount: mediaData[i]['comment'],
                 mediaId: mediaData[i]['id'],
               ),
@@ -699,7 +706,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
     );
     // return Container(
     //   padding: EdgeInsets.symmetric(vertical: 8),
-    //     height: 247 + 9.0,
+    //     height: ScreenUtil.instance.setWidth(247 + 9.0),
     //     alignment: Alignment.centerLeft,
     //     child: new ListView.builder(
     //         scrollDirection: Axis.horizontal,
@@ -737,7 +744,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
     //                           //     forceSafariVC: true);
     //                         },
     //                         child: Container(
-    //                           height: 146,
+    //                           height: ScreenUtil.instance.setWidth(146),
     //                           width: i == 0 ? 223 : 223,
     //                           decoration: BoxDecoration(
     //                             color: Color(0xFFFEC97C),
@@ -753,7 +760,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
     //                         ),
     //                       ),
     //                       Container(
-    //                         height: 110,
+    //                         height: ScreenUtil.instance.setWidth(110),
     //                         decoration: BoxDecoration(
     //                           color: Colors.white,
     //                           borderRadius: BorderRadius.only(
@@ -761,7 +768,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
     //                               topRight: Radius.circular(15)),
     //                         ),
     //                         child: Column(children: <Widget>[
-    //                           SizedBox(height: 9),
+    //                           SizedBox(height: ScreenUtil.instance.setWidth(9)),
     //                           // Text(data[i]["dateStart"],
     //                           //     style: TextStyle(color: eventajaGreenTeal),
     //                           //     textAlign: TextAlign.start),
@@ -772,13 +779,13 @@ class TimelineDashboardState extends State<TimelineDashboard>
     //                               mainAxisAlignment: MainAxisAlignment.start,
     //                               children: <Widget>[
     //                                 Container(
-    //                                   width: 220,
+    //                                   width: ScreenUtil.instance.setWidth(220),
     //                                   child: Text(
     //                                     'Masuk Universitas Favorit \n Penting, Tapi...',
     //                                     // mediaData['data'][i]["title"],
     //                                     overflow: TextOverflow.ellipsis,
     //                                     style: TextStyle(
-    //                                         fontSize: 20,
+    //                                         fontSize: ScreenUtil.instance.setSp(20),
     //                                         fontWeight: FontWeight.bold),
     //                                     textAlign: TextAlign.start,
     //                                     maxLines: 2,
@@ -787,7 +794,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
     //                               ],
     //                             ),
     //                           ),
-    //                           SizedBox(height: 9),
+    //                           SizedBox(height: ScreenUtil.instance.setWidth(9)),
     //                           Padding(
     //                             padding: const EdgeInsets.only(left: 10),
     //                             child: Row(
@@ -795,8 +802,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
     //                               crossAxisAlignment: CrossAxisAlignment.center,
     //                               children: <Widget>[
     //                                 Container(
-    //                                     height: 30,
-    //                                     width: 30,
+    //                                     height: ScreenUtil.instance.setWidth(30),
+    //                                     width: ScreenUtil.instance.setWidth(30),
     //                                     decoration: BoxDecoration(
     //                                       color: Colors.lightBlueAccent,
     //                                       shape: BoxShape.circle,
@@ -807,7 +814,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
     //                                       //     fit: BoxFit.fill),
     //                                     )),
     //                                 SizedBox(
-    //                                   width: 10,
+    //                                   height: ScreenUtil.instance.setWidth(10),
     //                                 ),
     //                                 Text('Eventevent'
     //                                     // mediaData['data'][i]['creator']
@@ -841,7 +848,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
               Text('Latest Media',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: 19,
+                      fontSize: ScreenUtil.instance.setSp(19),
                       fontWeight: FontWeight.bold)),
               Padding(
                   padding: EdgeInsets.symmetric(
@@ -859,7 +866,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 },
                 child: Text(
                   'See All',
-                  style: TextStyle(color: eventajaGreenTeal, fontSize: 12),
+                  style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
                 ),
               ),
             ],
@@ -876,7 +883,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
             child: CircularProgressIndicator(),
           ))
         : ColumnBuilder(
-            itemCount: mediaData == null ? 0 : mediaData.length,
+            itemCount: latestMediaPhoto == null ? 0 : latestMediaPhoto.length,
             itemBuilder: (BuildContext context, i) {
               return GestureDetector(
                 onTap: () {
@@ -921,7 +928,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
               Text('Popular Video',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: 19,
+                      fontSize: ScreenUtil.instance.setSp(19),
                       fontWeight: FontWeight.bold)),
               Padding(
                   padding: EdgeInsets.symmetric(
@@ -939,7 +946,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 },
                 child: Text(
                   'See All',
-                  style: TextStyle(color: eventajaGreenTeal, fontSize: 12),
+                  style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
                 ),
               ),
             ],
@@ -951,7 +958,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
 
   Widget popularVideoContent() {
     return Container(
-      height: 247,
+      height: ScreenUtil.instance.setWidth(247),
       child: popularMediaVideo == null
           ? Container(
               child: Center(
@@ -1015,7 +1022,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
               Text('Latest Video',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: 19,
+                      fontSize: ScreenUtil.instance.setSp(19),
                       fontWeight: FontWeight.bold)),
               Padding(
                   padding: EdgeInsets.symmetric(
@@ -1033,7 +1040,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 },
                 child: Text(
                   'See All',
-                  style: TextStyle(color: eventajaGreenTeal, fontSize: 12),
+                  style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
                 ),
               ),
             ],
@@ -1045,7 +1052,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
 
   Widget latestVideoContent() {
     return ColumnBuilder(
-      itemCount: mediaData == null ? 0 : mediaData.length,
+      itemCount: latestMediaVideo == null ? 0 : latestMediaVideo.length,
       itemBuilder: (BuildContext context, i) {
         return GestureDetector(
           onTap: () {
@@ -1085,7 +1092,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
   Widget banner() {
     int _current = 0;
     return CarouselSlider(
-      height: 200,
+      height: ScreenUtil.instance.setWidth(200),
       items: bannerData == null
           ? [
               Center(
@@ -1127,7 +1134,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
 
         return Container(
             margin: EdgeInsets.only(bottom: 25),
-            height: 35,
+            height: ScreenUtil.instance.setWidth(35),
             child: Center(child: body));
       }),
       controller: refreshController,
@@ -1235,10 +1242,10 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                         NetworkImage(timelineList[i]['photo']),
                                   ),
                                   SizedBox(
-                                    width: 8,
+                                    width: ScreenUtil.instance.setWidth(8),
                                   ),
                                   Container(
-                                      width: 200.0 - 32.0,
+                                      width: ScreenUtil.instance.setWidth(200.0 - 32.0),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -1248,12 +1255,12 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                               timelineList[i]['isVerified'] ==
                                                       '1'
                                                   ? Container(
-                                                      height: 18,
-                                                      width: 18,
+                                                      height: ScreenUtil.instance.setWidth(18),
+                                                      width: ScreenUtil.instance.setWidth(18),
                                                       child: Image.asset(
                                                           'assets/icons/icon_apps/verif.png'))
                                                   : Container(),
-                                              SizedBox(width: 5),
+                                              SizedBox(width: ScreenUtil.instance.setWidth(5)),
                                               Text(timelineList[i]['fullName'],
                                                   style: TextStyle(
                                                       fontWeight:
@@ -1261,7 +1268,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                             ],
                                           ),
                                           SizedBox(
-                                            height: 5,
+                                            height: ScreenUtil.instance.setWidth(5),
                                           ),
                                           Row(
                                             children: <Widget>[
@@ -1271,7 +1278,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                                       scale: 3,
                                                     )
                                                   : Container(),
-                                              SizedBox(width: 5),
+                                              SizedBox(width: ScreenUtil.instance.setWidth(5)),
                                               Text(
                                                   timelineList[i]['type'] ==
                                                           'love'
@@ -1286,7 +1293,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                                                   ['type'],
                                                   style: TextStyle(
                                                       color: Colors.grey,
-                                                      fontSize: 10)),
+                                                      fontSize: ScreenUtil.instance.setSp(10))),
                                             ],
                                           ),
                                         ],
@@ -1296,9 +1303,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                               children: <Widget>[
                                 Text(
                                   'a minute ago',
-                                  style: TextStyle(fontSize: 10),
+                                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(10)),
                                 ),
-                                SizedBox(height: 4),
+                                SizedBox(height: ScreenUtil.instance.setWidth(4)),
                               ],
                             )
                           ],
@@ -1360,7 +1367,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                                     ['pictureFull'],
                                           ),
                                           fit: BoxFit.cover)),
-                                  height: 400,
+                                  height: ScreenUtil.instance.setWidth(400),
                                   width: MediaQuery.of(context).size.width,
                                   child: Center(
                                     child: timelineList[i]['type'] == 'video'
@@ -1386,8 +1393,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                       Text(timelineList[i]['fullName'],
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 15)),
-                                      SizedBox(height: 8),
+                                              fontSize: ScreenUtil.instance.setSp(15))),
+                                      SizedBox(height: ScreenUtil.instance.setWidth(8)),
                                       Row(
                                         children: <Widget>[
                                           timelineList[i]['type'] == 'love'
@@ -1413,7 +1420,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                                   timelineList[i]['type'] ==
                                                       'photo'
                                               ? Container(
-                                                  width: 360 - 70.0,
+                                                  width: ScreenUtil.instance.setWidth(360 - 70.0),
                                                   child: Text(
                                                       timelineList[i]['name'] ==
                                                               null
@@ -1426,7 +1433,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                                               0xFF8A8A8B))),
                                                 )
                                               : Container(
-                                                  width: 150,
+                                                  width: ScreenUtil.instance.setWidth(150),
                                                   child: Text(
                                                     timelineList[i]['name'] ==
                                                             null
@@ -1536,7 +1543,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 10),
-                              height: 30,
+                              height: ScreenUtil.instance.setWidth(30),
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(15),
@@ -1556,7 +1563,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                           : Colors.grey,
                                       scale: 3.5,
                                     ),
-                                    SizedBox(width: 5),
+                                    SizedBox(width: ScreenUtil.instance.setWidth(5)),
                                     Text(impressionList.length.toString(),
                                         style: TextStyle(
                                             color: Color(
@@ -1566,7 +1573,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 10),
-                            height: 30,
+                            height: ScreenUtil.instance.setWidth(30),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(15),
@@ -1583,7 +1590,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                     'assets/icons/icon_apps/comment.png',
                                     scale: 3.5,
                                   ),
-                                  SizedBox(width: 5),
+                                  SizedBox(width: ScreenUtil.instance.setWidth(5)),
                                   Text(commentList.length.toString(),
                                       style: TextStyle(
                                           color: Color(
@@ -1619,7 +1626,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 10),
-                              height: 30,
+                              height: ScreenUtil.instance.setWidth(30),
                               child: Icon(Icons.more_horiz),
                             ),
                           )
@@ -1649,13 +1656,13 @@ class TimelineDashboardState extends State<TimelineDashboard>
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50),
                 child: SizedBox(
-                    height: 5,
-                    width: 50,
+                    height: ScreenUtil.instance.setWidth(5),
+                    width: ScreenUtil.instance.setWidth(50),
                     child: Image.asset(
                       'assets/icons/icon_line.png',
                       fit: BoxFit.fill,
                     ))),
-            SizedBox(height: 35),
+            SizedBox(height: ScreenUtil.instance.setWidth(35)),
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);
@@ -1683,18 +1690,18 @@ class TimelineDashboardState extends State<TimelineDashboard>
                           'Delete',
                           style: TextStyle(
                               color: Colors.red,
-                              fontSize: 16,
+                              fontSize: ScreenUtil.instance.setSp(16),
                               fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                     Container(
-                        height: 30,
-                        width: 30,
+                        height: ScreenUtil.instance.setWidth(30),
+                        width: ScreenUtil.instance.setWidth(30),
                         child: Image.asset('assets/icons/icon_apps/delete.png'))
                     // Container(
-                    //   height: 44,
-                    //   width: 50,
+                    //   height: ScreenUtil.instance.setWidth(44),
+                    //   width: ScreenUtil.instance.setWidth(50),
                     //   decoration: BoxDecoration(
                     //       image: DecorationImage(
                     //           image: AssetImage(
@@ -1713,9 +1720,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 ),
               ),
             ),
-            SizedBox(height: 19),
+            SizedBox(height: ScreenUtil.instance.setWidth(19)),
             Divider(),
-            SizedBox(height: 16),
+            SizedBox(height: ScreenUtil.instance.setWidth(16)),
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);
@@ -1745,20 +1752,20 @@ class TimelineDashboardState extends State<TimelineDashboard>
                         Text(
                           'Edit',
                           style: TextStyle(
-                              fontSize: 16,
+                              fontSize: ScreenUtil.instance.setSp(16),
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF40D7FF)),
                         ),
                       ],
                     ),
                     Container(
-                      height: 30,
-                      width: 30,
+                      height: ScreenUtil.instance.setWidth(30),
+                      width: ScreenUtil.instance.setWidth(30),
                       child: Image.asset('assets/icons/icon_apps/edit.png'),
                     )
                     // Container(
-                    //   height: 44,
-                    //   width: 50,
+                    //   height: ScreenUtil.instance.setWidth(44),
+                    //   width: ScreenUtil.instance.setWidth(50),
                     //   decoration: BoxDecoration(
                     //       image: DecorationImage(
                     //           image: AssetImage(
@@ -1800,13 +1807,13 @@ class TimelineDashboardState extends State<TimelineDashboard>
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50),
                 child: SizedBox(
-                    height: 5,
-                    width: 50,
+                    height: ScreenUtil.instance.setWidth(5),
+                    width: ScreenUtil.instance.setWidth(50),
                     child: Image.asset(
                       'assets/icons/icon_line.png',
                       fit: BoxFit.fill,
                     ))),
-            SizedBox(height: 35),
+            SizedBox(height: ScreenUtil.instance.setWidth(35)),
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);
@@ -1836,14 +1843,14 @@ class TimelineDashboardState extends State<TimelineDashboard>
                           'Report',
                           style: TextStyle(
                               color: Colors.red,
-                              fontSize: 16,
+                              fontSize: ScreenUtil.instance.setSp(16),
                               fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                     Container(
-                      height: 30,
-                      width: 30,
+                      height: ScreenUtil.instance.setWidth(30),
+                      width: ScreenUtil.instance.setWidth(30),
                       child: Image.asset('assets/icons/icon_apps/report.png'),
                     )
                   ],
@@ -1868,26 +1875,26 @@ class TimelineDashboardState extends State<TimelineDashboard>
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            height: 100,
-            width: 200,
+            height: ScreenUtil.instance.setWidth(100),
+            width: ScreenUtil.instance.setWidth(200),
             child: Column(
               children: <Widget>[
                 Text(
                   'Oops',
                   style: TextStyle(
                       color: Colors.black54,
-                      fontSize: 18,
+                      fontSize: ScreenUtil.instance.setSp(18),
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: ScreenUtil.instance.setWidth(10),
                 ),
                 Text(
                   'Delete this moment?',
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
-                  height: 20,
+                  height: ScreenUtil.instance.setWidth(20),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -1904,7 +1911,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                       ),
                     ),
                     SizedBox(
-                      width: 50,
+                      width: ScreenUtil.instance.setWidth(50),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -1961,7 +1968,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
 
   Future<http.Response> getLatestMediaPhoto() async {
     String url = BaseApi().restUrl +
-        '/media?X-API-KEY=$API_KEY&search=&page=1&limit=10&type=photo&status=latest';
+        '/media?X-API-KEY=$API_KEY&search=&page=1&limit=5&type=photo&status=latest';
 
     final response = await http.get(url,
         headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
@@ -1975,7 +1982,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
 
   Future<http.Response> getLatestMediaVideo() async {
     String url = BaseApi().restUrl +
-        '/media?X-API-KEY=$API_KEY&search=&page=1&limit=10&type=video&status=latest';
+        '/media?X-API-KEY=$API_KEY&search=&page=1&limit=5&type=video&status=latest';
 
     final response = await http.get(url,
         headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});

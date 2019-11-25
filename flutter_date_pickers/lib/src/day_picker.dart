@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:flutter/rendering.dart';
 import 'package:flutter_date_pickers/src/date_picker_styles.dart';
 import 'package:flutter_date_pickers/src/layout_settings.dart';
@@ -195,7 +195,7 @@ class _DayPickerState extends State<DayPicker> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return SizedBox(
       width: widget.datePickerLayoutSettings.monthPickerPortraitWidth,
       height: widget.datePickerLayoutSettings.maxDayPickerHeight,
@@ -433,7 +433,7 @@ class _DayPicker extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     final ThemeData themeData = Theme.of(context);
     final MaterialLocalizations localizations =
         MaterialLocalizations.of(context);

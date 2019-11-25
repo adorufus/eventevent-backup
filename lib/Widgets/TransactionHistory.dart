@@ -6,7 +6,7 @@ import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/Widgets/notification/TransactionHistoryItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -35,7 +35,14 @@ class TransactionHistoryState extends State<TransactionHistory> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     
     return Scaffold(
       appBar: PreferredSize(
@@ -54,8 +61,8 @@ class TransactionHistoryState extends State<TransactionHistory> {
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
                       SizedBox(
-                        height: 15.49,
-                        width: 9.73,
+                        height: ScreenUtil.instance.setWidth(15.49),
+                        width: ScreenUtil.instance.setWidth(9.73),
                         child: Image.asset(
                           'assets/icons/icon_apps/arrow.png',
                           fit: BoxFit.fill,
@@ -68,7 +75,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
               centerTitle: true,
               title: Text(
                 'Transaction History',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
               ),
             ),
           )),

@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -65,7 +65,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return SafeArea(
       child: Scaffold(
         body: Container(

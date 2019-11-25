@@ -2,7 +2,7 @@ import 'package:eventevent/helper/API/registerModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:eventevent/helper/API/loginModel.dart';
-import 'dart:io';
+import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SharedPrefs{
   saveCurrentSession(http.Response response, Map responseJson) async {

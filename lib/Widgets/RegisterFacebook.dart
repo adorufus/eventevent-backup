@@ -5,7 +5,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/API/registerModel.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -43,7 +43,14 @@ class RegisterFacebookState extends State<RegisterFacebook> {
   }
   
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -77,7 +84,7 @@ class RegisterFacebookState extends State<RegisterFacebook> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        SizedBox(height: 10,),
+        SizedBox(height: ScreenUtil.instance.setWidth(10),),
         GestureDetector(
           child: Column(
             children: <Widget>[
@@ -87,12 +94,12 @@ class RegisterFacebookState extends State<RegisterFacebook> {
                   profilePictureURI
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: ScreenUtil.instance.setWidth(10),),
               Text('Tap to change / edit photo')
             ]
           )
         ),
-        SizedBox(height: 15,),
+        SizedBox(height: ScreenUtil.instance.setWidth(15),),
         TextFormField(
           controller: usernameController,
           decoration: InputDecoration(
@@ -100,7 +107,7 @@ class RegisterFacebookState extends State<RegisterFacebook> {
             icon: Image.asset('assets/drawable/username.png', scale: 2,),
           ),
         ),
-        SizedBox(height: 15,),
+        SizedBox(height: ScreenUtil.instance.setWidth(15),),
         TextFormField(
           controller: birthdateController,
           decoration: InputDecoration(
@@ -108,7 +115,7 @@ class RegisterFacebookState extends State<RegisterFacebook> {
             icon: Image.asset('assets/drawable/cake.png', scale: 5,)
           ),
         ),
-        SizedBox(height: 15,),
+        SizedBox(height: ScreenUtil.instance.setWidth(15),),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -118,14 +125,14 @@ class RegisterFacebookState extends State<RegisterFacebook> {
               value: 0,
             ),
             Text('Male'),
-            SizedBox(width: 30),
+            SizedBox(width: ScreenUtil.instance.setWidth(30)),
             Radio(
               groupValue: currentValue,
               onChanged: (int i) => setState(() => currentValue = i),
               value: 1,
             ),
             Text('Female'),
-            SizedBox(width: 30),
+            SizedBox(width: ScreenUtil.instance.setWidth(30)),
             Radio(
               groupValue: currentValue,
               onChanged: (int i) => setState(() => currentValue = i),
@@ -134,7 +141,7 @@ class RegisterFacebookState extends State<RegisterFacebook> {
             Text('Other')
           ],
         ),
-        SizedBox(height: 15,),
+        SizedBox(height: ScreenUtil.instance.setWidth(15),),
         TextFormField(
           controller: phoneController,
           decoration: InputDecoration(
@@ -143,7 +150,7 @@ class RegisterFacebookState extends State<RegisterFacebook> {
 
           ),
         ),
-        SizedBox(height: 15,),
+        SizedBox(height: ScreenUtil.instance.setWidth(15),),
         TextFormField(
           controller: passwordController,
           autocorrect: false,
@@ -163,20 +170,20 @@ class RegisterFacebookState extends State<RegisterFacebook> {
             )
           ),
         ),
-        SizedBox(height: 15,),
+        SizedBox(height: ScreenUtil.instance.setWidth(15),),
         GestureDetector(
           onTap: (){
             postRegister();
           },
                   child: Container(
-            height: 50,
+            height: ScreenUtil.instance.setWidth(50),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: eventajaGreenTeal,
               borderRadius: BorderRadius.circular(30)
             ),
             child: Center(
-              child: Text('DONE', style: TextStyle(fontSize: 18 ,color: Colors.white, fontWeight: FontWeight.bold),)
+              child: Text('DONE', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18) ,color: Colors.white, fontWeight: FontWeight.bold),)
             ),
           ),
         )

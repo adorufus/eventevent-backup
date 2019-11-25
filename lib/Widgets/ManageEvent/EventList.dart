@@ -2,7 +2,7 @@ import 'package:eventevent/Widgets/ManageEvent/PrivateEventList.dart';
 import 'package:eventevent/Widgets/ManageEvent/PublicEventList.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +21,14 @@ class EventList extends StatefulWidget{
 class EventListState extends State<EventList>{
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     
     return Scaffold(
       appBar: AppBar(
@@ -43,7 +50,7 @@ class EventListState extends State<EventList>{
         child: DefaultTabController(
           length: 2,
           initialIndex: 0,
-          child: Column(
+          child: ListView(
             children: <Widget>[
               TabBar(
                 labelColor: eventajaGreenTeal,

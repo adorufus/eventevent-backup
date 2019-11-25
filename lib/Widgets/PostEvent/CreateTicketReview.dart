@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/PostEvent/CreateTicketFinal.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:google_places_picker/google_places_picker.dart';
 import 'package:location/location.dart';
@@ -122,7 +122,14 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     var thisScaffold = new GlobalKey<ScaffoldState>();
     return Scaffold(
         key: thisScaffold,
@@ -159,11 +166,11 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                         'Ticket Name',
                         style: TextStyle(
                             color: Colors.black54,
-                            fontSize: 18,
+                            fontSize: ScreenUtil.instance.setSp(18),
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
-                        height: 5,
+                        height: ScreenUtil.instance.setWidth(5),
                       ),
                       TextFormField(
                         controller: eventNameController,
@@ -180,18 +187,18 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                             )),
                       ),
                       SizedBox(
-                        height: 15,
+                        height: ScreenUtil.instance.setWidth(15),
                       ),
                       Container(
-                        height: 250,
+                        height: ScreenUtil.instance.setWidth(250),
                         width: MediaQuery.of(context).size.width,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                              height: 225,
-                              width: 150,
+                              height: ScreenUtil.instance.setWidth(225),
+                              width: ScreenUtil.instance.setWidth(150),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
                                 child: Image.file(File(imageUri),
@@ -199,7 +206,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                               ),
                             ),
                             SizedBox(
-                              width: 20,
+                              width: ScreenUtil.instance.setWidth(20),
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,14 +215,14 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                 Text(
                                   'Ticket Quantity',
                                   style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: ScreenUtil.instance.setSp(18),
                                       color: Colors.black54,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                SizedBox(height: 10),
+                                SizedBox(height: ScreenUtil.instance.setWidth(10)),
                                 Container(
-                                    width: 170,
-                                    height: 50,
+                                    width: ScreenUtil.instance.setWidth(170),
+                                    height: ScreenUtil.instance.setWidth(50),
                                     padding: EdgeInsets.only(left: 10),
                                     child: TextFormField(
                                       controller: ticketQuantityController,
@@ -231,31 +238,31 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                               borderRadius:
                                                   BorderRadius.circular(7))),
                                     )),
-                                SizedBox(height: 20),
+                                SizedBox(height: ScreenUtil.instance.setWidth(20)),
                                 Text(
                                   'Set The Price',
                                   style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: ScreenUtil.instance.setSp(18),
                                       color: Colors.black54,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
                                   'Set your ticket price',
                                   style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: ScreenUtil.instance.setSp(15),
                                       color: Colors.grey[300],
                                       fontWeight: FontWeight.bold),
                                 ),
-                                SizedBox(height: 10),
+                                SizedBox(height: ScreenUtil.instance.setWidth(10)),
                                 Container(
-                                    width: 170,
-                                    height: 50,
+                                    width: ScreenUtil.instance.setWidth(170),
+                                    height: ScreenUtil.instance.setWidth(50),
                                     padding: EdgeInsets.only(left: 10),
                                     child: ticketTypeID == '5' ||
                                             ticketTypeID == '10'
                                         ? Text('FREE',
                                             style: TextStyle(
-                                                fontSize: 18,
+                                                fontSize: ScreenUtil.instance.setSp(18),
                                                 color: Colors.grey[300],
                                                 fontWeight: FontWeight.bold))
                                         : TextFormField(
@@ -286,7 +293,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                       Divider(
                         color: Colors.black,
                       ),
-                      SizedBox(height: 15),
+                      SizedBox(height: ScreenUtil.instance.setWidth(15)),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -301,14 +308,14 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                     Text(
                                       'Min Ticket',
                                       style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: ScreenUtil.instance.setSp(18),
                                           color: Colors.black54,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(height: 10),
+                                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
                                     Container(
-                                        width: 170,
-                                        height: 50,
+                                        width: ScreenUtil.instance.setWidth(170),
+                                        height: ScreenUtil.instance.setWidth(50),
                                         padding: EdgeInsets.only(left: 10),
                                         child: TextFormField(
                                           controller: minTicketController,
@@ -332,14 +339,14 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                     Text(
                                       'Max Ticket',
                                       style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: ScreenUtil.instance.setSp(18),
                                           color: Colors.black54,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(height: 10),
+                                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
                                     Container(
-                                        width: 170,
-                                        height: 50,
+                                        width: ScreenUtil.instance.setWidth(170),
+                                        height: ScreenUtil.instance.setWidth(50),
                                         padding: EdgeInsets.only(left: 10),
                                         child: TextFormField(
                                           controller: maxTicketController,
@@ -362,17 +369,17 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                           Text(
                             'Ticket Sales Starts',
                             style:
-                                TextStyle(color: Colors.black54, fontSize: 18),
+                                TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18)),
                           ),
                           SizedBox(
-                            height: 15,
+                            height: ScreenUtil.instance.setWidth(15),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Container(
-                                  width: 150,
-                                  height: 50,
+                                  width: ScreenUtil.instance.setWidth(150),
+                                  height: ScreenUtil.instance.setWidth(50),
                                   padding: EdgeInsets.only(left: 10),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
@@ -381,14 +388,14 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         startDate,
-                                        style: TextStyle(fontSize: 20),
+                                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
                                       ))),
                               SizedBox(
-                                width: 25,
+                                width: ScreenUtil.instance.setWidth(25),
                               ),
                               Container(
-                                  width: 150,
-                                  height: 50,
+                                  width: ScreenUtil.instance.setWidth(150),
+                                  height: ScreenUtil.instance.setWidth(50),
                                   padding: EdgeInsets.only(left: 10),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
@@ -397,27 +404,27 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         startTime,
-                                        style: TextStyle(fontSize: 20),
+                                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
                                       ))),
                             ],
                           ),
                           SizedBox(
-                            height: 20,
+                            height: ScreenUtil.instance.setWidth(20),
                           ),
                           Text(
                             'Ticket Sales Ends',
                             style:
-                                TextStyle(color: Colors.black54, fontSize: 18),
+                                TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18)),
                           ),
                           SizedBox(
-                            height: 15,
+                            height: ScreenUtil.instance.setWidth(15),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Container(
-                                  width: 150,
-                                  height: 50,
+                                  width: ScreenUtil.instance.setWidth(150),
+                                  height: ScreenUtil.instance.setWidth(50),
                                   padding: EdgeInsets.only(left: 10),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
@@ -426,14 +433,14 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         endDate,
-                                        style: TextStyle(fontSize: 20),
+                                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
                                       ))),
                               SizedBox(
-                                width: 25,
+                                width: ScreenUtil.instance.setWidth(25),
                               ),
                               Container(
-                                  width: 150,
-                                  height: 50,
+                                  width: ScreenUtil.instance.setWidth(150),
+                                  height: ScreenUtil.instance.setWidth(50),
                                   padding: EdgeInsets.only(left: 10),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
@@ -442,11 +449,11 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         endTime,
-                                        style: TextStyle(fontSize: 20),
+                                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
                                       ))),
                             ],
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
@@ -454,13 +461,13 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                 'Show Remaining Ticket',
                                 style: TextStyle(
                                     color: Colors.black54,
-                                    fontSize: 18,
+                                    fontSize: ScreenUtil.instance.setSp(18),
                                     fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
                           SizedBox(
-                            height: 10,
+                            height: ScreenUtil.instance.setWidth(10),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -473,7 +480,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                               ),
                               Text('Yes'),
                               SizedBox(
-                                width: 25,
+                                width: ScreenUtil.instance.setWidth(25),
                               ),
                               Radio(
                                 groupValue: __curValue,
@@ -493,13 +500,13 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                 'One Purchase Per User',
                                 style: TextStyle(
                                     color: Colors.black54,
-                                    fontSize: 18,
+                                    fontSize: ScreenUtil.instance.setSp(18),
                                     fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
                           SizedBox(
-                            height: 10,
+                            height: ScreenUtil.instance.setWidth(10),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -512,7 +519,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                               ),
                               Text('Yes'),
                               SizedBox(
-                                width: 25,
+                                width: ScreenUtil.instance.setWidth(25),
                               ),
                               Radio(
                                 groupValue: __curValue2,
@@ -525,16 +532,16 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                               Text('No')
                             ],
                           ),
-                          SizedBox(height: 20),
+                          SizedBox(height: ScreenUtil.instance.setWidth(20)),
                           Text(
                             'Description',
                             style: TextStyle(
                                 color: Colors.black54,
-                                fontSize: 18,
+                                fontSize: ScreenUtil.instance.setSp(18),
                                 fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
-                            height: 10,
+                            height: ScreenUtil.instance.setWidth(10),
                           ),
                           TextFormField(
                             controller: descController,
@@ -547,10 +554,10 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide.none)),
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Container(
                             width: MediaQuery.of(context).size.width,
-                            height: 50,
+                            height: ScreenUtil.instance.setWidth(50),
                             child: RaisedButton(
                               color: eventajaGreenTeal,
                               onPressed: (){

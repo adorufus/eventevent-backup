@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/RecycleableWidget/PostMedia.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:camera/camera.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:path_provider/path_provider.dart';
@@ -49,7 +49,14 @@ class CustomCameraState extends State<CustomCamera> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     final size = MediaQuery.of(context).size;
     final deviceRatio = size.width / size.height;
 
@@ -81,8 +88,8 @@ class CustomCameraState extends State<CustomCamera> {
                     Navigator.pop(context);
                   },
                   child: Container(
-                      height: 30,
-                      width: 30,
+                      height: ScreenUtil.instance.setWidth(30),
+                      width: ScreenUtil.instance.setWidth(30),
                       child: Icon(
                         Icons.close,
                         color: Colors.white,
@@ -93,8 +100,8 @@ class CustomCameraState extends State<CustomCamera> {
               bottom: 70,
               left: 0,
               child: Container(
-                width: 50,
-                height: 50,
+                width: ScreenUtil.instance.setWidth(50),
+                height: ScreenUtil.instance.setWidth(50),
                 color: Colors.grey,
                 child: Image.asset('/assets/grey-fade.jpg'),
               ),
@@ -102,13 +109,13 @@ class CustomCameraState extends State<CustomCamera> {
             Positioned(
               bottom: 70,
               child: SizedBox(
-                width: 50,
-                height: 50,
+                width: ScreenUtil.instance.setWidth(50),
+                height: ScreenUtil.instance.setWidth(50),
                 child: Container(
                   alignment: Alignment.bottomCenter,
                   child: SizedBox(
-                    width: 50,
-                    height: 50,
+                    width: ScreenUtil.instance.setWidth(50),
+                    height: ScreenUtil.instance.setWidth(50),
                     child: new GestureDetector(
                       onTap: () async {
                         try {
@@ -183,8 +190,8 @@ class CustomCameraState extends State<CustomCamera> {
     File croppedImage = await ImageCropper.cropImage(
       sourcePath: image.path,
       aspectRatio: CropAspectRatio(ratioX: 2, ratioY: 3),
-      maxHeight: 512,
-      maxWidth: 512,
+      maxHeight: ScreenUtil.instance.setWidth(512),
+      maxWidth: ScreenUtil.instance.setWidth(512),
     );
 
     print(croppedImage.path);

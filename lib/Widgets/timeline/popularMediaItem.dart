@@ -1,6 +1,6 @@
 import 'package:eventevent/Widgets/timeline/MediaDetails.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,12 +51,21 @@ class _MediaItemState extends State<MediaItem> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
+    double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     print(MediaQuery.of(context).size.width);
+    
     return Container(
         margin: EdgeInsets.only(left: 13, top: 8, bottom: 8, right: 0),
-        height: 247,
-        width: 223,
+        height: ScreenUtil.instance.setWidth(247),
+        width: ScreenUtil.instance.setWidth(223),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
@@ -69,7 +78,7 @@ class _MediaItemState extends State<MediaItem> {
         child: Stack(
           children: <Widget>[
             Container(
-              height: 146,
+              height: ScreenUtil.instance.setWidth(146),
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image: NetworkImage(widget.image), fit: BoxFit.cover),
@@ -90,8 +99,8 @@ class _MediaItemState extends State<MediaItem> {
             Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 8.97),
-                  height: 110,
+                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 7),
+                  height: ScreenUtil.instance.setWidth(110),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15)),
@@ -107,14 +116,14 @@ class _MediaItemState extends State<MediaItem> {
                                     NetworkImage(widget.userPicture),
                                 radius: 7),
                             SizedBox(
-                              width: 2.68,
+                              width: ScreenUtil.instance.setWidth(2.68),
                             ),
                             Container(
-                                width: 125,
+                                width: ScreenUtil.instance.setWidth(125),
                                 child: Text(
                                   '@' + widget.username.toString(),
                                   style: TextStyle(
-                                      color: Color(0xFF8A8A8B), fontSize: 12),
+                                      color: Color(0xFF8A8A8B), fontSize: ScreenUtil.instance.setSp(12)),
                                 )),
                             Text(
                               '19 - 08 - 2019',
@@ -124,17 +133,17 @@ class _MediaItemState extends State<MediaItem> {
                           ],
                         ),
                         SizedBox(
-                          height: 4,
+                          height: ScreenUtil.instance.setWidth(4),
                         ),
                         Container(
-                            height: 40,
+                            height: ScreenUtil.instance.setWidth(40),
                             child: Text(
                               widget.title,
                               style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.bold),
+                                  fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),
                             )),
                         SizedBox(
-                          height: 3,
+                          height: ScreenUtil.instance.setWidth(3),
                         ),
                         Container(
                           child: Row(
@@ -143,20 +152,18 @@ class _MediaItemState extends State<MediaItem> {
                                 onTap: () {
                                   setState(() {
                                     if (isLiked == false) {
+                                      likeCount += 1;
+                                      isLiked = true;
                                       doLove().then((response) {
                                         print(response.statusCode);
                                         print(response.body);
-                                        if (response.statusCode == 200) {
-                                          likeCount += 1;
-                                          isLiked = true;
-                                        }
+                                        if (response.statusCode == 200) {}
                                       });
                                     } else {
+                                      likeCount -= 1;
+                                      isLiked = false;
                                       doLove().then((response) {
-                                        if (response.statusCode == 200) {
-                                          likeCount -= 1;
-                                          isLiked = false;
-                                        }
+                                        if (response.statusCode == 200) {}
                                       });
                                     }
                                   });
@@ -164,7 +171,7 @@ class _MediaItemState extends State<MediaItem> {
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: likeCount < 1 ? 8 : 13),
-                                  height: 30,
+                                  height: ScreenUtil.instance.setWidth(30),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(15),
@@ -183,7 +190,9 @@ class _MediaItemState extends State<MediaItem> {
                                           'assets/icons/icon_apps/love.png',
                                           color: likeCount < 1
                                               ? Colors.grey
-                                              : Colors.red,
+                                              : isLiked == false
+                                                  ? Colors.grey
+                                                  : Colors.red,
                                           scale: 3.5,
                                         ),
                                         SizedBox(width: likeCount < 1 ? 0 : 5),
@@ -197,7 +206,7 @@ class _MediaItemState extends State<MediaItem> {
                                       ]),
                                 ),
                               ),
-                              SizedBox(width: 12),
+                              SizedBox(width: ScreenUtil.instance.setWidth(12)),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -218,7 +227,7 @@ class _MediaItemState extends State<MediaItem> {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(horizontal: 13),
-                                  height: 30,
+                                  height: ScreenUtil.instance.setWidth(30),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(15),
@@ -237,7 +246,7 @@ class _MediaItemState extends State<MediaItem> {
                                           'assets/icons/icon_apps/comment.png',
                                           scale: 3.5,
                                         ),
-                                        SizedBox(width: 5),
+                                        SizedBox(width: ScreenUtil.instance.setWidth(5)),
                                         Text(commentCount.length.toString(),
                                             style: TextStyle(
                                                 color: Color(

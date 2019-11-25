@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/RecycleableWidget/Invoice.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -51,7 +51,14 @@ class BuyersState extends State<Buyers> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     
     return Scaffold(
       key: scaffoldKey,
@@ -103,7 +110,7 @@ class BuyersState extends State<Buyers> {
                     backgroundImage:
                         NetworkImage(buyerList[i]['user']['pictureAvatarURL']),
                   )),
-                  SizedBox(width: 50),
+                  SizedBox(width: ScreenUtil.instance.setWidth(50)),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -113,7 +120,7 @@ class BuyersState extends State<Buyers> {
                     ],
                   ),
                   SizedBox(
-                    width: 45,
+                    width: ScreenUtil.instance.setWidth(45),
                   ),
                   Center(
                     child: Text('See Invoice >'),

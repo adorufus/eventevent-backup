@@ -193,7 +193,7 @@ class _WeekPickerState extends State<WeekPicker> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return SizedBox(
       width: widget.datePickerLayoutSettings.monthPickerPortraitWidth,
       height: widget.datePickerLayoutSettings.maxDayPickerHeight,
@@ -537,7 +537,7 @@ class _WeekPicker extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     final ThemeData themeData = Theme.of(context);
     final MaterialLocalizations localizations =
         MaterialLocalizations.of(context);

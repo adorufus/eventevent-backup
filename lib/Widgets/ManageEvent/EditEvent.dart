@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_places_picker/google_places_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
@@ -171,7 +171,14 @@ class EditEventState extends State<EditEvent>{
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
@@ -237,7 +244,7 @@ class EditEventState extends State<EditEvent>{
                     },
                     child: Text(
                       'Update',
-                      style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                      style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
                     ),
                   ),
                 ),
@@ -260,11 +267,11 @@ class EditEventState extends State<EditEvent>{
                       'Event Name',
                       style: TextStyle(
                           color: eventajaGreenTeal,
-                          fontSize: 18,
+                          fontSize: ScreenUtil.instance.setSp(18),
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
-                      height: 5,
+                      height: ScreenUtil.instance.setWidth(5),
                     ),
                     TextFormField(
                       controller: eventNameController,
@@ -281,25 +288,25 @@ class EditEventState extends State<EditEvent>{
                           )),
                     ),
                     SizedBox(
-                      height: 15,
+                      height: ScreenUtil.instance.setWidth(15),
                     ),
                     Container(
-                      height: 250,
+                      height: ScreenUtil.instance.setWidth(250),
                       width: MediaQuery.of(context).size.width,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                            height: 225,
-                            width: 150,
+                            height: ScreenUtil.instance.setWidth(225),
+                            width: ScreenUtil.instance.setWidth(150),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: imageUri == null ? Image.network(imageUriNetwork, fit: BoxFit.fill,) : Image.file(File(imageUri.path), fit: BoxFit.fill),
                             ),
                           ),
                           SizedBox(
-                            width: 20,
+                            width: ScreenUtil.instance.setWidth(20),
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,14 +315,14 @@ class EditEventState extends State<EditEvent>{
                               Text(
                                 'Event Type',
                                 style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: ScreenUtil.instance.setSp(18),
                                     color: Colors.black54,
                                     fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
                               Container(
-                                  width: 170,
-                                  height: 50,
+                                  width: ScreenUtil.instance.setWidth(170),
+                                  height: ScreenUtil.instance.setWidth(50),
                                   padding: EdgeInsets.only(left: 10),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
@@ -324,20 +331,20 @@ class EditEventState extends State<EditEvent>{
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         isPrivate == '0' ? 'PUBLIC' : 'PRIVATE',
-                                        style: TextStyle(fontSize: 15),
+                                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
                                       ))),
-                              SizedBox(height: 20),
+                              SizedBox(height: ScreenUtil.instance.setWidth(20)),
                               Text(
                                 'Category',
                                 style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: ScreenUtil.instance.setSp(18),
                                     color: Colors.black54,
                                     fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
                               Container(
-                                  width: 170,
-                                  height: 50,
+                                  width: ScreenUtil.instance.setWidth(170),
+                                  height: ScreenUtil.instance.setWidth(50),
                                   padding: EdgeInsets.only(left: 10),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
@@ -349,7 +356,7 @@ class EditEventState extends State<EditEvent>{
                                             categoryList[0] : categoryList.length == 2 ?
                                               categoryList[0] + ', ' + categoryList[1] : categoryList.length == 3 ?
                                                 categoryList[0] + ', ' + categoryList[1] + ', ' + categoryList[2] : '',
-                                        style: TextStyle(fontSize: 15),
+                                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
                                       )))
                             ],
                           )
@@ -362,17 +369,17 @@ class EditEventState extends State<EditEvent>{
                       children: <Widget>[
                         Text(
                           'Date',
-                          style: TextStyle(color: Colors.black54, fontSize: 18),
+                          style: TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18)),
                         ),
                         SizedBox(
-                          height: 15,
+                          height: ScreenUtil.instance.setWidth(15),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                                width: 150,
-                                height: 50,
+                                width: ScreenUtil.instance.setWidth(150),
+                                height: ScreenUtil.instance.setWidth(50),
                                 padding: EdgeInsets.only(left: 10),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
@@ -381,14 +388,14 @@ class EditEventState extends State<EditEvent>{
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       dateStart,
-                                      style: TextStyle(fontSize: 20),
+                                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
                                     ))),
                             SizedBox(
-                              width: 25,
+                              width: ScreenUtil.instance.setWidth(25),
                             ),
                             Container(
-                                width: 150,
-                                height: 50,
+                                width: ScreenUtil.instance.setWidth(150),
+                                height: ScreenUtil.instance.setWidth(50),
                                 padding: EdgeInsets.only(left: 10),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
@@ -397,26 +404,26 @@ class EditEventState extends State<EditEvent>{
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       dateEnd,
-                                      style: TextStyle(fontSize: 20),
+                                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
                                     ))),
                           ],
                         ),
                         SizedBox(
-                          height: 20,
+                          height: ScreenUtil.instance.setWidth(20),
                         ),
                         Text(
                           'Time',
-                          style: TextStyle(color: Colors.black54, fontSize: 18),
+                          style: TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18)),
                         ),
                         SizedBox(
-                          height: 15,
+                          height: ScreenUtil.instance.setWidth(15),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                                width: 150,
-                                height: 50,
+                                width: ScreenUtil.instance.setWidth(150),
+                                height: ScreenUtil.instance.setWidth(50),
                                 padding: EdgeInsets.only(left: 10),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
@@ -425,14 +432,14 @@ class EditEventState extends State<EditEvent>{
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       timeStart,
-                                      style: TextStyle(fontSize: 20),
+                                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
                                     ))),
                             SizedBox(
-                              width: 25,
+                              width: ScreenUtil.instance.setWidth(25),
                             ),
                             Container(
-                                width: 150,
-                                height: 50,
+                                width: ScreenUtil.instance.setWidth(150),
+                                height: ScreenUtil.instance.setWidth(50),
                                 padding: EdgeInsets.only(left: 10),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
@@ -441,13 +448,13 @@ class EditEventState extends State<EditEvent>{
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       timeEnd,
-                                      style: TextStyle(fontSize: 20),
+                                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
                                     ))),
                           ],
                         )
                       ],
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: ScreenUtil.instance.setWidth(20)),
                     Divider(
                       color: Colors.black54,
                     )
@@ -455,7 +462,7 @@ class EditEventState extends State<EditEvent>{
                 ),
               ),
               SizedBox(
-                height: 15,
+                height: ScreenUtil.instance.setWidth(15),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
@@ -467,7 +474,7 @@ class EditEventState extends State<EditEvent>{
                       'Video & Picture',
                       style: TextStyle(
                           color: Colors.black54,
-                          fontSize: 18,
+                          fontSize: ScreenUtil.instance.setSp(18),
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
@@ -475,20 +482,20 @@ class EditEventState extends State<EditEvent>{
                       style: TextStyle(color: Colors.black26),
                     ),
                     SizedBox(
-                      height: 15,
+                      height: ScreenUtil.instance.setWidth(15),
                     )
                   ],
                 ),
               ),
               //addMed(context),
               SizedBox(
-                height: 20,
+                height: ScreenUtil.instance.setWidth(20),
               ),
               Divider(
                 color: Colors.black54,
               ),
               SizedBox(
-                height: 15,
+                height: ScreenUtil.instance.setWidth(15),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
@@ -499,11 +506,11 @@ class EditEventState extends State<EditEvent>{
                         'Description',
                         style: TextStyle(
                             color: Colors.black54,
-                            fontSize: 18,
+                            fontSize: ScreenUtil.instance.setSp(18),
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: ScreenUtil.instance.setWidth(10),
                       ),
                       TextFormField(
                         controller: descController,
@@ -516,30 +523,30 @@ class EditEventState extends State<EditEvent>{
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide.none)),
                       ),
-                      SizedBox(height: 15),
+                      SizedBox(height: ScreenUtil.instance.setWidth(15)),
                       Text(
                         'Contact',
                         style: TextStyle(
                             color: Colors.black54,
-                            fontSize: 18,
+                            fontSize: ScreenUtil.instance.setSp(18),
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 15),
+                      SizedBox(height: ScreenUtil.instance.setWidth(15)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(
-                            height: 40,
-                            width: 40,
+                            height: ScreenUtil.instance.setWidth(40),
+                            width: ScreenUtil.instance.setWidth(40),
                             child: Image.asset(
                                 'assets/icons/btn_phone_active.png'),
                           ),
                           SizedBox(
-                            width: 10,
+                            height: ScreenUtil.instance.setWidth(10),
                           ),
                           Container(
-                            width: 280,
-                            height: 35,
+                            width: ScreenUtil.instance.setWidth(280),
+                            height: ScreenUtil.instance.setWidth(35),
                             child: TextFormField(
                               keyboardType: TextInputType.phone,
                               controller: telephoneController,
@@ -557,23 +564,23 @@ class EditEventState extends State<EditEvent>{
                         ],
                       ),
                       SizedBox(
-                        height: 10,
+                        height: ScreenUtil.instance.setWidth(10),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(
-                            height: 40,
-                            width: 40,
+                            height: ScreenUtil.instance.setWidth(40),
+                            width: ScreenUtil.instance.setWidth(40),
                             child:
                             Image.asset('assets/icons/btn_mail_active.png'),
                           ),
                           SizedBox(
-                            width: 10,
+                            height: ScreenUtil.instance.setWidth(10),
                           ),
                           Container(
-                            width: 280,
-                            height: 35,
+                            width: ScreenUtil.instance.setWidth(280),
+                            height: ScreenUtil.instance.setWidth(35),
                             child: TextFormField(
                               controller: emailController,
                               decoration: InputDecoration(
@@ -590,23 +597,23 @@ class EditEventState extends State<EditEvent>{
                         ],
                       ),
                       SizedBox(
-                        height: 10,
+                        height: ScreenUtil.instance.setWidth(10),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(
-                            height: 40,
-                            width: 40,
+                            height: ScreenUtil.instance.setWidth(40),
+                            width: ScreenUtil.instance.setWidth(40),
                             child:
                             Image.asset('assets/icons/btn_web_active.png'),
                           ),
                           SizedBox(
-                            width: 10,
+                            height: ScreenUtil.instance.setWidth(10),
                           ),
                           Container(
-                            width: 280,
-                            height: 35,
+                            width: ScreenUtil.instance.setWidth(280),
+                            height: ScreenUtil.instance.setWidth(35),
                             child: TextFormField(
                               controller: websiteController,
                               decoration: InputDecoration(
@@ -622,17 +629,17 @@ class EditEventState extends State<EditEvent>{
                           )
                         ],
                       ),
-                      SizedBox(height: 15),
+                      SizedBox(height: ScreenUtil.instance.setWidth(15)),
                       Text(
                         'Location Address',
                         style: TextStyle(
                             color: Colors.black54,
-                            fontSize: 18,
+                            fontSize: ScreenUtil.instance.setSp(18),
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 15),
+                      SizedBox(height: ScreenUtil.instance.setWidth(15)),
                       Container(
-                        height: 80,
+                        height: ScreenUtil.instance.setWidth(80),
                         width: MediaQuery.of(context).size.width,
                         margin: EdgeInsets.only(right: 18),
                         padding: EdgeInsets.all(15),
@@ -644,7 +651,7 @@ class EditEventState extends State<EditEvent>{
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
-                      SizedBox(height: 12),
+                      SizedBox(height: ScreenUtil.instance.setWidth(12)),
                       TextFormField(
                         controller: additionalInfoMapController,
                         maxLines: 5,
@@ -661,7 +668,7 @@ class EditEventState extends State<EditEvent>{
                                 BorderSide(color: Colors.transparent))),
                       ),
                       SizedBox(
-                        height: 15,
+                        height: ScreenUtil.instance.setWidth(15),
                       ),
                       showMap(context)
                     ],
@@ -675,15 +682,15 @@ class EditEventState extends State<EditEvent>{
   Widget showMap(BuildContext context) {
     StaticMapsProvider mapProvider = new StaticMapsProvider(
       GOOGLE_API_KEY: 'AIzaSyDjNpeyufzT81GAhQkCe85x83kxzfA7qbI',
-      height: 1024,
-      width: 1024,
+      height: ScreenUtil.instance.setWidth(1024),
+      width: ScreenUtil.instance.setWidth(1024),
       latitude: lat,
       longitude: long,
       isRedirectToGMAP: false,
     );
 
     return Container(
-      height: 300,
+      height: ScreenUtil.instance.setWidth(300),
       width: MediaQuery.of(context).size.width,
       child: Stack(alignment: Alignment.bottomCenter, children: <Widget>[
         Positioned(
@@ -696,8 +703,8 @@ class EditEventState extends State<EditEvent>{
         ),
         Center(
           child: SizedBox(
-            height: 50,
-            width: 50,
+            height: ScreenUtil.instance.setWidth(50),
+            width: ScreenUtil.instance.setWidth(50),
             child: Image.asset('assets/icons/location-transparent.png'),
           ),
         )
@@ -707,7 +714,7 @@ class EditEventState extends State<EditEvent>{
 
   Widget addMed(BuildContext context) {
     return Container(
-      height: 200,
+      height: ScreenUtil.instance.setWidth(200),
       width: MediaQuery.of(context).size.width,
       child: ListView(
         padding: EdgeInsets.only(left: 10),
@@ -775,12 +782,12 @@ class EditEventState extends State<EditEvent>{
             },
             child: Container(
               color: Colors.grey,
-              height: 200,
-              width: 150,
+              height: ScreenUtil.instance.setWidth(200),
+              width: ScreenUtil.instance.setWidth(150),
               child: Center(
                 child: SizedBox(
-                  height: 50,
-                  width: 50,
+                  height: ScreenUtil.instance.setWidth(50),
+                  width: ScreenUtil.instance.setWidth(50),
                   child: Image.asset(
                       'assets/bottom-bar/new-something-white.png'),
                 ),

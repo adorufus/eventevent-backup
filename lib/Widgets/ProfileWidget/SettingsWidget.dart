@@ -7,7 +7,7 @@ import 'package:eventevent/Widgets/ProfileWidget/editProfile.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:launch_review/launch_review.dart';
@@ -44,7 +44,14 @@ class _SettingsWidgetState extends State<SettingsWidget>{
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -64,9 +71,9 @@ class _SettingsWidgetState extends State<SettingsWidget>{
         children: <Widget>[
           Container(
             padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Text('REVIEW', style: TextStyle(fontSize: 20, color: Colors.grey[600]),),
+            child: Text('REVIEW', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[600]),),
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: ScreenUtil.instance.setWidth(10),),
           Container(
             width: MediaQuery.of(context).size.width,
             color: Colors.white,
@@ -82,19 +89,19 @@ class _SettingsWidgetState extends State<SettingsWidget>{
                     padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
                     child: Text(
                       'Rate EventEvent on App Store / Google Play',
-                      style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[700]),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 25,),
+          SizedBox(height: ScreenUtil.instance.setWidth(25),),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Text('BANK ACCOUNT & WITHDRAW', style: TextStyle(fontSize: 20, color: Colors.grey[600]),),
+            child: Text('BANK ACCOUNT & WITHDRAW', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[600]),),
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: ScreenUtil.instance.setWidth(10),),
           Container(
             width: MediaQuery.of(context).size.width,
             color: Colors.white,
@@ -110,7 +117,7 @@ class _SettingsWidgetState extends State<SettingsWidget>{
                     padding: EdgeInsets.only(left: 30, top: 15),
                     child: Text(
                       'Bank Account',
-                      style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[700]),
                     ),
                   ),
                 ),
@@ -128,19 +135,19 @@ class _SettingsWidgetState extends State<SettingsWidget>{
                     padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
                     child: Text(
                       'Withdraw',
-                      style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[700]),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 25,),
+          SizedBox(height: ScreenUtil.instance.setWidth(25),),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Text('ACCOUNT SETTINGS', style: TextStyle(fontSize: 20, color: Colors.grey[600]),),
+            child: Text('ACCOUNT SETTINGS', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[600]),),
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: ScreenUtil.instance.setWidth(10),),
           Container(
             width: MediaQuery.of(context).size.width,
             color: Colors.white,
@@ -156,7 +163,7 @@ class _SettingsWidgetState extends State<SettingsWidget>{
                     padding: EdgeInsets.only(left: 30, top: 15),
                     child: Text(
                       'Edit Profile',
-                      style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[700]),
                     ),
                   ),
                 ),
@@ -174,19 +181,19 @@ class _SettingsWidgetState extends State<SettingsWidget>{
                     padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
                     child: Text(
                       'Change Password',
-                      style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[700]),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 25,),
+          SizedBox(height: ScreenUtil.instance.setWidth(25),),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Text('FEEDBACK', style: TextStyle(fontSize: 20, color: Colors.grey[600]),),
+            child: Text('FEEDBACK', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[600]),),
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: ScreenUtil.instance.setWidth(10),),
           Container(
             width: MediaQuery.of(context).size.width,
             color: Colors.white,
@@ -202,14 +209,14 @@ class _SettingsWidgetState extends State<SettingsWidget>{
                     padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
                     child: Text(
                       'Give us feedback',
-                      style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[700]),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 25,),
+          SizedBox(height: ScreenUtil.instance.setWidth(25),),
           GestureDetector(
             onTap: (){
               showDialog(
@@ -228,15 +235,15 @@ class _SettingsWidgetState extends State<SettingsWidget>{
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10)
                             ),
-                            height: 100,
-                            width: 200,
+                            height: ScreenUtil.instance.setWidth(100),
+                            width: ScreenUtil.instance.setWidth(200),
                             child: Column(
                               children: <Widget>[
-                                Text('Oops', style: TextStyle(color: Colors.black54,fontSize: 18, fontWeight: FontWeight.bold),),
-                                SizedBox(height: 10,),
+                                Text('Oops', style: TextStyle(color: Colors.black54,fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
+                                SizedBox(height: ScreenUtil.instance.setWidth(10),),
                                 Text('Do you want to log out?', textAlign: TextAlign.center,),
                                 SizedBox(
-                                  height: 20,
+                                  height: ScreenUtil.instance.setWidth(20),
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -248,7 +255,7 @@ class _SettingsWidgetState extends State<SettingsWidget>{
                                       child: Text('Cancel', style: TextStyle(color: Colors.lightBlue, fontWeight: FontWeight.bold),),
                                     ),
                                     SizedBox(
-                                      width: 50,
+                                      width: ScreenUtil.instance.setWidth(50),
                                     ),
                                     GestureDetector(
                                       onTap: (){
@@ -273,15 +280,15 @@ class _SettingsWidgetState extends State<SettingsWidget>{
               width: MediaQuery.of(context).size.width,
               color: Colors.white,
               padding: EdgeInsets.only(left: 30, bottom: 10, top: 10),
-              child: Text('Log Out', style: TextStyle(color: Colors.red, fontSize: 20),),
+              child: Text('Log Out', style: TextStyle(color: Colors.red, fontSize: ScreenUtil.instance.setSp(18)),),
             ),
           ),
-          SizedBox(height: 25,),
+          SizedBox(height: ScreenUtil.instance.setWidth(25),),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Text('Terms and Condition', style: TextStyle(fontSize: 20, color: Colors.grey[600]),),
+            child: Text('Terms and Condition', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[600]),),
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: ScreenUtil.instance.setWidth(10),),
           Container(
             width: MediaQuery.of(context).size.width,
             color: Colors.white,
@@ -297,7 +304,7 @@ class _SettingsWidgetState extends State<SettingsWidget>{
                     padding: EdgeInsets.only(left: 30, top: 15),
                     child: Text(
                       'Terms',
-                      style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[700]),
                     ),
                   ),
                 ),
@@ -315,22 +322,22 @@ class _SettingsWidgetState extends State<SettingsWidget>{
                     padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
                     child: Text(
                       'Privacy Policy',
-                      style: TextStyle(fontSize: 20, color: Colors.grey[700]),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[700]),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 25,),
+          SizedBox(height: ScreenUtil.instance.setWidth(25),),
           GestureDetector(
             onTap: (){
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
-              height: 50,
+              height: ScreenUtil.instance.setWidth(50),
               color: Colors.white,
-              child: Center(child: Text(appVersion, style: TextStyle(color: Colors.grey[700], fontSize: 18),))
+              child: Center(child: Text(appVersion, style: TextStyle(color: Colors.grey[700], fontSize: ScreenUtil.instance.setSp(18)),))
             ),
           ),
         ],

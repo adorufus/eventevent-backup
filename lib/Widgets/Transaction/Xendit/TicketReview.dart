@@ -7,7 +7,7 @@ import 'package:eventevent/Widgets/Transaction/GOPAY/WaitingGopay.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
@@ -108,7 +108,14 @@ class _TicketReviewState extends State<TicketReview> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
       appBar: AppBar(
@@ -135,12 +142,12 @@ class _TicketReviewState extends State<TicketReview> {
           postPurchaseTicket();
         },
         child: Container(
-            height: 50,
+            height: ScreenUtil.instance.setWidth(50),
             color: Colors.deepOrangeAccent,
             child: Center(
               child: Text(
                 'PURCHASE',
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                style: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(20)),
               ),
             )),
       ),
@@ -149,7 +156,7 @@ class _TicketReviewState extends State<TicketReview> {
           Container(
               color: Colors.white,
               padding: EdgeInsets.all(15),
-              height: 280,
+              height: ScreenUtil.instance.setWidth(280),
               width: MediaQuery.of(context).size.width,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -159,24 +166,24 @@ class _TicketReviewState extends State<TicketReview> {
                       child: Text(
                         thisEventName == null ? '' : thisEventName,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 22),
+                            fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(22)),
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: ScreenUtil.instance.setWidth(20)),
                     Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                              height: 150,
-                              width: 100,
+                              height: ScreenUtil.instance.setWidth(150),
+                              width: ScreenUtil.instance.setWidth(100),
                               child: Image(
                                   image: thisEventImage == null
                                       ? AssetImage('assets/white.png')
                                       : NetworkImage(thisEventImage),
                                   fit: BoxFit.fill)),
-                          SizedBox(width: 20),
+                          SizedBox(width: ScreenUtil.instance.setWidth(20)),
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -184,26 +191,26 @@ class _TicketReviewState extends State<TicketReview> {
                                 Text(thisTicketAmount == null
                                     ? ''
                                     : thisTicketAmount + 'X' + ' Ticket(s)'),
-                                SizedBox(height: 15),
+                                SizedBox(height: ScreenUtil.instance.setWidth(15)),
                                 Text(
                                     thisTicketName == null
                                         ? ''
                                         : thisTicketName,
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: ScreenUtil.instance.setSp(20),
                                         fontWeight: FontWeight.bold)),
-                                SizedBox(height: 15),
+                                SizedBox(height: ScreenUtil.instance.setWidth(15)),
                                 Container(
-                                    width: 190,
+                                    width: ScreenUtil.instance.setWidth(190),
                                     child: Text(
                                         thisEventAddres == null
                                             ? ''
                                             : thisEventAddres,
                                         overflow: TextOverflow.ellipsis)),
-                                SizedBox(height: 15),
+                                SizedBox(height: ScreenUtil.instance.setWidth(15)),
                                 Text(
                                     thisEventDate == null ? '' : thisEventDate),
-                                SizedBox(height: 15),
+                                SizedBox(height: ScreenUtil.instance.setWidth(15)),
                                 Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
@@ -221,11 +228,11 @@ class _TicketReviewState extends State<TicketReview> {
                               ])
                         ])
                   ])),
-          SizedBox(height: 50),
+          SizedBox(height: ScreenUtil.instance.setWidth(50)),
           Container(
               padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 15),
               color: Colors.white,
-              height: 150,
+              height: ScreenUtil.instance.setWidth(150),
               width: MediaQuery.of(context).size.width,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,10 +250,10 @@ class _TicketReviewState extends State<TicketReview> {
                         controller: promoCodeController,
                         decoration:
                             InputDecoration(hintText: 'Example: TIX25')),
-                    SizedBox(height: 15),
+                    SizedBox(height: ScreenUtil.instance.setWidth(15)),
                     SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        height: 40,
+                        height: ScreenUtil.instance.setWidth(40),
                         child: RaisedButton(
                             child: Text(couponButtonText,
                                 style: TextStyle(
@@ -277,11 +284,11 @@ class _TicketReviewState extends State<TicketReview> {
                                 ? eventajaGreenTeal.withOpacity(0.2)
                                 : buttonColor))
                   ])),
-          SizedBox(height: 50),
+          SizedBox(height: ScreenUtil.instance.setWidth(50)),
           Container(
               padding: EdgeInsets.all(15),
               color: Colors.white,
-              height: 150,
+              height: ScreenUtil.instance.setWidth(150),
               width: MediaQuery.of(context).size.width,
               child: Column(children: <Widget>[
                 Row(
@@ -289,40 +296,40 @@ class _TicketReviewState extends State<TicketReview> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text('Ticket Price'),
-                      SizedBox(width: 95),
+                      SizedBox(width: ScreenUtil.instance.setWidth(95)),
                       Text(':'),
-                      SizedBox(width: 50),
+                      SizedBox(width: ScreenUtil.instance.setWidth(50)),
                       Text('Rp. ' + thisTicketPrice)
                     ]),
-                SizedBox(height: 20),
+                SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text('Processing Fee'),
-                      SizedBox(width: 70.5),
+                      SizedBox(width: ScreenUtil.instance.setWidth(70.5)),
                       Text(':'),
-                      SizedBox(width: 50),
+                      SizedBox(width: ScreenUtil.instance.setWidth(50)),
                       Text(pajak.toString())
                     ]),
-                SizedBox(height: 20),
+                SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 Align(
                     alignment: Alignment.centerRight,
-                    child: Divider(height: 10, indent: 150)),
+                    child: Divider(height: ScreenUtil.instance.setWidth(10), indent: 150)),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text('Total'),
-                      SizedBox(width: 135),
+                      SizedBox(width: ScreenUtil.instance.setWidth(135)),
                       Text(':'),
-                      SizedBox(width: 50),
+                      SizedBox(width: ScreenUtil.instance.setWidth(50)),
                       Text(
                         'Rp. ' + total.toString(),
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontWeight: FontWeight.bold,
-                            fontSize: 20),
+                            fontSize: ScreenUtil.instance.setSp(20)),
                         textAlign: TextAlign.end,
                       )
                     ]),

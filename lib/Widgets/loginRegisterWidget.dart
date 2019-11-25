@@ -7,7 +7,7 @@ import 'package:eventevent/Widgets/loginWidget.dart';
 import 'package:eventevent/Widgets/registerWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/FirebaseMessagingHelper.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -267,7 +267,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                   scale: 4,
                 ),
               ),
-              SizedBox(height: ScreenUtil.instance.setHeight(30)),
+              SizedBox(height: ScreenUtil.instance.setWidth(30)),
               FractionallySizedBox(
                 child: Container(
                     width: ScreenUtil.instance.setWidth(306.93),

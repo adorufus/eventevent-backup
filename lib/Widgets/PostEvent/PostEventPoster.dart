@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +32,15 @@ class PostEventPosterState extends State<PostEventPoster> {
 
   @override
   Widget build(BuildContext context) {
-    
+    double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
+
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
@@ -60,7 +70,9 @@ class PostEventPosterState extends State<PostEventPoster> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -88,24 +100,24 @@ class PostEventPosterState extends State<PostEventPoster> {
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: ScreenUtil.instance.setWidth(20),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Divider(
                   color: Colors.grey,
-                  height: 5,
+                  height: ScreenUtil.instance.setWidth(5),
                 ),
               ),
               SizedBox(
-                height: 50,
+                height: ScreenUtil.instance.setWidth(50),
               ),
               Text(
                 'Post',
                 style: TextStyle(
                     color: eventajaGreenTeal,
                     fontWeight: FontWeight.bold,
-                    fontSize: 30),
+                    fontSize: ScreenUtil.instance.setSp(30)),
               ),
               SizedBox(
                 height: posterFile == null ? 100 : 30,
@@ -116,16 +128,16 @@ class PostEventPosterState extends State<PostEventPoster> {
                 },
                 child: posterFile == null
                     ? SizedBox(
-                        height: 100,
-                        width: 100,
+                        height: ScreenUtil.instance.setWidth(100),
+                        width: ScreenUtil.instance.setWidth(100),
                         child: Image.asset(
                           'assets/bottom-bar/new-something-white.png',
                           color: Colors.grey,
                         ),
                       )
                     : Container(
-                        height: 300,
-                        width: 200,
+                        height: ScreenUtil.instance.setWidth(300),
+                        width: ScreenUtil.instance.setWidth(200),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             image: DecorationImage(
@@ -197,7 +209,8 @@ class PostEventPosterState extends State<PostEventPoster> {
           ratioY: 3.0,
         ),
         maxWidth: 512,
-        maxHeight: 512);
+        maxHeight: 512,
+      );
 
     print(croppedImage.path);
     setState(() {

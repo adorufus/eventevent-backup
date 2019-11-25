@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,7 +28,14 @@ class ReportPostState extends State<ReportPost> {
   bool isReported = false;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -81,22 +88,22 @@ class ReportPostState extends State<ReportPost> {
               Text(
                 'Report post',
                 style: TextStyle(
-                    fontSize: 15,
+                    fontSize: ScreenUtil.instance.setSp(15),
                     color: Color(0xff8a8a8b),
                     fontWeight: FontWeight.bold),
               ),
               SizedBox(
-                height: 10,
+                height: ScreenUtil.instance.setWidth(10),
               ),
               Text(
                 'Why are you reporting this post?',
-                style: TextStyle(fontSize: 13),
+                style: TextStyle(fontSize: ScreenUtil.instance.setSp(13)),
               ),
             ],
           ),
         ),
         SizedBox(
-          height: 13,
+          height: ScreenUtil.instance.setWidth(13),
         ),
         Container(
           margin: EdgeInsets.only(bottom: 13),
@@ -279,7 +286,14 @@ class ReportPostState extends State<ReportPost> {
 
 class SuccesReportPage extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

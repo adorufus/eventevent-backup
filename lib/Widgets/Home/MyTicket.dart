@@ -5,6 +5,7 @@ import 'package:eventevent/Widgets/ProfileWidget/UseTicket.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -75,22 +76,28 @@ class _MyTicketState extends State<MyTicket> {
 
   @override
   Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
+
     searchController.addListener(() {
       if (searchController.text.isEmpty) {
-        _searchText = "";
-        filteredTickets = myTicketList;
-      } else {
-        _searchText = searchController.text;
+        searchController.text = '';
       }
     });
 
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
         appBar: PreferredSize(
           preferredSize: Size(null, 100),
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 65,
+            height: ScreenUtil.instance.setWidth(65),
             padding: EdgeInsets.symmetric(horizontal: 13),
             color: Colors.white,
             child: AppBar(
@@ -107,7 +114,7 @@ class _MyTicketState extends State<MyTicket> {
                 ),
               ),
               title: Container(
-                width: 280,
+                width: ScreenUtil.instance.setWidth(280),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40),
                     boxShadow: <BoxShadow>[
@@ -116,7 +123,7 @@ class _MyTicketState extends State<MyTicket> {
                           color: Colors.black.withOpacity(0.1),
                           spreadRadius: 1.5)
                     ]),
-                height: 32.95,
+                height: ScreenUtil.instance.setWidth(32.95),
                 child: Material(
                   borderRadius: BorderRadius.circular(40),
                   child: TextFormField(
@@ -124,11 +131,11 @@ class _MyTicketState extends State<MyTicket> {
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.search,
                     onFieldSubmitted: (value) {
-                      if (value != null) {
-                        _getTickets();
-                      }
+                      setState(() {
+                        searchController.text = value;
+                      });
                     },
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
                     autofocus: false,
                     autocorrect: false,
                     decoration: InputDecoration(
@@ -140,7 +147,7 @@ class _MyTicketState extends State<MyTicket> {
                         contentPadding:
                             EdgeInsets.symmetric(vertical: 4, horizontal: 15),
                         hintText: 'Search',
-                        hintStyle: TextStyle(fontSize: 12),
+                        hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(40),
                             borderSide:
@@ -156,129 +163,165 @@ class _MyTicketState extends State<MyTicket> {
               textTheme: TextTheme(
                   title: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 14,
+                fontSize: ScreenUtil.instance.setSp(14),
                 color: Colors.black,
               )),
             ),
           ),
         ),
-        body: Container(
-          child: 
-          // myTicketList == null
-          //     ? Center(
-          //         child: Container(
-          //           width: 25,
-          //           height: 25,
-          //           child: FittedBox(
-          //             fit: BoxFit.fill,
-          //             child: CircularProgressIndicator(),
-          //           ),
-          //         ),
-          //       )
-          //     : 
-              SmartRefresher(
-                  enablePullDown: true,
-                  enablePullUp: true,
-                  footer: CustomFooter(
-                      builder: (BuildContext context, LoadStatus mode) {
-                    Widget body;
-                    if (mode == LoadStatus.idle) {
-                      body = Text("Load data");
-                    } else if (mode == LoadStatus.loading) {
-                      body = CircularProgressIndicator();
-                    } else if (mode == LoadStatus.failed) {
-                      body = Text("Load Failed!");
-                    } else if (mode == LoadStatus.canLoading) {
-                      body = Text('More');
-                    } else {
-                      body = Container();
-                    }
+        body: FutureBuilder(
+            future: _getTickets(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return Center(
+                    child: Text('Please Check Your Internet Connection'),
+                  );
+                  break;
+                case ConnectionState.waiting:
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                  break;
+                case ConnectionState.active:
+                  //
+                  break;
+                case ConnectionState.done:
+                  if (snapshot.hasError) {
+                    print(snapshot.error);
+                    return Container(
+                      child: Center(child: Text('Something Went Wrong')),
+                    );
+                  } else {
 
-                    return Container(height: 35, child: Center(child: body));
-                  }),
-                  controller: refreshController,
-                  onRefresh: () {
-                    setState(() {
-                      newPage = 0;
-                    });
-                    getMyTicket(newPage: newPage).then((response) {
-                      if (response.statusCode == 200) {
-                        setState(() {
-                          var extractedData = json.decode(response.body);
-                          myTicketList = extractedData['data'];
-                        });
-                        if (mounted) setState(() {});
-                        refreshController.refreshCompleted();
-                      }
-                    });
-                  },
-                  onLoading: _onLoading,
-                  child: ListView.builder(
-                      itemCount:
-                          myTicketList == null ? 0 : myTicketList.length,
-                      itemBuilder: (BuildContext context, i) {
-                        Color ticketColor;
-                        String ticketStatusText;
+                    myTicketList = snapshot.data['data'];
 
-                        if (myTicketList[i]['usedStatus'] == 'available') {
-                          ticketColor = eventajaGreenTeal;
-                          ticketStatusText = 'Available';
-                        } else if (myTicketList[i]['usedStatus'] == 'used') {
-                          ticketColor = Color(0xFFA6A8AB);
-                          ticketStatusText = 'Used';
-                        } else if (myTicketList[i]['usedStatus'] ==
-                            'expired') {
-                          ticketColor = Color(0xFF8E1E2D);
-                          ticketStatusText = 'Expired';
-                        }
+                    return Container(
+                      child:
+                          // myTicketList == null
+                          //     ? Center(
+                          //         child: Container(
+                          //           width: ScreenUtil.instance.setWidth(25),
+                          //           height: ScreenUtil.instance.setWidth(25),
+                          //           child: FittedBox(
+                          //             fit: BoxFit.fill,
+                          //             child: CircularProgressIndicator(),
+                          //           ),
+                          //         ),
+                          //       )
+                          //     :
+                          SmartRefresher(
+                        enablePullDown: true,
+                        enablePullUp: true,
+                        footer: CustomFooter(
+                            builder: (BuildContext context, LoadStatus mode) {
+                          Widget body;
+                          if (mode == LoadStatus.idle) {
+                            body = Text("Load data");
+                          } else if (mode == LoadStatus.loading) {
+                            body = CircularProgressIndicator();
+                          } else if (mode == LoadStatus.failed) {
+                            body = Text("Load Failed!");
+                          } else if (mode == LoadStatus.canLoading) {
+                            body = Text('More');
+                          } else {
+                            body = Container();
+                          }
 
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        UseTicket(
-                                          ticketTitle: myTicketList[i]
-                                              ['ticket']['ticket_name'],
-                                          ticketImage: myTicketList[i]
-                                              ['ticket_image']['url'],
-                                          ticketCode: myTicketList[i]
-                                              ['ticket_code'],
-                                          ticketDate: myTicketList[i]['event']
-                                              ['dateStart'],
-                                          ticketStartTime: myTicketList[i]
-                                              ['event']['timeStart'],
-                                          ticketEndTime: myTicketList[i]
-                                              ['event']['timeEnd'],
-                                          ticketDesc: myTicketList[i]['event']
-                                              ['name'],
-                                          ticketID: myTicketList[i]['id'],
-                                          usedStatus:
-                                              ticketStatusText.toUpperCase(),
-                                        )));
+                          return Container(
+                              height: ScreenUtil.instance.setWidth(35),
+                              child: Center(child: body));
+                        }),
+                        controller: refreshController,
+                        onRefresh: () {
+                          setState(() {
+                            newPage = 0;
+                          });
+                          getMyTicket(newPage: newPage).then((response) {
+                            if (response.statusCode == 200) {
+                              setState(() {
+                                var extractedData = json.decode(response.body);
+                                myTicketList = extractedData['data'];
+                              });
+                              if (mounted) setState(() {});
+                              refreshController.refreshCompleted();
+                            }
+                          });
+                        },
+                        onLoading: _onLoading,
+                        child: ListView.builder(
+                          itemCount:
+                              myTicketList == null ? 0 : myTicketList.length,
+                          itemBuilder: (BuildContext context, i) {
+                            Color ticketColor;
+                            String ticketStatusText;
+
+                            if (myTicketList[i]['usedStatus'] == 'available') {
+                              ticketColor = eventajaGreenTeal;
+                              ticketStatusText = 'Available';
+                            } else if (myTicketList[i]['usedStatus'] ==
+                                'used') {
+                              ticketColor = Color(0xFF652D90);
+                              ticketStatusText = 'Used';
+                            } else if (myTicketList[i]['usedStatus'] ==
+                                'expired') {
+                              ticketColor = Color(0xFF8E1E2D);
+                              ticketStatusText = 'Expired';
+                            }
+
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            UseTicket(
+                                              ticketTitle: myTicketList[i]
+                                                  ['ticket']['ticket_name'],
+                                              ticketImage: myTicketList[i]
+                                                  ['ticket_image']['url'],
+                                              ticketCode: myTicketList[i]
+                                                  ['ticket_code'],
+                                              ticketDate: myTicketList[i]
+                                                  ['event']['dateStart'],
+                                              ticketStartTime: myTicketList[i]
+                                                  ['event']['timeStart'],
+                                              ticketEndTime: myTicketList[i]
+                                                  ['event']['timeEnd'],
+                                              ticketDesc: myTicketList[i]
+                                                  ['event']['name'],
+                                              ticketID: myTicketList[i]['id'],
+                                              usedStatus: ticketStatusText
+                                                  .toUpperCase(),
+                                            )));
+                              },
+                              child: Container(
+                                child: new MyTicketItem(
+                                  image: myTicketList[i]['ticket_image']
+                                      ['secure_url'],
+                                  title: myTicketList[i]['event']['name'],
+                                  ticketCode: myTicketList[i]['ticket_code'],
+                                  ticketStatus: ticketStatusText,
+                                  timeStart: myTicketList[i]['event']
+                                      ['timeStart'],
+                                  timeEnd: myTicketList[i]['event']['timeEnd'],
+                                  ticketName: myTicketList[i]['ticket']
+                                      ['ticket_name'],
+                                  ticketColor: ticketColor,
+                                  // topPadding: i == 0 ? 13.0 : 0.0,
+                                ),
+                              ),
+                            );
                           },
-                          child: Container(
-                            child: new MyTicketItem(
-                              image: myTicketList[i]['ticket_image']
-                                  ['secure_url'],
-                              title: myTicketList[i]['event']['name'],
-                              ticketCode: myTicketList[i]['ticket_code'],
-                              ticketStatus: ticketStatusText,
-                              timeStart: myTicketList[i]['event']
-                                  ['timeStart'],
-                              timeEnd: myTicketList[i]['event']['timeEnd'],
-                              ticketName: myTicketList[i]['ticket']
-                                  ['ticket_name'],
-                              ticketColor: ticketColor,
-                              // topPadding: i == 0 ? 13.0 : 0.0,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-        ),
+                        ),
+                      ),
+                    );
+                  }
+                  break;
+              }
+
+              return Container();
+            }),
       ),
     );
   }
@@ -287,7 +330,8 @@ class _MyTicketState extends State<MyTicket> {
     if (!(_searchText.isEmpty)) {
       List tempList = new List();
       for (int i = 0; i < filteredTickets.length; i++) {
-        if (filteredTickets[i]['name'].toString()
+        if (filteredTickets[i]['name']
+            .toString()
             .toLowerCase()
             .contains(_searchText.toLowerCase())) {
           tempList.add(filteredTickets[i]);
@@ -305,7 +349,7 @@ class _MyTicketState extends State<MyTicket> {
             ticketColor = eventajaGreenTeal;
             ticketStatusText = 'Available';
           } else if (filteredTickets[i]['usedStatus'] == 'used') {
-            ticketColor = Color(0xFFA6A8AB);
+            ticketColor = Color(0xFF652D90);
             ticketStatusText = 'Used';
           } else if (filteredTickets[i]['usedStatus'] == 'expired') {
             ticketColor = Color(0xFF8E1E2D);
@@ -362,7 +406,7 @@ class _MyTicketState extends State<MyTicket> {
     //       ticketColor = eventajaGreenTeal;
     //       ticketStatusText = 'Available';
     //     } else if (filteredTickets[i]['usedStatus'] == 'used') {
-    //       ticketColor = Color(0xFFA6A8AB);
+    //       ticketColor = Color(0xFF652D90);
     //       ticketStatusText = 'Used';
     //     } else if (filteredTickets[i]['usedStatus'] == 'expired') {
     //       ticketColor = Color(0xFF8E1E2D);
@@ -407,7 +451,7 @@ class _MyTicketState extends State<MyTicket> {
     // );
   }
 
-  Future<http.Response> _getTickets() async {
+  Future _getTickets() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String url = BaseApi().apiUrl +
         '/tickets/all?X-API-KEY=$API_KEY&page=1&search=${searchController.text}';
@@ -419,8 +463,9 @@ class _MyTicketState extends State<MyTicket> {
 
     print(response.statusCode);
     print(response.body);
+    var extractedData = json.decode(response.body);
 
-    return response;
+    return extractedData;
   }
 
   Future<http.Response> getMyTicket({int newPage}) async {

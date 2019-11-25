@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter/services.dart';
 
@@ -54,7 +54,14 @@ class _ScanBarcodeState extends State<ScanBarcode> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(title: const Text('Barcode scan')),
@@ -71,7 +78,7 @@ class _ScanBarcodeState extends State<ScanBarcode> {
                             },
                             child: Text("Start barcode scan")),
                         Text('Scan result : $_scanBarcode\n',
-                            style: TextStyle(fontSize: 20)),
+                            style: TextStyle(fontSize: ScreenUtil.instance.setSp(20))),
                         RaisedButton(
                             onPressed: () {
                               startBarcodeScanStream();

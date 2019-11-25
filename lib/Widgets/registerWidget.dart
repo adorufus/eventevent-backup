@@ -5,7 +5,7 @@ import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/API/registerModel.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
@@ -34,7 +34,14 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   bool isLoading = false;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -50,7 +57,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         ),
         middle: Text(
           'Register',
-          style: TextStyle(fontSize: 20, color: eventajaGreenTeal),
+          style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: eventajaGreenTeal),
         ),
       ),
       body: Stack(
@@ -143,7 +150,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               suffixIcon: validationUsernameIcon),
         ),
         SizedBox(
-          height: 15,
+          height: ScreenUtil.instance.setWidth(15),
         ),
         TextFormField(
           controller: _emailController,
@@ -223,12 +230,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               suffixIcon: validationEmailIcon),
         ),
         SizedBox(
-          height: 15,
+          height: ScreenUtil.instance.setWidth(15),
         ),
         Row(
           children: <Widget>[
             Container(
-              width: 250,
+              width: ScreenUtil.instance.setWidth(250),
               child: TextFormField(
                 controller: _passwordController,
                 keyboardType: TextInputType.text,
@@ -248,8 +255,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 });
               },
               child: Container(
-                  height: 20,
-                  width: 20,
+                  height: ScreenUtil.instance.setWidth(20),
+                  width: ScreenUtil.instance.setWidth(20),
                   child: Icon(
                     Icons.remove_red_eye,
                     color:
@@ -258,15 +265,15 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             )
           ],
         ),
-        SizedBox(height: 15),
+        SizedBox(height: ScreenUtil.instance.setWidth(15)),
         ButtonTheme(
-          minWidth: 500,
-          height: 50,
+          minWidth: ScreenUtil.instance.setWidth(500),
+          height: ScreenUtil.instance.setWidth(50),
           child: RaisedButton(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             child: Text('Register',
-                style: TextStyle(fontSize: 15, color: Colors.white)),
+                style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.white)),
             color: eventajaGreenTeal,
             onPressed: () {
               isLoading = true;
@@ -327,10 +334,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           ),
         ),
         SizedBox(
-          height: 15,
+          height: ScreenUtil.instance.setWidth(15),
         ),
         Divider(
-          height: 15,
+          height: ScreenUtil.instance.setWidth(15),
         )
       ],
     );

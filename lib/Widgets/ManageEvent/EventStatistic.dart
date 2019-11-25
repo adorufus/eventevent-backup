@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:http/http.dart' as http;
@@ -52,7 +52,14 @@ class EventStatisticState extends State<EventStatistic>{
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     
     return Scaffold(
       backgroundColor: Colors.white,
@@ -75,15 +82,15 @@ class EventStatisticState extends State<EventStatistic>{
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text('EVENT NAME', style: TextStyle(fontSize: 18, color: Colors.grey[500]),),
-                Text(eventName.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),)
+                Text('EVENT NAME', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[500]),),
+                Text(eventName.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18)),)
               ],
             ),
-            SizedBox(height: 25,),
+            SizedBox(height: ScreenUtil.instance.setWidth(25),),
             Divider(color: Colors.grey,),
-            SizedBox(height: 20,),
-            Center(child: Text('OVERVIEW', style: TextStyle(color: Colors.grey[500], fontSize: 18),),),
-            SizedBox(height: 20,),
+            SizedBox(height: ScreenUtil.instance.setWidth(20),),
+            Center(child: Text('OVERVIEW', style: TextStyle(color: Colors.grey[500], fontSize: ScreenUtil.instance.setSp(18)),),),
+            SizedBox(height: ScreenUtil.instance.setWidth(20),),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -91,19 +98,19 @@ class EventStatisticState extends State<EventStatistic>{
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      height: 35,
-                      width: 50,
+                      height: ScreenUtil.instance.setWidth(35),
+                      width: ScreenUtil.instance.setWidth(50),
                       child: Image.asset('assets/icons/butt_eye.png', fit: BoxFit.fill,),
                     ),
                     SizedBox(
-                      height: 15,
+                      height: ScreenUtil.instance.setWidth(15),
                     ),
                     Text(
                       viewers,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(25)),
                     ),
                     SizedBox(
-                      height: 15
+                      height: ScreenUtil.instance.setWidth(15)
                     ),
                     Text(
                       'VIEWED',
@@ -115,19 +122,19 @@ class EventStatisticState extends State<EventStatistic>{
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      height: 30,
-                      width: 30,
+                      height: ScreenUtil.instance.setWidth(30),
+                      width: ScreenUtil.instance.setWidth(30),
                       child: Image.asset('assets/icons/butt_love_ijo.png', fit: BoxFit.fill,),
                     ),
                     SizedBox(
-                      height: 15,
+                      height: ScreenUtil.instance.setWidth(15),
                     ),
                     Text(
                       lovers,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(25)),
                     ),
                     SizedBox(
-                        height: 15
+                        height: ScreenUtil.instance.setWidth(15)
                     ),
                     Text(
                       'LIKED',
@@ -139,19 +146,19 @@ class EventStatisticState extends State<EventStatistic>{
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      height: 30,
-                      width: 30,
+                      height: ScreenUtil.instance.setWidth(30),
+                      width: ScreenUtil.instance.setWidth(30),
                       child: Image.asset('assets/icons/butt_share.png', fit: BoxFit.fill,),
                     ),
                     SizedBox(
-                      height: 15,
+                      height: ScreenUtil.instance.setWidth(15),
                     ),
                     Text(
                       sharedData['total_shared'] == null ? '-' : sharedData['total_shared'].toString(),
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(25)),
                     ),
                     SizedBox(
-                        height: 15
+                        height: ScreenUtil.instance.setWidth(15)
                     ),
                     Text(
                       'SHARED',
@@ -162,11 +169,11 @@ class EventStatisticState extends State<EventStatistic>{
               ],
             ),
             SizedBox(
-              height: 20,
+              height: ScreenUtil.instance.setWidth(20),
             ),
             Center(
               child: Text(
-                'VIEWERS', style: TextStyle(color: Colors.grey[500], fontSize: 18)
+                'VIEWERS', style: TextStyle(color: Colors.grey[500], fontSize: ScreenUtil.instance.setSp(18))
               ),
             ),
             Row(
@@ -187,12 +194,12 @@ class EventStatisticState extends State<EventStatistic>{
                 Column(
                   children: <Widget>[
                     SizedBox(
-                      height: 80,
-                      width: 45,
+                      height: ScreenUtil.instance.setWidth(80),
+                      width: ScreenUtil.instance.setWidth(45),
                       child: Image.asset('assets/icons/butt_cowo.png', color: eventajaGreenTeal,)
                     ),
                     SizedBox(
-                      height: 10,
+                      height: ScreenUtil.instance.setWidth(10),
                     ),
                     Text(totalMale, style: TextStyle(fontWeight: FontWeight.bold))
                   ],
@@ -200,12 +207,12 @@ class EventStatisticState extends State<EventStatistic>{
                 Column(
                   children: <Widget>[
                     SizedBox(
-                        height: 80,
-                        width: 45,
+                        height: ScreenUtil.instance.setWidth(80),
+                        width: ScreenUtil.instance.setWidth(45),
                         child: Image.asset('assets/icons/butt_cewe.png', color: eventajaGreenTeal,)
                     ),
                     SizedBox(
-                      height: 10,
+                      height: ScreenUtil.instance.setWidth(10),
                     ),
                     Text(totalFemale, style: TextStyle(fontWeight: FontWeight.bold))
                   ],
@@ -216,13 +223,13 @@ class EventStatisticState extends State<EventStatistic>{
                   children: <Widget>[
                     SizedBox(
                       child: SizedBox(
-                          height: 50,
-                          width: 25,
+                          height: ScreenUtil.instance.setWidth(50),
+                          width: ScreenUtil.instance.setWidth(25),
                           child: Image.asset('assets/icons/butt_gender_apakah_ini.png', color: Colors.grey,)
                       ),
                     ),
                     SizedBox(
-                      height: 25
+                      height: ScreenUtil.instance.setWidth(25)
                     ),
                     Text(totalUnspecified, style: TextStyle(fontWeight: FontWeight.bold))
                   ],
@@ -230,53 +237,53 @@ class EventStatisticState extends State<EventStatistic>{
               ],
             ),
             SizedBox(
-              height: 20
+              height: ScreenUtil.instance.setWidth(20)
             ),
             Divider(
               color: Colors.grey,
             ),
             SizedBox(
-              height: 20,
+              height: ScreenUtil.instance.setWidth(20),
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('TICKET SOLD', style: TextStyle(fontSize: 18),),
-                Text(ticketData['sold'].toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: eventajaGreenTeal))
+                Text('TICKET SOLD', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18)),),
+                Text(ticketData['sold'].toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18), color: eventajaGreenTeal))
               ],
             ),
             SizedBox(
-              height: 40,
+              height: ScreenUtil.instance.setWidth(40),
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('TICKET BOOKED', style: TextStyle(fontSize: 18)),
-                Text(ticketData['booked'].toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: eventajaGreenTeal))
+                Text('TICKET BOOKED', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18))),
+                Text(ticketData['booked'].toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18), color: eventajaGreenTeal))
               ],
             ),
             SizedBox(
-              height: 40,
+              height: ScreenUtil.instance.setWidth(40),
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('CHECKED IN', style: TextStyle(fontSize: 18)),
-                Text(ticketData['sold'].toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: eventajaGreenTeal))
+                Text('CHECKED IN', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18))),
+                Text(ticketData['sold'].toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18), color: eventajaGreenTeal))
               ],
             ),
             SizedBox(
-              height: 40,
+              height: ScreenUtil.instance.setWidth(40),
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('TOTAL AVAILABLE TICKET', style: TextStyle(fontSize: 18)),
-                Text(ticketData['available'].toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: eventajaGreenTeal))
+                Text('TOTAL AVAILABLE TICKET', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18))),
+                Text(ticketData['available'].toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18), color: eventajaGreenTeal))
               ],
             )
           ],

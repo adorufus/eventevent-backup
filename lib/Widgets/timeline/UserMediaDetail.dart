@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:googleapis/plusdomains/v1.dart';
 import 'package:http/http.dart' as http;
@@ -29,14 +29,8 @@ class UserMediaDetail extends StatefulWidget {
 class _UserMediaDetailState extends State<UserMediaDetail> {
 
   TextEditingController commentController = new TextEditingController();
-
+  List commentList;
   @override
-  Widget build(BuildContext context) {
-    List commentList;
-
-    print(widget.postID);
-
-    @override
     void initState() {
       super.initState();
       getCommentList().then((response){
@@ -53,12 +47,27 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
       });
     }
 
+  @override
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
+
+
+    print(widget.postID);
+
+    
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: 64,
+          height: ScreenUtil.instance.setWidth(64),
           padding: EdgeInsets.symmetric(horizontal: 13),
           color: Colors.white,
           child: AppBar(
@@ -79,7 +88,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
             textTheme: TextTheme(
                 title: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: ScreenUtil.instance.setSp(14),
               color: Colors.black,
             )),
           ),
@@ -88,7 +97,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
       bottomNavigationBar: Padding(
         padding: MediaQuery.of(context).viewInsets,
         child: Container(
-          height: 70,
+          height: ScreenUtil.instance.setWidth(70),
           width: MediaQuery.of(context).size.width,
           child: Row(
             children: <Widget>[
@@ -131,7 +140,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
       body: ListView(
         children: <Widget>[
           Container(
-            height: 400,
+            height: ScreenUtil.instance.setWidth(400),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
                 color: Color(0xff8a8a8b),
@@ -139,7 +148,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
                     image: NetworkImage(widget.imageUri), fit: BoxFit.fill)),
           ),
           SizedBox(
-            height: 15,
+            height: ScreenUtil.instance.setWidth(15),
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 13),
@@ -149,19 +158,19 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
                     backgroundImage: NetworkImage(widget.userPicture),
                     radius: 15),
                 SizedBox(
-                  width: 5,
+                  width: ScreenUtil.instance.setWidth(5),
                 ),
                 Container(
                     width: MediaQuery.of(context).size.width - 217.7,
                     child: Text(
                       widget.username.toString(),
-                      style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: Colors.black, fontSize: ScreenUtil.instance.setSp(14), fontWeight: FontWeight.bold),
                     )),
               ],
             ),
           ),
           SizedBox(
-            height: 15,
+            height: ScreenUtil.instance.setWidth(15),
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 13),
@@ -173,19 +182,21 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
             ),
           ),
           SizedBox(
-            height: 10,
+            height: ScreenUtil.instance.setWidth(10),
           ),
           Divider(
             color: Colors.black,
           ),
+          Text('Comments'),
           ListView.builder(
             shrinkWrap: true,
             itemCount: commentList == null ? 0 : commentList.length,
             itemBuilder: (context, i){
-              return Container(
-                height: 50,
-                width: MediaQuery.of(context).size.width,
-                child:  Text('test')
+              return ListTile(
+                leading: CircleAvatar(backgroundImage: NetworkImage(commentList[i]['photo']),),
+                title: Text(commentList[i]['fullName'], style: TextStyle(
+                            fontSize: ScreenUtil.instance.setSp(12), fontWeight: FontWeight.bold),),
+                subtitle: Text(commentList[i]['response']),
               );
             },
           )
@@ -198,7 +209,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
 
   Future<http.Response> getCommentList() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String url = BaseApi().apiUrl + '/photo_comment/list?X-API-KEY=$API_KEY}&id=${widget.postID}&page=1';
+    String url = BaseApi().apiUrl + '/photo_comment/list?X-API-KEY=$API_KEY&id=${widget.postID}&page=1';
     
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,

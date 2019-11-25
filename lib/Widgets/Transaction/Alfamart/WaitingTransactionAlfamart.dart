@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -63,7 +63,14 @@ class _WaitingTransactionAlfamartState
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
       bottomNavigationBar: GestureDetector(
@@ -71,7 +78,7 @@ class _WaitingTransactionAlfamartState
           Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SuccessPage()));
         },
         child: Container(
-          height: 50,
+          height: ScreenUtil.instance.setWidth(50),
           width: MediaQuery.of(context).size.width,
           color: Colors.orangeAccent,
           child: Text('test succes page'),
@@ -100,7 +107,7 @@ class _WaitingTransactionAlfamartState
           : ListView(
               children: <Widget>[
                 Container(
-                  height: 459,
+                  height: ScreenUtil.instance.setWidth(459),
                   color: Colors.white,
                   padding: EdgeInsets.only(left: 25, right: 25, top: 10),
                   child: Column(
@@ -109,7 +116,7 @@ class _WaitingTransactionAlfamartState
                     children: <Widget>[
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        height: 200,
+                        height: ScreenUtil.instance.setWidth(200),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: eventajaGreenTeal),
@@ -118,15 +125,15 @@ class _WaitingTransactionAlfamartState
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             SizedBox(
-                              height: 10,
+                              height: ScreenUtil.instance.setWidth(10),
                             ),
                             Text('Complete Payment In',
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 18,
+                                    fontSize: ScreenUtil.instance.setSp(18),
                                     fontWeight: FontWeight.bold)),
                             SizedBox(
-                              height: 20,
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,52 +142,52 @@ class _WaitingTransactionAlfamartState
                                 Text('${hour}',
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 20,
+                                        fontSize: ScreenUtil.instance.setSp(20),
                                         fontWeight: FontWeight.bold)),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   ':',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   '$min',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   ':',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   '$sec',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
                             SizedBox(
-                              height: 20,
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -188,23 +195,23 @@ class _WaitingTransactionAlfamartState
                               children: <Widget>[
                                 Text('H',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 20)),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                                 SizedBox(
-                                  width: 35,
+                                  width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('M',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 20)),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                                 SizedBox(
-                                  width: 35,
+                                  width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('S',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 20)),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                               ],
                             ),
                             SizedBox(
-                              height: 20,
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -224,7 +231,7 @@ class _WaitingTransactionAlfamartState
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: ScreenUtil.instance.setWidth(20),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -233,9 +240,9 @@ class _WaitingTransactionAlfamartState
                           Text(
                             'PAYMENT',
                             style:
-                                TextStyle(fontSize: 20, color: Colors.black45),
+                                TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.black45),
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
                             'Rp. ' + paymentData['amount'] == null
                                 ? '-'
@@ -243,25 +250,25 @@ class _WaitingTransactionAlfamartState
                             style: TextStyle(
                                 fontSize: 50, fontWeight: FontWeight.bold),
                           ),
-                          Divider(height: 5, color: Colors.black),
-                          SizedBox(height: 15),
+                          Divider(height: ScreenUtil.instance.setWidth(5), color: Colors.black),
+                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Container(
-                              height: 50,
-                              width: 200,
+                              height: ScreenUtil.instance.setWidth(50),
+                              width: ScreenUtil.instance.setWidth(200),
                               child: Image.network(
                                   "https://home.eventeventapp.com/assets/landing/img/payment/" +
                                       paymentData['payment']['icon'])),
-                          SizedBox(height: 5),
+                          SizedBox(height: ScreenUtil.instance.setWidth(5)),
                           Text(
                             'Kode pembayaran Alfamart',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                            style: TextStyle(color: Colors.grey, fontSize: ScreenUtil.instance.setSp(12)),
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(paymentData['payment_vendor_code'],
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 25,
+                                  fontSize: ScreenUtil.instance.setSp(25),
                                   fontWeight: FontWeight.bold)),
                         ],
                       ),
@@ -298,11 +305,11 @@ class _WaitingTransactionAlfamartState
                         children: <Widget>[
                           Text(HEADER_ID,
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          SizedBox(height: 10),
+                          SizedBox(height: ScreenUtil.instance.setWidth(10)),
                           Text(
                             ALFAMART_HOWTO_LINE1_ID +
                                 paymentData['payment_vendor_code'],
-                            style: TextStyle(fontSize: 14),
+                            style: TextStyle(fontSize: ScreenUtil.instance.setSp(14)),
                           ),
                           Text(ALFAMART_HOWTO_LINE2_ID)
                         ]),
@@ -321,11 +328,11 @@ class _WaitingTransactionAlfamartState
                                 Text(HEADER_EN,
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold)),
-                                SizedBox(height: 10),
+                                SizedBox(height: ScreenUtil.instance.setWidth(10)),
                                 Text(
                                   ALFAMART_HOWTO_LINE1_EN +
                                       paymentData['payment_vendor_code'],
-                                  style: TextStyle(fontSize: 14),
+                                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(14)),
                                 ),
                                 Text(ALFAMART_HOWTO_LINE2_EN)
                               ]))

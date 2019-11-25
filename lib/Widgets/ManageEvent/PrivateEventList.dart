@@ -3,7 +3,7 @@ import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -30,7 +30,14 @@ class PrivateEventListState extends State<PrivateEventList> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Container(
         width: MediaQuery.of(context).size.width,
         child: isEmpty == true
@@ -85,7 +92,7 @@ class PrivateEventListState extends State<PrivateEventList> {
                         }
                       } else if (privateData[i]['ticket_type']['type'] ==
                           'no_ticket') {
-                        itemColor = Color(0xFFA6A8AB);
+                        itemColor = Color(0xFF652D90);
                         itemPriceText = 'NO TICKET';
                       } else if (privateData[i]['ticket_type']['type'] ==
                           'on_the_spot') {
@@ -164,8 +171,8 @@ class PrivateEventListState extends State<PrivateEventList> {
     }
 
     return SizedBox(
-      height: 50,
-      width: 150,
+      height: ScreenUtil.instance.setWidth(50),
+      width: ScreenUtil.instance.setWidth(150),
       child: Image.asset(
         imageUri,
         fit: BoxFit.fill,

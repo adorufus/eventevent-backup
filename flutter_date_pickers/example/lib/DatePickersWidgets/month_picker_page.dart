@@ -36,7 +36,8 @@ class _MonthPickerPageState extends State<MonthPickerPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    
     // add selected colors to default settings
     dp.DatePickerStyles styles = dp.DatePickerStyles(
         selectedDateStyle: Theme.of(context)
@@ -83,7 +84,7 @@ class _MonthPickerPageState extends State<MonthPickerPage> {
                         colorBtnSize: 42.0,
                       ),
                       SizedBox(
-                        width: 12.0,
+                        height: 12.0,
                       ),
                       ColorSelectorBtn(
                         title: "Background",

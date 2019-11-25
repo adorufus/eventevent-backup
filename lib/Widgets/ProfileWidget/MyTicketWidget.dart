@@ -4,7 +4,7 @@ import 'package:eventevent/Widgets/Home/See%20All/MyTicketItem.dart';
 import 'package:eventevent/Widgets/ProfileWidget/UseTicket.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -72,9 +72,18 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return ticketDetailData == null
-        ? Container(child: Center(child: CircularProgressIndicator()))
+        ? Container(
+            padding: EdgeInsets.only(top: 80),
+            alignment: Alignment.topCenter, child: CircularProgressIndicator())
         : SmartRefresher(
             enablePullDown: false,
             enablePullUp: true,
@@ -93,7 +102,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                 body = Container();
               }
 
-              return Container(height: 35, child: Center(child: body));
+              return Container(height: ScreenUtil.instance.setWidth(35), child: Center(child: body));
             }),
             controller: refreshController,
             onLoading: _onLoading,
@@ -109,7 +118,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                     ticketColor = eventajaGreenTeal;
                     ticketStatusText = 'Available';
                   } else if (ticketDetailData[i]['usedStatus'] == 'used') {
-                    ticketColor = Color(0xFFA6A8AB);
+                    ticketColor = Color(0xFF652D90);
                     ticketStatusText = 'Used';
                   } else if (ticketDetailData[i]['usedStatus'] == 'expired') {
                     ticketColor = Color(0xFF8E1E2D);

@@ -1,7 +1,7 @@
 import 'package:eventevent/Widgets/PostEvent/CreateTicketDescription.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'CreateTicketPrice.dart';
@@ -20,7 +20,14 @@ class CreateTicketOnePurchaseState extends State<CreateTicketOnePurchase> {
   int __curValue = 0;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
@@ -47,7 +54,7 @@ class CreateTicketOnePurchaseState extends State<CreateTicketOnePurchase> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -70,23 +77,23 @@ class CreateTicketOnePurchaseState extends State<CreateTicketOnePurchase> {
                     'One Purchase Per User',
                     style: TextStyle(
                         color: Colors.black54,
-                        fontSize: 25,
+                        fontSize: ScreenUtil.instance.setSp(25),
                         fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: ScreenUtil.instance.setWidth(20),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Divider(
                   color: Colors.grey,
-                  height: 10,
+                  height: ScreenUtil.instance.setWidth(10),
                 ),
               ),
               SizedBox(
-                height: 150,
+                height: ScreenUtil.instance.setWidth(150),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 29, left: 20),
@@ -99,7 +106,7 @@ class CreateTicketOnePurchaseState extends State<CreateTicketOnePurchase> {
                       value: 1,
                     ),
                     Text('Yes'),
-                    SizedBox(width: 25,),
+                    SizedBox(width: ScreenUtil.instance.setWidth(25),),
                     Radio(
                       groupValue: __curValue,
                       onChanged: (int i) => setState((){

@@ -4,7 +4,7 @@ import 'package:eventevent/Widgets/ManageEvent/AddNewTicket.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -34,7 +34,14 @@ class ManageTicketState extends State<ManageTicket> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     
     return Scaffold(
       appBar: AppBar(
@@ -62,7 +69,7 @@ class ManageTicketState extends State<ManageTicket> {
                     itemBuilder: (BuildContext context, i) {
                       print(ticketID);
                       return Container(
-                        height: 200,
+                        height: ScreenUtil.instance.setWidth(200),
                         width: MediaQuery.of(context).size.width,
                         margin:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -74,14 +81,14 @@ class ManageTicketState extends State<ManageTicket> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             SizedBox(
-                              height: 150,
-                              width: 100,
+                              height: ScreenUtil.instance.setWidth(150),
+                              width: ScreenUtil.instance.setWidth(100),
                               child: Image.network(
                                 ticketList[i]['ticket_image']['secure_url'],
                                 fit: BoxFit.fill,
                               ),
                             ),
-                            SizedBox(width: 20),
+                            SizedBox(width: ScreenUtil.instance.setWidth(20)),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +96,7 @@ class ManageTicketState extends State<ManageTicket> {
                                 Text(
                                   ticketList[i]['ticket_name'],
                                   style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: ScreenUtil.instance.setSp(18),
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Row(
@@ -101,12 +108,12 @@ class ManageTicketState extends State<ManageTicket> {
                                         'Available',
                                         style: TextStyle(
                                             color: Colors.grey[300],
-                                            fontSize: 18),
+                                            fontSize: ScreenUtil.instance.setSp(18)),
                                       )
                                     ]),
                                 Container(
-                                  height: 55,
-                                  width: 125,
+                                  height: ScreenUtil.instance.setWidth(55),
+                                  width: ScreenUtil.instance.setWidth(125),
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
                                           image: AssetImage(ticketList[i][
@@ -135,7 +142,7 @@ class ManageTicketState extends State<ManageTicket> {
                                     'Ticket(s) left: ${(int.parse(ticketList[i]['quantity']) - int.parse(ticketList[i]['sold']))} / ${ticketList[i]['quantity']}')
                               ],
                             ),
-                            SizedBox(width: 20),
+                            SizedBox(width: ScreenUtil.instance.setWidth(20)),
                             Icon(
                               Icons.navigate_next,
                               color: Colors.black,
@@ -154,7 +161,7 @@ class ManageTicketState extends State<ManageTicket> {
                     },
                     child: Container(
                       color: Colors.white,
-                      height: 150,
+                      height: ScreenUtil.instance.setWidth(150),
                       width: MediaQuery.of(context).size.width,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -168,7 +175,7 @@ class ManageTicketState extends State<ManageTicket> {
                           Text(
                             'Add Ticket',
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: ScreenUtil.instance.setSp(18),
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey[300]),
                           )

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -54,7 +54,14 @@ class ShowQrState extends State<ShowQr>{
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     
     return Scaffold(
       appBar: AppBar(
@@ -62,10 +69,10 @@ class ShowQrState extends State<ShowQr>{
         leading: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal,),
         backgroundColor: Colors.white,
         centerTitle: true,
-        title: Text('SCAN THIS QR CODE FOR ENTRY', style: TextStyle(color: eventajaGreenTeal, fontSize: 14),),
+        title: Text('SCAN THIS QR CODE FOR ENTRY', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(14)),),
         actions: <Widget>[
           Icon(Icons.help_outline, color: eventajaGreenTeal, size: 25,),
-          SizedBox(width: 10,),
+          SizedBox(height: ScreenUtil.instance.setWidth(10),),
           Icon(CupertinoIcons.share, color: eventajaGreenTeal, size: 25,)
         ],
       ),
@@ -83,7 +90,7 @@ class ShowQrState extends State<ShowQr>{
                   blurRadius: 5
                 )]
               ),
-              height: 380,
+              height: ScreenUtil.instance.setWidth(380),
               width: MediaQuery.of(context).size.width,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -92,21 +99,21 @@ class ShowQrState extends State<ShowQr>{
                     alignment: Alignment.center,
                     children:<Widget> [
                       Container(
-                        height: 300,
-                        width: 300,
+                        height: ScreenUtil.instance.setWidth(300),
+                        width: ScreenUtil.instance.setWidth(300),
                         child: Image.network(qrUri),
                       )
                     ]
                   ),
                   SizedBox(
-                    height: 15,
+                    height: ScreenUtil.instance.setWidth(15),
                   ),
-                  Text(name, style: TextStyle(color: eventajaGreenTeal, fontWeight: FontWeight.bold, fontSize: 18),),
+                  Text(name, style: TextStyle(color: eventajaGreenTeal, fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18)),),
                   total_user_checkin == 0 ? Container() : Text('Check-In: $total_user_checkin / $total_user_have_ticket')
                 ],
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: ScreenUtil.instance.setWidth(10),),
             Container(
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(horizontal: 10),
@@ -147,7 +154,7 @@ class ShowQrState extends State<ShowQr>{
                 ),
               ),
             ),
-            SizedBox(height: 15,),
+            SizedBox(height: ScreenUtil.instance.setWidth(15),),
             checkinList == null ? Container() : ColumnBuilder(
               itemCount: checkinList == null ? 0 : checkinList.length,
               itemBuilder: (BuildContext context, i){
@@ -156,7 +163,7 @@ class ShowQrState extends State<ShowQr>{
 
                 return Container(
                   width: MediaQuery.of(context).size.width,
-                  height: 80,
+                  height: ScreenUtil.instance.setWidth(80),
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   padding: EdgeInsets.only(left: 10, right: 0),
                   decoration: BoxDecoration(
@@ -172,25 +179,25 @@ class ShowQrState extends State<ShowQr>{
                         backgroundImage: NetworkImage(checkinList[i]['user']['pictureAvatarURL']),
                         radius: 25,
                       ),
-                      SizedBox(width: 15,),
+                      SizedBox(width: ScreenUtil.instance.setWidth(15),),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(checkinList[i]['user']['fullName'], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                          Text(checkinList[i]['user']['fullName'], style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18)),),
                           Text(checkinList[i]['ticket_name'], style: TextStyle(color: Colors.grey)),
                           Text(checkinList[i]['ticket_code'], style: TextStyle(color: eventajaGreenTeal, fontWeight: FontWeight.bold)),
                         ],
                       ),
                       SizedBox(
-                        width: 60,
+                        width: ScreenUtil.instance.setWidth(60),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Icon(Icons.check, color: eventajaGreenTeal, size: 30,),
-                          Text('CHECK IN', style: TextStyle(fontSize: 10, color: Colors.grey),),
-                          Text(time.hour.toString() + ':' + time.minute.toString(), style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),)
+                          Text('CHECK IN', style: TextStyle(fontSize: ScreenUtil.instance.setSp(10), color: Colors.grey),),
+                          Text(time.hour.toString() + ':' + time.minute.toString(), style: TextStyle(fontSize: ScreenUtil.instance.setSp(10), fontWeight: FontWeight.bold),)
                         ],
                       )
                     ],

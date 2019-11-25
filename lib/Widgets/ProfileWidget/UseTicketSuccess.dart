@@ -1,6 +1,6 @@
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 
 class UseTicketSuccess extends StatefulWidget {
@@ -15,7 +15,14 @@ class UseTicketSuccess extends StatefulWidget {
 
 class UseTicketSuccessState extends State<UseTicketSuccess> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.95),
       
@@ -27,20 +34,20 @@ class UseTicketSuccessState extends State<UseTicketSuccess> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              height: 250,
-              width: 250,
+              height: ScreenUtil.instance.setWidth(250),
+              width: ScreenUtil.instance.setWidth(250),
               child: Image.asset('assets/drawable/success.png'),
             ),
             SizedBox(
-              height: 20,
+              height: ScreenUtil.instance.setWidth(20),
             ),
-            Text('Congratulation', style: TextStyle(color: eventajaGreenTeal, fontSize: 18, fontWeight: FontWeight.bold),),
+            Text('Congratulation', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
             SizedBox(
-              height: 15,
+              height: ScreenUtil.instance.setWidth(15),
             ),
             Text('YOU ARE CHECKED IN TO ${widget.eventName}', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),),
             SizedBox(
-              height: 20,
+              height: ScreenUtil.instance.setWidth(20),
             ),
             GestureDetector(
               onTap: (){
@@ -49,14 +56,14 @@ class UseTicketSuccessState extends State<UseTicketSuccess> {
                 ), ModalRoute.withName('/Dashboard'));
               },
               child: Container(
-                height: 50,
-                width: 300,
+                height: ScreenUtil.instance.setWidth(50),
+                width: ScreenUtil.instance.setWidth(300),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   color: eventajaGreenTeal,
                 ),
                 child: Center(
-                  child: Text('OK', style: TextStyle(color: Colors.white, fontSize: 18),),
+                  child: Text('OK', style: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(18)),),
                 ),
               ),
             )

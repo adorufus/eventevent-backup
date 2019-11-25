@@ -7,7 +7,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -61,7 +61,14 @@ class WithdrawBankState extends State<WithdrawBank> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
         key: scaffoldKey,
         resizeToAvoidBottomPadding: false,
@@ -69,7 +76,7 @@ class WithdrawBankState extends State<WithdrawBank> {
           preferredSize: Size(null, 100),
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 75,
+            height: ScreenUtil.instance.setWidth(75),
             child: Container(
               color: Colors.white,
               child: Container(
@@ -84,8 +91,8 @@ class WithdrawBankState extends State<WithdrawBank> {
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
                           SizedBox(
-                            height: 15.49,
-                            width: 9.73,
+                            height: ScreenUtil.instance.setWidth(15.49),
+                            width: ScreenUtil.instance.setWidth(9.73),
                             child: Image.asset(
                               'assets/icons/icon_apps/arrow.png',
                               fit: BoxFit.fill,
@@ -98,7 +105,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                     Text(
                       'Balance',
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
                     )
                   ],
                 ),
@@ -115,7 +122,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                 });
           },
           child: Container(
-            height: 50,
+            height: ScreenUtil.instance.setWidth(50),
             color: Color(0xFFFFAA00),
             child: Center(
                 child: Text(
@@ -147,11 +154,11 @@ class WithdrawBankState extends State<WithdrawBank> {
                                 'assets/icons/icon_apps/home.png',
                                 scale: 4.5,
                               ),
-                              SizedBox(width: 10),
+                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
                               Text('Withdraw',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 12.5)),
+                                      fontSize: ScreenUtil.instance.setSp(12.5))),
                             ],
                           ),
                         ),
@@ -164,11 +171,11 @@ class WithdrawBankState extends State<WithdrawBank> {
                                 'assets/icons/icon_apps/latest.png',
                                 scale: 4.5,
                               ),
-                              SizedBox(width: 10),
+                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
                               Text('History',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 12.5)),
+                                      fontSize: ScreenUtil.instance.setSp(12.5))),
                             ],
                           ),
                         ),
@@ -214,13 +221,13 @@ class WithdrawBankState extends State<WithdrawBank> {
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50),
                 child: SizedBox(
-                    height: 5,
-                    width: 50,
+                    height: ScreenUtil.instance.setWidth(5),
+                    width: ScreenUtil.instance.setWidth(50),
                     child: Image.asset(
                       'assets/icons/icon_line.png',
                       fit: BoxFit.fill,
                     ))),
-            SizedBox(height: 70),
+            SizedBox(height: ScreenUtil.instance.setWidth(70)),
             Container(
                 width: MediaQuery.of(context).size.width,
                 child: Column(
@@ -229,9 +236,9 @@ class WithdrawBankState extends State<WithdrawBank> {
                     Text(
                       'Withdraw Ammount',
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(17)),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: ScreenUtil.instance.setWidth(20)),
                     TextFormField(
                       controller: amountController,
                       keyboardType: TextInputType.number,
@@ -241,7 +248,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                           filled: true,
                           fillColor: Colors.white,
                           hintText: 'Enter withdraw amount (e.g. 125000)',
-                          hintStyle: TextStyle(fontSize: 12)),
+                          hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(12))),
                     ),
                     GestureDetector(
                       onTap: () async {
@@ -295,7 +302,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                       child: Container(
                           width: MediaQuery.of(context).size.width,
                           margin: EdgeInsets.only(top: 31, bottom: 35),
-                          height: 37,
+                          height: ScreenUtil.instance.setWidth(37),
                           decoration: BoxDecoration(
                               color: Color(0xFFFFAA00),
                               borderRadius: BorderRadius.circular(30),
@@ -336,11 +343,11 @@ class WithdrawBankState extends State<WithdrawBank> {
                       EdgeInsets.only(left: 13, right: 13, bottom: 6, top: 20),
                   child: Text(
                     'Balance:',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
                   )),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 13),
-                height: 80,
+                height: ScreenUtil.instance.setWidth(80),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15),
@@ -354,11 +361,11 @@ class WithdrawBankState extends State<WithdrawBank> {
                     child: Text('Rp. ${balanceData['amount']},-',
                         style: TextStyle(
                             color: eventajaGreenTeal,
-                            fontSize: 20,
+                            fontSize: ScreenUtil.instance.setSp(20),
                             fontWeight: FontWeight.bold))),
               ),
               SizedBox(
-                height: 15,
+                height: ScreenUtil.instance.setWidth(15),
               ),
               // TextFormField(
               //   controller: amountController,
@@ -378,7 +385,7 @@ class WithdrawBankState extends State<WithdrawBank> {
               //   ),
               // ),
               // SizedBox(
-              //   height: 25,
+              //   height: ScreenUtil.instance.setWidth(25),
               // ),
               bankList.length == 3
                   ? Container()
@@ -393,7 +400,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                       child: Container(
                         margin: EdgeInsets.symmetric(horizontal: 13),
                         padding: EdgeInsets.symmetric(horizontal: 8),
-                        height: 42.61,
+                        height: ScreenUtil.instance.setWidth(42.61),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(30),
@@ -429,7 +436,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                       EdgeInsets.only(left: 13, right: 13, bottom: 9, top: 20),
                   child: Text(
                     'Select Bank:',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
                   )),
               ColumnBuilder(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -471,7 +478,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                       );
                     },
                     child: Container(
-                      height: 85,
+                      height: ScreenUtil.instance.setWidth(85),
                       width: MediaQuery.of(context).size.width,
                       margin: EdgeInsets.only(bottom: 9, left: 13, right: 13),
                       padding:
@@ -495,7 +502,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                             scale: 2,
                           ),
                           SizedBox(
-                            width: 9,
+                            width: ScreenUtil.instance.setWidth(9),
                           ),
                           Align(
                             alignment: Alignment.centerRight,
@@ -507,28 +514,28 @@ class WithdrawBankState extends State<WithdrawBank> {
                                     child: Text(
                                   bankList[i]['account_name'],
                                   style: TextStyle(
-                                      color: Colors.grey, fontSize: 12),
+                                      color: Colors.grey, fontSize: ScreenUtil.instance.setSp(12)),
                                   overflow: TextOverflow.ellipsis,
                                 )),
-                                SizedBox(height: 3),
+                                SizedBox(height: ScreenUtil.instance.setWidth(3)),
                                 Container(
-                                    width: 200,
+                                    width: ScreenUtil.instance.setWidth(200),
                                     child: Text(bankList[i]['bank_name'],
                                         style: TextStyle(
-                                            fontSize: 15,
+                                            fontSize: ScreenUtil.instance.setSp(15),
                                             fontWeight: FontWeight.bold),
                                         overflow: TextOverflow.ellipsis)),
-                                SizedBox(height: 3),
+                                SizedBox(height: ScreenUtil.instance.setWidth(3)),
                                 Text(
                                   bankList[i]['account_number'],
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: ScreenUtil.instance.setSp(12),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          SizedBox(width: 10),
+                          SizedBox(height: ScreenUtil.instance.setWidth(10)),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
@@ -563,7 +570,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                 },
               ),
               SizedBox(
-                height: 21,
+                height: ScreenUtil.instance.setWidth(21),
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
@@ -573,14 +580,14 @@ class WithdrawBankState extends State<WithdrawBank> {
                     Text(
                       'Notes',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: ScreenUtil.instance.setSp(14),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 6),
+                    SizedBox(height: ScreenUtil.instance.setWidth(6)),
                     Text('Withdraw process may take up to 1 business day',
-                        style: TextStyle(fontSize: 14, color: Colors.grey)),
-                    SizedBox(height: 15),
+                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(14), color: Colors.grey)),
+                    SizedBox(height: ScreenUtil.instance.setWidth(15)),
                   ],
                 ),
               ),
@@ -663,7 +670,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                           textAlign: TextAlign.start,
                         ),
                         SizedBox(
-                          height: 15,
+                          height: ScreenUtil.instance.setWidth(15),
                         ),
                         historyList[i]['status'] == 'added'
                             ? Text(historyList[i]['description'])

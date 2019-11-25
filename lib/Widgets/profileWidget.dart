@@ -4,7 +4,7 @@ import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/Widgets/editProfileWidget.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/API/profileModel.dart';
 import 'package:http/http.dart' as http;
@@ -58,7 +58,14 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return userData == null
         ? Container(
             color: Colors.white,

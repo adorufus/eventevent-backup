@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -35,7 +35,14 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
@@ -43,7 +50,7 @@ class _CategoryPageState extends State<CategoryPage> {
           preferredSize: Size(null, 100),
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 50,
+            height: ScreenUtil.instance.setWidth(50),
             padding: EdgeInsets.symmetric(horizontal: 13),
             color: Colors.white,
             child: AppBar(
@@ -64,7 +71,7 @@ class _CategoryPageState extends State<CategoryPage> {
               textTheme: TextTheme(
                   title: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 14,
+                fontSize: ScreenUtil.instance.setSp(14),
                 color: Colors.black,
               )),
             ),
@@ -74,8 +81,8 @@ class _CategoryPageState extends State<CategoryPage> {
           child: eventByCategoryList == null
               ? Center(
                   child: Container(
-                    width: 25,
-                    height: 25,
+                    width: ScreenUtil.instance.setWidth(25),
+                    height: ScreenUtil.instance.setWidth(25),
                     child: FittedBox(
                       fit: BoxFit.fill,
                       child: CircularProgressIndicator(),
@@ -119,7 +126,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       }
                     } else if (eventByCategoryList[i]['ticket_type']['type'] ==
                         'no_ticket') {
-                      itemColor = Color(0xFFA6A8AB);
+                      itemColor = Color(0xFF652D90);
                       itemPriceText = 'NO TICKET';
                     } else if (eventByCategoryList[i]['ticket_type']['type'] ==
                         'on_the_spot') {

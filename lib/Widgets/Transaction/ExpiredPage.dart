@@ -1,6 +1,6 @@
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 
 class ExpiredPage extends StatefulWidget {
@@ -35,16 +35,16 @@ class ExpiredPageState extends State<ExpiredPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
-              height: 250,
-              width: 250,
+              height: ScreenUtil.instance.setWidth(250),
+              width: ScreenUtil.instance.setWidth(250),
               child: Image.asset('assets/drawable/success.png'),
             ),
             SizedBox(
-              height: 20,
+              height: ScreenUtil.instance.setWidth(20),
             ),
             Text('TRANSACTION EXPIRED', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),),
             SizedBox(
-              height: 20,
+              height: ScreenUtil.instance.setWidth(20),
             ),
           ],
         ),

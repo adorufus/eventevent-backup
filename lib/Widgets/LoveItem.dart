@@ -1,5 +1,5 @@
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoveItem extends StatefulWidget {
   final isComment;
@@ -12,10 +12,17 @@ class LoveItem extends StatefulWidget {
 
 class _LoveItemState extends State<LoveItem> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 13),
-      height: 30,
+      height: ScreenUtil.instance.setWidth(30),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
@@ -32,7 +39,7 @@ class _LoveItemState extends State<LoveItem> {
           color: widget.isComment == false ? Colors.red : eventajaGreenTeal,
           scale: 3.5,
         ),
-        SizedBox(width: 5),
+        SizedBox(width: ScreenUtil.instance.setWidth(5)),
         Text('99+',
             style: TextStyle(
                 color: Color(

@@ -3,15 +3,16 @@ import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class PublicEventList extends StatefulWidget {
   final type;
+  final userId;
 
-  const PublicEventList({Key key, this.type}) : super(key: key);
+  const PublicEventList({Key key, this.type, this.userId}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return PublicEventListState();
@@ -27,10 +28,18 @@ class PublicEventListState extends State<PublicEventList> {
   void initState() {
     super.initState();
     fetchMyEvent();
+    print('user id: ' + widget.userId);
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Container(
         width: MediaQuery.of(context).size.width,
         child: isEmpty == true
@@ -60,7 +69,7 @@ class PublicEventListState extends State<PublicEventList> {
 
                       if (publicData[i]['ticket_type']['type'] == 'paid' ||
                           publicData[i]['ticket_type']['type'] ==
-                              'paid_seating') {
+                              'paid_seating' || publicData[i]['ticket_type']['type'] == 'paid_live_stream') {
                         if (publicData[i]['ticket']['availableTicketStatus'] ==
                             '1') {
                           itemColor = Color(0xFF34B323);
@@ -85,7 +94,7 @@ class PublicEventListState extends State<PublicEventList> {
                         }
                       } else if (publicData[i]['ticket_type']['type'] ==
                           'no_ticket') {
-                        itemColor = Color(0xFFA6A8AB);
+                        itemColor = Color(0xFF652D90);
                         itemPriceText = 'NO TICKET';
                       } else if (publicData[i]['ticket_type']['type'] ==
                           'on_the_spot') {
@@ -125,6 +134,9 @@ class PublicEventListState extends State<PublicEventList> {
                           }
                         }
                       }
+
+                      print(itemColor);
+
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -158,7 +170,7 @@ class PublicEventListState extends State<PublicEventList> {
                       //     padding: EdgeInsets.symmetric(
                       //         horizontal: 10, vertical: 10),
                       //     width: MediaQuery.of(context).size.width,
-                      //     height: 300,
+                      //     height: ScreenUtil.instance.setWidth(300),
                       //     child: Column(
                       //       mainAxisAlignment: MainAxisAlignment.start,
                       //       crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,12 +180,12 @@ class PublicEventListState extends State<PublicEventList> {
                       //           crossAxisAlignment: CrossAxisAlignment.start,
                       //           children: <Widget>[
                       //             SizedBox(
-                      //               width: 150,
+                      //               width: ScreenUtil.instance.setWidth(150),
                       //               child: Image.network(
                       //                   publicData[i]['picture'],
                       //                   fit: BoxFit.fill),
                       //             ),
-                      //             SizedBox(width: 20),
+                      //             SizedBox(width: ScreenUtil.instance.setWidth(20)),
                       //             Column(
                       //               crossAxisAlignment:
                       //                   CrossAxisAlignment.start,
@@ -184,33 +196,33 @@ class PublicEventListState extends State<PublicEventList> {
                       //                       TextStyle(color: eventajaGreenTeal),
                       //                 ),
                       //                 SizedBox(
-                      //                   height: 20,
+                      //                   height: ScreenUtil.instance.setWidth(20),
                       //                 ),
                       //                 Text(
                       //                   publicData[i]['name'],
                       //                   style: TextStyle(
                       //                       color: Colors.black54,
                       //                       fontWeight: FontWeight.bold,
-                      //                       fontSize: 20),
+                      //                       fontSize: ScreenUtil.instance.setSp(20)),
                       //                 ),
                       //                 SizedBox(
-                      //                   height: 20,
+                      //                   height: ScreenUtil.instance.setWidth(20),
                       //                 ),
                       //                 Text(
                       //                   publicData[i]['isPrivate'] == '0'
                       //                       ? 'PUBLIC EVENT'
                       //                       : 'PRIVATE EVENT',
-                      //                   style: TextStyle(fontSize: 18),
+                      //                   style: TextStyle(fontSize: ScreenUtil.instance.setSp(18)),
                       //                 ),
                       //                 SizedBox(
-                      //                   height: 50,
+                      //                   height: ScreenUtil.instance.setWidth(50),
                       //                 ),
                       //                 buttonType(i)
                       //               ],
                       //             )
                       //           ],
                       //         ),
-                      //         SizedBox(height: 20),
+                      //         SizedBox(height: ScreenUtil.instance.setWidth(20)),
                       //         Divider()
                       //       ],
                       //     ),
@@ -233,17 +245,20 @@ class PublicEventListState extends State<PublicEventList> {
     }
 
     return SizedBox(
-      height: 50,
-      width: 100,
+      height: ScreenUtil.instance.setWidth(50),
+      width: ScreenUtil.instance.setWidth(100),
       child: Image.asset(imageUri),
     );
   }
 
+  
+
   Future fetchMyEvent() async {
+    
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print(prefs.getString('Last User ID'));
     String uri = BaseApi().apiUrl +
-        '/user/${widget.type}?X-API-KEY=$API_KEY&page=1&userID=${prefs.getString('Last User ID')}&isPrivate=0';
+        '/user/${widget.type}?X-API-KEY=$API_KEY&page=1&userID=${widget.userId == prefs.getString('Last User ID') ? prefs.getString('Last User ID') : widget.userId }&isPrivate=0';
 
     final response = await http.get(
       uri,

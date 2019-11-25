@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:flutter/rendering.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart';
 import 'package:flutter_date_pickers/src/date_period.dart';
@@ -196,7 +196,7 @@ class _RangePickerState extends State<RangePicker> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return SizedBox(
       width: widget.datePickerLayoutSettings.monthPickerPortraitWidth,
       height: widget.datePickerLayoutSettings.maxDayPickerHeight,
@@ -526,7 +526,7 @@ class _RangePicker extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     final ThemeData themeData = Theme.of(context);
     final MaterialLocalizations localizations =
         MaterialLocalizations.of(context);

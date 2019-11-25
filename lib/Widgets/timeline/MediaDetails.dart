@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:chewie/chewie.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:googleapis/compute/v1.dart' as prefix1;
 import 'package:googleapis/docs/v1.dart' as prefix0;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
@@ -90,13 +92,20 @@ class _MediaDetailsState extends State<MediaDetails> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: 65,
+          height: ScreenUtil.instance.setWidth(65),
           padding: EdgeInsets.symmetric(horizontal: 13),
           color: Colors.white,
           child: AppBar(
@@ -117,7 +126,7 @@ class _MediaDetailsState extends State<MediaDetails> {
             textTheme: TextTheme(
                 title: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: ScreenUtil.instance.setSp(14),
               color: Colors.black,
             )),
           ),
@@ -126,57 +135,128 @@ class _MediaDetailsState extends State<MediaDetails> {
       bottomNavigationBar: Padding(
         padding: MediaQuery.of(context).viewInsets,
         child: Container(
-          height: 70,
+          height: ScreenUtil.instance.setWidth(70),
           width: MediaQuery.of(context).size.width,
           child: Row(
             children: <Widget>[
               Container(
-                width: MediaQuery.of(context).size.width,
-                child: TextFormField(
-                  controller: textEditingController,
-                  autofocus: widget.autoFocus,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(0)),
-                          borderSide: BorderSide(color: Colors.black)),
-                      hintText: 'Add a comment..',
-                      suffix: GestureDetector(
-                        onTap: () {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          postComment(
-                                  widget.mediaId, textEditingController.text)
-                              .then((response) {
-                            var extractedData = json.decode(response.body);
+                  width: MediaQuery.of(context).size.width,
+                  child: TypeAheadFormField(
+                    textFieldConfiguration: TextFieldConfiguration(
+                      controller: textEditingController,
+                      autofocus: widget.autoFocus,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(0)),
+                              borderSide: BorderSide(color: Colors.black)),
+                          hintText: 'Add a comment..',
+                          suffix: GestureDetector(
+                            onTap: () {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              postComment(widget.mediaId,
+                                      textEditingController.text)
+                                  .then((response) {
+                                var extractedData = json.decode(response.body);
 
-                            if (response.statusCode == 200 ||
-                                response.statusCode == 201) {
-                              print(response.body);
-                              isLoading = false;
-                              print('****Comment Posted!*****');
-                              textEditingController.text = '';
-                              setState(() {});
-                            } else {
-                              isLoading = false;
-                              print(response.body);
-                              print('****Comment Failed****');
-                              print('reason: ${extractedData['desc']}');
-                            }
-                          }).catchError((e) {
-                            isLoading = false;
-                            print('****Comment Failed****');
-                            print('reason: ' + e.toString());
-                          });
-                        },
-                        child: Container(
-                            child: Text(
-                          'Send',
-                          style: TextStyle(
-                              color: eventajaGreenTeal,
-                              fontWeight: FontWeight.bold),
-                        )),
-                      )),
-                ),
-              )
+                                if (response.statusCode == 200 ||
+                                    response.statusCode == 201) {
+                                  print(response.body);
+                                  isLoading = false;
+                                  print('****Comment Posted!*****');
+                                  textEditingController.text = '';
+                                  setState(() {});
+                                } else {
+                                  isLoading = false;
+                                  print(response.body);
+                                  print('****Comment Failed****');
+                                  print('reason: ${extractedData['desc']}');
+                                }
+                              }).catchError((e) {
+                                isLoading = false;
+                                print('****Comment Failed****');
+                                print('reason: ' + e.toString());
+                              });
+                            },
+                            child: Container(
+                                child: Text(
+                              'Send',
+                              style: TextStyle(
+                                  color: eventajaGreenTeal,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                          )),
+                    ),
+                    suggestionsCallback: (text) async {
+                      for (var texts in text.split(' ')) {
+                        print(texts);
+                        if(texts.startsWith('@')){
+                          return await searchUser(texts);
+                        }
+                      }
+                      return null;
+                    },
+                    direction: AxisDirection.up,
+                    itemBuilder: (context, suggestion) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(suggestion['photo']),
+                        ),
+                        title: Text(suggestion['username']),
+                      );
+                    },
+                    transitionBuilder: (context, suggestionBox, controller) {
+                      return suggestionBox;
+                    },
+                    onSuggestionSelected: (suggestion) {
+                      textEditingController.text += suggestion;
+                    },
+                  )
+                  //TextFormField(
+                  //   controller: textEditingController,
+                  //   autofocus: widget.autoFocus,
+                  //   decoration: InputDecoration(
+                  //       border: OutlineInputBorder(
+                  //           borderRadius: BorderRadius.all(Radius.circular(0)),
+                  //           borderSide: BorderSide(color: Colors.black)),
+                  //       hintText: 'Add a comment..',
+                  //       suffix: GestureDetector(
+                  //         onTap: () {
+                  //           FocusScope.of(context).requestFocus(FocusNode());
+                  //           postComment(
+                  //                   widget.mediaId, textEditingController.text)
+                  //               .then((response) {
+                  //             var extractedData = json.decode(response.body);
+
+                  //             if (response.statusCode == 200 ||
+                  //                 response.statusCode == 201) {
+                  //               print(response.body);
+                  //               isLoading = false;
+                  //               print('****Comment Posted!*****');
+                  //               textEditingController.text = '';
+                  //               setState(() {});
+                  //             } else {
+                  //               isLoading = false;
+                  //               print(response.body);
+                  //               print('****Comment Failed****');
+                  //               print('reason: ${extractedData['desc']}');
+                  //             }
+                  //           }).catchError((e) {
+                  //             isLoading = false;
+                  //             print('****Comment Failed****');
+                  //             print('reason: ' + e.toString());
+                  //           });
+                  //         },
+                  //         child: Container(
+                  //             child: Text(
+                  //           'Send',
+                  //           style: TextStyle(
+                  //               color: eventajaGreenTeal,
+                  //               fontWeight: FontWeight.bold),
+                  //         )),
+                  //       )),
+                  // ),
+                  )
             ],
           ),
         ),
@@ -186,7 +266,7 @@ class _MediaDetailsState extends State<MediaDetails> {
           widget.isVideo == true
               ? videoType()
               : Container(
-                  height: 200,
+                  height: ScreenUtil.instance.setWidth(200),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                       color: Color(0xff8a8a8b),
@@ -195,7 +275,7 @@ class _MediaDetailsState extends State<MediaDetails> {
                           fit: BoxFit.fill)),
                 ),
           SizedBox(
-            height: 15,
+            height: ScreenUtil.instance.setWidth(15),
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 13),
@@ -205,19 +285,19 @@ class _MediaDetailsState extends State<MediaDetails> {
                     backgroundImage: NetworkImage(widget.userPicture),
                     radius: 15),
                 SizedBox(
-                  width: 5,
+                  width: ScreenUtil.instance.setWidth(5),
                 ),
                 Container(
                     width: MediaQuery.of(context).size.width - 217.7,
                     child: Text(
                       '@' + widget.username.toString(),
-                      style: TextStyle(color: Color(0xFF8A8A8B), fontSize: 14),
+                      style: TextStyle(color: Color(0xFF8A8A8B), fontSize: ScreenUtil.instance.setSp(14)),
                     )),
               ],
             ),
           ),
           SizedBox(
-            height: 15,
+            height: ScreenUtil.instance.setWidth(15),
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 13),
@@ -229,7 +309,7 @@ class _MediaDetailsState extends State<MediaDetails> {
             ),
           ),
           SizedBox(
-            height: 10,
+            height: ScreenUtil.instance.setWidth(10),
           ),
           Divider(
             color: Colors.black,
@@ -238,10 +318,10 @@ class _MediaDetailsState extends State<MediaDetails> {
             'Comments',
             style: TextStyle(
                 color: Color(0xff8a8a8b),
-                fontSize: 12,
+                fontSize: ScreenUtil.instance.setSp(12),
                 fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 12),
+          SizedBox(height: ScreenUtil.instance.setWidth(12)),
           Container(
             child: FutureBuilder(
               future: getCommentList(),
@@ -277,8 +357,14 @@ class _MediaDetailsState extends State<MediaDetails> {
                       leading: CircleAvatar(
                         backgroundImage: NetworkImage(commentList[i]['photo']),
                       ),
-                      title: Text(commentList[i]['fullName'] + ' ' +
-                          commentList[i]['lastName'] + ': ', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),),
+                      title: Text(
+                        commentList[i]['fullName'] +
+                            ' ' +
+                            commentList[i]['lastName'] +
+                            ': ',
+                        style: TextStyle(
+                            fontSize: ScreenUtil.instance.setSp(12), fontWeight: FontWeight.bold),
+                      ),
                       subtitle: Text(commentList[i]['comment']),
                     );
                   },
@@ -293,7 +379,7 @@ class _MediaDetailsState extends State<MediaDetails> {
       //   child: ListView(
       //     children: <Widget>[
       //       Container(
-      //         height: 200,
+      //         height: ScreenUtil.instance.setWidth(200),
       //         width: MediaQuery.of(context).size.width,
       //         decoration: BoxDecoration(
       //             color: Color(0xff8a8a8b),
@@ -301,7 +387,7 @@ class _MediaDetailsState extends State<MediaDetails> {
       //                 image: NetworkImage(widget.imageUri), fit: BoxFit.fill)),
       //       ),
       //       SizedBox(
-      //         height: 15,
+      //         height: ScreenUtil.instance.setWidth(15),
       //       ),
       //       Container(
       //         margin: EdgeInsets.symmetric(horizontal: 13),
@@ -311,19 +397,19 @@ class _MediaDetailsState extends State<MediaDetails> {
       //                 backgroundImage: NetworkImage(widget.userPicture),
       //                 radius: 15),
       //             SizedBox(
-      //               width: 5,
+      //               width: ScreenUtil.instance.setWidth(5),
       //             ),
       //             Container(
       //                 width: MediaQuery.of(context).size.width - 217.7,
       //                 child: Text(
       //                   '@' + widget.username.toString(),
-      //                   style: TextStyle(color: Color(0xFF8A8A8B), fontSize: 14),
+      //                   style: TextStyle(color: Color(0xFF8A8A8B), fontSize: ScreenUtil.instance.setSp(14)),
       //                 )),
       //           ],
       //         ),
       //       ),
       //       SizedBox(
-      //         height: 15,
+      //         height: ScreenUtil.instance.setWidth(15),
       //       ),
       //       Container(
       //         margin: EdgeInsets.symmetric(horizontal: 13),
@@ -335,7 +421,7 @@ class _MediaDetailsState extends State<MediaDetails> {
       //         ),
       //       ),
       //       SizedBox(
-      //         height: 10,
+      //         height: ScreenUtil.instance.setWidth(10),
       //       ),
       //       Divider(
       //         color: Colors.black,
@@ -361,6 +447,38 @@ class _MediaDetailsState extends State<MediaDetails> {
       );
     }
     return typeWidget;
+  }
+
+  Future searchUser(String query) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    String queryString = query.substring(1);
+
+    print(queryString);
+
+    String url = BaseApi().apiUrl +
+        '/user/search?X-API-KEY=$API_KEY&people=$queryString&page=1';
+
+    final response = await http.get(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': preferences.getString('Session')
+    });
+
+    var extractedData = json.decode(response.body);
+    print(extractedData['data'].runtimeType);
+
+    List dataMatch = List();
+    print('debug');
+    dataMatch.addAll(extractedData['data']);
+    print('debug');
+
+    print(dataMatch);
+
+    print(response.statusCode);
+
+    dataMatch.retainWhere(
+        (s) => s.toString().toLowerCase().contains(queryString.toLowerCase()));
+    return dataMatch;
   }
 
   Future getCommentList() async {

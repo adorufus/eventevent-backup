@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LatestMediaItem extends StatefulWidget {
   final bool isVideo;
@@ -37,11 +37,18 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     print(MediaQuery.of(context).size.width);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 13, vertical: 6),
-      height: 110,
+      height: ScreenUtil.instance.setWidth(110),
       decoration: BoxDecoration(boxShadow: <BoxShadow>[
         BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -51,7 +58,7 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
       child: Row(
         children: <Widget>[
           Container(
-            width: 167,
+            width: ScreenUtil.instance.setWidth(167),
             decoration: BoxDecoration(
               image: DecorationImage(
                   image: NetworkImage(widget.image), fit: BoxFit.cover),
@@ -73,20 +80,20 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
                       backgroundImage: NetworkImage(widget.userImage),
                       radius: 7,
                     ),
-                    SizedBox(width: 3),
+                    SizedBox(width: ScreenUtil.instance.setWidth(3)),
                     Text(
                       '@${widget.username}',
-                      style: TextStyle(fontSize: 12, color: Color(0xFF8A8A8B)),
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(12), color: Color(0xFF8A8A8B)),
                     ),
                   ]),
-                  SizedBox(height: 4),
+                  SizedBox(height: ScreenUtil.instance.setWidth(4)),
                   Container(
-                    height: 40,
-                    width: 150,
+                    height: ScreenUtil.instance.setWidth(40),
+                    width: ScreenUtil.instance.setWidth(150),
                     child: Text(
                       widget.title,
                       style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),
                       maxLines: 2,
                     ),
                   ),
@@ -96,7 +103,7 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
                         Container(
                           padding: EdgeInsets.symmetric(
                               horizontal: likeCount < 1 ? 8 : 13),
-                          height: 30,
+                          height: ScreenUtil.instance.setWidth(30),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(15),
@@ -122,10 +129,10 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
                                             0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
                               ]),
                         ),
-                        SizedBox(width: 12),
+                        SizedBox(width: ScreenUtil.instance.setWidth(12)),
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 13),
-                          height: 30,
+                          height: ScreenUtil.instance.setWidth(30),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(15),
@@ -142,7 +149,7 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
                                   'assets/icons/icon_apps/comment.png',
                                   scale: 3.5,
                                 ),
-                                SizedBox(width: 5),
+                                SizedBox(width: ScreenUtil.instance.setWidth(5)),
                                 Text(commentCount.length.toString(),
                                     style: TextStyle(
                                         color: Color(

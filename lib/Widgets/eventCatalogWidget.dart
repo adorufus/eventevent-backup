@@ -19,7 +19,8 @@ import 'package:eventevent/helper/Models/PopularEventModels.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/API/catalogModel.dart';
@@ -162,6 +163,15 @@ class _EventCatalogState extends State<EventCatalog>
 
   @override
   Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
+
     mappedDataBanner = bannerData?.map((bannerData) {
           return bannerData == null
               ? Center(child: CircularProgressIndicator())
@@ -258,7 +268,7 @@ class _EventCatalogState extends State<EventCatalog>
           preferredSize: Size(null, 100),
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 75,
+            height: ScreenUtil.instance.setWidth(75),
             padding: EdgeInsets.symmetric(horizontal: 13),
             color: Colors.white,
             child: AppBar(
@@ -267,12 +277,12 @@ class _EventCatalogState extends State<EventCatalog>
               backgroundColor: Colors.white,
               titleSpacing: 0,
               title: Container(
-                width: 240,
+                width: ScreenUtil.instance.setWidth(240),
                 child: Row(
                   children: <Widget>[
                     SizedBox(
-                      height: 23,
-                      width: 140,
+                      height: ScreenUtil.instance.setWidth(23),
+                      width: ScreenUtil.instance.setWidth(140),
                       child: Hero(
                         tag: 'eventeventlogo',
                         child: Image.asset(
@@ -287,7 +297,7 @@ class _EventCatalogState extends State<EventCatalog>
               textTheme: TextTheme(
                   title: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 14,
+                fontSize: ScreenUtil.instance.setSp(14),
                 color: Colors.black,
               )),
               actions: <Widget>[
@@ -299,8 +309,8 @@ class _EventCatalogState extends State<EventCatalog>
                             builder: (BuildContext context) => Search()));
                   },
                   child: Container(
-                      height: 35,
-                      width: 35,
+                      height: ScreenUtil.instance.setWidth(35),
+                      width: ScreenUtil.instance.setWidth(35),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.circle,
@@ -316,15 +326,15 @@ class _EventCatalogState extends State<EventCatalog>
                         scale: 4.5,
                       )),
                 ),
-                SizedBox(width: 8),
+                SizedBox(width: ScreenUtil.instance.setWidth(8)),
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => MyTicket()));
                   },
                   child: Container(
-                      height: 35,
-                      width: 35,
+                      height: ScreenUtil.instance.setWidth(35),
+                      width: ScreenUtil.instance.setWidth(35),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.circle,
@@ -340,7 +350,7 @@ class _EventCatalogState extends State<EventCatalog>
                         scale: 3,
                       )),
                 ),
-                SizedBox(width: 2),
+                SizedBox(width: ScreenUtil.instance.setWidth(2)),
               ],
             ),
           ),
@@ -349,7 +359,7 @@ class _EventCatalogState extends State<EventCatalog>
         //   preferredSize: Size(null, 100),
         //   child: Container(
         //     width: MediaQuery.of(context).size.width,
-        //     height: 75,
+        //     height: ScreenUtil.instance.setWidth(75),
         //     child: Container(
         //       color: Colors.white,
         //       child: Container(
@@ -359,12 +369,12 @@ class _EventCatalogState extends State<EventCatalog>
         //           crossAxisAlignment: CrossAxisAlignment.center,
         //           children: <Widget>[
         //             Container(
-        //               width: 240,
+        //               width: ScreenUtil.instance.setWidth(240),
         //               child: Row(
         //                 children: <Widget>[
         //                   SizedBox(
-        //                     height: 23,
-        //                     width: 140,
+        //                     height: ScreenUtil.instance.setWidth(23),
+        //                     width: ScreenUtil.instance.setWidth(140),
         //                     child: Image.asset(
         //                       'assets/icons/logo_company.png',
         //                       fit: BoxFit.fill,
@@ -381,8 +391,8 @@ class _EventCatalogState extends State<EventCatalog>
         //                         builder: (BuildContext context) => Search()));
         //               },
         //               child: Container(
-        //                   height: 35,
-        //                   width: 35,
+        //                   height: ScreenUtil.instance.setWidth(35),
+        //                   width: ScreenUtil.instance.setWidth(35),
         //                   decoration: BoxDecoration(
         //                       color: Colors.white,
         //                       shape: BoxShape.circle,
@@ -404,8 +414,8 @@ class _EventCatalogState extends State<EventCatalog>
         //                     builder: (BuildContext context) => MyTicket()));
         //               },
         //               child: Container(
-        //                   height: 35,
-        //                   width: 35,
+        //                   height: ScreenUtil.instance.setWidth(35),
+        //                   width: ScreenUtil.instance.setWidth(35),
         //                   decoration: BoxDecoration(
         //                       color: Colors.white,
         //                       shape: BoxShape.circle,
@@ -427,7 +437,7 @@ class _EventCatalogState extends State<EventCatalog>
         //     ),
         //   ),
         // ),
-        body: Column(
+        body: ListView(
           children: <Widget>[
             DefaultTabController(
               length: 3,
@@ -450,11 +460,11 @@ class _EventCatalogState extends State<EventCatalog>
                                 'assets/icons/icon_apps/home.png',
                                 scale: 4.5,
                               ),
-                              SizedBox(width: 10),
+                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
                               Text('Home',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 12.5)),
+                                      fontSize: ScreenUtil.instance.setSp(12.5))),
                             ],
                           ),
                         ),
@@ -467,11 +477,11 @@ class _EventCatalogState extends State<EventCatalog>
                                 'assets/icons/icon_apps/nearby.png',
                                 scale: 4.5,
                               ),
-                              SizedBox(width: 10),
+                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
                               Text('Nearby',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 12.5)),
+                                      fontSize: ScreenUtil.instance.setSp(12.5))),
                             ],
                           ),
                         ),
@@ -484,11 +494,11 @@ class _EventCatalogState extends State<EventCatalog>
                                 'assets/icons/icon_apps/latest.png',
                                 scale: 4.5,
                               ),
-                              SizedBox(width: 10),
+                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
                               Text('Latest',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 12.5)),
+                                      fontSize: ScreenUtil.instance.setSp(12.5))),
                             ],
                           ),
                         ),
@@ -540,7 +550,7 @@ class _EventCatalogState extends State<EventCatalog>
           body = Container();
         }
 
-        return Container(height: 35, child: Center(child: body));
+        return Container(height: ScreenUtil.instance.setWidth(35), child: Center(child: body));
       }),
       onRefresh: () {
         fetchCatalog();
@@ -565,6 +575,7 @@ class _EventCatalogState extends State<EventCatalog>
         refreshController.refreshCompleted();
       },
       child: ListView(
+        shrinkWrap: true,
         cacheExtent: 0,
         padding: EdgeInsets.zero,
         children: <Widget>[
@@ -592,7 +603,7 @@ class _EventCatalogState extends State<EventCatalog>
                 ),
                 popularEventTitle(),
                 Container(
-                    height: 310,
+                    height: ScreenUtil.instance.setWidth(310),
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: data == null ? 0 : data.length,
@@ -627,7 +638,7 @@ class _EventCatalogState extends State<EventCatalog>
                             }
                           } else if (data[i]['ticket_type']['type'] ==
                               'no_ticket') {
-                            itemColor = Color(0xFFA6A8AB);
+                            itemColor = Color(0xFF652D90);
                             itemPriceText = 'NO TICKET';
                           } else if (data[i]['ticket_type']['type'] ==
                               'on_the_spot') {
@@ -688,11 +699,11 @@ class _EventCatalogState extends State<EventCatalog>
                             ),
                           );
                         })),
-                SizedBox(height: 20),
+                SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 mediaHeader(),
                 Container(
-                  height: 247,
-                  child: ListView.builder(
+                  height: ScreenUtil.instance.setWidth(247),
+                  child: mediaData == null ? Container(child: Center(child: CircularProgressIndicator()),) : ListView.builder(
                     itemCount: mediaData == null ? 0 : mediaData.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, i) {
@@ -732,13 +743,13 @@ class _EventCatalogState extends State<EventCatalog>
               ],
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: ScreenUtil.instance.setWidth(20)),
           latestVideoHeader(),
           latestVideoContent(),
-          SizedBox(height: 20),
+          SizedBox(height: ScreenUtil.instance.setWidth(20)),
           categoryTitle(),
           Container(
-              height: 180,
+              height: ScreenUtil.instance.setWidth(180),
               padding: EdgeInsets.only(top: 5, left: 6.5),
               // decoration: BoxDecoration(
               //     color: Colors.white,
@@ -755,10 +766,10 @@ class _EventCatalogState extends State<EventCatalog>
           collectionImage(),
           popularPeople(),
           popularPeopleImage(),
-          SizedBox(height: 15),
+          SizedBox(height: ScreenUtil.instance.setWidth(15)),
           discoverEvent(),
           discoverData == null ? Container() : Container(
-              height: 310,
+              height: ScreenUtil.instance.setWidth(310),
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: data == null ? 0 : data.length,
@@ -793,7 +804,7 @@ class _EventCatalogState extends State<EventCatalog>
                       }
                     } else if (discoverData[i]['ticket_type']['type'] ==
                         'no_ticket') {
-                      itemColor = Color(0xFFA6A8AB);
+                      itemColor = Color(0xFF652D90);
                       itemPriceText = 'NO TICKET';
                     } else if (discoverData[i]['ticket_type']['type'] ==
                         'on_the_spot') {
@@ -883,7 +894,7 @@ class _EventCatalogState extends State<EventCatalog>
               Text('Categories',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: 19,
+                      fontSize: ScreenUtil.instance.setSp(19),
                       fontWeight: FontWeight.bold)),
             ],
           ),
@@ -904,7 +915,7 @@ class _EventCatalogState extends State<EventCatalog>
               Text('Popular Event',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: 19,
+                      fontSize: ScreenUtil.instance.setSp(19),
                       fontWeight: FontWeight.bold)),
               Padding(
                   padding: EdgeInsets.symmetric(
@@ -921,14 +932,14 @@ class _EventCatalogState extends State<EventCatalog>
                 },
                 child: Text(
                   'See All',
-                  style: TextStyle(color: eventajaGreenTeal, fontSize: 12),
+                  style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 5),
+          SizedBox(height: ScreenUtil.instance.setWidth(5)),
           Text('Find the most popular event',
-              style: TextStyle(color: Color(0xFF868686), fontSize: 14)),
+              style: TextStyle(color: Color(0xFF868686), fontSize: ScreenUtil.instance.setSp(14))),
         ],
       ),
     );
@@ -936,7 +947,7 @@ class _EventCatalogState extends State<EventCatalog>
 
   Widget popularEventContent() {
     return Container(
-        height: 269,
+        height: ScreenUtil.instance.setWidth(269),
         child: isLoading
             ? Center(child: CircularProgressIndicator())
             : new ListView.builder(
@@ -970,8 +981,8 @@ class _EventCatalogState extends State<EventCatalog>
                                             )));
                               },
                               child: Container(
-                                height: 250,
-                                width: 190,
+                                height: ScreenUtil.instance.setWidth(250),
+                                width: ScreenUtil.instance.setWidth(190),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     boxShadow: <BoxShadow>[
@@ -993,13 +1004,13 @@ class _EventCatalogState extends State<EventCatalog>
                               data[i]["name"],
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontSize: ScreenUtil.instance.setSp(20), fontWeight: FontWeight.bold),
                             ),
                             Text(data[i]["address"],
                                 overflow: TextOverflow.ellipsis),
                             Container(
-                              height: 40,
-                              width: 150,
+                              height: ScreenUtil.instance.setWidth(40),
+                              width: ScreenUtil.instance.setWidth(150),
                               decoration: BoxDecoration(
                                   image: DecorationImage(
                                       image: AssetImage(ticketPriceImageURI),
@@ -1026,7 +1037,7 @@ class _EventCatalogState extends State<EventCatalog>
               Text('Discover Event',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: 19,
+                      fontSize: ScreenUtil.instance.setSp(19),
                       fontWeight: FontWeight.bold)),
               Padding(
                   padding: EdgeInsets.symmetric(
@@ -1043,14 +1054,14 @@ class _EventCatalogState extends State<EventCatalog>
                 },
                 child: Text(
                   'See All',
-                  style: TextStyle(color: eventajaGreenTeal, fontSize: 12),
+                  style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 5),
+          SizedBox(height: ScreenUtil.instance.setWidth(5)),
           Text('Discover the undiscovered',
-              style: TextStyle(fontSize: 14, color: Color(0xFF868686))),
+              style: TextStyle(fontSize: ScreenUtil.instance.setSp(14), color: Color(0xFF868686))),
         ],
       ),
     );
@@ -1058,7 +1069,7 @@ class _EventCatalogState extends State<EventCatalog>
 
   Widget discoverEventContent() {
     return Container(
-        height: 310,
+        height: ScreenUtil.instance.setWidth(310),
         child: isLoading
             ? Center(child: CircularProgressIndicator())
             : new ListView.builder(
@@ -1076,8 +1087,8 @@ class _EventCatalogState extends State<EventCatalog>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Container(
-                              height: 250,
-                              width: 190,
+                              height: ScreenUtil.instance.setWidth(250),
+                              width: ScreenUtil.instance.setWidth(190),
                               child: CachedNetworkImage(
                                 fit: BoxFit.fill,
                                 imageUrl: discoverData[i]["picture"],
@@ -1093,7 +1104,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 style: TextStyle(color: eventajaGreenTeal)),
                             Text(discoverData[i]["name"],
                                 style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                    fontSize: ScreenUtil.instance.setSp(20), fontWeight: FontWeight.bold),
                                 overflow: TextOverflow.ellipsis),
                             Text(discoverData[i]["address"],
                                 overflow: TextOverflow.ellipsis),
@@ -1117,7 +1128,7 @@ class _EventCatalogState extends State<EventCatalog>
               Text('Popular People',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: 19,
+                      fontSize: ScreenUtil.instance.setSp(19),
                       fontWeight: FontWeight.bold)),
               Padding(
                   padding: EdgeInsets.symmetric(
@@ -1134,14 +1145,14 @@ class _EventCatalogState extends State<EventCatalog>
                 },
                 child: Text(
                   'See All',
-                  style: TextStyle(color: eventajaGreenTeal, fontSize: 12),
+                  style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 5),
+          SizedBox(height: ScreenUtil.instance.setWidth(5)),
           Text('Find the most popular people',
-              style: TextStyle(color: Color(0xFF868686), fontSize: 14)),
+              style: TextStyle(color: Color(0xFF868686), fontSize: ScreenUtil.instance.setSp(14))),
         ],
       ),
     );
@@ -1149,7 +1160,7 @@ class _EventCatalogState extends State<EventCatalog>
 
   Widget popularPeopleImage() {
     return Container(
-      height: 80,
+      height: ScreenUtil.instance.setWidth(80),
       child: isLoading
           ? Center(child: CircularProgressIndicator())
           : ListView.builder(
@@ -1174,8 +1185,8 @@ class _EventCatalogState extends State<EventCatalog>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          height: 41.50,
-                          width: 41.50,
+                          height: ScreenUtil.instance.setWidth(40.50),
+                          width: ScreenUtil.instance.setWidth(41.50),
                           decoration: BoxDecoration(
                               boxShadow: <BoxShadow>[
                                 BoxShadow(
@@ -1212,12 +1223,12 @@ class _EventCatalogState extends State<EventCatalog>
                 'Collection',
                 style: TextStyle(
                     color: eventajaBlack,
-                    fontSize: 19,
+                    fontSize: ScreenUtil.instance.setSp(19),
                     fontWeight: FontWeight.bold),
               ),
             ],
           ),
-          SizedBox(height: 5),
+          SizedBox(height: ScreenUtil.instance.setWidth(5)),
           Text('Check out our hand-picked collectoins bellow',
               style: TextStyle(color: Color(0xFF868686), fontSize: 8.63)),
         ],
@@ -1227,7 +1238,7 @@ class _EventCatalogState extends State<EventCatalog>
 
   Widget collectionImage() {
     return Container(
-      height: 90,
+      height: ScreenUtil.instance.setWidth(90),
       child: isLoading
           ? Center(child: CircularProgressIndicator())
           : collectionData == null
@@ -1246,7 +1257,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 )));
                       },
                       child: new Container(
-                        width: 150,
+                        width: ScreenUtil.instance.setWidth(150),
                         margin: i == 0
                             ? EdgeInsets.only(left: 13)
                             : EdgeInsets.only(left: 13),
@@ -1254,8 +1265,8 @@ class _EventCatalogState extends State<EventCatalog>
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                              height: 70,
-                              width: 150,
+                              height: ScreenUtil.instance.setWidth(70),
+                              width: ScreenUtil.instance.setWidth(150),
                               decoration: BoxDecoration(
                                   color: Color(0xff8a8a8b),
                                   borderRadius: BorderRadius.circular(5),
@@ -1305,7 +1316,7 @@ class _EventCatalogState extends State<EventCatalog>
               Text('Discover People',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: 19,
+                      fontSize: ScreenUtil.instance.setSp(19),
                       fontWeight: FontWeight.bold)),
               Padding(
                   padding: EdgeInsets.symmetric(
@@ -1322,14 +1333,14 @@ class _EventCatalogState extends State<EventCatalog>
                 },
                 child: Text(
                   'See All',
-                  style: TextStyle(color: eventajaGreenTeal, fontSize: 12),
+                  style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 5),
+          SizedBox(height: ScreenUtil.instance.setWidth(5)),
           Text('Find more people to follow',
-              style: TextStyle(color: Color(0xFF868686), fontSize: 14)),
+              style: TextStyle(color: Color(0xFF868686), fontSize: ScreenUtil.instance.setSp(14))),
         ],
       ),
     );
@@ -1337,7 +1348,7 @@ class _EventCatalogState extends State<EventCatalog>
 
   Widget discoverPeopleImage() {
     return Container(
-      height: 80,
+      height: ScreenUtil.instance.setWidth(80),
       child: isLoading
           ? Center(child: CircularProgressIndicator())
           : ListView.builder(
@@ -1362,8 +1373,8 @@ class _EventCatalogState extends State<EventCatalog>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          height: 41.50,
-                          width: 41.50,
+                          height: ScreenUtil.instance.setWidth(40.50),
+                          width: ScreenUtil.instance.setWidth(41.50),
                           decoration: BoxDecoration(
                               boxShadow: <BoxShadow>[
                                 BoxShadow(
@@ -1391,7 +1402,7 @@ class _EventCatalogState extends State<EventCatalog>
   ///
   Widget banner() {
     return CarouselSlider(
-      height: 200,
+      height: ScreenUtil.instance.setWidth(200),
       items: bannerData == null
           ? [
               Center(
@@ -1418,8 +1429,8 @@ class _EventCatalogState extends State<EventCatalog>
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         SizedBox(
-          height: 180,
-          width: 350,
+          height: ScreenUtil.instance.setWidth(180),
+          width: ScreenUtil.instance.setWidth(350),
           child: new Carousel(
             boxFit: BoxFit.cover,
             images: mappedDataBanner,
@@ -1447,7 +1458,7 @@ class _EventCatalogState extends State<EventCatalog>
               Text('Popular Media',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: 19,
+                      fontSize: ScreenUtil.instance.setSp(19),
                       fontWeight: FontWeight.bold)),
               Padding(
                   padding: EdgeInsets.symmetric(
@@ -1461,7 +1472,7 @@ class _EventCatalogState extends State<EventCatalog>
                 },
                 child: Text(
                   'See All',
-                  style: TextStyle(color: eventajaGreenTeal, fontSize: 12),
+                  style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
                 ),
               ),
             ],
@@ -1473,7 +1484,7 @@ class _EventCatalogState extends State<EventCatalog>
 
   // Widget mediaContent() {
   //   return Container(
-  //       height: 250,
+  //       height: ScreenUtil.instance.setWidth(250),
   //       alignment: Alignment.centerLeft,
   //       child: isLoading
   //           ? Center(
@@ -1517,7 +1528,7 @@ class _EventCatalogState extends State<EventCatalog>
   //                                     forceSafariVC: true);
   //                               },
   //                               child: Container(
-  //                                 height: 120,
+  //                                 height: ScreenUtil.instance.setWidth(120),
   //                                 width: i == 0 ? 250 : 250,
   //                                 decoration: BoxDecoration(
   //                                     borderRadius: BorderRadius.only(
@@ -1531,7 +1542,7 @@ class _EventCatalogState extends State<EventCatalog>
   //                               ),
   //                             ),
   //                             Container(
-  //                               height: 120,
+  //                               height: ScreenUtil.instance.setWidth(120),
   //                               decoration: BoxDecoration(
   //                                 color: Colors.white,
   //                                 borderRadius: BorderRadius.only(
@@ -1539,7 +1550,7 @@ class _EventCatalogState extends State<EventCatalog>
   //                                     topRight: Radius.circular(15)),
   //                               ),
   //                               child: Column(children: <Widget>[
-  //                                 SizedBox(height: 9),
+  //                                 SizedBox(height: ScreenUtil.instance.setWidth(9)),
   //                                 // Text(data[i]["dateStart"],
   //                                 //     style: TextStyle(color: eventajaGreenTeal),
   //                                 //     textAlign: TextAlign.start),
@@ -1552,13 +1563,13 @@ class _EventCatalogState extends State<EventCatalog>
   //                                         MainAxisAlignment.start,
   //                                     children: <Widget>[
   //                                       Container(
-  //                                         width: 220,
+  //                                         width: ScreenUtil.instance.setWidth(220),
   //                                         child: Text(
   //                                           //'asdfghhtij aijitaj sjakj \n ofkoakf ffffa gggdssef ffwf',
   //                                           mediaData['data'][i]["title"],
   //                                           overflow: TextOverflow.ellipsis,
   //                                           style: TextStyle(
-  //                                               fontSize: 20,
+  //                                               fontSize: ScreenUtil.instance.setSp(20),
   //                                               fontWeight: FontWeight.bold),
   //                                           textAlign: TextAlign.start,
   //                                           maxLines: 2,
@@ -1567,7 +1578,7 @@ class _EventCatalogState extends State<EventCatalog>
   //                                     ],
   //                                   ),
   //                                 ),
-  //                                 SizedBox(height: 9),
+  //                                 SizedBox(height: ScreenUtil.instance.setWidth(9)),
   //                                 Padding(
   //                                   padding: const EdgeInsets.only(left: 10),
   //                                   child: Row(
@@ -1577,8 +1588,8 @@ class _EventCatalogState extends State<EventCatalog>
   //                                         CrossAxisAlignment.center,
   //                                     children: <Widget>[
   //                                       Container(
-  //                                         height: 30,
-  //                                         width: 30,
+  //                                         height: ScreenUtil.instance.setWidth(30),
+  //                                         width: ScreenUtil.instance.setWidth(30),
   //                                         decoration: BoxDecoration(
   //                                             shape: BoxShape.circle,
   //                                             image: DecorationImage(
@@ -1588,7 +1599,7 @@ class _EventCatalogState extends State<EventCatalog>
   //                                                 fit: BoxFit.fill)),
   //                                       ),
   //                                       SizedBox(
-  //                                         width: 10,
+  //                                         height: ScreenUtil.instance.setWidth(10),
   //                                       ),
   //                                       Text(mediaData['data'][i]['creator']
   //                                                   ['fullName'] ==
@@ -1843,7 +1854,7 @@ class _EventCatalogState extends State<EventCatalog>
               Text('Latest Video',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: 19,
+                      fontSize: ScreenUtil.instance.setSp(19),
                       fontWeight: FontWeight.bold)),
               Padding(
                   padding: EdgeInsets.symmetric(
@@ -1861,7 +1872,7 @@ class _EventCatalogState extends State<EventCatalog>
                 },
                 child: Text(
                   'See All',
-                  style: TextStyle(color: eventajaGreenTeal, fontSize: 12),
+                  style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
                 ),
               ),
             ],
@@ -1873,7 +1884,7 @@ class _EventCatalogState extends State<EventCatalog>
 
   Widget latestVideoContent() {
     return ColumnBuilder(
-      itemCount: mediaData == null ? 0 : mediaData.length,
+      itemCount: latestMediaVideo == null ? 0 : latestMediaVideo.length,
       itemBuilder: (BuildContext context, i) {
         return GestureDetector(
           onTap: () {

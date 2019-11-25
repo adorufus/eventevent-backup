@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:flutter_date_picker/color_picker_dialog.dart';
 import 'package:flutter_date_picker/color_selector_btn.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart';
@@ -102,14 +102,14 @@ class _WeekPickerPageState extends State<WeekPickerPage> {
               color: selectedPeriodStartColor,
               showDialogFunction: _showSelectedStartColorDialog),
           SizedBox(
-            width: 12.0,
+            height: 12.0,
           ),
           ColorSelectorBtn(
               title: "Middle",
               color: selectedPeriodMiddleColor,
               showDialogFunction: _showSelectedMiddleColorDialog),
           SizedBox(
-            width: 12.0,
+            height: 12.0,
           ),
           ColorSelectorBtn(
               title: "End",

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MarqueeWidget extends StatefulWidget{
   final Widget child;
@@ -29,7 +29,14 @@ class _MarqueeWidgetState extends State<MarqueeWidget>{
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return SingleChildScrollView(
       child: widget.child,
       scrollDirection: widget.direction,

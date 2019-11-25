@@ -5,7 +5,7 @@ import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -43,7 +43,14 @@ class TicketSalesState extends State<TicketSales> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     
     return Scaffold(
       appBar: AppBar(
@@ -64,17 +71,17 @@ class TicketSalesState extends State<TicketSales> {
                 children: <Widget>[
                   Container(
                     color: Colors.white,
-                    height: 150,
+                    height: ScreenUtil.instance.setWidth(150),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
                           'TOTAL TICKET SOLD',
-                          style: TextStyle(fontSize: 20, color: Colors.grey),
+                          style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.grey),
                         ),
                         SizedBox(
-                          height: 15,
+                          height: ScreenUtil.instance.setWidth(15),
                         ),
                         Text(
                           ticketSalesData['total_sold_ticket'] == null
@@ -86,10 +93,10 @@ class TicketSalesState extends State<TicketSales> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(height: ScreenUtil.instance.setWidth(30)),
                   Container(
                     color: Colors.white,
-                    height: 300,
+                    height: ScreenUtil.instance.setWidth(300),
                     padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -97,14 +104,14 @@ class TicketSalesState extends State<TicketSales> {
                       children: <Widget>[
                         Text('From ' + widget.eventName),
                         SizedBox(
-                          height: 15,
+                          height: ScreenUtil.instance.setWidth(15),
                         ),
                         Text(
                           'BALANCE ON HOLD',
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
                         ),
                         SizedBox(
-                          height: 15,
+                          height: ScreenUtil.instance.setWidth(15),
                         ),
                         Text(
                           'Rp. ' +
@@ -116,7 +123,7 @@ class TicketSalesState extends State<TicketSales> {
                               color: Colors.orange),
                         ),
                         SizedBox(
-                          height: 15,
+                          height: ScreenUtil.instance.setWidth(15),
                         ),
                         GestureDetector(
                           child: Text(
@@ -125,11 +132,11 @@ class TicketSalesState extends State<TicketSales> {
                           ),
                         ),
                         SizedBox(
-                          height: 15,
+                          height: ScreenUtil.instance.setWidth(15),
                         ),
                         Container(
                           width: MediaQuery.of(context).size.width,
-                          height: 50,
+                          height: ScreenUtil.instance.setWidth(50),
                           margin: EdgeInsets.symmetric(horizontal: 5),
                           child: MaterialButton(
                             onPressed: () {
@@ -142,12 +149,12 @@ class TicketSalesState extends State<TicketSales> {
                             child: Text('WITHDRAW',
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 18,
+                                    fontSize: ScreenUtil.instance.setSp(18),
                                     fontWeight: FontWeight.w500)),
                           ),
                         ),
                         SizedBox(
-                          height: 15,
+                          height: ScreenUtil.instance.setWidth(15),
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
@@ -166,7 +173,7 @@ class TicketSalesState extends State<TicketSales> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: ScreenUtil.instance.setWidth(20),
                   ),
                   Container(
                     color: Colors.white,
@@ -180,10 +187,10 @@ class TicketSalesState extends State<TicketSales> {
                           children: <Widget>[
                             Text(
                               'TOTAL SALES AMOUNT',
-                              style: TextStyle(fontSize: 18),
+                              style: TextStyle(fontSize: ScreenUtil.instance.setSp(18)),
                             ),
                             SizedBox(
-                              width: 30,
+                              width: ScreenUtil.instance.setWidth(30),
                             ),
                             Text(
                               'Rp. ' +
@@ -192,7 +199,7 @@ class TicketSalesState extends State<TicketSales> {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: eventajaGreenTeal,
-                                  fontSize: 18),
+                                  fontSize: ScreenUtil.instance.setSp(18)),
                             )
                           ],
                         ),
@@ -200,7 +207,7 @@ class TicketSalesState extends State<TicketSales> {
                           color: Colors.grey,
                         ),
                         SizedBox(
-                          height: 20,
+                          height: ScreenUtil.instance.setWidth(20),
                         ),
                         ColumnBuilder(
                           itemCount: ticketData == null ? 0 : ticketData.length,
@@ -211,15 +218,15 @@ class TicketSalesState extends State<TicketSales> {
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
-                                height: 130,
+                                height: ScreenUtil.instance.setWidth(130),
                                 padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     SizedBox(
-                                      height: 100,
-                                      width: 70,
+                                      height: ScreenUtil.instance.setWidth(100),
+                                      width: ScreenUtil.instance.setWidth(70),
                                       child: Image.network(
                                         ticketData[i]['ticket_image']
                                             ['secure_url'],
@@ -227,7 +234,7 @@ class TicketSalesState extends State<TicketSales> {
                                       ),
                                     ),
                                     SizedBox(
-                                      width: 16,
+                                      width: ScreenUtil.instance.setWidth(16),
                                     ),
                                     Expanded(
                                       child: Column(
@@ -247,7 +254,7 @@ class TicketSalesState extends State<TicketSales> {
                                                       ticketData[i]
                                                           ['ticket_name'],
                                                       style: TextStyle(
-                                                          fontSize: 14,
+                                                          fontSize: ScreenUtil.instance.setSp(14),
                                                           fontWeight:
                                                               FontWeight.bold),
                                                     )),
@@ -265,7 +272,7 @@ class TicketSalesState extends State<TicketSales> {
                                                       : 'FREE',
                                                   textAlign: TextAlign.end,
                                                   style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: ScreenUtil.instance.setSp(18),
                                                       color: ticketData[i][
                                                                   'paid_ticket_type_id'] ==
                                                               '1'
@@ -292,11 +299,11 @@ class TicketSalesState extends State<TicketSales> {
                                                   Text(
                                                     'REMAINING TICKET',
                                                     style: TextStyle(
-                                                        fontSize: 12,
+                                                        fontSize: ScreenUtil.instance.setSp(12),
                                                         color: Colors.grey),
                                                   ),
                                                   SizedBox(
-                                                    height: 8,
+                                                    height: ScreenUtil.instance.setWidth(8),
                                                   ),
                                                   Text(
                                                     ticketData[i]
@@ -304,7 +311,7 @@ class TicketSalesState extends State<TicketSales> {
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontSize: 18),
+                                                        fontSize: ScreenUtil.instance.setSp(18)),
                                                   )
                                                 ],
                                               ),
@@ -315,11 +322,11 @@ class TicketSalesState extends State<TicketSales> {
                                                   Text(
                                                     'TICKET SOLD',
                                                     style: TextStyle(
-                                                        fontSize: 12,
+                                                        fontSize: ScreenUtil.instance.setSp(12),
                                                         color: Colors.grey),
                                                   ),
                                                   SizedBox(
-                                                    height: 8,
+                                                    height: ScreenUtil.instance.setWidth(8),
                                                   ),
                                                   Text(
                                                     ticketData[i]['sold'],
@@ -328,7 +335,7 @@ class TicketSalesState extends State<TicketSales> {
                                                             eventajaGreenTeal,
                                                         fontWeight:
                                                             FontWeight.bold,
-                                                        fontSize: 18),
+                                                        fontSize: ScreenUtil.instance.setSp(18)),
                                                   )
                                                 ],
                                               ),

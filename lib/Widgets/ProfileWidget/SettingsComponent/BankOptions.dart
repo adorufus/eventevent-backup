@@ -1,6 +1,6 @@
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,7 +20,14 @@ class BankOptions extends StatefulWidget{
 
 class BankOptionsState extends State<BankOptions>{
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -41,26 +48,26 @@ class BankOptionsState extends State<BankOptions>{
             child: Column(
               children: <Widget>[
                 Text(widget.accountName),
-                SizedBox(height: 10,),
+                SizedBox(height: ScreenUtil.instance.setWidth(10),),
                 Text(widget.bankName),
-                SizedBox(height: 10,),
+                SizedBox(height: ScreenUtil.instance.setWidth(10),),
                 Text(widget.accountNumber)
               ],
             ),
           ),
-          SizedBox(height: 50,),
+          SizedBox(height: ScreenUtil.instance.setWidth(50),),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 50),
             decoration: BoxDecoration(
               color: eventajaGreenTeal,
               borderRadius: BorderRadius.circular(10)
             ),
-            height: 50,
+            height: ScreenUtil.instance.setWidth(50),
             child: Center(
               child: Text('EDIT ACCOUNT', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: ScreenUtil.instance.setWidth(10),),
           GestureDetector(
             onTap: (){
               showDialog(
@@ -79,15 +86,15 @@ class BankOptionsState extends State<BankOptions>{
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10)
                             ),
-                            height: 100,
-                            width: 200,
+                            height: ScreenUtil.instance.setWidth(100),
+                            width: ScreenUtil.instance.setWidth(200),
                             child: Column(
                               children: <Widget>[
-                                Text('Warning', style: TextStyle(color: Colors.black54,fontSize: 18, fontWeight: FontWeight.bold),),
-                                SizedBox(height: 10,),
+                                Text('Warning', style: TextStyle(color: Colors.black54,fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
+                                SizedBox(height: ScreenUtil.instance.setWidth(10),),
                                 Text('Delete this bank accout?', textAlign: TextAlign.center,),
                                 SizedBox(
-                                  height: 20,
+                                  height: ScreenUtil.instance.setWidth(20),
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -99,7 +106,7 @@ class BankOptionsState extends State<BankOptions>{
                                       child: Text('Cancel', style: TextStyle(color: Colors.lightBlue, fontWeight: FontWeight.bold),),
                                     ),
                                     SizedBox(
-                                      width: 50,
+                                      width: ScreenUtil.instance.setWidth(50),
                                     ),
                                     GestureDetector(
                                       onTap: (){
@@ -131,7 +138,7 @@ class BankOptionsState extends State<BankOptions>{
                 color: Colors.red,
                 borderRadius: BorderRadius.circular(10)
               ),
-              height: 50,
+              height: ScreenUtil.instance.setWidth(50),
               child: Center(
                 child: Text('REMOVE', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
               ),

@@ -4,7 +4,7 @@ import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankAccountLi
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankList.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,14 +24,21 @@ class SetupBankAccountState extends State<SetupBankAccount> {
   String bankID;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       key: scaffoldKey,
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: 75,
+          height: ScreenUtil.instance.setWidth(75),
           padding: EdgeInsets.symmetric(horizontal: 13),
           color: Colors.white,
           child: AppBar(
@@ -52,7 +59,7 @@ class SetupBankAccountState extends State<SetupBankAccount> {
             
             textTheme: TextTheme(title: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: ScreenUtil.instance.setSp(14),
               color: Colors.black,
             )),
           ),
@@ -64,14 +71,14 @@ class SetupBankAccountState extends State<SetupBankAccount> {
           Text(
               'Please setup your bank account for balance withdraw from your ticket sales or ticket refund'),
           SizedBox(
-            height: 15,
+            height: ScreenUtil.instance.setWidth(15),
           ),
           Text(
             'Account Name',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18)),
           ),
           SizedBox(
-            height: 10,
+            height: ScreenUtil.instance.setWidth(10),
           ),
           TextFormField(
             controller: accName,
@@ -87,14 +94,14 @@ class SetupBankAccountState extends State<SetupBankAccount> {
                     borderRadius: BorderRadius.circular(10))),
           ),
           SizedBox(
-            height: 15,
+            height: ScreenUtil.instance.setWidth(15),
           ),
           Text(
             'Account Number',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18)),
           ),
           SizedBox(
-            height: 10,
+            height: ScreenUtil.instance.setWidth(10),
           ),
           TextFormField(
             controller: accNumber,
@@ -110,14 +117,14 @@ class SetupBankAccountState extends State<SetupBankAccount> {
                     borderRadius: BorderRadius.circular(10))),
           ),
           SizedBox(
-            height: 15,
+            height: ScreenUtil.instance.setWidth(15),
           ),
           Text(
             'Bank Name',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18)),
           ),
           SizedBox(
-            height: 10,
+            height: ScreenUtil.instance.setWidth(10),
           ),
           GestureDetector(
             onTap: () async {
@@ -130,7 +137,7 @@ class SetupBankAccountState extends State<SetupBankAccount> {
               print(result['bank_name']);
             },
             child: Container(
-              height: 50,
+              height: ScreenUtil.instance.setWidth(50),
               padding: EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
@@ -139,7 +146,7 @@ class SetupBankAccountState extends State<SetupBankAccount> {
             ),
           ),
           SizedBox(
-            height: 20,
+            height: ScreenUtil.instance.setWidth(20),
           ),
           GestureDetector(
             onTap: () {
@@ -164,7 +171,7 @@ class SetupBankAccountState extends State<SetupBankAccount> {
               });
             },
             child: Container(
-              height: 50,
+              height: ScreenUtil.instance.setWidth(50),
               padding: EdgeInsets.symmetric(horizontal: 10),
               margin: EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(

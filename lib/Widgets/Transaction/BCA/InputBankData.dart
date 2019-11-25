@@ -3,7 +3,7 @@ import 'dart:math' as math;
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -74,7 +74,14 @@ class PaymentBcaState extends State<PaymentBCA> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -105,7 +112,7 @@ class PaymentBcaState extends State<PaymentBCA> {
                 children: <Widget>[
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 200,
+                    height: ScreenUtil.instance.setWidth(200),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: eventajaGreenTeal),
@@ -114,15 +121,15 @@ class PaymentBcaState extends State<PaymentBCA> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
-                          height: 10,
+                          height: ScreenUtil.instance.setWidth(10),
                         ),
                         Text('Complete Payment In',
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 18,
+                                fontSize: ScreenUtil.instance.setSp(18),
                                 fontWeight: FontWeight.bold)),
                         SizedBox(
-                          height: 20,
+                          height: ScreenUtil.instance.setWidth(20),
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -131,52 +138,52 @@ class PaymentBcaState extends State<PaymentBCA> {
                             Text('${hour}',
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: ScreenUtil.instance.setSp(20),
                                     fontWeight: FontWeight.bold)),
                             SizedBox(
-                              width: 10,
+                              height: ScreenUtil.instance.setWidth(10),
                             ),
                             Text(
                               ':',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 20,
+                                  fontSize: ScreenUtil.instance.setSp(20),
                                   fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
-                              width: 10,
+                              height: ScreenUtil.instance.setWidth(10),
                             ),
                             Text(
                               '$min',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 20,
+                                  fontSize: ScreenUtil.instance.setSp(20),
                                   fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
-                              width: 10,
+                              height: ScreenUtil.instance.setWidth(10),
                             ),
                             Text(
                               ':',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 20,
+                                  fontSize: ScreenUtil.instance.setSp(20),
                                   fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
-                              width: 10,
+                              height: ScreenUtil.instance.setWidth(10),
                             ),
                             Text(
                               '$sec',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 20,
+                                  fontSize: ScreenUtil.instance.setSp(20),
                                   fontWeight: FontWeight.bold),
                             )
                           ],
                         ),
                         SizedBox(
-                          height: 20,
+                          height: ScreenUtil.instance.setWidth(20),
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -184,23 +191,23 @@ class PaymentBcaState extends State<PaymentBCA> {
                           children: <Widget>[
                             Text('H',
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 20)),
+                                    color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                             SizedBox(
-                              width: 35,
+                              width: ScreenUtil.instance.setWidth(35),
                             ),
                             Text('M',
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 20)),
+                                    color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                             SizedBox(
-                              width: 35,
+                              width: ScreenUtil.instance.setWidth(35),
                             ),
                             Text('S',
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 20)),
+                                    color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                           ],
                         ),
                         SizedBox(
-                          height: 20,
+                          height: ScreenUtil.instance.setWidth(20),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -220,7 +227,7 @@ class PaymentBcaState extends State<PaymentBCA> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: ScreenUtil.instance.setWidth(20),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -228,28 +235,28 @@ class PaymentBcaState extends State<PaymentBCA> {
                     children: <Widget>[
                       Text(
                         'TRANSFER AMOUNT',
-                        style: TextStyle(fontSize: 20, color: Colors.black45),
+                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.black45),
                       ),
-                      SizedBox(height: 15),
+                      SizedBox(height: ScreenUtil.instance.setWidth(15)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
                             'Rp. ' + firstAmount + ',',
                             style: TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold),
+                                fontSize: ScreenUtil.instance.setSp(30), fontWeight: FontWeight.bold),
                           ),
-                          Text(uniqueAmount, style: TextStyle(color: Colors.red, fontSize: 30, fontWeight: FontWeight.bold)),
+                          Text(uniqueAmount, style: TextStyle(color: Colors.red, fontSize: ScreenUtil.instance.setSp(30), fontWeight: FontWeight.bold)),
                           Text(
                             ',-',
-                            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)
+                            style: TextStyle(fontSize: ScreenUtil.instance.setSp(30), fontWeight: FontWeight.bold)
                           )
                         ],
                       ),
-                      SizedBox(height: 15),
+                      SizedBox(height: ScreenUtil.instance.setWidth(15)),
                       Container(
                           width: MediaQuery.of(context).size.width,
-                          height: 50,
+                          height: ScreenUtil.instance.setWidth(50),
                           margin: EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
                             color: Colors.red,
@@ -260,18 +267,18 @@ class PaymentBcaState extends State<PaymentBCA> {
                             'IMPORTANT! Please transfer until the last 3 digits',
                             style: TextStyle(color: Colors.white),
                           ))),
-                      SizedBox(height: 15),
+                      SizedBox(height: ScreenUtil.instance.setWidth(15)),
                       Text(
                         'Eventevent will automatically check your payment. It may take up to 1 hour to process',
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                        style: TextStyle(color: Colors.grey, fontSize: ScreenUtil.instance.setSp(12)),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(
-                        height: 15,
+                        height: ScreenUtil.instance.setWidth(15),
                       ),
                       Text('TRANSFER KE'),
                       SizedBox(
-                        height: 10,
+                        height: ScreenUtil.instance.setWidth(10),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -282,7 +289,7 @@ class PaymentBcaState extends State<PaymentBCA> {
                             ));
                         },
                         child: Container(
-                          height: 100,
+                          height: ScreenUtil.instance.setWidth(100),
                           margin: EdgeInsets.all(10),
                           padding: EdgeInsets.only(
                               left: 15, right: 7, top: 10, bottom: 10),
@@ -302,12 +309,12 @@ class PaymentBcaState extends State<PaymentBCA> {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: SizedBox(
-                                  height: 20,
+                                  height: ScreenUtil.instance.setWidth(20),
                                   child: Image.asset('assets/drawable/bca.png'),
                                 ),
                               ),
                               SizedBox(
-                                width: 10,
+                                height: ScreenUtil.instance.setWidth(10),
                               ),
                               Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -317,18 +324,18 @@ class PaymentBcaState extends State<PaymentBCA> {
                                       bank_acc,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 20,
+                                          fontSize: ScreenUtil.instance.setSp(20),
                                           color: Colors.black54,),
                                     ),
-                                    SizedBox(height: 10),
+                                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
                                     Text(bank_code.toUpperCase(),
                                         style: TextStyle(color: Colors.grey)),
-                                    SizedBox(height: 10),
+                                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
                                     Text(
                                       bank_number,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 15,
+                                          fontSize: ScreenUtil.instance.setSp(15),
                                           color: Colors.black54),
                                     ),
                                   ])

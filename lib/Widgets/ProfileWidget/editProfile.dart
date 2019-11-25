@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -78,7 +78,14 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
 
 
     return Scaffold(
@@ -110,10 +117,10 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                     child: Center(
                       child: Container(
                         color: Colors.white,
-                        height: 120,
-                        width: 120,
+                        height: ScreenUtil.instance.setWidth(120),
+                        width: ScreenUtil.instance.setWidth(120),
                         child: SizedBox(
-                            height: 50, width: 50, child: CircularProgressIndicator()),
+                            height: ScreenUtil.instance.setWidth(50), width: ScreenUtil.instance.setWidth(50), child: CircularProgressIndicator()),
                       ),
                     ),
                   );
@@ -128,7 +135,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
               child: Center(
                 child: Text(
                   'SAVE',
-                  style: TextStyle(fontSize: 20, color: eventajaGreenTeal),
+                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: eventajaGreenTeal),
                 ),
               ),
             ),
@@ -143,19 +150,19 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
     return ListView(
       children: <Widget>[
         SizedBox(
-          height: 20,
+          height: ScreenUtil.instance.setWidth(20),
         ),
         profilePicture(),
         SizedBox(
-          height: 30,
+          height: ScreenUtil.instance.setWidth(30),
         ),
         basicSettings(),
         SizedBox(
-          height: 20,
+          height: ScreenUtil.instance.setWidth(20),
         ),
         contactSettings(),
         SizedBox(
-          height: 20,
+          height: ScreenUtil.instance.setWidth(20),
         )
       ],
     );
@@ -166,8 +173,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
       child: Column(
         children: <Widget>[
           Container(
-            height: 200,
-            width: 200,
+            height: ScreenUtil.instance.setWidth(200),
+            width: ScreenUtil.instance.setWidth(200),
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
@@ -175,7 +182,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                     fit: BoxFit.contain)),
           ),
           SizedBox(
-            height: 30,
+            height: ScreenUtil.instance.setWidth(30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -205,10 +212,10 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
         Text(
           'BASIC SETTINGS',
           style: TextStyle(
-              fontSize: 15, fontWeight: FontWeight.bold, color: Colors.grey),
+              fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold, color: Colors.grey),
         ),
         SizedBox(
-          height: 15,
+          height: ScreenUtil.instance.setWidth(15),
         ),
         Container(
           width: MediaQuery.of(context).size.width / 1.2,
@@ -228,24 +235,24 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Username', style: TextStyle(color: eventajaGreenTeal, fontSize: 15, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 20,),
-                    Text('First Name', style: TextStyle(color: eventajaGreenTeal, fontSize: 15, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 20,),
-                    Text('Last Name', style: TextStyle(color: eventajaGreenTeal, fontSize: 15, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 20,),
-                    Text('Date Of Birth', style: TextStyle(color: eventajaGreenTeal, fontSize: 15, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 20,),
-                    Text('Bio', style: TextStyle(color: eventajaGreenTeal, fontSize: 15, fontWeight: FontWeight.bold),),
+                    Text('Username', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
+                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
+                    Text('First Name', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
+                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
+                    Text('Last Name', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
+                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
+                    Text('Date Of Birth', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
+                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
+                    Text('Bio', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
                   ],),
                 SizedBox(
-                  width: 25,
+                  width: ScreenUtil.instance.setWidth(25),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                        width: 150,
+                        width: ScreenUtil.instance.setWidth(150),
                         child: TextFormField(
                           controller: usernameController,
                           textAlign: TextAlign.start,
@@ -253,13 +260,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.symmetric(vertical: 1),
                             hintText: 'Username',
-                            hintStyle: TextStyle(fontSize: 15),
+                            hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
                           ),
                         ),
                       ),
-                    SizedBox(height: 15,),
+                    SizedBox(height: ScreenUtil.instance.setWidth(15),),
                     Container(
-                        width: 150,
+                        width: ScreenUtil.instance.setWidth(150),
                         child: TextFormField(
                           controller: firstNameController,
                           textAlign: TextAlign.start,
@@ -267,13 +274,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                               contentPadding: EdgeInsets.symmetric(vertical: 1),
                               border: InputBorder.none,
                               hintText: 'First Name',
-                              hintStyle: TextStyle(fontSize: 15)
+                              hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15))
                           ),
                         ),
                       ),
-                    SizedBox(height: 20,),
+                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
                     Container(
-                        width: 150,
+                        width: ScreenUtil.instance.setWidth(150),
                         child: TextFormField(
                           controller: lastNameController,
                           textAlign: TextAlign.start,
@@ -281,13 +288,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                               contentPadding: EdgeInsets.symmetric(vertical: 1),
                               border: InputBorder.none,
                               hintText: 'Last Name',
-                              hintStyle: TextStyle(fontSize: 15)
+                              hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15))
                           ),
                         ),
                       ),
-                    SizedBox(height: 15,),
+                    SizedBox(height: ScreenUtil.instance.setWidth(15),),
                     Container(
-                        width: 150,
+                        width: ScreenUtil.instance.setWidth(150),
                         child: TextFormField(
                           controller: birthDateController,
                           textAlign: TextAlign.start,
@@ -295,13 +302,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                               contentPadding: EdgeInsets.symmetric(vertical: 1),
                               border: InputBorder.none,
                               hintText: 'Birthday',
-                              hintStyle: TextStyle(fontSize: 15)
+                              hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15))
                           ),
                         ),
                       ),
-                    SizedBox(height: 15,),
+                    SizedBox(height: ScreenUtil.instance.setWidth(15),),
                     Container(
-                        width: 150,
+                        width: ScreenUtil.instance.setWidth(150),
                         child: TextFormField(
                           controller: shortBioController,
                           keyboardType: TextInputType.multiline,
@@ -311,7 +318,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                               contentPadding: EdgeInsets.symmetric(vertical: 1),
                               border: InputBorder.none,
                               hintText: 'Short Bio',
-                              hintStyle: TextStyle(fontSize: 15)
+                              hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15))
                           ),
                         ),
                       ),
@@ -332,13 +339,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
         Text(
           'CONTACT SETTINGS',
           style: TextStyle(
-              fontSize: 15, fontWeight: FontWeight.bold, color: Colors.grey),
+              fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold, color: Colors.grey),
         ),
         SizedBox(
-          height: 15,
+          height: ScreenUtil.instance.setWidth(15),
         ),
         Container(
-          height: 120,
+          height: ScreenUtil.instance.setWidth(120),
           width: MediaQuery.of(context).size.width / 1.2,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
@@ -356,20 +363,20 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Email', style: TextStyle(color: eventajaGreenTeal, fontSize: 15, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 20,),
-                    Text('Phone', style: TextStyle(color: eventajaGreenTeal, fontSize: 15, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 20,),
-                    Text('Website', style: TextStyle(color: eventajaGreenTeal, fontSize: 15, fontWeight: FontWeight.bold),),
+                    Text('Email', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
+                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
+                    Text('Phone', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
+                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
+                    Text('Website', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
                   ],),
                 SizedBox(
-                  width: 57,
+                  width: ScreenUtil.instance.setWidth(57),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      width: 150,
+                      width: ScreenUtil.instance.setWidth(150),
                       child: TextFormField(
                         controller: emailController,
                         textAlign: TextAlign.start,
@@ -377,13 +384,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(vertical: 1),
                           hintText: 'Email Address',
-                          hintStyle: TextStyle(fontSize: 15),
+                          hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
                         ),
                       ),
                     ),
-                    SizedBox(height: 15,),
+                    SizedBox(height: ScreenUtil.instance.setWidth(15),),
                     Container(
-                      width: 150,
+                      width: ScreenUtil.instance.setWidth(150),
                       child: TextFormField(
                         controller: phoneController,
                         textAlign: TextAlign.start,
@@ -391,13 +398,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                             contentPadding: EdgeInsets.symmetric(vertical: 1),
                             border: InputBorder.none,
                             hintText: 'Phone Number',
-                            hintStyle: TextStyle(fontSize: 15)
+                            hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15))
                         ),
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
                     Container(
-                      width: 150,
+                      width: ScreenUtil.instance.setWidth(150),
                       child: TextFormField(
                         controller: websiteController,
                         textAlign: TextAlign.start,
@@ -405,7 +412,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                             contentPadding: EdgeInsets.symmetric(vertical: 1),
                             border: InputBorder.none,
                             hintText: 'Website',
-                            hintStyle: TextStyle(fontSize: 15)
+                            hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15))
                         ),
                       ),
                     ),

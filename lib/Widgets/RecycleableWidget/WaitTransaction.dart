@@ -4,7 +4,7 @@ import 'package:quiver/async.dart';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -99,7 +99,14 @@ class _WaitTransactionState extends State<WaitTransaction> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white.withOpacity(0.9),
@@ -126,7 +133,7 @@ class _WaitTransactionState extends State<WaitTransaction> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  height: 380,
+                  height: ScreenUtil.instance.setWidth(380),
                   color: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: Column(
@@ -135,7 +142,7 @@ class _WaitTransactionState extends State<WaitTransaction> {
                     children: <Widget>[
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        height: 200,
+                        height: ScreenUtil.instance.setWidth(200),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: eventajaGreenTeal),
@@ -144,15 +151,15 @@ class _WaitTransactionState extends State<WaitTransaction> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             SizedBox(
-                              height: 10,
+                              height: ScreenUtil.instance.setWidth(10),
                             ),
                             Text('Complete Payment In',
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 18,
+                                    fontSize: ScreenUtil.instance.setSp(18),
                                     fontWeight: FontWeight.bold)),
                             SizedBox(
-                              height: 20,
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -161,52 +168,52 @@ class _WaitTransactionState extends State<WaitTransaction> {
                                 Text('${hour}',
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 20,
+                                        fontSize: ScreenUtil.instance.setSp(20),
                                         fontWeight: FontWeight.bold)),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   ':',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   '$min',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   ':',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   '$sec',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
                             SizedBox(
-                              height: 20,
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -214,23 +221,23 @@ class _WaitTransactionState extends State<WaitTransaction> {
                               children: <Widget>[
                                 Text('H',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 20)),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                                 SizedBox(
-                                  width: 35,
+                                  width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('M',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 20)),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                                 SizedBox(
-                                  width: 35,
+                                  width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('S',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 20)),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                               ],
                             ),
                             SizedBox(
-                              height: 20,
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -250,7 +257,7 @@ class _WaitTransactionState extends State<WaitTransaction> {
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: ScreenUtil.instance.setWidth(20),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -259,19 +266,19 @@ class _WaitTransactionState extends State<WaitTransaction> {
                           Text(
                             'TRANSFER AMOUNT',
                             style:
-                                TextStyle(fontSize: 20, color: Colors.black45),
+                                TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.black45),
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
                             'Rp. ' +
                                 widget.finalPrice.toString(),
                             style: TextStyle(
                                 fontSize: 50, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
                             'Eventevent will automatically check your payment. It may take up to 1 hour to process',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                            style: TextStyle(color: Colors.grey, fontSize: ScreenUtil.instance.setSp(12)),
                             textAlign: TextAlign.center,
                           )
                         ],
@@ -280,13 +287,13 @@ class _WaitTransactionState extends State<WaitTransaction> {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: ScreenUtil.instance.setWidth(20),
                 ),
                 Text(
                   'TRANSFER TO',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: ScreenUtil.instance.setWidth(15)),
                 GestureDetector(
                   onTap: (){
                     if(paymentData['payment_method_id'] == '2'){
@@ -303,7 +310,7 @@ class _WaitTransactionState extends State<WaitTransaction> {
                     }
                   },
                   child: Container(
-                    height: 130,
+                    height: ScreenUtil.instance.setWidth(130),
                     margin: EdgeInsets.all(10),
                     padding: EdgeInsets.only(
                         left: 15, right: 7, top: 10, bottom: 10),
@@ -323,7 +330,7 @@ class _WaitTransactionState extends State<WaitTransaction> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: SizedBox(
-                            height: 30,
+                            height: ScreenUtil.instance.setWidth(30),
                             child: Image.asset(paymentData['payment']['data_vendor']['available_banks'][0]['bank_code'] ==
                                     'BNI'
                                 ? 'assets/drawable/bni.png'
@@ -331,7 +338,7 @@ class _WaitTransactionState extends State<WaitTransaction> {
                           ),
                         ),
                         SizedBox(
-                          width: 20,
+                          width: ScreenUtil.instance.setWidth(20),
                         ),
                         Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -341,19 +348,19 @@ class _WaitTransactionState extends State<WaitTransaction> {
                                 paymentData['payment']['data_vendor']['available_banks'][0]['account_holder_name'],
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20,
+                                    fontSize: ScreenUtil.instance.setSp(20),
                                     color: Colors.black54),
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
                               Text(
                                   paymentData['payment']['data_vendor']['available_banks'][0]['bank_code'],
                                   style: TextStyle(color: Colors.grey)),
-                              SizedBox(height: 10),
+                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
                               Text(
                                 paymentData['payment']['data_vendor']['available_banks'][0]['bank_account_number'].toString(),
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 15,
+                                    fontSize: ScreenUtil.instance.setSp(15),
                                     color: Colors.black54),
                               ),
                             ])

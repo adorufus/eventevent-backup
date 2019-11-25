@@ -1,6 +1,6 @@
 import 'package:eventevent/Widgets/Transaction/Form.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
@@ -65,7 +65,14 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white.withOpacity(0.9),
@@ -81,7 +88,7 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
           centerTitle: true,
           title: Text('Name Event', style: TextStyle(
             color: eventajaGreenTeal,
-            fontSize: 25
+            fontSize: ScreenUtil.instance.setSp(25)
           ),),
         ),
         body: Container(
@@ -92,7 +99,7 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               header(),
-              SizedBox(height: 50,),
+              SizedBox(height: ScreenUtil.instance.setWidth(50),),
               priceDetail(),
               GestureDetector(
                 onTap: (){
@@ -108,9 +115,9 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
                 },
                 child: Container(
                   alignment: Alignment.bottomCenter,
-                  height: 50,
+                  height: ScreenUtil.instance.setWidth(50),
                   color: Colors.orange,
-                  child: Center(child: Text('BUY TICKET(S)', style: TextStyle(color: Colors.white, fontSize: 20),)),
+                  child: Center(child: Text('BUY TICKET(S)', style: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(20)),)),
                 ),
               )
             ],
@@ -126,7 +133,7 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
       flex: 2,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: 150,
+        height: ScreenUtil.instance.setWidth(150),
         color: Colors.white,
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 25),
@@ -140,17 +147,17 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text('Total: ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                    SizedBox(width: 150,),
-                    Text( 'Rp. ' + (int.parse(widget.ticketPrice) * ticketCount).toString(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: eventajaGreenTeal),)
+                    Text('Total: ', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
+                    SizedBox(width: ScreenUtil.instance.setWidth(150),),
+                    Text( 'Rp. ' + (int.parse(widget.ticketPrice) * ticketCount).toString(), style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold, color: eventajaGreenTeal),)
                   ],
                 ),
               ),
-              SizedBox(height: 15,),
-              Divider(color: Colors.grey, height: 5,),
-              SizedBox(height: 15,),
-              Text('Details', style: TextStyle(fontSize: 20),),
-              SizedBox(height: 10,),
+              SizedBox(height: ScreenUtil.instance.setWidth(15),),
+              Divider(color: Colors.grey, height: ScreenUtil.instance.setWidth(5),),
+              SizedBox(height: ScreenUtil.instance.setWidth(15),),
+              Text('Details', style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),),
+              SizedBox(height: ScreenUtil.instance.setWidth(10),),
               Text(widget.ticketDetail == null ? '-' : widget.ticketDetail.toString()),
             ],
           ),
@@ -161,7 +168,7 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
 
   Widget header(){
     return Container(
-      height: 200,
+      height: ScreenUtil.instance.setWidth(200),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           color: Colors.white,
@@ -179,39 +186,39 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
         children: <Widget>[
           Container(
             margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            height: 250,
-            width: 110,
+            height: ScreenUtil.instance.setWidth(250),
+            width: ScreenUtil.instance.setWidth(110),
             child: Image(image: NetworkImage(widget.eventImage.toString()), fit: BoxFit.fill),
           ),
           Container(
-            height: 250,
-            width: 192,
+            height: ScreenUtil.instance.setWidth(250),
+            width: ScreenUtil.instance.setWidth(192),
             padding: EdgeInsets.only(right: 10),
             margin: EdgeInsets.only(top: 15, bottom: 15,),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(widget.eventDate, style: TextStyle(color: eventajaGreenTeal, fontSize: 15), ),
-                SizedBox(height: 10),
-                Text(widget.eventName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
-                SizedBox(height: 10),
+                Text(widget.eventDate, style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15)), ),
+                SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                Text(widget.eventName, style: TextStyle(fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
+                SizedBox(height: ScreenUtil.instance.setWidth(10)),
                 Container(
                     margin: EdgeInsets.only(bottom: 10),
-                    width: 235,
-                    height: 15,
+                    width: ScreenUtil.instance.setWidth(235),
+                    height: ScreenUtil.instance.setWidth(15),
                     child: Text(
                       widget.eventAddress,
                       overflow: TextOverflow.ellipsis,
                     )
                 ),
-                Divider(color: Colors.grey, height: 5,),
-                SizedBox(height: 10),
-                Text(widget.ticketName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                SizedBox(height: 10),
+                Divider(color: Colors.grey, height: ScreenUtil.instance.setWidth(5),),
+                SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                Text(widget.ticketName, style: TextStyle(fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold)),
+                SizedBox(height: ScreenUtil.instance.setWidth(10)),
                 Container(
-                  width: 100,
-                  height: 40,
+                  width: ScreenUtil.instance.setWidth(100),
+                  height: ScreenUtil.instance.setWidth(40),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(color: Colors.black, width: 0.5)
@@ -224,7 +231,7 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
                         onTap: (){
                           decrease();
                         },
-                        child: Text('-', style: TextStyle(color: ticketCount == 1 ? Colors.grey.withOpacity(0.5) : Colors.black54, fontSize: 25, fontWeight: FontWeight.bold)),
+                        child: Text('-', style: TextStyle(color: ticketCount == 1 ? Colors.grey.withOpacity(0.5) : Colors.black54, fontSize: ScreenUtil.instance.setSp(25), fontWeight: FontWeight.bold)),
                       ),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 15),
@@ -232,18 +239,18 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
                           child: Text(
                             ticketCount.toString(),
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: ScreenUtil.instance.setSp(20),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        width: 25,
+                        width: ScreenUtil.instance.setWidth(25),
                       ),
                       GestureDetector(
                           onTap: (){
                             add();
                           },
-                          child: Text('+', style: TextStyle(color: Colors.black54, fontSize: 25, fontWeight: FontWeight.bold),)
+                          child: Text('+', style: TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(25), fontWeight: FontWeight.bold),)
                       )
                     ],
                   ),

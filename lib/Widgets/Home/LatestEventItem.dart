@@ -1,7 +1,7 @@
 import 'package:eventevent/Widgets/Home/MiniDate.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'PopularEventWidget.dart';
 
 class LatestEventItem extends StatelessWidget {
@@ -19,11 +19,18 @@ class LatestEventItem extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     print(MediaQuery.of(context).size.width);
     return Container(
       margin: EdgeInsets.only(left: 13, right:13, top: 13),
-      height: 150.18,
+      height: ScreenUtil.instance.setWidth(150.18),
       decoration: BoxDecoration(boxShadow: <BoxShadow>[
         BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -33,7 +40,7 @@ class LatestEventItem extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Container(
-            width: 100.19,
+            width: ScreenUtil.instance.setWidth(100.19),
             decoration: BoxDecoration(
               image:
                   DecorationImage(image: NetworkImage(image), fit: BoxFit.fill),
@@ -47,32 +54,32 @@ class LatestEventItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 MiniDate(),
-                SizedBox(height: 7),
+                SizedBox(height: ScreenUtil.instance.setWidth(7)),
                 Container(
                   width: MediaQuery.of(context).size.width - 146,
-                  height: 20,
+                  height: ScreenUtil.instance.setWidth(20),
                   child: Text(
                     title,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(15)),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textWidthBasis: TextWidthBasis.parent,
                   ),
                 ),
-                SizedBox(height: 5),
+                SizedBox(height: ScreenUtil.instance.setWidth(5)),
                 Container(
-                  height: 10,
+                  height: ScreenUtil.instance.setWidth(10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        height: 10,
-                        width: 10,
+                        height: ScreenUtil.instance.setWidth(10),
+                        width: ScreenUtil.instance.setWidth(10),
                         child: Image.asset('assets/icons/icon_apps/location.png'),
                       ),
-                      SizedBox(width: 3),
+                      SizedBox(width: ScreenUtil.instance.setWidth(3)),
                       Container(
-                          width: 200 - 20.37,
+                          width: ScreenUtil.instance.setWidth(200 - 20.37),
                           child: Text(
                             location,
                             style:
@@ -83,17 +90,17 @@ class LatestEventItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 7),
+                SizedBox(height: ScreenUtil.instance.setWidth(7)),
                 Row(
                   children: <Widget>[
                     type == 'paid' || type == 'paid_seating' || type == 'free_limited' || type == 'free_limited_seating' ? isAvailable == '1' ? Icon(CupertinoIcons.circle_filled, color: eventajaGreenTeal, size: 15,) : Icon(CupertinoIcons.circle_filled, color: itemPrice == 'sales_ended' ? Colors.yellowAccent : Colors.red, size: 15,) : Container(),
-                    type == 'paid' || type == 'paid_seating' || type == 'free_limited' || type == 'free_limited_seating' ? isAvailable == '1' ? Text('Available', style: TextStyle(fontSize: 12),) : Text(itemPrice, style: TextStyle(fontSize: 12),) : Container(),
+                    type == 'paid' || type == 'paid_seating' || type == 'free_limited' || type == 'free_limited_seating' ? isAvailable == '1' ? Text('Available', style: TextStyle(fontSize: ScreenUtil.instance.setSp(12)),) : Text(itemPrice, style: TextStyle(fontSize: ScreenUtil.instance.setSp(12)),) : Container(),
                   ],
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: ScreenUtil.instance.setWidth(10)),
                 Container(
-                  height: 28,
-                  width: 133,
+                  height: ScreenUtil.instance.setWidth(28),
+                  width: ScreenUtil.instance.setWidth(133),
                   decoration: BoxDecoration(
                       boxShadow: <BoxShadow>[
                         BoxShadow(
@@ -108,7 +115,7 @@ class LatestEventItem extends StatelessWidget {
                     type == 'paid' || type == 'paid_seating' ? isAvailable == '1' ? 'Rp. ' + itemPrice.toUpperCase() + ',-' : itemPrice.toUpperCase() : itemPrice.toUpperCase(),
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 10,
+                        fontSize: ScreenUtil.instance.setSp(10),
                         fontWeight: FontWeight.bold),
                   )),
                 ),

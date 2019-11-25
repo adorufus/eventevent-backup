@@ -1,10 +1,10 @@
-import 'dart:io';
+import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -30,7 +30,14 @@ class PostMediaState extends State<PostMedia> {
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return SafeArea(
           child: Scaffold(
         key: scaffoldKey,
@@ -108,14 +115,14 @@ class PostMediaState extends State<PostMedia> {
               padding: EdgeInsets.symmetric(vertical: 15),
               color: Colors.white,
               width: MediaQuery.of(context).size.width,
-              height: 120,
+              height: ScreenUtil.instance.setWidth(120),
               child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      height: 80,
-                      width: 80,
+                      height: ScreenUtil.instance.setWidth(80),
+                      width: ScreenUtil.instance.setWidth(80),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
@@ -123,7 +130,7 @@ class PostMediaState extends State<PostMedia> {
                               fit: BoxFit.fill)),
                     ),
                     Container(
-                      width: 250,
+                      width: ScreenUtil.instance.setWidth(250),
                       child: TextFormField(
                         controller: captionController,
                         keyboardType: TextInputType.multiline,

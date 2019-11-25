@@ -1,6 +1,6 @@
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'PostEventAdditionalMedia.dart';
@@ -23,7 +23,14 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
         key: thisScaffold,
         resizeToAvoidBottomInset: true,
@@ -54,7 +61,7 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -84,32 +91,32 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                   ],
                 ),
                 SizedBox(
-                  height: 20,
+                  height: ScreenUtil.instance.setWidth(20),
                 ),
                 Divider(
                   color: Colors.grey,
-                  height: 5,
+                  height: ScreenUtil.instance.setWidth(5),
                 ),
                 SizedBox(
-                  height: 15,
+                  height: ScreenUtil.instance.setWidth(15),
                 ),
-                Text('*Required', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 18),),
-                SizedBox(height: 20),
+                Text('*Required', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18)),),
+                SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 Center(
-                  child: Text('Contact', style: TextStyle(color: eventajaGreenTeal, fontWeight: FontWeight.bold, fontSize: 18),),
+                  child: Text('Contact', style: TextStyle(color: eventajaGreenTeal, fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18)),),
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: ScreenUtil.instance.setWidth(15)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(height: 40, width: 40, child: Image.asset('assets/icons/btn_phone_active.png'),),
+                    SizedBox(height: ScreenUtil.instance.setWidth(40), width: ScreenUtil.instance.setWidth(40), child: Image.asset('assets/icons/btn_phone_active.png'),),
                     Text('*', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 35),),
-                    SizedBox(width: 10,),
-                    Text('Telephone', style: TextStyle(fontSize: 15, color: Colors.black54, fontWeight: FontWeight.bold),),
-                    SizedBox(width: 20,),
+                    SizedBox(height: ScreenUtil.instance.setWidth(10),),
+                    Text('Telephone', style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.black54, fontWeight: FontWeight.bold),),
+                    SizedBox(width: ScreenUtil.instance.setWidth(20),),
                     Container(
-                      width: 180,
-                      height: 35,
+                      width: ScreenUtil.instance.setWidth(180),
+                      height: ScreenUtil.instance.setWidth(35),
                       child: TextFormField(
                         keyboardType: TextInputType.phone,
                         controller: telephoneController,
@@ -128,17 +135,17 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                     )
                   ],
                 ),
-                SizedBox(height: 10,),
+                SizedBox(height: ScreenUtil.instance.setWidth(10),),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(height: 40, width: 40, child: Image.asset('assets/icons/btn_mail_active.png'),),
-                    SizedBox(width: 24,),
-                    Text('Email', style: TextStyle(fontSize: 15, color: Colors.black54, fontWeight: FontWeight.bold),),
-                    SizedBox(width: 52,),
+                    SizedBox(height: ScreenUtil.instance.setWidth(40), width: ScreenUtil.instance.setWidth(40), child: Image.asset('assets/icons/btn_mail_active.png'),),
+                    SizedBox(width: ScreenUtil.instance.setWidth(24),),
+                    Text('Email', style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.black54, fontWeight: FontWeight.bold),),
+                    SizedBox(width: ScreenUtil.instance.setWidth(52),),
                     Container(
-                      width: 180,
-                      height: 35,
+                      width: ScreenUtil.instance.setWidth(180),
+                      height: ScreenUtil.instance.setWidth(35),
                       child: TextFormField(
                         controller: emailController,
                         decoration: InputDecoration(
@@ -156,17 +163,17 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                     )
                   ],
                 ),
-                SizedBox(height: 10,),
+                SizedBox(height: ScreenUtil.instance.setWidth(10),),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(height: 40, width: 40, child: Image.asset('assets/icons/btn_web_active.png'),),
-                    SizedBox(width: 9,),
-                    Text('Website', style: TextStyle(fontSize: 15, color: Colors.black54, fontWeight: FontWeight.bold),),
-                    SizedBox(width: 52,),
+                    SizedBox(height: ScreenUtil.instance.setWidth(40), width: ScreenUtil.instance.setWidth(40), child: Image.asset('assets/icons/btn_web_active.png'),),
+                    SizedBox(width: ScreenUtil.instance.setWidth(9),),
+                    Text('Website', style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.black54, fontWeight: FontWeight.bold),),
+                    SizedBox(width: ScreenUtil.instance.setWidth(52),),
                     Container(
-                      width: 180,
-                      height: 35,
+                      width: ScreenUtil.instance.setWidth(180),
+                      height: ScreenUtil.instance.setWidth(35),
                       child: TextFormField(
                         controller: websiteController,
                         decoration: InputDecoration(
@@ -184,13 +191,13 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                     )
                   ],
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: ScreenUtil.instance.setWidth(20),),
                 Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text('Description', style: TextStyle(color: eventajaGreenTeal, fontWeight: FontWeight.bold, fontSize: 18)),
-                      Text('*', style: TextStyle(color: Colors.red, fontSize: 17, fontWeight: FontWeight.bold),)
+                      Text('Description', style: TextStyle(color: eventajaGreenTeal, fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18))),
+                      Text('*', style: TextStyle(color: Colors.red, fontSize: ScreenUtil.instance.setSp(17), fontWeight: FontWeight.bold),)
                     ],
                   ),
                 ),

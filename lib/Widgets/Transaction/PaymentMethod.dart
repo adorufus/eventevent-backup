@@ -4,7 +4,7 @@ import 'package:eventevent/Widgets/Transaction/Xendit/TicketReview.dart';
 import 'package:eventevent/Widgets/Transaction/Xendit/vaList.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,7 +52,14 @@ class PaymentMethodState extends State<PaymentMethod> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -77,15 +84,15 @@ class PaymentMethodState extends State<PaymentMethod> {
             children: <Widget>[
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: 100,
+                height: ScreenUtil.instance.setWidth(100),
                 color: Colors.white,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text('Transfer Amount'.toUpperCase(),
-                        style: TextStyle(fontSize: 20, color: Colors.grey)),
-                    SizedBox(height: 20),
+                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.grey)),
+                    SizedBox(height: ScreenUtil.instance.setWidth(20)),
                     Text('Rp. $paymentAmount',
                         style: TextStyle(
                             fontSize: 35, fontWeight: FontWeight.bold)),
@@ -154,7 +161,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                     ),
                                   ),
                                   Container(
-                                    height: 80,
+                                    height: ScreenUtil.instance.setWidth(80),
                                     width: MediaQuery.of(context).size.width,
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 10),
@@ -175,11 +182,11 @@ class PaymentMethodState extends State<PaymentMethod> {
                                                 : NetworkImage(
                                                     paymentMethodList[i]
                                                         ['photo']),
-                                            width: 250,
+                                            width: ScreenUtil.instance.setWidth(250),
                                           )),
                                         ),
                                         SizedBox(
-                                          width: 50,
+                                          width: ScreenUtil.instance.setWidth(50),
                                         ),
                                         Icon(
                                           Icons.navigate_next,

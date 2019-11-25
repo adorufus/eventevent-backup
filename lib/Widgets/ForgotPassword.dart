@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +18,14 @@ class ForgotPasswordState extends State<ForgotPassword> {
   var _usernameController = new TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -43,23 +50,23 @@ class ForgotPasswordState extends State<ForgotPassword> {
                 Text(
                   'FIND YOUR ACCOUNT',
                   style: TextStyle(
-                      fontSize: 18,
+                      fontSize: ScreenUtil.instance.setSp(18),
                       fontWeight: FontWeight.bold,
                       color: Colors.black.withOpacity(0.5)),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
-                  height: 15,
+                  height: ScreenUtil.instance.setWidth(15),
                 ),
                 Text(
                   'Enter your username or the email address associated with your account.',
-                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey),
                   textAlign: TextAlign.center,
                 )
               ],
             )),
             SizedBox(
-              height: 20,
+              height: ScreenUtil.instance.setWidth(20),
             ),
             TextFormField(
                 controller: _usernameController,
@@ -71,13 +78,13 @@ class ForgotPasswordState extends State<ForgotPassword> {
                   ),
                   hintText: 'Email / Username',
                 )),
-            SizedBox(height: 50),
+            SizedBox(height: ScreenUtil.instance.setWidth(50)),
             GestureDetector(
               onTap: (){
                 requestForgotPassword(_usernameController.text);
               },
               child: Container(
-                height: 50,
+                height: ScreenUtil.instance.setWidth(50),
                 width: MediaQuery.of(context).size.width,
                 margin: EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
@@ -130,7 +137,14 @@ class SuccessResetPassword extends StatelessWidget{
   const SuccessResetPassword({Key key, this.username}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -148,7 +162,7 @@ class SuccessResetPassword extends StatelessWidget{
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 35),
         child: Center(
-          child: Text('Hi $username, an email has been set to your account\'s email address, Please check your email to continue', style: TextStyle(fontSize: 18), textAlign: TextAlign.center,)
+          child: Text('Hi $username, an email has been set to your account\'s email address, Please check your email to continue', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18)), textAlign: TextAlign.center,)
         ),
       ),
     );

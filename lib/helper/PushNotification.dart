@@ -5,7 +5,7 @@ import 'package:eventevent/Widgets/TransactionHistory.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'dart:async';
@@ -88,14 +88,21 @@ class PushNotificationState extends State<PushNotification> {
   // }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
         key: scaffoldKey,
         appBar: PreferredSize(
           preferredSize: Size(null, 100),
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 75,
+            height: ScreenUtil.instance.setWidth(75),
             child: Container(
               color: Colors.white,
               child: Container(
@@ -107,7 +114,7 @@ class PushNotificationState extends State<PushNotification> {
                       Text(
                         'Notification',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14),
+                            fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
                       )
                     ],
                   ),
@@ -129,7 +136,7 @@ class PushNotificationState extends State<PushNotification> {
                   child: ListView(children: <Widget>[
                     Container(
                       margin: EdgeInsets.only(left: 13, right: 13, top: 13),
-                      height: 60,
+                      height: ScreenUtil.instance.setWidth(60),
                       decoration: BoxDecoration(
                           boxShadow: <BoxShadow>[
                             BoxShadow(
@@ -148,25 +155,25 @@ class PushNotificationState extends State<PushNotification> {
                                         WithdrawBank()));
                           },
                           leading: Container(
-                            height: 25,
-                            width: 25,
+                            height: ScreenUtil.instance.setWidth(25),
+                            width: ScreenUtil.instance.setWidth(25),
                             child: Image.asset(
                                 'assets/icons/icon_apps/my_balance.png',
                                 scale: 3),
                           ),
                           title: Text('My Balance',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 13)),
+                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(13))),
                           trailing: Icon(
                             Icons.navigate_next,
                             size: 25,
                             color: eventajaGreenTeal,
                           )),
                     ),
-                    SizedBox(height: 9),
+                    SizedBox(height: ScreenUtil.instance.setWidth(9)),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 13),
-                      height: 60,
+                      height: ScreenUtil.instance.setWidth(60),
                       decoration: BoxDecoration(
                           boxShadow: <BoxShadow>[
                             BoxShadow(
@@ -185,13 +192,13 @@ class PushNotificationState extends State<PushNotification> {
                                         TransactionHistory()));
                           },
                           leading: Container(
-                            width: 25,
-                            height: 25,
+                            width: ScreenUtil.instance.setWidth(25),
+                            height: ScreenUtil.instance.setWidth(25),
                               child: Image.asset(
                                   'assets/icons/icon_apps/paymentstatus.png')),
                           title: Text('Payment Status',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 13)),
+                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(13))),
                           trailing: Icon(
                             Icons.navigate_next,
                             size: 25,
@@ -204,7 +211,7 @@ class PushNotificationState extends State<PushNotification> {
                           : notificationData.length,
                       itemBuilder: (context, i) {
                         return Container(
-                          height: 60,
+                          height: ScreenUtil.instance.setWidth(60),
                           margin: EdgeInsets.symmetric(horizontal: 13),
                           child:
                               // Container(
@@ -214,7 +221,7 @@ class PushNotificationState extends State<PushNotification> {
                               //   children: <Widget>[
                               //     Image.asset('assets/icons/icon_apps/nearby.png',
                               //         scale: 3),
-                              //         SizedBox(width: 13),
+                              //         SizedBox(width: ScreenUtil.instance.setWidth(13)),
                               //     Column(
                               //       crossAxisAlignment: CrossAxisAlignment.start,
                               //       mainAxisAlignment: MainAxisAlignment.center,
@@ -222,11 +229,11 @@ class PushNotificationState extends State<PushNotification> {
                               //         Text(
                               //           notificationData[i]['fullName'] + ':',
                               //           style: TextStyle(
-                              //               fontSize: 13,
+                              //               fontSize: ScreenUtil.instance.setSp(13),
                               //               fontWeight: FontWeight.bold),
                               //         ),
                               //         Container(
-                              //           height: 40,
+                              //           height: ScreenUtil.instance.setWidth(40),
                               //           child: Text(
                               //             notificationData[i]['caption'],
                               //             maxLines: 5,
@@ -239,15 +246,15 @@ class PushNotificationState extends State<PushNotification> {
                               // ))
                               ListTile(
                             leading: Container(
-                              height: 25,
-                              width: 25,
+                              height: ScreenUtil.instance.setWidth(25),
+                              width: ScreenUtil.instance.setWidth(25),
                               child: Image.asset(
                                   'assets/icons/icon_apps/announcement.png',),
                             ),
                             title: Text(
                               notificationData[i]['fullName'] + ':',
                               style: TextStyle(
-                                  fontSize: 13, fontWeight: FontWeight.bold),
+                                  fontSize: ScreenUtil.instance.setSp(13), fontWeight: FontWeight.bold),
                             ),
                             subtitle: Text(notificationData[i]['caption']),
                           ),

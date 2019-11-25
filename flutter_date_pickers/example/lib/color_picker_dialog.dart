@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
 class ColorPickerDialog extends StatefulWidget {
@@ -24,7 +24,7 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return AlertDialog(
       contentPadding: const EdgeInsets.all(6.0),
       title: Text("Color picker"),

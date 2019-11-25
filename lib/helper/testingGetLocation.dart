@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
 
@@ -31,7 +31,7 @@ class _ListenPageState extends State<ListenPage> {
       }
     
       @override
-      Widget build(BuildContext context) {
+      Widget build(BuildContext context) { 
         return Scaffold(
           body: Center(child: Text('Get Longitude Latitude | Lat: ${currentLocation.latitude} Long: ${currentLocation.longitude}'),),
         ); 

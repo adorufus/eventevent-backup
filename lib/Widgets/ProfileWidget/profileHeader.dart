@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/ManageEvent/EventList.dart';
+import 'package:eventevent/Widgets/ManageEvent/PublicEventList.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsWidget.dart';
 import 'package:eventevent/Widgets/ProfileWidget/editProfile.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/listviewWithAppBar.dart';
@@ -9,7 +10,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eventevent/helper/FollowUnfollow.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -115,13 +116,20 @@ class _ProfileHeaderState extends State<ProfileHeader>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size(null, 75),
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 60,
+            height: ScreenUtil.instance.setWidth(60),
             padding: EdgeInsets.symmetric(horizontal: 13),
             color: Colors.white,
             child: AppBar(
@@ -149,7 +157,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         },
                         child: Image.asset(
                           'assets/icons/icon_apps/iconsettings.png',
-                          scale: 3.5,
+                          scale: 1.5,
                           alignment: Alignment.centerRight,
                         ))
                     : Container(),
@@ -182,8 +190,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 28, vertical: 3),
-                    height: 110,
-                    width: 110,
+                    height: ScreenUtil.instance.setWidth(110),
+                    width: ScreenUtil.instance.setWidth(110),
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         boxShadow: <BoxShadow>[
@@ -206,10 +214,10 @@ class _ProfileHeaderState extends State<ProfileHeader>
                       Text(
                         widget.fullName == null ? 'loading' : widget.fullName,
                         style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.bold),
+                            fontSize: ScreenUtil.instance.setSp(17), fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
-                        height: 4,
+                        height: ScreenUtil.instance.setWidth(4),
                       ),
                       Row(
                         children: <Widget>[
@@ -219,29 +227,29 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                   'assets/icons/icon_apps/verif.png',
                                   scale: 4,
                                 ),
-                          SizedBox(width: 4),
+                          SizedBox(width: ScreenUtil.instance.setWidth(4)),
                           Text(
                             widget.username == null
                                 ? 'loading'
                                 : '@' + widget.username,
-                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            style: TextStyle(fontSize: ScreenUtil.instance.setSp(12), color: Colors.grey),
                           ),
                         ],
                       ),
                       SizedBox(
-                        height: 4,
+                        height: ScreenUtil.instance.setWidth(4),
                       ),
                       Container(
-                        width: 180,
+                        width: ScreenUtil.instance.setWidth(180),
                         child: Text(
                           widget.bio == null ? '-' : widget.bio,
-                          style: TextStyle(fontSize: 12),
+                          style: TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       SizedBox(
-                        height: 4,
+                        height: ScreenUtil.instance.setWidth(4),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -254,11 +262,11 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         child: Text(
                           widget.website == null ? '-' : widget.website,
                           style:
-                              TextStyle(color: eventajaGreenTeal, fontSize: 12),
+                              TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: ScreenUtil.instance.setWidth(20),
                       ),
                       widget.currentUserId == userId
                           ? GestureDetector(
@@ -266,11 +274,11 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                 handleClickButtonEditProfile(context, widget);
                               },
                               child: Container(
-                                height: 32.93,
-                                width: 82.31,
+                                height: ScreenUtil.instance.setWidth(32.93),
+                                width: ScreenUtil.instance.setWidth(82.31),
                                 decoration: BoxDecoration(
                                     // border: Border.all(
-                                    //   width: 1,
+                                    //   width: ScreenUtil.instance.setWidth(1),
                                     //   color: Color(0xFF55B9E5),
                                     // ),
                                     borderRadius: BorderRadius.circular(30),
@@ -284,13 +292,13 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 12),
+                                      fontSize: ScreenUtil.instance.setSp(12)),
                                 )
                                     //     Text(
                                     //   isFollowing == '1' ? 'Following' : 'Follow',
                                     //   style: TextStyle(
                                     //       fontWeight: FontWeight.bold,
-                                    //       fontSize: 10,
+                                    //       fontSize: ScreenUtil.instance.setSp(10),
                                     //       color: Color(
                                     //           isFollowing == '1' ? 0xFFFFFFFF : 0xFF55B9E5)),
                                     // )
@@ -302,24 +310,24 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                 print(this.isFollowed);
                                 if (this.isFollowed == false) {
                                   FollowUnfollow().follow(widget.currentUserId);
-                                  setState((){
+                                  setState(() {
                                     this.isFollowed = true;
                                   });
                                 } else {
                                   FollowUnfollow()
                                       .unfollow(widget.currentUserId);
 
-                                  setState((){
+                                  setState(() {
                                     this.isFollowed = false;
                                   });
                                 }
                               },
                               child: Container(
-                                height: 32.93,
-                                width: 82.31,
+                                height: ScreenUtil.instance.setWidth(32.93),
+                                width: ScreenUtil.instance.setWidth(82.31),
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                      width: 1,
+                                      width: ScreenUtil.instance.setWidth(1),
                                       color: Color(0xFF55B9E5),
                                     ),
                                     borderRadius: BorderRadius.circular(30),
@@ -333,7 +341,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                             : 'Following',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 10,
+                                          fontSize: ScreenUtil.instance.setSp(10),
                                           color: this.isFollowed == false
                                               ? Color(0xFF55B9E5)
                                               : Color(0xFFFFFFFF),
@@ -345,7 +353,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                 ],
               ),
               Container(
-                height: 60.63,
+                height: ScreenUtil.instance.setWidth(60.63),
                 margin: EdgeInsets.symmetric(horizontal: 13, vertical: 28),
                 padding: EdgeInsets.symmetric(horizontal: 13),
                 width: MediaQuery.of(context).size.width,
@@ -390,7 +398,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                     : Colors.black),
                           ),
                           SizedBox(
-                            height: 9,
+                            height: ScreenUtil.instance.setWidth(9),
                           ),
                           Text('EVENT CREATED',
                               style: TextStyle(
@@ -403,18 +411,18 @@ class _ProfileHeaderState extends State<ProfileHeader>
                       ),
                     ),
                     SizedBox(
-                      width: 16,
+                      width: ScreenUtil.instance.setWidth(16),
                     ),
                     Container(
                       width: 0,
-                      height: 48,
+                      height: ScreenUtil.instance.setWidth(48),
                       decoration: BoxDecoration(
                           border: Border(
                               right: createBorderSide(context,
                                   color: Color(0xFF8A8A8B)))),
                     ),
                     SizedBox(
-                      width: 18,
+                      width: ScreenUtil.instance.setWidth(18),
                     ),
                     GestureDetector(
                       onTap: widget.eventGoingCount == '0'
@@ -443,7 +451,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       ? Colors.grey
                                       : Colors.black)),
                           SizedBox(
-                            height: 9,
+                            height: ScreenUtil.instance.setWidth(9),
                           ),
                           Text('EVENT GOING',
                               style: TextStyle(
@@ -456,18 +464,18 @@ class _ProfileHeaderState extends State<ProfileHeader>
                       ),
                     ),
                     SizedBox(
-                      width: 18,
+                      width: ScreenUtil.instance.setWidth(18),
                     ),
                     Container(
                       width: 0,
-                      height: 48,
+                      height: ScreenUtil.instance.setWidth(48),
                       decoration: BoxDecoration(
                           border: Border(
                               right: createBorderSide(context,
                                   color: Color(0xFF8A8A8B)))),
                     ),
                     SizedBox(
-                      width: 23,
+                      width: ScreenUtil.instance.setWidth(23),
                     ),
                     GestureDetector(
                       onTap: widget.follower == '0'
@@ -478,7 +486,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       ListViewWithAppBar(
                                         title: 'FOLLOWER',
                                         apiURL: BaseApi().apiUrl +
-                                            '/user/follower?X-API-KEY=${API_KEY}&userID=${widget.currentUserId}&page=1',
+                                            '/user/follower?X-API-KEY=$API_KEY&userID=${widget.currentUserId}&page=1',
                                       )));
                             },
                       child: Column(
@@ -497,7 +505,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       ? Colors.grey
                                       : Colors.black)),
                           SizedBox(
-                            height: 9,
+                            height: ScreenUtil.instance.setWidth(9),
                           ),
                           Text('FOLLOWER',
                               style: TextStyle(
@@ -510,18 +518,18 @@ class _ProfileHeaderState extends State<ProfileHeader>
                       ),
                     ),
                     SizedBox(
-                      width: 23,
+                      width: ScreenUtil.instance.setWidth(23),
                     ),
                     Container(
                       width: 0,
-                      height: 48,
+                      height: ScreenUtil.instance.setWidth(48),
                       decoration: BoxDecoration(
                           border: Border(
                               right: createBorderSide(context,
                                   color: Color(0xFF8A8A8B)))),
                     ),
                     SizedBox(
-                      width: 23,
+                      width: ScreenUtil.instance.setWidth(23),
                     ),
                     GestureDetector(
                       onTap: widget.following == '0'
@@ -552,7 +560,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       ? Colors.grey
                                       : Colors.black)),
                           SizedBox(
-                            height: 9,
+                            height: ScreenUtil.instance.setWidth(9),
                           ),
                           Text('FOLLOWING',
                               style: TextStyle(
@@ -576,7 +584,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
         //     UnconstrainedBox(
         //       alignment: Alignment.topCenter,
         //       child: Container(
-        //         height: 150,
+        //         height: ScreenUtil.instance.setWidth(150),
         //         width: MediaQuery.of(context).size.width,
         //         child: Image(
         //           image: widget.profilePhotoURL == null
@@ -591,8 +599,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
         //         mainAxisAlignment: MainAxisAlignment.start,
         //         children: <Widget>[
         //           Container(
-        //             height: 200,
-        //             width: 200,
+        //             height: ScreenUtil.instance.setWidth(200),
+        //             width: ScreenUtil.instance.setWidth(200),
         //             decoration: BoxDecoration(
         //                 shape: BoxShape.circle,
         //                 boxShadow: <BoxShadow>[
@@ -609,32 +617,32 @@ class _ProfileHeaderState extends State<ProfileHeader>
         //                     fit: BoxFit.cover)),
         //           ),
         //           SizedBox(
-        //             height: 15,
+        //             height: ScreenUtil.instance.setWidth(15),
         //           ),
         //           Text(
         //             widget.fullName == null ? 'loading' : widget.fullName,
         //             style:
-        //                 TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        //                 TextStyle(fontSize: ScreenUtil.instance.setSp(20), fontWeight: FontWeight.bold),
         //           ),
         //           SizedBox(
-        //             height: 10,
+        //             height: ScreenUtil.instance.setWidth(10),
         //           ),
         //           Text(
         //             widget.username == null
         //                 ? 'loading'
         //                 : '@' + widget.username,
-        //             style: TextStyle(fontSize: 15, color: Colors.grey),
+        //             style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.grey),
         //           ),
         //           SizedBox(
-        //             height: 20,
+        //             height: ScreenUtil.instance.setWidth(20),
         //           ),
         //           GestureDetector(
         //             onTap: () {
         //               handleClickButtonEditProfile(context, widget);
         //             },
         //             child: Container(
-        //               height: 50,
-        //               width: 100,
+        //               height: ScreenUtil.instance.setWidth(50),
+        //               height: ScreenUtil.instance.setWidth(100),
         //               child: Image.asset('assets/icons/btn_edit_profile.png'),
         //             ),
         //           ),
@@ -673,10 +681,10 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         'assets/icons/icon_apps/home.png',
                         scale: 4.5,
                       ),
-                      SizedBox(width: 10),
+                      SizedBox(height: ScreenUtil.instance.setWidth(10)),
                       Text('Timeline',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 12.5)),
+                              fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.5))),
                     ],
                   ),
                 ),
@@ -689,10 +697,10 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         'assets/icons/icon_apps/latest.png',
                         scale: 4.5,
                       ),
-                      SizedBox(width: 10),
-                      Text('My Ticket',
+                      SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                      Text(widget.currentUserId == userId ? 'My Ticket' : 'Event Going',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 12.5)),
+                              fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.5))),
                     ],
                   ),
                 ),
@@ -703,7 +711,16 @@ class _ProfileHeaderState extends State<ProfileHeader>
           Container(
             height: MediaQuery.of(context).size.height,
             child: TabBarView(
-              children: <Widget>[timeline(), MyTicketWidget()],
+              children: <Widget>[
+                userTimelineList == null
+                    ? Container(
+                        padding: EdgeInsets.only(top: 80),
+                        alignment: Alignment.topCenter,
+                        child: CircularProgressIndicator(),
+                      )
+                    : timeline(),
+                widget.currentUserId == userId ? MyTicketWidget() :  PublicEventList(type: 'going', userId: widget.currentUserId,)
+              ],
             ),
           ),
         ],
@@ -762,7 +779,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
 
           return Container(
               margin: EdgeInsets.only(bottom: 25),
-              height: 35,
+              height: ScreenUtil.instance.setWidth(35),
               child: Center(child: body));
         }),
         onLoading: _onLoading,
@@ -810,10 +827,10 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                           userTimelineList[i]['photo']),
                                     ),
                                     SizedBox(
-                                      width: 8,
+                                      width: ScreenUtil.instance.setWidth(8),
                                     ),
                                     Container(
-                                        width: 200.0 - 32.0,
+                                        width: ScreenUtil.instance.setWidth(200.0 - 32.0),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -824,12 +841,12 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                                             ['isVerified'] ==
                                                         '1'
                                                     ? Container(
-                                                        height: 18,
-                                                        width: 18,
+                                                        height: ScreenUtil.instance.setWidth(18),
+                                                        width: ScreenUtil.instance.setWidth(18),
                                                         child: Image.asset(
                                                             'assets/icons/icon_apps/verif.png'))
                                                     : Container(),
-                                                SizedBox(width: 5),
+                                                SizedBox(width: ScreenUtil.instance.setWidth(5)),
                                                 Text(
                                                     userTimelineList[i]
                                                         ['fullName'],
@@ -839,7 +856,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                               ],
                                             ),
                                             SizedBox(
-                                              height: 5,
+                                              height: ScreenUtil.instance.setWidth(5),
                                             ),
                                             Row(
                                               children: <Widget>[
@@ -850,7 +867,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                                         scale: 3,
                                                       )
                                                     : Container(),
-                                                SizedBox(width: 5),
+                                                SizedBox(width: ScreenUtil.instance.setWidth(5)),
                                                 Text(
                                                     userTimelineList[i]
                                                                 ['type'] ==
@@ -866,7 +883,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                                                     i]['type'],
                                                     style: TextStyle(
                                                         color: Colors.grey,
-                                                        fontSize: 10)),
+                                                        fontSize: ScreenUtil.instance.setSp(10))),
                                               ],
                                             ),
                                           ],
@@ -876,9 +893,9 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                 children: <Widget>[
                                   Text(
                                     'a minute ago',
-                                    style: TextStyle(fontSize: 10),
+                                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(10)),
                                   ),
-                                  SizedBox(height: 4),
+                                  SizedBox(height: ScreenUtil.instance.setWidth(4)),
                                 ],
                               )
                             ],
@@ -907,7 +924,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                                     ['pictureFull'],
                                           ),
                                           fit: BoxFit.cover)),
-                                  height: 400,
+                                  height: ScreenUtil.instance.setWidth(400),
                                   width: MediaQuery.of(context).size.width,
                                   child: Center(
                                     child:
@@ -934,8 +951,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                         Text(userTimelineList[i]['fullName'],
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 15)),
-                                        SizedBox(height: 8),
+                                                fontSize: ScreenUtil.instance.setSp(15))),
+                                        SizedBox(height: ScreenUtil.instance.setWidth(8)),
                                         Row(
                                           children: <Widget>[
                                             userTimelineList[i]['type'] ==
@@ -967,7 +984,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                                             ['type'] ==
                                                         'photo'
                                                 ? Container(
-                                                    width: 360 - 70.0,
+                                                    width: ScreenUtil.instance.setWidth(360 - 70.0),
                                                     child: Text(
                                                         userTimelineList[i]
                                                                     ['name'] ==
@@ -1023,7 +1040,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                           children: <Widget>[
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 10),
-                              height: 30,
+                              height: ScreenUtil.instance.setWidth(30),
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(15),
@@ -1043,7 +1060,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                           : Colors.grey,
                                       scale: 3.5,
                                     ),
-                                    SizedBox(width: 5),
+                                    SizedBox(width: ScreenUtil.instance.setWidth(5)),
                                     Text(impressionList.length.toString(),
                                         style: TextStyle(
                                             color: Color(
@@ -1052,7 +1069,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                             ),
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 10),
-                              height: 30,
+                              height: ScreenUtil.instance.setWidth(30),
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(15),
@@ -1069,7 +1086,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       'assets/icons/icon_apps/comment.png',
                                       scale: 3.5,
                                     ),
-                                    SizedBox(width: 5),
+                                    SizedBox(width: ScreenUtil.instance.setWidth(5)),
                                     Text(commentList.length.toString(),
                                         style: TextStyle(
                                             color: Color(
@@ -1103,7 +1120,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 10),
-                                height: 30,
+                                height: ScreenUtil.instance.setWidth(30),
                                 child: Icon(Icons.more_horiz),
                               ),
                             )
@@ -1132,13 +1149,13 @@ class _ProfileHeaderState extends State<ProfileHeader>
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50),
                 child: SizedBox(
-                    height: 5,
-                    width: 50,
+                    height: ScreenUtil.instance.setWidth(5),
+                    width: ScreenUtil.instance.setWidth(50),
                     child: Image.asset(
                       'assets/icons/icon_line.png',
                       fit: BoxFit.fill,
                     ))),
-            SizedBox(height: 35),
+            SizedBox(height: ScreenUtil.instance.setWidth(35)),
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);
@@ -1166,18 +1183,18 @@ class _ProfileHeaderState extends State<ProfileHeader>
                           'Delete',
                           style: TextStyle(
                               color: Colors.red,
-                              fontSize: 16,
+                              fontSize: ScreenUtil.instance.setSp(16),
                               fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                     Container(
-                        height: 30,
-                        width: 30,
+                        height: ScreenUtil.instance.setWidth(30),
+                        width: ScreenUtil.instance.setWidth(30),
                         child: Image.asset('assets/icons/icon_apps/delete.png'))
                     // Container(
-                    //   height: 44,
-                    //   width: 50,
+                    //   height: ScreenUtil.instance.setWidth(44),
+                    //   width: ScreenUtil.instance.setWidth(50),
                     //   decoration: BoxDecoration(
                     //       image: DecorationImage(
                     //           image: AssetImage(
@@ -1196,9 +1213,9 @@ class _ProfileHeaderState extends State<ProfileHeader>
                 ),
               ),
             ),
-            SizedBox(height: 19),
+            SizedBox(height: ScreenUtil.instance.setWidth(19)),
             Divider(),
-            SizedBox(height: 16),
+            SizedBox(height: ScreenUtil.instance.setWidth(16)),
             GestureDetector(
               onTap: () {
                 // imageCaputreCamera();
@@ -1216,20 +1233,20 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         Text(
                           'Edit',
                           style: TextStyle(
-                              fontSize: 16,
+                              fontSize: ScreenUtil.instance.setSp(16),
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF40D7FF)),
                         ),
                       ],
                     ),
                     Container(
-                      height: 30,
-                      width: 30,
+                      height: ScreenUtil.instance.setWidth(30),
+                      width: ScreenUtil.instance.setWidth(30),
                       child: Image.asset('assets/icons/icon_apps/edit.png'),
                     )
                     // Container(
-                    //   height: 44,
-                    //   width: 50,
+                    //   height: ScreenUtil.instance.setWidth(44),
+                    //   width: ScreenUtil.instance.setWidth(50),
                     //   decoration: BoxDecoration(
                     //       image: DecorationImage(
                     //           image: AssetImage(
@@ -1271,20 +1288,20 @@ class _ProfileHeaderState extends State<ProfileHeader>
             Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50),
                 child: SizedBox(
-                    height: 5,
-                    width: 50,
+                    height: ScreenUtil.instance.setWidth(5),
+                    width: ScreenUtil.instance.setWidth(50),
                     child: Image.asset(
                       'assets/icons/icon_line.png',
                       fit: BoxFit.fill,
                     ))),
-            SizedBox(height: 35),
+            SizedBox(height: ScreenUtil.instance.setWidth(35)),
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => ReportPost()));
+                        builder: (BuildContext context) => ReportPost(postId: id, postType: postType,)));
                 // Navigator.push(
                 //     context,
                 //     MaterialPageRoute(
@@ -1304,14 +1321,14 @@ class _ProfileHeaderState extends State<ProfileHeader>
                           'Report',
                           style: TextStyle(
                               color: Colors.red,
-                              fontSize: 16,
+                              fontSize: ScreenUtil.instance.setSp(16),
                               fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                     Container(
-                      height: 30,
-                      width: 30,
+                      height: ScreenUtil.instance.setWidth(30),
+                      width: ScreenUtil.instance.setWidth(30),
                       child: Image.asset('assets/icons/icon_apps/report.png'),
                     )
                   ],
@@ -1336,26 +1353,26 @@ class _ProfileHeaderState extends State<ProfileHeader>
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            height: 100,
-            width: 200,
+            height: ScreenUtil.instance.setWidth(100),
+            width: ScreenUtil.instance.setWidth(200),
             child: Column(
               children: <Widget>[
                 Text(
                   'Oops',
                   style: TextStyle(
                       color: Colors.black54,
-                      fontSize: 18,
+                      fontSize: ScreenUtil.instance.setSp(18),
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: ScreenUtil.instance.setWidth(10),
                 ),
                 Text(
                   'Delete this moment?',
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
-                  height: 20,
+                  height: ScreenUtil.instance.setWidth(20),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -1372,7 +1389,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                       ),
                     ),
                     SizedBox(
-                      width: 50,
+                      width: ScreenUtil.instance.setWidth(50),
                     ),
                     GestureDetector(
                       onTap: () {

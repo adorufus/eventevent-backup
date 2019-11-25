@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -64,7 +64,14 @@ class _WaitingGopayState extends State<WaitingGopay>{
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -88,19 +95,19 @@ class _WaitingGopayState extends State<WaitingGopay>{
           launch(paymentData['payment']['data_vendor']['payment_url']);
         },
         child: Container(
-                  height: 50,
+                  height: ScreenUtil.instance.setWidth(50),
                   color: Colors.deepOrangeAccent,
                   child: Center(
                     child: Text(
                       'PAY WITH GO-PAY',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(20)),
                     ),
                   )),
       ),
       body: ListView(
         children: <Widget>[
           Container(
-                  height: 380,
+                  height: ScreenUtil.instance.setWidth(380),
                   color: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 25),
                   child: Column(
@@ -109,7 +116,7 @@ class _WaitingGopayState extends State<WaitingGopay>{
                     children: <Widget>[
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        height: 200,
+                        height: ScreenUtil.instance.setWidth(200),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: eventajaGreenTeal),
@@ -118,15 +125,15 @@ class _WaitingGopayState extends State<WaitingGopay>{
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             SizedBox(
-                              height: 10,
+                              height: ScreenUtil.instance.setWidth(10),
                             ),
                             Text('Complete Payment In',
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 18,
+                                    fontSize: ScreenUtil.instance.setSp(18),
                                     fontWeight: FontWeight.bold)),
                             SizedBox(
-                              height: 20,
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,52 +142,52 @@ class _WaitingGopayState extends State<WaitingGopay>{
                                 Text('${hour}',
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 20,
+                                        fontSize: ScreenUtil.instance.setSp(20),
                                         fontWeight: FontWeight.bold)),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   ':',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   '$min',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   ':',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  height: ScreenUtil.instance.setWidth(10),
                                 ),
                                 Text(
                                   '$sec',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
+                                      fontSize: ScreenUtil.instance.setSp(20),
                                       fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
                             SizedBox(
-                              height: 20,
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -188,23 +195,23 @@ class _WaitingGopayState extends State<WaitingGopay>{
                               children: <Widget>[
                                 Text('H',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 20)),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                                 SizedBox(
-                                  width: 35,
+                                  width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('M',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 20)),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                                 SizedBox(
-                                  width: 35,
+                                  width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('S',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 20)),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
                               ],
                             ),
                             SizedBox(
-                              height: 20,
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -224,7 +231,7 @@ class _WaitingGopayState extends State<WaitingGopay>{
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: ScreenUtil.instance.setWidth(20),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -233,19 +240,19 @@ class _WaitingGopayState extends State<WaitingGopay>{
                           Text(
                             'TRANSFER AMOUNT',
                             style:
-                                TextStyle(fontSize: 20, color: Colors.black45),
+                                TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.black45),
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
                             'Rp. ' +
                                 paymentData['amount_detail']['final_amount'],
                             style: TextStyle(
                                 fontSize: 50, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
                             'Eventevent will automatically check your payment. It may take up to 1 hour to process',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                            style: TextStyle(color: Colors.grey, fontSize: ScreenUtil.instance.setSp(12)),
                             textAlign: TextAlign.center,
                           )
                         ],
@@ -286,8 +293,8 @@ class _WaitingGopayState extends State<WaitingGopay>{
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget> [
                               Text(GOPAY_HEADER_ID, style: TextStyle(fontWeight: FontWeight.bold)),
-                              SizedBox(height: 10),
-                              Text(GOPAY_HOWTO_LINE1_ID, style: TextStyle(fontSize: 14),),
+                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                              Text(GOPAY_HOWTO_LINE1_ID, style: TextStyle(fontSize: ScreenUtil.instance.setSp(14)),),
                             ]
                           ),
                         )
@@ -304,8 +311,8 @@ class _WaitingGopayState extends State<WaitingGopay>{
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget> [
                               Text(GOPAY_HEADER_EN, style: TextStyle(fontWeight: FontWeight.bold)),
-                              SizedBox(height: 10),
-                              Text(GOPAY_HOWTO_LINE1_EN, style: TextStyle(fontSize: 14),),
+                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                              Text(GOPAY_HOWTO_LINE1_EN, style: TextStyle(fontSize: ScreenUtil.instance.setSp(14)),),
                               
                             ]
                           )

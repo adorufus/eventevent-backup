@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,7 +23,14 @@ class ChangePasswordState extends State<ChangePassword>{
   TextEditingController confirmPasswordController = new TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     
     return Scaffold(
       key: thisScaffold,
@@ -44,11 +51,11 @@ class ChangePasswordState extends State<ChangePassword>{
                 FocusScope.of(context).unfocus();
                 postChangePassword();
               },
-              child: Text('Save', style: TextStyle(color: eventajaGreenTeal, fontSize: 18),),
+              child: Text('Save', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),),
             ),
           ),
           SizedBox(
-            width: 15,
+            width: ScreenUtil.instance.setWidth(15),
           )
         ],
       ),
@@ -75,7 +82,7 @@ class ChangePasswordState extends State<ChangePassword>{
                 ),
               ),
               SizedBox(
-                height: 30,
+                height: ScreenUtil.instance.setWidth(30),
               ),
               TextFormField(
                 controller: newPasswordController,
@@ -89,7 +96,7 @@ class ChangePasswordState extends State<ChangePassword>{
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: ScreenUtil.instance.setWidth(10),
               ),
               TextFormField(
                 controller: confirmPasswordController,

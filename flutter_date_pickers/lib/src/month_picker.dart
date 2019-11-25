@@ -186,7 +186,7 @@ class _MonthPickerState extends State<MonthPicker> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return SizedBox(
       width: widget.datePickerLayoutSettings.monthPickerPortraitWidth,
       height: widget.datePickerLayoutSettings.maxDayPickerHeight,
@@ -304,7 +304,7 @@ class _MonthPicker extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     final MaterialLocalizations localizations =
         MaterialLocalizations.of(context);
     final ThemeData themeData = Theme.of(context);

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/Transaction/Xendit/TicketReview.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,7 +29,14 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -61,11 +68,11 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
                 child: Center(
                     child: Text(
                   'Choose bank account for payment',
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
                 )),
               ),
               Container(
-                height: 340,
+                height: ScreenUtil.instance.setWidth(340),
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
@@ -83,7 +90,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
                         }
                       },
                       child: Container(
-                        height: 130,
+                        height: ScreenUtil.instance.setWidth(130),
                         margin: EdgeInsets.all(10),
                         padding: EdgeInsets.only(
                             left: 15, right: 7, top: 10, bottom: 10),
@@ -112,7 +119,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
                               ),
                             ),
                             SizedBox(
-                              width: 20,
+                              width: ScreenUtil.instance.setWidth(20),
                             ),
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,18 +129,18 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
                                     vaList[i]['virtual_account_name'],
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20,
+                                        fontSize: ScreenUtil.instance.setSp(20),
                                         color: Colors.black54),
                                   ),
-                                  SizedBox(height: 10),
+                                  SizedBox(height: ScreenUtil.instance.setWidth(10)),
                                   Text(vaList[i]['bank_code'],
                                       style: TextStyle(color: Colors.grey)),
-                                  SizedBox(height: 10),
+                                  SizedBox(height: ScreenUtil.instance.setWidth(10)),
                                   Text(
                                     vaList[i]['virtual_account_number'],
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 15,
+                                        fontSize: ScreenUtil.instance.setSp(15),
                                         color: Colors.black54),
                                   ),
                                 ])

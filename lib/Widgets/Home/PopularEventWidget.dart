@@ -1,6 +1,7 @@
 import 'package:eventevent/Widgets/Home/MiniDate.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PopularEventWidget extends StatelessWidget {
   final imageUrl;
@@ -12,17 +13,34 @@ class PopularEventWidget extends StatelessWidget {
   final isAvailable;
 
   const PopularEventWidget(
-      {Key key, this.imageUrl, this.title, this.location, this.price, this.color, this.type, this.isAvailable})
+      {Key key,
+      this.imageUrl,
+      this.title,
+      this.location,
+      this.price,
+      this.color,
+      this.type,
+      this.isAvailable})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
+
     print(MediaQuery.of(context).size.width);
+
     return Stack(
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(left: 13, top: 8, bottom: 8, right: 3),
-          width: 133,
+          width: ScreenUtil.instance.setWidth(133),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
@@ -35,7 +53,7 @@ class PopularEventWidget extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Container(
-                height: 199.5,
+                height: ScreenUtil.instance.setWidth(199.5),
                 decoration: BoxDecoration(
                     color: Color(0xFFB5B5B5),
                     image: DecorationImage(
@@ -50,56 +68,66 @@ class PopularEventWidget extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Container(
-                        width: 133,
+                        width: ScreenUtil.instance.setWidth(133),
                         child: Text(
                           title,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                              fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),
                         )),
-                    SizedBox(height: 4),
+                    SizedBox(height: ScreenUtil.instance.setWidth(4)),
                     Row(
                       children: <Widget>[
                         Image.asset(
                           'assets/icons/icon_apps/location.png',
                           scale: 7,
                         ),
-                        SizedBox(width: 3),
+                        SizedBox(width: ScreenUtil.instance.setWidth(3)),
                         Container(
-                          width: 112,
+                          width: ScreenUtil.instance.setWidth(112),
                           child: Text(location,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 13)),
+                              style: TextStyle(fontSize: ScreenUtil.instance.setSp(13))),
                         )
                       ],
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 11),
-              Container(
-                  height: 28,
-                  width: 133,
-                  decoration: BoxDecoration(
-                    boxShadow: <BoxShadow>[
+              SizedBox(height: ScreenUtil.instance.setWidth(11)),
+              Flexible(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    height: ScreenUtil.instance.setWidth(28),
+                    width: ScreenUtil.instance.setWidth(133),
+                    decoration: BoxDecoration(boxShadow: <BoxShadow>[
                       BoxShadow(
-                        color: color.withOpacity(0.4),
-                        blurRadius: 2,
-                        spreadRadius: 1.5
-                      )
-                    ],
-                      color: color,
-                      borderRadius: BorderRadius.circular(15)),
-                      child: Center(
-                        child: Text(type == 'paid' || type == 'paid_seating' ? isAvailable == '1' ? 'Rp. ' + price.toUpperCase() + ',-' : price.toUpperCase() : price.toUpperCase() , style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),)
-                      ),
+                          color: color.withOpacity(0.4),
+                          blurRadius: 2,
+                          spreadRadius: 1.5)
+                    ], color: color, borderRadius: BorderRadius.circular(15)),
+                    child: Center(
+                        child: Text(
+                      type == 'paid' || type == 'paid_seating'
+                          ? isAvailable == '1'
+                              ? 'Rp. ' + price.toUpperCase() + ',-'
+                              : price.toUpperCase()
+                          : price.toUpperCase(),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenUtil.instance.setSp(10),
+                          fontWeight: FontWeight.bold),
+                    )),
+                  ),
                 ),
+              )
             ],
           ),
         ),
         Positioned(
-          top: 194,
-          left: 21,
+          top: ScreenUtil.instance.setWidth(194),
+          left: ScreenUtil.instance.setWidth(21),
           child: MiniDate(),
         ),
       ],

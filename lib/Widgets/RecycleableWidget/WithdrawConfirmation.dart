@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -57,7 +57,14 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -90,28 +97,28 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10)
                         ),
-                        height: 200,
-                        width: 300,
+                        height: ScreenUtil.instance.setWidth(200),
+                        width: ScreenUtil.instance.setWidth(300),
                         child: Column(
                           children: <Widget>[
-                            Text('PASSWORD REQUIRED', style: TextStyle(color: Colors.black54,fontSize: 18, fontWeight: FontWeight.bold),),
-                            SizedBox(height: 10,),
+                            Text('PASSWORD REQUIRED', style: TextStyle(color: Colors.black54,fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
+                            SizedBox(height: ScreenUtil.instance.setWidth(10),),
                             Text('Please enter your EventEvent account password', textAlign: TextAlign.center,),
-                            SizedBox(height: 15,),
+                            SizedBox(height: ScreenUtil.instance.setWidth(15),),
                             TextFormField(
                               obscureText: true,
                               controller: passwordController,
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black, width: 1),
+                                  borderSide: BorderSide(color: Colors.black, width: ScreenUtil.instance.setWidth(1)),
                                 ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.black, width: 1),
+                                    borderSide: BorderSide(color: Colors.black, width: ScreenUtil.instance.setWidth(1)),
                                   )
                               ),
                             ),
                             SizedBox(
-                              height: 20,
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -123,7 +130,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
                                   child: Text('Cancel', style: TextStyle(color: Colors.lightBlue, fontWeight: FontWeight.bold),),
                                 ),
                                 SizedBox(
-                                  width: 50,
+                                  width: ScreenUtil.instance.setWidth(50),
                                 ),
                                 GestureDetector(
                                   onTap: (){
@@ -144,7 +151,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
           );
         },
         child: Container(
-          height: 50,
+          height: ScreenUtil.instance.setWidth(50),
           color: Colors.deepOrangeAccent,
           child: Center(child: Text('CONFIRM', style: TextStyle(color: Colors.white),),),
         ),
@@ -160,45 +167,45 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Center(
-                    child: Text('WITHDRAW AMOUNT', style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 18,),),
+                    child: Text('WITHDRAW AMOUNT', style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18),),),
                   ),
                   SizedBox(
-                    height: 25,
+                    height: ScreenUtil.instance.setWidth(25),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
-                      Text('Requested Amount', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black26),),
-                      Text('Rp. ' + withdrawAmount.toString() + ',-', style: TextStyle(fontSize: 18),),
+                      Text('Requested Amount', style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18), color: Colors.black26),),
+                      Text('Rp. ' + withdrawAmount.toString() + ',-', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18)),),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
-                      Text('Processing Fee', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black26),),
-                      Text('-Rp. 5.000', style: TextStyle(fontSize: 18, color: Colors.red),),
+                      Text('Processing Fee', style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18), color: Colors.black26),),
+                      Text('-Rp. 5.000', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.red),),
                     ],
                   ),
                   Divider(color: Colors.grey,),
                   SizedBox(
-                    height: 15,
+                    height: ScreenUtil.instance.setWidth(15),
                   ),
-                  Text('Amount will be transfered to your account', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.grey),),
-                  SizedBox(height: 20,),
-                  Text('Rp. ' + (withdrawAmount - int.parse('5000')).toString() + ',-', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: eventajaGreenTeal),),
+                  Text('Amount will be transfered to your account', style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(16), color: Colors.grey),),
+                  SizedBox(height: ScreenUtil.instance.setWidth(20),),
+                  Text('Rp. ' + (withdrawAmount - int.parse('5000')).toString() + ',-', style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(25), color: eventajaGreenTeal),),
                 ],
               ),
             ),
             SizedBox(
-              height: 20
+              height: ScreenUtil.instance.setWidth(20)
             ),
             Center(
-              child: Text('TRANSFER TO', style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: 18),),
+              child: Text('TRANSFER TO', style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18)),),
             ),
             SizedBox(
-                height: 20
+                height: ScreenUtil.instance.setWidth(20)
             ),
           ],
         ),

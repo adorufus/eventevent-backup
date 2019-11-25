@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:google_places_picker/google_places_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -97,7 +97,7 @@ class PostEventMapState extends State<PostEventMap>{
     );
 
     return Container(
-      height: 300,
+      height: ScreenUtil.instance.setWidth(300),
       width: MediaQuery.of(context).size.width,
       child: Stack(alignment: Alignment.bottomCenter, children: <Widget>[
         Positioned(
@@ -110,8 +110,8 @@ class PostEventMapState extends State<PostEventMap>{
         ),
         Center(
           child: SizedBox(
-            height: 50,
-            width: 50,
+            height: ScreenUtil.instance.setWidth(50),
+            width: ScreenUtil.instance.setWidth(50),
             child: Image.asset('assets/icons/location-transparent.png'),
           ),
         )
@@ -145,7 +145,14 @@ class PostEventMapState extends State<PostEventMap>{
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
     return Scaffold(
         key: thisScaffold,
         resizeToAvoidBottomInset: true,
@@ -176,7 +183,7 @@ class PostEventMapState extends State<PostEventMap>{
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: 18),
+                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -205,18 +212,18 @@ class PostEventMapState extends State<PostEventMap>{
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: ScreenUtil.instance.setWidth(20),
                   ),
                   Divider(
                     color: Colors.grey,
-                    height: 5,
+                    height: ScreenUtil.instance.setWidth(5),
                   ),
                   SizedBox(
                     height: 0,
                   ),
                   // Container(
                   //   width: MediaQuery.of(context).size.width,
-                  //   height: 5,
+                  //   height: ScreenUtil.instance.setWidth(5),
                   //   child: Center(
                   //     child: RaisedButton(
                   //       onPressed: (){
@@ -231,7 +238,7 @@ class PostEventMapState extends State<PostEventMap>{
                     child: ListView(children: <Widget>[
                       showMap(),
                       SizedBox(
-                        height: 20,
+                        height: ScreenUtil.instance.setWidth(20),
                       ),
                       Align(
                           alignment: Alignment.centerLeft,
@@ -240,13 +247,13 @@ class PostEventMapState extends State<PostEventMap>{
                             style: TextStyle(
                                 color: Colors.black54,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 18),
+                                fontSize: ScreenUtil.instance.setSp(18)),
                           )),
                       SizedBox(
-                        height: 12,
+                        height: ScreenUtil.instance.setWidth(12),
                       ),
                       Container(
-                        height: 80,
+                        height: ScreenUtil.instance.setWidth(80),
                         width: MediaQuery.of(context).size.width,
                         margin: EdgeInsets.only(right: 18),
                         padding: EdgeInsets.all(15),
@@ -259,7 +266,7 @@ class PostEventMapState extends State<PostEventMap>{
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: ScreenUtil.instance.setWidth(20),
                       ),
                       Align(
                           alignment: Alignment.centerLeft,
@@ -268,9 +275,9 @@ class PostEventMapState extends State<PostEventMap>{
                             style: TextStyle(
                                 color: Colors.black54,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 18),
+                                fontSize: ScreenUtil.instance.setSp(18)),
                           )),
-                      SizedBox(height: 12),
+                      SizedBox(height: ScreenUtil.instance.setWidth(12)),
                       TextFormField(
                         controller: additionalInfoController,
                         maxLines: 5,
