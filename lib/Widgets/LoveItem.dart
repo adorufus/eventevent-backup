@@ -3,8 +3,10 @@ import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutt
 
 class LoveItem extends StatefulWidget {
   final isComment;
+  final loveCount;
+  final commentCount;
 
-  const LoveItem({Key key, this.isComment}) : super(key: key);
+  const LoveItem({Key key, this.isComment, this.loveCount, this.commentCount}) : super(key: key);
 
   @override
   _LoveItemState createState() => _LoveItemState();
@@ -40,7 +42,7 @@ class _LoveItemState extends State<LoveItem> {
           scale: 3.5,
         ),
         SizedBox(width: ScreenUtil.instance.setWidth(5)),
-        Text('99+',
+        Text(widget.isComment == false ? widget.loveCount : widget.commentCount,
             style: TextStyle(
                 color: Color(
                     0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']

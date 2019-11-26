@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/LoveItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EditEvent.dart';
@@ -17,7 +18,8 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_branch_io_plugin/flutter_branch_io_plugin.dart';
 import 'dart:ui';
 import 'package:marquee/marquee.dart';
@@ -217,7 +219,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -433,11 +436,15 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             SizedBox(
-                                              height: ScreenUtil.instance.setWidth(30),
-                                              width: ScreenUtil.instance.setWidth(30),
+                                              height: ScreenUtil.instance
+                                                  .setWidth(30),
+                                              width: ScreenUtil.instance
+                                                  .setWidth(30),
                                               child: Container(
-                                                height: ScreenUtil.instance.setWidth(30),
-                                                width: ScreenUtil.instance.setWidth(30),
+                                                height: ScreenUtil.instance
+                                                    .setWidth(30),
+                                                width: ScreenUtil.instance
+                                                    .setWidth(30),
                                                 decoration: BoxDecoration(
                                                     shape: BoxShape.circle,
                                                     image: DecorationImage(
@@ -447,7 +454,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               ),
                                             ),
                                             SizedBox(
-                                              width: ScreenUtil.instance.setWidth(5),
+                                              width: ScreenUtil.instance
+                                                  .setWidth(5),
                                             ),
                                             Column(
                                               crossAxisAlignment:
@@ -459,7 +467,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       : creatorFullName
                                                           .toString(),
                                                   style: TextStyle(
-                                                      fontSize: ScreenUtil.instance.setSp(12),
+                                                      fontSize: ScreenUtil
+                                                          .instance
+                                                          .setSp(12),
                                                       color: eventajaGreenTeal,
                                                       fontWeight:
                                                           FontWeight.bold),
@@ -471,104 +481,206 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             .toString(),
                                                     style: TextStyle(
                                                         color: Colors.grey,
-                                                        fontSize: ScreenUtil.instance.setSp(11))),
+                                                        fontSize: ScreenUtil
+                                                            .instance
+                                                            .setSp(11))),
                                               ],
                                             )
                                           ],
                                         ),
-                                        SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                                        SizedBox(
+                                            height: ScreenUtil.instance
+                                                .setWidth(10)),
                                         Container(
-                                            height: ScreenUtil.instance.setWidth(35),
-                                            width: ScreenUtil.instance.setWidth(180),
+                                            height: ScreenUtil.instance
+                                                .setWidth(35),
+                                            width: ScreenUtil.instance
+                                                .setWidth(180),
                                             child: Text(
                                               detailData['name'] == null
                                                   ? '-'
                                                   : detailData['name']
                                                       .toUpperCase(),
                                               style: TextStyle(
-                                                  fontSize: ScreenUtil.instance.setSp(15),
+                                                  fontSize: ScreenUtil.instance
+                                                      .setSp(15),
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.grey),
                                             )),
-                                        SizedBox(height: ScreenUtil.instance.setWidth(17)),
+                                        SizedBox(
+                                            height: ScreenUtil.instance
+                                                .setWidth(17)),
                                         Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             SizedBox(
-                                              width: ScreenUtil.instance.setWidth(10),
-                                              height: ScreenUtil.instance.setWidth(12),
+                                              width: ScreenUtil.instance
+                                                  .setWidth(10),
+                                              height: ScreenUtil.instance
+                                                  .setWidth(12),
                                               child: Image.asset(
                                                   'assets/icons/location-transparent.png'),
                                             ),
-                                            SizedBox(width: ScreenUtil.instance.setWidth(5)),
-                                            Container(
-                                              height: ScreenUtil.instance.setWidth(16),
-                                              width: ScreenUtil.instance.setWidth(170),
-                                              child: MarqueeWidget(
-                                                text: detailData['address'] ==
-                                                        null
-                                                    ? '-'
-                                                    : detailData['address'],
-                                                scrollAxis: Axis.horizontal,
-                                                textStyle:
-                                                    TextStyle(fontSize: ScreenUtil.instance.setSp(11)),
-                                              ),
-                                            )
+                                            SizedBox(
+                                                width: ScreenUtil.instance
+                                                    .setWidth(5)),
+                                            detailData['address']
+                                                        .toString()
+                                                        .length <
+                                                    50
+                                                ? Text(
+                                                    detailData['address'],
+                                                    style: TextStyle(
+                                                        fontSize: ScreenUtil
+                                                            .instance
+                                                            .setSp(11)),
+                                                    maxLines: 1,
+                                                  )
+                                                : Container(
+                                                    height: ScreenUtil.instance
+                                                        .setWidth(16),
+                                                    width: ScreenUtil.instance
+                                                        .setWidth(170),
+                                                    child: MarqueeWidget(
+                                                      text: detailData[
+                                                                  'address'] ==
+                                                              null
+                                                          ? '-'
+                                                          : detailData[
+                                                              'address'],
+                                                      scrollAxis:
+                                                          Axis.horizontal,
+                                                      textStyle: TextStyle(
+                                                          fontSize: ScreenUtil
+                                                              .instance
+                                                              .setSp(11)),
+                                                      ratioOfBlankToScreen: .1,
+                                                    ),
+                                                  )
                                           ],
                                         ),
-                                        SizedBox(height: ScreenUtil.instance.setWidth(5)),
+                                        SizedBox(
+                                            height: ScreenUtil.instance
+                                                .setWidth(5)),
                                         Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             SizedBox(
-                                              width: ScreenUtil.instance.setWidth(10),
-                                              height: ScreenUtil.instance.setWidth(12),
+                                              width: ScreenUtil.instance
+                                                  .setWidth(10),
+                                              height: ScreenUtil.instance
+                                                  .setWidth(12),
                                               child: Image.asset(
                                                   'assets/icons/btn_time_green.png'),
                                             ),
-                                            SizedBox(width: ScreenUtil.instance.setWidth(5)),
+                                            SizedBox(
+                                                width: ScreenUtil.instance
+                                                    .setWidth(5)),
                                             Text(
                                                 startTime.toString() +
                                                     ' to ' +
                                                     endTime.toString(),
-                                                style: TextStyle(fontSize: ScreenUtil.instance.setSp(11))),
+                                                style: TextStyle(
+                                                    fontSize: ScreenUtil
+                                                        .instance
+                                                        .setSp(11))),
                                           ],
                                         ),
                                         SizedBox(
-                                          height: ScreenUtil.instance.setWidth(15),
+                                          height:
+                                              ScreenUtil.instance.setWidth(15),
                                         ),
-                                        Container(
-                                          height: ScreenUtil.instance.setWidth(28),
-                                          width: ScreenUtil.instance.setWidth(133),
-                                          decoration: BoxDecoration(
-                                              boxShadow: <BoxShadow>[
-                                                BoxShadow(
-                                                    color: itemColor
-                                                        .withOpacity(0.4),
-                                                    blurRadius: 2,
-                                                    spreadRadius: 1.5)
-                                              ],
-                                              color: itemColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(15)),
-                                          child: Center(
-                                              child: Text(
-                                            'test',
-                                            // type == 'paid' ||
-                                            //         type == 'paid_seating'
-                                            //     ? isAvailable == '1'
-                                            //         ? 'Rp. ' +
-                                            //             itemPrice.toUpperCase() +
-                                            //             ',-'
-                                            //         : itemPrice.toUpperCase()
-                                            //     : itemPrice.toUpperCase(),
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: ScreenUtil.instance.setSp(10),
-                                                fontWeight: FontWeight.bold),
-                                          )),
+                                        GestureDetector(
+                                          onTap: () {
+                                            if (ticketStat['salesStatus'] ==
+                                                null) {
+                                            } else if (ticketType['type'] ==
+                                                'free') {
+                                              showCupertinoDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          SuccessPage());
+                                            } else if (ticketType['type'] ==
+                                                'no_ticket') {
+                                              print('no ticket');
+                                              showDialog(
+                                                  context: context,
+                                                  child:
+                                                      new CupertinoAlertDialog(
+                                                    title: new Text(
+                                                        "Dialog Title"),
+                                                    content: new Text(
+                                                        "This is my content"),
+                                                    actions: <Widget>[
+                                                      CupertinoDialogAction(
+                                                        isDefaultAction: true,
+                                                        child: Text("Yes"),
+                                                      ),
+                                                      CupertinoDialogAction(
+                                                        child: Text("No"),
+                                                      )
+                                                    ],
+                                                  ));
+                                            } else {
+                                              if (ticketStat['salesStatus'] ==
+                                                      'endSales' ||
+                                                  ticketStat[
+                                                          'availableTicketStatus'] ==
+                                                      '0') {
+                                                return;
+                                              } else {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (BuildContext
+                                                                context) =>
+                                                            SelectTicketWidget(
+                                                              eventID:
+                                                                  detailData[
+                                                                      'id'],
+                                                              eventDate:
+                                                                  detailData[
+                                                                      'dateStart'],
+                                                            )));
+                                              }
+                                            }
+                                          },
+                                          child: Container(
+                                            height: ScreenUtil.instance
+                                                .setWidth(28),
+                                            width: ScreenUtil.instance
+                                                .setWidth(133),
+                                            decoration: BoxDecoration(
+                                                boxShadow: <BoxShadow>[
+                                                  BoxShadow(
+                                                      color: itemColor
+                                                          .withOpacity(0.4),
+                                                      blurRadius: 2,
+                                                      spreadRadius: 1.5)
+                                                ],
+                                                color: itemColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(15)),
+                                            child: Center(
+                                                child: Text(
+                                              ticketPrice,
+                                              // type == 'paid' ||
+                                              //         type == 'paid_seating'
+                                              //     ? isAvailable == '1'
+                                              //         ? 'Rp. ' +
+                                              //             itemPrice.toUpperCase() +
+                                              //             ',-'
+                                              //         : itemPrice.toUpperCase()
+                                              //     : itemPrice.toUpperCase(),
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: ScreenUtil.instance
+                                                      .setSp(10),
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                          ),
                                         ),
                                       ])),
                             ],
@@ -586,17 +698,23 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                               color: Colors.white,
                               boxShadow: [
                                 BoxShadow(
-                                    blurRadius: 2,
+                                    blurRadius: 5,
                                     spreadRadius: 1.5,
                                     color: Color(0xff8a8a8b).withOpacity(.5))
                               ]),
                           child: Row(
                             children: <Widget>[
-                              LoveItem(isComment: false),
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(10),
+                              LoveItem(
+                                isComment: false,
+                                loveCount: detailData['countLove'],
                               ),
-                              LoveItem(isComment: true),
+                              SizedBox(
+                                width: ScreenUtil.instance.setWidth(10),
+                              ),
+                              LoveItem(
+                                  isComment: true,
+                                  commentCount:
+                                      detailData['total_comment'].toString()),
                               Expanded(
                                 child: SizedBox(),
                               ),
@@ -651,24 +769,29 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                         isPrivate == "0"
                             ? Container()
                             : Padding(
-                                padding: EdgeInsets.only(left: 20),
+                                padding: EdgeInsets.only(left: 13),
                                 child: Container(
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 13, vertical: 13),
+                                  // margin: EdgeInsets.symmetric(
+                                  //     horizontal: 13, vertical: 13),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        'Who\'s Invited'.toUpperCase(),
-                                        style:
-                                            TextStyle(color: eventajaGreenTeal),
+                                        'Who\'s Invited',
+                                        style: TextStyle(
+                                            color: Color(0xff8a8a8b),
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(11)),
                                       ),
-                                      SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                                      invitedUserList == null
+                                      SizedBox(
+                                          height:
+                                              ScreenUtil.instance.setWidth(10)),
+                                      invitedUserList.length == 0
                                           ? Container()
                                           : Container(
-                                              height: ScreenUtil.instance.setWidth(30),
+                                              height: ScreenUtil.instance
+                                                  .setWidth(30),
                                               width: MediaQuery.of(context)
                                                   .size
                                                   .width,
@@ -687,12 +810,31 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     child: Container(
                                                       constraints:
                                                           BoxConstraints(
-                                                              maxHeight: ScreenUtil.instance.setWidth(30),
-                                                              maxWidth: ScreenUtil.instance.setWidth(30),
-                                                              minHeight: ScreenUtil.instance.setWidth(30),
-                                                              minWidth: ScreenUtil.instance.setWidth(30)),
-                                                      height: ScreenUtil.instance.setWidth(30),
-                                                      width: ScreenUtil.instance.setWidth(30),
+                                                              maxHeight:
+                                                                  ScreenUtil
+                                                                      .instance
+                                                                      .setWidth(
+                                                                          30),
+                                                              maxWidth:
+                                                                  ScreenUtil
+                                                                      .instance
+                                                                      .setWidth(
+                                                                          30),
+                                                              minHeight:
+                                                                  ScreenUtil
+                                                                      .instance
+                                                                      .setWidth(
+                                                                          30),
+                                                              minWidth:
+                                                                  ScreenUtil
+                                                                      .instance
+                                                                      .setWidth(
+                                                                          30)),
+                                                      height: ScreenUtil
+                                                          .instance
+                                                          .setWidth(30),
+                                                      width: ScreenUtil.instance
+                                                          .setWidth(30),
                                                       decoration: BoxDecoration(
                                                           boxShadow: <
                                                               BoxShadow>[
@@ -741,9 +883,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                               Text(
                                 'Who\'s Going',
                                 style: TextStyle(
-                                    color: Color(0xff8a8a8b), fontSize: ScreenUtil.instance.setSp(11)),
+                                    color: Color(0xff8a8a8b),
+                                    fontSize: ScreenUtil.instance.setSp(11)),
                               ),
-                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10)),
                               Container(
                                 height: ScreenUtil.instance.setWidth(50),
                                 width: MediaQuery.of(context).size.width,
@@ -777,8 +921,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             Container(
-                                              height: ScreenUtil.instance.setWidth(30),
-                                              width: ScreenUtil.instance.setWidth(30),
+                                              height: ScreenUtil.instance
+                                                  .setWidth(30),
+                                              width: ScreenUtil.instance
+                                                  .setWidth(30),
                                               decoration: BoxDecoration(
                                                   boxShadow: <BoxShadow>[
                                                     BoxShadow(
@@ -815,13 +961,15 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                             : Container(
                                 width: ScreenUtil.instance.setWidth(333.7),
                                 height: ScreenUtil.instance.setWidth(95.4),
-                                padding: EdgeInsets.all(15),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 15),
+                                margin: EdgeInsets.symmetric(horizontal: 13),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
                                   boxShadow: [
                                     BoxShadow(
-                                        blurRadius: 2,
+                                        blurRadius: 5,
                                         spreadRadius: 1.5,
                                         color:
                                             Color(0xff8a8a8b).withOpacity(.5))
@@ -829,7 +977,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                 ),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     GestureDetector(
                                       onTap: () {
@@ -844,7 +993,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         )));
                                       },
                                       child: SizedBox(
-                                        height: ScreenUtil.instance.setWidth(100),
+                                        height:
+                                            ScreenUtil.instance.setWidth(100),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -852,32 +1002,28 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             SizedBox(
-                                                height: ScreenUtil.instance.setWidth(30),
-                                                width: ScreenUtil.instance.setWidth(30),
+                                                height: ScreenUtil.instance
+                                                    .setWidth(20.9),
+                                                // width: ScreenUtil.instance
+                                                //     .setWidth(30),
                                                 child: Image.asset(
-                                                    'assets/icons/btn_manage_ticket.png',
+                                                    'assets/icons/icon_apps/ticket.png',
                                                     fit: BoxFit.fill)),
                                             SizedBox(
-                                              height: ScreenUtil.instance.setWidth(20),
+                                              height: ScreenUtil.instance
+                                                  .setWidth(15),
                                             ),
                                             Text(
                                               'MANAGE TICKET',
-                                              style: TextStyle(fontSize: ScreenUtil.instance.setSp(10)),
+                                              style: TextStyle(
+                                                  color: Color(0xff404041),
+                                                  fontSize: ScreenUtil.instance
+                                                      .setSp(10)),
                                             )
                                           ],
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                                    Container(
-                                      width: 0,
-                                      height: ScreenUtil.instance.setWidth(100),
-                                      decoration: BoxDecoration(
-                                          border: Border(
-                                              right: createBorderSide(context,
-                                                  color: Colors.black))),
-                                    ),
-                                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
                                     GestureDetector(
                                       onTap: () async {
                                         SharedPreferences prefs =
@@ -899,7 +1045,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         ShowQr()));
                                       },
                                       child: SizedBox(
-                                        height: ScreenUtil.instance.setWidth(100),
+                                        height:
+                                            ScreenUtil.instance.setWidth(100),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -907,31 +1054,26 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             SizedBox(
-                                                height: ScreenUtil.instance.setWidth(30),
-                                                width: ScreenUtil.instance.setWidth(30),
+                                                width: ScreenUtil.instance
+                                                    .setWidth(20.9),
                                                 child: Image.asset(
-                                                  'assets/icons/btn_show_qr.png',
+                                                  'assets/icons/icon_apps/qr.png',
                                                   fit: BoxFit.fill,
                                                 )),
                                             SizedBox(
-                                              height: ScreenUtil.instance.setWidth(20),
+                                              height: ScreenUtil.instance
+                                                  .setWidth(15),
                                             ),
                                             Text('SHOW QR CODE',
-                                                style: TextStyle(fontSize: ScreenUtil.instance.setSp(10)))
+                                                style: TextStyle(
+                                                    color: Color(0xff404041),
+                                                    fontSize: ScreenUtil
+                                                        .instance
+                                                        .setSp(10)))
                                           ],
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                                    Container(
-                                      width: 0,
-                                      height: ScreenUtil.instance.setWidth(100),
-                                      decoration: BoxDecoration(
-                                          border: Border(
-                                              right: createBorderSide(context,
-                                                  color: Colors.black))),
-                                    ),
-                                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.of(context).push(
@@ -945,7 +1087,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     )));
                                       },
                                       child: SizedBox(
-                                        height: ScreenUtil.instance.setWidth(100),
+                                        height:
+                                            ScreenUtil.instance.setWidth(100),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -953,16 +1096,21 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             SizedBox(
-                                                height: ScreenUtil.instance.setWidth(30),
-                                                width: ScreenUtil.instance.setWidth(30),
+                                                width: ScreenUtil.instance
+                                                    .setWidth(20.9),
                                                 child: Image.asset(
-                                                    'assets/icons/btn_ticket_sales.png',
+                                                    'assets/icons/icon_apps/wallet.png',
                                                     fit: BoxFit.fill)),
                                             SizedBox(
-                                              height: ScreenUtil.instance.setWidth(20),
+                                              height: ScreenUtil.instance
+                                                  .setWidth(12),
                                             ),
                                             Text('TICKET SALES',
-                                                style: TextStyle(fontSize: ScreenUtil.instance.setSp(10)))
+                                                style: TextStyle(
+                                                    color: Color(0xff404041),
+                                                    fontSize: ScreenUtil
+                                                        .instance
+                                                        .setSp(10)))
                                           ],
                                         ),
                                       ),
@@ -976,77 +1124,90 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                         Container(
                           margin: EdgeInsets.symmetric(
                               horizontal: 13, vertical: 13),
-                          height: ScreenUtil.instance.setWidth(32),
+                          height: ScreenUtil.instance.setWidth(35),
                           decoration: BoxDecoration(
                             color: Colors.white,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Container(
-                                height: ScreenUtil.instance.setWidth(108),
-                                child: Column(
-                                  children: <Widget>[
-                                    // Row(
-                                    //   children: <Widget>[
-                                    //     CircleAvatar(
-                                    //       backgroundImage: ,
-                                    //     )
-                                    //   ],
-                                    // )
-                                    Text(
-                                      'Detail',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Divider(
-                                      thickness: 2,
-                                    )
-                                  ],
+                              Flexible(
+                                child: Container(
+                                  height: ScreenUtil.instance.setWidth(115),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      // Row(
+                                      //   children: <Widget>[
+                                      //     CircleAvatar(
+                                      //       backgroundImage: ,
+                                      //     )
+                                      //   ],
+                                      // )
+                                      Text(
+                                        'Detail',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Divider(
+                                        thickness: 2,
+                                        color: eventajaGreenTeal,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                              Container(
-                                height: ScreenUtil.instance.setWidth(108),
-                                child: Column(
-                                  children: <Widget>[
-                                    // Row(
-                                    //   children: <Widget>[
-                                    //     CircleAvatar(
-                                    //       backgroundImage: ,
-                                    //     )
-                                    //   ],
-                                    // )
-                                    Text(
-                                      'Activty',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Divider(
-                                      thickness: 2,
-                                    )
-                                  ],
+                              Flexible(
+                                child: Container(
+                                  height: ScreenUtil.instance.setWidth(112),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      // Row(
+                                      //   children: <Widget>[
+                                      //     CircleAvatar(
+                                      //       backgroundImage: ,
+                                      //     )
+                                      //   ],
+                                      // )
+                                      Text(
+                                        'Activty',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Divider(
+                                        thickness: 2,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                              Container(
-                                height: ScreenUtil.instance.setWidth(108),
-                                child: Column(
-                                  children: <Widget>[
-                                    // Row(
-                                    //   children: <Widget>[
-                                    //     CircleAvatar(
-                                    //       backgroundImage: ,
-                                    //     )
-                                    //   ],
-                                    // )
-                                    Text(
-                                      'Comments',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Divider(
-                                      thickness: 2,
-                                    )
-                                  ],
+                              Flexible(
+                                child: Container(
+                                  height: ScreenUtil.instance.setWidth(112),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      // Row(
+                                      //   children: <Widget>[
+                                      //     CircleAvatar(
+                                      //       backgroundImage: ,
+                                      //     )
+                                      //   ],
+                                      // )
+                                      Text(
+                                        'Comments',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Divider(
+                                        thickness: 2,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               )
                             ],
@@ -1067,7 +1228,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     borderRadius: BorderRadius.circular(13),
                                     boxShadow: [
                                       BoxShadow(
-                                          blurRadius: 2,
+                                          blurRadius: 5,
                                           spreadRadius: 1.5,
                                           color:
                                               Color(0xff8a8a8b).withOpacity(.2))
@@ -1080,16 +1241,22 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       detailData['name'],
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: ScreenUtil.instance.setSp(18)),
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(18)),
                                     ),
                                     SizedBox(
-                                      height: ScreenUtil.instance.setWidth(29),
+                                      height: ScreenUtil.instance.setWidth(
+                                          detailData['additional'].length == 0
+                                              ? 0
+                                              : 29),
                                     ),
-                                    detailData['additional'] == null
+                                    detailData['additional'].length == 0
                                         ? Container()
                                         : Container(
-                                            height: ScreenUtil.instance.setWidth(206),
-                                            width: ScreenUtil.instance.setWidth(206),
+                                            height: ScreenUtil.instance
+                                                .setWidth(206),
+                                            width: ScreenUtil.instance
+                                                .setWidth(206),
                                             decoration: BoxDecoration(
                                                 color: Color(0xff8a8a8b),
                                                 image: DecorationImage(
@@ -1118,7 +1285,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     borderRadius: BorderRadius.circular(13),
                                     boxShadow: [
                                       BoxShadow(
-                                          blurRadius: 2,
+                                          blurRadius: 5,
                                           spreadRadius: 1.5,
                                           color:
                                               Color(0xff8a8a8b).withOpacity(.2))
@@ -1126,9 +1293,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     color: Colors.white),
                                 child: Column(
                                   children: <Widget>[
-                                    Container(
-                                      child: Text('Lokasi terdaftar')
-                                    ),
+                                    Container(child: Text('Lokasi terdaftar')),
                                     showMap()
                                   ],
                                 ),
@@ -1408,23 +1573,29 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         SizedBox(
-                                            height: ScreenUtil.instance.setWidth(30),
-                                            width: ScreenUtil.instance.setWidth(30),
+                                            height: ScreenUtil.instance
+                                                .setWidth(30),
+                                            width: ScreenUtil.instance
+                                                .setWidth(30),
                                             child: Image.asset(
                                                 'assets/icons/btn_manage_ticket.png',
                                                 fit: BoxFit.fill)),
                                         SizedBox(
-                                          height: ScreenUtil.instance.setWidth(20),
+                                          width:
+                                              ScreenUtil.instance.setWidth(20),
                                         ),
                                         Text(
                                           'MANAGE TICKET',
-                                          style: TextStyle(fontSize: ScreenUtil.instance.setSp(10)),
+                                          style: TextStyle(
+                                              fontSize: ScreenUtil.instance
+                                                  .setSp(10)),
                                         )
                                       ],
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(10)),
                                 Container(
                                   width: 0,
                                   height: ScreenUtil.instance.setWidth(100),
@@ -1433,7 +1604,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           right: createBorderSide(context,
                                               color: Colors.black))),
                                 ),
-                                SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(10)),
                                 GestureDetector(
                                   onTap: () async {
                                     SharedPreferences prefs =
@@ -1461,22 +1633,28 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         SizedBox(
-                                            height: ScreenUtil.instance.setWidth(30),
-                                            width: ScreenUtil.instance.setWidth(30),
+                                            height: ScreenUtil.instance
+                                                .setWidth(30),
+                                            width: ScreenUtil.instance
+                                                .setWidth(30),
                                             child: Image.asset(
                                               'assets/icons/btn_show_qr.png',
                                               fit: BoxFit.fill,
                                             )),
                                         SizedBox(
-                                          height: ScreenUtil.instance.setWidth(20),
+                                          height:
+                                              ScreenUtil.instance.setWidth(20),
                                         ),
                                         Text('SHOW QR CODE',
-                                            style: TextStyle(fontSize: ScreenUtil.instance.setSp(10)))
+                                            style: TextStyle(
+                                                fontSize: ScreenUtil.instance
+                                                    .setSp(10)))
                                       ],
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(10)),
                                 Container(
                                   width: 0,
                                   height: ScreenUtil.instance.setWidth(100),
@@ -1485,7 +1663,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           right: createBorderSide(context,
                                               color: Colors.black))),
                                 ),
-                                SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(10)),
                                 GestureDetector(
                                   onTap: () {
                                     Navigator.of(context).push(
@@ -1505,16 +1684,21 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         SizedBox(
-                                            height: ScreenUtil.instance.setWidth(30),
-                                            width: ScreenUtil.instance.setWidth(30),
+                                            height: ScreenUtil.instance
+                                                .setWidth(30),
+                                            width: ScreenUtil.instance
+                                                .setWidth(30),
                                             child: Image.asset(
                                                 'assets/icons/btn_ticket_sales.png',
                                                 fit: BoxFit.fill)),
                                         SizedBox(
-                                          height: ScreenUtil.instance.setWidth(20),
+                                          height:
+                                              ScreenUtil.instance.setWidth(20),
                                         ),
                                         Text('TICKET SALES',
-                                            style: TextStyle(fontSize: ScreenUtil.instance.setSp(10)))
+                                            style: TextStyle(
+                                                fontSize: ScreenUtil.instance
+                                                    .setSp(10)))
                                       ],
                                     ),
                                   ),
@@ -1553,7 +1737,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     children: <Widget>[
                                       Text('EVENT'),
                                       SizedBox(
-                                        height: ScreenUtil.instance.setWidth(10),
+                                        height:
+                                            ScreenUtil.instance.setWidth(10),
                                       ),
                                       Text(
                                         detailData['name'] == null
@@ -1564,27 +1749,33 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(
-                                        height: ScreenUtil.instance.setWidth(10),
+                                        height:
+                                            ScreenUtil.instance.setWidth(10),
                                       ),
                                       Divider(
                                         color: Colors.black26,
-                                        height: ScreenUtil.instance.setWidth(10),
+                                        height:
+                                            ScreenUtil.instance.setWidth(10),
                                       ),
                                       SizedBox(
-                                        height: ScreenUtil.instance.setWidth(10),
+                                        height:
+                                            ScreenUtil.instance.setWidth(10),
                                       ),
                                       Text(detailData['description'] == null
                                           ? '-'
                                           : detailData['description']),
                                       SizedBox(
-                                        height: ScreenUtil.instance.setWidth(10),
+                                        height:
+                                            ScreenUtil.instance.setWidth(10),
                                       ),
                                       Divider(
                                         color: Colors.black26,
-                                        height: ScreenUtil.instance.setWidth(10),
+                                        height:
+                                            ScreenUtil.instance.setWidth(10),
                                       ),
                                       SizedBox(
-                                        height: ScreenUtil.instance.setWidth(10),
+                                        height:
+                                            ScreenUtil.instance.setWidth(10),
                                       ),
                                       Row(
                                         crossAxisAlignment:
@@ -1593,8 +1784,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             MainAxisAlignment.start,
                                         children: <Widget>[
                                           Container(
-                                            height: ScreenUtil.instance.setWidth(20),
-                                            width: ScreenUtil.instance.setWidth(20),
+                                            height: ScreenUtil.instance
+                                                .setWidth(20),
+                                            width: ScreenUtil.instance
+                                                .setWidth(20),
                                             child: Image.asset(
                                                 'assets/icons/location-transparent.png'),
                                           ),
@@ -1642,8 +1835,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                             width: ScreenUtil.instance.setWidth(5),
                           ),
                           Text('Private Event',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(12))),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil.instance.setSp(12))),
                         ],
                       ),
               ),
@@ -1749,7 +1943,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                 ? '-'
                                 : detailData['address'],
                             scrollAxis: Axis.horizontal,
-                            textStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(11)),
+                            textStyle: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(11)),
                           ),
                         )
                       ],
@@ -1765,7 +1960,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                         ),
                         SizedBox(width: ScreenUtil.instance.setWidth(5)),
                         Text(startTime.toString() + ' to ' + endTime.toString(),
-                            style: TextStyle(fontSize: ScreenUtil.instance.setSp(11)))
+                            style: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(11)))
                       ],
                     )
                   ],
@@ -1873,7 +2069,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
           Text(
               'Ticket sales start from ${_dDay.day} - ${_dDay.month} - ${_dDay.year}'),
           Text(countdownAsString,
-              style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold)),
+              style: TextStyle(
+                  fontSize: ScreenUtil.instance.setSp(18),
+                  fontWeight: FontWeight.bold)),
         ],
       )),
     );
@@ -1882,7 +2080,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   Widget showMap() {
     StaticMapsProvider mapProvider = new StaticMapsProvider(
       GOOGLE_API_KEY: 'AIzaSyDjNpeyufzT81GAhQkCe85x83kxzfA7qbI',
-      height: ScreenUtil.instance.setWidth(200),
+      height: 200,
       width: MediaQuery.of(context).size.width.round(),
       latitude: lat,
       longitude: long,
@@ -1964,9 +2162,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         website = detailData['website'];
         eventID = detailData['id'];
         loveCount = int.parse(isLoved);
-        _dDay = DateTime.parse(detailData['ticket']['sales_start_date']);
+        // _dDay = DateTime.parse(detailData['ticket']['sales_start_date']);
 
-        print(_dDay.toString());
+        // print(_dDay.toString());
         // setState((){
         //   if(detailData['status'] == 'active'){
         //     if(detailData['ticket_type']['type'] == 'free'){
@@ -1991,49 +2189,106 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         //     }
         // });
 
-        if (detailData['status'] == 'active') {
-          if (ticketType['isSetupTicket'].toString() == "1") {
-            if (ticketStat['cheapestTicket'].toString() == "0") {
-              setState(() {
-                ticketPriceStringVisibility = false;
-                itemColor = Colors.green;
-                ticketTypeURI = 'assets/btn_ticket/free-limited.png';
-              });
-            } else {
-              ticketTypeURI = 'assets/btn_ticket/paid-value.png';
-              ticketPrice = "Rp. " + ticketStat['cheapestTicket'].toString();
-            }
+        print('type' + detailData['ticket_type'].toString());
 
-            if (ticketStat['availableTicketStatus'].toString() == '0') {
-              isTicketUnavailable = true;
+        if (detailData['ticket_type']['type'] == 'paid' ||
+            detailData['ticket_type']['type'] == 'paid_seating') {
+          if (detailData['ticket']['availableTicketStatus'] == '1') {
+            if (detailData['ticket']['cheapestTicket'] == '0') {
+              itemColor = Color(0xFFFFAA00);
+              ticketPrice = 'Free Limited';
             } else {
-              isTicketUnavailable = false;
+              itemColor = Color(0xFF34B323);
+              ticketPrice = detailData['ticket']['cheapestTicket'];
             }
-          } else if (ticketType['isSetupTicket'] == "0" &&
-              ticketStat['cheapestTicket'] == "" &&
-              ticketStat['availableTicketStatus'] == "") {
-            setState(() {
-              if (ticketType['type'] == 'free') {
-                ticketTypeURI = "assets/btn_ticket/free.png";
-              } else if (ticketType['type'] == 'no_ticket') {
-                ticketTypeURI = "assets/btn_ticket/no-ticket.png";
-              } else if (ticketType['type'] == 'on_the_spot') {
-                ticketTypeURI = "assets/btn_ticket/ots.png";
+          } else {
+            if (detailData['ticket']['salesStatus'] == 'comingSoon') {
+              itemColor = Color(0xFF34B323).withOpacity(0.3);
+              ticketPrice = 'COMING SOON';
+            } else if (detailData['ticket']['salesStatus'] == 'endSales') {
+              itemColor = Color(0xFF8E1E2D);
+              if (detailData['status'] == 'ended') {
+                ticketPrice = 'EVENT HAS ENDED';
               }
-            });
+              ticketPrice = 'SALES ENDED';
+            } else {
+              itemColor = Color(0xFF8E1E2D);
+              ticketPrice = 'SOLD OUT';
+            }
           }
-
-          if (isGoing == "1" && ticketType['isSetupTicket'].toString() == "0") {
-            ticketTypeURI = "assets/btn_ticket/going.png";
-          }
-        } else {
-          ticketPrice = "";
-          if (detailData['status'] == 'canceled') {
-            ticketTypeURI = "assets/btn_ticket/canceled.png";
-          } else if (detailData['status'] == 'ended') {
-            ticketTypeURI = "assets/btn_ticket/event-ended.png";
+        } else if (detailData['ticket_type']['type'] == 'no_ticket') {
+          itemColor = Color(0xFF652D90);
+          ticketPrice = 'NO TICKET';
+        } else if (detailData['ticket_type']['type'] == 'on_the_spot') {
+          itemColor = Color(0xFF652D90);
+          ticketPrice = detailData['ticket_type']['name'];
+        } else if (detailData['ticket_type']['type'] == 'free') {
+          itemColor = Color(0xFFFFAA00);
+          ticketPrice = detailData['ticket_type']['name'];
+        } else if (detailData['ticket_type']['type'] == 'free') {
+          itemColor = Color(0xFFFFAA00);
+          ticketPrice = detailData['ticket_type']['name'];
+        } else if (detailData['ticket_type']['type'] == 'free_limited') {
+          if (detailData['ticket']['availableTicketStatus'] == '1') {
+            itemColor = Color(0xFFFFAA00);
+            ticketPrice = 'Free Limited';
+          } else {
+            if (detailData['ticket']['salesStatus'] == 'comingSoon') {
+              itemColor = Color(0xFF34B323).withOpacity(0.3);
+              ticketPrice = 'COMING SOON';
+            } else if (detailData['ticket']['salesStatus'] == 'endSales') {
+              itemColor = Color(0xFF8E1E2D);
+              if (detailData['status'] == 'ended') {
+                ticketPrice = 'EVENT HAS ENDED';
+              }
+              ticketPrice = 'SALES ENDED';
+            } else {
+              itemColor = Color(0xFFFFAA00);
+              ticketPrice = 'SOLD OUT';
+            }
           }
         }
+
+        // setState(() {
+        //   if (ticketType['type'] == 'free') {
+        //     ticketPrice = 'Free';
+        //   } else if (ticketType['type'] == 'no_ticket') {
+        //     ticketPrice = 'No Ticket';
+        //   } else if (ticketType['type'] == 'on_the_spot') {
+        //     ticketPrice = 'On The Spot';
+        //   }
+        // });
+
+        // if (detailData['status'] == 'active') {
+        //   if (ticketType['isSetupTicket'].toString() == "1") {
+        //     if (ticketStat['cheapestTicket'].toString() == "0") {
+        //       setState(() {
+        //         ticketPriceStringVisibility = false;
+        //         itemColor = Colors.green;
+        //         ticketPrice = 'Free Limited';
+        //       });
+        //     } else {
+        //       ticketTypeURI = 'assets/btn_ticket/paid-value.png';
+        //       ticketPrice = "Rp. " + ticketStat['cheapestTicket'].toString();
+        //     }
+
+        //     if (ticketStat['availableTicketStatus'].toString() == '0') {
+        //       isTicketUnavailable = true;
+        //     } else {
+        //       isTicketUnavailable = false;
+        //     }
+        //   }
+
+        //   if (isGoing == "1") {
+        //     ticketPrice = 'Going';
+        //   }
+        // } else {
+        //   if (detailData['status'] == 'canceled') {
+        //     ticketPrice = "Canceled";
+        //   } else if (detailData['status'] == 'ended') {
+        //     ticketPrice = "Event Ended";
+        //   }
+        // }
       });
       preferences.setString('eventID', detailData['id']);
       print(detailData['id']);

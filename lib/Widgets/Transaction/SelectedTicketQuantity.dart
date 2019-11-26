@@ -214,7 +214,7 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
                 ),
                 Divider(color: Colors.grey, height: ScreenUtil.instance.setWidth(5),),
                 SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                Text(widget.ticketName, style: TextStyle(fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold)),
+                Container(width: 150, child: Text(widget.ticketName, style: TextStyle(fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold), maxLines: 1,)),
                 SizedBox(height: ScreenUtil.instance.setWidth(10)),
                 Container(
                   width: ScreenUtil.instance.setWidth(100),

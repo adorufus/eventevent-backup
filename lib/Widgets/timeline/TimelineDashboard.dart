@@ -1591,7 +1591,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                     scale: 3.5,
                                   ),
                                   SizedBox(width: ScreenUtil.instance.setWidth(5)),
-                                  Text(commentList.length.toString(),
+                                  Text(timelineList[i]['comment']['totalRows'],
                                       style: TextStyle(
                                           color: Color(
                                               0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']

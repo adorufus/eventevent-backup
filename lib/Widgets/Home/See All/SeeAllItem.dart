@@ -169,9 +169,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
         body: DefaultTabController(
           initialIndex: widget.initialIndex,
           length: 2,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
+          child: ListView(
             children: <Widget>[
               Container(
                 color: Colors.white,
@@ -284,6 +282,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                 },
                 onLoading: _onPopularLoading,
                 child: ListView.builder(
+                  shrinkWrap: true,
                   itemCount:
                       popularEventList == null ? 0 : popularEventList.length,
                   itemBuilder: (BuildContext context, i) {
@@ -434,6 +433,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                 },
                 onLoading: _onDiscoverLoading,
                 child: ListView.builder(
+                shrinkWrap: true,
                 itemCount:
                     discoverEventList == null ? 0 : discoverEventList.length,
                 itemBuilder: (BuildContext context, i) {

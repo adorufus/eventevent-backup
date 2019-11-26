@@ -159,6 +159,8 @@ flutter:
     - assets/icons/aset_icon/popular.png
     - assets/icons/icon_apps/popular.png
     - assets/icons/icon_apps/home.png
+    - assets/icons/icon_apps/wallet.png
+    - assets/icons/icon_apps/qr.png
     - assets/icons/icon_apps/comment.png
     - assets/icons/icon_apps/latest.png
     - assets/icons/icon_apps/love.png

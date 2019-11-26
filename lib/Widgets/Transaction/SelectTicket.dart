@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/Transaction/SelectedTicketQuantity.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +28,8 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
   String ticketButtonImageURI = 'assets/btn_ticket/paid-value.png';
   String date;
   String dateEvent;
+  Color itemColor;
+  String ticketPrice;
 
   void initConvertDate(String dateEvent, String date) {
     int yearStart, monthStart, dateStart, hourStart, minuteStart, secondStart;
@@ -76,7 +79,8 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -108,6 +112,25 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
       body: ListView.builder(
         itemCount: ticketListData == null ? 0 : ticketListData.length,
         itemBuilder: (BuildContext context, i) {
+
+          if (ticketListData[i]['event']['ticket_type']['type'] == 'paid' ||
+              ticketListData[i]['event']['ticket_type']['type'] == 'paid_seating') {
+            if (ticketListData[i]['availableTicketStatus'] == '1') {
+              if (ticketListData[i]['final_price'] == '0') {
+                itemColor = Color(0xFFFFAA00);
+                ticketPrice = 'Free Limited';
+              } else if (int.parse(ticketListData[i]['final_price']) > 0){
+                itemColor = Color(0xFF34B323);
+                ticketPrice = ticketListData[i]['final_price'];
+              }
+            } 
+
+            if(ticketListData[i]['availableTicketStatus'] == '0' && int.parse(ticketListData[i]['final_price']) > 0) {
+              itemColor = Color(0xFF34B323).withOpacity(.2);
+              ticketPrice = ticketListData[i]['final_price'];
+            }
+          }
+
           return GestureDetector(
             onTap: () {
               savePreferences(
@@ -168,7 +191,8 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                             Text(
                               ticketListData[i]['ticket_name'],
                               style: TextStyle(
-                                  fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),
+                                  fontSize: ScreenUtil.instance.setSp(15),
+                                  fontWeight: FontWeight.bold),
                             ),
                             Text(
                                 ticketListData[i]['availableTicketStatus'] ==
@@ -197,22 +221,34 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                               height: ScreenUtil.instance.setWidth(20),
                             ),
                             Container(
-                                height: ScreenUtil.instance.setWidth(40),
-                                width: ScreenUtil.instance.setWidth(130),
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                  image: AssetImage(ticketButtonImageURI),
-                                  fit: BoxFit.fill,
-                                )),
-                                child: Center(
-                                    child: Text(
-                                  ticketListData[i]['final_price'] == null
-                                      ? '-'
-                                      : 'Rp. ' +
-                                          ticketListData[i]['final_price'],
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: ScreenUtil.instance.setSp(15)),
-                                ))),
+                              height: ScreenUtil.instance.setWidth(28),
+                              width: ScreenUtil.instance.setWidth(133),
+                              decoration: BoxDecoration(
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: itemColor.withOpacity(0.4),
+                                        blurRadius: 2,
+                                        spreadRadius: 1.5)
+                                  ],
+                                  color: itemColor,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Center(
+                                  child: Text(
+                                ticketPrice,
+                                // type == 'paid' ||
+                                //         type == 'paid_seating'
+                                //     ? isAvailable == '1'
+                                //         ? 'Rp. ' +
+                                //             itemPrice.toUpperCase() +
+                                //             ',-'
+                                //         : itemPrice.toUpperCase()
+                                //     : itemPrice.toUpperCase(),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil.instance.setSp(10),
+                                    fontWeight: FontWeight.bold),
+                              )),
+                            ),
                             Text(ticketListData[i]['is_single_ticket'] == '0'
                                 ? ''
                                 : 'Limited to one purchase only')
@@ -263,6 +299,11 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
       setState(() {
         var extractedData = json.decode(response.body);
         ticketListData = extractedData['data'];
+
+        for (var ticketData in ticketListData) {
+          print(ticketData);
+          
+        }
 
         print(ticketListData.toString());
       });
