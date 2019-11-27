@@ -1,10 +1,12 @@
 import 'dart:convert';
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/RecycleableWidget/Invoice.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -15,8 +17,9 @@ import 'package:share_extend/share_extend.dart';
 
 class Buyers extends StatefulWidget {
   final ticketID;
+  final eventName;
 
-  const Buyers({Key key, this.ticketID}) : super(key: key);
+  const Buyers({Key key, this.ticketID, this.eventName}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -27,10 +30,10 @@ class Buyers extends StatefulWidget {
 class BuyersState extends State<Buyers> {
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   List buyerList = new List();
+  List buyerListExport = new List();
 
   @override
   void initState() {
-    
     super.initState();
     getBuyerList().then((response) {
       var extractedData = json.decode(response.body);
@@ -41,17 +44,19 @@ class BuyersState extends State<Buyers> {
       } else {
         print('gagal');
       }
-    }).timeout(Duration(seconds: 8), onTimeout: () {
-      scaffoldKey.currentState.showSnackBar(SnackBar(
-        backgroundColor: Colors.red,
-        content:
-            Text('Request Time Out!', style: TextStyle(color: Colors.white)),
-      ));
     });
+    // .timeout(Duration(seconds: 8), onTimeout: () {
+    //   scaffoldKey.currentState.showSnackBar(SnackBar(
+    //     backgroundColor: Colors.red,
+    //     content:
+    //         Text('Request Time Out!', style: TextStyle(color: Colors.white)),
+    //   ));
+    // });
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -59,7 +64,7 @@ class BuyersState extends State<Buyers> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    
+
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -81,7 +86,18 @@ class BuyersState extends State<Buyers> {
         actions: <Widget>[
           GestureDetector(
             onTap: () {
-              exportCSV();
+              getBuyerExport().then((response) {
+                var extractedData = json.decode(response.body);
+                if (response.statusCode == 200) {
+                  setState(() {
+                    buyerListExport = extractedData['data'];
+                    exportCSV();
+                  });
+                } else {
+                  print('gagal');
+                }
+              });
+              
             },
             child: Center(
               child: Text('Export', style: TextStyle(color: eventajaGreenTeal)),
@@ -94,10 +110,11 @@ class BuyersState extends State<Buyers> {
         itemCount: buyerList == null ? 0 : buyerList.length,
         itemBuilder: (BuildContext context, i) {
           return GestureDetector(
-            onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => Invoice(
-                transactionID: buyerList[i]['id'],
-              )));
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => Invoice(
+                        transactionID: buyerList[i]['id'],
+                      )));
             },
             child: Container(
               margin: EdgeInsets.only(bottom: 15),
@@ -136,14 +153,50 @@ class BuyersState extends State<Buyers> {
 
   exportCSV() async {
     List<List<dynamic>> rows = List<List<dynamic>>();
-    for (int i = 0; i < buyerList.length; i++) {
+    // rows.add('Transaction Code');
+    //   rows.add('Full Name');
+    //   rows.add('username');
+    //   rows.add('Ticket Quantity');
+    //   rows.add('Note');
+    List buyersForm = List();
+    Map formLists = Map();
+
+    for (var buyers in buyerListExport) {
+      print('buyers: ' + buyers.toString());
       List<dynamic> row = List();
-      row.add(buyerList[i]['transaction_code']);
-      row.add(buyerList[i]['user']['fullName']);
-      row.add('@' + buyerList[i]['user']['username']);
-      row.add(buyerList[i]['quantity']);
+      
+
+      row.add(buyers['transaction_code']);
+      row.add(buyers['user']['fullName']);
+      row.add('@' + buyers['user']['username']);
+      row.add(buyers['quantity']);
+      row.add(buyers['note']);
+      if (buyers['form'] != null || buyers['form'].length != 0) {
+        for (var formList in buyers['form']) {
+          setState(() {
+            formLists = formList;
+          });
+          row.add(formList['answer']);
+        }
+      }
+      
+      
       rows.add(row);
+
+      print(rows);
     }
+
+    print('buyers Form: ' + formLists.toString());
+      buyersForm.add(formLists['question']);
+
+      rows.insert(0, [
+        'Transaction Code',
+        'Full Name',
+        'Username',
+        'Quantity',
+        'Note',
+        formLists.length != 0 ? formLists['question'] : ''
+      ]);
 
     Map<PermissionGroup, PermissionStatus> permissions =
         await PermissionHandler().requestPermissions([PermissionGroup.storage]);
@@ -153,8 +206,8 @@ class BuyersState extends State<Buyers> {
     print(checkPermission.toString());
 
     if (checkPermission == PermissionStatus.granted) {
-      String dir =
-          (await getExternalStorageDirectory()).absolute.path + '/report';
+      String dir = (await getExternalStorageDirectory()).absolute.path +
+          '/report_${widget.eventName}';
       String file = "$dir";
       print(file);
       File f = new File(file + ".csv");
@@ -169,11 +222,25 @@ class BuyersState extends State<Buyers> {
     }
   }
 
+  Future<http.Response> getBuyerExport() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String url = BaseApi().apiUrl +
+        '/tickets/user?X-API-KEY=$API_KEY&ticketID=${widget.ticketID}&page=all';
+
+    final response = await http.get(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session')
+    });
+
+    return response;
+  }
+
   Future<http.Response> getBuyerList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String url = BaseApi().apiUrl +
-        '/tickets/user?X-API-KEY=$API_KEY&ticketID=${widget.ticketID}=&?page=1';
+        '/tickets/user?X-API-KEY=$API_KEY&ticketID=${widget.ticketID}&page=1';
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,

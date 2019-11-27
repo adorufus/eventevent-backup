@@ -243,6 +243,7 @@ flutter:
     - assets/drawable/my_ticket_empty_state.png
     - assets/drawable/profile_empty_state.png
     - assets/drawable/my_ticket_empty_state.png
+    - assets/drawable/event_empty_state.png
     - assets/drawable/username.png
     - assets/drawable/username-invalid.png
     - assets/drawable/username-valid.png
