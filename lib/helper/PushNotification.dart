@@ -11,7 +11,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:background_fetch/background_fetch.dart';
+// import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -298,7 +298,7 @@ class PushNotificationState extends State<PushNotification> {
         return extractedData;
       });
     }
-    BackgroundFetch.finish();
+    // BackgroundFetch.finish();
     return json.decode(response.body);
   }
 
@@ -328,7 +328,7 @@ class PushNotificationState extends State<PushNotification> {
     });
 
     print(response.statusCode);
-    BackgroundFetch.finish();
+    // BackgroundFetch.finish();
   }
 
   loadNotification(GlobalKey<ScaffoldState> scaffoldKey) async {
