@@ -112,23 +112,30 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
       body: ListView.builder(
         itemCount: ticketListData == null ? 0 : ticketListData.length,
         itemBuilder: (BuildContext context, i) {
-
           if (ticketListData[i]['event']['ticket_type']['type'] == 'paid' ||
-              ticketListData[i]['event']['ticket_type']['type'] == 'paid_seating') {
+              ticketListData[i]['event']['ticket_type']['type'] ==
+                  'paid_seating') {
             if (ticketListData[i]['availableTicketStatus'] == '1') {
               if (ticketListData[i]['final_price'] == '0') {
                 itemColor = Color(0xFFFFAA00);
                 ticketPrice = 'Free Limited';
-              } else if (int.parse(ticketListData[i]['final_price']) > 0){
+              } else if (int.parse(ticketListData[i]['final_price']) > 0) {
                 itemColor = Color(0xFF34B323);
                 ticketPrice = ticketListData[i]['final_price'];
               }
-            } 
+            }
 
-            if(ticketListData[i]['availableTicketStatus'] == '0' && int.parse(ticketListData[i]['final_price']) > 0) {
+            if (ticketListData[i]['availableTicketStatus'] == '0' &&
+                int.parse(ticketListData[i]['final_price']) > 0) {
               itemColor = Color(0xFF34B323).withOpacity(.2);
               ticketPrice = ticketListData[i]['final_price'];
             }
+          } else if (ticketListData[i]['event']['ticket_type']['type'] ==
+                  'free_limited' ||
+              ticketListData[i]['event']['ticket_type']['type'] ==
+                  'free_limited_seating') {
+            itemColor = Color(0xFFFFAA00);
+            ticketPrice = 'Free Limited';
           }
 
           return GestureDetector(
@@ -302,7 +309,6 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
 
         for (var ticketData in ticketListData) {
           print(ticketData);
-          
         }
 
         print(ticketListData.toString());

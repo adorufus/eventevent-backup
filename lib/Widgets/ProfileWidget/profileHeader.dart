@@ -830,7 +830,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       width: ScreenUtil.instance.setWidth(8),
                                     ),
                                     Container(
-                                        width: ScreenUtil.instance.setWidth(200.0 - 32.0),
+                                        width: ScreenUtil.instance.setWidth(200.0),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,

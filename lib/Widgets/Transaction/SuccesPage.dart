@@ -2,6 +2,7 @@ import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SuccessPage extends StatefulWidget {
   @override
@@ -11,6 +12,23 @@ class SuccessPage extends StatefulWidget {
 }
 
 class SuccessPageState extends State<SuccessPage> {
+
+  String currentUserId = '';
+  
+  currentUserData() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    setState(() {
+      currentUserId = preferences.getString('Last User ID');
+    });
+  }
+
+  @override
+  void initState() {
+    currentUserData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
@@ -60,7 +78,7 @@ class SuccessPageState extends State<SuccessPage> {
             GestureDetector(
               onTap: (){
                 Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                  builder: ( BuildContext context) => ProfileWidget(initialIndex: 1,)
+                  builder: ( BuildContext context) => ProfileWidget(initialIndex: 1, userId: currentUserId,)
                 ), ModalRoute.withName('/Dashboard'));
               },
               child: Container(

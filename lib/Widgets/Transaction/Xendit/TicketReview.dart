@@ -17,8 +17,10 @@ import '../CC.dart';
 
 class TicketReview extends StatefulWidget {
   final ticketType;
+  final List customForm;
+  
 
-  const TicketReview({Key key, this.ticketType}) : super(key: key);
+  const TicketReview({Key key, this.ticketType, this.customForm}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _TicketReviewState();
@@ -281,7 +283,7 @@ class _TicketReviewState extends State<TicketReview> {
                                       },
                             color: promoCodeController.text == "" ||
                                     promoCodeController == null
-                                ? eventajaGreenTeal.withOpacity(0.2)
+                                ? Colors.grey
                                 : buttonColor))
                   ])),
           SizedBox(height: ScreenUtil.instance.setWidth(50)),
@@ -453,8 +455,17 @@ class _TicketReviewState extends State<TicketReview> {
       'email': prefs.getString('ticket_about_email'),
       'phone': prefs.getString('ticket_about_phone'),
       'note': prefs.getString('ticket_about_aditional'),
-      'identifier': uuid.v4().toString()
+      'identifier': uuid.v4().toString(),
+      'form[0]': ''
     };
+
+    
+
+    // for(int i = 0; i < widget.customForm.length; i++){
+    //   var customForm = widget.customForm;
+    //   bodyFreeLimit.putIfAbsent('form[$i][id]', customForm[i]['id']);
+    //   bodyFreeLimit.putIfAbsent('form[$i][answer]', customForm[i]['answer']);
+    // }
 
     String purchaseUri = BaseApi().apiUrl + '/ticket_transaction/post';
     final response = await http.post(purchaseUri,

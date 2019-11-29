@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/Transaction/PaymentMethod.dart';
@@ -5,7 +6,8 @@ import 'package:eventevent/Widgets/Transaction/Xendit/TicketReview.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,7 +15,8 @@ class TransactionForm extends StatefulWidget {
   final eventID;
   final ticketType;
 
-  const TransactionForm({Key key, this.eventID, this.ticketType}) : super(key: key);
+  const TransactionForm({Key key, this.eventID, this.ticketType})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -86,8 +89,25 @@ class _TransactionFormState extends State<TransactionForm> {
     aditionalNotesController = TextEditingController();
   }
 
+  List<String> answer;
+  List<String> questionId;
+
+  Map<String, dynamic> formIds = new HashMap();
+  Map<String, dynamic> formAnswer;
+
+  void addFormToList() {
+    for (var i = 0; i < questionId.length; i++) {
+      formIds['id'] = questionId[i];
+    }
+
+    for(var i = 0; i < answer.length; i++){
+      formAnswer['answer'] = answer[i];
+    }
+  }
+
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -101,9 +121,16 @@ class _TransactionFormState extends State<TransactionForm> {
           )
         : Scaffold(
             bottomNavigationBar: GestureDetector(
-              onTap: (){
+              onTap: () {
                 saveInput();
-                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => widget.ticketType == 'free_limited' ? TicketReview(ticketType: widget.ticketType) : PaymentMethod()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        widget.ticketType == 'free_limited'
+                            ? TicketReview(
+                                ticketType: widget.ticketType,
+                                customForm: [formIds, formAnswer],
+                              )
+                            : PaymentMethod()));
               },
               child: Container(
                   height: ScreenUtil.instance.setWidth(50),
@@ -111,7 +138,9 @@ class _TransactionFormState extends State<TransactionForm> {
                   child: Center(
                     child: Text(
                       'OK',
-                      style: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(20)),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenUtil.instance.setSp(20)),
                     ),
                   )),
             ),
@@ -158,7 +187,8 @@ class _TransactionFormState extends State<TransactionForm> {
                           Text(
                             'First Name',
                             style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold),
+                                fontSize: ScreenUtil.instance.setSp(16),
+                                fontWeight: FontWeight.bold),
                           ),
                           TextFormField(
                             controller: firstnameController,
@@ -183,7 +213,8 @@ class _TransactionFormState extends State<TransactionForm> {
                           Text(
                             'Last Name',
                             style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold),
+                                fontSize: ScreenUtil.instance.setSp(16),
+                                fontWeight: FontWeight.bold),
                           ),
                           TextFormField(
                             controller: lastnameController,
@@ -208,7 +239,8 @@ class _TransactionFormState extends State<TransactionForm> {
                           Text(
                             'E-mail',
                             style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold),
+                                fontSize: ScreenUtil.instance.setSp(16),
+                                fontWeight: FontWeight.bold),
                           ),
                           TextFormField(
                             controller: emailController,
@@ -233,7 +265,8 @@ class _TransactionFormState extends State<TransactionForm> {
                           Text(
                             'Phone Number',
                             style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold),
+                                fontSize: ScreenUtil.instance.setSp(16),
+                                fontWeight: FontWeight.bold),
                           ),
                           TextFormField(
                             controller: phoneController,
@@ -259,7 +292,8 @@ class _TransactionFormState extends State<TransactionForm> {
                           Text(
                             'Aditional Notes',
                             style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold),
+                                fontSize: ScreenUtil.instance.setSp(16),
+                                fontWeight: FontWeight.bold),
                           ),
                           TextFormField(
                             controller: aditionalNotesController,
@@ -282,39 +316,49 @@ class _TransactionFormState extends State<TransactionForm> {
           );
   }
 
-  Widget customForm(){
-    if(customFormData['status'] == 'OK' && customFormData['data']['isCustomForm'] == '1'){
+  Widget customForm() {
+    if (customFormData['status'] == 'OK' &&
+        customFormData['data']['isCustomForm'] == '1') {
       return ColumnBuilder(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         itemCount: customFormList == null ? 0 : customFormList.length,
-        itemBuilder: (BuildContext context, i){
-          if(customFormList[i]['isRequired'] == "1"){
+        itemBuilder: (BuildContext context, i) {
+          if (customFormList[i]['isRequired'] == "1") {
             isRequired = true;
-          }
-          else{
+          } else {
             isRequired = false;
           }
 
-          return customFormList == null ? Container() : Container(
-            margin: EdgeInsets.only(bottom: 30),
-            padding: EdgeInsets.all(15),
-            alignment: Alignment.centerLeft,
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget> [
-                  Row(
-                    children: <Widget> [
-                      isRequired == false ? Container() : Text('*', style: TextStyle(color: Colors.red, fontSize: ScreenUtil.instance.setSp(20))),
-                      SizedBox(width: ScreenUtil.instance.setWidth(5)),
-                      Text(customFormList[i]['name'] == null ? '' : customFormList[i]['name'], style: TextStyle(fontSize: ScreenUtil.instance.setSp(16), fontWeight: FontWeight.bold))
-                    ]
-                  ),
-                  formType(i)
-                ]
-              ),
-          );
+          return customFormList == null
+              ? Container()
+              : Container(
+                  margin: EdgeInsets.only(bottom: 30),
+                  padding: EdgeInsets.all(15),
+                  alignment: Alignment.centerLeft,
+                  color: Colors.white,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(children: <Widget>[
+                          isRequired == false
+                              ? Container()
+                              : Text('*',
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: ScreenUtil.instance.setSp(20))),
+                          SizedBox(width: ScreenUtil.instance.setWidth(5)),
+                          Text(
+                              customFormList[i]['name'] == null
+                                  ? ''
+                                  : customFormList[i]['name'],
+                              style: TextStyle(
+                                  fontSize: ScreenUtil.instance.setSp(16),
+                                  fontWeight: FontWeight.bold))
+                        ]),
+                        formType(i)
+                      ]),
+                );
         },
       );
     }
@@ -327,35 +371,33 @@ class _TransactionFormState extends State<TransactionForm> {
 
   int _radioValue = 0;
 
-  Widget formType(int index){
-    if(customFormList[index]['type'] == '2'){
+  Widget formType(int index) {
+    if (customFormList[index]['type'] == '2') {
       return ColumnBuilder(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        itemCount: customFormList[index]['option'] == null ? 0 : customFormList[index]['option'].length,
-        itemBuilder: (BuildContext context, i){
-          return Row(
-            children: <Widget> [
+          crossAxisAlignment: CrossAxisAlignment.start,
+          itemCount: customFormList[index]['option'] == null
+              ? 0
+              : customFormList[index]['option'].length,
+          itemBuilder: (BuildContext context, i) {
+            return Row(children: <Widget>[
               Radio(
-                value: int.parse(customFormList[index]['option'][i]['order']),
-                groupValue: _radioValue,
-                onChanged: (int i) => setState(() => _radioValue = i)
-              ),
+                  value: int.parse(customFormList[index]['option'][i]['order']),
+                  groupValue: _radioValue,
+                  onChanged: (int i) => setState(() => _radioValue = i)),
               Text(customFormList[index]['option'][i]['name'])
-            ]
-          );
-        }
-      );
-    }
-    else if(customFormList[index]['type'] == '1'){
+            ]);
+          });
+    } else if (customFormList[index]['type'] == '1') {
       return TextFormField(
-                            controller: aditionalNotesController,
-                            keyboardType: TextInputType.multiline,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintMaxLines: 100,
-                                hintText:
-                                    'Put your answers....'),
-                          );
+        keyboardType: TextInputType.multiline,
+        onFieldSubmitted: (value){
+          answer.add(value);
+        },
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            hintMaxLines: 100,
+            hintText: 'Put your answers....'),
+      );
     }
   }
 
@@ -381,29 +423,26 @@ class _TransactionFormState extends State<TransactionForm> {
 
     var session;
     setState(() {
-     session = preferences.getString('Session'); 
+      session = preferences.getString('Session');
     });
 
-    String customFormURI = BaseApi().apiUrl + '/custom_form/get?X-API-KEY=${API_KEY}&id=' + preferences.getString('eventID');
+    String customFormURI = BaseApi().apiUrl +
+        '/custom_form/get?X-API-KEY=${API_KEY}&id=' +
+        preferences.getString('eventID');
     print(customFormURI.toString());
-    final response = await http.get(customFormURI, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': session
-    });
+    final response = await http.get(customFormURI,
+        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session});
 
     print(response.body);
 
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       setState(() {
-       var extractedData = json.decode(response.body);
-       customFormData = json.decode(response.body);
-       customFormList = extractedData['data']['question'];
-
-       
+        var extractedData = json.decode(response.body);
+        customFormData = json.decode(response.body);
+        customFormList = extractedData['data']['question'];
       });
-    }
-    else if(response.statusCode == 400){
-      setState((){
+    } else if (response.statusCode == 400) {
+      setState(() {
         customFormData = json.decode(response.body);
       });
     }

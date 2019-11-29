@@ -513,7 +513,7 @@ class _MediaDetailsState extends State<MediaDetails> {
       'X-API-KEY': API_KEY,
       'media_id': mediaId,
       'comment': comment,
-      'comment_id': ''
+      'comment_id': '',
     });
 
     return response;

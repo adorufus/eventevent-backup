@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:eventevent/Widgets/ManageEvent/exportCounter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/RecycleableWidget/Invoice.dart';
@@ -35,12 +36,25 @@ class BuyersState extends State<Buyers> {
   @override
   void initState() {
     super.initState();
+    print('counter list' + Counter().counter.length.toString());
     getBuyerList().then((response) {
       var extractedData = json.decode(response.body);
       if (response.statusCode == 200) {
         setState(() {
           buyerList = extractedData['data'];
         });
+      } else {
+        print('gagal');
+      }
+    });
+
+    getBuyerExport().then((response) {
+      var extractedData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        setState(() {
+          buyerListExport = extractedData['data'];
+        });
+        print('Buyer List Export: ' + buyerListExport.length.toString());
       } else {
         print('gagal');
       }
@@ -86,18 +100,7 @@ class BuyersState extends State<Buyers> {
         actions: <Widget>[
           GestureDetector(
             onTap: () {
-              getBuyerExport().then((response) {
-                var extractedData = json.decode(response.body);
-                if (response.statusCode == 200) {
-                  setState(() {
-                    buyerListExport = extractedData['data'];
-                    exportCSV();
-                  });
-                } else {
-                  print('gagal');
-                }
-              });
-              
+              exportCSV();
             },
             child: Center(
               child: Text('Export', style: TextStyle(color: eventajaGreenTeal)),
@@ -105,7 +108,7 @@ class BuyersState extends State<Buyers> {
           )
         ],
       ),
-      body: ListView.builder(
+      body: buyerList.length == 0 || buyerListExport.length == 0 ? Container(child: Center(child: CircularProgressIndicator(),),) : ListView.builder(
         padding: EdgeInsets.only(bottom: 15),
         itemCount: buyerList == null ? 0 : buyerList.length,
         itemBuilder: (BuildContext context, i) {
@@ -161,10 +164,11 @@ class BuyersState extends State<Buyers> {
     List buyersForm = List();
     Map formLists = Map();
 
+    print('buyerList length' + buyerListExport.length.toString());
+
     for (var buyers in buyerListExport) {
       print('buyers: ' + buyers.toString());
       List<dynamic> row = List();
-      
 
       row.add(buyers['transaction_code']);
       row.add(buyers['user']['fullName']);
@@ -179,24 +183,23 @@ class BuyersState extends State<Buyers> {
           row.add(formList['answer']);
         }
       }
-      
-      
+
       rows.add(row);
 
-      print(rows);
+      print('banyak user beli tiket: ' + rows.length.toString());
     }
 
     print('buyers Form: ' + formLists.toString());
-      buyersForm.add(formLists['question']);
+    buyersForm.add(formLists['question']);
 
-      rows.insert(0, [
-        'Transaction Code',
-        'Full Name',
-        'Username',
-        'Quantity',
-        'Note',
-        formLists.length != 0 ? formLists['question'] : ''
-      ]);
+    rows.insert(0, [
+      'Transaction Code',
+      'Full Name',
+      'Username',
+      'Quantity',
+      'Note',
+      formLists.length != 0 ? formLists['question'] : ''
+    ]);
 
     Map<PermissionGroup, PermissionStatus> permissions =
         await PermissionHandler().requestPermissions([PermissionGroup.storage]);
