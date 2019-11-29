@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>branch_key</key>
-	<string>key_live_ijCwqgMyqksKHN0YEnvjJiocuzi2ciR4</string>
-	<key>branch_app_domain</key>
-	<string>eventevent.app.link</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -22,55 +18,10 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>eventevent</string>
-				<string>fb482210258650577</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.googleusercontent.apps.192954205664-0fmvrn1t263lksjtg0kfa9l87abvlavl</string>
-			</array>
-		</dict>
-	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>FacebookAppID</key>
-	<string>482210258650577</string>
-	<key>FacebookDisplayName</key>
-	<string>EventEvent</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>itms</string>
-	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>EventEvent need to use the camera</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Needed to access location</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Needed to access location</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>EventEvent need to use the mic</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>EventEvent need to access to your gallery</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -90,7 +41,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>io.flutter.embedded_views_preview</key>
-	<true/>
 </dict>
 </plist>
