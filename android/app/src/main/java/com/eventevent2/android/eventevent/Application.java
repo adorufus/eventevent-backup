@@ -1,7 +1,5 @@
 package com.eventevent2.android.eventevent;
 
-import com.transistorsoft.flutter.backgroundfetch.BackgroundFetchPlugin;
-
 import io.flutter.app.FlutterApplication;
  import io.flutter.plugin.common.PluginRegistry;
  import io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback;
