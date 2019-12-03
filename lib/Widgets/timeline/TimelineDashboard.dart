@@ -329,23 +329,6 @@ class TimelineDashboardState extends State<TimelineDashboard>
                               ),
                             ],
                           ),
-                          Container(
-                              height: ScreenUtil.instance.setWidth(35),
-                              width: ScreenUtil.instance.setWidth(35),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        offset: Offset(0, 0),
-                                        spreadRadius: 1.5,
-                                        blurRadius: 2)
-                                  ]),
-                              child: Image.asset(
-                                'assets/icons/ticket.png',
-                                scale: 3,
-                              ))
                         ],
                       ),
                     ),
