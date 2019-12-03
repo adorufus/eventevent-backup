@@ -6,8 +6,6 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:googleapis/compute/v1.dart' as prefix1;
-import 'package:googleapis/docs/v1.dart' as prefix0;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -69,7 +67,7 @@ class _MediaDetailsState extends State<MediaDetails> {
             : widget.youtubeUrl);
 
         ytController = YoutubePlayerController(
-            initialVideoId: videoId,
+            initialVideoId: videoId == null ? '' : videoId,
             flags: YoutubePlayerFlags(
               autoPlay: true,
             ));
@@ -272,7 +270,7 @@ class _MediaDetailsState extends State<MediaDetails> {
                       color: Color(0xff8a8a8b),
                       image: DecorationImage(
                           image: NetworkImage(widget.imageUri),
-                          fit: BoxFit.fill)),
+                          fit: BoxFit.cover)),
                 ),
           SizedBox(
             height: ScreenUtil.instance.setWidth(15),

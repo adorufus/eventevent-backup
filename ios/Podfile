@@ -33,7 +33,7 @@ def parse_KV_file(file, separator='=')
 end
 
 target 'Runner' do
-#   use_frameworks!
+  use_frameworks!
 
   pod 'FBSDKLoginKit', '~> 4.39.1'
   pod 'FBSDKCoreKit', '~> 4.39.1'

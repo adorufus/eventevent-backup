@@ -730,6 +730,10 @@ class _EventCatalogState extends State<EventCatalog>
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => MediaDetails(
+                                              videoUrl: mediaData[i]
+                                                  ['video'],
+                                              youtubeUrl: mediaData[i]
+                                                  ['youtube'],
                                               userPicture: mediaData[i]
                                                   ['creator']['photo'],
                                               articleDetail: mediaData[i]
@@ -752,6 +756,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 imageIndex: i,
                                 commentCount: mediaData[i]['comment'],
                                 likeCount: mediaData[i]['count_loved'],
+                                mediaId: mediaData[i]['id'],
                               ),
                             );
                           },

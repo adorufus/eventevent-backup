@@ -607,7 +607,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
       child: ListView(
         shrinkWrap: true,
         children: <Widget>[
-          // banner(),
+          banner(),
           popularVideoHeader(),
           popularVideoContent(),
           latestVideoHeader(),
