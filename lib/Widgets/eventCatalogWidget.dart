@@ -462,7 +462,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 scale: 4.5,
                               ),
                               SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10)),
+                                  width: ScreenUtil.instance.setWidth(10)),
                               Text('Home',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -481,7 +481,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 scale: 4.5,
                               ),
                               SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10)),
+                                  width: ScreenUtil.instance.setWidth(10)),
                               Text('Nearby',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -500,7 +500,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 scale: 4.5,
                               ),
                               SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10)),
+                                  width: ScreenUtil.instance.setWidth(10)),
                               Text('Latest',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,

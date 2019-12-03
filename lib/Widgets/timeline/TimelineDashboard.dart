@@ -15,7 +15,8 @@ import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -242,7 +243,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -263,9 +265,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => OpenMedia(
-                                            articleID: bannerData['id'],
-                                            url: bannerData['link'],
-                                          )));
+                                        url: bannerData['link'],
+                                      )));
                             },
                             child: Container(
                               width: MediaQuery.of(context).devicePixelRatio *
@@ -354,11 +355,13 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                   'assets/icons/icon_apps/home.png',
                                   scale: 4.5,
                                 ),
-                                SizedBox(width: ScreenUtil.instance.setWidth(8)),
+                                SizedBox(
+                                    width: ScreenUtil.instance.setWidth(8)),
                                 Text('Home',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: ScreenUtil.instance.setSp(12.5))),
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(12.5))),
                               ],
                             ),
                           ),
@@ -371,11 +374,13 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                   'assets/icons/icon_apps/public_timeline.png',
                                   scale: 4.5,
                                 ),
-                                SizedBox(width: ScreenUtil.instance.setWidth(8)),
+                                SizedBox(
+                                    width: ScreenUtil.instance.setWidth(8)),
                                 Text('Public Timeline',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: ScreenUtil.instance.setSp(12.5))),
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(12.5))),
                               ],
                             ),
                           )
@@ -634,7 +639,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 },
                 child: Text(
                   'See All',
-                  style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
+                  style: TextStyle(
+                      color: eventajaGreenTeal,
+                      fontSize: ScreenUtil.instance.setSp(12)),
                 ),
               ),
             ],
@@ -849,7 +856,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 },
                 child: Text(
                   'See All',
-                  style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
+                  style: TextStyle(
+                      color: eventajaGreenTeal,
+                      fontSize: ScreenUtil.instance.setSp(12)),
                 ),
               ),
             ],
@@ -870,20 +879,22 @@ class TimelineDashboardState extends State<TimelineDashboard>
             itemBuilder: (BuildContext context, i) {
               return GestureDetector(
                 onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MediaDetails(
-                              userPicture: latestMediaPhoto[i]['creator']['photo'],
-                              articleDetail: latestMediaPhoto[i]['content'],
-                              imageCount: 'img' + i.toString(),
-                              username: latestMediaPhoto[i]['creator']['username'],
-                              imageUri: latestMediaPhoto[i]['banner'],
-                              mediaTitle: latestMediaPhoto[i]['title'],
-                              autoFocus: false,
-                              mediaId: latestMediaPhoto[i]['id'],
-                              isVideo: false,
-                            )));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MediaDetails(
+                                userPicture: latestMediaPhoto[i]['creator']
+                                    ['photo'],
+                                articleDetail: latestMediaPhoto[i]['content'],
+                                imageCount: 'img' + i.toString(),
+                                username: latestMediaPhoto[i]['creator']
+                                    ['username'],
+                                imageUri: latestMediaPhoto[i]['banner'],
+                                mediaTitle: latestMediaPhoto[i]['title'],
+                                autoFocus: false,
+                                mediaId: latestMediaPhoto[i]['id'],
+                                isVideo: false,
+                              )));
                 },
                 child: LatestMediaItem(
                   isVideo: false,
@@ -929,7 +940,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 },
                 child: Text(
                   'See All',
-                  style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
+                  style: TextStyle(
+                      color: eventajaGreenTeal,
+                      fontSize: ScreenUtil.instance.setSp(12)),
                 ),
               ),
             ],
@@ -1023,7 +1036,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 },
                 child: Text(
                   'See All',
-                  style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
+                  style: TextStyle(
+                      color: eventajaGreenTeal,
+                      fontSize: ScreenUtil.instance.setSp(12)),
                 ),
               ),
             ],
@@ -1228,7 +1243,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                     width: ScreenUtil.instance.setWidth(8),
                                   ),
                                   Container(
-                                      width: ScreenUtil.instance.setWidth(200.0 - 32.0),
+                                      width: ScreenUtil.instance
+                                          .setWidth(200.0 - 32.0),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -1238,12 +1254,17 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                               timelineList[i]['isVerified'] ==
                                                       '1'
                                                   ? Container(
-                                                      height: ScreenUtil.instance.setWidth(18),
-                                                      width: ScreenUtil.instance.setWidth(18),
+                                                      height: ScreenUtil
+                                                          .instance
+                                                          .setWidth(18),
+                                                      width: ScreenUtil.instance
+                                                          .setWidth(18),
                                                       child: Image.asset(
                                                           'assets/icons/icon_apps/verif.png'))
                                                   : Container(),
-                                              SizedBox(width: ScreenUtil.instance.setWidth(5)),
+                                              SizedBox(
+                                                  width: ScreenUtil.instance
+                                                      .setWidth(5)),
                                               Text(timelineList[i]['fullName'],
                                                   style: TextStyle(
                                                       fontWeight:
@@ -1251,7 +1272,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                             ],
                                           ),
                                           SizedBox(
-                                            height: ScreenUtil.instance.setWidth(5),
+                                            height:
+                                                ScreenUtil.instance.setWidth(5),
                                           ),
                                           Row(
                                             children: <Widget>[
@@ -1261,7 +1283,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                                       scale: 3,
                                                     )
                                                   : Container(),
-                                              SizedBox(width: ScreenUtil.instance.setWidth(5)),
+                                              SizedBox(
+                                                  width: ScreenUtil.instance
+                                                      .setWidth(5)),
                                               Text(
                                                   timelineList[i]['type'] ==
                                                           'love'
@@ -1276,7 +1300,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                                                   ['type'],
                                                   style: TextStyle(
                                                       color: Colors.grey,
-                                                      fontSize: ScreenUtil.instance.setSp(10))),
+                                                      fontSize: ScreenUtil
+                                                          .instance
+                                                          .setSp(10))),
                                             ],
                                           ),
                                         ],
@@ -1286,9 +1312,11 @@ class TimelineDashboardState extends State<TimelineDashboard>
                               children: <Widget>[
                                 Text(
                                   'a minute ago',
-                                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(10)),
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil.instance.setSp(10)),
                                 ),
-                                SizedBox(height: ScreenUtil.instance.setWidth(4)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(4)),
                               ],
                             )
                           ],
@@ -1376,8 +1404,11 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                       Text(timelineList[i]['fullName'],
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: ScreenUtil.instance.setSp(15))),
-                                      SizedBox(height: ScreenUtil.instance.setWidth(8)),
+                                              fontSize: ScreenUtil.instance
+                                                  .setSp(15))),
+                                      SizedBox(
+                                          height:
+                                              ScreenUtil.instance.setWidth(8)),
                                       Row(
                                         children: <Widget>[
                                           timelineList[i]['type'] == 'love'
@@ -1403,7 +1434,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                                   timelineList[i]['type'] ==
                                                       'photo'
                                               ? Container(
-                                                  width: ScreenUtil.instance.setWidth(360 - 70.0),
+                                                  width: ScreenUtil.instance
+                                                      .setWidth(360 - 70.0),
                                                   child: Text(
                                                       timelineList[i]['name'] ==
                                                               null
@@ -1416,7 +1448,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                                               0xFF8A8A8B))),
                                                 )
                                               : Container(
-                                                  width: ScreenUtil.instance.setWidth(150),
+                                                  width: ScreenUtil.instance
+                                                      .setWidth(150),
                                                   child: Text(
                                                     timelineList[i]['name'] ==
                                                             null
@@ -1546,7 +1579,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                           : Colors.grey,
                                       scale: 3.5,
                                     ),
-                                    SizedBox(width: ScreenUtil.instance.setWidth(5)),
+                                    SizedBox(
+                                        width: ScreenUtil.instance.setWidth(5)),
                                     Text(impressionList.length.toString(),
                                         style: TextStyle(
                                             color: Color(
@@ -1573,7 +1607,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                     'assets/icons/icon_apps/comment.png',
                                     scale: 3.5,
                                   ),
-                                  SizedBox(width: ScreenUtil.instance.setWidth(5)),
+                                  SizedBox(
+                                      width: ScreenUtil.instance.setWidth(5)),
                                   Text(timelineList[i]['comment']['totalRows'],
                                       style: TextStyle(
                                           color: Color(

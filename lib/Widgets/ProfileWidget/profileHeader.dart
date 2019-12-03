@@ -681,7 +681,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         'assets/icons/icon_apps/home.png',
                         scale: 4.5,
                       ),
-                      SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                      SizedBox(width: ScreenUtil.instance.setWidth(10)),
                       Text('Timeline',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.5))),
@@ -697,7 +697,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         'assets/icons/icon_apps/latest.png',
                         scale: 4.5,
                       ),
-                      SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                      SizedBox(width: ScreenUtil.instance.setWidth(10)),
                       Text(widget.currentUserId == userId ? 'My Ticket' : 'Event Going',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.5))),

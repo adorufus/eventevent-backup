@@ -16,11 +16,13 @@ import 'package:camera/camera.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Widgets/loginRegisterWidget.dart';
 import 'package:google_places_picker/google_places_picker.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:flutter/services.dart';
 
 List<CameraDescription> cameras;
 
@@ -58,6 +60,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarColor(Colors.white);
     return MaterialApp(
       // navigatorObservers: [
       //   FirebaseAnalyticsObserver(analytics:  analytics)
