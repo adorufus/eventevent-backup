@@ -389,7 +389,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                       ),
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.height - 197,
+                      height: ScreenUtil.instance.setHeight(MediaQuery.of(context).size.height - 50),
                       child: Stack(
                         children: <Widget>[
                           TabBarView(
@@ -604,6 +604,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
           mediaContent(),
           latestMediaHeader(),
           latestMediaContent(),
+          SizedBox(
+            height: ScreenUtil.instance.setWidth(20),
+          )
         ],
       ),
     );

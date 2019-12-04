@@ -5,11 +5,13 @@ import 'package:eventevent/Widgets/TransactionHistory.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -26,11 +28,12 @@ class PushNotification extends StatefulWidget {
 
 class PushNotificationState extends State<PushNotification> {
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-  GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      new GlobalKey<RefreshIndicatorState>();
+  RefreshController refreshController =
+      new RefreshController(initialRefresh: false);
   List notificationData;
   StreamController _notificationStreamController;
   int count = 1;
+  int newPage = 0;
 
   String pushToken;
 
@@ -47,7 +50,27 @@ class PushNotificationState extends State<PushNotification> {
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
     _notificationStreamController = new StreamController();
-    loadNotification(scaffoldKey);
+    getNotification().then((response) {
+      if (response.statusCode == 200) {
+        setState(() {
+          var extractedData = json.decode(response.body);
+          notificationData = extractedData['data'];
+          assert(notificationData != null);
+
+          print(notificationData);
+
+          _showNotification(
+              notificationData[0]['fullName'], notificationData[0]['caption'],
+              payload: 'test');
+
+          // for(int i =   0; i <= notificationData.length; i +r= notificationData.length){
+          //   _showNotification(notificationData[i]['fullName'], notificationData[i]['caption']);
+          // }
+
+          return extractedData;
+        });
+      }
+    });
   }
 
   Future<void> _showNotification(String title, String body,
@@ -66,6 +89,26 @@ class PushNotificationState extends State<PushNotification> {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
     }
+  }
+
+  void _onLoading() async {
+    await Future.delayed(Duration(milliseconds: 2000));
+    setState(() {
+      newPage += 1;
+    });
+
+    getNotification(page: newPage).then((response) {
+      if (response.statusCode == 200) {
+        setState(() {
+          var extractedData = json.decode(response.body);
+          List updatedData = extractedData['data'];
+          print('data: ' + updatedData.toString());
+          notificationData.addAll(updatedData);
+        });
+        if (mounted) setState(() {});
+        refreshController.loadComplete();
+      }
+    });
   }
 
   // Future<void> onDidReceiveLocalNotification(int id, String title, String body, String payload) async{
@@ -88,7 +131,8 @@ class PushNotificationState extends State<PushNotification> {
   // }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -114,7 +158,8 @@ class PushNotificationState extends State<PushNotification> {
                       Text(
                         'Notification',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
+                            fontWeight: FontWeight.bold,
+                            fontSize: ScreenUtil.instance.setSp(14)),
                       )
                     ],
                   ),
@@ -130,9 +175,60 @@ class PushNotificationState extends State<PushNotification> {
                     child: CircularProgressIndicator(),
                   ),
                 )
-              : RefreshIndicator(
-                  key: _refreshIndicatorKey,
-                  onRefresh: _handleRefresh,
+              : SmartRefresher(
+                  controller: refreshController,
+                  enablePullDown: true,
+                  enablePullUp: true,
+                  footer: CustomFooter(
+                      builder: (BuildContext context, LoadStatus mode) {
+                    Widget body;
+                    if (mode == LoadStatus.idle) {
+                      body = Text("Load data");
+                    } else if (mode == LoadStatus.loading) {
+                      body = CircularProgressIndicator();
+                    } else if (mode == LoadStatus.failed) {
+                      body = Text("Load Failed!");
+                    } else if (mode == LoadStatus.canLoading) {
+                      body = Text('More');
+                    } else {
+                      body = Container();
+                    }
+
+                    return Container(
+                        height: ScreenUtil.instance.setWidth(35),
+                        child: Center(child: body));
+                  }),
+                  onRefresh: () {
+                    setState(() {
+                      newPage = 0;
+                    });
+
+                    getNotification().then((response) {
+                      if (response.statusCode == 200) {
+                        setState(() {
+                          var extractedData = json.decode(response.body);
+                          notificationData = extractedData['data'];
+                          assert(notificationData != null);
+
+                          print(notificationData);
+
+                          _showNotification(notificationData[0]['fullName'],
+                              notificationData[0]['caption'],
+                              payload: 'test');
+
+                          // for(int i =   0; i <= notificationData.length; i +r= notificationData.length){
+                          //   _showNotification(notificationData[i]['fullName'], notificationData[i]['caption']);
+                          // }
+
+                          return extractedData;
+                        });
+                      }
+                    });
+
+                    if (mounted) setState(() {});
+                    refreshController.refreshCompleted();
+                  },
+                  onLoading: _onLoading,
                   child: ListView(children: <Widget>[
                     Container(
                       margin: EdgeInsets.only(left: 13, right: 13, top: 13),
@@ -163,7 +259,8 @@ class PushNotificationState extends State<PushNotification> {
                           ),
                           title: Text('My Balance',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(13))),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil.instance.setSp(13))),
                           trailing: Icon(
                             Icons.navigate_next,
                             size: 25,
@@ -192,13 +289,14 @@ class PushNotificationState extends State<PushNotification> {
                                         TransactionHistory()));
                           },
                           leading: Container(
-                            width: ScreenUtil.instance.setWidth(25),
-                            height: ScreenUtil.instance.setWidth(25),
+                              width: ScreenUtil.instance.setWidth(25),
+                              height: ScreenUtil.instance.setWidth(25),
                               child: Image.asset(
                                   'assets/icons/icon_apps/paymentstatus.png')),
                           title: Text('Payment Status',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(13))),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil.instance.setSp(13))),
                           trailing: Icon(
                             Icons.navigate_next,
                             size: 25,
@@ -249,12 +347,14 @@ class PushNotificationState extends State<PushNotification> {
                               height: ScreenUtil.instance.setWidth(25),
                               width: ScreenUtil.instance.setWidth(25),
                               child: Image.asset(
-                                  'assets/icons/icon_apps/announcement.png',),
+                                'assets/icons/icon_apps/announcement.png',
+                              ),
                             ),
                             title: Text(
                               notificationData[i]['fullName'] + ':',
                               style: TextStyle(
-                                  fontSize: ScreenUtil.instance.setSp(13), fontWeight: FontWeight.bold),
+                                  fontSize: ScreenUtil.instance.setSp(13),
+                                  fontWeight: FontWeight.bold),
                             ),
                             subtitle: Text(notificationData[i]['caption']),
                           ),
@@ -266,11 +366,19 @@ class PushNotificationState extends State<PushNotification> {
         ));
   }
 
-  Future getNotification([page = 1]) async {
+  Future<http.Response> getNotification({int page}) async {
     print('[BackgroundFetch] Headless event received1.');
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    var url = BaseApi().apiUrl + '/user/notification?X-API-KEY=$API_KEY&page=1';
+    int currentPage = 1;
+
+    setState(() {
+      if (page != null) {
+        currentPage += page;
+      }
+    });
+
+    var url = BaseApi().apiUrl + '/user/notification?X-API-KEY=$API_KEY&page=$currentPage';
 
     var response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,
@@ -279,25 +387,8 @@ class PushNotificationState extends State<PushNotification> {
 
     print(response.statusCode);
 
-    if (response.statusCode == 200) {
-      setState(() {
-        var extractedData = json.decode(response.body);
-        notificationData = extractedData['data'];
-        assert(notificationData != null);
+    return response;
 
-        print(notificationData);
-
-        _showNotification(
-            notificationData[0]['fullName'], notificationData[0]['caption'],
-            payload: 'test');
-
-        // for(int i =   0; i <= notificationData.length; i +r= notificationData.length){
-        //   _showNotification(notificationData[i]['fullName'], notificationData[i]['caption']);
-        // }
-
-        return extractedData;
-      });
-    }
     // BackgroundFetch.finish();
     return json.decode(response.body);
   }
@@ -331,20 +422,20 @@ class PushNotificationState extends State<PushNotification> {
     // BackgroundFetch.finish();
   }
 
-  loadNotification(GlobalKey<ScaffoldState> scaffoldKey) async {
-    getNotification().then((res) async {
-      setState(() {
-        _notificationStreamController.add(res);
-        print(res['desc']);
-        return res;
-      });
-    }).timeout(Duration(minutes: 5), onTimeout: () {
-      scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text('Request Timeout!'),
-        backgroundColor: Colors.red,
-      ));
-    });
-  }
+  // loadNotification(GlobalKey<ScaffoldState> scaffoldKey) async {
+  //   getNotification().then((res) async {
+  //     setState(() {
+  //       _notificationStreamController.add(res);
+  //       print(res['desc']);
+  //       return res;
+  //     });
+  //   }).timeout(Duration(minutes: 5), onTimeout: () {
+  //     scaffoldKey.currentState.showSnackBar(SnackBar(
+  //       content: Text('Request Timeout!'),
+  //       backgroundColor: Colors.red,
+  //     ));
+  //   });
+  // }
 
   @override
   void dispose() {

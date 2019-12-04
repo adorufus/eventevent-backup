@@ -70,7 +70,7 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
                                               offset: Offset(0.0, 0.0))
                                         ],
                                         image: DecorationImage(
-                                            image: NetworkImage(
+                                            image: CachedNetworkImageProvider(
                                           categoryData['logo'],
                                         ))),
                                   ),

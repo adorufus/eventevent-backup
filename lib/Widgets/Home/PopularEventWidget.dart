@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eventevent/Widgets/Home/MiniDate.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class PopularEventWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: Color(0xFFB5B5B5),
                     image: DecorationImage(
-                        image: NetworkImage(imageUrl), fit: BoxFit.fill),
+                        image: CachedNetworkImageProvider(imageUrl), fit: BoxFit.fill),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(15),
                       topRight: Radius.circular(15),
