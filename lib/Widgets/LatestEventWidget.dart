@@ -215,6 +215,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                           location: latestEventData[i]['address'],
                           itemColor: itemColor,
                           itemPrice: itemPriceText,
+                          date: DateTime.parse(latestEventData[i]['dateStart']),
                           type: latestEventData[i]['ticket_type']['type'],
                           isAvailable: latestEventData[i]['ticket']
                               ['availableTicketStatus'],

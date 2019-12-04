@@ -11,6 +11,7 @@ class PopularEventWidget extends StatelessWidget {
   final Color color;
   final type;
   final isAvailable;
+  final DateTime date;
 
   const PopularEventWidget(
       {Key key,
@@ -20,7 +21,7 @@ class PopularEventWidget extends StatelessWidget {
       this.price,
       this.color,
       this.type,
-      this.isAvailable})
+      this.isAvailable, this.date})
       : super(key: key);
 
   @override
@@ -128,7 +129,9 @@ class PopularEventWidget extends StatelessWidget {
         Positioned(
           top: ScreenUtil.instance.setWidth(194),
           left: ScreenUtil.instance.setWidth(21),
-          child: MiniDate(),
+          child: MiniDate(
+            date: date,
+          ),
         ),
       ],
     );

@@ -707,6 +707,7 @@ class _EventCatalogState extends State<EventCatalog>
                               color: itemColor,
                               price: itemPriceText,
                               type: data[i]['ticket_type']['type'],
+                              date: DateTime.parse(data[i]['dateStart']),
                               isAvailable: data[i]['ticket']
                                   ['availableTicketStatus'],
                             ),
@@ -892,6 +893,7 @@ class _EventCatalogState extends State<EventCatalog>
                             location: discoverData[i]["address"],
                             price: itemPriceText,
                             color: itemColor,
+                            date: DateTime.parse(discoverData[i]['dateStart']),
                             type: discoverData[i]['ticket_type']['type'],
                             isAvailable: discoverData[i]['ticket']
                                 ['availableTicketStatus'],

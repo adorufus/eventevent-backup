@@ -302,6 +302,7 @@ class SearchState extends State<Search> {
                     itemColor: itemColor,
                     location: filteredEvents[i]['address'],
                     title: filteredEvents[i]['name'],
+                    date: DateTime.parse(filteredEvents[i]['dateStart']),
                     type: filteredEvents[i]['ticket_type']['type'],
                   ),
                 );

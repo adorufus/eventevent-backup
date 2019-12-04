@@ -148,6 +148,7 @@ class PrivateEventListState extends State<PrivateEventList> {
                           itemColor: itemColor,
                           itemPrice: itemPriceText,
                           type: privateData[i]['ticket_type']['type'],
+                          date: DateTime.parse(privateData[i]['dateStart']),
                           isAvailable: privateData[i]['ticket']
                               ['availableTicketStatus'],
                         ),

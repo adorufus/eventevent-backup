@@ -305,6 +305,7 @@ class _MyTicketState extends State<MyTicket> {
                                   timeStart: myTicketList[i]['event']
                                       ['timeStart'],
                                   timeEnd: myTicketList[i]['event']['timeEnd'],
+                                  date: DateTime.parse(myTicketList[i]['event']['dateStart']),
                                   ticketName: myTicketList[i]['ticket']
                                       ['ticket_name'],
                                   ticketColor: ticketColor,
@@ -386,6 +387,7 @@ class _MyTicketState extends State<MyTicket> {
                 ticketStatus: ticketStatusText,
                 timeStart: filteredTickets[i]['event']['timeStart'],
                 timeEnd: filteredTickets[i]['event']['timeEnd'],
+                date: DateTime.parse(filteredTickets[i]['event']['dateStart']),
                 ticketName: filteredTickets[i]['ticket']['ticket_name'],
                 ticketColor: ticketColor,
                 // topPadding: i == 0 ? 13.0 : 0.0,

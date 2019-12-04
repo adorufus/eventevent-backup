@@ -11,6 +11,7 @@ class MyTicketItem extends StatelessWidget {
   final timeEnd;
   final ticketType;
   final ticketStatus;
+  final DateTime date;
   final Color ticketColor;
 
   const MyTicketItem(
@@ -21,7 +22,7 @@ class MyTicketItem extends StatelessWidget {
       this.timeStart,
       this.timeEnd,
       this.ticketType,
-      this.ticketStatus, this.ticketName, this.ticketColor})
+      this.ticketStatus, this.ticketName, this.ticketColor, this.date})
       : super(key: key);
 
   @override
@@ -58,7 +59,9 @@ class MyTicketItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                MiniDate(),
+                MiniDate(
+                  date: date,
+                ),
                 SizedBox(height: ScreenUtil.instance.setWidth(5)),
                 Container(
                   width: MediaQuery.of(context).size.width - 146,

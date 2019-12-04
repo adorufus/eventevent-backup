@@ -5,7 +5,9 @@ import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,12 +29,25 @@ class _CollectionPageState extends State<CollectionPage> {
   List eventByCategoryList;
   List userByCollectionList;
 
+  RefreshController refreshController =
+      new RefreshController(initialRefresh: false);
+  int newPage = 0;
+
   bool isLoading;
   Widget errReasonWidget = Container();
 
   @override
   void initState() {
-    fetchCategoryById().catchError((e) {
+    fetchCategoryById().then((response) {
+      if (response.statusCode == 200) {
+        setState(() {
+          var extractedData = json.decode(response.body);
+          eventByCategoryList = extractedData['data'];
+        });
+        if (mounted) setState(() {});
+        refreshController.refreshCompleted();
+      }
+    }).catchError((e) {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         backgroundColor: Colors.red,
         content: Text(
@@ -55,8 +70,39 @@ class _CollectionPageState extends State<CollectionPage> {
     super.initState();
   }
 
+  void _onLoading() async {
+    await Future.delayed(Duration(milliseconds: 2000));
+    setState(() {
+      newPage += 1;
+    });
+
+    fetchCategoryById(page: newPage).then((response) {
+      var extractedData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          isLoading = false;
+          eventByCategoryList.addAll(extractedData['data']);
+        });
+      } else {
+        if (extractedData['desc'] == 'Event Not Found') {
+          setState(() {
+            isLoading = false;
+            errReasonWidget = EmptyState(
+              emptyImage: 'assets/drawable/event_empty_state.png',
+              reasonText: 'No Event Found',
+            );
+          });
+        }
+      }
+    });
+
+    refreshController.loadComplete();
+  }
+
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -65,42 +111,82 @@ class _CollectionPageState extends State<CollectionPage> {
       allowFontScaling: true,
     )..init(context);
     return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: PreferredSize(
-          preferredSize: Size(null, 100),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: ScreenUtil.instance.setWidth(50),
-            padding: EdgeInsets.symmetric(horizontal: 13),
-            color: Colors.white,
-            child: AppBar(
-              elevation: 0,
-              backgroundColor: Colors.white,
-              leading: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Image.asset(
-                  'assets/icons/icon_apps/arrow.png',
-                  scale: 5.5,
-                  alignment: Alignment.centerLeft,
-                ),
+        child: Scaffold(
+      key: _scaffoldKey,
+      appBar: PreferredSize(
+        preferredSize: Size(null, 100),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: ScreenUtil.instance.setWidth(50),
+          padding: EdgeInsets.symmetric(horizontal: 13),
+          color: Colors.white,
+          child: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Image.asset(
+                'assets/icons/icon_apps/arrow.png',
+                scale: 5.5,
+                alignment: Alignment.centerLeft,
               ),
-              title: Text('Events Happening in ' +
-                  widget.collectionName[0].toUpperCase() +
-                  widget.collectionName.substring(1)),
-              centerTitle: true,
-              textTheme: TextTheme(
-                  title: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: ScreenUtil.instance.setSp(14),
-                color: Colors.black,
-              )),
             ),
+            title: Text('Events Happening in ' +
+                widget.collectionName[0].toUpperCase() +
+                widget.collectionName.substring(1)),
+            centerTitle: true,
+            textTheme: TextTheme(
+                title: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: ScreenUtil.instance.setSp(14),
+              color: Colors.black,
+            )),
           ),
         ),
-        body: ListView(
+      ),
+      body: SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: true,
+        footer: CustomFooter(builder: (BuildContext context, LoadStatus mode) {
+          Widget body;
+          if (mode == LoadStatus.idle) {
+            body = Container();
+          } else if (mode == LoadStatus.loading) {
+            body = CircularProgressIndicator();
+          } else if (mode == LoadStatus.failed) {
+            body = Text("Load Failed!");
+          } else if (mode == LoadStatus.canLoading) {
+            body = Text('More');
+          } else {
+            body = Container();
+          }
+
+          return Container(
+              height: ScreenUtil.instance.setWidth(35),
+              child: Center(child: body));
+        }),
+        controller: refreshController,
+        onRefresh: () {
+          setState(() {
+            newPage = 0;
+          });
+          fetchCategoryById().then((response) {
+            if (response.statusCode == 200) {
+              setState(() {
+                var extractedData = json.decode(response.body);
+                eventByCategoryList = extractedData['data'];
+                isLoading = false;
+              });
+              if (mounted) setState(() {});
+              refreshController.refreshCompleted();
+            }
+          });
+          refreshController.refreshCompleted();
+        },
+        onLoading: _onLoading,
+        child: ListView(
           children: <Widget>[
             Container(
               height: ScreenUtil.instance.setWidth(200),
@@ -124,51 +210,70 @@ class _CollectionPageState extends State<CollectionPage> {
                     margin: EdgeInsets.symmetric(horizontal: 25),
                     child: Text('Organizers in this collections'),
                   ),
-                  SizedBox(height: ScreenUtil.instance.setWidth(10),),
+                  SizedBox(
+                    height: ScreenUtil.instance.setWidth(10),
+                  ),
                   Container(
                       height: ScreenUtil.instance.setWidth(50),
                       color: Colors.white,
-                      child: userByCollectionList == null ? Container(
-                        margin: EdgeInsets.symmetric(horizontal: 25),
-                        child: Text('No Event Organizers Found', style: TextStyle(color: Color(0xff8a8a8b), fontWeight: FontWeight.bold),),
-                      ) :
-                      ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: userByCollectionList == null
-                            ? 0
-                            : userByCollectionList.length,
-                        itemBuilder: (context, i) {
-                          return Container(
-                            padding: i == 0
-                                ? EdgeInsets.only(left: 25, right: i == userByCollectionList.last ? 15 : 0)
-                                : EdgeInsets.only(left: i == 1 ? 15 : 0 , right: 15, ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Container(
-                                  height: ScreenUtil.instance.setWidth(40.50),
-                                  width: ScreenUtil.instance.setWidth(41.50),
-                                  decoration: BoxDecoration(
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                            color: Colors.black26,
-                                            offset: Offset(1.0, 1.0),
-                                            blurRadius: 3)
-                                      ],
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                        image: CachedNetworkImageProvider(
-                                            userByCollectionList[i]["photo"]),
-                                        fit: BoxFit.fill,
-                                      )),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      )),
+                      child: userByCollectionList == null
+                          ? Container(
+                              margin: EdgeInsets.symmetric(horizontal: 25),
+                              child: Text(
+                                'No Event Organizers Found',
+                                style: TextStyle(
+                                    color: Color(0xff8a8a8b),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: userByCollectionList == null
+                                  ? 0
+                                  : userByCollectionList.length,
+                              itemBuilder: (context, i) {
+                                return Container(
+                                  padding: i == 0
+                                      ? EdgeInsets.only(
+                                          left: 25,
+                                          right: i == userByCollectionList.last
+                                              ? 15
+                                              : 0)
+                                      : EdgeInsets.only(
+                                          left: i == 1 ? 15 : 0,
+                                          right: 15,
+                                        ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Container(
+                                        height:
+                                            ScreenUtil.instance.setWidth(40.50),
+                                        width:
+                                            ScreenUtil.instance.setWidth(41.50),
+                                        decoration: BoxDecoration(
+                                            boxShadow: <BoxShadow>[
+                                              BoxShadow(
+                                                  color: Colors.black26,
+                                                  offset: Offset(1.0, 1.0),
+                                                  blurRadius: 3)
+                                            ],
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                              image: CachedNetworkImageProvider(
+                                                  userByCollectionList[i]
+                                                      ["photo"]),
+                                              fit: BoxFit.fill,
+                                            )),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            )),
                 ],
               ),
             ),
@@ -278,7 +383,8 @@ class _CollectionPageState extends State<CollectionPage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      settings: RouteSettings(name: 'EventDetails'),
+                                        settings:
+                                            RouteSettings(name: 'EventDetails'),
                                         builder: (BuildContext context) =>
                                             EventDetailsConstructView(
                                                 id: eventByCategoryList[i]
@@ -294,6 +400,7 @@ class _CollectionPageState extends State<CollectionPage> {
                                     ['type'],
                                 isAvailable: eventByCategoryList[i]['ticket']
                                     ['availableTicketStatus'],
+                                    date: DateTime.parse(eventByCategoryList[i]['dateStart']),
                               ),
                             );
                           },
@@ -302,7 +409,7 @@ class _CollectionPageState extends State<CollectionPage> {
           ],
         ),
       ),
-    );
+    ));
   }
 
   Future<http.Response> fetchUserByCollectionId() async {
@@ -327,17 +434,24 @@ class _CollectionPageState extends State<CollectionPage> {
     return response;
   }
 
-  Future fetchCategoryById() async {
+  Future<http.Response> fetchCategoryById({int page}) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
+    int currentPage = 1;
+
+    setState(() {
+      if (page != null) {
+        currentPage += page;
+      }
+    });
 
     final latestEventApi = BaseApi().apiUrl +
-        '/collections/event?X-API-KEY=$API_KEY&id=${widget.categoryId}&page=1';
+        '/collections/event?X-API-KEY=$API_KEY&id=${widget.categoryId}&page=$currentPage';
 
     print(latestEventApi);
 
-    setState(() {
-      isLoading = true;
-    });
+    // setState(() {
+    //   isLoading = true;
+    // });
 
     final response = await http.get(latestEventApi, headers: {
       'Authorization': "Basic YWRtaW46MTIzNA==",
@@ -345,23 +459,7 @@ class _CollectionPageState extends State<CollectionPage> {
     });
 
     print(response.body);
-    var extractedData = json.decode(response.body);
 
-    if (response.statusCode == 200) {
-      setState(() {
-        isLoading = false;
-        eventByCategoryList = extractedData['data'];
-      });
-    } else {
-      if (extractedData['desc'] == 'Event Not Found') {
-        setState(() {
-          isLoading = false;
-          errReasonWidget = EmptyState(
-            emptyImage: 'assets/drawable/event_empty_state.png',
-            reasonText: 'No Event Found',
-          );
-        });
-      }
-    }
+    return response;
   }
 }

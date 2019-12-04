@@ -152,6 +152,7 @@ class PublicEventListState extends State<PublicEventList> {
                           location: publicData[i]['address'],
                           itemColor: itemColor,
                           itemPrice: itemPriceText,
+                          date: DateTime.parse(publicData[i]['dateStart']),
                           type: publicData[i]['ticket_type']['type'],
                           isAvailable: publicData[i]['ticket']
                               ['availableTicketStatus'],

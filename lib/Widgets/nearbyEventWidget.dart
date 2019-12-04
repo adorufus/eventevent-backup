@@ -6,7 +6,8 @@ import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:flutter/services.dart';
@@ -103,7 +104,8 @@ class _ListenPageState extends State<ListenPage> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -112,7 +114,7 @@ class _ListenPageState extends State<ListenPage> {
       allowFontScaling: true,
     )..init(context);
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
         body: Container(
           child: nearbyEventData == null
               ? Center(
@@ -143,7 +145,9 @@ class _ListenPageState extends State<ListenPage> {
                       body = Container();
                     }
 
-                    return Container(height: ScreenUtil.instance.setWidth(35), child: Center(child: body));
+                    return Container(
+                        height: ScreenUtil.instance.setWidth(35),
+                        child: Center(child: body));
                   }),
                   controller: refreshController,
                   onRefresh: () {
@@ -164,7 +168,8 @@ class _ListenPageState extends State<ListenPage> {
                   onLoading: _onLoading,
                   child: ListView(children: <Widget>[
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       margin: EdgeInsets.only(left: 13, right: 13, top: 13),
                       width: MediaQuery.of(context).size.width,
                       height: ScreenUtil.instance.setWidth(50),
@@ -184,7 +189,8 @@ class _ListenPageState extends State<ListenPage> {
                           children: <Widget>[
                             Column(
                               children: <Widget>[
-                                SizedBox(height: ScreenUtil.instance.setWidth(3)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(3)),
                                 Container(
                                   height: ScreenUtil.instance.setWidth(10),
                                   width: ScreenUtil.instance.setWidth(10),
@@ -200,7 +206,8 @@ class _ListenPageState extends State<ListenPage> {
                               width: MediaQuery.of(context).size.width - 71,
                               child: Text(
                                 adresses == null ? '-' : adresses.addressLine,
-                                style: TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
+                                style: TextStyle(
+                                    fontSize: ScreenUtil.instance.setSp(12)),
                                 maxLines: 2,
                               ),
                             )
@@ -217,7 +224,8 @@ class _ListenPageState extends State<ListenPage> {
                         Color itemColor;
                         String itemPriceText;
 
-                        if (nearbyEventData[i]['ticket_type']['type'] == 'paid' ||
+                        if (nearbyEventData[i]['ticket_type']['type'] ==
+                                'paid' ||
                             nearbyEventData[i]['ticket_type']['type'] ==
                                 'paid_seating') {
                           if (nearbyEventData[i]['ticket']
@@ -264,8 +272,9 @@ class _ListenPageState extends State<ListenPage> {
                           itemPriceText =
                               nearbyEventData[i]['ticket_type']['name'];
                         } else if (nearbyEventData[i]['ticket_type']['type'] ==
-                            'free_limited' || nearbyEventData[i]['ticket_type']['type'] ==
-                            'free_limited_seating') {
+                                'free_limited' ||
+                            nearbyEventData[i]['ticket_type']['type'] ==
+                                'free_limited_seating') {
                           if (nearbyEventData[i]['ticket']
                                   ['availableTicketStatus'] ==
                               '1') {
@@ -306,6 +315,7 @@ class _ListenPageState extends State<ListenPage> {
                             location: nearbyEventData[i]['address'],
                             itemColor: itemColor,
                             itemPrice: itemPriceText,
+                            date: DateTime.parse(nearbyEventData[i]['dateStart']),
                             type: nearbyEventData[i]['ticket_type']['type'],
                             isAvailable: nearbyEventData[i]['ticket']
                                 ['availableTicketStatus'],

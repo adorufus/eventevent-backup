@@ -153,6 +153,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                       ticketStatus: ticketStatusText,
                       timeStart: ticketDetailData[i]['event']['timeStart'],
                       timeEnd: ticketDetailData[i]['event']['timeEnd'],
+                      date: DateTime.parse(ticketDetailData[i]['event']['dateStart']),
                       ticketName: ticketDetailData[i]['ticket']['ticket_name'],
                       ticketColor: ticketColor,
                       // topPadding: i == 0 ? 13.0 : 0.0,

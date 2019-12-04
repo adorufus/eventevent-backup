@@ -13,9 +13,10 @@ class LatestEventItem extends StatelessWidget {
   final String itemPrice;
   final type;
   final isAvailable;
+  final DateTime date;
 
   const LatestEventItem(
-      {Key key, this.image, this.title, this.username, this.location, this.itemColor, this.itemPrice, this.type, this.isAvailable})
+      {Key key, this.image, this.title, this.username, this.location, this.itemColor, this.itemPrice, this.type, this.isAvailable, this.date})
       : super(key: key);
 
   @override
@@ -53,7 +54,9 @@ class LatestEventItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                MiniDate(),
+                MiniDate(
+                  date: date,
+                ),
                 SizedBox(height: ScreenUtil.instance.setWidth(7)),
                 Container(
                   width: MediaQuery.of(context).size.width - 146,

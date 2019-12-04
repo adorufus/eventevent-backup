@@ -369,6 +369,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                         itemColor: itemColor,
                         itemPrice: itemPriceText,
                         type: popularEventList[i]['ticket_type']['type'],
+                        date: DateTime.parse(popularEventList[i]['dateStart']),
                         isAvailable: popularEventList[i]['ticket']
                             ['availableTicketStatus']);
                   },
@@ -518,6 +519,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                       itemColor: itemColor,
                       itemPrice: itemPriceText,
                       type: discoverEventList[i]['ticket_type']['type'],
+                      date: DateTime.parse(discoverEventList[i]['dateStart']),
                       isAvailable: discoverEventList[i]['ticket']
                           ['availableTicketStatus']);
                 },
