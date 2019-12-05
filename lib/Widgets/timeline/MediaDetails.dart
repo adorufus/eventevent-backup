@@ -312,12 +312,15 @@ class _MediaDetailsState extends State<MediaDetails> {
           Divider(
             color: Colors.black,
           ),
-          Text(
-            'Comments',
-            style: TextStyle(
-                color: Color(0xff8a8a8b),
-                fontSize: ScreenUtil.instance.setSp(12),
-                fontWeight: FontWeight.bold),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 13),
+            child: Text(
+              'Comments',
+              style: TextStyle(
+                  color: Color(0xff8a8a8b),
+                  fontSize: ScreenUtil.instance.setSp(12),
+                  fontWeight: FontWeight.bold),
+            ),
           ),
           SizedBox(height: ScreenUtil.instance.setWidth(12)),
           Container(

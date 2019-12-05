@@ -10,8 +10,9 @@ import 'dart:convert';
 
 class PrivateEventList extends StatefulWidget {
   final type;
+  final userId;
 
-  const PrivateEventList({Key key, this.type}) : super(key: key);
+  const PrivateEventList({Key key, this.type, this.userId}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return PrivateEventListState();
@@ -184,7 +185,7 @@ class PrivateEventListState extends State<PrivateEventList> {
   Future fetchMyEvent() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String uri = BaseApi().apiUrl +
-        '/user/${widget.type}?X-API-KEY=$API_KEY&page=1&userID=${prefs.getString('Last User ID')}&isPrivate=1';
+        '/user/${widget.type}?X-API-KEY=$API_KEY&page=1&userID=${widget.userId == prefs.getString('Last User ID') ? prefs.getString('Last User ID') : widget.userId}&isPrivate=1';
 
     final response = await http.get(
       uri,

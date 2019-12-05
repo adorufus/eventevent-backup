@@ -163,9 +163,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
         body: DefaultTabController(
           initialIndex: widget.initialIndex,
           length: 2,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
+          child: ListView(
             children: <Widget>[
               Container(
                 color: Colors.white,
@@ -294,7 +292,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                                       userPicture: popularMedia[i]['creator']
                                           ['photo'],
                                       articleDetail: popularMedia[i]
-                                          ['description'],
+                                          ['content'],
                                       imageCount: 'img' + i.toString(),
                                       username: popularMedia[i]['creator']
                                           ['username'],
@@ -392,7 +390,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                                       userPicture: latestMedia[i]['creator']
                                           ['photo'],
                                       articleDetail: latestMedia[i]
-                                          ['description'],
+                                          ['content'],
                                       imageCount: 'img' + i.toString(),
                                       username: latestMedia[i]['creator']
                                           ['username'],

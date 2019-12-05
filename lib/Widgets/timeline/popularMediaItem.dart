@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eventevent/Widgets/timeline/MediaDetails.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,7 +53,7 @@ class _MediaItemState extends State<MediaItem> {
   }
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
@@ -61,7 +63,7 @@ class _MediaItemState extends State<MediaItem> {
       allowFontScaling: true,
     )..init(context);
     print(MediaQuery.of(context).size.width);
-    
+
     return Container(
         margin: EdgeInsets.only(left: 13, top: 8, bottom: 8, right: 0),
         height: ScreenUtil.instance.setWidth(247),
@@ -81,7 +83,8 @@ class _MediaItemState extends State<MediaItem> {
               height: ScreenUtil.instance.setWidth(146),
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(widget.image), fit: BoxFit.cover),
+                      image: CachedNetworkImageProvider(widget.image),
+                      fit: BoxFit.cover),
                   color: Color(0xFFB5B5B5),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(15),
@@ -123,7 +126,8 @@ class _MediaItemState extends State<MediaItem> {
                                 child: Text(
                                   '@' + widget.username.toString(),
                                   style: TextStyle(
-                                      color: Color(0xFF8A8A8B), fontSize: ScreenUtil.instance.setSp(12)),
+                                      color: Color(0xFF8A8A8B),
+                                      fontSize: ScreenUtil.instance.setSp(12)),
                                 )),
                             Text(
                               '19 - 08 - 2019',
@@ -140,7 +144,8 @@ class _MediaItemState extends State<MediaItem> {
                             child: Text(
                               widget.title,
                               style: TextStyle(
-                                  fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),
+                                  fontSize: ScreenUtil.instance.setSp(15),
+                                  fontWeight: FontWeight.bold),
                             )),
                         SizedBox(
                           height: ScreenUtil.instance.setWidth(3),
@@ -246,7 +251,9 @@ class _MediaItemState extends State<MediaItem> {
                                           'assets/icons/icon_apps/comment.png',
                                           scale: 3.5,
                                         ),
-                                        SizedBox(width: ScreenUtil.instance.setWidth(5)),
+                                        SizedBox(
+                                            width: ScreenUtil.instance
+                                                .setWidth(5)),
                                         Text(commentCount.length.toString(),
                                             style: TextStyle(
                                                 color: Color(

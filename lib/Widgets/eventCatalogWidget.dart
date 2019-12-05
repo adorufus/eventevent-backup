@@ -738,12 +738,14 @@ class _EventCatalogState extends State<EventCatalog>
                                               userPicture: mediaData[i]
                                                   ['creator']['photo'],
                                               articleDetail: mediaData[i]
-                                                  ['description'],
+                                                  ['content'],
                                               imageCount: 'img' + i.toString(),
                                               username: mediaData[i]['creator']
                                                   ['username'],
                                               imageUri: mediaData[i]['banner'],
                                               mediaTitle: mediaData[i]['title'],
+                                              isVideo: true,
+                                              mediaId: mediaData[i]['id'],
                                               autoFocus: false,
                                             )));
                               },
@@ -1519,7 +1521,7 @@ class _EventCatalogState extends State<EventCatalog>
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          SeeAllMediaItem(initialIndex: 0, isVideo: false)));
+                          SeeAllMediaItem(initialIndex: 0, isVideo: true)));
                 },
                 child: Text(
                   'See All',

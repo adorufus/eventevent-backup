@@ -7,14 +7,15 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class WithdrawBank extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    
     return WithdrawBankState();
   }
 }
@@ -28,6 +29,8 @@ class WithdrawBankState extends State<WithdrawBank> {
   Map balanceData;
   List bankList = [];
   List historyList = new List();
+
+  MoneyFormatterOutput fo;
 
   int _currentValue = 0;
   String user_bank_id;
@@ -47,6 +50,7 @@ class WithdrawBankState extends State<WithdrawBank> {
       if (response.statusCode == 200) {
         setState(() {
           historyList = extractedData['data'];
+          
         });
       } else {
         print('gagal');
@@ -61,7 +65,8 @@ class WithdrawBankState extends State<WithdrawBank> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -104,8 +109,9 @@ class WithdrawBankState extends State<WithdrawBank> {
                     SizedBox(width: MediaQuery.of(context).size.width / 2.8),
                     Text(
                       'Balance',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: ScreenUtil.instance.setSp(14)),
                     )
                   ],
                 ),
@@ -150,15 +156,11 @@ class WithdrawBankState extends State<WithdrawBank> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Image.asset(
-                                'assets/icons/icon_apps/home.png',
-                                scale: 4.5,
-                              ),
-                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
                               Text('Withdraw',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: ScreenUtil.instance.setSp(12.5))),
+                                      fontSize:
+                                          ScreenUtil.instance.setSp(12.5))),
                             ],
                           ),
                         ),
@@ -167,15 +169,11 @@ class WithdrawBankState extends State<WithdrawBank> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Image.asset(
-                                'assets/icons/icon_apps/latest.png',
-                                scale: 4.5,
-                              ),
-                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
                               Text('History',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: ScreenUtil.instance.setSp(12.5))),
+                                      fontSize:
+                                          ScreenUtil.instance.setSp(12.5))),
                             ],
                           ),
                         ),
@@ -235,8 +233,9 @@ class WithdrawBankState extends State<WithdrawBank> {
                   children: <Widget>[
                     Text(
                       'Withdraw Ammount',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(17)),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: ScreenUtil.instance.setSp(17)),
                     ),
                     SizedBox(height: ScreenUtil.instance.setWidth(20)),
                     TextFormField(
@@ -248,7 +247,8 @@ class WithdrawBankState extends State<WithdrawBank> {
                           filled: true,
                           fillColor: Colors.white,
                           hintText: 'Enter withdraw amount (e.g. 125000)',
-                          hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(12))),
+                          hintStyle: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(12))),
                     ),
                     GestureDetector(
                       onTap: () async {
@@ -343,7 +343,9 @@ class WithdrawBankState extends State<WithdrawBank> {
                       EdgeInsets.only(left: 13, right: 13, bottom: 6, top: 20),
                   child: Text(
                     'Balance:',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: ScreenUtil.instance.setSp(14)),
                   )),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 13),
@@ -436,7 +438,9 @@ class WithdrawBankState extends State<WithdrawBank> {
                       EdgeInsets.only(left: 13, right: 13, bottom: 9, top: 20),
                   child: Text(
                     'Select Bank:',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: ScreenUtil.instance.setSp(14)),
                   )),
               ColumnBuilder(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -514,18 +518,22 @@ class WithdrawBankState extends State<WithdrawBank> {
                                     child: Text(
                                   bankList[i]['account_name'],
                                   style: TextStyle(
-                                      color: Colors.grey, fontSize: ScreenUtil.instance.setSp(12)),
+                                      color: Colors.grey,
+                                      fontSize: ScreenUtil.instance.setSp(12)),
                                   overflow: TextOverflow.ellipsis,
                                 )),
-                                SizedBox(height: ScreenUtil.instance.setWidth(3)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(3)),
                                 Container(
                                     width: ScreenUtil.instance.setWidth(200),
                                     child: Text(bankList[i]['bank_name'],
                                         style: TextStyle(
-                                            fontSize: ScreenUtil.instance.setSp(15),
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(15),
                                             fontWeight: FontWeight.bold),
                                         overflow: TextOverflow.ellipsis)),
-                                SizedBox(height: ScreenUtil.instance.setWidth(3)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(3)),
                                 Text(
                                   bankList[i]['account_number'],
                                   style: TextStyle(
@@ -586,7 +594,9 @@ class WithdrawBankState extends State<WithdrawBank> {
                     ),
                     SizedBox(height: ScreenUtil.instance.setWidth(6)),
                     Text('Withdraw process may take up to 1 business day',
-                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(14), color: Colors.grey)),
+                        style: TextStyle(
+                            fontSize: ScreenUtil.instance.setSp(14),
+                            color: Colors.grey)),
                     SizedBox(height: ScreenUtil.instance.setWidth(15)),
                   ],
                 ),
@@ -626,6 +636,7 @@ class WithdrawBankState extends State<WithdrawBank> {
         : ListView.builder(
             itemCount: historyList == null ? 0 : historyList.length,
             itemBuilder: (BuildContext context, i) {
+              fo = FlutterMoneyFormatter(amount: double.parse(historyList[i]['amount'] + '.0')).output;
               if (historyList[i]['status'] == 'completed') {
                 transactionStatus = 'WITHDRAW COMPLETE';
                 transactionColor = eventajaGreenTeal;
@@ -645,56 +656,102 @@ class WithdrawBankState extends State<WithdrawBank> {
               }
 
               return Container(
-                margin: EdgeInsets.only(bottom: 5),
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                margin: EdgeInsets.only(top: 5, bottom: 5, left: 13, right: 13),
+                padding: EdgeInsets.symmetric(horizontal: 13, vertical: 6),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15)),
                 child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    // Flexible(
+                    //                       child: Align(
+                    //       alignment: Alignment.topLeft,
+                    //       child: Icon(
+                    //         Icons.brightness_1,
+                    //         color: transactionColor,
+                    //       )),
+                    // ),
                     Container(
-                        alignment: Alignment.topCenter,
-                        child: Icon(
-                          Icons.brightness_1,
-                          color: transactionColor,
-                        )),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          transactionStatus,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[500],
+                      width: ScreenUtil.instance.setWidth(210),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.brightness_1,
+                                size: ScreenUtil.instance.setSp(12),
+                                color: transactionColor,
+                              ),
+                              SizedBox(
+                                width: ScreenUtil.instance.setWidth(5),
+                              ),
+                              Text(
+                                transactionStatus,
+                                style: TextStyle(
+                                  fontSize: ScreenUtil.instance.setSp(13),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey[500],
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
+                            ],
                           ),
-                          textAlign: TextAlign.start,
-                        ),
-                        SizedBox(
-                          height: ScreenUtil.instance.setWidth(15),
-                        ),
-                        historyList[i]['status'] == 'added'
-                            ? Text(historyList[i]['description'])
-                            : Text('Transfer to ' + '-'),
-                        historyList[i]['status'] == 'added'
-                            ? Container()
-                            : Text('- / '),
-                        historyList[i]['status'] == 'added'
-                            ? Container()
-                            : Text('-'),
-                        historyList[i]['status'] == 'added'
-                            ? Container()
-                            : Text(historyList[i]['withdraw_code'])
-                      ],
+                          SizedBox(
+                            height: ScreenUtil.instance.setWidth(12),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                historyList[i]['status'] == 'added'
+                                    ? Text(
+                                        historyList[i]['description'],
+                                        style: TextStyle(fontSize: 10),
+                                      )
+                                    : Text(
+                                        'Transfer to ' + '-',
+                                        style: TextStyle(fontSize: 10),
+                                      ),
+                                historyList[i]['status'] == 'added'
+                                    ? Container()
+                                    : Text(
+                                        '- / ',
+                                        style: TextStyle(fontSize: 10),
+                                      ),
+                                historyList[i]['status'] == 'added'
+                                    ? Container()
+                                    : Text(
+                                        '-',
+                                        style: TextStyle(fontSize: 10),
+                                      ),
+                                historyList[i]['status'] == 'added'
+                                    ? Container()
+                                    : Text(
+                                        historyList[i]['withdraw_code'],
+                                        style: TextStyle(fontSize: 10),
+                                      )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
                     ),
                     Container(
                       alignment: Alignment.center,
                       child: Center(
                         child: Text(
-                          'Rp. ${historyList[i]['amount']}',
-                          style: TextStyle(color: amountColor),
+                          'Rp. ${fo.withoutFractionDigits}',
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                              color: amountColor, fontWeight: FontWeight.bold),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               );

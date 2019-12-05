@@ -375,6 +375,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                           : () {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) => EventList(
+                                    userId: widget.currentUserId,
                                         type: 'created',
                                       )));
                             },

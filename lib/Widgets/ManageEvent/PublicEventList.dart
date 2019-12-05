@@ -261,6 +261,7 @@ class PublicEventListState extends State<PublicEventList> {
     String uri = BaseApi().apiUrl +
         '/user/${widget.type}?X-API-KEY=$API_KEY&page=1&userID=${widget.userId == prefs.getString('Last User ID') ? prefs.getString('Last User ID') : widget.userId }&isPrivate=0';
 
+    print(uri);
     final response = await http.get(
       uri,
       headers: {

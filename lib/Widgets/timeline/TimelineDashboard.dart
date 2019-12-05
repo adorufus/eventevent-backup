@@ -605,7 +605,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
           latestMediaHeader(),
           latestMediaContent(),
           SizedBox(
-            height: ScreenUtil.instance.setWidth(20),
+            height: ScreenUtil.instance.setWidth(30),
           )
         ],
       ),

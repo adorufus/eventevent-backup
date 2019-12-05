@@ -9,8 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class EventList extends StatefulWidget{
   final type;
+  final userId;
 
-  const EventList({Key key, this.type}) : super(key: key);
+  const EventList({Key key, this.type, this.userId}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     
@@ -65,8 +66,13 @@ class EventListState extends State<EventList>{
                 width: MediaQuery.of(context).size.width,
                 child: TabBarView(
                   children: <Widget>[
-                    PublicEventList(type: widget.type,),
-                    PrivateEventList(type: widget.type,)
+                    PublicEventList(
+                      userId: widget.userId,
+                      type: widget.type,
+                    ),
+                    PrivateEventList(
+                      userId: widget.userId,
+                      type: widget.type,)
                   ],
                 ),
               )

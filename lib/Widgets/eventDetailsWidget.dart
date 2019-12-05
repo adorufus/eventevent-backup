@@ -111,6 +111,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   String generatedLink = '-';
   String error = '-';
   String defaultTab = '0';
+  String dateTime = '-';
+  String month = '-';
 
   @override
   bool get wantKeepAlive => true;
@@ -870,8 +872,22 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   height: ScreenUtil.instance
                                                       .setWidth(10)),
                                               Container(
+                                                  width: ScreenUtil.instance
+                                                      .setWidth(180),
+                                                  child: Text(
+                                                    dateTime,
+                                                    style: TextStyle(
+                                                        fontSize: ScreenUtil
+                                                            .instance
+                                                            .setSp(12),
+                                                        color: Colors.grey),
+                                                  )),
+                                              SizedBox(
                                                   height: ScreenUtil.instance
-                                                      .setWidth(35),
+                                                      .setWidth(10)),
+                                              Container(
+                                                  height: ScreenUtil.instance
+                                                      .setWidth(detailData['name'].length < 30 ? 15 : 35),
                                                   width: ScreenUtil.instance
                                                       .setWidth(180),
                                                   child: Text(
@@ -1391,8 +1407,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                               isPrivate == "0"
                                   ? Container()
                                   : SizedBox(
-                                height: ScreenUtil.instance.setWidth(20),
-                              ),
+                                      height: ScreenUtil.instance.setWidth(20),
+                                    ),
                               isPrivate == "0"
                                   ? Container()
                                   : Padding(
@@ -1587,8 +1603,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                               ),
                               detailData['status'] == 'ended'
                                   ? SizedBox(
-                                height: ScreenUtil.instance.setWidth(20),
-                              ) : Container(),
+                                      height: ScreenUtil.instance.setWidth(20),
+                                    )
+                                  : Container(),
                               detailData['status'] == 'ended'
                                   ? Container(
                                       // height: ScreenUtil.instance.setWidth(150),
@@ -2285,7 +2302,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                   color: Colors.white),
               child: Column(
                 children: <Widget>[
-                  Container(child: Text('Lokasi terdaftar')),
                   showMap()
                 ],
               ),
@@ -2415,6 +2431,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     return Container(
       width: MediaQuery.of(context).size.width,
       height: ScreenUtil.instance.setWidth(200),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
       child: mapProvider,
     );
   }
@@ -2512,6 +2529,51 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         // });
 
         print('type' + detailData['ticket_type'].toString());
+
+        setState(() {
+          _dDay = DateTime.parse(detailData['dateStart']);
+
+          switch (_dDay.month) {
+            case 1:
+              month = 'January';
+              break;
+            case 2:
+              month = 'February';
+              break;
+            case 3:
+              month = 'March';
+              break;
+            case 4:
+              month = 'April';
+              break;
+            case 5:
+              month = 'May';
+              break;
+            case 6:
+              month = 'June';
+              break;
+            case 7:
+              month = 'July';
+              break;
+            case 8:
+              month = 'August';
+              break;
+            case 9:
+              month = 'September';
+              break;
+            case 10:
+              month = 'October';
+              break;
+            case 11:
+              month = 'November';
+              break;
+            case 12:
+              month = 'December';
+              break;
+          }
+
+          dateTime = _dDay.day.toString() + ' ' + month + ' ' + _dDay.year.toString();
+        });
 
         if (detailData['ticket_type']['type'] == 'paid' ||
             detailData['ticket_type']['type'] == 'paid_seating') {
