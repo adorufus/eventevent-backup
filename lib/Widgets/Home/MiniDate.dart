@@ -64,7 +64,7 @@ class _MiniDateState extends State<MiniDate> {
     )..init(context);
     
     return Container(
-          padding: EdgeInsets.only(left: 5.5, right: 2, top: 1),
+          padding: EdgeInsets.only(left: 2, right: 2, top: 1),
           width: ScreenUtil.instance.setWidth(27),
           height: ScreenUtil.instance.setWidth(27),
           decoration: BoxDecoration(

@@ -657,7 +657,7 @@ class WithdrawBankState extends State<WithdrawBank> {
 
               return Container(
                 margin: EdgeInsets.only(top: 5, bottom: 5, left: 13, right: 13),
-                padding: EdgeInsets.symmetric(horizontal: 13, vertical: 6),
+                padding: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15)),

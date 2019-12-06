@@ -790,15 +790,15 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                             children: <Widget>[
                               Container(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 13, vertical: 13),
+                                    horizontal: 11, vertical: 13),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
-                                      width:
-                                          ScreenUtil.instance.setWidth(122.86),
-                                      height:
-                                          ScreenUtil.instance.setWidth(184.06),
+                                      width: ScreenUtil.instance
+                                          .setWidth(122.86 * 1.3),
+                                      height: ScreenUtil.instance
+                                          .setWidth(184.06 * 1.3),
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(12),
@@ -1036,7 +1036,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           '1') {
                                                         ungoing()
                                                             .then((response) {
-                                                              isLoading = true;
+                                                          isLoading = true;
                                                           print(response
                                                               .statusCode);
                                                           print(response.body);
@@ -1130,9 +1130,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                             Widget>[
                                                                           Container(
                                                                             width:
-                                                                                ScreenUtil.instance.setWidth(122.86),
+                                                                                ScreenUtil.instance.setWidth(146.67),
                                                                             height:
-                                                                                ScreenUtil.instance.setWidth(184.06),
+                                                                                ScreenUtil.instance.setWidth(220),
                                                                             decoration: BoxDecoration(
                                                                                 borderRadius: BorderRadius.circular(12),
                                                                                 color: Colors.grey,
@@ -1304,9 +1304,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 },
                                                 child: Container(
                                                   height: ScreenUtil.instance
-                                                      .setWidth(28),
+                                                      .setWidth(28 * 1.1),
                                                   width: ScreenUtil.instance
-                                                      .setWidth(133),
+                                                      .setWidth(133 * 1.1),
                                                   decoration: BoxDecoration(
                                                       boxShadow: <BoxShadow>[
                                                         BoxShadow(
@@ -1456,87 +1456,84 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             SizedBox(
                                                 height: ScreenUtil.instance
                                                     .setWidth(10)),
-                                            invitedUserList.length == 0
-                                                ? Container()
-                                                : Container(
-                                                    height: ScreenUtil.instance
-                                                        .setWidth(30),
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    child: ListView.builder(
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      itemCount:
-                                                          invitedUserList ==
-                                                                  null
-                                                              ? 0
-                                                              : invitedUserList
-                                                                  .length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              i) {
-                                                        return Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  right: 10),
-                                                          child: Container(
-                                                            constraints: BoxConstraints(
-                                                                maxHeight:
-                                                                    ScreenUtil
-                                                                        .instance
-                                                                        .setWidth(
-                                                                            30),
-                                                                maxWidth:
-                                                                    ScreenUtil
-                                                                        .instance
-                                                                        .setWidth(
-                                                                            30),
-                                                                minHeight:
-                                                                    ScreenUtil
-                                                                        .instance
-                                                                        .setWidth(
-                                                                            30),
-                                                                minWidth: ScreenUtil
-                                                                    .instance
-                                                                    .setWidth(
-                                                                        30)),
-                                                            height: ScreenUtil
-                                                                .instance
-                                                                .setWidth(30),
-                                                            width: ScreenUtil
-                                                                .instance
-                                                                .setWidth(30),
-                                                            decoration: BoxDecoration(
-                                                                boxShadow: <
-                                                                    BoxShadow>[
-                                                                  BoxShadow(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      blurRadius:
-                                                                          8,
-                                                                      offset: Offset(
-                                                                          1.0,
-                                                                          1.0))
-                                                                ],
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                                image: DecorationImage(
-                                                                    image: invitedUserList[i]['photo'] ==
-                                                                            null
-                                                                        ? AssetImage(
-                                                                            'assets/grey-fade.jpg')
-                                                                        : NetworkImage(invitedUserList[i]
-                                                                            [
-                                                                            'photo']),
-                                                                    fit: BoxFit
-                                                                        .fill)),
-                                                          ),
-                                                        );
-                                                      },
+                                            Container(
+                                              height: ScreenUtil.instance
+                                                  .setWidth(30),
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              child: ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount: invitedUserList ==
+                                                        null
+                                                    ? 0
+                                                    : invitedUserList.length,
+                                                itemBuilder:
+                                                    (BuildContext context, i) {
+                                                  return Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 10),
+                                                    child: Container(
+                                                      constraints:
+                                                          BoxConstraints(
+                                                              maxHeight:
+                                                                  ScreenUtil
+                                                                      .instance
+                                                                      .setWidth(
+                                                                          30),
+                                                              maxWidth:
+                                                                  ScreenUtil
+                                                                      .instance
+                                                                      .setWidth(
+                                                                          30),
+                                                              minHeight:
+                                                                  ScreenUtil
+                                                                      .instance
+                                                                      .setWidth(
+                                                                          30),
+                                                              minWidth:
+                                                                  ScreenUtil
+                                                                      .instance
+                                                                      .setWidth(
+                                                                          30)),
+                                                      height: ScreenUtil
+                                                          .instance
+                                                          .setWidth(30),
+                                                      width: ScreenUtil.instance
+                                                          .setWidth(30),
+                                                      decoration: BoxDecoration(
+                                                          boxShadow: <
+                                                              BoxShadow>[
+                                                            BoxShadow(
+                                                                color: Colors
+                                                                    .black26,
+                                                                offset: Offset(
+                                                                    1.0, 1.0),
+                                                                blurRadius: 3)
+                                                          ],
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          image: DecorationImage(
+                                                              image: invitedUserList[
+                                                                              i]
+                                                                          [
+                                                                          'photo'] ==
+                                                                      null
+                                                                  ? AssetImage(
+                                                                      'assets/grey-fade.jpg')
+                                                                  : NetworkImage(
+                                                                      invitedUserList[
+                                                                              i]
+                                                                          [
+                                                                          'photo']),
+                                                              fit:
+                                                                  BoxFit.fill)),
                                                     ),
-                                                  )
+                                                  );
+                                                },
+                                              ),
+                                            )
                                           ],
                                         ),
                                       ),
@@ -1585,9 +1582,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           )));
                                             },
                                             child: new Container(
-                                              padding: i == 0
-                                                  ? EdgeInsets.only(left: 13)
-                                                  : EdgeInsets.only(left: 13),
+                                              
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
@@ -2465,20 +2460,23 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   }
 
   Future getInvitedUser() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
     final invitedDataUrl = BaseApi().apiUrl +
-        '/event/invited?X-API-KEY=${API_KEY}&event_id=${widget.id}&page=all';
+        '/event/invited?X-API-KEY=$API_KEY&event_id=${widget.id}&page=all';
     final response = await http.get(invitedDataUrl, headers: {
       'Authorization': 'Basic YWRtaW46MTIzNA==',
-      'cookie': session
+      'cookie': preferences.getString('Session')
     });
 
     print(response.statusCode);
+    print('invited: ' + response.body);
 
     if (response.statusCode == 200) {
       setState(() {
         var extractedData = json.decode(response.body);
         invitedData = extractedData['data'];
-        invitedUserList = invitedData['invited']['data'];
+        invitedUserList = invitedData['invited'];
       });
 
       print(invitedUserList);

@@ -26,7 +26,7 @@ class _MyTicketState extends State<MyTicket> {
   int newPage = 0;
   String _searchText = "";
 
-  bool notFound;
+  bool notFound = false;
 
   @override
   void initState() {
