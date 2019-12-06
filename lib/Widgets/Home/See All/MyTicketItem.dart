@@ -64,7 +64,7 @@ class MyTicketItem extends StatelessWidget {
                 ),
                 SizedBox(height: ScreenUtil.instance.setWidth(5)),
                 Container(
-                  width: MediaQuery.of(context).size.width - 146,
+                  width: 200,
                   child: Text(
                     title,
                     style: TextStyle(
