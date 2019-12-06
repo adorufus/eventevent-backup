@@ -54,7 +54,7 @@ class TransactionHistoryItem extends StatelessWidget {
             decoration: BoxDecoration(
               image:
                   DecorationImage(image: NetworkImage(image), fit: BoxFit.fill),
-              color: Color(0xFFFEC97C),
+              color: Color(0xFF8a8a8b),
               borderRadius: BorderRadius.circular(15),
             ),
           ),
