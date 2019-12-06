@@ -50,7 +50,7 @@ class TransactionHistoryItem extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Container(
-            height: ScreenUtil.instance.setWidth(100.19),
+            width: ScreenUtil.instance.setWidth(100.19),
             decoration: BoxDecoration(
               image:
                   DecorationImage(image: NetworkImage(image), fit: BoxFit.fill),
