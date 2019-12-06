@@ -208,6 +208,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   @override
   void dispose() {
     _timer.cancel();
+    refreshController.dispose();
     super.dispose();
   }
 
@@ -227,10 +228,30 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
   bool isLoading = false;
 
-  Future<http.Response> goingToEvent() async {
+  Future<http.Response> ungoing() async {
+    print(widget.id);
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/event_going/post';
+    String url = BaseApi().apiUrl + '/event_goingstatus/delete';
+
+    final response = await http.delete(
+      url,
+      headers: {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session'),
+        'id': widget.id,
+        'X-API-KEY': API_KEY,
+      },
+    );
+
+    return response;
+  }
+
+  Future<http.Response> goingToEvent() async {
+    print(widget.id);
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    String url = BaseApi().apiUrl + '/event_goingstatus/post';
 
     final response = await http.post(
       url,
@@ -238,7 +259,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         'Authorization': AUTHORIZATION_KEY,
         'cookie': preferences.getString('Session')
       },
-      body: {'X-API-KEY': API_KEY, 'eventID': eventID},
+      body: {'X-API-KEY': API_KEY, 'eventID': widget.id},
     );
 
     return response;
@@ -575,19 +596,16 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           Navigator.pop(context);
 
                                           isLoading = true;
+                                          goingToEvent().then((response) {
+                                            print(response.statusCode);
+                                            print(response.body);
 
-                                          Future.delayed(Duration(seconds: 6),
-                                              () {
-                                            goingToEvent().then((response) {
-                                              print(response.statusCode);
-                                              print(response.body);
-
-                                              if (response.statusCode == 201) {
-                                                isLoading = false;
-                                              } else {
-                                                isLoading = false;
-                                              }
-                                            });
+                                            if (response.statusCode == 201) {
+                                              getEventDetailsSpecificInfo();
+                                              isLoading = false;
+                                            } else {
+                                              isLoading = false;
+                                            }
                                           });
                                         },
                                         child: Container(
@@ -887,7 +905,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       .setWidth(10)),
                                               Container(
                                                   height: ScreenUtil.instance
-                                                      .setWidth(detailData['name'].length < 30 ? 15 : 35),
+                                                      .setWidth(
+                                                          detailData['name']
+                                                                      .length <
+                                                                  30
+                                                              ? 15
+                                                              : 35),
                                                   width: ScreenUtil.instance
                                                       .setWidth(180),
                                                   child: Text(
@@ -1008,271 +1031,274 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             ['type'] ==
                                                         'free') {
                                                       print('show modal');
-                                                      showModalBottomSheet(
-                                                        context: context,
-                                                        isScrollControlled:
-                                                            true,
-                                                        builder: (context) {
-                                                          return Container(
-                                                            color: Color(
-                                                                0xFF737373),
-                                                            child: Container(
-                                                              padding: EdgeInsets
-                                                                  .only(
-                                                                      bottom:
-                                                                          30),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .only(
-                                                                        topLeft:
-                                                                            Radius.circular(15),
-                                                                        topRight:
-                                                                            Radius.circular(15),
-                                                                      )),
-                                                              child: Column(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: <
-                                                                    Widget>[
-                                                                  Container(
-                                                                    padding:
-                                                                        EdgeInsets.all(
-                                                                            13),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                            color:
-                                                                                eventajaGreenTeal,
-                                                                            borderRadius:
-                                                                                BorderRadius.only(
-                                                                              topLeft: Radius.circular(15),
-                                                                              topRight: Radius.circular(15),
-                                                                            )),
-                                                                    child:
-                                                                        Center(
+                                                      if (detailData[
+                                                              'isGoing'] ==
+                                                          '1') {
+                                                        ungoing()
+                                                            .then((response) {
+                                                              isLoading = true;
+                                                          print(response
+                                                              .statusCode);
+                                                          print(response.body);
+
+                                                          if (response.statusCode ==
+                                                                  200 ||
+                                                              response.statusCode ==
+                                                                  201) {
+                                                            getEventDetailsSpecificInfo();
+                                                            isLoading = false;
+                                                          } else {
+                                                            isLoading = false;
+                                                          }
+                                                        });
+                                                      } else {
+                                                        showModalBottomSheet(
+                                                          context: context,
+                                                          isScrollControlled:
+                                                              true,
+                                                          builder: (context) {
+                                                            return Container(
+                                                              color: Color(
+                                                                  0xFF737373),
+                                                              child: Container(
+                                                                padding: EdgeInsets
+                                                                    .only(
+                                                                        bottom:
+                                                                            30),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        borderRadius:
+                                                                            BorderRadius.only(
+                                                                          topLeft:
+                                                                              Radius.circular(15),
+                                                                          topRight:
+                                                                              Radius.circular(15),
+                                                                        )),
+                                                                child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Container(
+                                                                      padding:
+                                                                          EdgeInsets.all(
+                                                                              13),
+                                                                      decoration: BoxDecoration(
+                                                                          color: eventajaGreenTeal,
+                                                                          borderRadius: BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                          )),
                                                                       child:
-                                                                          Text(
-                                                                        'Going to this event?',
-                                                                        style: TextStyle(
-                                                                            color: Colors
-                                                                                .white,
-                                                                            fontSize:
-                                                                                12,
-                                                                            fontWeight:
-                                                                                prefix0.FontWeight.bold),
+                                                                          Center(
+                                                                        child:
+                                                                            Text(
+                                                                          'Going to this event?',
+                                                                          style: TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontSize: 12,
+                                                                              fontWeight: prefix0.FontWeight.bold),
+                                                                        ),
                                                                       ),
                                                                     ),
-                                                                  ),
-                                                                  // Padding(
-                                                                  //     padding:
-                                                                  //         EdgeInsets.symmetric(horizontal: 50),
-                                                                  //     child: SizedBox(
-                                                                  //         height: ScreenUtil.instance.setWidth(5),
-                                                                  //         width: ScreenUtil.instance.setWidth(50),
-                                                                  //         child: Image.asset(
-                                                                  //           'assets/icons/icon_line.png',
-                                                                  //           fit: BoxFit.fill,
-                                                                  //         ))),
-                                                                  Container(
-                                                                    margin: EdgeInsets.symmetric(
-                                                                        horizontal:
-                                                                            13,
-                                                                        vertical:
-                                                                            13),
-                                                                    child: Row(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
-                                                                      children: <
-                                                                          Widget>[
-                                                                        Container(
-                                                                          width: ScreenUtil
-                                                                              .instance
-                                                                              .setWidth(122.86),
-                                                                          height: ScreenUtil
-                                                                              .instance
-                                                                              .setWidth(184.06),
-                                                                          decoration: BoxDecoration(
-                                                                              borderRadius: BorderRadius.circular(12),
-                                                                              color: Colors.grey,
-                                                                              image: DecorationImage(image: NetworkImage(detailData['photo']))),
-                                                                        ),
-                                                                        SizedBox(
-                                                                          width:
-                                                                              12,
-                                                                        ),
-                                                                        Flexible(
-                                                                          child:
-                                                                              Column(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.start,
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.start,
-                                                                            children: <Widget>[
-                                                                              Container(
-                                                                                width: ScreenUtil.instance.setWidth(200),
-                                                                                child: Text(
-                                                                                  detailData['name'],
-                                                                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                                                                  maxLines: 2,
-                                                                                ),
-                                                                              ),
-                                                                              SizedBox(
-                                                                                height: 15,
-                                                                              ),
-                                                                              Container(
-                                                                                  width: 210,
+                                                                    // Padding(
+                                                                    //     padding:
+                                                                    //         EdgeInsets.symmetric(horizontal: 50),
+                                                                    //     child: SizedBox(
+                                                                    //         height: ScreenUtil.instance.setWidth(5),
+                                                                    //         width: ScreenUtil.instance.setWidth(50),
+                                                                    //         child: Image.asset(
+                                                                    //           'assets/icons/icon_line.png',
+                                                                    //           fit: BoxFit.fill,
+                                                                    //         ))),
+                                                                    Container(
+                                                                      margin: EdgeInsets.symmetric(
+                                                                          horizontal:
+                                                                              13,
+                                                                          vertical:
+                                                                              13),
+                                                                      child:
+                                                                          Row(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
+                                                                        children: <
+                                                                            Widget>[
+                                                                          Container(
+                                                                            width:
+                                                                                ScreenUtil.instance.setWidth(122.86),
+                                                                            height:
+                                                                                ScreenUtil.instance.setWidth(184.06),
+                                                                            decoration: BoxDecoration(
+                                                                                borderRadius: BorderRadius.circular(12),
+                                                                                color: Colors.grey,
+                                                                                image: DecorationImage(image: NetworkImage(detailData['photo']))),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                12,
+                                                                          ),
+                                                                          Flexible(
+                                                                            child:
+                                                                                Column(
+                                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              children: <Widget>[
+                                                                                Container(
+                                                                                  width: ScreenUtil.instance.setWidth(200),
                                                                                   child: Text(
-                                                                                    detailData['description'],
-                                                                                    maxLines: 8,
-                                                                                  ))
-                                                                            ],
-                                                                          ),
-                                                                        )
-                                                                      ],
+                                                                                    detailData['name'],
+                                                                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                                                                    maxLines: 2,
+                                                                                  ),
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  height: 15,
+                                                                                ),
+                                                                                Container(
+                                                                                    width: 210,
+                                                                                    child: Text(
+                                                                                      detailData['description'],
+                                                                                      maxLines: 8,
+                                                                                    ))
+                                                                              ],
+                                                                            ),
+                                                                          )
+                                                                        ],
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                  SizedBox(
-                                                                      height: ScreenUtil
-                                                                          .instance
-                                                                          .setWidth(
-                                                                              12)),
-                                                                  Container(
-                                                                    margin: EdgeInsets.symmetric(
-                                                                        horizontal:
-                                                                            13),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .end,
-                                                                      children: <
-                                                                          Widget>[
-                                                                        GestureDetector(
-                                                                          onTap:
-                                                                              () {
-                                                                            Navigator.pop(context);
-                                                                          },
-                                                                          child:
-                                                                              Container(
-                                                                            height:
-                                                                                ScreenUtil.instance.setWidth(30),
-                                                                            width:
-                                                                                ScreenUtil.instance.setWidth(100),
-                                                                            decoration:
-                                                                                BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(30)),
+                                                                    SizedBox(
+                                                                        height: ScreenUtil
+                                                                            .instance
+                                                                            .setWidth(12)),
+                                                                    Container(
+                                                                      margin: EdgeInsets.symmetric(
+                                                                          horizontal:
+                                                                              13),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.end,
+                                                                        children: <
+                                                                            Widget>[
+                                                                          GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              Navigator.pop(context);
+                                                                            },
                                                                             child:
-                                                                                Center(
-                                                                              child: Text(
-                                                                                'Cancel',
-                                                                                style: TextStyle(
-                                                                                  color: Colors.white,
+                                                                                Container(
+                                                                              height: ScreenUtil.instance.setWidth(30),
+                                                                              width: ScreenUtil.instance.setWidth(100),
+                                                                              decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(30)),
+                                                                              child: Center(
+                                                                                child: Text(
+                                                                                  'Cancel',
+                                                                                  style: TextStyle(
+                                                                                    color: Colors.white,
+                                                                                  ),
                                                                                 ),
                                                                               ),
                                                                             ),
                                                                           ),
-                                                                        ),
-                                                                        SizedBox(
-                                                                            width:
-                                                                                ScreenUtil.instance.setWidth(8)),
-                                                                        GestureDetector(
-                                                                          onTap:
-                                                                              () {
-                                                                            Navigator.pop(context);
+                                                                          SizedBox(
+                                                                              width: ScreenUtil.instance.setWidth(8)),
+                                                                          GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              Navigator.pop(context);
 
-                                                                            isLoading =
-                                                                                true;
+                                                                              isLoading = true;
 
-                                                                            goingToEvent().then((response) {
-                                                                              print(response.statusCode);
-                                                                              print(response.body);
+                                                                              goingToEvent().then((response) {
+                                                                                print(response.statusCode);
+                                                                                print(response.body);
 
-                                                                              if (response.statusCode == 201) {
-                                                                                isLoading = false;
-                                                                              } else {
-                                                                                isLoading = false;
-                                                                              }
-                                                                            });
-                                                                          },
-                                                                          child:
-                                                                              Container(
-                                                                            height:
-                                                                                ScreenUtil.instance.setWidth(30),
-                                                                            width:
-                                                                                ScreenUtil.instance.setWidth(100),
-                                                                            decoration:
-                                                                                BoxDecoration(color: eventajaGreenTeal, borderRadius: BorderRadius.circular(30)),
+                                                                                if (response.statusCode == 201) {
+                                                                                  getEventDetailsSpecificInfo();
+                                                                                  isLoading = false;
+                                                                                } else {
+                                                                                  isLoading = false;
+                                                                                }
+                                                                              });
+                                                                            },
                                                                             child:
-                                                                                Center(
-                                                                              child: Text(
-                                                                                'Yes',
-                                                                                style: TextStyle(
-                                                                                  color: Colors.white,
+                                                                                Container(
+                                                                              height: ScreenUtil.instance.setWidth(30),
+                                                                              width: ScreenUtil.instance.setWidth(100),
+                                                                              decoration: BoxDecoration(color: eventajaGreenTeal, borderRadius: BorderRadius.circular(30)),
+                                                                              child: Center(
+                                                                                child: Text(
+                                                                                  'Yes',
+                                                                                  style: TextStyle(
+                                                                                    color: Colors.white,
+                                                                                  ),
                                                                                 ),
                                                                               ),
                                                                             ),
-                                                                          ),
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                  )
-                                                                ],
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
                                                               ),
-                                                            ),
-                                                          );
-                                                        },
-                                                      );
-                                                    }
-                                                  } else if (ticketType[
-                                                          'type'] ==
-                                                      'no_ticket') {
-                                                    print('no ticket');
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return new CupertinoAlertDialog(
-                                                            title: new Text(
-                                                                "Dialog Title"),
-                                                            content: new Text(
-                                                                "This is my content"),
-                                                            actions: <Widget>[
-                                                              CupertinoDialogAction(
-                                                                isDefaultAction:
-                                                                    true,
-                                                                child:
-                                                                    Text("Yes"),
-                                                              ),
-                                                              CupertinoDialogAction(
-                                                                child:
-                                                                    Text("No"),
-                                                              )
-                                                            ],
-                                                          );
-                                                        });
-                                                  } else {
-                                                    if (ticketStat[
-                                                                'salesStatus'] ==
-                                                            'endSales' ||
-                                                        ticketStat[
-                                                                'availableTicketStatus'] ==
-                                                            '0') {
-                                                      return;
+                                                            );
+                                                          },
+                                                        );
+                                                      }
+                                                    } else if (ticketType[
+                                                            'type'] ==
+                                                        'no_ticket') {
+                                                      print('no ticket');
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return new CupertinoAlertDialog(
+                                                              title: new Text(
+                                                                  "Dialog Title"),
+                                                              content: new Text(
+                                                                  "This is my content"),
+                                                              actions: <Widget>[
+                                                                CupertinoDialogAction(
+                                                                  isDefaultAction:
+                                                                      true,
+                                                                  child: Text(
+                                                                      "Yes"),
+                                                                ),
+                                                                CupertinoDialogAction(
+                                                                  child: Text(
+                                                                      "No"),
+                                                                )
+                                                              ],
+                                                            );
+                                                          });
                                                     } else {
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder: (BuildContext
-                                                                      context) =>
-                                                                  SelectTicketWidget(
-                                                                    eventID:
-                                                                        detailData[
-                                                                            'id'],
-                                                                    eventDate:
-                                                                        detailData[
-                                                                            'dateStart'],
-                                                                  )));
+                                                      if (ticketStat[
+                                                                  'salesStatus'] ==
+                                                              'endSales' ||
+                                                          ticketStat[
+                                                                  'availableTicketStatus'] ==
+                                                              '0') {
+                                                        return;
+                                                      } else {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder: (BuildContext
+                                                                        context) =>
+                                                                    SelectTicketWidget(
+                                                                      eventID:
+                                                                          detailData[
+                                                                              'id'],
+                                                                      eventDate:
+                                                                          detailData[
+                                                                              'dateStart'],
+                                                                    )));
+                                                      }
                                                     }
                                                   }
                                                 },
@@ -2301,9 +2327,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                   ],
                   color: Colors.white),
               child: Column(
-                children: <Widget>[
-                  showMap()
-                ],
+                children: <Widget>[showMap()],
               ),
             )
           ],
@@ -2572,64 +2596,72 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               break;
           }
 
-          dateTime = _dDay.day.toString() + ' ' + month + ' ' + _dDay.year.toString();
+          dateTime =
+              _dDay.day.toString() + ' ' + month + ' ' + _dDay.year.toString();
         });
 
-        if (detailData['ticket_type']['type'] == 'paid' ||
-            detailData['ticket_type']['type'] == 'paid_seating') {
-          if (detailData['ticket']['availableTicketStatus'] == '1') {
-            if (detailData['ticket']['cheapestTicket'] == '0') {
+        print('isGoing' + detailData['isGoing'].toString());
+
+        if (detailData['isGoing'] == '1') {
+          itemColor = Colors.blue;
+          ticketPrice = 'Going!';
+        } else {
+          if (detailData['ticket_type']['type'] == 'paid' ||
+              detailData['ticket_type']['type'] == 'paid_seating') {
+            if (detailData['ticket']['availableTicketStatus'] == '1') {
+              if (detailData['ticket']['cheapestTicket'] == '0') {
+                itemColor = Color(0xFFFFAA00);
+                ticketPrice = 'Free Limited';
+              } else {
+                itemColor = Color(0xFF34B323);
+                ticketPrice =
+                    'Rp. ' + detailData['ticket']['cheapestTicket'] + ' ,-';
+              }
+            } else {
+              if (detailData['ticket']['salesStatus'] == 'comingSoon') {
+                itemColor = Color(0xFF34B323).withOpacity(0.3);
+                ticketPrice = 'COMING SOON';
+              } else if (detailData['ticket']['salesStatus'] == 'endSales') {
+                itemColor = Color(0xFF8E1E2D);
+                if (detailData['status'] == 'ended') {
+                  ticketPrice = 'EVENT HAS ENDED';
+                }
+                ticketPrice = 'SALES ENDED';
+              } else {
+                itemColor = Color(0xFF8E1E2D);
+                ticketPrice = 'SOLD OUT';
+              }
+            }
+          } else if (detailData['ticket_type']['type'] == 'no_ticket') {
+            itemColor = Color(0xFF652D90);
+            ticketPrice = 'NO TICKET';
+          } else if (detailData['ticket_type']['type'] == 'on_the_spot') {
+            itemColor = Color(0xFF652D90);
+            ticketPrice = detailData['ticket_type']['name'];
+          } else if (detailData['ticket_type']['type'] == 'free') {
+            itemColor = Color(0xFFFFAA00);
+            ticketPrice = detailData['ticket_type']['name'];
+          } else if (detailData['ticket_type']['type'] == 'free') {
+            itemColor = Color(0xFFFFAA00);
+            ticketPrice = detailData['ticket_type']['name'];
+          } else if (detailData['ticket_type']['type'] == 'free_limited') {
+            if (detailData['ticket']['availableTicketStatus'] == '1') {
               itemColor = Color(0xFFFFAA00);
               ticketPrice = 'Free Limited';
             } else {
-              itemColor = Color(0xFF34B323);
-              ticketPrice =
-                  'Rp. ' + detailData['ticket']['cheapestTicket'] + ' ,-';
-            }
-          } else {
-            if (detailData['ticket']['salesStatus'] == 'comingSoon') {
-              itemColor = Color(0xFF34B323).withOpacity(0.3);
-              ticketPrice = 'COMING SOON';
-            } else if (detailData['ticket']['salesStatus'] == 'endSales') {
-              itemColor = Color(0xFF8E1E2D);
-              if (detailData['status'] == 'ended') {
-                ticketPrice = 'EVENT HAS ENDED';
+              if (detailData['ticket']['salesStatus'] == 'comingSoon') {
+                itemColor = Color(0xFF34B323).withOpacity(0.3);
+                ticketPrice = 'COMING SOON';
+              } else if (detailData['ticket']['salesStatus'] == 'endSales') {
+                itemColor = Color(0xFF8E1E2D);
+                if (detailData['status'] == 'ended') {
+                  ticketPrice = 'EVENT HAS ENDED';
+                }
+                ticketPrice = 'SALES ENDED';
+              } else {
+                itemColor = Color(0xFFFFAA00);
+                ticketPrice = 'SOLD OUT';
               }
-              ticketPrice = 'SALES ENDED';
-            } else {
-              itemColor = Color(0xFF8E1E2D);
-              ticketPrice = 'SOLD OUT';
-            }
-          }
-        } else if (detailData['ticket_type']['type'] == 'no_ticket') {
-          itemColor = Color(0xFF652D90);
-          ticketPrice = 'NO TICKET';
-        } else if (detailData['ticket_type']['type'] == 'on_the_spot') {
-          itemColor = Color(0xFF652D90);
-          ticketPrice = detailData['ticket_type']['name'];
-        } else if (detailData['ticket_type']['type'] == 'free') {
-          itemColor = Color(0xFFFFAA00);
-          ticketPrice = detailData['ticket_type']['name'];
-        } else if (detailData['ticket_type']['type'] == 'free') {
-          itemColor = Color(0xFFFFAA00);
-          ticketPrice = detailData['ticket_type']['name'];
-        } else if (detailData['ticket_type']['type'] == 'free_limited') {
-          if (detailData['ticket']['availableTicketStatus'] == '1') {
-            itemColor = Color(0xFFFFAA00);
-            ticketPrice = 'Free Limited';
-          } else {
-            if (detailData['ticket']['salesStatus'] == 'comingSoon') {
-              itemColor = Color(0xFF34B323).withOpacity(0.3);
-              ticketPrice = 'COMING SOON';
-            } else if (detailData['ticket']['salesStatus'] == 'endSales') {
-              itemColor = Color(0xFF8E1E2D);
-              if (detailData['status'] == 'ended') {
-                ticketPrice = 'EVENT HAS ENDED';
-              }
-              ticketPrice = 'SALES ENDED';
-            } else {
-              itemColor = Color(0xFFFFAA00);
-              ticketPrice = 'SOLD OUT';
             }
           }
         }

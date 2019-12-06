@@ -144,7 +144,7 @@ class PublicEventListState extends State<PublicEventList> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       EventDetailsConstructView(
-                                          id: publicData[i]['id'])));
+                                          id: publicData[i]['eventID'])));
                         },
                         child: new LatestEventItem(
                           image: publicData[i]['picture'],

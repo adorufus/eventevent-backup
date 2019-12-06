@@ -10,7 +10,8 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eventevent/helper/FollowUnfollow.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -116,7 +117,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -214,7 +216,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                       Text(
                         widget.fullName == null ? 'loading' : widget.fullName,
                         style: TextStyle(
-                            fontSize: ScreenUtil.instance.setSp(17), fontWeight: FontWeight.bold),
+                            fontSize: ScreenUtil.instance.setSp(17),
+                            fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: ScreenUtil.instance.setWidth(4),
@@ -232,7 +235,9 @@ class _ProfileHeaderState extends State<ProfileHeader>
                             widget.username == null
                                 ? 'loading'
                                 : '@' + widget.username,
-                            style: TextStyle(fontSize: ScreenUtil.instance.setSp(12), color: Colors.grey),
+                            style: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(12),
+                                color: Colors.grey),
                           ),
                         ],
                       ),
@@ -243,7 +248,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         width: ScreenUtil.instance.setWidth(180),
                         child: Text(
                           widget.bio == null ? '-' : widget.bio,
-                          style: TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(12)),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -261,8 +267,9 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         },
                         child: Text(
                           widget.website == null ? '-' : widget.website,
-                          style:
-                              TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(12)),
+                          style: TextStyle(
+                              color: eventajaGreenTeal,
+                              fontSize: ScreenUtil.instance.setSp(12)),
                         ),
                       ),
                       SizedBox(
@@ -341,7 +348,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                             : 'Following',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: ScreenUtil.instance.setSp(10),
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(10),
                                           color: this.isFollowed == false
                                               ? Color(0xFF55B9E5)
                                               : Color(0xFFFFFFFF),
@@ -366,213 +374,224 @@ class _ProfileHeaderState extends State<ProfileHeader>
                           color: Colors.black.withOpacity(0.1),
                           spreadRadius: 1.5)
                     ]),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: widget.eventCreatedCount == '0'
-                          ? () {}
-                          : () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) => EventList(
-                                    userId: widget.currentUserId,
-                                        type: 'created',
-                                      )));
-                            },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            widget.eventCreatedCount == null
-                                ? '0'
-                                : widget.eventCreatedCount,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize:
-                                    int.parse(widget.eventCreatedCount) > 999
-                                        ? 14
-                                        : 17,
-                                color: widget.eventCreatedCount == "0" ||
-                                        widget.eventCreatedCount == null
-                                    ? Colors.grey
-                                    : Colors.black),
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(9),
-                          ),
-                          Text('EVENT CREATED',
+                child: ConstrainedBox(
+                  constraints: BoxConstraints.expand(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: widget.eventCreatedCount == '0'
+                            ? () {}
+                            : () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        EventList(
+                                          userId: widget.currentUserId,
+                                          type: 'created',
+                                        )));
+                              },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              widget.eventCreatedCount == null
+                                  ? '0'
+                                  : widget.eventCreatedCount,
                               style: TextStyle(
-                                  fontSize: 7,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize:
+                                      int.parse(widget.eventCreatedCount) > 999
+                                          ? 14
+                                          : 17,
                                   color: widget.eventCreatedCount == "0" ||
                                           widget.eventCreatedCount == null
                                       ? Colors.grey
-                                      : Colors.black))
-                        ],
+                                      : Colors.black),
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(9),
+                            ),
+                            Text('EVENT CREATED',
+                                style: TextStyle(
+                                    fontSize: 7,
+                                    color: widget.eventCreatedCount == "0" ||
+                                            widget.eventCreatedCount == null
+                                        ? Colors.grey
+                                        : Colors.black))
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: ScreenUtil.instance.setWidth(16),
-                    ),
-                    Container(
-                      width: 0,
-                      height: ScreenUtil.instance.setWidth(48),
-                      decoration: BoxDecoration(
-                          border: Border(
-                              right: createBorderSide(context,
-                                  color: Color(0xFF8A8A8B)))),
-                    ),
-                    SizedBox(
-                      width: ScreenUtil.instance.setWidth(18),
-                    ),
-                    GestureDetector(
-                      onTap: widget.eventGoingCount == '0'
-                          ? () {}
-                          : () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      EventList(type: 'going')));
-                            },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                              widget.eventGoingCount == null
-                                  ? '0'
-                                  : widget.eventGoingCount,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                      int.parse(widget.eventCreatedCount) > 999
-                                          ? 14
-                                          : 17,
-                                  color: widget.eventGoingCount == "0" ||
-                                          widget.eventGoingCount == null
-                                      ? Colors.grey
-                                      : Colors.black)),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(9),
-                          ),
-                          Text('EVENT GOING',
-                              style: TextStyle(
-                                  fontSize: 7,
-                                  color: widget.eventGoingCount == "0" ||
-                                          widget.eventGoingCount == null
-                                      ? Colors.grey
-                                      : Colors.black))
-                        ],
+                      SizedBox(
+                        width: ScreenUtil.instance.setWidth(16),
                       ),
-                    ),
-                    SizedBox(
-                      width: ScreenUtil.instance.setWidth(18),
-                    ),
-                    Container(
-                      width: 0,
-                      height: ScreenUtil.instance.setWidth(48),
-                      decoration: BoxDecoration(
-                          border: Border(
-                              right: createBorderSide(context,
-                                  color: Color(0xFF8A8A8B)))),
-                    ),
-                    SizedBox(
-                      width: ScreenUtil.instance.setWidth(23),
-                    ),
-                    GestureDetector(
-                      onTap: widget.follower == '0'
-                          ? () {}
-                          : () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      ListViewWithAppBar(
-                                        title: 'FOLLOWER',
-                                        apiURL: BaseApi().apiUrl +
-                                            '/user/follower?X-API-KEY=$API_KEY&userID=${widget.currentUserId}&page=1',
-                                      )));
-                            },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(widget.follower == null ? '0' : widget.follower,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                      int.parse(widget.eventCreatedCount) > 999
-                                          ? 14
-                                          : 17,
-                                  color: widget.follower == "0" ||
-                                          widget.follower == null
-                                      ? Colors.grey
-                                      : Colors.black)),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(9),
-                          ),
-                          Text('FOLLOWER',
-                              style: TextStyle(
-                                  fontSize: 7,
-                                  color: widget.follower == "0" ||
-                                          widget.follower == null
-                                      ? Colors.grey
-                                      : Colors.black))
-                        ],
+                      Container(
+                        width: 0,
+                        height: ScreenUtil.instance.setWidth(48),
+                        decoration: BoxDecoration(
+                            border: Border(
+                                right: createBorderSide(context,
+                                    color: Color(0xFF8A8A8B)))),
                       ),
-                    ),
-                    SizedBox(
-                      width: ScreenUtil.instance.setWidth(23),
-                    ),
-                    Container(
-                      width: 0,
-                      height: ScreenUtil.instance.setWidth(48),
-                      decoration: BoxDecoration(
-                          border: Border(
-                              right: createBorderSide(context,
-                                  color: Color(0xFF8A8A8B)))),
-                    ),
-                    SizedBox(
-                      width: ScreenUtil.instance.setWidth(23),
-                    ),
-                    GestureDetector(
-                      onTap: widget.following == '0'
-                          ? () {}
-                          : () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      ListViewWithAppBar(
-                                        title: 'FOLLOWING',
-                                        apiURL: BaseApi().apiUrl +
-                                            '/user/following?X-API-KEY=${API_KEY}&userID=${widget.currentUserId}&page=1',
-                                      )));
-                            },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                              widget.following == null ? '0' : widget.following,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                      int.parse(widget.eventCreatedCount) > 999
-                                          ? 14
-                                          : 17,
-                                  color: widget.following == "0" ||
-                                          widget.following == null
-                                      ? Colors.grey
-                                      : Colors.black)),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(9),
-                          ),
-                          Text('FOLLOWING',
-                              style: TextStyle(
-                                  fontSize: 7,
-                                  color: widget.following == "0"
-                                      ? Colors.grey
-                                      : Colors.black))
-                        ],
+                      SizedBox(
+                        width: ScreenUtil.instance.setWidth(18),
                       ),
-                    )
-                  ],
+                      GestureDetector(
+                        onTap: widget.eventGoingCount == '0'
+                            ? () {}
+                            : () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        EventList(type: 'going', userId: widget.currentUserId,)));
+                              },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                                widget.eventGoingCount ==
+                                        null
+                                    ? '0'
+                                    : widget.eventGoingCount,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize:
+                                        int.parse(widget.eventCreatedCount) >
+                                                999
+                                            ? 14
+                                            : 17,
+                                    color: widget.eventGoingCount == "0" ||
+                                            widget.eventGoingCount == null
+                                        ? Colors.grey
+                                        : Colors.black)),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(9),
+                            ),
+                            Text('EVENT GOING',
+                                style: TextStyle(
+                                    fontSize: 7,
+                                    color: widget.eventGoingCount == "0" ||
+                                            widget.eventGoingCount == null
+                                        ? Colors.grey
+                                        : Colors.black))
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: ScreenUtil.instance.setWidth(18),
+                      ),
+                      Container(
+                        width: 0,
+                        height: ScreenUtil.instance.setWidth(48),
+                        decoration: BoxDecoration(
+                            border: Border(
+                                right: createBorderSide(context,
+                                    color: Color(0xFF8A8A8B)))),
+                      ),
+                      SizedBox(
+                        width: ScreenUtil.instance.setWidth(23),
+                      ),
+                      GestureDetector(
+                        onTap: widget.follower == '0'
+                            ? () {}
+                            : () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        ListViewWithAppBar(
+                                          title: 'FOLLOWER',
+                                          apiURL: BaseApi().apiUrl +
+                                              '/user/follower?X-API-KEY=$API_KEY&userID=${widget.currentUserId}&page=1',
+                                        )));
+                              },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                                widget.follower == null ? '0' : widget.follower,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize:
+                                        int.parse(widget.eventCreatedCount) >
+                                                999
+                                            ? 14
+                                            : 17,
+                                    color: widget.follower == "0" ||
+                                            widget.follower == null
+                                        ? Colors.grey
+                                        : Colors.black)),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(9),
+                            ),
+                            Text('FOLLOWER',
+                                style: TextStyle(
+                                    fontSize: 7,
+                                    color: widget.follower == "0" ||
+                                            widget.follower == null
+                                        ? Colors.grey
+                                        : Colors.black))
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: ScreenUtil.instance.setWidth(23),
+                      ),
+                      Container(
+                        width: 0,
+                        height: ScreenUtil.instance.setWidth(48),
+                        decoration: BoxDecoration(
+                            border: Border(
+                                right: createBorderSide(context,
+                                    color: Color(0xFF8A8A8B)))),
+                      ),
+                      SizedBox(
+                        width: ScreenUtil.instance.setWidth(23),
+                      ),
+                      GestureDetector(
+                        onTap: widget.following == '0'
+                            ? () {}
+                            : () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        ListViewWithAppBar(
+                                          title: 'FOLLOWING',
+                                          apiURL: BaseApi().apiUrl +
+                                              '/user/following?X-API-KEY=${API_KEY}&userID=${widget.currentUserId}&page=1',
+                                        )));
+                              },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                                widget.following == null
+                                    ? '0'
+                                    : widget.following,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize:
+                                        int.parse(widget.eventCreatedCount) >
+                                                999
+                                            ? 14
+                                            : 17,
+                                    color: widget.following == "0" ||
+                                            widget.following == null
+                                        ? Colors.grey
+                                        : Colors.black)),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(9),
+                            ),
+                            Text('FOLLOWING',
+                                style: TextStyle(
+                                    fontSize: 7,
+                                    color: widget.following == "0"
+                                        ? Colors.grey
+                                        : Colors.black))
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               tabNavigator(context, widget)
@@ -685,7 +704,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                       SizedBox(width: ScreenUtil.instance.setWidth(10)),
                       Text('Timeline',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.5))),
+                              fontWeight: FontWeight.bold,
+                              fontSize: ScreenUtil.instance.setSp(12.5))),
                     ],
                   ),
                 ),
@@ -699,9 +719,13 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         scale: 4.5,
                       ),
                       SizedBox(width: ScreenUtil.instance.setWidth(10)),
-                      Text(widget.currentUserId == userId ? 'My Ticket' : 'Event Going',
+                      Text(
+                          widget.currentUserId == userId
+                              ? 'My Ticket'
+                              : 'Event Going',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.5))),
+                              fontWeight: FontWeight.bold,
+                              fontSize: ScreenUtil.instance.setSp(12.5))),
                     ],
                   ),
                 ),
@@ -720,7 +744,12 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         child: CircularProgressIndicator(),
                       )
                     : timeline(),
-                widget.currentUserId == userId ? MyTicketWidget() :  PublicEventList(type: 'going', userId: widget.currentUserId,)
+                widget.currentUserId == userId
+                    ? MyTicketWidget()
+                    : PublicEventList(
+                        type: 'going',
+                        userId: widget.currentUserId,
+                      )
               ],
             ),
           ),
@@ -831,7 +860,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       width: ScreenUtil.instance.setWidth(8),
                                     ),
                                     Container(
-                                        width: ScreenUtil.instance.setWidth(200.0),
+                                        width:
+                                            ScreenUtil.instance.setWidth(200.0),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -842,12 +872,18 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                                             ['isVerified'] ==
                                                         '1'
                                                     ? Container(
-                                                        height: ScreenUtil.instance.setWidth(18),
-                                                        width: ScreenUtil.instance.setWidth(18),
+                                                        height: ScreenUtil
+                                                            .instance
+                                                            .setWidth(18),
+                                                        width: ScreenUtil
+                                                            .instance
+                                                            .setWidth(18),
                                                         child: Image.asset(
                                                             'assets/icons/icon_apps/verif.png'))
                                                     : Container(),
-                                                SizedBox(width: ScreenUtil.instance.setWidth(5)),
+                                                SizedBox(
+                                                    width: ScreenUtil.instance
+                                                        .setWidth(5)),
                                                 Text(
                                                     userTimelineList[i]
                                                         ['fullName'],
@@ -857,7 +893,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                               ],
                                             ),
                                             SizedBox(
-                                              height: ScreenUtil.instance.setWidth(5),
+                                              height: ScreenUtil.instance
+                                                  .setWidth(5),
                                             ),
                                             Row(
                                               children: <Widget>[
@@ -868,7 +905,9 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                                         scale: 3,
                                                       )
                                                     : Container(),
-                                                SizedBox(width: ScreenUtil.instance.setWidth(5)),
+                                                SizedBox(
+                                                    width: ScreenUtil.instance
+                                                        .setWidth(5)),
                                                 Text(
                                                     userTimelineList[i]
                                                                 ['type'] ==
@@ -884,7 +923,9 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                                                     i]['type'],
                                                     style: TextStyle(
                                                         color: Colors.grey,
-                                                        fontSize: ScreenUtil.instance.setSp(10))),
+                                                        fontSize: ScreenUtil
+                                                            .instance
+                                                            .setSp(10))),
                                               ],
                                             ),
                                           ],
@@ -894,9 +935,12 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                 children: <Widget>[
                                   Text(
                                     'a minute ago',
-                                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(10)),
+                                    style: TextStyle(
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(10)),
                                   ),
-                                  SizedBox(height: ScreenUtil.instance.setWidth(4)),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(4)),
                                 ],
                               )
                             ],
@@ -952,8 +996,11 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                         Text(userTimelineList[i]['fullName'],
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: ScreenUtil.instance.setSp(15))),
-                                        SizedBox(height: ScreenUtil.instance.setWidth(8)),
+                                                fontSize: ScreenUtil.instance
+                                                    .setSp(15))),
+                                        SizedBox(
+                                            height: ScreenUtil.instance
+                                                .setWidth(8)),
                                         Row(
                                           children: <Widget>[
                                             userTimelineList[i]['type'] ==
@@ -985,7 +1032,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                                             ['type'] ==
                                                         'photo'
                                                 ? Container(
-                                                    width: ScreenUtil.instance.setWidth(360 - 70.0),
+                                                    width: ScreenUtil.instance
+                                                        .setWidth(360 - 70.0),
                                                     child: Text(
                                                         userTimelineList[i]
                                                                     ['name'] ==
@@ -1061,7 +1109,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                           : Colors.grey,
                                       scale: 3.5,
                                     ),
-                                    SizedBox(width: ScreenUtil.instance.setWidth(5)),
+                                    SizedBox(
+                                        width: ScreenUtil.instance.setWidth(5)),
                                     Text(impressionList.length.toString(),
                                         style: TextStyle(
                                             color: Color(
@@ -1087,7 +1136,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       'assets/icons/icon_apps/comment.png',
                                       scale: 3.5,
                                     ),
-                                    SizedBox(width: ScreenUtil.instance.setWidth(5)),
+                                    SizedBox(
+                                        width: ScreenUtil.instance.setWidth(5)),
                                     Text(commentList.length.toString(),
                                         style: TextStyle(
                                             color: Color(
@@ -1302,7 +1352,10 @@ class _ProfileHeaderState extends State<ProfileHeader>
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => ReportPost(postId: id, postType: postType,)));
+                        builder: (BuildContext context) => ReportPost(
+                              postId: id,
+                              postType: postType,
+                            )));
                 // Navigator.push(
                 //     context,
                 //     MaterialPageRoute(
