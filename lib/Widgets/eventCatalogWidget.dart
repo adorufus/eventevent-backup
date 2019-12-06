@@ -174,61 +174,61 @@ class _EventCatalogState extends State<EventCatalog>
     )..init(context);
 
     mappedDataBanner = bannerData?.map((bannerData) {
-          return bannerData == null
-              ? Center(child: CircularProgressIndicator())
-              : Builder(
+          return Builder(
                   builder: (BuildContext context) {
-                    return bannerData == null
-                        ? Center(child: CircularProgressIndicator())
-                        : GestureDetector(
-                            onTap: () {
-                              if (bannerData['type'] == 'event') {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            EventDetailsConstructView(
-                                                id: bannerData['eventID'],
-                                                name: bannerData['name'],
-                                                image:
-                                                    bannerData['photoFull'])));
-                              } else if (bannerData['type'] == 'nolink') {
-                                return;
-                              } else if (bannerData['type'] == 'category') {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            EventDetailsConstructView(
-                                                id: bannerData['categoryID'],
-                                                name: bannerData['name'],
-                                                image:
-                                                    bannerData['photoFull'])));
-                              }
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).devicePixelRatio *
-                                  2645.0,
-                              margin: EdgeInsets.only(
-                                  left: 13, right: 13, bottom: 15, top: 13),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.rectangle,
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        offset: Offset(0, 0),
-                                        blurRadius: 2,
-                                        spreadRadius: 1.5)
-                                  ],
-                                  borderRadius: BorderRadius.circular(15),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: CachedNetworkImageProvider(
-                                      bannerData["image"],
-                                    ),
-                                  )),
-                            ));
+                    return GestureDetector(
+                        onTap: () {
+                          if (bannerData['type'] == 'event') {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        EventDetailsConstructView(
+                                            id: bannerData['eventID'],
+                                            name: bannerData['name'],
+                                            image: bannerData['photoFull'])));
+                          } else if (bannerData['type'] == 'nolink') {
+                            return;
+                          } else if (bannerData['type'] == 'category') {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        EventDetailsConstructView(
+                                            id: bannerData['categoryID'],
+                                            name: bannerData['name'],
+                                            image: bannerData['photoFull'])));
+                          }
+                        },
+                        child: Container(
+                          width:
+                              MediaQuery.of(context).devicePixelRatio * 2645.0,
+                          margin: EdgeInsets.only(
+                              left: 13, right: 13, bottom: 15, top: 13),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.rectangle,
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  offset: Offset(0, 0),
+                                  blurRadius: 2,
+                                  spreadRadius: 1.5)
+                            ],
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: CachedNetworkImage(
+                                imageUrl: bannerData["image"],
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => new Container(
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    )),
+                          ),
+                        ));
                   },
                 );
         })?.toList() ??
@@ -461,8 +461,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 'assets/icons/icon_apps/home.png',
                                 scale: 4.5,
                               ),
-                              SizedBox(
-                                  width: ScreenUtil.instance.setWidth(10)),
+                              SizedBox(width: ScreenUtil.instance.setWidth(10)),
                               Text('Home',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -480,8 +479,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 'assets/icons/icon_apps/nearby.png',
                                 scale: 4.5,
                               ),
-                              SizedBox(
-                                  width: ScreenUtil.instance.setWidth(10)),
+                              SizedBox(width: ScreenUtil.instance.setWidth(10)),
                               Text('Nearby',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -499,8 +497,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 'assets/icons/icon_apps/latest.png',
                                 scale: 4.5,
                               ),
-                              SizedBox(
-                                  width: ScreenUtil.instance.setWidth(10)),
+                              SizedBox(width: ScreenUtil.instance.setWidth(10)),
                               Text('Latest',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -602,11 +599,7 @@ class _EventCatalogState extends State<EventCatalog>
                   padding: EdgeInsets.only(bottom: 0),
                   child: Stack(
                     children: <Widget>[
-                      mappedDataBanner == null
-                          ? Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : banner(),
+                      banner(),
                     ],
                   ),
                 ),
@@ -731,8 +724,7 @@ class _EventCatalogState extends State<EventCatalog>
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => MediaDetails(
-                                              videoUrl: mediaData[i]
-                                                  ['video'],
+                                              videoUrl: mediaData[i]['video'],
                                               youtubeUrl: mediaData[i]
                                                   ['youtube'],
                                               userPicture: mediaData[i]
