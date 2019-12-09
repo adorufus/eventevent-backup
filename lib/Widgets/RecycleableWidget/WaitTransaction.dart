@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:eventevent/Widgets/TransactionHistory.dart';
 import 'package:quiver/async.dart';
 
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -115,7 +116,7 @@ class _WaitTransactionState extends State<WaitTransaction> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => TransactionHistory()), (Route<dynamic> route) => false);
           },
           child: Icon(
             Icons.close,

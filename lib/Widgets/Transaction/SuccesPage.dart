@@ -77,9 +77,9 @@ class SuccessPageState extends State<SuccessPage> {
             ),
             GestureDetector(
               onTap: (){
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                Navigator.of(context).push(MaterialPageRoute(
                   builder: ( BuildContext context) => ProfileWidget(initialIndex: 1, userId: currentUserId,)
-                ), ModalRoute.withName('/Dashboard'));
+                ));
               },
               child: Container(
                 height: ScreenUtil.instance.setWidth(50),
