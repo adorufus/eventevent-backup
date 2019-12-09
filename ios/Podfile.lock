@@ -106,6 +106,8 @@ PODS:
     - Flutter
   - flutter_money_formatter (0.0.1):
     - Flutter
+  - flutter_statusbarcolor (0.0.1):
+    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -230,6 +232,7 @@ DEPENDENCIES:
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_money_formatter (from `.symlinks/plugins/flutter_money_formatter/ios`)
+  - flutter_statusbarcolor (from `.symlinks/plugins/flutter_statusbarcolor/ios`)
   - geocoder (from `.symlinks/plugins/geocoder/ios`)
   - google_places_picker (from `.symlinks/plugins/google_places_picker/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
@@ -312,6 +315,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_money_formatter:
     :path: ".symlinks/plugins/flutter_money_formatter/ios"
+  flutter_statusbarcolor:
+    :path: ".symlinks/plugins/flutter_statusbarcolor/ios"
   geocoder:
     :path: ".symlinks/plugins/geocoder/ios"
   google_places_picker:
@@ -382,6 +387,7 @@ SPEC CHECKSUMS:
   flutter_keyboard_visibility: 6195387fb6d8f46e5cd6dda4a4154e41f800f545
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   flutter_money_formatter: d0d18ddc5be333fad8d09964d741b59fa11a91dc
+  flutter_statusbarcolor: 8afb1071ed8c58be929f1e32b36c629771fd2259
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geocoder: 3cfab70531a0b367e917bafe82df4c30f6d4c45a
   google_places_picker: 03d33817a6997c04308b98d62c1e198608522730

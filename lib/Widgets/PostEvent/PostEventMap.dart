@@ -30,7 +30,7 @@ class PostEventMapState extends State<PostEventMap>{
   LocationData currentLocation;
   StreamSubscription<LocationData> locationSubcription;
 
-  showPlacePicker() async {
+showPlacePicker() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var place = await PluginGooglePlacePicker.showPlacePicker();
 

@@ -28,7 +28,7 @@ class WithdrawBankState extends State<WithdrawBank> {
 
   Map balanceData;
   List bankList = [];
-  List historyList = new List();
+  List historyList = [];
 
   MoneyFormatterOutput fo;
 
