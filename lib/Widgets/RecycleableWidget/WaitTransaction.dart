@@ -116,7 +116,8 @@ class _WaitTransactionState extends State<WaitTransaction> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => TransactionHistory()), (Route<dynamic> route) => false);
+            Navigator.of(context).popUntil(ModalRoute.withName('/Dashboard'));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => TransactionHistory()));
           },
           child: Icon(
             Icons.close,
