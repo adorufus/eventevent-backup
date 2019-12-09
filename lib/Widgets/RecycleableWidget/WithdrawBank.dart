@@ -711,19 +711,19 @@ class WithdrawBankState extends State<WithdrawBank> {
                                         style: TextStyle(fontSize: 10),
                                       )
                                     : Text(
-                                        'Transfer to ' + '-',
+                                        'Transfer to ' + historyList[i]['user_bank'] == null ? '-' : historyList[i]['user_bank']['account_name'],
                                         style: TextStyle(fontSize: 10),
                                       ),
                                 historyList[i]['status'] == 'added'
                                     ? Container()
                                     : Text(
-                                        '- / ',
+                                        historyList[i]['user_bank'] == null ? '-' : historyList[i]['user_bank']['account_number'] + ' / ',
                                         style: TextStyle(fontSize: 10),
                                       ),
                                 historyList[i]['status'] == 'added'
                                     ? Container()
                                     : Text(
-                                        '-',
+                                        DateTime.parse(historyList[i]['created_at']).day.toString() + '-' + DateTime.parse(historyList[i]['created_at']).month.toString() + '-' + DateTime.parse(historyList[i]['created_at']).year.toString() ,
                                         style: TextStyle(fontSize: 10),
                                       ),
                                 historyList[i]['status'] == 'added'

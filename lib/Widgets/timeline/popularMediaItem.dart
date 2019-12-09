@@ -231,7 +231,7 @@ class _MediaItemState extends State<MediaItem> {
                                               )));
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 13),
+                                  padding: EdgeInsets.symmetric(horizontal:  commentCount.length < 1 ? 8 : 13),
                                   height: ScreenUtil.instance.setWidth(30),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
@@ -250,11 +250,12 @@ class _MediaItemState extends State<MediaItem> {
                                         Image.asset(
                                           'assets/icons/icon_apps/comment.png',
                                           scale: 3.5,
+                                          color:  commentCount.length < 1 ? Colors.grey : Colors.transparent,
                                         ),
                                         SizedBox(
                                             width: ScreenUtil.instance
-                                                .setWidth(5)),
-                                        Text(commentCount.length.toString(),
+                                                .setWidth(commentCount.length < 1 ? 0 : 5)),
+                                        Text(commentCount.length < 1 ? '' : commentCount.length.toString(),
                                             style: TextStyle(
                                                 color: Color(
                                                     0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']

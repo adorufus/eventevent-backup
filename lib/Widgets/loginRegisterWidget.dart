@@ -497,6 +497,9 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                   ],
                 ),
               ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(50),
+              )
             ],
           ),
         ),

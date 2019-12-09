@@ -52,7 +52,7 @@ class _ListenPageState extends State<ListenPage> {
           myLocation = null;
         }
         setState(() {
-          currentLocation = myLocation;
+          // currentLocation = myLocation;
         });
       }
 }

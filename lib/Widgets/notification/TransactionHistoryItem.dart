@@ -53,7 +53,7 @@ class TransactionHistoryItem extends StatelessWidget {
             width: ScreenUtil.instance.setWidth(100.19),
             decoration: BoxDecoration(
               image:
-                  DecorationImage(image: NetworkImage(image), fit: BoxFit.fill),
+                  DecorationImage(image: image == null || image == '' ? AssetImage('assets/grey-fade.jpg') : NetworkImage(image), fit: BoxFit.fill),
               color: Color(0xFF8a8a8b),
               borderRadius: BorderRadius.circular(15),
             ),
