@@ -711,13 +711,13 @@ class WithdrawBankState extends State<WithdrawBank> {
                                         style: TextStyle(fontSize: 10),
                                       )
                                     : Text(
-                                        'Transfer to ' + historyList[i]['user_bank'] == null ? '-' : historyList[i]['user_bank']['account_name'],
+                                        'Transfer to ' + historyList[i]['user_bank']['account_name'] ?? '-',
                                         style: TextStyle(fontSize: 10),
                                       ),
                                 historyList[i]['status'] == 'added'
                                     ? Container()
                                     : Text(
-                                        historyList[i]['user_bank'] == null ? '-' : historyList[i]['user_bank']['account_number'] + ' / ',
+                                        historyList[i]['user_bank']['account_number'] ?? '-' + ' / ',
                                         style: TextStyle(fontSize: 10),
                                       ),
                                 historyList[i]['status'] == 'added'
@@ -729,7 +729,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                                 historyList[i]['status'] == 'added'
                                     ? Container()
                                     : Text(
-                                        historyList[i]['withdraw_code'],
+                                        historyList[i]['withdraw_code'] ?? '-',
                                         style: TextStyle(fontSize: 10),
                                       )
                               ],
