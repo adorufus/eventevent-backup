@@ -5,7 +5,8 @@ import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -27,7 +28,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
 
   void _onLoading() async {
     await Future.delayed(Duration(milliseconds: 2000));
-    setState((){
+    setState(() {
       newPage += 1;
     });
 
@@ -36,7 +37,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
         setState(() {
           var extractedData = json.decode(response.body);
           List updatedData = extractedData['data'];
-          if(updatedData == null){
+          if (updatedData == null) {
             refreshController.loadNoData();
           }
           print('data: ' + updatedData.toString());
@@ -62,7 +63,8 @@ class _LatestEventWidget extends State<LatestEventWidget> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -71,7 +73,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
       allowFontScaling: true,
     )..init(context);
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
         body: Container(
           child: latestEventData == null
               ? Center(
@@ -102,11 +104,13 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                       body = Container();
                     }
 
-                    return Container(height: ScreenUtil.instance.setWidth(35), child: Center(child: body));
+                    return Container(
+                        height: ScreenUtil.instance.setWidth(35),
+                        child: Center(child: body));
                   }),
                   controller: refreshController,
                   onRefresh: () {
-                    setState((){
+                    setState(() {
                       newPage = 0;
                     });
                     fetchLatestEvent(newPage: newPage).then((response) {
@@ -129,74 +133,82 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                     itemBuilder: (BuildContext context, i) {
                       Color itemColor;
                       String itemPriceText;
-
-                      if (latestEventData[i]['ticket_type']['type'] == 'paid' ||
-                          latestEventData[i]['ticket_type']['type'] ==
-                              'paid_seating') {
-                        if (latestEventData[i]['ticket']
-                                ['availableTicketStatus'] ==
-                            '1') {
-                          itemColor = Color(0xFF34B323);
-                          itemPriceText =
-                              latestEventData[i]['ticket']['cheapestTicket'];
-                        } else {
-                          if (latestEventData[i]['ticket']['salesStatus'] ==
-                              'comingSoon') {
-                            itemColor = Color(0xFF34B323).withOpacity(0.3);
-                            itemPriceText = 'COMING SOON';
-                          } else if (latestEventData[i]['ticket']
-                                  ['salesStatus'] ==
-                              'endSales') {
-                            itemColor = Color(0xFF8E1E2D);
-                            if (latestEventData[i]['status'] == 'ended') {
-                              itemPriceText = 'EVENT HAS ENDED';
-                            }
-                            itemPriceText = 'SALES ENDED';
+                      if (latestEventData[i]['isGoing'] == '1') {
+                        itemColor = Colors.blue;
+                        itemPriceText = 'Going!';
+                      } else {
+                        if (latestEventData[i]['ticket_type']['type'] ==
+                                'paid' ||
+                            latestEventData[i]['ticket_type']['type'] ==
+                                'paid_seating') {
+                          if (latestEventData[i]['ticket']
+                                  ['availableTicketStatus'] ==
+                              '1') {
+                            itemColor = Color(0xFF34B323);
+                            itemPriceText =
+                                latestEventData[i]['ticket']['cheapestTicket'];
                           } else {
-                            itemColor = Color(0xFF8E1E2D);
-                            itemPriceText = 'SOLD OUT';
+                            if (latestEventData[i]['ticket']['salesStatus'] ==
+                                'comingSoon') {
+                              itemColor = Color(0xFF34B323).withOpacity(0.3);
+                              itemPriceText = 'COMING SOON';
+                            } else if (latestEventData[i]['ticket']
+                                    ['salesStatus'] ==
+                                'endSales') {
+                              itemColor = Color(0xFF8E1E2D);
+                              if (latestEventData[i]['status'] == 'ended') {
+                                itemPriceText = 'EVENT HAS ENDED';
+                              }
+                              itemPriceText = 'SALES ENDED';
+                            } else {
+                              itemColor = Color(0xFF8E1E2D);
+                              itemPriceText = 'SOLD OUT';
+                            }
                           }
-                        }
-                      } else if (latestEventData[i]['ticket_type']['type'] ==
-                          'no_ticket') {
-                        itemColor = Color(0xFF652D90);
-                        itemPriceText = 'NO TICKET';
-                      } else if (latestEventData[i]['ticket_type']['type'] ==
-                          'on_the_spot') {
-                        itemColor = Color(0xFF652D90);
-                        itemPriceText = latestEventData[i]['ticket_type']['name'];
-                      } else if (latestEventData[i]['ticket_type']['type'] ==
-                          'free') {
-                        itemColor = Color(0xFFFFAA00);
-                        itemPriceText = latestEventData[i]['ticket_type']['name'];
-                      } else if (latestEventData[i]['ticket_type']['type'] ==
-                          'free') {
-                        itemColor = Color(0xFFFFAA00);
-                        itemPriceText = latestEventData[i]['ticket_type']['name'];
-                      } else if (latestEventData[i]['ticket_type']['type'] ==
-                          'free_limited') {
-                        if (latestEventData[i]['ticket']
-                                ['availableTicketStatus'] ==
-                            '1') {
+                        } else if (latestEventData[i]['ticket_type']['type'] ==
+                            'no_ticket') {
+                          itemColor = Color(0xFF652D90);
+                          itemPriceText = 'NO TICKET';
+                        } else if (latestEventData[i]['ticket_type']['type'] ==
+                            'on_the_spot') {
+                          itemColor = Color(0xFF652D90);
+                          itemPriceText =
+                              latestEventData[i]['ticket_type']['name'];
+                        } else if (latestEventData[i]['ticket_type']['type'] ==
+                            'free') {
                           itemColor = Color(0xFFFFAA00);
                           itemPriceText =
                               latestEventData[i]['ticket_type']['name'];
-                        } else {
-                          if (latestEventData[i]['ticket']['salesStatus'] ==
-                              'comingSoon') {
-                            itemColor = Color(0xFFFFAA00).withOpacity(0.3);
-                            itemPriceText = 'COMING SOON';
-                          } else if (latestEventData[i]['ticket']
-                                  ['salesStatus'] ==
-                              'endSales') {
-                            itemColor = Color(0xFF8E1E2D);
-                            if (latestEventData[i]['status'] == 'ended') {
-                              itemPriceText = 'EVENT HAS ENDED';
-                            }
-                            itemPriceText = 'SALES ENDED';
+                        } else if (latestEventData[i]['ticket_type']['type'] ==
+                            'free') {
+                          itemColor = Color(0xFFFFAA00);
+                          itemPriceText =
+                              latestEventData[i]['ticket_type']['name'];
+                        } else if (latestEventData[i]['ticket_type']['type'] ==
+                            'free_limited') {
+                          if (latestEventData[i]['ticket']
+                                  ['availableTicketStatus'] ==
+                              '1') {
+                            itemColor = Color(0xFFFFAA00);
+                            itemPriceText =
+                                latestEventData[i]['ticket_type']['name'];
                           } else {
-                            itemColor = Color(0xFF8E1E2D);
-                            itemPriceText = 'SOLD OUT';
+                            if (latestEventData[i]['ticket']['salesStatus'] ==
+                                'comingSoon') {
+                              itemColor = Color(0xFFFFAA00).withOpacity(0.3);
+                              itemPriceText = 'COMING SOON';
+                            } else if (latestEventData[i]['ticket']
+                                    ['salesStatus'] ==
+                                'endSales') {
+                              itemColor = Color(0xFF8E1E2D);
+                              if (latestEventData[i]['status'] == 'ended') {
+                                itemPriceText = 'EVENT HAS ENDED';
+                              }
+                              itemPriceText = 'SALES ENDED';
+                            } else {
+                              itemColor = Color(0xFF8E1E2D);
+                              itemPriceText = 'SOLD OUT';
+                            }
                           }
                         }
                       }
@@ -235,7 +247,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
 
     setState(() {
       session = preferences.getString('Session');
-      if(newPage != null){
+      if (newPage != null) {
         currentPage += newPage;
       }
       print(currentPage);

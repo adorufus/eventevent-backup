@@ -224,79 +224,89 @@ class _ListenPageState extends State<ListenPage> {
                         Color itemColor;
                         String itemPriceText;
 
-                        if (nearbyEventData[i]['ticket_type']['type'] ==
-                                'paid' ||
-                            nearbyEventData[i]['ticket_type']['type'] ==
-                                'paid_seating') {
-                          if (nearbyEventData[i]['ticket']
-                                  ['availableTicketStatus'] ==
-                              '1') {
-                            itemColor = Color(0xFF34B323);
-                            itemPriceText =
-                                nearbyEventData[i]['ticket']['cheapestTicket'];
-                          } else {
-                            if (nearbyEventData[i]['ticket']['salesStatus'] ==
-                                'comingSoon') {
-                              itemColor = Color(0xFF34B323).withOpacity(0.3);
-                              itemPriceText = 'COMING SOON';
-                            } else if (nearbyEventData[i]['ticket']
-                                    ['salesStatus'] ==
-                                'endSales') {
-                              itemColor = Color(0xFF8E1E2D);
-                              if (nearbyEventData[i]['status'] == 'ended') {
-                                itemPriceText = 'EVENT HAS ENDED';
-                              }
-                              itemPriceText = 'SALES ENDED';
+                        if (nearbyEventData[i]['isGoing'] == '1') {
+                          itemColor = Colors.blue;
+                          itemPriceText = 'Going!';
+                        } else {
+                          if (nearbyEventData[i]['ticket_type']['type'] ==
+                                  'paid' ||
+                              nearbyEventData[i]['ticket_type']['type'] ==
+                                  'paid_seating') {
+                            if (nearbyEventData[i]['ticket']
+                                    ['availableTicketStatus'] ==
+                                '1') {
+                              itemColor = Color(0xFF34B323);
+                              itemPriceText = nearbyEventData[i]['ticket']
+                                  ['cheapestTicket'];
                             } else {
-                              itemColor = Color(0xFF8E1E2D);
-                              itemPriceText = 'SOLD OUT';
+                              if (nearbyEventData[i]['ticket']['salesStatus'] ==
+                                  'comingSoon') {
+                                itemColor = Color(0xFF34B323).withOpacity(0.3);
+                                itemPriceText = 'COMING SOON';
+                              } else if (nearbyEventData[i]['ticket']
+                                      ['salesStatus'] ==
+                                  'endSales') {
+                                itemColor = Color(0xFF8E1E2D);
+                                if (nearbyEventData[i]['status'] == 'ended') {
+                                  itemPriceText = 'EVENT HAS ENDED';
+                                }
+                                itemPriceText = 'SALES ENDED';
+                              } else {
+                                itemColor = Color(0xFF8E1E2D);
+                                itemPriceText = 'SOLD OUT';
+                              }
                             }
-                          }
-                        } else if (nearbyEventData[i]['ticket_type']['type'] ==
-                            'no_ticket') {
-                          itemColor = Color(0xFF652D90);
-                          itemPriceText = 'NO TICKET';
-                        } else if (nearbyEventData[i]['ticket_type']['type'] ==
-                            'on_the_spot') {
-                          itemColor = Color(0xFF652D90);
-                          itemPriceText =
-                              nearbyEventData[i]['ticket_type']['name'];
-                        } else if (nearbyEventData[i]['ticket_type']['type'] ==
-                            'free') {
-                          itemColor = Color(0xFFFFAA00);
-                          itemPriceText =
-                              nearbyEventData[i]['ticket_type']['name'];
-                        } else if (nearbyEventData[i]['ticket_type']['type'] ==
-                            'free') {
-                          itemColor = Color(0xFFFFAA00);
-                          itemPriceText =
-                              nearbyEventData[i]['ticket_type']['name'];
-                        } else if (nearbyEventData[i]['ticket_type']['type'] ==
-                                'free_limited' ||
-                            nearbyEventData[i]['ticket_type']['type'] ==
-                                'free_limited_seating') {
-                          if (nearbyEventData[i]['ticket']
-                                  ['availableTicketStatus'] ==
-                              '1') {
+                          } else if (nearbyEventData[i]['ticket_type']
+                                  ['type'] ==
+                              'no_ticket') {
+                            itemColor = Color(0xFF652D90);
+                            itemPriceText = 'NO TICKET';
+                          } else if (nearbyEventData[i]['ticket_type']
+                                  ['type'] ==
+                              'on_the_spot') {
+                            itemColor = Color(0xFF652D90);
+                            itemPriceText =
+                                nearbyEventData[i]['ticket_type']['name'];
+                          } else if (nearbyEventData[i]['ticket_type']
+                                  ['type'] ==
+                              'free') {
                             itemColor = Color(0xFFFFAA00);
                             itemPriceText =
                                 nearbyEventData[i]['ticket_type']['name'];
-                          } else {
-                            if (nearbyEventData[i]['ticket']['salesStatus'] ==
-                                'comingSoon') {
-                              itemColor = Color(0xFFFFAA00).withOpacity(0.3);
-                              itemPriceText = 'COMING SOON';
-                            } else if (nearbyEventData[i]['ticket']
-                                    ['salesStatus'] ==
-                                'endSales') {
-                              itemColor = Color(0xFF8E1E2D);
-                              if (nearbyEventData[i]['status'] == 'ended') {
-                                itemPriceText = 'EVENT HAS ENDED';
-                              }
-                              itemPriceText = 'SALES ENDED';
+                          } else if (nearbyEventData[i]['ticket_type']
+                                  ['type'] ==
+                              'free') {
+                            itemColor = Color(0xFFFFAA00);
+                            itemPriceText =
+                                nearbyEventData[i]['ticket_type']['name'];
+                          } else if (nearbyEventData[i]['ticket_type']
+                                      ['type'] ==
+                                  'free_limited' ||
+                              nearbyEventData[i]['ticket_type']['type'] ==
+                                  'free_limited_seating') {
+                            if (nearbyEventData[i]['ticket']
+                                    ['availableTicketStatus'] ==
+                                '1') {
+                              itemColor = Color(0xFFFFAA00);
+                              itemPriceText =
+                                  nearbyEventData[i]['ticket_type']['name'];
                             } else {
-                              itemColor = Color(0xFF8E1E2D);
-                              itemPriceText = 'SOLD OUT';
+                              if (nearbyEventData[i]['ticket']['salesStatus'] ==
+                                  'comingSoon') {
+                                itemColor = Color(0xFFFFAA00).withOpacity(0.3);
+                                itemPriceText = 'COMING SOON';
+                              } else if (nearbyEventData[i]['ticket']
+                                      ['salesStatus'] ==
+                                  'endSales') {
+                                itemColor = Color(0xFF8E1E2D);
+                                if (nearbyEventData[i]['status'] == 'ended') {
+                                  itemPriceText = 'EVENT HAS ENDED';
+                                }
+                                itemPriceText = 'SALES ENDED';
+                              } else {
+                                itemColor = Color(0xFF8E1E2D);
+                                itemPriceText = 'SOLD OUT';
+                              }
                             }
                           }
                         }
@@ -315,7 +325,8 @@ class _ListenPageState extends State<ListenPage> {
                             location: nearbyEventData[i]['address'],
                             itemColor: itemColor,
                             itemPrice: itemPriceText,
-                            date: DateTime.parse(nearbyEventData[i]['dateStart']),
+                            date:
+                                DateTime.parse(nearbyEventData[i]['dateStart']),
                             type: nearbyEventData[i]['ticket_type']['type'],
                             isAvailable: nearbyEventData[i]['ticket']
                                 ['availableTicketStatus'],

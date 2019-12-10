@@ -175,62 +175,59 @@ class _EventCatalogState extends State<EventCatalog>
 
     mappedDataBanner = bannerData?.map((bannerData) {
           return Builder(
-                  builder: (BuildContext context) {
-                    return GestureDetector(
-                        onTap: () {
-                          if (bannerData['type'] == 'event') {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        EventDetailsConstructView(
-                                            id: bannerData['eventID'],
-                                            name: bannerData['name'],
-                                            image: bannerData['photoFull'])));
-                          } else if (bannerData['type'] == 'nolink') {
-                            return;
-                          } else if (bannerData['type'] == 'category') {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        EventDetailsConstructView(
-                                            id: bannerData['categoryID'],
-                                            name: bannerData['name'],
-                                            image: bannerData['photoFull'])));
-                          }
-                        },
-                        child: Container(
-                          width:
-                              MediaQuery.of(context).devicePixelRatio * 2645.0,
-                          margin: EdgeInsets.only(
-                              left: 13, right: 13, bottom: 15, top: 13),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.rectangle,
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  offset: Offset(0, 0),
-                                  blurRadius: 2,
-                                  spreadRadius: 1.5)
-                            ],
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: CachedNetworkImage(
-                                imageUrl: bannerData["image"],
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => new Container(
-                                      child: Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    )),
-                          ),
-                        ));
+            builder: (BuildContext context) {
+              return GestureDetector(
+                  onTap: () {
+                    if (bannerData['type'] == 'event') {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EventDetailsConstructView(
+                                  id: bannerData['eventID'],
+                                  name: bannerData['name'],
+                                  image: bannerData['photoFull'])));
+                    } else if (bannerData['type'] == 'nolink') {
+                      return;
+                    } else if (bannerData['type'] == 'category') {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EventDetailsConstructView(
+                                  id: bannerData['categoryID'],
+                                  name: bannerData['name'],
+                                  image: bannerData['photoFull'])));
+                    }
                   },
-                );
+                  child: Container(
+                    width: MediaQuery.of(context).devicePixelRatio * 2645.0,
+                    margin: EdgeInsets.only(
+                        left: 13, right: 13, bottom: 15, top: 13),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.rectangle,
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            offset: Offset(0, 0),
+                            blurRadius: 2,
+                            spreadRadius: 1.5)
+                      ],
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: CachedNetworkImage(
+                          imageUrl: bannerData["image"],
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => new Container(
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              )),
+                    ),
+                  ));
+            },
+          );
         })?.toList() ??
         [];
 
@@ -356,88 +353,6 @@ class _EventCatalogState extends State<EventCatalog>
             ),
           ),
         ),
-        // PreferredSize(
-        //   preferredSize: Size(null, 100),
-        //   child: Container(
-        //     width: MediaQuery.of(context).size.width,
-        //     height: ScreenUtil.instance.setWidth(75),
-        //     child: Container(
-        //       color: Colors.white,
-        //       child: Container(
-        //         margin: EdgeInsets.fromLTRB(13, 13, 13, 13),
-        //         child: Row(
-        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //           crossAxisAlignment: CrossAxisAlignment.center,
-        //           children: <Widget>[
-        //             Container(
-        //               width: ScreenUtil.instance.setWidth(240),
-        //               child: Row(
-        //                 children: <Widget>[
-        //                   SizedBox(
-        //                     height: ScreenUtil.instance.setWidth(23),
-        //                     width: ScreenUtil.instance.setWidth(140),
-        //                     child: Image.asset(
-        //                       'assets/icons/logo_company.png',
-        //                       fit: BoxFit.fill,
-        //                     ),
-        //                   ),
-        //                 ],
-        //               ),
-        //             ),
-        //             GestureDetector(
-        //               onTap: () {
-        //                 Navigator.push(
-        //                     context,
-        //                     CupertinoPageRoute(
-        //                         builder: (BuildContext context) => Search()));
-        //               },
-        //               child: Container(
-        //                   height: ScreenUtil.instance.setWidth(35),
-        //                   width: ScreenUtil.instance.setWidth(35),
-        //                   decoration: BoxDecoration(
-        //                       color: Colors.white,
-        //                       shape: BoxShape.circle,
-        //                       boxShadow: <BoxShadow>[
-        //                         BoxShadow(
-        //                             color: Colors.black.withOpacity(0.1),
-        //                             offset: Offset(0, 0),
-        //                             spreadRadius: 1.5,
-        //                             blurRadius: 2)
-        //                       ]),
-        //                   child: Image.asset(
-        //                     'assets/icons/icon_apps/search.png',
-        //                     scale: 4.5,
-        //                   )),
-        //             ),
-        //             GestureDetector(
-        //               onTap: () {
-        //                 Navigator.of(context).push(MaterialPageRoute(
-        //                     builder: (BuildContext context) => MyTicket()));
-        //               },
-        //               child: Container(
-        //                   height: ScreenUtil.instance.setWidth(35),
-        //                   width: ScreenUtil.instance.setWidth(35),
-        //                   decoration: BoxDecoration(
-        //                       color: Colors.white,
-        //                       shape: BoxShape.circle,
-        //                       boxShadow: <BoxShadow>[
-        //                         BoxShadow(
-        //                             color: Colors.black.withOpacity(0.1),
-        //                             offset: Offset(0, 0),
-        //                             spreadRadius: 1.5,
-        //                             blurRadius: 2)
-        //                       ]),
-        //                   child: Image.asset(
-        //                     'assets/icons/ticket.png',
-        //                     scale: 3,
-        //                   )),
-        //             )
-        //           ],
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
         body: ListView(
           children: <Widget>[
             DefaultTabController(
@@ -612,72 +527,81 @@ class _EventCatalogState extends State<EventCatalog>
                         itemBuilder: (BuildContext context, i) {
                           Color itemColor;
                           String itemPriceText;
-
-                          if (data[i]['ticket_type']['type'] == 'paid' ||
-                              data[i]['ticket_type']['type'] ==
-                                  'paid_seating') {
-                            if (data[i]['ticket']['availableTicketStatus'] ==
-                                '1') {
-                              if (data[i]['ticket']['cheapestTicket'] == '0') {
-                                itemColor = Color(0xFFFFAA00);
-                                itemPriceText = 'Free Limited';
-                              } else {
-                                itemColor = Color(0xFF34B323);
-                                itemPriceText =
-                                    data[i]['ticket']['cheapestTicket'];
-                              }
-                            } else {
-                              if (data[i]['ticket']['salesStatus'] ==
-                                  'comingSoon') {
-                                itemColor = Color(0xFF34B323).withOpacity(0.3);
-                                itemPriceText = 'COMING SOON';
-                              } else if (data[i]['ticket']['salesStatus'] ==
-                                  'endSales') {
-                                itemColor = Color(0xFF8E1E2D);
-                                if (data[i]['status'] == 'ended') {
-                                  itemPriceText = 'EVENT HAS ENDED';
+                          if (data[i]['isGoing'] == '1') {
+                            itemColor = Colors.blue;
+                            itemPriceText = 'Going!';
+                          } else {
+                            if (data[i]['ticket_type']['type'] == 'paid' ||
+                                data[i]['ticket_type']['type'] ==
+                                    'paid_seating') {
+                              if (data[i]['ticket']['availableTicketStatus'] ==
+                                  '1') {
+                                if (data[i]['ticket']['cheapestTicket'] ==
+                                    '0') {
+                                  itemColor = Color(0xFFFFAA00);
+                                  itemPriceText = 'Free Limited';
+                                } else {
+                                  itemColor = Color(0xFF34B323);
+                                  itemPriceText =
+                                      data[i]['ticket']['cheapestTicket'];
                                 }
-                                itemPriceText = 'SALES ENDED';
                               } else {
-                                itemColor = Color(0xFF8E1E2D);
-                                itemPriceText = 'SOLD OUT';
+                                if (data[i]['ticket']['salesStatus'] ==
+                                    'comingSoon') {
+                                  itemColor =
+                                      Color(0xFF34B323).withOpacity(0.3);
+                                  itemPriceText = 'COMING SOON';
+                                } else if (data[i]['ticket']['salesStatus'] ==
+                                    'endSales') {
+                                  itemColor = Color(0xFF8E1E2D);
+                                  if (data[i]['status'] == 'ended') {
+                                    itemPriceText = 'EVENT HAS ENDED';
+                                  }
+                                  itemPriceText = 'SALES ENDED';
+                                } else {
+                                  itemColor = Color(0xFF8E1E2D);
+                                  itemPriceText = 'SOLD OUT';
+                                }
                               }
-                            }
-                          } else if (data[i]['ticket_type']['type'] ==
-                              'no_ticket') {
-                            itemColor = Color(0xFF652D90);
-                            itemPriceText = 'NO TICKET';
-                          } else if (data[i]['ticket_type']['type'] ==
-                              'on_the_spot') {
-                            itemColor = Color(0xFF652D90);
-                            itemPriceText = data[i]['ticket_type']['name'];
-                          } else if (data[i]['ticket_type']['type'] == 'free') {
-                            itemColor = Color(0xFFFFAA00);
-                            itemPriceText = data[i]['ticket_type']['name'];
-                          } else if (data[i]['ticket_type']['type'] == 'free') {
-                            itemColor = Color(0xFFFFAA00);
-                            itemPriceText = data[i]['ticket_type']['name'];
-                          } else if (data[i]['ticket_type']['type'] ==
-                              'free_limited') {
-                            if (data[i]['ticket']['availableTicketStatus'] ==
-                                '1') {
+                            } else if (data[i]['ticket_type']['type'] ==
+                                'no_ticket') {
+                              itemColor = Color(0xFF652D90);
+                              itemPriceText = 'NO TICKET';
+                            } else if (data[i]['ticket_type']['type'] ==
+                                'on_the_spot') {
+                              itemColor = Color(0xFF652D90);
+                              itemPriceText = data[i]['ticket_type']['name'];
+                            } else if (data[i]['ticket_type']['type'] ==
+                                'free') {
                               itemColor = Color(0xFFFFAA00);
                               itemPriceText = data[i]['ticket_type']['name'];
-                            } else {
-                              if (data[i]['ticket']['salesStatus'] ==
-                                  'comingSoon') {
-                                itemColor = Color(0xFF34B323).withOpacity(0.3);
-                                itemPriceText = 'COMING SOON';
-                              } else if (data[i]['ticket']['salesStatus'] ==
-                                  'endSales') {
-                                itemColor = Color(0xFF8E1E2D);
-                                if (data[i]['status'] == 'ended') {
-                                  itemPriceText = 'EVENT HAS ENDED';
-                                }
-                                itemPriceText = 'SALES ENDED';
-                              } else {
+                            } else if (data[i]['ticket_type']['type'] ==
+                                'free') {
+                              itemColor = Color(0xFFFFAA00);
+                              itemPriceText = data[i]['ticket_type']['name'];
+                            } else if (data[i]['ticket_type']['type'] ==
+                                'free_limited') {
+                              if (data[i]['ticket']['availableTicketStatus'] ==
+                                  '1') {
                                 itemColor = Color(0xFFFFAA00);
-                                itemPriceText = 'SOLD OUT';
+                                itemPriceText = data[i]['ticket_type']['name'];
+                              } else {
+                                if (data[i]['ticket']['salesStatus'] ==
+                                    'comingSoon') {
+                                  itemColor =
+                                      Color(0xFF34B323).withOpacity(0.3);
+                                  itemPriceText = 'COMING SOON';
+                                } else if (data[i]['ticket']['salesStatus'] ==
+                                    'endSales') {
+                                  itemColor = Color(0xFF8E1E2D);
+                                  if (data[i]['status'] == 'ended') {
+                                    itemPriceText = 'EVENT HAS ENDED';
+                                  }
+                                  itemPriceText = 'SALES ENDED';
+                                } else {
+                                  itemColor = Color(0xFFFFAA00);
+                                  itemPriceText = 'SOLD OUT';
+                                }
                               }
                             }
                           }
@@ -795,77 +719,82 @@ class _EventCatalogState extends State<EventCatalog>
                       itemBuilder: (BuildContext context, i) {
                         Color itemColor;
                         String itemPriceText;
-
-                        if (discoverData[i]['ticket_type']['type'] == 'paid' ||
-                            discoverData[i]['ticket_type']['type'] ==
-                                'paid_seating') {
-                          if (discoverData[i]['ticket']
-                                  ['availableTicketStatus'] ==
-                              '1') {
-                            itemColor = Color(0xFF34B323);
-                            itemPriceText =
-                                discoverData[i]['ticket']['cheapestTicket'];
-                          } else {
-                            if (discoverData[i]['ticket']['salesStatus'] ==
-                                'comingSoon') {
-                              itemColor = Color(0xFF34B323).withOpacity(0.3);
-                              itemPriceText = 'COMING SOON';
-                            } else if (discoverData[i]['ticket']
-                                    ['salesStatus'] ==
-                                'endSales') {
-                              itemColor = Color(0xFF8E1E2D);
-                              if (discoverData[i]['status'] == 'ended') {
-                                itemPriceText = 'EVENT HAS ENDED';
-                              }
-                              itemPriceText = 'SALES ENDED';
+                        if (discoverData[i]['isGoing'] == '1') {
+                          itemColor = Colors.blue;
+                          itemPriceText = 'Going!';
+                        } else {
+                          if (discoverData[i]['ticket_type']['type'] ==
+                                  'paid' ||
+                              discoverData[i]['ticket_type']['type'] ==
+                                  'paid_seating') {
+                            if (discoverData[i]['ticket']
+                                    ['availableTicketStatus'] ==
+                                '1') {
+                              itemColor = Color(0xFF34B323);
+                              itemPriceText =
+                                  discoverData[i]['ticket']['cheapestTicket'];
                             } else {
-                              itemColor = Color(0xFF8E1E2D);
-                              itemPriceText = 'SOLD OUT';
+                              if (discoverData[i]['ticket']['salesStatus'] ==
+                                  'comingSoon') {
+                                itemColor = Color(0xFF34B323).withOpacity(0.3);
+                                itemPriceText = 'COMING SOON';
+                              } else if (discoverData[i]['ticket']
+                                      ['salesStatus'] ==
+                                  'endSales') {
+                                itemColor = Color(0xFF8E1E2D);
+                                if (discoverData[i]['status'] == 'ended') {
+                                  itemPriceText = 'EVENT HAS ENDED';
+                                }
+                                itemPriceText = 'SALES ENDED';
+                              } else {
+                                itemColor = Color(0xFF8E1E2D);
+                                itemPriceText = 'SOLD OUT';
+                              }
                             }
-                          }
-                        } else if (discoverData[i]['ticket_type']['type'] ==
-                            'no_ticket') {
-                          itemColor = Color(0xFF652D90);
-                          itemPriceText = 'NO TICKET';
-                        } else if (discoverData[i]['ticket_type']['type'] ==
-                            'on_the_spot') {
-                          itemColor = Color(0xFF652D90);
-                          itemPriceText =
-                              discoverData[i]['ticket_type']['name'];
-                        } else if (discoverData[i]['ticket_type']['type'] ==
-                            'free') {
-                          itemColor = Color(0xFFFFAA00);
-                          itemPriceText =
-                              discoverData[i]['ticket_type']['name'];
-                        } else if (discoverData[i]['ticket_type']['type'] ==
-                            'free') {
-                          itemColor = Color(0xFFFFAA00);
-                          itemPriceText =
-                              discoverData[i]['ticket_type']['name'];
-                        } else if (discoverData[i]['ticket_type']['type'] ==
-                            'free_limited') {
-                          if (discoverData[i]['ticket']
-                                  ['availableTicketStatus'] ==
-                              '1') {
+                          } else if (discoverData[i]['ticket_type']['type'] ==
+                              'no_ticket') {
+                            itemColor = Color(0xFF652D90);
+                            itemPriceText = 'NO TICKET';
+                          } else if (discoverData[i]['ticket_type']['type'] ==
+                              'on_the_spot') {
+                            itemColor = Color(0xFF652D90);
+                            itemPriceText =
+                                discoverData[i]['ticket_type']['name'];
+                          } else if (discoverData[i]['ticket_type']['type'] ==
+                              'free') {
                             itemColor = Color(0xFFFFAA00);
                             itemPriceText =
                                 discoverData[i]['ticket_type']['name'];
-                          } else {
-                            if (discoverData[i]['ticket']['salesStatus'] ==
-                                'comingSoon') {
-                              itemColor = Color(0xFFFFAA00).withOpacity(0.3);
-                              itemPriceText = 'COMING SOON';
-                            } else if (discoverData[i]['ticket']
-                                    ['salesStatus'] ==
-                                'endSales') {
-                              itemColor = Color(0xFF8E1E2D);
-                              if (discoverData[i]['status'] == 'ended') {
-                                itemPriceText = 'EVENT HAS ENDED';
-                              }
-                              itemPriceText = 'SALES ENDED';
+                          } else if (discoverData[i]['ticket_type']['type'] ==
+                              'free') {
+                            itemColor = Color(0xFFFFAA00);
+                            itemPriceText =
+                                discoverData[i]['ticket_type']['name'];
+                          } else if (discoverData[i]['ticket_type']['type'] ==
+                              'free_limited') {
+                            if (discoverData[i]['ticket']
+                                    ['availableTicketStatus'] ==
+                                '1') {
+                              itemColor = Color(0xFFFFAA00);
+                              itemPriceText =
+                                  discoverData[i]['ticket_type']['name'];
                             } else {
-                              itemColor = Color(0xFF8E1E2D);
-                              itemPriceText = 'SOLD OUT';
+                              if (discoverData[i]['ticket']['salesStatus'] ==
+                                  'comingSoon') {
+                                itemColor = Color(0xFFFFAA00).withOpacity(0.3);
+                                itemPriceText = 'COMING SOON';
+                              } else if (discoverData[i]['ticket']
+                                      ['salesStatus'] ==
+                                  'endSales') {
+                                itemColor = Color(0xFF8E1E2D);
+                                if (discoverData[i]['status'] == 'ended') {
+                                  itemPriceText = 'EVENT HAS ENDED';
+                                }
+                                itemPriceText = 'SALES ENDED';
+                              } else {
+                                itemColor = Color(0xFF8E1E2D);
+                                itemPriceText = 'SOLD OUT';
+                              }
                             }
                           }
                         }

@@ -2483,6 +2483,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     }
   }
 
+  DateTime ticketStartDate;
+
   Future getEventDetailsSpecificInfo() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -2523,7 +2525,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         website = detailData['website'];
         eventID = detailData['id'];
         loveCount = int.parse(isLoved);
-        // _dDay = DateTime.parse(detailData['ticket']['sales_start_date']);
+        
+        if(detailData['ticket']['sales_start_date'] == null){
+          
+        }
+        else{
+          ticketStartDate = DateTime.parse(detailData['ticket']['sales_start_date']);
+        }
 
         // print(_dDay.toString());
         // setState((){
