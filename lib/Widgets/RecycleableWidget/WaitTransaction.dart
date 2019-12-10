@@ -51,8 +51,6 @@ class _WaitTransactionState extends State<WaitTransaction> {
 
   Map<String, dynamic> paymentData;
 
-  Timer countdownTimer;
-
   void startCounter(String expired) {
     int hoursStart, minuteStart, secondStart;
     String strHour, strMinute, strSecond;
@@ -396,6 +394,34 @@ class _WaitTransactionState extends State<WaitTransaction> {
                 ),
               ],
             ),
+    );
+  }
+
+  Widget countdownTimer() {
+    final salesDay = _dDay;
+    final remaining = salesDay.difference(_currentTime);
+
+    final days = remaining.inDays;
+    final hours = remaining.inHours - remaining.inDays * 24;
+    final minutes = remaining.inMinutes - remaining.inHours * 60;
+    final seconds = remaining.inSeconds - remaining.inMinutes * 60;
+
+    final countdownAsString = '$days : $hours : $minutes : $seconds';
+
+    print(countdownAsString);
+
+    return Container(
+      child: Center(
+          child: Column(
+        children: <Widget>[
+          Text(
+              'Ticket sales start from ${_dDay.day} - ${_dDay.month} - ${_dDay.year}'),
+          Text(countdownAsString,
+              style: TextStyle(
+                  fontSize: ScreenUtil.instance.setSp(18),
+                  fontWeight: FontWeight.bold)),
+        ],
+      )),
     );
   }
 
