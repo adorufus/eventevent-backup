@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eventevent/Widgets/timeline/MediaDetails.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
@@ -17,6 +18,8 @@ class MediaItem extends StatefulWidget {
   final mediaId;
   final likeCount;
   final commentCount;
+  final youtube;
+  final videoUrl;
 
   const MediaItem(
       {Key key,
@@ -29,7 +32,7 @@ class MediaItem extends StatefulWidget {
       this.articleDetail,
       this.mediaId,
       this.likeCount,
-      this.commentCount})
+      this.commentCount, this.youtube, this.videoUrl})
       : super(key: key);
 
   @override
@@ -227,7 +230,11 @@ class _MediaItemState extends State<MediaItem> {
                                                         .toString(),
                                                 articleDetail:
                                                     widget.articleDetail,
+                                                    mediaId: widget.mediaId,
                                                 autoFocus: true,
+                                                isVideo: widget.isVideo,
+                                                videoUrl: widget.videoUrl,
+                                                youtubeUrl: widget.youtube
                                               )));
                                 },
                                 child: Container(
@@ -250,7 +257,7 @@ class _MediaItemState extends State<MediaItem> {
                                         Image.asset(
                                           'assets/icons/icon_apps/comment.png',
                                           scale: 3.5,
-                                          color:  commentCount.length < 1 ? Colors.grey : Colors.transparent,
+                                          color:  commentCount.length < 1 ? Colors.grey : eventajaGreenTeal
                                         ),
                                         SizedBox(
                                             width: ScreenUtil.instance

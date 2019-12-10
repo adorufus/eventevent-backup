@@ -5,7 +5,8 @@ import 'package:quiver/async.dart';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -17,7 +18,8 @@ class WaitTransaction extends StatefulWidget {
   final String transactionID;
   final String finalPrice;
 
-  const WaitTransaction({Key key, this.expDate, this.transactionID, this.finalPrice})
+  const WaitTransaction(
+      {Key key, this.expDate, this.transactionID, this.finalPrice})
       : super(key: key);
 
   @override
@@ -40,7 +42,7 @@ class _WaitTransactionState extends State<WaitTransaction> {
   String bank_number;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  
+
   // MyChromeSafariBrowser myChromeSafariBrowser = new MyChromeSafariBrowser(inAppBrowserFallback);
 
   DateTime dateTime;
@@ -89,7 +91,6 @@ class _WaitTransactionState extends State<WaitTransaction> {
       bank_code = bankCode;
       bank_acc = bankAcc;
     });
-
   }
 
   @override
@@ -100,7 +101,8 @@ class _WaitTransactionState extends State<WaitTransaction> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -116,7 +118,8 @@ class _WaitTransactionState extends State<WaitTransaction> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => TransactionHistory()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (BuildContext context) => TransactionHistory()));
           },
           child: Icon(
             Icons.close,
@@ -222,19 +225,25 @@ class _WaitTransactionState extends State<WaitTransaction> {
                               children: <Widget>[
                                 Text('H',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20))),
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('M',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20))),
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('S',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20))),
                               ],
                             ),
                             SizedBox(
@@ -266,20 +275,22 @@ class _WaitTransactionState extends State<WaitTransaction> {
                         children: <Widget>[
                           Text(
                             'TRANSFER AMOUNT',
-                            style:
-                                TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.black45),
+                            style: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(20),
+                                color: Colors.black45),
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
-                            'Rp. ' +
-                                widget.finalPrice.toString(),
+                            'Rp. ' + widget.finalPrice.toString(),
                             style: TextStyle(
                                 fontSize: 50, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
                             'Eventevent will automatically check your payment. It may take up to 1 hour to process',
-                            style: TextStyle(color: Colors.grey, fontSize: ScreenUtil.instance.setSp(12)),
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: ScreenUtil.instance.setSp(12)),
                             textAlign: TextAlign.center,
                           )
                         ],
@@ -296,18 +307,22 @@ class _WaitTransactionState extends State<WaitTransaction> {
                 ),
                 SizedBox(height: ScreenUtil.instance.setWidth(15)),
                 GestureDetector(
-                  onTap: (){
-                    if(paymentData['payment_method_id'] == '2'){
+                  onTap: () {
+                    if (paymentData['payment_method_id'] == '2') {
                       print('string copied');
                       Clipboard.setData(ClipboardData(text: bank_number));
                       print(Clipboard.getData('text/plain'));
                       _scaffoldKey.currentState.showSnackBar(SnackBar(
                         content: Text('Text Coppied!'),
                       ));
-                    }
-                    else if(paymentData['payment_method_id'] == '9'){
-                      String url = paymentData['payment']['data_vendor']['payment_url'];
-                      launch(url, forceSafariVC: true, enableJavaScript: true, forceWebView: true, statusBarBrightness: Brightness.light);
+                    } else if (paymentData['payment_method_id'] == '9') {
+                      String url =
+                          paymentData['payment']['data_vendor']['payment_url'];
+                      launch(url,
+                          forceSafariVC: true,
+                          enableJavaScript: true,
+                          forceWebView: true,
+                          statusBarBrightness: Brightness.light);
                     }
                   },
                   child: Container(
@@ -332,7 +347,9 @@ class _WaitTransactionState extends State<WaitTransaction> {
                           alignment: Alignment.centerLeft,
                           child: SizedBox(
                             height: ScreenUtil.instance.setWidth(30),
-                            child: Image.asset(paymentData['payment']['data_vendor']['available_banks'][0]['bank_code'] ==
+                            child: Image.asset(paymentData['payment']
+                                            ['data_vendor']['available_banks']
+                                        [0]['bank_code'] ==
                                     'BNI'
                                 ? 'assets/drawable/bni.png'
                                 : 'assets/drawable/bri.png'),
@@ -346,19 +363,27 @@ class _WaitTransactionState extends State<WaitTransaction> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                paymentData['payment']['data_vendor']['available_banks'][0]['account_holder_name'],
+                                paymentData['payment']['data_vendor']
+                                        ['available_banks'][0]
+                                    ['account_holder_name'],
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: ScreenUtil.instance.setSp(20),
                                     color: Colors.black54),
                               ),
-                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10)),
                               Text(
-                                  paymentData['payment']['data_vendor']['available_banks'][0]['bank_code'],
+                                  paymentData['payment']['data_vendor']
+                                      ['available_banks'][0]['bank_code'],
                                   style: TextStyle(color: Colors.grey)),
-                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10)),
                               Text(
-                                paymentData['payment']['data_vendor']['available_banks'][0]['bank_account_number'].toString(),
+                                paymentData['payment']['data_vendor']
+                                            ['available_banks'][0]
+                                        ['bank_account_number']
+                                    .toString(),
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: ScreenUtil.instance.setSp(15),

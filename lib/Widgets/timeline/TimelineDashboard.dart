@@ -265,8 +265,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => OpenMedia(
-                                        url: bannerData['link'],
-                                      )));
+                                            url: bannerData['link'],
+                                          )));
                             },
                             child: Container(
                               width: MediaQuery.of(context).devicePixelRatio *
@@ -389,7 +389,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                       ),
                     ),
                     Container(
-                      height: ScreenUtil.instance.setHeight(MediaQuery.of(context).size.height - 50),
+                      height: ScreenUtil.instance
+                          .setHeight(MediaQuery.of(context).size.height - 50),
                       child: Stack(
                         children: <Widget>[
                           TabBarView(
@@ -684,6 +685,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 isVideo: false,
                 image: mediaData[i]['banner_timeline'],
                 title: mediaData[i]['title'],
+                youtube: latestMediaVideo[i]['youtube'] ?? '/',
+                videoUrl: latestMediaVideo[i]['video'] ?? '/',
                 username: mediaData[i]['creator']['username'],
                 userPicture: mediaData[i]['creator']['photo'],
                 articleDetail: mediaData[i]['description'],
@@ -902,11 +905,15 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 child: LatestMediaItem(
                   isVideo: false,
                   image: latestMediaPhoto[i]['banner_timeline'],
+                  mediaId: latestMediaPhoto[i]['id'],
                   title: latestMediaPhoto[i]['title'],
+                  youtube: latestMediaPhoto[i]['youtube'] ?? '/',
+                  videoUrl: latestMediaPhoto[i]['video'] ?? '/',
                   username: latestMediaPhoto[i]['creator']['username'],
                   userImage: latestMediaPhoto[i]['creator']['photo'],
                   likeCount: latestMediaPhoto[i]['count_loved'],
                   commentCount: latestMediaPhoto[i]['comment'],
+                  article: latestMediaPhoto[i]['content'],
                 ),
               );
             },
@@ -1076,6 +1083,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
           },
           child: LatestMediaItem(
             isVideo: true,
+            youtube: latestMediaVideo[i]['youtube'] ?? '/',
+            videoUrl: latestMediaVideo[i]['video'] ?? '/',
+            mediaId: latestMediaVideo[i]['id'],
             image: latestMediaVideo[i]['thumbnail_timeline'],
             title: latestMediaVideo[i]['title'],
             username: latestMediaVideo[i]['creator']['username'],

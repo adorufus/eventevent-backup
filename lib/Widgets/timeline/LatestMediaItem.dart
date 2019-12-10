@@ -1,4 +1,7 @@
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:eventevent/Widgets/timeline/MediaDetails.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LatestMediaItem extends StatefulWidget {
   final bool isVideo;
@@ -7,7 +10,11 @@ class LatestMediaItem extends StatefulWidget {
   final username;
   final userImage;
   final likeCount;
+  final article;
   final commentCount;
+  final youtube;
+  final videoUrl;
+  final mediaId;
 
   const LatestMediaItem(
       {Key key,
@@ -16,7 +23,11 @@ class LatestMediaItem extends StatefulWidget {
       this.title,
       this.username,
       this.userImage,
-      this.likeCount, this.commentCount})
+      this.likeCount,
+      this.commentCount,
+      this.youtube,
+      this.videoUrl,
+      this.article, this.mediaId})
       : super(key: key);
 
   @override
@@ -29,7 +40,7 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
 
   @override
   void initState() {
-    setState((){
+    setState(() {
       commentCount = widget.commentCount;
       likeCount = widget.likeCount;
     });
@@ -37,7 +48,8 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -68,7 +80,11 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
             child: widget.isVideo == false
                 ? Container()
                 : Center(
-                    child: Icon(Icons.play_circle_filled, color: Colors.white.withOpacity(.7), size: 50,)),
+                    child: Icon(
+                    Icons.play_circle_filled,
+                    color: Colors.white.withOpacity(.7),
+                    size: 50,
+                  )),
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -83,7 +99,9 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
                     SizedBox(width: ScreenUtil.instance.setWidth(3)),
                     Text(
                       '@${widget.username}',
-                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(12), color: Color(0xFF8A8A8B)),
+                      style: TextStyle(
+                          fontSize: ScreenUtil.instance.setSp(12),
+                          color: Color(0xFF8A8A8B)),
                     ),
                   ]),
                   SizedBox(height: ScreenUtil.instance.setWidth(4)),
@@ -92,8 +110,9 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
                     width: ScreenUtil.instance.setWidth(150),
                     child: Text(
                       widget.title,
-                      style:
-                          TextStyle(fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
                       maxLines: 2,
                     ),
                   ),
@@ -130,31 +149,58 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
                               ]),
                         ),
                         SizedBox(width: ScreenUtil.instance.setWidth(12)),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 13),
-                          height: ScreenUtil.instance.setWidth(30),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 2,
-                                    spreadRadius: 1.5)
-                              ]),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Image.asset(
-                                  'assets/icons/icon_apps/comment.png',
-                                  scale: 3.5,
-                                ),
-                                SizedBox(width: ScreenUtil.instance.setWidth(5)),
-                                Text(commentCount.length.toString(),
-                                    style: TextStyle(
-                                        color: Color(
-                                            0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
-                              ]),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MediaDetails(
+                                        username: widget.username,
+                                        mediaTitle: widget.title,
+                                        userPicture: widget.userImage,
+                                        imageUri: widget.image,
+                                        imageCount: 'img',
+                                        mediaId: widget.mediaId,
+                                        articleDetail: widget.article,
+                                        autoFocus: true,
+                                        isVideo: widget.isVideo,
+                                        videoUrl: widget.videoUrl,
+                                        youtubeUrl: widget.youtube)));
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: commentCount.length < 1 ? 8 : 13),
+                            height: ScreenUtil.instance.setWidth(30),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 2,
+                                      spreadRadius: 1.5)
+                                ]),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Image.asset(
+                                      'assets/icons/icon_apps/comment.png',
+                                      scale: 3.5,
+                                      color: commentCount.length < 1
+                                          ? Colors.grey
+                                          : eventajaGreenTeal),
+                                  SizedBox(
+                                      width: ScreenUtil.instance.setWidth(
+                                          commentCount.length < 1 ? 0 : 5)),
+                                  Text(
+                                      commentCount.length < 1
+                                          ? ''
+                                          : commentCount.length.toString(),
+                                      style: TextStyle(
+                                          color: Color(
+                                              0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
+                                ]),
+                          ),
                         ),
                       ],
                     ),
