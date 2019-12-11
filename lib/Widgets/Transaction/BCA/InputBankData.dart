@@ -3,7 +3,8 @@ import 'dart:math' as math;
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -22,7 +23,6 @@ class PaymentBCA extends StatefulWidget {
 }
 
 class PaymentBcaState extends State<PaymentBCA> {
-
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   String month;
@@ -32,6 +32,8 @@ class PaymentBcaState extends State<PaymentBCA> {
   String finalAmount;
   String firstAmount;
   String uniqueAmount;
+  DateTime _dDay;
+  DateTime _currentTime = DateTime.now();
 
   String bank_number;
   String bank_code;
@@ -70,11 +72,13 @@ class PaymentBcaState extends State<PaymentBCA> {
   void initState() {
     super.initState();
     getPaymentData();
+
     //getFinalAmount();
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -131,57 +135,7 @@ class PaymentBcaState extends State<PaymentBCA> {
                         SizedBox(
                           height: ScreenUtil.instance.setWidth(20),
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text('${hour}',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: ScreenUtil.instance.setSp(20),
-                                    fontWeight: FontWeight.bold)),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(10),
-                            ),
-                            Text(
-                              ':',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil.instance.setSp(20),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(10),
-                            ),
-                            Text(
-                              '$min',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil.instance.setSp(20),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(10),
-                            ),
-                            Text(
-                              ':',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil.instance.setSp(20),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(10),
-                            ),
-                            Text(
-                              '$sec',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil.instance.setSp(20),
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
+                        countdownTimer(),
                         SizedBox(
                           height: ScreenUtil.instance.setWidth(20),
                         ),
@@ -191,19 +145,22 @@ class PaymentBcaState extends State<PaymentBCA> {
                           children: <Widget>[
                             Text('H',
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil.instance.setSp(20))),
                             SizedBox(
                               width: ScreenUtil.instance.setWidth(35),
                             ),
                             Text('M',
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil.instance.setSp(20))),
                             SizedBox(
                               width: ScreenUtil.instance.setWidth(35),
                             ),
                             Text('S',
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil.instance.setSp(20))),
                           ],
                         ),
                         SizedBox(
@@ -235,7 +192,9 @@ class PaymentBcaState extends State<PaymentBCA> {
                     children: <Widget>[
                       Text(
                         'TRANSFER AMOUNT',
-                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.black45),
+                        style: TextStyle(
+                            fontSize: ScreenUtil.instance.setSp(20),
+                            color: Colors.black45),
                       ),
                       SizedBox(height: ScreenUtil.instance.setWidth(15)),
                       Row(
@@ -244,13 +203,18 @@ class PaymentBcaState extends State<PaymentBCA> {
                           Text(
                             'Rp. ' + firstAmount + ',',
                             style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(30), fontWeight: FontWeight.bold),
+                                fontSize: ScreenUtil.instance.setSp(30),
+                                fontWeight: FontWeight.bold),
                           ),
-                          Text(uniqueAmount, style: TextStyle(color: Colors.red, fontSize: ScreenUtil.instance.setSp(30), fontWeight: FontWeight.bold)),
-                          Text(
-                            ',-',
-                            style: TextStyle(fontSize: ScreenUtil.instance.setSp(30), fontWeight: FontWeight.bold)
-                          )
+                          Text(uniqueAmount,
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: ScreenUtil.instance.setSp(30),
+                                  fontWeight: FontWeight.bold)),
+                          Text(',-',
+                              style: TextStyle(
+                                  fontSize: ScreenUtil.instance.setSp(30),
+                                  fontWeight: FontWeight.bold))
                         ],
                       ),
                       SizedBox(height: ScreenUtil.instance.setWidth(15)),
@@ -270,7 +234,9 @@ class PaymentBcaState extends State<PaymentBCA> {
                       SizedBox(height: ScreenUtil.instance.setWidth(15)),
                       Text(
                         'Eventevent will automatically check your payment. It may take up to 1 hour to process',
-                        style: TextStyle(color: Colors.grey, fontSize: ScreenUtil.instance.setSp(12)),
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: ScreenUtil.instance.setSp(12)),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(
@@ -283,10 +249,10 @@ class PaymentBcaState extends State<PaymentBCA> {
                       GestureDetector(
                         onTap: () {
                           Clipboard.setData(ClipboardData(text: bank_number));
-                            print(Clipboard.getData('text/plain'));
-                            _scaffoldKey.currentState.showSnackBar(SnackBar(
-                              content: Text('Text Coppied!'),
-                            ));
+                          print(Clipboard.getData('text/plain'));
+                          _scaffoldKey.currentState.showSnackBar(SnackBar(
+                            content: Text('Text Coppied!'),
+                          ));
                         },
                         child: Container(
                           height: ScreenUtil.instance.setWidth(100),
@@ -323,19 +289,25 @@ class PaymentBcaState extends State<PaymentBCA> {
                                     Text(
                                       bank_acc,
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: ScreenUtil.instance.setSp(20),
-                                          color: Colors.black54,),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenUtil.instance.setSp(20),
+                                        color: Colors.black54,
+                                      ),
                                     ),
-                                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                                    SizedBox(
+                                        height:
+                                            ScreenUtil.instance.setWidth(10)),
                                     Text(bank_code.toUpperCase(),
                                         style: TextStyle(color: Colors.grey)),
-                                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                                    SizedBox(
+                                        height:
+                                            ScreenUtil.instance.setWidth(10)),
                                     Text(
                                       bank_number,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: ScreenUtil.instance.setSp(15),
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(15),
                                           color: Colors.black54),
                                     ),
                                   ])
@@ -348,6 +320,35 @@ class PaymentBcaState extends State<PaymentBCA> {
                 ],
               ),
             ),
+    );
+  }
+
+  Widget countdownTimer() {
+    var countdownAsString;
+    
+    setState(() {
+      final salesDay = _dDay;
+      print('salesDay:' + salesDay.toString());
+      final remaining = salesDay.difference(DateTime.now());
+
+      final days = remaining.inDays;
+      final hours = remaining.inHours - remaining.inDays * 24;
+      final minutes = remaining.inMinutes - remaining.inHours * 60;
+      final seconds = remaining.inSeconds - remaining.inMinutes * 60;
+
+      countdownAsString = '$days : $hours : $minutes : $seconds';
+    });
+
+    print(countdownAsString);
+
+    return Container(
+      child: Center(
+        child: Text(countdownAsString,
+            style: TextStyle(
+              color: Colors.white,
+                fontSize: ScreenUtil.instance.setSp(18),
+                fontWeight: FontWeight.bold)),
+      ),
     );
   }
 
@@ -379,6 +380,7 @@ class PaymentBcaState extends State<PaymentBCA> {
         bank_acc = paymentData['payment']['data_vendor']['account_name'];
         bank_code = paymentData['payment']['vendor'];
         imageUriBank = paymentData['payment']['data_vendor']['icon'];
+        _dDay = DateTime.parse(paymentData['expired_time']);
 
         int firstPrice = int.parse(paymentData['amount_detail']['total_price']);
         int uniqueCode =
@@ -386,11 +388,11 @@ class PaymentBcaState extends State<PaymentBCA> {
         finalAmount = (firstPrice + uniqueCode).toString();
 
         firstAmount = finalAmount.substring(0, finalAmount.length - 3);
-          uniqueAmount = finalAmount.substring(finalAmount.length - 3, finalAmount.length);
-          print(firstAmount + uniqueAmount);
+        uniqueAmount =
+            finalAmount.substring(finalAmount.length - 3, finalAmount.length);
+        print(firstAmount + uniqueAmount);
 
         print(finalAmount);
-        
       });
     }
   }

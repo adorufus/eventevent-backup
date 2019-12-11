@@ -50,7 +50,9 @@ class WithdrawBankState extends State<WithdrawBank> {
       if (response.statusCode == 200) {
         setState(() {
           historyList = extractedData['data'];
-          
+          print(historyList);
+          print(extractedData['data'][0].containsKey('user_bank').runtimeType);
+          print(extractedData['data'][0].containsKey('user_bank'));
         });
       } else {
         print('gagal');
@@ -74,7 +76,8 @@ class WithdrawBankState extends State<WithdrawBank> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    return Scaffold(
+    return SafeArea(
+      child: Scaffold(
         key: scaffoldKey,
         resizeToAvoidBottomPadding: false,
         appBar: PreferredSize(
@@ -137,8 +140,7 @@ class WithdrawBankState extends State<WithdrawBank> {
             )),
           ),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        body: ListView(
           children: <Widget>[
             DefaultTabController(
               length: 2,
@@ -192,7 +194,9 @@ class WithdrawBankState extends State<WithdrawBank> {
               ),
             )
           ],
-        ));
+        ),
+      ),
+    );
   }
 
   testGetWidgetHeight() {
@@ -225,7 +229,12 @@ class WithdrawBankState extends State<WithdrawBank> {
                       'assets/icons/icon_line.png',
                       fit: BoxFit.fill,
                     ))),
-            SizedBox(height: ScreenUtil.instance.setWidth(70)),
+            SizedBox(height: ScreenUtil.instance.setWidth(30)),
+            Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                    'Available Balance For Withdraw: ' + '\nRp. ${balanceData['amount']},-', style: TextStyle(color: eventajaGreenTeal), textAlign: TextAlign.center)),
+            SizedBox(height: ScreenUtil.instance.setWidth(26)),
             Container(
                 width: MediaQuery.of(context).size.width,
                 child: Column(
@@ -336,6 +345,7 @@ class WithdrawBankState extends State<WithdrawBank> {
             ),
           )
         : ListView(
+            shrinkWrap: true,
             children: <Widget>[
               Container(
                   alignment: Alignment.centerLeft,
@@ -634,9 +644,12 @@ class WithdrawBankState extends State<WithdrawBank> {
     return historyList == null
         ? Container(child: Center(child: CircularProgressIndicator()))
         : ListView.builder(
+            shrinkWrap: true,
             itemCount: historyList == null ? 0 : historyList.length,
             itemBuilder: (BuildContext context, i) {
-              fo = FlutterMoneyFormatter(amount: double.parse(historyList[i]['amount'] + '.0')).output;
+              fo = FlutterMoneyFormatter(
+                      amount: double.parse(historyList[i]['amount'] + '.0'))
+                  .output;
               if (historyList[i]['status'] == 'completed') {
                 transactionStatus = 'WITHDRAW COMPLETE';
                 transactionColor = eventajaGreenTeal;
@@ -711,19 +724,47 @@ class WithdrawBankState extends State<WithdrawBank> {
                                         style: TextStyle(fontSize: 10),
                                       )
                                     : Text(
-                                        'Transfer to ' + historyList[i]['user_bank']['account_name'] ?? '-',
+                                        historyList[i]
+                                                    .containsKey('user_bank')
+                                                    .toString() ==
+                                                'true'
+                                            ? 'transfer to ' +
+                                                    historyList[i]['user_bank']
+                                                        ['account_name'] ??
+                                                '-'
+                                            : '-' + ' / ',
                                         style: TextStyle(fontSize: 10),
                                       ),
                                 historyList[i]['status'] == 'added'
                                     ? Container()
                                     : Text(
-                                        historyList[i]['user_bank']['account_number'] ?? '-' + ' / ',
+                                        historyList[i]
+                                                    .containsKey('user_bank')
+                                                    .toString() ==
+                                                'true'
+                                            ? historyList[i]['user_bank']
+                                                    ['account_number'] ??
+                                                '-'
+                                            : '-' + ' / ',
                                         style: TextStyle(fontSize: 10),
                                       ),
                                 historyList[i]['status'] == 'added'
                                     ? Container()
                                     : Text(
-                                        DateTime.parse(historyList[i]['created_at']).day.toString() + '-' + DateTime.parse(historyList[i]['created_at']).month.toString() + '-' + DateTime.parse(historyList[i]['created_at']).year.toString() ,
+                                        DateTime.parse(historyList[i]
+                                                    ['created_at'])
+                                                .day
+                                                .toString() +
+                                            '-' +
+                                            DateTime.parse(historyList[i]
+                                                    ['created_at'])
+                                                .month
+                                                .toString() +
+                                            '-' +
+                                            DateTime.parse(historyList[i]
+                                                    ['created_at'])
+                                                .year
+                                                .toString(),
                                         style: TextStyle(fontSize: 10),
                                       ),
                                 historyList[i]['status'] == 'added'

@@ -40,6 +40,8 @@ class _WaitTransactionState extends State<WaitTransaction> {
   String bank_code;
   String bank_acc;
   String bank_number;
+  DateTime _dDay;
+  DateTime _currentTime = DateTime.now();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -116,8 +118,10 @@ class _WaitTransactionState extends State<WaitTransaction> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (BuildContext context) => TransactionHistory()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => TransactionHistory()));
           },
           child: Icon(
             Icons.close,
@@ -163,57 +167,7 @@ class _WaitTransactionState extends State<WaitTransaction> {
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
                             ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text('${hour}',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: ScreenUtil.instance.setSp(20),
-                                        fontWeight: FontWeight.bold)),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  ':',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  '$min',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  ':',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  '$sec',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ),
+                            countdownTimer(),
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
                             ),
@@ -412,16 +366,12 @@ class _WaitTransactionState extends State<WaitTransaction> {
 
     return Container(
       child: Center(
-          child: Column(
-        children: <Widget>[
-          Text(
-              'Ticket sales start from ${_dDay.day} - ${_dDay.month} - ${_dDay.year}'),
-          Text(countdownAsString,
-              style: TextStyle(
-                  fontSize: ScreenUtil.instance.setSp(18),
-                  fontWeight: FontWeight.bold)),
-        ],
-      )),
+        child: Text(countdownAsString,
+            style: TextStyle(
+              color: Colors.white,
+                fontSize: ScreenUtil.instance.setSp(18),
+                fontWeight: FontWeight.bold)),
+      ),
     );
   }
 
@@ -446,6 +396,7 @@ class _WaitTransactionState extends State<WaitTransaction> {
       var extractedData = json.decode(response.body);
       setState(() {
         paymentData = extractedData['data'];
+        _dDay = DateTime.parse(paymentData['expired_time']);
         startCounter(paymentData['expired_time']);
         print(paymentData);
       });
