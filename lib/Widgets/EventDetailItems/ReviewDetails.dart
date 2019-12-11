@@ -182,7 +182,8 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                       // TODO: Handle this case.
                       break;
                     case ConnectionState.done:
-                      if(snapshot.hasData || snapshot.data['data']['data_review'].toString() != 'false'){
+                      print(snapshot.data['data']['data_review']);
+                      if(snapshot.data['data']['data_review'] != false){
                         List reviewData = snapshot.data['data']['data_review'];
                         print(reviewData);
 

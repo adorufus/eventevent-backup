@@ -123,6 +123,9 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                   } else if (ticketDetailData[i]['usedStatus'] == 'expired') {
                     ticketColor = Color(0xFF8E1E2D);
                     ticketStatusText = 'Expired';
+                  } else if(ticketDetailData[i]['usedStatus'] == 'refund'){
+                    ticketColor = Colors.blue;
+                    ticketStatusText = 'refund';
                   }
 
                   print(ticketDetailData[i].containsKey('ticket_image').toString());

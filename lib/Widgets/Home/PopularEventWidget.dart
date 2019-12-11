@@ -42,7 +42,7 @@ class PopularEventWidget extends StatelessWidget {
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(left: 13, top: 8, bottom: 8, right: 3),
-          width: ScreenUtil.instance.setWidth(133),
+          width: ScreenUtil.instance.setWidth(150),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
@@ -55,11 +55,11 @@ class PopularEventWidget extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Container(
-                height: ScreenUtil.instance.setWidth(199.5),
+                height: ScreenUtil.instance.setWidth(225),
                 decoration: BoxDecoration(
                     color: Color(0xFFB5B5B5),
                     image: DecorationImage(
-                        image: CachedNetworkImageProvider(imageUrl), fit: BoxFit.fill),
+                        image: CachedNetworkImageProvider(imageUrl), fit: BoxFit.cover),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(15),
                       topRight: Radius.circular(15),
@@ -102,7 +102,6 @@ class PopularEventWidget extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     height: ScreenUtil.instance.setWidth(28),
-                    width: ScreenUtil.instance.setWidth(133),
                     decoration: BoxDecoration(boxShadow: <BoxShadow>[
                       BoxShadow(
                           color: color.withOpacity(0.4),
@@ -128,7 +127,7 @@ class PopularEventWidget extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: ScreenUtil.instance.setWidth(194),
+          top: ScreenUtil.instance.setWidth(220),
           left: ScreenUtil.instance.setWidth(21),
           child: MiniDate(
             date: date,

@@ -1424,7 +1424,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                               isPrivate == "0"
                                   ? Container()
                                   : Padding(
-                                      padding: EdgeInsets.only(left: 13),
+                                      padding: EdgeInsets.only(left: 0),
                                       child: Container(
                                         // margin: EdgeInsets.symmetric(
                                         //     horizontal: 13, vertical: 13),
@@ -1432,12 +1432,15 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
-                                            Text(
-                                              'Who\'s Invited',
-                                              style: TextStyle(
-                                                  color: Color(0xff8a8a8b),
-                                                  fontSize: ScreenUtil.instance
-                                                      .setSp(11)),
+                                            Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 13),
+                                              child: Text(
+                                                'Who\'s Invited',
+                                                style: TextStyle(
+                                                    color: Color(0xff8a8a8b),
+                                                    fontSize: ScreenUtil.instance
+                                                        .setSp(11)),
+                                              ),
                                             ),
                                             SizedBox(
                                                 height: ScreenUtil.instance
@@ -1459,7 +1462,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     (BuildContext context, i) {
                                                   return Padding(
                                                     padding: EdgeInsets.only(
-                                                        right: 10),
+                                                        left: 13),
                                                     child: Container(
                                                       constraints:
                                                           BoxConstraints(
@@ -1530,16 +1533,19 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   : Container(),
                               Container(
                                 margin: EdgeInsets.symmetric(
-                                    horizontal: 13, vertical: 13),
+                                    horizontal: 0, vertical: 13),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(
-                                      'Who\'s Going',
-                                      style: TextStyle(
-                                          color: Color(0xff8a8a8b),
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(11)),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 13),
+                                      child: Text(
+                                        'Who\'s Going',
+                                        style: TextStyle(
+                                            color: Color(0xff8a8a8b),
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(11)),
+                                      ),
                                     ),
                                     SizedBox(
                                         height:
@@ -1568,6 +1574,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           )));
                                             },
                                             child: new Container(
+                                              margin: EdgeInsets.only(left: 10),
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,

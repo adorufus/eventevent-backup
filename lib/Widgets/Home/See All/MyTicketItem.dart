@@ -3,7 +3,7 @@ import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutt
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class MyTicketItem extends StatelessWidget {
-  final image;
+  final String image;
   final title;
   final ticketName;
   final ticketCode;

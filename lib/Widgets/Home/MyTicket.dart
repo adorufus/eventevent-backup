@@ -26,7 +26,7 @@ class _MyTicketState extends State<MyTicket> {
   int newPage = 0;
   String _searchText = "";
 
-  bool notFound = false;
+    bool notFound = false;
 
   @override
   void initState() {
@@ -267,6 +267,20 @@ class _MyTicketState extends State<MyTicket> {
                                 'expired') {
                               ticketColor = Color(0xFF8E1E2D);
                               ticketStatusText = 'Expired';
+                            } else if(myTicketList[i]['usedStatus'] == 'refund'){
+                              ticketColor = Colors.blue;
+                              ticketStatusText = 'Refund';
+                            }
+
+                            print(myTicketList[i].containsKey('ticket_image').toString());
+                            print(myTicketList[i]['ticket_image'].toString());
+                            String ticketImage;
+
+                            if(myTicketList[i]['ticket_image'] == false){
+                              ticketImage = '';
+                            }
+                            else {
+                                ticketImage = myTicketList[i]['ticket_image']['secure_url'];
                             }
 
                             return GestureDetector(
@@ -297,14 +311,10 @@ class _MyTicketState extends State<MyTicket> {
                               },
                               child: Container(
                                 child: new MyTicketItem(
-                                  ticketImage: myTicketList[i],
-                                  image: myTicketList[i]
-                                              .containsKey('ticket_image')
-                                              .toString() ==
-                                          'false'
-                                      ? ''
-                                      : myTicketList[i]['ticket_image']
-                                          ['secure_url'],
+                                  image: myTicketList[i].containsKey('ticket_image').toString() ==
+                                          'true'
+                                      ?
+                                   ticketImage ?? '' : '',
                                   title: myTicketList[i]['event']['name'],
                                   ticketCode: myTicketList[i]['ticket_code'],
                                   ticketStatus: ticketStatusText,

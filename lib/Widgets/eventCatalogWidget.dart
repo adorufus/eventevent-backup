@@ -497,7 +497,7 @@ class _EventCatalogState extends State<EventCatalog>
                 ),
                 popularEventTitle(),
                 Container(
-                    height: ScreenUtil.instance.setWidth(310),
+                    height: ScreenUtil.instance.setWidth(340),
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: data == null ? 0 : data.length,
@@ -689,7 +689,7 @@ class _EventCatalogState extends State<EventCatalog>
           discoverData == null
               ? Container()
               : Container(
-                  height: ScreenUtil.instance.setWidth(310),
+                  height: ScreenUtil.instance.setWidth(340),
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: data == null ? 0 : data.length,
