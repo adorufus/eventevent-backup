@@ -231,220 +231,197 @@ class _EventCatalogState extends State<EventCatalog>
         })?.toList() ??
         [];
 
-//    child = map<Widget>(
-//        bannerData ?? [],
-//        (index, i){
-//          return Container(
-//            width: MediaQuery.of(context).size.width,
-//            margin: EdgeInsets.only(left: 6, right: 6, bottom: 15, top: 10),
-//            decoration: BoxDecoration(
-//                shape: BoxShape.rectangle,
-//                boxShadow: <BoxShadow>[
-//                  BoxShadow(
-//                    color: Colors.black26,
-//                    offset: Offset(1.0, 1.0),
-//                    blurRadius: 5,
-//                  )
-//                ],
-//                borderRadius: BorderRadius.circular(15),
-//                image: DecorationImage(
-//                  fit: BoxFit.cover,
-//                  image: CachedNetworkImageProvider(
-//                    i['image'],
-//                  ),
-//                )),
-//          );
-//        }
-//    )?.toList() ?? [];
-
-    return RefreshConfiguration(
-      enableLoadingWhenFailed: true,
-      child: Scaffold(
-        resizeToAvoidBottomPadding: false,
-        resizeToAvoidBottomInset: false,
-        appBar: PreferredSize(
-          preferredSize: Size(null, 100),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: ScreenUtil.instance.setWidth(75),
-            padding: EdgeInsets.symmetric(horizontal: 13),
-            color: Colors.white,
-            child: AppBar(
-              automaticallyImplyLeading: false,
-              elevation: 0,
-              backgroundColor: Colors.white,
-              titleSpacing: 0,
-              title: Container(
-                width: ScreenUtil.instance.setWidth(240),
-                child: Row(
-                  children: <Widget>[
-                    SizedBox(
-                      height: ScreenUtil.instance.setWidth(23),
-                      width: ScreenUtil.instance.setWidth(140),
-                      child: Hero(
-                        tag: 'eventeventlogo',
-                        child: Image.asset(
-                          'assets/icons/logo_company.png',
-                          fit: BoxFit.fill,
+    return SafeArea(
+      bottom: false,
+      child: RefreshConfiguration(
+        enableLoadingWhenFailed: true,
+        child: Scaffold(
+          resizeToAvoidBottomPadding: false,
+          resizeToAvoidBottomInset: false,
+          appBar: PreferredSize(
+            preferredSize: Size(null, 100),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: ScreenUtil.instance.setWidth(75),
+              padding: EdgeInsets.symmetric(horizontal: 13),
+              color: Colors.white,
+              child: AppBar(
+                automaticallyImplyLeading: false,
+                elevation: 0,
+                backgroundColor: Colors.white,
+                titleSpacing: 0,
+                title: Container(
+                  width: ScreenUtil.instance.setWidth(240),
+                  child: Row(
+                    children: <Widget>[
+                      SizedBox(
+                        height: ScreenUtil.instance.setWidth(23),
+                        width: ScreenUtil.instance.setWidth(140),
+                        child: Hero(
+                          tag: 'eventeventlogo',
+                          child: Image.asset(
+                            'assets/icons/logo_company.png',
+                            fit: BoxFit.fill,
+                          ),
                         ),
+                      ),
+                    ],
+                  ),
+                ),
+                textTheme: TextTheme(
+                    title: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: ScreenUtil.instance.setSp(14),
+                  color: Colors.black,
+                )),
+                actions: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (BuildContext context) => Search()));
+                    },
+                    child: Container(
+                        height: ScreenUtil.instance.setWidth(35),
+                        width: ScreenUtil.instance.setWidth(35),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  offset: Offset(0, 0),
+                                  spreadRadius: 1.5,
+                                  blurRadius: 2)
+                            ]),
+                        child: Image.asset(
+                          'assets/icons/icon_apps/search.png',
+                          scale: 4.5,
+                        )),
+                  ),
+                  SizedBox(width: ScreenUtil.instance.setWidth(8)),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => MyTicket()));
+                    },
+                    child: Container(
+                        height: ScreenUtil.instance.setWidth(35),
+                        width: ScreenUtil.instance.setWidth(35),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  offset: Offset(0, 0),
+                                  spreadRadius: 1.5,
+                                  blurRadius: 2)
+                            ]),
+                        child: Image.asset(
+                          'assets/icons/ticket.png',
+                          scale: 3,
+                        )),
+                  ),
+                  SizedBox(width: ScreenUtil.instance.setWidth(2)),
+                ],
+              ),
+            ),
+          ),
+          body: ListView(
+            children: <Widget>[
+              DefaultTabController(
+                length: 3,
+                initialIndex: 0,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      color: Colors.white,
+                      child: TabBar(
+                        labelColor: Colors.black,
+                        labelStyle: TextStyle(fontFamily: 'Proxima'),
+                        tabs: [
+                          Tab(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Image.asset(
+                                  'assets/icons/icon_apps/home.png',
+                                  scale: 4.5,
+                                ),
+                                SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                                Text('Home',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(12.5))),
+                              ],
+                            ),
+                          ),
+                          Tab(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Image.asset(
+                                  'assets/icons/icon_apps/nearby.png',
+                                  scale: 4.5,
+                                ),
+                                SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                                Text('Nearby',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(12.5))),
+                              ],
+                            ),
+                          ),
+                          Tab(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Image.asset(
+                                  'assets/icons/icon_apps/latest.png',
+                                  scale: 4.5,
+                                ),
+                                SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                                Text('Latest',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(12.5))),
+                              ],
+                            ),
+                          ),
+                        ],
+                        unselectedLabelColor: Colors.grey,
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.topCenter,
+                      height: MediaQuery.of(context).size.height - 191,
+                      child: TabBarView(
+                        physics: NeverScrollableScrollPhysics(),
+                        children: [
+                          home(),
+                          Container(
+                            child: Center(
+                              child: ListenPage(),
+                            ),
+                          ),
+                          LatestEventWidget(),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
-              textTheme: TextTheme(
-                  title: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: ScreenUtil.instance.setSp(14),
-                color: Colors.black,
-              )),
-              actions: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                            builder: (BuildContext context) => Search()));
-                  },
-                  child: Container(
-                      height: ScreenUtil.instance.setWidth(35),
-                      width: ScreenUtil.instance.setWidth(35),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                offset: Offset(0, 0),
-                                spreadRadius: 1.5,
-                                blurRadius: 2)
-                          ]),
-                      child: Image.asset(
-                        'assets/icons/icon_apps/search.png',
-                        scale: 4.5,
-                      )),
-                ),
-                SizedBox(width: ScreenUtil.instance.setWidth(8)),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => MyTicket()));
-                  },
-                  child: Container(
-                      height: ScreenUtil.instance.setWidth(35),
-                      width: ScreenUtil.instance.setWidth(35),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                offset: Offset(0, 0),
-                                spreadRadius: 1.5,
-                                blurRadius: 2)
-                          ]),
-                      child: Image.asset(
-                        'assets/icons/ticket.png',
-                        scale: 3,
-                      )),
-                ),
-                SizedBox(width: ScreenUtil.instance.setWidth(2)),
-              ],
-            ),
+            ],
           ),
-        ),
-        body: ListView(
-          children: <Widget>[
-            DefaultTabController(
-              length: 3,
-              initialIndex: 0,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    color: Colors.white,
-                    child: TabBar(
-                      labelColor: Colors.black,
-                      labelStyle: TextStyle(fontFamily: 'Proxima'),
-                      tabs: [
-                        Tab(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Image.asset(
-                                'assets/icons/icon_apps/home.png',
-                                scale: 4.5,
-                              ),
-                              SizedBox(width: ScreenUtil.instance.setWidth(10)),
-                              Text('Home',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          ScreenUtil.instance.setSp(12.5))),
-                            ],
-                          ),
-                        ),
-                        Tab(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Image.asset(
-                                'assets/icons/icon_apps/nearby.png',
-                                scale: 4.5,
-                              ),
-                              SizedBox(width: ScreenUtil.instance.setWidth(10)),
-                              Text('Nearby',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          ScreenUtil.instance.setSp(12.5))),
-                            ],
-                          ),
-                        ),
-                        Tab(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Image.asset(
-                                'assets/icons/icon_apps/latest.png',
-                                scale: 4.5,
-                              ),
-                              SizedBox(width: ScreenUtil.instance.setWidth(10)),
-                              Text('Latest',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          ScreenUtil.instance.setSp(12.5))),
-                            ],
-                          ),
-                        ),
-                      ],
-                      unselectedLabelColor: Colors.grey,
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.topCenter,
-                    height: MediaQuery.of(context).size.height - 191,
-                    child: TabBarView(
-                      physics: NeverScrollableScrollPhysics(),
-                      children: [
-                        home(),
-                        Container(
-                          child: Center(
-                            child: ListenPage(),
-                          ),
-                        ),
-                        LatestEventWidget(),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
       ),
     );

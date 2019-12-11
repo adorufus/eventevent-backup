@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:eventevent/Widgets/EventDetailComment.dart';
+import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
 import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -744,14 +745,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                         child: Center(
                             child: Text(
                           ticketPrice,
-                          // type == 'paid' ||
-                          //         type == 'paid_seating'
-                          //     ? isAvailable == '1'
-                          //         ? 'Rp. ' +
-                          //             itemPrice.toUpperCase() +
-                          //             ',-'
-                          //         : itemPrice.toUpperCase()
-                          //     : itemPrice.toUpperCase(),
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: ScreenUtil.instance.setSp(13),
@@ -1277,28 +1270,29 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                               ],
                                                             );
                                                           });
+                                                    }
+                                                  }
+                                                  else {
+                                                    if (ticketStat[
+                                                    'salesStatus'] ==
+                                                        'endSales' ||
+                                                        ticketStat[
+                                                        'availableTicketStatus'] ==
+                                                            '0') {
+                                                      return;
                                                     } else {
-                                                      if (ticketStat[
-                                                                  'salesStatus'] ==
-                                                              'endSales' ||
-                                                          ticketStat[
-                                                                  'availableTicketStatus'] ==
-                                                              '0') {
-                                                        return;
-                                                      } else {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder: (BuildContext
-                                                                        context) =>
-                                                                    SelectTicketWidget(
-                                                                      eventID:
-                                                                          detailData[
-                                                                              'id'],
-                                                                      eventDate:
-                                                                          detailData[
-                                                                              'dateStart'],
-                                                                    )));
-                                                      }
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder: (BuildContext
+                                                              context) =>
+                                                                  SelectTicketWidget(
+                                                                    eventID:
+                                                                    detailData[
+                                                                    'id'],
+                                                                    eventDate:
+                                                                    detailData[
+                                                                    'dateStart'],
+                                                                  )));
                                                     }
                                                   }
                                                 },
@@ -1323,14 +1317,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   child: Center(
                                                       child: Text(
                                                     ticketPrice,
-                                                    // type == 'paid' ||
-                                                    //         type == 'paid_seating'
-                                                    //     ? isAvailable == '1'
-                                                    //         ? 'Rp. ' +
-                                                    //             itemPrice.toUpperCase() +
-                                                    //             ',-'
-                                                    //         : itemPrice.toUpperCase()
-                                                    //     : itemPrice.toUpperCase(),
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: ScreenUtil
@@ -1582,7 +1568,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           )));
                                             },
                                             child: new Container(
-                                              
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
@@ -1636,9 +1621,42 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
-                                          Text('USERS FEEDBACK',
-                                              style: TextStyle(
-                                                  color: Color(0xff8a8a8b))),
+                                          Row(
+                                            children: <Widget>[
+                                              Expanded(child: SizedBox()),
+                                              Text('USERS FEEDBACK',
+                                                  style: TextStyle(
+                                                      color:
+                                                          Color(0xff8a8a8b))),
+                                              Expanded(child: SizedBox()),
+                                              GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                ReviewDetails(
+                                                                  eventId: detailData['id'],
+                                                                  eventName:
+                                                                      detailData[
+                                                                          'name'],
+                                                                  goodReview: detailData[
+                                                                              'event_review']
+                                                                          [
+                                                                          'percent_review']
+                                                                      ['good'],
+                                                                  badReview: detailData[
+                                                                          'event_review']
+                                                                      [
+                                                                      'percent_review']['bad'],
+                                                                )));
+                                                  },
+                                                  child: Text('See All >',
+                                                      style: TextStyle(
+                                                          color:
+                                                              eventajaGreenTeal)))
+                                            ],
+                                          ),
                                           SizedBox(
                                             height: ScreenUtil.instance
                                                 .setWidth(15),
@@ -2525,12 +2543,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         website = detailData['website'];
         eventID = detailData['id'];
         loveCount = int.parse(isLoved);
-        
-        if(detailData['ticket']['sales_start_date'] == null){
-          
-        }
-        else{
-          ticketStartDate = DateTime.parse(detailData['ticket']['sales_start_date']);
+
+        if (detailData['ticket']['sales_start_date'] == null) {
+        } else {
+          ticketStartDate =
+              DateTime.parse(detailData['ticket']['sales_start_date']);
         }
 
         // print(_dDay.toString());

@@ -224,6 +224,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
     )..init(context);
 
     return SafeArea(
+      bottom: false,
       child: Scaffold(
         body: Container(
           alignment: Alignment.center,

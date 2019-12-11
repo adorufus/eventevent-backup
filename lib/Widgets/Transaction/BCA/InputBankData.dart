@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math' as math;
 
+import 'package:eventevent/Widgets/TransactionHistory.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +94,10 @@ class PaymentBcaState extends State<PaymentBCA> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.of(context).pop();
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => TransactionHistory()), ModalRoute.withName('/EventDetails'));
           },
           child: Icon(
             Icons.close,

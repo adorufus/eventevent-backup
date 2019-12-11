@@ -44,111 +44,114 @@ class TransactionHistoryState extends State<TransactionHistory> {
       allowFontScaling: true,
     )..init(context);
     
-    return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: Container(
-            child: AppBar(
-              elevation: 0,
-              backgroundColor: Colors.white,
-              leading: Padding(
-                padding: const EdgeInsets.only(left: 13.0),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      SizedBox(
-                        height: ScreenUtil.instance.setWidth(15.49),
-                        width: ScreenUtil.instance.setWidth(9.73),
-                        child: Image.asset(
-                          'assets/icons/icon_apps/arrow.png',
-                          fit: BoxFit.fill,
+    return SafeArea(
+      bottom: false,
+      child: Scaffold(
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(50),
+            child: Container(
+              child: AppBar(
+                elevation: 0,
+                backgroundColor: Colors.white,
+                leading: Padding(
+                  padding: const EdgeInsets.only(left: 13.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        SizedBox(
+                          height: ScreenUtil.instance.setWidth(15.49),
+                          width: ScreenUtil.instance.setWidth(9.73),
+                          child: Image.asset(
+                            'assets/icons/icon_apps/arrow.png',
+                            fit: BoxFit.fill,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
+                centerTitle: true,
+                title: Text(
+                  'Transaction History',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
+                ),
               ),
-              centerTitle: true,
-              title: Text(
-                'Transaction History',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
-              ),
-            ),
-          )),
-      body: transactionList == null
-          ? Container(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            )
-          : Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: ListView.builder(
-                itemCount:
-                    transactionList.length == null ? 0 : transactionList.length,
-                itemBuilder: (BuildContext context, i) {
-                  if (transactionList[i]['status_transaksi'] == 'completed') {
-                    paymentStatusColor = eventajaGreenTeal;
-                    paymentStatusText = 'Payment Success';
-                  } else if (transactionList[i]['status_transaksi'] ==
-                      'expired') {
-                    paymentStatusColor = Colors.red[500];
-                    paymentStatusText = 'Transaction Expired';
-                  } else if (transactionList[i]['status_transaksi'] ==
-                      'pending') {
-                    paymentStatusColor = Colors.yellow[600];
-                    paymentStatusText = 'Waiting for payment';
-                  }
+            )),
+        body: transactionList == null
+            ? Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: ListView.builder(
+                  itemCount:
+                      transactionList.length == null ? 0 : transactionList.length,
+                  itemBuilder: (BuildContext context, i) {
+                    if (transactionList[i]['status_transaksi'] == 'completed') {
+                      paymentStatusColor = eventajaGreenTeal;
+                      paymentStatusText = 'Payment Success';
+                    } else if (transactionList[i]['status_transaksi'] ==
+                        'expired') {
+                      paymentStatusColor = Colors.red[500];
+                      paymentStatusText = 'Transaction Expired';
+                    } else if (transactionList[i]['status_transaksi'] ==
+                        'pending') {
+                      paymentStatusColor = Colors.yellow[600];
+                      paymentStatusText = 'Waiting for payment';
+                    }
 
-                  return GestureDetector(
-                      onTap: () {
-                        if (transactionList[i]['status_transaksi'] ==
-                            'pending') {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      WaitTransaction(
-                                        transactionID: transactionList[i]['id'],
-                                        expDate: transactionList[i]
-                                            ['expired_time'],
-                                        finalPrice: transactionList[i]
-                                            ['amount'],
-                                      )));
-                        } else if (transactionList[i]['status_transaksi'] ==
-                            'completed') {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      SuccessPage()));
-                        } else if (transactionList[i]['status_transaksi'] ==
-                            'expired') {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      ExpiredPage()));
-                        }
-                      },
-                      child: TransactionHistoryItem(
-                        image: transactionList[i]['ticket_image']['secure_url'],
-                        ticketCode: transactionList[i]['transaction_code'],
-                        ticketName: transactionList[i]['ticket']['ticket_name'],
-                        ticketStatus: paymentStatusText,
-                        ticketColor: paymentStatusColor,
-                        quantity: transactionList[i]['quantity'],
-                        timeStart: transactionList[i]['updated_at'],
-                        price: transactionList[i]['amount'],
-                      ));
-                },
+                    return GestureDetector(
+                        onTap: () {
+                          if (transactionList[i]['status_transaksi'] ==
+                              'pending') {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        WaitTransaction(
+                                          transactionID: transactionList[i]['id'],
+                                          expDate: transactionList[i]
+                                              ['expired_time'],
+                                          finalPrice: transactionList[i]
+                                              ['amount'],
+                                        )));
+                          } else if (transactionList[i]['status_transaksi'] ==
+                              'completed') {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        SuccessPage()));
+                          } else if (transactionList[i]['status_transaksi'] ==
+                              'expired') {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        ExpiredPage()));
+                          }
+                        },
+                        child: TransactionHistoryItem(
+                          image: transactionList[i]['ticket_image']['secure_url'],
+                          ticketCode: transactionList[i]['transaction_code'],
+                          ticketName: transactionList[i]['ticket']['ticket_name'],
+                          ticketStatus: paymentStatusText,
+                          ticketColor: paymentStatusColor,
+                          quantity: transactionList[i]['quantity'],
+                          timeStart: transactionList[i]['updated_at'],
+                          price: transactionList[i]['amount'],
+                        ));
+                  },
+                ),
               ),
-            ),
+      ),
     );
   }
 

@@ -42,46 +42,49 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Colors.white,
-      appBar: CupertinoNavigationBar(
-        padding:
-            EdgeInsetsDirectional.only(start: 15, bottom: 10, end: 15, top: 5),
+    return SafeArea(
+      bottom: false,
+      child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.white,
-        leading: GestureDetector(
-          onTap: () {
-            backEvent();
-          },
-          child: Icon(Icons.arrow_back, color: eventajaGreenTeal),
-        ),
-        middle: Text(
-          'Register',
-          style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: eventajaGreenTeal),
-        ),
-      ),
-      body: Stack(
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(left: 40, right: 40, top: 45),
-                child: Material(
-                  color: Colors.white,
-                  child: registerForm(),
-                ),
-              )
-            ],
+        appBar: CupertinoNavigationBar(
+          padding:
+              EdgeInsetsDirectional.only(start: 15, bottom: 10, end: 15, top: 5),
+          backgroundColor: Colors.white,
+          leading: GestureDetector(
+            onTap: () {
+              backEvent();
+            },
+            child: Icon(Icons.arrow_back, color: eventajaGreenTeal),
           ),
-          Positioned(
-              child: isLoading == true
-                  ? Container(
-                      child: Center(child: CircularProgressIndicator()),
-                      color: Colors.black.withOpacity(0.5),
-                    )
-                  : Container())
-        ],
+          middle: Text(
+            'Register',
+            style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: eventajaGreenTeal),
+          ),
+        ),
+        body: Stack(
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 40, right: 40, top: 45),
+                  child: Material(
+                    color: Colors.white,
+                    child: registerForm(),
+                  ),
+                )
+              ],
+            ),
+            Positioned(
+                child: isLoading == true
+                    ? Container(
+                        child: Center(child: CircularProgressIndicator()),
+                        color: Colors.black.withOpacity(0.5),
+                      )
+                    : Container())
+          ],
+        ),
       ),
     );
   }
