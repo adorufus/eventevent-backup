@@ -125,6 +125,8 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                     ticketStatusText = 'Expired';
                   }
 
+                  print(ticketDetailData[i].containsKey('ticket_image').toString());
+
                   return GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
@@ -147,7 +149,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                               )));
                     },
                     child: new MyTicketItem(
-                      image: ticketDetailData[i]['ticket_image']['secure_url'],
+                      image: ticketDetailData[i].containsKey('ticket_image').toString() == 'false' ? '' : ticketDetailData[i]['ticket_image']['secure_url'],
                       title: ticketDetailData[i]['event']['name'],
                       ticketCode: ticketDetailData[i]['ticket_code'],
                       ticketStatus: ticketStatusText,

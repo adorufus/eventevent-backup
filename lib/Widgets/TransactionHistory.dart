@@ -139,7 +139,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
                           }
                         },
                         child: TransactionHistoryItem(
-                          image: transactionList[i]['ticket_image']['secure_url'],
+                          image: transactionList[i].containsKey('ticket_image').toString() == 'false' ? '' : transactionList[i]['ticket_image']['secure_url'],
                           ticketCode: transactionList[i]['transaction_code'],
                           ticketName: transactionList[i]['ticket']['ticket_name'],
                           ticketStatus: paymentStatusText,

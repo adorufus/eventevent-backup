@@ -11,6 +11,7 @@ class MyTicketItem extends StatelessWidget {
   final timeEnd;
   final ticketType;
   final ticketStatus;
+  final ticketImage;
   final DateTime date;
   final Color ticketColor;
 
@@ -22,7 +23,7 @@ class MyTicketItem extends StatelessWidget {
       this.timeStart,
       this.timeEnd,
       this.ticketType,
-      this.ticketStatus, this.ticketName, this.ticketColor, this.date})
+      this.ticketStatus, this.ticketName, this.ticketColor, this.date, this.ticketImage})
       : super(key: key);
 
   @override
@@ -49,7 +50,7 @@ class MyTicketItem extends StatelessWidget {
             width: ScreenUtil.instance.setWidth(100.19),
             decoration: BoxDecoration(
               image:
-                  DecorationImage(image: image == null || image == '' ? AssetImage('assets/grey-fade.jpg') : NetworkImage(image), fit: BoxFit.fill),
+                  DecorationImage(image: image == '' ? AssetImage('assets/grey-fade.jpg') : NetworkImage(image), fit: BoxFit.fill),
               color: Color(0xFFB5B5B5),
               borderRadius: BorderRadius.circular(15),
             ),
