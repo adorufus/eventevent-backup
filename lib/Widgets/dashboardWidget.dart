@@ -314,6 +314,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
     ];
 
     return SafeArea(
+      bottom: false,
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
