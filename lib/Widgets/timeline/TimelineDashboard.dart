@@ -39,6 +39,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
   List bannerData;
   String currentUserId;
   bool isLoading = false;
+  bool isLoved = false;
 
   GlobalKey modalBottomSheetKey = new GlobalKey();
 
@@ -1180,6 +1181,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
           List commentList = timelineList[i]['comment']['data'];
           List impressions = new List();
           bool isLiked;
+          String likeCount = '';
+
 
 //          for(i = 0; i < impressionList.length; i++){
 //            if(impressionList != null){
@@ -1199,22 +1202,18 @@ class TimelineDashboardState extends State<TimelineDashboard>
 //          print('impression map: ' + impressionLists.toString());
 //          print('userID map: ' + impressionLists['data'].toString());
 
-          for (int i = 0; i < impressionList.length; i++) {
-            List impression = impressionList;
+          for(Map impression in timelineList[i]['impression']['data']){
+            print('impression' + impression.toString());
+            print(impression.containsValue(currentUserId).toString());
 
-            print(impression);
-
-            if (impression != null) {
-              if (impression[i]['userID'].contains(currentUserId)) {
-                isLiked = false;
-                print('not yet liked');
-              } else {
+              if(impression.containsValue(currentUserId) == true){
                 isLiked = true;
-                print('you already liked');
               }
-            } else {
-              isLiked = false;
-            }
+              else{
+                isLiked = false;
+              }
+
+            print(isLiked);
           }
 
           return Container(
@@ -1515,59 +1514,45 @@ class TimelineDashboardState extends State<TimelineDashboard>
                         children: <Widget>[
                           GestureDetector(
                             onTap: () {
-//                              for(int i = 0; i < impressionList.length; i++ ){
-//                                List impression = impressionList;
-//
-//                                if(impression[i]['userID'].contains(currentUserId)){
-//                                  isLiked = false;
-//                                  print('not yet liked');
-//                                }
-//                                else{
-//                                  isLiked = true;
-//                                  print('you already liked');
-//                                }
+//                              if(isLiked){
+//                                unLove(timelineList[i]['id']).then((response){
+//                                  print(response.body);
+//                                  setState((){
+//                                    isLiked = false;
+//                                  });
+//                                });
+//                                print(isLiked);
 //                              }
-
-                              if (timelineList[i]['impression']['data'] ==
-                                  null) {
-                                isLiked = false;
-                                for (int i = 0;
-                                    i < impressionList.length;
-                                    i++) {
-                                  List impression = impressionList;
-
-                                  if (impression[i]['userID']
-                                      .contains(currentUserId)) {
-                                    isLiked = false;
-                                    print('not yet liked');
-                                  } else {
-                                    isLiked = true;
-                                    print('you already liked');
-                                  }
+//                              else{
+//                                doLove(timelineList[i]['id'], '6').then((response){
+//                                  print(response.body);
+//
+//                                  setState(() {
+//                                    isLiked = true;
+//                                  });
+//                                });
+//                                print(isLiked);
+//                              }
+                              for(Map impression in timelineList[i]['impression']['data']){
+                                if(impression.containsValue(currentUserId) == true){
+                                  unLove(timelineList[i]['id']).then((response){
+                                    print(response.body);
+                                    setState((){
+                                      isLiked = false;
+                                    });
+                                  });
+                                  print(isLiked);
                                 }
-                              } else {
-                                for (int i = 0;
-                                    i < impressionList.length;
-                                    i++) {
-                                  List impression = impressionList;
+                                else{
+                                  doLove(timelineList[i]['id'], '6').then((response){
+                                    print(response.body);
 
-                                  if (impression[i]['userID']
-                                      .contains(currentUserId)) {
-                                    isLiked = false;
-                                    print('not yet liked');
-                                  } else {
-                                    isLiked = true;
-                                    print('you already liked');
-                                  }
+                                    setState(() {
+                                      isLiked = true;
+                                    });
+                                  });
+                                  print(isLiked);
                                 }
-                              }
-
-                              if (isLiked == false) {
-                                isLiked = !isLiked;
-                                print('liked');
-                              } else {
-                                isLiked = !isLiked;
-                                print('disliked');
                               }
                             },
                             child: Container(
@@ -1993,6 +1978,23 @@ class TimelineDashboardState extends State<TimelineDashboard>
       'Authorization': AUTHORIZATION_KEY,
       'cookie': prefs.getString('Session'),
     });
+
+    return response;
+  }
+
+  Future<http.Response> unLove(String id) async {
+    SharedPreferences prefences = await SharedPreferences.getInstance();
+
+    String url = BaseApi().apiUrl + '/photo_impression/delete';
+
+    final response = await http.delete(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'X-API-KEY': API_KEY,
+      'cookie': prefences.getString('Session'),
+      'id': id
+    });
+
+    print(response.body);
 
     return response;
   }

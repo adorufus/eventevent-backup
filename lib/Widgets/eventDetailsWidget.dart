@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:eventevent/Widgets/EventDetailComment.dart';
 import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
 import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart';
+import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -1271,27 +1272,26 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             );
                                                           });
                                                     }
-                                                  }
-                                                  else {
+                                                  } else {
                                                     if (ticketStat[
-                                                    'salesStatus'] ==
-                                                        'endSales' ||
+                                                                'salesStatus'] ==
+                                                            'endSales' ||
                                                         ticketStat[
-                                                        'availableTicketStatus'] ==
+                                                                'availableTicketStatus'] ==
                                                             '0') {
                                                       return;
                                                     } else {
                                                       Navigator.of(context).push(
                                                           MaterialPageRoute(
                                                               builder: (BuildContext
-                                                              context) =>
+                                                                      context) =>
                                                                   SelectTicketWidget(
                                                                     eventID:
-                                                                    detailData[
-                                                                    'id'],
+                                                                        detailData[
+                                                                            'id'],
                                                                     eventDate:
-                                                                    detailData[
-                                                                    'dateStart'],
+                                                                        detailData[
+                                                                            'dateStart'],
                                                                   )));
                                                     }
                                                   }
@@ -1433,12 +1433,15 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 13),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 13),
                                               child: Text(
                                                 'Who\'s Invited',
                                                 style: TextStyle(
                                                     color: Color(0xff8a8a8b),
-                                                    fontSize: ScreenUtil.instance
+                                                    fontSize: ScreenUtil
+                                                        .instance
                                                         .setSp(11)),
                                               ),
                                             ),
@@ -1538,7 +1541,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 13),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 13),
                                       child: Text(
                                         'Who\'s Going',
                                         style: TextStyle(
@@ -1643,7 +1647,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         MaterialPageRoute(
                                                             builder: (context) =>
                                                                 ReviewDetails(
-                                                                  eventId: detailData['id'],
+                                                                  eventId:
+                                                                      detailData[
+                                                                          'id'],
                                                                   eventName:
                                                                       detailData[
                                                                           'name'],
@@ -2312,19 +2318,42 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     height: ScreenUtil.instance.setWidth(
                         detailData['additional'].length == 0 ? 0 : 29),
                   ),
-                  detailData['additional'].length == 0
-                      ? Container()
-                      : Container(
-                          height: ScreenUtil.instance.setWidth(206),
-                          width: ScreenUtil.instance.setWidth(206),
-                          decoration: BoxDecoration(
-                              color: Color(0xff8a8a8b),
-                              image: DecorationImage(
-                                  image: NetworkImage(detailData['additional']
-                                      [0]['posterPathThumb']),
-                                  fit: BoxFit.cover),
-                              borderRadius: BorderRadius.circular(15)),
-                        ),
+                  Container(
+                    height: 200,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: detailData['additional'].length == 0 ? 0 : detailData['additional'].length,
+                        itemBuilder: (context, i){
+                          return GestureDetector(
+                            onTap: (){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MediaPlayer(
+                                          videoUri: detailData['additional'][i]
+                                          ['posterPathFull'])));
+                            },
+                            child: Container(
+                                  margin: EdgeInsets.only(left: 10),
+                                  height: ScreenUtil.instance.setWidth(206),
+                                  width: ScreenUtil.instance.setWidth(206),
+                                  decoration: BoxDecoration(
+                                      color: Color(0xff8a8a8b),
+                                      image: DecorationImage(
+                                          image: NetworkImage(detailData['additional']
+                                          [i]['posterPathThumb']),
+                                          fit: BoxFit.cover),
+                                      borderRadius: BorderRadius.circular(15)),
+                              child: Center(
+                                child: detailData['additional']
+                                [i]['extension'] == 'image/jpeg' ? Container() : Icon(Icons.play_circle_filled, color: Colors.white, size: 50,)
+                              ),
+                                ),
+                          );
+                        }
+                    ),
+                  ),
                   SizedBox(
                     height: ScreenUtil.instance.setWidth(29),
                   ),

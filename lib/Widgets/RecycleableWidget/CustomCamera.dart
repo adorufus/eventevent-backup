@@ -10,7 +10,7 @@ import 'package:path/path.dart' show join;
 import 'package:thumbnails/thumbnails.dart';
 
 class CustomCamera extends StatefulWidget {
-  List<CameraDescription> cameras;
+  final List<CameraDescription> cameras;
 
   CustomCamera(this.cameras);
 
@@ -120,7 +120,7 @@ class CustomCameraState extends State<CustomCamera> {
                       onTap: () async {
                         try {
                           final path = join(
-                              (await getTemporaryDirectory()).path,
+                              (await getApplicationDocumentsDirectory()).path,
                               '${DateTime.now()}.jpg');
                           await controller.takePicture(path);
 
@@ -190,8 +190,8 @@ class CustomCameraState extends State<CustomCamera> {
     File croppedImage = await ImageCropper.cropImage(
       sourcePath: image.path,
       aspectRatio: CropAspectRatio(ratioX: 2, ratioY: 3),
-      maxHeight: ScreenUtil.instance.setWidth(512),
-      maxWidth: ScreenUtil.instance.setWidth(512),
+      maxHeight: 512,
+      maxWidth: 512,
     );
 
     print(croppedImage.path);

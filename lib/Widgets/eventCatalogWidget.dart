@@ -28,14 +28,10 @@ import 'package:eventevent/helper/API/catalogModel.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:carousel_pro/carousel_pro.dart';
-import 'package:flutter_advanced_networkimage/provider.dart';
-import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'nearbyEventWidget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'categoryEventWidget.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'timeline/TimelineDashboard.dart';
 
 //List<T> map<T>(List list, Function handler){

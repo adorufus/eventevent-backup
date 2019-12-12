@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:eventevent/Widgets/TransactionHistory.dart';
+import 'package:eventevent/helper/countdownCounter.dart';
 import 'package:quiver/async.dart';
 
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -25,13 +26,13 @@ class WaitTransaction extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _WaitTransactionState();
-    ;
+
   }
 }
 
 // InitInAppBrowser inAppBrowserFallback = new InitInAppBrowser();
 
-class _WaitTransactionState extends State<WaitTransaction> {
+class _WaitTransactionState extends State<WaitTransaction> with TickerProviderStateMixin{
   String month;
   String hour;
   String min;
@@ -42,6 +43,8 @@ class _WaitTransactionState extends State<WaitTransaction> {
   String bank_number;
   DateTime _dDay;
   DateTime _currentTime = DateTime.now();
+  Duration duration;
+  String timertick = '';
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -52,6 +55,22 @@ class _WaitTransactionState extends State<WaitTransaction> {
   var expDate;
 
   Map<String, dynamic> paymentData;
+
+  AnimationController animationController;
+
+  timerCounter(){
+
+  }
+
+  String get timerString {
+    Duration duration =
+        animationController.duration * animationController.value;
+    return '${duration.inMinutes}:${(duration.inSeconds % 60)
+        .toString()
+        .padLeft(2, '0')}';
+  }
+
+
 
   void startCounter(String expired) {
     int hoursStart, minuteStart, secondStart;
@@ -93,11 +112,43 @@ class _WaitTransactionState extends State<WaitTransaction> {
     });
   }
 
+  int days;
+  int hours;
+  int minutes;
+  int seconds;
+
   @override
   void initState() {
     super.initState();
     getTransactionDetail();
     getBankInfo();
+
+    _dDay = DateTime.parse(widget.expDate);
+
+    final salesDay = DateTime.parse(widget.expDate);
+    final remaining = salesDay.difference(_currentTime);
+
+    final days = remaining.inDays;
+    final hours = remaining.inHours;
+    final minutes = remaining.inMinutes;
+    seconds = remaining.inSeconds;
+
+    final countdownAsString = '$days : $hours : $minutes : $seconds';
+
+    print(countdownAsString);
+
+    animationController = AnimationController(vsync: this, duration: Duration(days: days, hours: hours, minutes: minutes, seconds: seconds));
+
+    animationController.reverse(
+      from: animationController.value == 0.0 ? 1.0 : animationController.value
+    );
+
+    duration = animationController.duration * animationController.value;
+
+    timertick = '${duration.inHours % 24} : ${duration.inMinutes % 60 } : ${(duration.inSeconds % 60)}';
+
+    print(timertick);
+
   }
 
   @override
@@ -167,7 +218,23 @@ class _WaitTransactionState extends State<WaitTransaction> {
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
                             ),
-                            countdownTimer(),
+                            CountDownTimer(
+                              secondsRemaining: seconds,
+                              whenTimeExpires: () {
+
+                              },
+                              countDownTimerStyle: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(18),
+                fontWeight: FontWeight.bold),
+                            ),
+//                            AnimatedBuilder(
+//                              animation: animationController,
+//                              builder: (_, Widget child){
+//                                return Text(
+//                                  timertick,
+//                                  style: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(18),
+//                fontWeight: FontWeight.bold));
+//                              },
+//                            ),
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
                             ),
@@ -299,11 +366,7 @@ class _WaitTransactionState extends State<WaitTransaction> {
                           alignment: Alignment.centerLeft,
                           child: SizedBox(
                             height: ScreenUtil.instance.setWidth(30),
-                            child: Image.asset(paymentData['payment']
-                                            ['data_vendor']['available_banks']
-                                        [0]['bank_code'] ==
-                                    'BNI'
-                                ? 'assets/drawable/bni.png'
+                            child: Image.asset(paymentData['payment']['vendor'] == 'bca' ? 'assets/drawable/bca.png'
                                 : 'assets/drawable/bri.png'),
                           ),
                         ),
@@ -315,7 +378,7 @@ class _WaitTransactionState extends State<WaitTransaction> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                paymentData['payment']['data_vendor']
+                                paymentData['payment']['vendor'] == 'bca' ? paymentData['payment']['data_vendor']['account_name'] : paymentData['payment']['data_vendor']
                                         ['available_banks'][0]
                                     ['account_holder_name'],
                                 style: TextStyle(
@@ -326,13 +389,13 @@ class _WaitTransactionState extends State<WaitTransaction> {
                               SizedBox(
                                   height: ScreenUtil.instance.setWidth(10)),
                               Text(
-                                  paymentData['payment']['data_vendor']
+                                  paymentData['payment']['vendor'] == 'bca' ? paymentData['payment']['method']: paymentData['payment']['data_vendor']
                                       ['available_banks'][0]['bank_code'],
                                   style: TextStyle(color: Colors.grey)),
                               SizedBox(
                                   height: ScreenUtil.instance.setWidth(10)),
                               Text(
-                                paymentData['payment']['data_vendor']
+                                paymentData['payment']['vendor'] == 'bca' ? paymentData['payment']['data_vendor']['account_number'] : paymentData['payment']['data_vendor']
                                             ['available_banks'][0]
                                         ['bank_account_number']
                                     .toString(),
@@ -351,29 +414,31 @@ class _WaitTransactionState extends State<WaitTransaction> {
     );
   }
 
-  Widget countdownTimer() {
-    final salesDay = _dDay;
-    final remaining = salesDay.difference(_currentTime);
 
-    final days = remaining.inDays;
-    final hours = remaining.inHours - remaining.inDays * 24;
-    final minutes = remaining.inMinutes - remaining.inHours * 60;
-    final seconds = remaining.inSeconds - remaining.inMinutes * 60;
 
-    final countdownAsString = '$days : $hours : $minutes : $seconds';
-
-    print(countdownAsString);
-
-    return Container(
-      child: Center(
-        child: Text(countdownAsString,
-            style: TextStyle(
-              color: Colors.white,
-                fontSize: ScreenUtil.instance.setSp(18),
-                fontWeight: FontWeight.bold)),
-      ),
-    );
-  }
+//  Widget countdownTimer() {
+//    final salesDay = _dDay;
+//    final remaining = salesDay.difference(_currentTime);
+//
+//    final days = remaining.inDays;
+//    final hours = remaining.inHours - remaining.inDays * 24;
+//    final minutes = remaining.inMinutes - remaining.inHours * 60;
+//    final seconds = remaining.inSeconds - remaining.inMinutes * 60;
+//
+//    final countdownAsString = '$days : $hours : $minutes : $seconds';
+//
+//    print(countdownAsString);
+//
+//    return Container(
+//      child: Center(
+//        child: Text(countdownAsString,
+//            style: TextStyle(
+//              color: Colors.white,
+//                fontSize: ScreenUtil.instance.setSp(18),
+//                fontWeight: FontWeight.bold)),
+//      ),
+//    );
+//  }
 
   Future getTransactionDetail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -403,10 +468,10 @@ class _WaitTransactionState extends State<WaitTransaction> {
     }
   }
 
-  String get timerString {
-    Duration duration = new Duration(hours: 60, minutes: 10, seconds: 5);
-    return '${duration.inHours}:${duration.inMinutes % 60}:${duration.inSeconds % 60}'
-        .toString()
-        .padLeft(2, '0');
-  }
+//  String get timerString {
+//    Duration duration = new Duration(hours: 60, minutes: 10, seconds: 5);
+//    return '${duration.inHours}:${duration.inMinutes % 60}:${duration.inSeconds % 60}'
+//        .toString()
+//        .padLeft(2, '0');
+//  }
 }
