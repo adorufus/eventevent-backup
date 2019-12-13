@@ -501,7 +501,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                       )),
                   BottomNavigationBarItem(
                       title: Text(
-                        'Timeline',
+                        'Media',
                         style: TextStyle(color: Colors.black26, fontSize: ScreenUtil.instance.setSp(10)),
                       ),
                       icon: Image.asset(

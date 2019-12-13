@@ -230,15 +230,17 @@ class _SettingsWidgetState extends State<SettingsWidget>{
                         color: Colors.transparent,
                         child: Center(
                           child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                            padding: EdgeInsets.symmetric(horizontal: ScreenUtil.instance.setWidth(8), vertical: ScreenUtil.instance.setWidth(8)),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10)
                             ),
-                            height: ScreenUtil.instance.setWidth(100),
-                            width: ScreenUtil.instance.setWidth(200),
+                            height: ScreenUtil.instance.setWidth(150),
+                            width: ScreenUtil.instance.setWidth(250),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
+                                SizedBox(height: ScreenUtil.instance.setWidth(15),),
                                 Text('Oops', style: TextStyle(color: Colors.black54,fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
                                 SizedBox(height: ScreenUtil.instance.setWidth(10),),
                                 Text('Do you want to log out?', textAlign: TextAlign.center,),
@@ -247,6 +249,7 @@ class _SettingsWidgetState extends State<SettingsWidget>{
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     GestureDetector(
                                       onTap: (){
