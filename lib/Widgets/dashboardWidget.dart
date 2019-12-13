@@ -22,7 +22,6 @@ import 'eventCatalogWidget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
-import 'package:google_places_picker/google_places_picker.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/OpenCamera.dart';
 
 FirebaseMessaging _firebaseMessaging = FirebaseMessaging();

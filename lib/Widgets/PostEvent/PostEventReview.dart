@@ -8,8 +8,10 @@ import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
-import 'package:google_places_picker/google_places_picker.dart';
+import 'package:googleapis/firestore/v1.dart' as prefix0;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:place_picker/place_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -758,19 +760,21 @@ class PostEventReviewState extends State<PostEventReview> {
 
   showPlacePicker() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var place = await PluginGooglePlacePicker.showPlacePicker();
+    LocationResult place = await Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => PlacePicker('AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI', displayLocation: LatLng(double.parse(currentLocation.latitude.toString()), double.parse(currentLocation.latitude.toString())
+    ))));
 
     if (!mounted) {
       return;
     }
-    print(place.address);
+    print(place.name);
     setState(() {
-      placeName = place.address;
-      lat = place.latitude.toString();
-      long = place.longitude.toString();
-      prefs.setString('CREATE_EVENT_LOCATION_ADDRESS', place.address);
-      prefs.setString('CREATE_EVENT_LOCATION_LAT', place.latitude.toString());
-      prefs.setString('CREATE_EVENT_LOCATION_LONG', place.longitude.toString());
+      placeName = place.name;
+      lat = place.latLng.latitude.toString();
+      long = place.latLng.longitude.toString();
+      prefs.setString('CREATE_EVENT_LOCATION_ADDRESS', place.name);
+      prefs.setString('CREATE_EVENT_LOCATION_LAT', place.latLng.latitude.toString());
+      prefs.setString('CREATE_EVENT_LOCATION_LONG', place.latLng.longitude.toString());
     });
 
     print(prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'));
