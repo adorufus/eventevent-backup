@@ -6,13 +6,14 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_places_picker/google_places_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
 import 'package:path/path.dart';
 import 'package:flutter/services.dart';
+import 'package:place_picker/place_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class EditEvent extends StatefulWidget{
   @override
@@ -679,6 +680,28 @@ class EditEventState extends State<EditEvent>{
         ));
   }
 
+  showPlacePicker(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    LocationResult place = await Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => PlacePicker('AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI', displayLocation: LatLng(double.parse(currentLocation.latitude.toString()), double.parse(currentLocation.latitude.toString())
+    ))));
+
+    if (!mounted) {
+      return;
+    }
+    print(place.name);
+    setState(() {
+      address = place.name;
+      lat = place.latLng.latitude.toString();
+      long = place.latLng.longitude.toString();
+      prefs.setString('CREATE_EVENT_LOCATION_ADDRESS', place.name);
+      prefs.setString('CREATE_EVENT_LOCATION_LAT', place.latLng.latitude.toString());
+      prefs.setString('CREATE_EVENT_LOCATION_LONG', place.latLng.longitude.toString());
+    });
+
+    print(prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'));
+  }
+
   Widget showMap(BuildContext context) {
     StaticMapsProvider mapProvider = new StaticMapsProvider(
       GOOGLE_API_KEY: 'AIzaSyDjNpeyufzT81GAhQkCe85x83kxzfA7qbI',
@@ -697,7 +720,7 @@ class EditEventState extends State<EditEvent>{
           left: 15,
           child: GestureDetector(
               onTap: () {
-                showPlacePicker();
+                showPlacePicker(context);
               },
               child: mapProvider),
         ),
@@ -798,26 +821,6 @@ class EditEventState extends State<EditEvent>{
         ],
       ),
     );
-  }
-
-  showPlacePicker() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var place = await PluginGooglePlacePicker.showPlacePicker();
-
-    if (!mounted) {
-      return;
-    }
-    print(place.address);
-    setState(() {
-      address = place.address;
-      lat = place.latitude.toString();
-      long = place.longitude.toString();
-      prefs.setString('CREATE_EVENT_LOCATION_ADDRESS', place.address);
-      prefs.setString('CREATE_EVENT_LOCATION_LAT', place.latitude.toString());
-      prefs.setString('CREATE_EVENT_LOCATION_LONG', place.longitude.toString());
-    });
-
-    print(prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'));
   }
 
   Future fetchCategoryEvent() async {

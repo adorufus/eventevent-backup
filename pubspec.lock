@@ -8,15 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.9"
-  apple_maps_flutter:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: f4a51808ee8f9493002fe51a8fdb039efe646cc5
-      url: "https://github.com/LuisThein/apple_maps_flutter.git"
-    source: git
-    version: "0.0.6+2"
   async:
     dependency: transitive
     description:
@@ -293,15 +284,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.1"
-  google_places_picker:
-    dependency: "direct main"
+  google_maps_flutter:
+    dependency: transitive
     description:
-      path: "."
-      ref: legacy
-      resolved-ref: "503b3eb2b3f0dfe690e84600472ba0d1eac31b78"
-      url: "https://github.com/derTuca/flutter_google_places_picker.git"
-    source: git
-    version: "0.1.0"
+      name: google_maps_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.21+14"
   google_sign_in:
     dependency: "direct main"
     description:
@@ -434,7 +423,7 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.0"
+    version: "1.4.4"
   pedantic:
     dependency: transitive
     description:
@@ -463,6 +452,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  place_picker:
+    dependency: "direct main"
+    description:
+      name: place_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.9.11"
   platform:
     dependency: transitive
     description:
@@ -640,4 +636,4 @@ packages:
     version: "6.0.1"
 sdks:
   dart: ">=2.5.0 <3.0.0"
-  flutter: ">=1.9.1+hotfix.5 <2.0.0"
+  flutter: ">=1.9.1 <2.0.0"

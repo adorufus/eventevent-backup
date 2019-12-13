@@ -7,9 +7,10 @@ import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
-import 'package:google_places_picker/google_places_picker.dart';
+import 'package:place_picker/place_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'PostEventCreatorDetails.dart';
 
@@ -34,19 +35,21 @@ class PostEventMapState extends State<PostEventMap>{
 
 showPlacePicker() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var place = await PluginGooglePlacePicker.showPlacePicker();
+    LocationResult place = await Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => PlacePicker('AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI', displayLocation: LatLng(currentLocation.latitude, currentLocation.longitude)
+    )));
 
     if (!mounted) {
       return;
     }
-    print(place.address);
+    print(place.formattedAddress);
     setState(() {
-      placeName = place.address;
-      lat = place.latitude.toString();
-      long = place.longitude.toString();
-      prefs.setString('CREATE_EVENT_LOCATION_ADDRESS', place.address);
-      prefs.setString('CREATE_EVENT_LOCATION_LAT', place.latitude.toString());
-      prefs.setString('CREATE_EVENT_LOCATION_LONG', place.longitude.toString());
+      placeName = place.formattedAddress;
+      lat = place.latLng.latitude.toString();
+      long = place.latLng.longitude.toString();
+      prefs.setString('CREATE_EVENT_LOCATION_ADDRESS', place.formattedAddress);
+      prefs.setString('CREATE_EVENT_LOCATION_LAT', place.latLng.latitude.toString());
+      prefs.setString('CREATE_EVENT_LOCATION_LONG', place.latLng.longitude.toString());
     });
 
     print(prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'));
@@ -238,7 +241,7 @@ showPlacePicker() async {
                   Container(
                     height: MediaQuery.of(context).size.height / 1.32,
                     child: ListView(children: <Widget>[
-                      Platform.isIOS ? IosMap() : showMap(),
+                      showMap(),
                       SizedBox(
                         height: ScreenUtil.instance.setWidth(20),
                       ),

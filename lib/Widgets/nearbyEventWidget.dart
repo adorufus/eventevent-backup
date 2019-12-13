@@ -15,7 +15,6 @@ import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:google_places_picker/google_places_picker.dart';
 
 var session;
 List nearbyEventData;
