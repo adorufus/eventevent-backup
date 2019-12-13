@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:eventevent/Widgets/PostEvent/Components/IOSMap.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -236,7 +238,7 @@ showPlacePicker() async {
                   Container(
                     height: MediaQuery.of(context).size.height / 1.32,
                     child: ListView(children: <Widget>[
-                      showMap(),
+                      Platform.isIOS ? IosMap() : showMap(),
                       SizedBox(
                         height: ScreenUtil.instance.setWidth(20),
                       ),

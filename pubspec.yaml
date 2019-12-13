@@ -85,6 +85,9 @@ dependencies:
     git:
      url: https://github.com/d-silveira/flutter-share.git
   camera: ^0.5.4
+  apple_maps_flutter:
+    git:
+      url: https://github.com/LuisThein/apple_maps_flutter.git
 #  flutter_svg: ^0.15.0
   flutter_date_pickers:
     path: flutter_date_pickers

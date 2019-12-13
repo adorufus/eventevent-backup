@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:eventevent/Widgets/EventDetailComment.dart';
+import 'package:eventevent/Widgets/EventDetailItems/FeedbackLogic.dart';
 import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
 import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
@@ -80,6 +81,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   String eventID = "";
   String currentUserId = "";
 
+  TextEditingController feedbackInputController = new TextEditingController();
+
   int loveCount = 0;
   int loveClickedCount = 0;
   int currentTab = 0;
@@ -115,6 +118,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   String defaultTab = '0';
   String dateTime = '-';
   String month = '-';
+
+  bool isGoodFeedback = false;
+  bool isBadFeedback = false;
 
   @override
   bool get wantKeepAlive => true;
@@ -1758,8 +1764,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             ['user_review'] ==
                                                         '1' ||
                                                     detailData['isGoing'] == '0'
-                                                ? 15
-                                                : 0,
+                                                ? 0
+                                                : 15,
                                           ),
                                           detailData['event_review']
                                                           ['user_review'] ==
@@ -1773,157 +1779,262 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         isScrollControlled:
                                                             true,
                                                         builder: (context) {
-                                                          return Container(
-                                                            color: Color(
-                                                                0xFF737373),
-                                                            child: Container(
-                                                              padding: EdgeInsets
-                                                                  .only(
-                                                                      bottom:
-                                                                          30),
-                                                              decoration:
-                                                                  BoxDecoration(
+                                                          return StatefulBuilder(
+                                                              builder: (context,
+                                                                  state) {
+                                                            return Container(
+                                                              color: Color(
+                                                                  0xFF737373),
+                                                              child: Container(
+                                                                padding: EdgeInsets
+                                                                    .only(
+                                                                        bottom:
+                                                                            30),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        borderRadius:
+                                                                            BorderRadius.only(
+                                                                          topLeft:
+                                                                              Radius.circular(15),
+                                                                          topRight:
+                                                                              Radius.circular(15),
+                                                                        )),
+                                                                child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Container(
+                                                                      padding:
+                                                                          EdgeInsets.all(
+                                                                              13),
+                                                                      decoration: BoxDecoration(
+                                                                          color: eventajaGreenTeal,
+                                                                          borderRadius: BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                          )),
+                                                                      child:
+                                                                          Center(
+                                                                        child:
+                                                                            Text(
+                                                                          'Give feedback to this event',
+                                                                          style: TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontSize: 12,
+                                                                              fontWeight: prefix0.FontWeight.bold),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Container(
                                                                       color: Colors
                                                                           .white,
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .only(
-                                                                        topLeft:
-                                                                            Radius.circular(15),
-                                                                        topRight:
-                                                                            Radius.circular(15),
-                                                                      )),
-                                                              child: Column(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: <
-                                                                    Widget>[
-                                                                  Container(
-                                                                    padding:
-                                                                        EdgeInsets.all(
-                                                                            13),
-                                                                    decoration:
-                                                                        BoxDecoration(
+                                                                      margin: EdgeInsets.symmetric(
+                                                                          horizontal:
+                                                                              60,
+                                                                          vertical:
+                                                                              15),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceBetween,
+                                                                        children: <
+                                                                            Widget>[
+                                                                          GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              state(() {
+                                                                                if (isGoodFeedback == true) {
+                                                                                  isGoodFeedback = false;
+                                                                                  reviewColor = Color(0xff8a8a8b);
+                                                                                } else {
+                                                                                  isGoodFeedback = true;
+                                                                                  if (isBadFeedback == true) {
+                                                                                    isBadFeedback = false;
+                                                                                    reviewColorBad = Color(0xff8a8a8b);
+                                                                                  }
+                                                                                  reviewColor = eventajaGreenTeal;
+                                                                                }
+                                                                              });
+                                                                            },
+                                                                            child:
+                                                                                Column(
+                                                                              crossAxisAlignment: prefix0.CrossAxisAlignment.center,
+                                                                              children: <Widget>[
+                                                                                Icon(
+                                                                                  Icons.thumb_up,
+                                                                                  size: 100,
+                                                                                  color: reviewColor,
+                                                                                ),
+                                                                                Text('GOOD', style: prefix0.TextStyle(color: reviewColor, fontSize: 14))
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              state(() {
+                                                                                if (isBadFeedback == true) {
+                                                                                  isBadFeedback = false;
+                                                                                  reviewColorBad = Color(0xff8a8a8b);
+                                                                                } else {
+                                                                                  isBadFeedback = true;
+                                                                                  if (isGoodFeedback == true) {
+                                                                                    isGoodFeedback = false;
+                                                                                    reviewColor = Color(0xff8a8a8b);
+                                                                                  }
+                                                                                  reviewColorBad = Colors.red;
+                                                                                }
+                                                                              });
+                                                                            },
+                                                                            child:
+                                                                                Column(
+                                                                              crossAxisAlignment: prefix0.CrossAxisAlignment.center,
+                                                                              children: <Widget>[
+                                                                                Icon(
+                                                                                  Icons.thumb_down,
+                                                                                  size: 100,
+                                                                                  color: reviewColorBad,
+                                                                                ),
+                                                                                Text('BAD', style: prefix0.TextStyle(color: reviewColorBad, fontSize: 14))
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        height: ScreenUtil
+                                                                            .instance
+                                                                            .setWidth(0)),
+                                                                    prefix0
+                                                                        .Container(
+                                                                      margin: EdgeInsets.symmetric(
+                                                                          horizontal:
+                                                                              13),
+                                                                      child:
+                                                                          TextFormField(
+                                                                        controller:
+                                                                            feedbackInputController,
+                                                                        decoration:
+                                                                            InputDecoration(
+                                                                          focusedBorder:
+                                                                              OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(15),
+                                                                          ),
+                                                                          hintText:
+                                                                              'Enter your feedback',
+                                                                          enabledBorder:
+                                                                              OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(15),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          15,
+                                                                    ),
+                                                                    GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                        String
+                                                                            typeId =
+                                                                            '0';
+
+                                                                        state(
+                                                                            () {
+                                                                          if (isGoodFeedback == true &&
+                                                                              isBadFeedback == false) {
+                                                                            typeId =
+                                                                                '1';
+                                                                          } else if (isBadFeedback == true &&
+                                                                              isGoodFeedback == false) {
+                                                                            typeId =
+                                                                                '2';
+                                                                          }
+
+                                                                          print(
+                                                                              typeId);
+
+                                                                          isLoading =
+                                                                              true;
+
+                                                                          FeedbackLogic.postFeedback(detailData['id'], typeId, feedbackInputController.text).then(
+                                                                              (response) {
+                                                                            if (response.statusCode == 201 ||
+                                                                                response.statusCode == 200) {
+                                                                              getEventDetailsSpecificInfo();
+                                                                              isLoading = false;
+                                                                            } else {
+                                                                              isLoading = false;
+                                                                              print(response.body);
+                                                                            }
+                                                                          }).timeout(
+                                                                              Duration(seconds: 15),
+                                                                              onTimeout:
+                                                                                  () {
+                                                                            isLoading =
+                                                                                false;
+                                                                            print('request timeout');
+                                                                          }).catchError(
+                                                                              (err) {
+                                                                            isLoading =
+                                                                                false;
+                                                                            print(err);
+                                                                          });
+                                                                        });
+                                                                      },
+                                                                      child:
+                                                                          Container(
+                                                                        margin: EdgeInsets.symmetric(
+                                                                            horizontal:
+                                                                                13),
+                                                                        height: ScreenUtil
+                                                                            .instance
+                                                                            .setWidth(50),
+                                                                        decoration: BoxDecoration(
                                                                             color:
                                                                                 eventajaGreenTeal,
                                                                             borderRadius:
-                                                                                BorderRadius.only(
-                                                                              topLeft: Radius.circular(15),
-                                                                              topRight: Radius.circular(15),
-                                                                            )),
-                                                                    child:
-                                                                        Center(
-                                                                      child:
-                                                                          Text(
-                                                                        'Give feedback to this event',
-                                                                        style: TextStyle(
-                                                                            color: Colors
-                                                                                .white,
-                                                                            fontSize:
-                                                                                12,
-                                                                            fontWeight:
-                                                                                prefix0.FontWeight.bold),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Container(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    margin: EdgeInsets.symmetric(
-                                                                        horizontal:
-                                                                            60,
-                                                                        vertical:
-                                                                            15),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceBetween,
-                                                                      children: <
-                                                                          Widget>[
-                                                                        GestureDetector(
-                                                                          onTap:
-                                                                              () {
-                                                                            setState(() {
-                                                                              reviewColor = eventajaGreenTeal;
-                                                                            });
-                                                                          },
-                                                                          child:
-                                                                              Column(
-                                                                            crossAxisAlignment:
-                                                                                prefix0.CrossAxisAlignment.center,
-                                                                            children: <Widget>[
-                                                                              Icon(
-                                                                                Icons.thumb_up,
-                                                                                size: 100,
-                                                                                color: reviewColor,
-                                                                              ),
-                                                                              Text('GOOD', style: prefix0.TextStyle(color: reviewColor, fontSize: 14))
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                        GestureDetector(
-                                                                          onTap:
-                                                                              () {
-                                                                            setState(() {
-                                                                              reviewColorBad = Colors.red;
-                                                                            });
-                                                                          },
-                                                                          child:
-                                                                              Column(
-                                                                            crossAxisAlignment:
-                                                                                prefix0.CrossAxisAlignment.center,
-                                                                            children: <Widget>[
-                                                                              Icon(
-                                                                                Icons.thumb_down,
-                                                                                size: 100,
-                                                                                color: reviewColorBad,
-                                                                              ),
-                                                                              Text('BAD', style: prefix0.TextStyle(color: reviewColorBad, fontSize: 14))
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(
-                                                                      height: ScreenUtil
-                                                                          .instance
-                                                                          .setWidth(
-                                                                              0)),
-                                                                  prefix0
-                                                                      .Container(
-                                                                    margin: EdgeInsets.symmetric(
-                                                                        horizontal:
-                                                                            13),
-                                                                    child:
-                                                                        TextFormField(
-                                                                      decoration:
-                                                                          InputDecoration(
-                                                                        focusedBorder:
-                                                                            OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(15),
-                                                                        ),
-                                                                        hintText:
-                                                                            'Enter your feedback',
-                                                                        enabledBorder:
-                                                                            OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(15),
+                                                                                BorderRadius.circular(10)),
+                                                                        child:
+                                                                            Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          children: <
+                                                                              Widget>[
+                                                                            Icon(
+                                                                              Icons.chat,
+                                                                              color: Colors.white,
+                                                                              size: 18,
+                                                                            ),
+                                                                            SizedBox(
+                                                                              width: ScreenUtil.instance.setWidth(8),
+                                                                            ),
+                                                                            Text('Write a review',
+                                                                                style: TextStyle(color: Colors.white, fontSize: 15))
+                                                                          ],
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                  ),
-                                                                  Padding(
-                                                                      padding: EdgeInsets.only(
-                                                                          bottom: MediaQuery.of(context)
-                                                                              .viewInsets
-                                                                              .bottom))
-                                                                ],
+                                                                    Padding(
+                                                                        padding:
+                                                                            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom))
+                                                                  ],
+                                                                ),
                                                               ),
-                                                            ),
-                                                          );
+                                                            );
+                                                          });
                                                         });
                                                   },
                                                   child: Container(
@@ -2321,38 +2432,46 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                   Container(
                     height: 200,
                     child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: detailData['additional'].length == 0 ? 0 : detailData['additional'].length,
-                        itemBuilder: (context, i){
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: detailData['additional'].length == 0
+                            ? 0
+                            : detailData['additional'].length,
+                        itemBuilder: (context, i) {
                           return GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => MediaPlayer(
                                           videoUri: detailData['additional'][i]
-                                          ['posterPathFull'])));
+                                              ['posterPathFull'])));
                             },
                             child: Container(
-                                  margin: EdgeInsets.only(left: 10),
-                                  height: ScreenUtil.instance.setWidth(206),
-                                  width: ScreenUtil.instance.setWidth(206),
-                                  decoration: BoxDecoration(
-                                      color: Color(0xff8a8a8b),
-                                      image: DecorationImage(
-                                          image: NetworkImage(detailData['additional']
-                                          [i]['posterPathThumb']),
-                                          fit: BoxFit.cover),
-                                      borderRadius: BorderRadius.circular(15)),
+                              margin: EdgeInsets.only(left: 10),
+                              height: ScreenUtil.instance.setWidth(206),
+                              width: ScreenUtil.instance.setWidth(206),
+                              decoration: BoxDecoration(
+                                  color: Color(0xff8a8a8b),
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          detailData['additional'][i]
+                                              ['posterPathThumb']),
+                                      fit: BoxFit.cover),
+                                  borderRadius: BorderRadius.circular(15)),
                               child: Center(
-                                child: detailData['additional']
-                                [i]['extension'] == 'image/jpeg' ? Container() : Icon(Icons.play_circle_filled, color: Colors.white, size: 50,)
-                              ),
-                                ),
+                                  child: detailData['additional'][i]
+                                              ['extension'] ==
+                                          'image/jpeg'
+                                      ? Container()
+                                      : Icon(
+                                          Icons.play_circle_filled,
+                                          color: Colors.white,
+                                          size: 50,
+                                        )),
+                            ),
                           );
-                        }
-                    ),
+                        }),
                   ),
                   SizedBox(
                     height: ScreenUtil.instance.setWidth(29),

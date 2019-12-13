@@ -5,7 +5,7 @@ class CountDownTimer extends StatefulWidget {
     int secondsRemaining,
     this.countDownTimerStyle,
     this.whenTimeExpires,
-    this.countDownFormatter,
+    this.countDownFormatter, this.isDay,
   })  : secondsRemaining = secondsRemaining,
         super(key: key);
 
@@ -13,6 +13,7 @@ class CountDownTimer extends StatefulWidget {
   final Function whenTimeExpires;
   final Function countDownFormatter;
   final TextStyle countDownTimerStyle;
+  final bool isDay;
 
   State createState() => new _CountDownTimerState();
 }
@@ -32,15 +33,21 @@ class _CountDownTimerState extends State<CountDownTimer>
   }
 
   String formatHHMMSS(int seconds) {
+    int days = (seconds / 86400).truncate();
     int hours = (seconds / 3600).truncate();
     seconds = (seconds % 3600).truncate();
     int minutes = (seconds / 60).truncate();
 
+    String daysStr = (hours).toString().padLeft(2, '0');
     String hoursStr = (hours).toString().padLeft(2, '0');
     String minutesStr = (minutes).toString().padLeft(2, '0');
     String secondsStr = (seconds % 60).toString().padLeft(2, '0');
 
-    return "$hoursStr:$minutesStr:$secondsStr";
+    if(widget.isDay == true){
+      return "$daysStr : $hoursStr : $minutesStr : $secondsStr";
+    }
+
+    return "$hoursStr : $minutesStr : $secondsStr";
   }
 
   @override
