@@ -256,7 +256,7 @@ class _MediaItemState extends State<MediaItem> {
                                       children: <Widget>[
                                         Image.asset(
                                           'assets/icons/icon_apps/comment.png',
-                                          scale: 3.5,
+                                          scale: 3,
                                           color:  commentCount.length < 1 ? Colors.grey : eventajaGreenTeal
                                         ),
                                         SizedBox(
