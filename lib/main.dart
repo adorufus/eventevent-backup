@@ -1,4 +1,6 @@
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io'; import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/CrashlyticsTester.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEvent.dart';
@@ -17,11 +19,26 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:rxdart/subjects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Widgets/loginRegisterWidget.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/services.dart';
+
+FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+final BehaviorSubject<RecievedNotification> didRecieveLocalNotificationPlugin = BehaviorSubject<RecievedNotification>();
+final BehaviorSubject<String> selectNotificationSubject = BehaviorSubject<String>();
+
+class RecievedNotification {
+  final int id;
+  final String title;
+  final String body;
+  final String payload;
+
+  RecievedNotification({@required this.id, @required this.title, @required this.body, @required this.payload});
+}
 
 List<CameraDescription> cameras;
 

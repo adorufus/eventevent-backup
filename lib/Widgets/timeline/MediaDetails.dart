@@ -57,9 +57,19 @@ class _MediaDetailsState extends State<MediaDetails> {
   bool isLoading = false;
 
   List commentList;
+  Map mediaDetails = {};
 
   @override
   void initState() {
+    getMediaDetails().then((response){
+      var extractedData = json.decode(response.body);
+      if(response.statusCode == 200){
+        setState(() {
+          mediaDetails = extractedData['data'];
+        });
+      }
+    });
+
     setState(() {
       if (widget.videoUrl == null) {
         videoId = YoutubePlayer.convertUrlToId(widget.youtubeUrl == null
@@ -299,8 +309,8 @@ class _MediaDetailsState extends State<MediaDetails> {
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 13),
-            child: Html(
-              data: widget.articleDetail,
+            child: mediaDetails['media_content'] == null ? Container(child: Center(child: CircularProgressIndicator(),),) : Html(
+              data: mediaDetails['media_content'][0]['content_text'],
               onLinkTap: (url) {
                 print('loading..');
               },
@@ -375,61 +385,6 @@ class _MediaDetailsState extends State<MediaDetails> {
           )
         ],
       ),
-      // Hero(
-      //   tag: widget.imageCount,
-      //   child: ListView(
-      //     children: <Widget>[
-      //       Container(
-      //         height: ScreenUtil.instance.setWidth(200),
-      //         width: MediaQuery.of(context).size.width,
-      //         decoration: BoxDecoration(
-      //             color: Color(0xff8a8a8b),
-      //             image: DecorationImage(
-      //                 image: NetworkImage(widget.imageUri), fit: BoxFit.fill)),
-      //       ),
-      //       SizedBox(
-      //         height: ScreenUtil.instance.setWidth(15),
-      //       ),
-      //       Container(
-      //         margin: EdgeInsets.symmetric(horizontal: 13),
-      //         child: Row(
-      //           children: <Widget>[
-      //             CircleAvatar(
-      //                 backgroundImage: NetworkImage(widget.userPicture),
-      //                 radius: 15),
-      //             SizedBox(
-      //               width: ScreenUtil.instance.setWidth(5),
-      //             ),
-      //             Container(
-      //                 width: MediaQuery.of(context).size.width - 217.7,
-      //                 child: Text(
-      //                   '@' + widget.username.toString(),
-      //                   style: TextStyle(color: Color(0xFF8A8A8B), fontSize: ScreenUtil.instance.setSp(14)),
-      //                 )),
-      //           ],
-      //         ),
-      //       ),
-      //       SizedBox(
-      //         height: ScreenUtil.instance.setWidth(15),
-      //       ),
-      //       Container(
-      //         margin: EdgeInsets.symmetric(horizontal: 13),
-      //         child: Html(
-      //           data: widget.articleDetail,
-      //           onLinkTap: (url) {
-      //             print('loading..');
-      //           },
-      //         ),
-      //       ),
-      //       SizedBox(
-      //         height: ScreenUtil.instance.setWidth(10),
-      //       ),
-      //       Divider(
-      //         color: Colors.black,
-      //       )
-      //     ],
-      //   ),
-      // ),
     );
   }
 
@@ -496,6 +451,23 @@ class _MediaDetailsState extends State<MediaDetails> {
     var extractedData = json.decode(response.body);
 
     return extractedData;
+  }
+
+  Future<http.Response> getMediaDetails() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String url = BaseApi().apiUrl + '/media/detail?X-API-KEY=$API_KEY&id=${widget.mediaId}';
+
+    final response = await http.get(
+        url,
+      headers: {
+          'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session')
+      }
+    );
+
+    print(response.body);
+
+    return response;
   }
 
   Future<http.Response> postComment(String mediaId, String comment) async {

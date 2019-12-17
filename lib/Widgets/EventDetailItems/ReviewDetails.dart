@@ -203,7 +203,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                                     fontSize: ScreenUtil.instance.setSp(12),
                                     fontWeight: FontWeight.bold),
                               ),
-                              subtitle: Text('\"${reviewData[i]['review_type']['type_name']}\"'),
+                              subtitle: Text('\"${reviewData[i]['description'] == null ? reviewData[i]['review_type']['type_name'] : reviewData[i]['description']}\"'),
                               trailing: reviewData[i]['review_type']['type'] == 'good' ? Icon(Icons.thumb_up,
                                   size: 30, color: eventajaGreenTeal) : Icon(Icons.thumb_down,
                                   size: 30, color: Colors.red),

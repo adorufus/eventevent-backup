@@ -75,18 +75,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          child: latestEventData == null
-              ? Center(
-                  child: Container(
-                    width: ScreenUtil.instance.setWidth(25),
-                    height: ScreenUtil.instance.setWidth(25),
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                )
-              : SmartRefresher(
+          child: SmartRefresher(
                   enablePullDown: true,
                   enablePullUp: true,
                   footer: CustomFooter(

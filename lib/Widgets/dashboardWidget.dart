@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:eventevent/Widgets/Home/RestPageNeedLogin.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/PostMedia.dart';
+import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/Widgets/timeline/TimelineDashboard.dart';
@@ -25,7 +26,8 @@ import 'package:http/http.dart' as http;
 import 'package:eventevent/Widgets/RecycleableWidget/OpenCamera.dart';
 
 FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+
 String pushToken;
 var initializationSettingsAndroid;
 var initializationSettingsIOS;
@@ -170,6 +172,11 @@ class _DashboardWidgetState extends State<DashboardWidget>
         },
         onBackgroundMessage: myBackgroundMessageHandler,
         onResume: (Map<String, dynamic> message) async {
+          List<Widget> navPages = [
+            EventDetailsConstructView(id: '15'),
+          ];
+
+          Navigator.push(context, MaterialPageRoute(builder: (context) => navPages[0]));
           print('on resume $message');
         },
         onLaunch: (Map<String, dynamic> message) async {
@@ -614,8 +621,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
   }
 
   void initLocalNotification() {
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        new FlutterLocalNotificationsPlugin();
+
     initializationSettingsAndroid =
         new AndroidInitializationSettings('app_icon');
     initializationSettingsIOS =
