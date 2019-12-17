@@ -43,18 +43,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
   @override
   void initState() {
     super.initState();
-    getCommentList().then((response) {
-      print(response.statusCode);
-      print(response.body);
-
-      var extractedData = json.decode(response.body);
-
-      if (response.statusCode == 200) {
-        setState(() {
-          commentList = extractedData['data'];
-        });
-      }
-    });
+    getCommentList();
   }
 
   @override
@@ -287,7 +276,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
                 } else {
                   // dataLength = snapshot.data['data'].length;
                   print(snapshot.data);
-                  commentList = snapshot.data['data']['comment'];
+                  commentList = snapshot.data['data']['comment']['data'];
                 }
 
                 if (snapshot.hasError) {
@@ -305,13 +294,11 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
                       ),
                       title: Text(
                         commentList[i]['fullName'] +
-                            ' ' +
-                            commentList[i]['lastName'] +
                             ': ',
                         style: TextStyle(
                             fontSize: ScreenUtil.instance.setSp(12), fontWeight: FontWeight.bold),
                       ),
-                      subtitle: Text(commentList[i]['comment']),
+                      subtitle: Text(commentList[i]['response']),
                     );
                   },
                 );
@@ -325,8 +312,8 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
 
   Future getCommentList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String url = BaseApi().apiUrl +
-        '/photo_comment/list?X-API-KEY=$API_KEY&id=${widget.postID}&page=1';
+    String url = BaseApi().apiUrl + '/timeline/detail?X-API-KEY=$API_KEY&type=photo&id=${widget.postID}';
+//        '/photo_comment/list?X-API-KEY=$API_KEY&id=${widget.postID}&page=1';
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,

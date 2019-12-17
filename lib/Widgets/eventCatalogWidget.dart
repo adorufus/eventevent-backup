@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:eventevent/Database/Database.dart';
+import 'package:eventevent/Database/Models/EventBannerModel.dart';
 import 'package:eventevent/Widgets/CollectionPage.dart';
 import 'package:eventevent/Widgets/Home/MyTicket.dart';
 import 'package:eventevent/Widgets/Home/PopularEventWidget.dart';
@@ -60,6 +62,8 @@ class _EventCatalogState extends State<EventCatalog>
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
+  List<Datum> bannerData2;
+
   ///Variable untuk insialisasi Value awal
   List data;
   List bannerData;
@@ -87,11 +91,13 @@ class _EventCatalogState extends State<EventCatalog>
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     super.initState();
+
     if (!mounted) {
       return;
     } else {
       fetchCatalog();
       fetchBanner();
+      getAllBanner();
       fetchDiscoverCatalog();
       fetchPopularPeople();
       fetchDiscoverPeople();
@@ -882,9 +888,7 @@ class _EventCatalogState extends State<EventCatalog>
   Widget popularEventContent() {
     return Container(
         height: ScreenUtil.instance.setWidth(269),
-        child: isLoading
-            ? Center(child: CircularProgressIndicator())
-            : new ListView.builder(
+        child: new ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: data == null ? 0 : data.length,
                 itemBuilder: (BuildContext context, i) {
@@ -1173,7 +1177,7 @@ class _EventCatalogState extends State<EventCatalog>
           ),
           SizedBox(height: ScreenUtil.instance.setWidth(5)),
           Text('Check out our hand-picked collectoins bellow',
-              style: TextStyle(color: Color(0xFF868686), fontSize: 8.63)),
+              style: TextStyle(color: Color(0xFF868686), fontSize: ScreenUtil.instance.setSp(14))),
         ],
       ),
     );
@@ -1182,9 +1186,7 @@ class _EventCatalogState extends State<EventCatalog>
   Widget collectionImage() {
     return Container(
       height: ScreenUtil.instance.setWidth(90),
-      child: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : collectionData == null
+      child: collectionData == null
               ? errReasonWidget
               : ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -1662,9 +1664,21 @@ class _EventCatalogState extends State<EventCatalog>
     return response;
   }
 
+  Future getAllBanner() async{
+    final db = await DBProvider.db.database;
+    var res = await db.query('event_banner');
+
+    bannerData = res.isNotEmpty ? res : [];
+    print('banner_data: ' + bannerData.toString());
+    return bannerData;
+  }
+
   ///Untuk Fetching Gambar banner
   Future fetchBanner() async {
     if (!mounted) return;
+
+    final db = await DBProvider.db.database;
+    var res = await db.query("event_banner");
 
     setState(() {
       isLoading = true;
@@ -1702,11 +1716,15 @@ class _EventCatalogState extends State<EventCatalog>
 
     print(
         'event catalog widget - fetchBanner' + response.statusCode.toString());
+    var extractedData = json.decode(response.body);
+
+    for(var data in extractedData['data']){
+      await db.rawInsert('INSERT INTO event_banner(id, name, image)'
+          ' VALUES (?, ?, ?)', [data['id'], data['name'], data['image']]);
+    }
 
     if (response.statusCode == 200) {
       setState(() {
-        var extractedData = json.decode(response.body);
-        bannerData = extractedData['data'];
 
         isLoading = false;
       });

@@ -259,7 +259,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
               ),
               Padding(
                 padding:
-                    EdgeInsets.only(top: ScreenUtil.instance.setWidth(100)),
+                    EdgeInsets.only(top: ScreenUtil.instance.setWidth(50)),
               ),
               Hero(
                 tag: 'eventeventlogo',

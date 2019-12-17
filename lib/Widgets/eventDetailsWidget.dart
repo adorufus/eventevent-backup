@@ -1956,11 +1956,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                           if (isGoodFeedback == true &&
                                                                               isBadFeedback == false) {
                                                                             typeId =
-                                                                                '1';
+                                                                                '4';
                                                                           } else if (isBadFeedback == true &&
                                                                               isGoodFeedback == false) {
                                                                             typeId =
-                                                                                '2';
+                                                                                '8';
                                                                           }
 
                                                                           print(
