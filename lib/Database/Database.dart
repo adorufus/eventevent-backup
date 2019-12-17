@@ -13,8 +13,6 @@ class DBProvider {
 
   static Database _database;
 
-  BannerModel banner = new BannerModel();
-
   Future<Database> get database async{
     if(_database != null)
       return _database;
@@ -28,7 +26,11 @@ class DBProvider {
     String path = join(documentsDirectory.path, "EventeventDatabase.db");
     return await openDatabase(path, version: 1, onOpen: (db){},
       onCreate: (Database db, int version) async {
-        await db.execute('CREATE TABLE event_banner("id INTEGER PRIMARY KEY", "name TEXT", "image TEXT")');
+        await db.execute("CREATE TABLE event_banner ("
+            "id INTEGER PRIMARY KEY,"
+            "name TEXT,"
+            "image TEXT"
+            ")");
       }
     );
   }

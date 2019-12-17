@@ -6,12 +6,14 @@ import 'package:eventevent/Widgets/Transaction/BCA/InputBankData.dart';
 import 'package:eventevent/Widgets/Transaction/GOPAY/WaitingGopay.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../CC.dart';
 
@@ -496,7 +498,7 @@ class _TicketReviewState extends State<TicketReview> {
                       expDate: paymentData['expired_time'],
                     )));
       } else if (paymentData['payment_method_id'] == '4') {
-        Navigator.of(context).pushAndRemoveUntil(
+        Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (BuildContext context) => WaitingGopay(
                       amount: paymentData['amount'],
@@ -504,43 +506,43 @@ class _TicketReviewState extends State<TicketReview> {
                       gopaytoken: paymentData['gopay'],
                       expDate: paymentData['expired_time'],
                       transactionID: paymentData['id'],
-                    )),
-            ModalRoute.withName('/Dashboard'));
+                    )),);
       } else if (paymentData['payment_method_id'] == '2') {
-        Navigator.of(context).pushAndRemoveUntil(
+        Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (BuildContext context) => WaitTransaction(
                     expDate: paymentData['expired_time'],
                     transactionID: paymentData['id'],
-                    finalPrice: total.toString())),
-            ModalRoute.withName('/Dashboard'));
+                    finalPrice: total.toString())));
       } else if (paymentData['payment_method_id'] == '3') {
-        Navigator.of(context).pushAndRemoveUntil(
+        Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => WaitingTransactionAlfamart(
                     transactionID: paymentData['id'],
                     expDate: paymentData['expired_time'],
-                  )),
-          ModalRoute.withName('/Dashboard'),
+                  ))
         );
       } else if (paymentData['payment_method_id'] == '5') {
-        launch(paymentData['payment']['data_vendor']['payment_url']);
+//        launch(paymentData['payment']['data_vendor']['payment_url']);
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => WebViewTest(
+            url: paymentData['payment']['data_vendor']['payment_url'],
+          )
+        ));
       } else if (paymentData['payment_method_id'] == '9') {
-        Navigator.of(context).pushAndRemoveUntil(
+        Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (BuildContext context) => WaitTransaction(
                     expDate: paymentData['expired_time'],
                     transactionID: paymentData['id'],
-                    finalPrice: total.toString())),
-            ModalRoute.withName('/Dashboard'));
+                    finalPrice: total.toString())));
       } else if (paymentData['payment_method_id'] == '7') {
-        Navigator.of(context).pushAndRemoveUntil(
+        Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (BuildContext context) => PaymentBCA(
                       expDate: paymentData['expired_time'],
                       transactionID: paymentData['id'],
-                    )),
-            ModalRoute.withName('/Dashboard'));
+                    )));
       }
     }
   }

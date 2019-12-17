@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:eventevent/Database/Database.dart';
 import 'package:eventevent/Database/Models/EventBannerModel.dart';
+import 'package:eventevent/Models/BannerModels.dart';
 import 'package:eventevent/Widgets/CollectionPage.dart';
 import 'package:eventevent/Widgets/Home/MyTicket.dart';
 import 'package:eventevent/Widgets/Home/PopularEventWidget.dart';
@@ -62,11 +64,9 @@ class _EventCatalogState extends State<EventCatalog>
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
-  List<Datum> bannerData2;
-
   ///Variable untuk insialisasi Value awal
   List data;
-  List bannerData;
+  List bannerData = [];
   List discoverData;
   List popularPeopleData;
   List discoverPeopleData;
@@ -79,6 +79,9 @@ class _EventCatalogState extends State<EventCatalog>
 
   String ticketPriceImageURI = 'assets/btn_ticket/paid-value.png';
   String urlType = '';
+
+  final StreamController<int> _bannerCount = StreamController<int>();
+  Stream<int> get bannerCount => _bannerCount.stream;
 
   int _current = 0;
 
@@ -97,7 +100,6 @@ class _EventCatalogState extends State<EventCatalog>
     } else {
       fetchCatalog();
       fetchBanner();
-      getAllBanner();
       fetchDiscoverCatalog();
       fetchPopularPeople();
       fetchDiscoverPeople();
@@ -222,10 +224,10 @@ class _EventCatalogState extends State<EventCatalog>
                           imageUrl: bannerData["image"],
                           fit: BoxFit.cover,
                           placeholder: (context, url) => new Container(
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              )),
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )),
                     ),
                   ));
             },
@@ -1352,13 +1354,7 @@ class _EventCatalogState extends State<EventCatalog>
   Widget banner() {
     return CarouselSlider(
       height: ScreenUtil.instance.setWidth(200),
-      items: bannerData == null
-          ? [
-              Center(
-                child: CircularProgressIndicator(),
-              )
-            ]
-          : mappedDataBanner,
+      items: bannerData.length < 1 ? [Container()] : mappedDataBanner,
       enlargeCenterPage: false,
       initialPage: 0,
       autoPlay: true,
@@ -1664,21 +1660,20 @@ class _EventCatalogState extends State<EventCatalog>
     return response;
   }
 
-  Future getAllBanner() async{
-    final db = await DBProvider.db.database;
-    var res = await db.query('event_banner');
-
-    bannerData = res.isNotEmpty ? res : [];
-    print('banner_data: ' + bannerData.toString());
-    return bannerData;
-  }
+//  Future getAllBanner() async{
+//    final db = await DBProvider.db.database;
+//    var res = await db.query('event_banner');
+//
+//
+//
+//    bannerData = res.isNotEmpty ? res : [];
+//    print('banner_data: ' + bannerData.toString());
+//    return bannerData;
+//  }
 
   ///Untuk Fetching Gambar banner
   Future fetchBanner() async {
     if (!mounted) return;
-
-    final db = await DBProvider.db.database;
-    var res = await db.query("event_banner");
 
     setState(() {
       isLoading = true;
@@ -1716,15 +1711,11 @@ class _EventCatalogState extends State<EventCatalog>
 
     print(
         'event catalog widget - fetchBanner' + response.statusCode.toString());
-    var extractedData = json.decode(response.body);
-
-    for(var data in extractedData['data']){
-      await db.rawInsert('INSERT INTO event_banner(id, name, image)'
-          ' VALUES (?, ?, ?)', [data['id'], data['name'], data['image']]);
-    }
 
     if (response.statusCode == 200) {
       setState(() {
+        var extractedData = json.decode(response.body);
+        bannerData = extractedData['data'];
 
         isLoading = false;
       });
@@ -1736,10 +1727,20 @@ class _EventCatalogState extends State<EventCatalog>
       Scaffold.of(context).showSnackBar(SnackBar(
         duration: Duration(seconds: 3),
         content:
-            Text(response.reasonPhrase, style: TextStyle(color: Colors.white)),
+        Text(response.reasonPhrase, style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.red,
       ));
     }
+  }
+
+  Stream<List<BannerModel>> get BannerList async* {
+    yield await fetchBanner();
+  }
+
+
+
+  BannerManager() {
+    BannerList.listen((list) => _bannerCount.add(list.length));
   }
 
   Future fetchCollection() async {

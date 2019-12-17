@@ -1,10 +1,13 @@
+import 'package:eventevent/Widgets/dashboardWidget.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewTest extends StatefulWidget {
-  final mediaID;
+  final url;
 
-  const WebViewTest({Key key, this.mediaID}) : super(key: key);
+
+  const WebViewTest({Key key, this.url}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -23,10 +26,19 @@ class WebViewTestState extends State<WebViewTest> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: eventajaGreenTeal,
+        leading: GestureDetector(
+          onTap: (){
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => DashboardWidget()), ModalRoute.withName('/Dashboard'));
+          },
+          child: Icon(Icons.close, color: Colors.white,),
+        ),
+      ),
       body: Container(
         child: WebView(
           javascriptMode: JavascriptMode.unrestricted,
-          initialUrl: 'https://media.eventevent.com/medias/${widget.mediaID}',
+          initialUrl: widget.url,
         ),
       ),
     );
