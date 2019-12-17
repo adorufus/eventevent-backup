@@ -50,8 +50,9 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
 
 class DashboardWidget extends StatefulWidget {
   final isRest;
+  final selectedPage;
 
-  const DashboardWidget({Key key, this.isRest}) : super(key: key);
+  const DashboardWidget({Key key, this.isRest, this.selectedPage}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _DashboardWidgetState();
@@ -138,6 +139,12 @@ class _DashboardWidgetState extends State<DashboardWidget>
     _saveCurrentRoute('/Dashboard');
     WidgetsBinding.instance.addObserver(this);
     super.initState();
+
+    if(widget.selectedPage == null){
+      _selectedPage = 0;
+    }
+
+    _selectedPage = widget.selectedPage;
     
     // registerNotification();
     configureNotification();

@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:eventevent/Widgets/TransactionHistory.dart';
+import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/countdownCounter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
@@ -46,6 +48,8 @@ class PaymentBcaState extends State<PaymentBCA> {
   DateTime dateTime;
   Map<String, dynamic> paymentData;
 
+  int seconds;
+
   void startCounter(String expired) {
     int hoursStart, minuteStart, secondStart;
     String strHour, strMinute, strSecond;
@@ -74,6 +78,16 @@ class PaymentBcaState extends State<PaymentBCA> {
     super.initState();
     getPaymentData();
 
+    final salesDay = DateTime.parse(widget.expDate);
+    final remaining = salesDay.difference(_currentTime);
+
+    final days = remaining.inDays;
+    final hours = remaining.inHours;
+    final minutes = remaining.inMinutes;
+    seconds = remaining.inSeconds;
+
+    print(seconds);
+
     //getFinalAmount();
   }
 
@@ -94,10 +108,8 @@ class PaymentBcaState extends State<PaymentBCA> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => TransactionHistory()), ModalRoute.withName('/EventDetails'));
+           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false, selectedPage: 3,)), ModalRoute.withName('/EventDetails'));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionHistory()));
           },
           child: Icon(
             Icons.close,
@@ -139,7 +151,14 @@ class PaymentBcaState extends State<PaymentBCA> {
                         SizedBox(
                           height: ScreenUtil.instance.setWidth(20),
                         ),
-                        countdownTimer(),
+                        CountDownTimer(
+                              secondsRemaining: seconds,
+                              whenTimeExpires: () {
+
+                              },
+                              countDownTimerStyle: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(18),
+                fontWeight: FontWeight.bold),
+                            ),
                         SizedBox(
                           height: ScreenUtil.instance.setWidth(20),
                         ),

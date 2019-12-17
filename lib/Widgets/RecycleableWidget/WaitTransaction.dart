@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:eventevent/Widgets/TransactionHistory.dart';
+import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
 import 'package:quiver/async.dart';
 
@@ -169,10 +170,8 @@ class _WaitTransactionState extends State<WaitTransaction> with TickerProviderSt
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => TransactionHistory()));
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false, selectedPage: 3,)), ModalRoute.withName('/EventDetails'));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionHistory()));
           },
           child: Icon(
             Icons.close,

@@ -227,15 +227,14 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
       bottom: false,
       child: Scaffold(
         body: Container(
-          alignment: Alignment.center,
-          padding: EdgeInsets.only(top: ScreenUtil.instance.setWidth(20)),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Flexible(
-                child: Align(
-                  alignment: Alignment.centerRight,
+              SizedBox(height: ScreenUtil.instance.setWidth(50)),
+              Align(
+                  alignment: Alignment.topRight,
                   child: GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -245,7 +244,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                   DashboardWidget(isRest: true)));
                     },
                     child: Container(
-                      margin: EdgeInsets.only(right: 15),
+                      margin: EdgeInsets.only(right: 25),
                       width: 30,
                       child: Text(
                         'SKIP',
@@ -256,10 +255,9 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                     ),
                   ),
                 ),
-              ),
               Padding(
                 padding:
-                    EdgeInsets.only(top: ScreenUtil.instance.setWidth(100)),
+                    EdgeInsets.only(top: ScreenUtil.instance.setWidth(150)),
               ),
               Hero(
                 tag: 'eventeventlogo',

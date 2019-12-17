@@ -496,7 +496,7 @@ class _TicketReviewState extends State<TicketReview> {
                       expDate: paymentData['expired_time'],
                     )));
       } else if (paymentData['payment_method_id'] == '4') {
-        Navigator.of(context).pushAndRemoveUntil(
+        Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (BuildContext context) => WaitingGopay(
                       amount: paymentData['amount'],
@@ -504,43 +504,38 @@ class _TicketReviewState extends State<TicketReview> {
                       gopaytoken: paymentData['gopay'],
                       expDate: paymentData['expired_time'],
                       transactionID: paymentData['id'],
-                    )),
-            ModalRoute.withName('/Dashboard'));
+                    )),);
       } else if (paymentData['payment_method_id'] == '2') {
-        Navigator.of(context).pushAndRemoveUntil(
+        Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (BuildContext context) => WaitTransaction(
                     expDate: paymentData['expired_time'],
                     transactionID: paymentData['id'],
-                    finalPrice: total.toString())),
-            ModalRoute.withName('/Dashboard'));
+                    finalPrice: total.toString())),);
       } else if (paymentData['payment_method_id'] == '3') {
-        Navigator.of(context).pushAndRemoveUntil(
+        Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => WaitingTransactionAlfamart(
                     transactionID: paymentData['id'],
                     expDate: paymentData['expired_time'],
                   )),
-          ModalRoute.withName('/Dashboard'),
         );
       } else if (paymentData['payment_method_id'] == '5') {
         launch(paymentData['payment']['data_vendor']['payment_url']);
       } else if (paymentData['payment_method_id'] == '9') {
-        Navigator.of(context).pushAndRemoveUntil(
+        Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (BuildContext context) => WaitTransaction(
                     expDate: paymentData['expired_time'],
                     transactionID: paymentData['id'],
-                    finalPrice: total.toString())),
-            ModalRoute.withName('/Dashboard'));
+                    finalPrice: total.toString())),);
       } else if (paymentData['payment_method_id'] == '7') {
-        Navigator.of(context).pushAndRemoveUntil(
+        Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (BuildContext context) => PaymentBCA(
                       expDate: paymentData['expired_time'],
                       transactionID: paymentData['id'],
-                    )),
-            ModalRoute.withName('/Dashboard'));
+                    )),);
       }
     }
   }
