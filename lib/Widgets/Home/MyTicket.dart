@@ -92,6 +92,7 @@ class _MyTicketState extends State<MyTicket> {
     });
 
     return SafeArea(
+      bottom: false,
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: Size(null, 100),

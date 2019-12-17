@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
+import 'package:eventevent/Widgets/TransactionHistory.dart';
+import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/countdownCounter.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -31,6 +34,7 @@ class _WaitingTransactionAlfamartState
 
   DateTime dateTime;
 
+  int seconds;
   Map<String, dynamic> paymentData;
 
   void startCounter(String expired) {
@@ -60,6 +64,9 @@ class _WaitingTransactionAlfamartState
   void initState() {
     super.initState();
     getTransactionDetails();
+    final salesDay = DateTime.parse(widget.expDate);
+    final remaining = salesDay.difference(DateTime.now());
+    seconds = remaining.inSeconds;
   }
 
   @override
@@ -73,23 +80,25 @@ class _WaitingTransactionAlfamartState
     )..init(context);
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
-      bottomNavigationBar: GestureDetector(
-        onTap: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SuccessPage()));
-        },
-        child: Container(
-          height: ScreenUtil.instance.setWidth(50),
-          width: MediaQuery.of(context).size.width,
-          color: Colors.orangeAccent,
-          child: Text('test succes page'),
-        ),
-      ),
+      // bottomNavigationBar: GestureDetector(
+      //   onTap: (){
+      //     Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SuccessPage()));
+      //   },
+      //   child: Container(
+      //     height: ScreenUtil.instance.setWidth(50),
+      //     width: MediaQuery.of(context).size.width,
+      //     color: Colors.orangeAccent,
+      //     child: Text('test succes page'),
+      //   ),
+      // ),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1,
         leading: GestureDetector(
           onTap: () {
-            Navigator.of(context).pop();
+
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false, selectedPage: 3,)), ModalRoute.withName('/EventDetails'));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionHistory()));
           },
           child: Icon(
             Icons.close,
@@ -135,56 +144,13 @@ class _WaitingTransactionAlfamartState
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
                             ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text('${hour}',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: ScreenUtil.instance.setSp(20),
-                                        fontWeight: FontWeight.bold)),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  ':',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  '$min',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  ':',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  '$sec',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
+                            CountDownTimer(
+                              secondsRemaining: seconds,
+                              whenTimeExpires: () {
+
+                              },
+                              countDownTimerStyle: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(18),
+                fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),

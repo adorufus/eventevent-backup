@@ -74,6 +74,7 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
       allowFontScaling: true,
     )..init(context);
     return SafeArea(
+      bottom: false,
       child: Scaffold(
         backgroundColor: Colors.white.withOpacity(0.9),
         appBar: AppBar(

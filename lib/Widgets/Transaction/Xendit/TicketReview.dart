@@ -513,14 +513,14 @@ class _TicketReviewState extends State<TicketReview> {
                 builder: (BuildContext context) => WaitTransaction(
                     expDate: paymentData['expired_time'],
                     transactionID: paymentData['id'],
-                    finalPrice: total.toString())));
+                    finalPrice: total.toString())),);
       } else if (paymentData['payment_method_id'] == '3') {
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => WaitingTransactionAlfamart(
                     transactionID: paymentData['id'],
                     expDate: paymentData['expired_time'],
-                  ))
+                  )),
         );
       } else if (paymentData['payment_method_id'] == '5') {
 //        launch(paymentData['payment']['data_vendor']['payment_url']);
@@ -535,14 +535,14 @@ class _TicketReviewState extends State<TicketReview> {
                 builder: (BuildContext context) => WaitTransaction(
                     expDate: paymentData['expired_time'],
                     transactionID: paymentData['id'],
-                    finalPrice: total.toString())));
+                    finalPrice: total.toString())),);
       } else if (paymentData['payment_method_id'] == '7') {
         Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (BuildContext context) => PaymentBCA(
                       expDate: paymentData['expired_time'],
                       transactionID: paymentData['id'],
-                    )));
+                    )),);
       }
     }
   }
