@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/countdownCounter.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:http/http.dart' as http;
@@ -29,6 +30,8 @@ class _WaitingGopayState extends State<WaitingGopay>{
   String hour;
   String min;
   String sec;
+
+  int seconds;
 
   DateTime dateTime;
 
@@ -61,6 +64,9 @@ class _WaitingGopayState extends State<WaitingGopay>{
   void initState() {
     super.initState();
     getTransactionDetail();
+    final salesDay = DateTime.parse(widget.expDate);
+    final remaining = salesDay.difference(DateTime.now());
+    seconds = remaining.inSeconds;
   }
 
   @override
@@ -135,56 +141,13 @@ class _WaitingGopayState extends State<WaitingGopay>{
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
                             ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text('${hour}',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: ScreenUtil.instance.setSp(20),
-                                        fontWeight: FontWeight.bold)),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  ':',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  '$min',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  ':',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  '$sec',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
+                            CountDownTimer(
+                              secondsRemaining: seconds,
+                              whenTimeExpires: () {
+
+                              },
+                              countDownTimerStyle: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(18),
+                                  fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),

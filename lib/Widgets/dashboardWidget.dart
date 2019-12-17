@@ -54,7 +54,7 @@ class DashboardWidget extends StatefulWidget {
   final isRest;
   final selectedPage;
 
-  const DashboardWidget({Key key, this.isRest, this.selectedPage}) : super(key: key);
+  const DashboardWidget({Key key, this.isRest, this.selectedPage = 0}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _DashboardWidgetState();
