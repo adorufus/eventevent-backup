@@ -817,7 +817,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
           shrinkWrap: true,
           itemCount: userTimelineList == null ? 0 : userTimelineList.length,
           itemBuilder: (context, i) {
-            List impressionList = userTimelineList[i]['impression']['data'];
+            List _loveCount = userTimelineList[i]['impression']['data'];
             List commentList = userTimelineList[i]['comment']['data'];
 
             return Container(
@@ -1104,14 +1104,14 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                   children: <Widget>[
                                     Image.asset(
                                       'assets/icons/icon_apps/love.png',
-                                      color: impressionList.length > 0
+                                      color: _loveCount.length > 0
                                           ? Colors.red
                                           : Colors.grey,
                                       scale: 3.5,
                                     ),
                                     SizedBox(
                                         width: ScreenUtil.instance.setWidth(5)),
-                                    Text(impressionList.length.toString(),
+                                    Text(_loveCount.length.toString(),
                                         style: TextStyle(
                                             color: Color(
                                                 0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
@@ -1145,7 +1145,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                   ]),
                             ),
                             SizedBox(
-                                width: impressionList.length > 99 ? 100 : 150),
+                                width: _loveCount.length > 99 ? 100 : 150),
                             GestureDetector(
                               onTap: () async {
                                 SharedPreferences prefs =

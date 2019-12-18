@@ -2502,7 +2502,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         ),
       );
     } else if (currentTab == 1) {
-      return UserTimelineItem(
+      return TimelineItem(
         id: detailData['createdByID'],
       );
     } else if (currentTab == 2) {
