@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:eventevent/Widgets/EventDetailComment.dart';
 import 'package:eventevent/Widgets/EventDetailItems/FeedbackLogic.dart';
 import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
+import 'package:eventevent/Widgets/timeline/EventDetailTimeline.dart';
 import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:flutter/material.dart' as prefix0;
@@ -122,6 +123,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   bool isGoodFeedback = false;
   bool isBadFeedback = false;
 
+  List timelineList = [];
+
   @override
   bool get wantKeepAlive => true;
 
@@ -139,6 +142,20 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     }
 
     branchIoInit();
+
+    getTimelineList().then((response) {
+      print(response.statusCode);
+      print(response.body);
+      var extractedData = json.decode(response.body);
+
+      print('Timeline List -> ${response.body.toString()}');
+
+      if (response.statusCode == 200) {
+        setState(() {
+          timelineList = extractedData['data'];
+        });
+      }
+    });
 
     getEventDetailsSpecificInfo();
     getInvitedUser();
@@ -2502,7 +2519,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         ),
       );
     } else if (currentTab == 1) {
-      return TimelineItem(
+      return EventDetailTimeline(
         id: detailData['createdByID'],
       );
     } else if (currentTab == 2) {
@@ -2538,9 +2555,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             ),
           ),
           detailData['comment'].length == 0
-              ? Center(
-                  child: Text('No Comments'),
-                )
+              ? Container(
+            height: 15,
+          )
               : ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
@@ -2843,47 +2860,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             }
           }
         }
-
-        // setState(() {
-        //   if (ticketType['type'] == 'free') {
-        //     ticketPrice = 'Free';
-        //   } else if (ticketType['type'] == 'no_ticket') {
-        //     ticketPrice = 'No Ticket';
-        //   } else if (ticketType['type'] == 'on_the_spot') {
-        //     ticketPrice = 'On The Spot';
-        //   }
-        // });
-
-        // if (detailData['status'] == 'active') {
-        //   if (ticketType['isSetupTicket'].toString() == "1") {
-        //     if (ticketStat['cheapestTicket'].toString() == "0") {
-        //       setState(() {
-        //         ticketPriceStringVisibility = false;
-        //         itemColor = Colors.green;
-        //         ticketPrice = 'Free Limited';
-        //       });
-        //     } else {
-        //       ticketTypeURI = 'assets/btn_ticket/paid-value.png';
-        //       ticketPrice = "Rp. " + ticketStat['cheapestTicket'].toString();
-        //     }
-
-        //     if (ticketStat['availableTicketStatus'].toString() == '0') {
-        //       isTicketUnavailable = true;
-        //     } else {
-        //       isTicketUnavailable = false;
-        //     }
-        //   }
-
-        //   if (isGoing == "1") {
-        //     ticketPrice = 'Going';
-        //   }
-        // } else {
-        //   if (detailData['status'] == 'canceled') {
-        //     ticketPrice = "Canceled";
-        //   } else if (detailData['status'] == 'ended') {
-        //     ticketPrice = "Event Ended";
-        //   }
-        // }
       });
       preferences.setString('eventID', detailData['id']);
       print(detailData['id']);
@@ -2898,5 +2874,30 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       print(ticketType['isSetupTicket']);
       print(ticketStat);
     }
+  }
+
+  Future<http.Response> getTimelineList({int newPage}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentPage = 1;
+
+    setState(() {
+      if (newPage != null) {
+        currentPage += newPage;
+      }
+
+      print(currentPage);
+    });
+
+    String url = BaseApi().apiUrl +
+        'timeline/user?X-API-KEY=$API_KEY&page=1&userID=$currentUserId';
+
+    final response = await http.get(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session')
+    });
+
+    print('body: ' + response.body);
+
+    return response;
   }
 }
