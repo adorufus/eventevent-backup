@@ -43,6 +43,7 @@ class RecievedNotification {
 List<CameraDescription> cameras;
 
 Future<Null> main() async {
+
   Crashlytics.instance.enableInDevMode = true;
   // FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
@@ -50,6 +51,7 @@ Future<Null> main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.white, statusBarIconBrightness: Brightness.dark));
   cameras = await availableCameras();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(new MyApp());
 }
 
