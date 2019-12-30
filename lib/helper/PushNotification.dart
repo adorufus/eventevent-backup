@@ -1,7 +1,11 @@
 import 'dart:convert' show json, utf8;
 
+import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/Widgets/TransactionHistory.dart';
+import 'package:eventevent/Widgets/eventDetailsWidget.dart';
+import 'package:eventevent/Widgets/profileWidget.dart';
+import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,9 +63,9 @@ class PushNotificationState extends State<PushNotification> {
 
           print(notificationData);
 
-          _showNotification(
-              notificationData[0]['fullName'], notificationData[0]['caption'],
-              payload: 'test');
+//          _showNotification(
+//              notificationData[0]['fullName'], notificationData[0]['caption'],
+//              payload: 'test');
 
           // for(int i =   0; i <= notificationData.length; i +r= notificationData.length){
           //   _showNotification(notificationData[i]['fullName'], notificationData[i]['caption']);
@@ -212,9 +216,9 @@ class PushNotificationState extends State<PushNotification> {
 
                           print(notificationData);
 
-                          _showNotification(notificationData[0]['fullName'],
-                              notificationData[0]['caption'],
-                              payload: 'test');
+//                          _showNotification(notificationData[0]['fullName'],
+//                              notificationData[0]['caption'],
+//                              payload: 'test');
 
                           // for(int i =   0; i <= notificationData.length; i +r= notificationData.length){
                           //   _showNotification(notificationData[i]['fullName'], notificationData[i]['caption']);
@@ -342,19 +346,25 @@ class PushNotificationState extends State<PushNotification> {
                               //     )
                               //   ],
                               // ))
-                              ListTile(
+
+                          ListTile(
+                            onTap: (){
+                              doNavigateOnPressedNotification(i);
+                            },
+                            contentPadding: EdgeInsets.only(bottom: 15),
+
                             leading: Container(
-                              height: ScreenUtil.instance.setWidth(25),
-                              width: ScreenUtil.instance.setWidth(25),
-                              child: Image.asset(
-                                'assets/icons/icon_apps/announcement.png',
-                              ),
+                                height: ScreenUtil.instance.setWidth(25),
+                                width: ScreenUtil.instance.setWidth(25),
+                                child: Image.asset(
+                                  'assets/icons/icon_apps/announcement.png',
+                                ),
                             ),
                             title: Text(
-                              notificationData[i]['fullName'] + ':',
-                              style: TextStyle(
-                                  fontSize: ScreenUtil.instance.setSp(13),
-                                  fontWeight: FontWeight.bold),
+                                notificationData[i]['fullName'] + ':',
+                                style: TextStyle(
+                                    fontSize: ScreenUtil.instance.setSp(13),
+                                    fontWeight: FontWeight.bold),
                             ),
                             subtitle: Text(notificationData[i]['caption']),
                           ),
@@ -364,6 +374,52 @@ class PushNotificationState extends State<PushNotification> {
                   ]),
                 ),
         ));
+  }
+
+  doNavigateOnPressedNotification(int index) {
+    if(notificationData[index]['type'] == 'reminder_event'){
+      navigationHandler(EventDetailsConstructView(id: notificationData[index]['id'],));
+    }
+    else if(notificationData[index]['type'] == 'relationship'){
+      navigationHandler(ProfileWidget(userId: notificationData[index]['id'], initialIndex: 0,));
+    }
+    else if(notificationData[index]['type'] == 'live_stream_cancel'){
+      navigationHandler(EventDetailsConstructView(id: notificationData[index]['id'],));
+    }
+    else if(notificationData[index]['type'] == 'photo_comment'){
+      navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
+    }
+    else if(notificationData[index]['type'] == 'combined_relationship_impression'){
+      navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
+    }
+    else if(notificationData[index]['type'] == 'relationship_comment'){
+      navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
+    }
+    else if(notificationData[index]['type'] == 'relationship_impression'){
+      navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
+    }
+    else if(notificationData[index]['type'] == 'event_comment'){
+      navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
+    }
+    else if(notificationData[index]['type'] == 'eventgoingstatus'){
+      navigationHandler(EventDetailsConstructView(id: notificationData[index]['id'],));
+    }
+    else if(notificationData[index]['type'] == 'photo_impression'){
+      navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
+    }
+    else if(notificationData[index]['type'] == 'event'){
+      navigationHandler(EventDetailsConstructView(id: notificationData[index]['id']));
+    }
+    else if(notificationData[index]['type'] == 'eventinvite'){
+      navigationHandler(EventDetailsConstructView(id: notificationData[index]['id']));
+    }
+    else if(notificationData[index]['type'] == 'reminder_qr'){
+      navigationHandler(ShowQr(qrUrl: notificationData[index][''],));
+    }
+  }
+  
+  navigationHandler(Widget page){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
   }
 
   Future<http.Response> getNotification({int page}) async {

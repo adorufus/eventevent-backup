@@ -112,12 +112,18 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
   void configureNotification(){
     var initializationSettingAndroid = new AndroidInitializationSettings('launch_background');
-    var initializationSettingIOS = new IOSInitializationSettings();
+    var initializationSettingIOS = new IOSInitializationSettings(onDidReceiveLocalNotification: (
+      int id, String title, String body, String payload
+    ) async {
+      print(id.toString() + ' ' + title + ' ' + body + ' ' + payload);
+    });
     var initializationSettings = new InitializationSettings(initializationSettingAndroid, initializationSettingIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   void showNotification(message) async {
+    var notificationAppLaunchDetail = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         'com.eventeven2.android',
         'EventEvent notification channel',
@@ -131,9 +137,14 @@ class _DashboardWidgetState extends State<DashboardWidget>
     var platformChannelSpecifics = new NotificationDetails(
         androidPlatformChannelSpecifics, iosPlatformChannelSpecifics);
 
-    await flutterLocalNotificationsPlugin.show(0, message['title'].toString(),
-        message['body'].toString(), platformChannelSpecifics,
+    print('message: ' + message.toString());
+    print('message: ' + message['notification'].toString());
+
+    await flutterLocalNotificationsPlugin.show(0, message['notification']['title'],
+        message['notification']['body'], platformChannelSpecifics,
         payload: json.encode(message));
+
+
   }
 
   @override
@@ -635,6 +646,49 @@ class _DashboardWidgetState extends State<DashboardWidget>
   Future<void> onSelectNotification(String payload) async {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
+
+      Map payloadData = json.decode(payload);
+      print(payloadData.toString());
+
+//      if(payload == 'reminder_event'){
+//        navigationHandler(EventDetailsConstructView(id: notificationData[index]['id'],));
+//      }
+//      else if(notificationData[index]['type'] == 'relationship'){
+//        navigationHandler(ProfileWidget(userId: notificationData[index]['id'], initialIndex: 0,));
+//      }
+//      else if(notificationData[index]['type'] == 'live_stream_cancel'){
+//        navigationHandler(EventDetailsConstructView(id: notificationData[index]['id'],));
+//      }
+//      else if(notificationData[index]['type'] == 'photo_comment'){
+//        navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
+//      }
+//      else if(notificationData[index]['type'] == 'combined_relationship_impression'){
+//        navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
+//      }
+//      else if(notificationData[index]['type'] == 'relationship_comment'){
+//        navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
+//      }
+//      else if(notificationData[index]['type'] == 'relationship_impression'){
+//        navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
+//      }
+//      else if(notificationData[index]['type'] == 'event_comment'){
+//        navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
+//      }
+//      else if(notificationData[index]['type'] == 'eventgoingstatus'){
+//        navigationHandler(EventDetailsConstructView(id: notificationData[index]['id'],));
+//      }
+//      else if(notificationData[index]['type'] == 'photo_impression'){
+//        navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
+//      }
+//      else if(notificationData[index]['type'] == 'event'){
+//        navigationHandler(EventDetailsConstructView(id: notificationData[index]['id']));
+//      }
+//      else if(notificationData[index]['type'] == 'eventinvite'){
+//        navigationHandler(EventDetailsConstructView(id: notificationData[index]['id']));
+//      }
+//      else if(notificationData[index]['type'] == 'reminder_qr'){
+//        navigationHandler(ShowQr(qrUrl: notificationData[index][''],));
+//      }
     }
   }
 

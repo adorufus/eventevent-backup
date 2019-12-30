@@ -40,10 +40,13 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
   TextEditingController commentController = new TextEditingController();
   List commentList;
   List mentionList=[];
+  Map mediaDetails;
+
   @override
   void initState() {
     super.initState();
     getCommentList();
+    getMediaDetails();
   }
 
   @override
@@ -59,7 +62,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
 
     print(widget.postID);
 
-    return Scaffold(
+    return mediaDetails == null ? Container(child: Center(child: CircularProgressIndicator(),),) :  Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(
@@ -80,7 +83,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
                 alignment: Alignment.centerLeft,
               ),
             ),
-            title: Text(widget.mediaTitle),
+            title: Text(mediaDetails['name'] == null ? 'loading' : mediaDetails['name']),
             centerTitle: true,
             textTheme: TextTheme(
                 title: TextStyle(
@@ -213,7 +216,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
             decoration: BoxDecoration(
                 color: Color(0xff8a8a8b),
                 image: DecorationImage(
-                    image: NetworkImage(widget.imageUri), fit: BoxFit.fill)),
+                    image: NetworkImage(mediaDetails['pictureFull']), fit: BoxFit.fill)),
           ),
           SizedBox(
             height: ScreenUtil.instance.setWidth(15),
@@ -223,7 +226,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
             child: Row(
               children: <Widget>[
                 CircleAvatar(
-                    backgroundImage: NetworkImage(widget.userPicture),
+                    backgroundImage: NetworkImage(mediaDetails['photo']),
                     radius: 15),
                 SizedBox(
                   width: ScreenUtil.instance.setWidth(5),
@@ -231,7 +234,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
                 Container(
                     width: MediaQuery.of(context).size.width - 217.7,
                     child: Text(
-                      widget.username.toString(),
+                      mediaDetails['fullName'],
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: ScreenUtil.instance.setSp(14),
@@ -246,7 +249,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 13),
             child: Html(
-              data: widget.articleDetail,
+              data: mediaDetails['name'],
               onLinkTap: (url) {
                 print('loading..');
               },
@@ -269,7 +272,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
                   return Container();
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return Center(child: CircularProgressIndicator());
                 } 
                 if (snapshot.data == null) {
                   print('loading');
@@ -308,6 +311,29 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
         ],
       ),
     );
+  }
+
+  Future getMediaDetails() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    String url = BaseApi().apiUrl + '/timeline/detail?X-API-KEY=$API_KEY&type=photo&id=${widget.postID}';
+
+    final response = await http.get(
+        url,
+      headers: {
+          'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session')
+      }
+    );
+
+    var extractedData = json.decode(response.body);
+    print(extractedData);
+
+    if(response.statusCode == 200){
+      setState(() {
+        mediaDetails = extractedData['data'];
+      });
+    }
   }
 
   Future getCommentList() async {

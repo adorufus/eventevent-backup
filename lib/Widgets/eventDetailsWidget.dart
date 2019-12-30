@@ -2190,7 +2190,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   MaterialPageRoute(
                                                       builder: (BuildContext
                                                               context) =>
-                                                          ShowQr()));
+                                                          ShowQr(
+                                                            qrUrl: detailData['qrcode']['secure_url'],
+                                                            eventName: detailData['name'],
+                                                          )));
                                             },
                                             child: SizedBox(
                                               height: ScreenUtil.instance

@@ -10,6 +10,10 @@ import 'dart:convert';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 
 class ShowQr extends StatefulWidget{
+  final qrUrl;
+  final eventName;
+
+  const ShowQr({Key key, this.qrUrl, this.eventName}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     
@@ -31,8 +35,8 @@ class ShowQrState extends State<ShowQr>{
   getData() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState((){
-      qrUri = prefs.getString('QR_URI');
-      name = prefs.getString('EVENT_NAME');
+      qrUri = widget.qrUrl;
+      name = widget.eventName;
     });
   }
 
