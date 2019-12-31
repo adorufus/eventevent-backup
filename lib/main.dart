@@ -48,10 +48,9 @@ Future<Null> main() async {
   // FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
   // HttpOverrides.global = MyHttpOverrides();
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.white, statusBarIconBrightness: Brightness.dark));
-  cameras = await availableCameras();
   WidgetsFlutterBinding.ensureInitialized();
+  cameras = await availableCameras();
+  
   runApp(new MyApp());
 }
 

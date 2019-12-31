@@ -227,12 +227,10 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
       bottom: false,
       child: Scaffold(
         body: Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: ListView(
+            physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
-              SizedBox(height: ScreenUtil.instance.setWidth(50)),
+              SizedBox(height: ScreenUtil.instance.setWidth(10)),
               Align(
                   alignment: Alignment.topRight,
                   child: GestureDetector(
@@ -268,6 +266,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
               ),
               SizedBox(height: ScreenUtil.instance.setWidth(30)),
               FractionallySizedBox(
+                widthFactor: ScreenUtil.instance.setWidth(.8),
                 child: Container(
                     width: ScreenUtil.instance.setWidth(306.93),
                     height: ScreenUtil.instance.setHeight(197.18),
