@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:io'; 
 
 import 'package:eventevent/Widgets/Home/RestPageNeedLogin.dart';
+import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/PostMedia.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/Widgets/timeline/TimelineDashboard.dart';
+import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/FirebaseMessagingHelper.dart';
 import 'package:eventevent/helper/PushNotification.dart';
@@ -19,20 +21,38 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'PostEvent/PostEvent.dart';
 import 'eventCatalogWidget.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:eventevent/Widgets/RecycleableWidget/OpenCamera.dart';
 
+
+
+
+var scaffoldGlobalKey = GlobalKey<ScaffoldState>();
 FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    new FlutterLocalNotificationsPlugin();
+final BehaviorSubject<RecievedNotification> didRecieveLocalNotificationSubject =
+    BehaviorSubject<RecievedNotification>();
+final BehaviorSubject<String> selectNotificationSubject =
+    BehaviorSubject<String>();
+
+class RecievedNotification {
+  final int id;
+  final String title;
+  final String body;
+  final String payload;
+
+  RecievedNotification(this.id, this.title, this.body, this.payload);
+}
 
 String pushToken;
 var initializationSettingsAndroid;
 var initializationSettingsIOS;
 var initializationSettings;
-var scaffoldGlobalKey = GlobalKey<ScaffoldState>();
 
 // Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
 //   if (message.containsKey('data')) {
@@ -81,77 +101,100 @@ class _DashboardWidgetState extends State<DashboardWidget>
     });
   }
 
-  void registerNotification() {
-    _firebaseMessaging.requestNotificationPermissions();
+  
 
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) {
-        print('onMessage: $message');
-        showNotification(message);
-        return;
-      },
-      onResume: (Map<String, dynamic> message){
-        print('onResume: $message');
-        return;
-      },
-      onLaunch: (Map<String, dynamic> message){
-        print('onResume: $message');
-        return;
-      },
-      onBackgroundMessage: Theme.of(context).platform == TargetPlatform.iOS ? null : myBackgroundMessageHandler
-    );
+  // // openPushNotification(Map<String, dynamic> message){
+  //   if(message['data']['type'] == 'reminder_event'){
+  //      navigationHandler(EventDetailsConstructView(id: message['data']['id'],));
+  //    }
+  //    else if(message['data']['type'] == 'relationship'){
+  //      navigationHandler(ProfileWidget(userId: message['data']['id'], initialIndex: 0,));
+  //    }
+  //    else if(message['data']['type'] == 'live_stream_cancel'){
+  //      navigationHandler(EventDetailsConstructView(id: message['data']['id'],));
+  //    }
+  //    else if(message['data']['type'] == 'photo_comment'){
+  //      navigationHandler(UserMediaDetail(postID: message['data']['id'], autoFocus: true,));
+  //    }
+  //    else if(message['data']['type'] == 'combined_relationship_impression'){
+  //      navigationHandler(UserMediaDetail(postID: message['data']['id'], autoFocus: true,));
+  //    }
+  //    else if(message['data']['type'] == 'relationship_comment'){
+  //      navigationHandler(UserMediaDetail(postID: message['data']['id'], autoFocus: true,));
+  //    }
+  //    else if(message['data']['type'] == 'relationship_impression'){
+  //      navigationHandler(UserMediaDetail(postID: message['data']['id'], autoFocus: true,));
+  //    }
+  //    else if(message['data']['type'] == 'event_comment'){
+  //      navigationHandler(UserMediaDetail(postID: message['data']['id'], autoFocus: true,));
+  //    }
+  //    else if(message['data']['type'] == 'eventgoingstatus'){
+  //      navigationHandler(EventDetailsConstructView(id: message['data']['id'],));
+  //    }
+  //    else if(message['data']['type'] == 'photo_impression'){
+  //      navigationHandler(UserMediaDetail(postID: message['data']['id'], autoFocus: true,));
+  //    }
+  //    else if(message['data']['type'] == 'event'){
+  //      navigationHandler(EventDetailsConstructView(id: message['data']['id']));
+  //    }
+  //    else if(message['data']['type'] == 'eventinvite'){
+  //      navigationHandler(EventDetailsConstructView(id: message['data']['id']));
+  //    }
+  //    else if(message['data']['type'] == 'reminder_qr'){
+  //      navigationHandler(ShowQr(qrUrl: message['data']['id'],));
+  //    }
+  // }
 
-    _firebaseMessaging.getToken().then((token){
-      print('firebase token: $token');
-      setState(() {
-        pushToken = token;
-        saveDeviceToken(token);
-      });
-    });
-  }
+  
 
-  void configureNotification(){
-    var initializationSettingAndroid = new AndroidInitializationSettings('launch_background');
-    var initializationSettingIOS = new IOSInitializationSettings(onDidReceiveLocalNotification: (
-      int id, String title, String body, String payload
-    ) async {
-      print(id.toString() + ' ' + title + ' ' + body + ' ' + payload);
-    });
-    var initializationSettings = new InitializationSettings(initializationSettingAndroid, initializationSettingIOS);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  }
-
-  void showNotification(message) async {
-    var notificationAppLaunchDetail = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-
-    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-        'com.eventeven2.android',
-        'EventEvent notification channel',
-        'channel description',
-        playSound: true,
-        enableVibration: true,
-        importance: Importance.Max,
-        priority: Priority.High);
-
-    var iosPlatformChannelSpecifics = new IOSNotificationDetails();
-    var platformChannelSpecifics = new NotificationDetails(
-        androidPlatformChannelSpecifics, iosPlatformChannelSpecifics);
-
-    print('message: ' + message.toString());
-    print('message: ' + message['notification'].toString());
-
-    await flutterLocalNotificationsPlugin.show(0, message['notification']['title'],
-        message['notification']['body'], platformChannelSpecifics,
-        payload: json.encode(message));
-
-
-  }
+  
 
   @override
   void initState() {
     _saveCurrentRoute('/Dashboard');
     WidgetsBinding.instance.addObserver(this);
     super.initState();
+
+    initializationSettingsAndroid =
+        new AndroidInitializationSettings('app_icon');
+    initializationSettingsIOS =
+        new IOSInitializationSettings(defaultPresentBadge: true);
+    initializationSettings = new InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (String payload) async {
+          if(payload != null){
+            debugPrint('notification Payload: ' + payload);
+          }
+          selectNotificationSubject.add(payload);
+        });
+
+        _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+          print('on message $message');
+          print(message['notification']);
+        },
+        onBackgroundMessage: myBackgroundMessageHandler,
+        onResume: (Map<String, dynamic> message) async {
+          List<Widget> navPages = [
+            EventDetailsConstructView(id: '15'),
+          ];
+
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => navPages[0]));
+          print('on resume $message');
+        },
+        onLaunch: (Map<String, dynamic> message) async {
+          print('on launch $message');
+        });
+
+        // didRecieveLocalNotificationSubject.stream.listen((RecievedNotification recievedNotification) async {
+
+        // });
+
+        selectNotificationSubject.stream.listen((String payload) async {
+          await onSelectNotification(payload);
+        });
 
     if(widget.selectedPage == null){
       _selectedPage = 0;
@@ -160,7 +203,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
     _selectedPage = widget.selectedPage;
     
     // registerNotification();
-    configureNotification();
+    // configureNotification();
 
     if (widget.isRest == true) {
       setState(() {
@@ -176,23 +219,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
     print('push token: $pushToken');
 
-    _firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) async {
-          print('on message $message');
-          print(message['notification']);
-        },
-        onBackgroundMessage: myBackgroundMessageHandler,
-        onResume: (Map<String, dynamic> message) async {
-          List<Widget> navPages = [
-            EventDetailsConstructView(id: '15'),
-          ];
-
-          Navigator.push(context, MaterialPageRoute(builder: (context) => navPages[0]));
-          print('on resume $message');
-        },
-        onLaunch: (Map<String, dynamic> message) async {
-          print('on launch $message');
-        });
+    
     getPopup().then((response) {
       var extractedData = json.decode(response.body);
 
@@ -285,6 +312,58 @@ class _DashboardWidgetState extends State<DashboardWidget>
     });
   }
 
+  navigationHandler(Widget page){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+  }
+
+  Future onSelectNotification(String payload) async {
+
+    if (payload != null) {
+      Map payloadData = json.decode(payload);
+      print(payloadData.toString());
+
+     if(payloadData['data']['type'] == 'reminder_event'){
+       navigationHandler(EventDetailsConstructView(id: payloadData['data']['id'],));
+     }
+     else if(payloadData['data']['type'] == 'relationship'){
+       navigationHandler(ProfileWidget(userId: payloadData['data']['id'], initialIndex: 0,));
+     }
+     else if(payloadData['data']['type'] == 'live_stream_cancel'){
+       navigationHandler(EventDetailsConstructView(id: payloadData['data']['id'],));
+     }
+     else if(payloadData['data']['type'] == 'photo_comment'){
+       navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
+     }
+     else if(payloadData['data']['type'] == 'combined_relationship_impression'){
+       navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
+     }
+     else if(payloadData['data']['type'] == 'relationship_comment'){
+       navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
+     }
+     else if(payloadData['data']['type'] == 'relationship_impression'){
+       navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
+     }
+     else if(payloadData['data']['type'] == 'event_comment'){
+       navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
+     }
+     else if(payloadData['data']['type'] == 'eventgoingstatus'){
+       navigationHandler(EventDetailsConstructView(id: payloadData['data']['id'],));
+     }
+     else if(payloadData['data']['type'] == 'photo_impression'){
+       navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
+     }
+     else if(payloadData['data']['type'] == 'event'){
+       navigationHandler(EventDetailsConstructView(id: payloadData['data']['id']));
+     }
+     else if(payloadData['data']['type'] == 'eventinvite'){
+       navigationHandler(EventDetailsConstructView(id: payloadData['data']['id']));
+     }
+     else if(payloadData['data']['type'] == 'reminder_qr'){
+       navigationHandler(ShowQr(qrUrl: payloadData['data']['id'],));
+     }
+    }
+  }
+
   @override
   void didChangeDependencies() {
     registerNotification();
@@ -294,7 +373,88 @@ class _DashboardWidgetState extends State<DashboardWidget>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    selectNotificationSubject.close();
     super.dispose();
+  }
+
+  void showNotification(message) async {
+    var notificationAppLaunchDetail =
+        await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+
+    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+        'com.eventeven2.android',
+        'EventEvent notification channel',
+        'channel description',
+        playSound: true,
+        enableVibration: true,
+        channelShowBadge: true,
+        importance: Importance.High,
+        priority: Priority.High);
+
+    var iosPlatformChannelSpecifics =
+        new IOSNotificationDetails(presentBadge: true, presentSound: true);
+    var platformChannelSpecifics = new NotificationDetails(
+        androidPlatformChannelSpecifics, iosPlatformChannelSpecifics);
+
+    print('message: ' + message.toString());
+    print('message: ' + message['notification'].toString());
+
+    await flutterLocalNotificationsPlugin.show(
+        0,
+        message['notification']['title'],
+        message['notification']['body'],
+        platformChannelSpecifics,
+        payload: json.encode(message));
+
+    // flutterLocalNotificationsPlugin.didReceiveLocalNotificationCallback();
+  }
+
+  Future saveDeviceToken(String pushTokens) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url = BaseApi().apiUrl + '/device/token';
+
+    final response = await http.post(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session')
+    }, body: {
+      'X-API-KEY': API_KEY,
+      'token': pushTokens
+    });
+
+    print(response.statusCode);
+    print(response.body);
+    print('token sent');
+    print(prefs.getKeys());
+  }
+
+  void registerNotification() {
+    _firebaseMessaging.requestNotificationPermissions();
+
+    _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) {
+          print('onMessage: $message');
+          showNotification(message);
+          return;
+        },
+        onResume: (Map<String, dynamic> message) {
+          print('onResume: $message');
+          return;
+        },
+        onLaunch: (Map<String, dynamic> message) {
+          print('onResume: $message');
+          return;
+        },
+        onBackgroundMessage: Theme.of(context).platform == TargetPlatform.iOS
+            ? null
+            : myBackgroundMessageHandler);
+
+    _firebaseMessaging.getToken().then((token) {
+      print('firebase token: $token');
+      setState(() {
+        pushToken = token;
+        saveDeviceToken(token);
+      });
+    });
   }
 
   @override
@@ -631,96 +791,69 @@ class _DashboardWidgetState extends State<DashboardWidget>
                 )));
   }
 
-  void initLocalNotification() {
+  // Future onSelectNotification(String payload) async {
+  //   var notificationAppLaunchDetails =
+  //    await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
-    initializationSettingsAndroid =
-        new AndroidInitializationSettings('app_icon');
-    initializationSettingsIOS =
-        new IOSInitializationSettings(defaultPresentBadge: true);
-    initializationSettings = new InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: onSelectNotification);
-  }
+  //   if (notificationAppLaunchDetails.didNotificationLaunchApp == true) {
+  //     Map payloadData = json.decode(notificationAppLaunchDetails.payload);
+  //     print(payloadData.toString());
 
-  Future<void> onSelectNotification(String payload) async {
-    if (payload != null) {
-      debugPrint('notification payload: ' + payload);
+  //    if(payloadData['data']['type'] == 'reminder_event'){
+  //      navigationHandler(EventDetailsConstructView(id: payloadData['data']['id'],));
+  //    }
+  //    else if(payloadData['data']['type'] == 'relationship'){
+  //      navigationHandler(ProfileWidget(userId: payloadData['data']['id'], initialIndex: 0,));
+  //    }
+  //    else if(payloadData['data']['type'] == 'live_stream_cancel'){
+  //      navigationHandler(EventDetailsConstructView(id: payloadData['data']['id'],));
+  //    }
+  //    else if(payloadData['data']['type'] == 'photo_comment'){
+  //      navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
+  //    }
+  //    else if(payloadData['data']['type'] == 'combined_relationship_impression'){
+  //      navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
+  //    }
+  //    else if(payloadData['data']['type'] == 'relationship_comment'){
+  //      navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
+  //    }
+  //    else if(payloadData['data']['type'] == 'relationship_impression'){
+  //      navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
+  //    }
+  //    else if(payloadData['data']['type'] == 'event_comment'){
+  //      navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
+  //    }
+  //    else if(payloadData['data']['type'] == 'eventgoingstatus'){
+  //      navigationHandler(EventDetailsConstructView(id: payloadData['data']['id'],));
+  //    }
+  //    else if(payloadData['data']['type'] == 'photo_impression'){
+  //      navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
+  //    }
+  //    else if(payloadData['data']['type'] == 'event'){
+  //      navigationHandler(EventDetailsConstructView(id: payloadData['data']['id']));
+  //    }
+  //    else if(payloadData['data']['type'] == 'eventinvite'){
+  //      navigationHandler(EventDetailsConstructView(id: payloadData['data']['id']));
+  //    }
+  //    else if(payloadData['data']['type'] == 'reminder_qr'){
+  //      navigationHandler(ShowQr(qrUrl: payloadData['data']['id'],));
+  //    }
+  //   }
+  // }
 
-      Map payloadData = json.decode(payload);
-      print(payloadData.toString());
+  
 
-//      if(payload == 'reminder_event'){
-//        navigationHandler(EventDetailsConstructView(id: notificationData[index]['id'],));
-//      }
-//      else if(notificationData[index]['type'] == 'relationship'){
-//        navigationHandler(ProfileWidget(userId: notificationData[index]['id'], initialIndex: 0,));
-//      }
-//      else if(notificationData[index]['type'] == 'live_stream_cancel'){
-//        navigationHandler(EventDetailsConstructView(id: notificationData[index]['id'],));
-//      }
-//      else if(notificationData[index]['type'] == 'photo_comment'){
-//        navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
-//      }
-//      else if(notificationData[index]['type'] == 'combined_relationship_impression'){
-//        navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
-//      }
-//      else if(notificationData[index]['type'] == 'relationship_comment'){
-//        navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
-//      }
-//      else if(notificationData[index]['type'] == 'relationship_impression'){
-//        navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
-//      }
-//      else if(notificationData[index]['type'] == 'event_comment'){
-//        navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
-//      }
-//      else if(notificationData[index]['type'] == 'eventgoingstatus'){
-//        navigationHandler(EventDetailsConstructView(id: notificationData[index]['id'],));
-//      }
-//      else if(notificationData[index]['type'] == 'photo_impression'){
-//        navigationHandler(UserMediaDetail(postID: notificationData[index]['id'], autoFocus: true,));
-//      }
-//      else if(notificationData[index]['type'] == 'event'){
-//        navigationHandler(EventDetailsConstructView(id: notificationData[index]['id']));
-//      }
-//      else if(notificationData[index]['type'] == 'eventinvite'){
-//        navigationHandler(EventDetailsConstructView(id: notificationData[index]['id']));
-//      }
-//      else if(notificationData[index]['type'] == 'reminder_qr'){
-//        navigationHandler(ShowQr(qrUrl: notificationData[index][''],));
-//      }
-    }
-  }
-
-  Future<void> _showNotification(String title, String body,
-      {String payload}) async {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'channel id', 'channel name', 'channel desc',
-        importance: Importance.Max, priority: Priority.High);
-    var iosPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iosPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin
-        .show(0, title, body, platformChannelSpecifics, payload: 'item x');
-  }
-
-  Future saveDeviceToken(String pushTokens) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String url = BaseApi().apiUrl + '/device/token';
-
-    final response = await http.post(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
-    }, body: {
-      'X-API-KEY': API_KEY,
-      'token': pushTokens
-    });
-
-    print(response.statusCode);
-    print(response.body);
-    print('token sent');
-    print(prefs.getKeys());
-  }
+  // Future<void> _showNotification(String title, String body,
+  //     {String payload}) async {
+  //   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+  //       'channel id', 'channel name', 'channel desc',
+  //       importance: Importance.Max, priority: Priority.High);
+  //   var iosPlatformChannelSpecifics = IOSNotificationDetails();
+  //   var platformChannelSpecifics = NotificationDetails(
+  //       androidPlatformChannelSpecifics, iosPlatformChannelSpecifics);
+  //   await flutterLocalNotificationsPlugin
+  //       .show(0, title, body, platformChannelSpecifics, payload: 'item x');
+  // }
 
   settingBottomSheet() {
     showModalBottomSheet<void>(

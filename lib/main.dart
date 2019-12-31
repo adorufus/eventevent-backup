@@ -1,4 +1,10 @@
-import 'dart:io'; import 'package:firebase_messaging/firebase_messaging.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
+import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:http/http.dart' as http;
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -26,32 +32,20 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/services.dart';
 
-FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-final BehaviorSubject<RecievedNotification> didRecieveLocalNotificationPlugin = BehaviorSubject<RecievedNotification>();
-final BehaviorSubject<String> selectNotificationSubject = BehaviorSubject<String>();
 
-class RecievedNotification {
-  final int id;
-  final String title;
-  final String body;
-  final String payload;
-
-  RecievedNotification({@required this.id, @required this.title, @required this.body, @required this.payload});
-}
 
 List<CameraDescription> cameras;
 
 Future<Null> main() async {
-
   Crashlytics.instance.enableInDevMode = true;
   // FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
   // HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
+
   cameras = await availableCameras();
-  
-  runApp(new MyApp());
+
+  runApp(new RunApp());
 }
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
@@ -68,7 +62,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   // Or do other work.
 }
 
-class MyApp extends StatelessWidget {
+class RunApp extends StatelessWidget {
   // This widget is the root of your application.
 
   Widget homeScreenWidget = LoginRegisterWidget();
@@ -84,15 +78,13 @@ class MyApp extends StatelessWidget {
       // ],
       title: 'EventEvent',
       debugShowCheckedModeBanner: false,
-      navigatorObservers: <NavigatorObserver> [
-        observer
-      ],
+      navigatorObservers: <NavigatorObserver>[RunApp.observer],
       theme: ThemeData(
           fontFamily: 'Proxima',
           primarySwatch: eventajaGreen,
           backgroundColor: Colors.white),
       // home: CrashlyticsTester(),
-      home: SplashScreen(analytics: analytics, observer: observer),
+      home: SplashScreen(analytics: RunApp.analytics, observer: RunApp.observer),
       routes: <String, WidgetBuilder>{
         '/LoginRegister': (BuildContext context) => LoginRegisterWidget(),
         '/Login': (BuildContext context) => LoginWidget(),
@@ -118,6 +110,8 @@ class MyApp extends StatelessWidget {
     }
   }
 }
+
+
 
 class MyHttpOverrides extends HttpOverrides {
   @override
