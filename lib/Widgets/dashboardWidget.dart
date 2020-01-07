@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io'; 
 
-import 'package:eventevent/Widgets/Home/RestPageNeedLogin.dart';
 import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/PostMedia.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
@@ -10,7 +9,6 @@ import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/Widgets/timeline/TimelineDashboard.dart';
 import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:eventevent/helper/FirebaseMessagingHelper.dart';
 import 'package:eventevent/helper/PushNotification.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,9 +24,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
-import 'package:eventevent/Widgets/RecycleableWidget/OpenCamera.dart';
-
-
 
 
 var scaffoldGlobalKey = GlobalKey<ScaffoldState>();
@@ -53,20 +48,6 @@ String pushToken;
 var initializationSettingsAndroid;
 var initializationSettingsIOS;
 var initializationSettings;
-
-// Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
-//   if (message.containsKey('data')) {
-//     // Handle data message
-//     final dynamic data = message['data'];
-//   }
-
-//   if (message.containsKey('notification')) {
-//     // Handle notification message
-//     final dynamic notification = message['notification'];
-//   }
-
-//   // Or do other work.
-// }
 
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async { return Future<void>.value(); }
 
@@ -100,54 +81,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
       currentUserId = prefs.getString('Last User ID');
     });
   }
-
-  
-
-  // // openPushNotification(Map<String, dynamic> message){
-  //   if(message['data']['type'] == 'reminder_event'){
-  //      navigationHandler(EventDetailsConstructView(id: message['data']['id'],));
-  //    }
-  //    else if(message['data']['type'] == 'relationship'){
-  //      navigationHandler(ProfileWidget(userId: message['data']['id'], initialIndex: 0,));
-  //    }
-  //    else if(message['data']['type'] == 'live_stream_cancel'){
-  //      navigationHandler(EventDetailsConstructView(id: message['data']['id'],));
-  //    }
-  //    else if(message['data']['type'] == 'photo_comment'){
-  //      navigationHandler(UserMediaDetail(postID: message['data']['id'], autoFocus: true,));
-  //    }
-  //    else if(message['data']['type'] == 'combined_relationship_impression'){
-  //      navigationHandler(UserMediaDetail(postID: message['data']['id'], autoFocus: true,));
-  //    }
-  //    else if(message['data']['type'] == 'relationship_comment'){
-  //      navigationHandler(UserMediaDetail(postID: message['data']['id'], autoFocus: true,));
-  //    }
-  //    else if(message['data']['type'] == 'relationship_impression'){
-  //      navigationHandler(UserMediaDetail(postID: message['data']['id'], autoFocus: true,));
-  //    }
-  //    else if(message['data']['type'] == 'event_comment'){
-  //      navigationHandler(UserMediaDetail(postID: message['data']['id'], autoFocus: true,));
-  //    }
-  //    else if(message['data']['type'] == 'eventgoingstatus'){
-  //      navigationHandler(EventDetailsConstructView(id: message['data']['id'],));
-  //    }
-  //    else if(message['data']['type'] == 'photo_impression'){
-  //      navigationHandler(UserMediaDetail(postID: message['data']['id'], autoFocus: true,));
-  //    }
-  //    else if(message['data']['type'] == 'event'){
-  //      navigationHandler(EventDetailsConstructView(id: message['data']['id']));
-  //    }
-  //    else if(message['data']['type'] == 'eventinvite'){
-  //      navigationHandler(EventDetailsConstructView(id: message['data']['id']));
-  //    }
-  //    else if(message['data']['type'] == 'reminder_qr'){
-  //      navigationHandler(ShowQr(qrUrl: message['data']['id'],));
-  //    }
-  // }
-
-  
-
-  
 
   @override
   void initState() {
@@ -222,46 +155,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
     
     getPopup().then((response) {
       var extractedData = json.decode(response.body);
-
-      // showDialog(
-      //     context: context,
-      //     builder: (BuildContext context) {
-      //       return GestureDetector(
-      //         onTap: () {
-      //           Navigator.pop(context);
-      //         },
-      //         child: Material(
-      //           color: Colors.transparent,
-      //           child: Center(
-      //             child: Container(
-      //               height: MediaQuery.of(context).size.height,
-      //               width: MediaQuery.of(context).size.width,
-      //               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 77),
-      //               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      //               decoration: BoxDecoration(
-      //                   color: Colors.white,
-      //                   borderRadius: BorderRadius.circular(10),
-      //                   image: DecorationImage(
-      //                       image: NetworkImage(
-      //                           'https://home.eventeventapp.com/photo_asset/5d663b08aebcb_popup.jpg'),
-      //                       fit: BoxFit.fill)),
-      //               child: GestureDetector(
-      //                 onTap: (){
-      //                   Navigator.pop(context);
-      //                 },
-      //                   child: Align(
-      //                 alignment: Alignment.topRight,
-      //                 child: Icon(
-      //                   Icons.close,
-      //                   color: Colors.white,
-      //                   size: 30,
-      //                 ),
-      //               )),
-      //             ),
-      //           ),
-      //         ),
-      //       );
-      //     });
 
       if (response.statusCode == 200) {
         showDialog(
@@ -790,70 +683,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
                   imagePath: croppedImage,
                 )));
   }
-
-  // Future onSelectNotification(String payload) async {
-  //   var notificationAppLaunchDetails =
-  //    await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-
-  //   if (notificationAppLaunchDetails.didNotificationLaunchApp == true) {
-  //     Map payloadData = json.decode(notificationAppLaunchDetails.payload);
-  //     print(payloadData.toString());
-
-  //    if(payloadData['data']['type'] == 'reminder_event'){
-  //      navigationHandler(EventDetailsConstructView(id: payloadData['data']['id'],));
-  //    }
-  //    else if(payloadData['data']['type'] == 'relationship'){
-  //      navigationHandler(ProfileWidget(userId: payloadData['data']['id'], initialIndex: 0,));
-  //    }
-  //    else if(payloadData['data']['type'] == 'live_stream_cancel'){
-  //      navigationHandler(EventDetailsConstructView(id: payloadData['data']['id'],));
-  //    }
-  //    else if(payloadData['data']['type'] == 'photo_comment'){
-  //      navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
-  //    }
-  //    else if(payloadData['data']['type'] == 'combined_relationship_impression'){
-  //      navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
-  //    }
-  //    else if(payloadData['data']['type'] == 'relationship_comment'){
-  //      navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
-  //    }
-  //    else if(payloadData['data']['type'] == 'relationship_impression'){
-  //      navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
-  //    }
-  //    else if(payloadData['data']['type'] == 'event_comment'){
-  //      navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
-  //    }
-  //    else if(payloadData['data']['type'] == 'eventgoingstatus'){
-  //      navigationHandler(EventDetailsConstructView(id: payloadData['data']['id'],));
-  //    }
-  //    else if(payloadData['data']['type'] == 'photo_impression'){
-  //      navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
-  //    }
-  //    else if(payloadData['data']['type'] == 'event'){
-  //      navigationHandler(EventDetailsConstructView(id: payloadData['data']['id']));
-  //    }
-  //    else if(payloadData['data']['type'] == 'eventinvite'){
-  //      navigationHandler(EventDetailsConstructView(id: payloadData['data']['id']));
-  //    }
-  //    else if(payloadData['data']['type'] == 'reminder_qr'){
-  //      navigationHandler(ShowQr(qrUrl: payloadData['data']['id'],));
-  //    }
-  //   }
-  // }
-
-  
-
-  // Future<void> _showNotification(String title, String body,
-  //     {String payload}) async {
-  //   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-  //       'channel id', 'channel name', 'channel desc',
-  //       importance: Importance.Max, priority: Priority.High);
-  //   var iosPlatformChannelSpecifics = IOSNotificationDetails();
-  //   var platformChannelSpecifics = NotificationDetails(
-  //       androidPlatformChannelSpecifics, iosPlatformChannelSpecifics);
-  //   await flutterLocalNotificationsPlugin
-  //       .show(0, title, body, platformChannelSpecifics, payload: 'item x');
-  // }
 
   settingBottomSheet() {
     showModalBottomSheet<void>(
