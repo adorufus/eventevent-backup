@@ -1,11 +1,12 @@
 import 'dart:convert';
-import 'dart:io'; 
+import 'dart:io';
 
 import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/PostMedia.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
+import 'package:eventevent/Widgets/timeline/LovedOnYourFollowingDetails.dart';
 import 'package:eventevent/Widgets/timeline/TimelineDashboard.dart';
 import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -13,7 +14,7 @@ import 'package:eventevent/helper/PushNotification.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +25,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
-
 
 var scaffoldGlobalKey = GlobalKey<ScaffoldState>();
 FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -49,13 +49,16 @@ var initializationSettingsAndroid;
 var initializationSettingsIOS;
 var initializationSettings;
 
-Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async { return Future<void>.value(); }
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  return Future<void>.value();
+}
 
 class DashboardWidget extends StatefulWidget {
   final isRest;
   final selectedPage;
 
-  const DashboardWidget({Key key, this.isRest, this.selectedPage = 0}) : super(key: key);
+  const DashboardWidget({Key key, this.isRest, this.selectedPage = 0})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _DashboardWidgetState();
@@ -96,13 +99,13 @@ class _DashboardWidgetState extends State<DashboardWidget>
         initializationSettingsAndroid, initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: (String payload) async {
-          if(payload != null){
-            debugPrint('notification Payload: ' + payload);
-          }
-          selectNotificationSubject.add(payload);
-        });
+      if (payload != null) {
+        debugPrint('notification Payload: ' + payload);
+      }
+      selectNotificationSubject.add(payload);
+    });
 
-        _firebaseMessaging.configure(
+    _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
           print('on message $message');
           print(message['notification']);
@@ -121,20 +124,20 @@ class _DashboardWidgetState extends State<DashboardWidget>
           print('on launch $message');
         });
 
-        // didRecieveLocalNotificationSubject.stream.listen((RecievedNotification recievedNotification) async {
+    // didRecieveLocalNotificationSubject.stream.listen((RecievedNotification recievedNotification) async {
 
-        // });
+    // });
 
-        selectNotificationSubject.stream.listen((String payload) async {
-          await onSelectNotification(payload);
-        });
+    selectNotificationSubject.stream.listen((String payload) async {
+      await onSelectNotification(payload);
+    });
 
-    if(widget.selectedPage == null){
+    if (widget.selectedPage == null) {
       _selectedPage = 0;
     }
 
     _selectedPage = widget.selectedPage;
-    
+
     // registerNotification();
     // configureNotification();
 
@@ -152,7 +155,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
     print('push token: $pushToken');
 
-    
     getPopup().then((response) {
       var extractedData = json.decode(response.body);
 
@@ -205,55 +207,119 @@ class _DashboardWidgetState extends State<DashboardWidget>
     });
   }
 
-  navigationHandler(Widget page){
+  navigationHandler(Widget page) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => page));
   }
 
   Future onSelectNotification(String payload) async {
-
     if (payload != null) {
       Map payloadData = json.decode(payload);
       print(payloadData.toString());
 
-     if(payloadData['data']['type'] == 'reminder_event'){
-       navigationHandler(EventDetailsConstructView(id: payloadData['data']['id'],));
-     }
-     else if(payloadData['data']['type'] == 'relationship'){
-       navigationHandler(ProfileWidget(userId: payloadData['data']['id'], initialIndex: 0,));
-     }
-     else if(payloadData['data']['type'] == 'live_stream_cancel'){
-       navigationHandler(EventDetailsConstructView(id: payloadData['data']['id'],));
-     }
-     else if(payloadData['data']['type'] == 'photo_comment'){
-       navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
-     }
-     else if(payloadData['data']['type'] == 'combined_relationship_impression'){
-       navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
-     }
-     else if(payloadData['data']['type'] == 'relationship_comment'){
-       navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
-     }
-     else if(payloadData['data']['type'] == 'relationship_impression'){
-       navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
-     }
-     else if(payloadData['data']['type'] == 'event_comment'){
-       navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
-     }
-     else if(payloadData['data']['type'] == 'eventgoingstatus'){
-       navigationHandler(EventDetailsConstructView(id: payloadData['data']['id'],));
-     }
-     else if(payloadData['data']['type'] == 'photo_impression'){
-       navigationHandler(UserMediaDetail(postID: payloadData['data']['id'], autoFocus: true,));
-     }
-     else if(payloadData['data']['type'] == 'event'){
-       navigationHandler(EventDetailsConstructView(id: payloadData['data']['id']));
-     }
-     else if(payloadData['data']['type'] == 'eventinvite'){
-       navigationHandler(EventDetailsConstructView(id: payloadData['data']['id']));
-     }
-     else if(payloadData['data']['type'] == 'reminder_qr'){
-       navigationHandler(ShowQr(qrUrl: payloadData['data']['id'],));
-     }
+      if (payloadData['data']['type'] == 'reminder_event') {
+        navigationHandler(EventDetailsConstructView(
+          id: payloadData['data']['id'],
+        ));
+      } else if (payloadData['data']['type'] == 'relationship') {
+        navigationHandler(ProfileWidget(
+          userId: payloadData['data']['id'],
+          initialIndex: 0,
+        ));
+      } else if (payloadData['data']['type'] == 'live_stream_cancel') {
+        navigationHandler(EventDetailsConstructView(
+          id: payloadData['data']['id'],
+        ));
+      } else if (payloadData['data']['type'] == 'photo_comment') {
+        navigationHandler(UserMediaDetail(
+          postID: payloadData['data']['id'],
+          autoFocus: true,
+        ));
+      } else if (payloadData['data']['type'] ==
+          'combined_relationship_impression') {
+        navigationHandler(LovedOnYourFollowingDetails(
+          mediaType: 'combined_relationship',
+          postID: payloadData['data']['id'],
+          autoFocus: true,
+        ));
+      } else if (payloadData['data']['type'] == 'relationship_comment') {
+        navigationHandler(LovedOnYourFollowingDetails(
+          mediaType: 'relationship',
+          postID: payloadData['data']['id'],
+          autoFocus: true,
+        ));
+      } else if (payloadData['data']['type'] == 'relationship_impression') {
+        navigationHandler(LovedOnYourFollowingDetails(
+          mediaType: 'relationship',
+          postID: payloadData['data']['id'],
+          autoFocus: true,
+        ));
+      } else if (payloadData['data']['type'] == 'thought_impression') {
+        navigationHandler(LovedOnYourFollowingDetails(
+          mediaType: 'thought',
+          postID: payloadData['data']['id'],
+          autoFocus: true,
+        ));
+      } else if (payloadData['data']['type'] == 'eventcheckin_impression') {
+        navigationHandler(LovedOnYourFollowingDetails(
+          mediaType: 'eventcheckin',
+          postID: payloadData['data']['id'],
+          autoFocus: true,
+        ));
+      } else if (payloadData['data']['type'] == 'eventcheckin_comment') {
+        navigationHandler(LovedOnYourFollowingDetails(
+          mediaType: 'eventcheckin',
+          postID: payloadData['data']['id'],
+          autoFocus: true,
+        ));
+      } else if (payloadData['data']['type'] == 'checkin_impression') {
+        navigationHandler(LovedOnYourFollowingDetails(
+          mediaType: 'checkin',
+          postID: payloadData['data']['id'],
+          autoFocus: true,
+        ));
+      } else if (payloadData['data']['type'] == 'checkin_comment') {
+        navigationHandler(LovedOnYourFollowingDetails(
+          mediaType: 'checkin',
+          postID: payloadData['data']['id'],
+          autoFocus: true,
+        ));
+      } else if (payloadData['data']['type'] == 'love_comment') {
+        navigationHandler(LovedOnYourFollowingDetails(
+          mediaType: 'love',
+          postID: payloadData['data']['id'],
+          autoFocus: true,
+        ));
+      } else if (payloadData['data']['type'] == 'love_impression') {
+        navigationHandler(LovedOnYourFollowingDetails(
+          mediaType: 'love',
+          postID: payloadData['data']['id'],
+          autoFocus: true,
+        ));
+      } else if (payloadData['data']['type'] == 'event_comment') {
+        navigationHandler(UserMediaDetail(
+          postID: payloadData['data']['id'],
+          autoFocus: true,
+        ));
+      } else if (payloadData['data']['type'] == 'eventgoingstatus') {
+        navigationHandler(EventDetailsConstructView(
+          id: payloadData['data']['id'],
+        ));
+      } else if (payloadData['data']['type'] == 'photo_impression') {
+        navigationHandler(UserMediaDetail(
+          postID: payloadData['data']['id'],
+          autoFocus: true,
+        ));
+      } else if (payloadData['data']['type'] == 'event') {
+        navigationHandler(
+            EventDetailsConstructView(id: payloadData['data']['id']));
+      } else if (payloadData['data']['type'] == 'eventinvite') {
+        navigationHandler(
+            EventDetailsConstructView(id: payloadData['data']['id']));
+      } else if (payloadData['data']['type'] == 'reminder_qr') {
+        navigationHandler(ShowQr(
+          qrUrl: payloadData['data']['id'],
+        ));
+      }
     }
   }
 
@@ -429,13 +495,16 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 50),
                                       child: SizedBox(
-                                          height: ScreenUtil.instance.setWidth(5),
-                                          width: ScreenUtil.instance.setWidth(50),
+                                          height:
+                                              ScreenUtil.instance.setWidth(5),
+                                          width:
+                                              ScreenUtil.instance.setWidth(50),
                                           child: Image.asset(
                                             'assets/icons/icon_line.png',
                                             fit: BoxFit.fill,
                                           ))),
-                                  SizedBox(height: ScreenUtil.instance.setWidth(35)),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(35)),
                                   GestureDetector(
                                     onTap: () {
                                       Navigator.push(
@@ -460,22 +529,29 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                               Text(
                                                 'New Event',
                                                 style: TextStyle(
-                                                    fontSize: ScreenUtil.instance.setSp(16),
+                                                    fontSize: ScreenUtil
+                                                        .instance
+                                                        .setSp(16),
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              SizedBox(height: ScreenUtil.instance.setWidth(5)),
+                                              SizedBox(
+                                                  height: ScreenUtil.instance
+                                                      .setWidth(5)),
                                               Text(
                                                 'Create & sell your own event',
                                                 style: TextStyle(
-                                                  fontSize: ScreenUtil.instance.setSp(10),
+                                                  fontSize: ScreenUtil.instance
+                                                      .setSp(10),
                                                 ),
                                               )
                                             ],
                                           ),
                                           Container(
-                                            height: ScreenUtil.instance.setWidth(44),
-                                            width: ScreenUtil.instance.setWidth(50),
+                                            height: ScreenUtil.instance
+                                                .setWidth(44),
+                                            width: ScreenUtil.instance
+                                                .setWidth(50),
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                     image: AssetImage(
@@ -494,9 +570,11 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: ScreenUtil.instance.setWidth(19)),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(19)),
                                   Divider(),
-                                  SizedBox(height: ScreenUtil.instance.setWidth(16)),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(16)),
                                   GestureDetector(
                                     onTap: () {
                                       // imageCaputreCamera();
@@ -517,21 +595,29 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                               Text(
                                                 'Post Media',
                                                 style: TextStyle(
-                                                    fontSize: ScreenUtil.instance.setSp(16),
+                                                    fontSize: ScreenUtil
+                                                        .instance
+                                                        .setSp(16),
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              SizedBox(height: ScreenUtil.instance.setWidth(4)),
+                                              SizedBox(
+                                                  height: ScreenUtil.instance
+                                                      .setWidth(4)),
                                               Text(
                                                   'Share your excitement to the others ',
                                                   style: TextStyle(
-                                                    fontSize: ScreenUtil.instance.setSp(10),
+                                                    fontSize: ScreenUtil
+                                                        .instance
+                                                        .setSp(10),
                                                   ))
                                             ],
                                           ),
                                           Container(
-                                            height: ScreenUtil.instance.setWidth(44),
-                                            width: ScreenUtil.instance.setWidth(50),
+                                            height: ScreenUtil.instance
+                                                .setWidth(44),
+                                            width: ScreenUtil.instance
+                                                .setWidth(50),
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                     image: AssetImage(
@@ -566,10 +652,13 @@ class _DashboardWidgetState extends State<DashboardWidget>
                   BottomNavigationBarItem(
                       title: Text(
                         'Discover',
-                        style: TextStyle(color: Colors.black26, fontSize: ScreenUtil.instance.setSp(10)),
+                        style: TextStyle(
+                            color: Colors.black26,
+                            fontSize: ScreenUtil.instance.setSp(10)),
                       ),
                       icon: Image.asset("assets/icons/aset_icon/eventevent.png",
-                          height: ScreenUtil.instance.setWidth(25), width: ScreenUtil.instance.setWidth(25)),
+                          height: ScreenUtil.instance.setWidth(25),
+                          width: ScreenUtil.instance.setWidth(25)),
                       activeIcon: Image.asset(
                         "assets/icons/aset_icon/eventevent.png",
                         height: ScreenUtil.instance.setWidth(25),
@@ -579,7 +668,9 @@ class _DashboardWidgetState extends State<DashboardWidget>
                   BottomNavigationBarItem(
                       title: Text(
                         'Media',
-                        style: TextStyle(color: Colors.black26, fontSize: ScreenUtil.instance.setSp(10)),
+                        style: TextStyle(
+                            color: Colors.black26,
+                            fontSize: ScreenUtil.instance.setSp(10)),
                       ),
                       icon: Image.asset(
                         "assets/icons/aset_icon/timeline.png",
@@ -595,10 +686,13 @@ class _DashboardWidgetState extends State<DashboardWidget>
                   BottomNavigationBarItem(
                       title: Text(
                         'Post',
-                        style: TextStyle(color: Colors.black26, fontSize: ScreenUtil.instance.setSp(10)),
+                        style: TextStyle(
+                            color: Colors.black26,
+                            fontSize: ScreenUtil.instance.setSp(10)),
                       ),
                       icon: Image.asset("assets/icons/aset_icon/post.png",
-                          height: ScreenUtil.instance.setWidth(25), width: ScreenUtil.instance.setWidth(25)),
+                          height: ScreenUtil.instance.setWidth(25),
+                          width: ScreenUtil.instance.setWidth(25)),
                       activeIcon: Image.asset(
                         "assets/icons/aset_icon/post.png",
                         height: ScreenUtil.instance.setWidth(25),
@@ -608,10 +702,13 @@ class _DashboardWidgetState extends State<DashboardWidget>
                   BottomNavigationBarItem(
                     title: Text(
                       'Notification',
-                      style: TextStyle(color: Colors.black26, fontSize: ScreenUtil.instance.setSp(10)),
+                      style: TextStyle(
+                          color: Colors.black26,
+                          fontSize: ScreenUtil.instance.setSp(10)),
                     ),
                     icon: Image.asset("assets/icons/aset_icon/notif.png",
-                        height: ScreenUtil.instance.setWidth(25), width: ScreenUtil.instance.setWidth(25)),
+                        height: ScreenUtil.instance.setWidth(25),
+                        width: ScreenUtil.instance.setWidth(25)),
                     activeIcon: Image.asset(
                       "assets/icons/aset_icon/notif.png",
                       height: ScreenUtil.instance.setWidth(25),
@@ -622,10 +719,13 @@ class _DashboardWidgetState extends State<DashboardWidget>
                   BottomNavigationBarItem(
                     title: Text(
                       'Profile',
-                      style: TextStyle(color: Colors.black26, fontSize: ScreenUtil.instance.setSp(10)),
+                      style: TextStyle(
+                          color: Colors.black26,
+                          fontSize: ScreenUtil.instance.setSp(10)),
                     ),
                     icon: Image.asset("assets/icons/aset_icon/profile.png",
-                        height: ScreenUtil.instance.setWidth(25), width: ScreenUtil.instance.setWidth(25)),
+                        height: ScreenUtil.instance.setWidth(25),
+                        width: ScreenUtil.instance.setWidth(25)),
                     activeIcon: Image.asset(
                       "assets/icons/aset_icon/profile.png",
                       height: ScreenUtil.instance.setWidth(25),
