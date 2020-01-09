@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:eventevent/Widgets/Home/See%20All/MyTicketItem.dart';
+import 'package:eventevent/Widgets/Home/SeeAll/MyTicketItem.dart';
 import 'package:eventevent/Widgets/ProfileWidget/UseTicket.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';

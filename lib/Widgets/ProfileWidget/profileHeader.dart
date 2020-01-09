@@ -6,6 +6,7 @@ import 'package:eventevent/Widgets/ProfileWidget/SettingsWidget.dart';
 import 'package:eventevent/Widgets/ProfileWidget/editProfile.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/listviewWithAppBar.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
+import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eventevent/helper/FollowUnfollow.dart';
@@ -819,366 +820,391 @@ class _ProfileHeaderState extends State<ProfileHeader>
           itemBuilder: (context, i) {
             List _loveCount = userTimelineList[i]['impression']['data'];
             List commentList = userTimelineList[i]['comment']['data'];
+            
+            Map impressionData;
 
-            return Container(
-                margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
-                decoration: BoxDecoration(
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 2,
-                          spreadRadius: 1.5)
-                    ],
-                    color: Color(0xFFF9F9F9),
-                    borderRadius: BorderRadius.circular(15)),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15)),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 13, vertical: 13),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: <Widget>[
-                                    CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                          userTimelineList[i]['photo']),
-                                    ),
-                                    SizedBox(
-                                      width: ScreenUtil.instance.setWidth(8),
-                                    ),
-                                    Container(
-                                        width:
-                                            ScreenUtil.instance.setWidth(200.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Row(
-                                              children: <Widget>[
-                                                userTimelineList[i]
-                                                            ['isVerified'] ==
-                                                        '1'
-                                                    ? Container(
-                                                        height: ScreenUtil
-                                                            .instance
-                                                            .setWidth(18),
-                                                        width: ScreenUtil
-                                                            .instance
-                                                            .setWidth(18),
-                                                        child: Image.asset(
-                                                            'assets/icons/icon_apps/verif.png'))
-                                                    : Container(),
-                                                SizedBox(
-                                                    width: ScreenUtil.instance
-                                                        .setWidth(5)),
-                                                Text(
-                                                    userTimelineList[i]
-                                                        ['fullName'],
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: ScreenUtil.instance
-                                                  .setWidth(5),
-                                            ),
-                                            Row(
-                                              children: <Widget>[
-                                                userTimelineList[i]['type'] ==
-                                                        'love'
-                                                    ? Image.asset(
-                                                        'assets/icons/icon_apps/love.png',
-                                                        scale: 3,
-                                                      )
-                                                    : Container(),
-                                                SizedBox(
-                                                    width: ScreenUtil.instance
-                                                        .setWidth(5)),
-                                                Text(
-                                                    userTimelineList[i]
-                                                                ['type'] ==
-                                                            'love'
-                                                        ? 'Loved'
-                                                        : userTimelineList[i]
-                                                                    ['type'] ==
-                                                                'relationship'
-                                                            ? userTimelineList[
-                                                                i]['name']
-                                                            : 'Post a ' +
-                                                                userTimelineList[
-                                                                    i]['type'],
-                                                    style: TextStyle(
-                                                        color: Colors.grey,
-                                                        fontSize: ScreenUtil
-                                                            .instance
-                                                            .setSp(10))),
-                                              ],
-                                            ),
-                                          ],
-                                        )),
-                                  ]),
-                              Column(
-                                children: <Widget>[
-                                  Text(
-                                    'a minute ago',
-                                    style: TextStyle(
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(10)),
-                                  ),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(4)),
-                                ],
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                              height: userTimelineList[i]['type'] == 'video' ||
-                                      userTimelineList[i]['type'] == 'photo' ||
-                                      userTimelineList[i]['type'] == 'event' ||
-                                      userTimelineList[i]['type'] ==
-                                          'eventgoing'
-                                  ? 15
-                                  : 0),
-                          userTimelineList[i]['type'] == 'video' ||
-                                  userTimelineList[i]['type'] == 'photo' ||
-                                  userTimelineList[i]['type'] == 'event' ||
-                                  userTimelineList[i]['type'] == 'eventgoing'
-                              ? Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                            userTimelineList[i]['type'] ==
-                                                    'video'
-                                                ? userTimelineList[i]['picture']
-                                                : userTimelineList[i]
-                                                    ['pictureFull'],
-                                          ),
-                                          fit: BoxFit.cover)),
-                                  height: ScreenUtil.instance.setWidth(400),
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Center(
-                                    child:
-                                        userTimelineList[i]['type'] == 'video'
-                                            ? Icon(
-                                                Icons.play_circle_filled,
-                                                size: 80,
-                                                color: Colors.white,
-                                              )
-                                            : Container(),
-                                  ),
-                                )
-                              : Container(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                  margin: EdgeInsets.only(top: 15),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(userTimelineList[i]['fullName'],
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: ScreenUtil.instance
-                                                    .setSp(15))),
-                                        SizedBox(
-                                            height: ScreenUtil.instance
-                                                .setWidth(8)),
-                                        Row(
-                                          children: <Widget>[
-                                            userTimelineList[i]['type'] ==
-                                                    'love'
-                                                ? Image.asset(
-                                                    'assets/icons/aset_icon/like.png',
-                                                    scale: 3,
-                                                  )
-                                                : Container(),
-                                            SizedBox(
-                                                width: userTimelineList[i]
-                                                            ['type'] ==
-                                                        'love'
-                                                    ? 8
-                                                    : 0),
-                                            userTimelineList[i]['type'] ==
-                                                    'love'
-                                                ? Text('Loved')
-                                                : Container(),
-                                            SizedBox(
-                                                width: userTimelineList[i]
-                                                            ['type'] ==
-                                                        'love'
-                                                    ? 8
-                                                    : 0),
-                                            userTimelineList[i]['type'] ==
-                                                        'video' ||
-                                                    userTimelineList[i]
-                                                            ['type'] ==
-                                                        'photo'
-                                                ? Container(
-                                                    width: ScreenUtil.instance
-                                                        .setWidth(360 - 70.0),
-                                                    child: Text(
-                                                        userTimelineList[i]
-                                                                    ['name'] ==
-                                                                null
-                                                            ? ''
-                                                            : userTimelineList[
-                                                                i]['name'],
-                                                        maxLines: 10,
-                                                        style: TextStyle(
-                                                            color: Color(
-                                                                0xFF8A8A8B))),
-                                                  )
-                                                : Text(
-                                                    userTimelineList[i]
-                                                                ['name'] ==
-                                                            null
-                                                        ? ''
-                                                        : userTimelineList[i]
-                                                            ['name'],
-                                                    maxLines: 10,
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF8A8A8B))),
-                                          ],
-                                        )
-                                      ])),
-                              // Container(
-                              //   child: Image.asset('assets/btn_ticket/free-limited.png', scale: 7,),)
-                              userTimelineList[i]['type'] == 'event'
-                                  ? Container(
-                                      child: Image.asset(
-                                        'assets/btn_ticket/free-limited.png',
-                                        scale: 7,
-                                      ),
-                                    )
-                                  : userTimelineList[i]['type'] == 'eventgoing'
-                                      ? Container(
-                                          child: Image.asset(
-                                            'assets/btn_ticket/going.png',
-                                            scale: 7,
-                                          ),
-                                        )
-                                      : Container()
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 13, top: 13, bottom: 13),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              height: ScreenUtil.instance.setWidth(30),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15),
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        blurRadius: 2,
-                                        spreadRadius: 1.5)
-                                  ]),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Image.asset(
-                                      'assets/icons/icon_apps/love.png',
-                                      color: _loveCount.length > 0
-                                          ? Colors.red
-                                          : Colors.grey,
-                                      scale: 3.5,
-                                    ),
-                                    SizedBox(
-                                        width: ScreenUtil.instance.setWidth(5)),
-                                    Text(_loveCount.length.toString(),
-                                        style: TextStyle(
-                                            color: Color(
-                                                0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
-                                  ]),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              height: ScreenUtil.instance.setWidth(30),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15),
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        blurRadius: 2,
-                                        spreadRadius: 1.5)
-                                  ]),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Image.asset(
-                                      'assets/icons/icon_apps/comment.png',
-                                      scale: 3.5,
-                                    ),
-                                    SizedBox(
-                                        width: ScreenUtil.instance.setWidth(5)),
-                                    Text(commentList.length.toString(),
-                                        style: TextStyle(
-                                            color: Color(
-                                                0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
-                                  ]),
-                            ),
-                            SizedBox(
-                                width: _loveCount.length > 99 ? 100 : 150),
-                            GestureDetector(
-                              onTap: () async {
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                if (userTimelineList[i]['userID'] ==
-                                    prefs.getString('Last User ID')) {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return showMoreOption(
-                                            userTimelineList[i]['id'],
-                                            userTimelineList[i]['type']);
-                                      });
-                                } else {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return showMoreOptionReport(
-                                            userTimelineList[i]['id'],
-                                            userTimelineList[i]['type']);
-                                      });
-                                }
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                height: ScreenUtil.instance.setWidth(30),
-                                child: Icon(Icons.more_horiz),
-                              ),
-                            )
-                          ]),
-                    )
-                  ],
-                ));
+            for(var impres in userTimelineList[i]['impression']['data']){
+              impressionData = impres;
+              print(impressionData.toString());
+            }
+
+            return TimelineItem(
+              id: userTimelineList[i]['id'],
+              commentTotalRows: userTimelineList[i]['comment']['totalRows'],
+              fullName: userTimelineList[i]['fullName'],
+              description: userTimelineList[i]['description'],
+              isVerified: userTimelineList[i]['isVerified'],
+              name: userTimelineList[i]['name'],
+              photo: userTimelineList[i]['photo'],
+              dateTime: DateTime.parse(userTimelineList[i]['createdDate']),
+              photoFull: userTimelineList[i]['photoFull'],
+              picture: userTimelineList[i]['picture'],
+              pictureFull: userTimelineList[i]['pictureFull'],
+              type: userTimelineList[i]['type'],
+              userId: userTimelineList[i]['userID'],
+              impressionId: userTimelineList[i]['impression']['data'].length == 0 ? '' : impressionData['id'],
+              loveCount: userTimelineList[i]['impression']['data'].length,
+              isLoved: userTimelineList[i]['impression']['data'].length == 0 ? false : impressionData.containsValue(widget.currentUserId) == true ? true : false,
+            ); 
+            // Container(
+            //     margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+            //     decoration: BoxDecoration(
+            //         boxShadow: <BoxShadow>[
+            //           BoxShadow(
+            //               color: Colors.black.withOpacity(0.1),
+            //               blurRadius: 2,
+            //               spreadRadius: 1.5)
+            //         ],
+            //         color: Color(0xFFF9F9F9),
+            //         borderRadius: BorderRadius.circular(15)),
+            //     child: Column(
+            //       children: <Widget>[
+            //         Container(
+            //           decoration: BoxDecoration(
+            //               color: Colors.white,
+            //               borderRadius: BorderRadius.circular(15)),
+            //           padding:
+            //               EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+            //           child: Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: <Widget>[
+            //               Row(
+            //                 crossAxisAlignment: CrossAxisAlignment.end,
+            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                 children: <Widget>[
+            //                   Row(
+            //                       crossAxisAlignment: CrossAxisAlignment.center,
+            //                       mainAxisAlignment:
+            //                           MainAxisAlignment.spaceBetween,
+            //                       mainAxisSize: MainAxisSize.max,
+            //                       children: <Widget>[
+            //                         CircleAvatar(
+            //                           backgroundImage: NetworkImage(
+            //                               userTimelineList[i]['photo']),
+            //                         ),
+            //                         SizedBox(
+            //                           width: ScreenUtil.instance.setWidth(8),
+            //                         ),
+            //                         Container(
+            //                             width:
+            //                                 ScreenUtil.instance.setWidth(200.0),
+            //                             child: Column(
+            //                               crossAxisAlignment:
+            //                                   CrossAxisAlignment.start,
+            //                               children: <Widget>[
+            //                                 Row(
+            //                                   children: <Widget>[
+            //                                     userTimelineList[i]
+            //                                                 ['isVerified'] ==
+            //                                             '1'
+            //                                         ? Container(
+            //                                             height: ScreenUtil
+            //                                                 .instance
+            //                                                 .setWidth(18),
+            //                                             width: ScreenUtil
+            //                                                 .instance
+            //                                                 .setWidth(18),
+            //                                             child: Image.asset(
+            //                                                 'assets/icons/icon_apps/verif.png'))
+            //                                         : Container(),
+            //                                     SizedBox(
+            //                                         width: ScreenUtil.instance
+            //                                             .setWidth(5)),
+            //                                     Text(
+            //                                         userTimelineList[i]
+            //                                             ['fullName'],
+            //                                         style: TextStyle(
+            //                                             fontWeight:
+            //                                                 FontWeight.bold)),
+            //                                   ],
+            //                                 ),
+            //                                 SizedBox(
+            //                                   height: ScreenUtil.instance
+            //                                       .setWidth(5),
+            //                                 ),
+            //                                 Row(
+            //                                   children: <Widget>[
+            //                                     userTimelineList[i]['type'] ==
+            //                                             'love'
+            //                                         ? Image.asset(
+            //                                             'assets/icons/icon_apps/love.png',
+            //                                             scale: 3,
+            //                                           )
+            //                                         : Container(),
+            //                                     SizedBox(
+            //                                         width: ScreenUtil.instance
+            //                                             .setWidth(5)),
+            //                                     Text(
+            //                                         userTimelineList[i]
+            //                                                     ['type'] ==
+            //                                                 'love'
+            //                                             ? 'Loved'
+            //                                             : userTimelineList[i]
+            //                                                         ['type'] ==
+            //                                                     'relationship'
+            //                                                 ? userTimelineList[
+            //                                                     i]['name']
+            //                                                 : 'Post a ' +
+            //                                                     userTimelineList[
+            //                                                         i]['type'],
+            //                                         style: TextStyle(
+            //                                             color: Colors.grey,
+            //                                             fontSize: ScreenUtil
+            //                                                 .instance
+            //                                                 .setSp(10))),
+            //                                   ],
+            //                                 ),
+            //                               ],
+            //                             )),
+            //                       ]),
+            //                   Column(
+            //                     children: <Widget>[
+            //                       Text(
+            //                         'a minute ago',
+            //                         style: TextStyle(
+            //                             fontSize:
+            //                                 ScreenUtil.instance.setSp(10)),
+            //                       ),
+            //                       SizedBox(
+            //                           height: ScreenUtil.instance.setWidth(4)),
+            //                     ],
+            //                   )
+            //                 ],
+            //               ),
+            //               SizedBox(
+            //                   height: userTimelineList[i]['type'] == 'video' ||
+            //                           userTimelineList[i]['type'] == 'photo' ||
+            //                           userTimelineList[i]['type'] == 'event' ||
+            //                           userTimelineList[i]['type'] ==
+            //                               'eventgoing'
+            //                       ? 15
+            //                       : 0),
+            //               userTimelineList[i]['type'] == 'video' ||
+            //                       userTimelineList[i]['type'] == 'photo' ||
+            //                       userTimelineList[i]['type'] == 'event' ||
+            //                       userTimelineList[i]['type'] == 'eventgoing'
+            //                   ? Container(
+            //                       decoration: BoxDecoration(
+            //                           borderRadius: BorderRadius.circular(15),
+            //                           image: DecorationImage(
+            //                               image: NetworkImage(
+            //                                 userTimelineList[i]['type'] ==
+            //                                         'video'
+            //                                     ? userTimelineList[i]['picture']
+            //                                     : userTimelineList[i]
+            //                                         ['pictureFull'],
+            //                               ),
+            //                               fit: BoxFit.cover)),
+            //                       height: ScreenUtil.instance.setWidth(400),
+            //                       width: MediaQuery.of(context).size.width,
+            //                       child: Center(
+            //                         child:
+            //                             userTimelineList[i]['type'] == 'video'
+            //                                 ? Icon(
+            //                                     Icons.play_circle_filled,
+            //                                     size: 80,
+            //                                     color: Colors.white,
+            //                                   )
+            //                                 : Container(),
+            //                       ),
+            //                     )
+            //                   : Container(),
+            //               Row(
+            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                 crossAxisAlignment: CrossAxisAlignment.center,
+            //                 children: <Widget>[
+            //                   Container(
+            //                       margin: EdgeInsets.only(top: 15),
+            //                       child: Column(
+            //                           crossAxisAlignment:
+            //                               CrossAxisAlignment.start,
+            //                           children: <Widget>[
+            //                             Text(userTimelineList[i]['fullName'],
+            //                                 style: TextStyle(
+            //                                     fontWeight: FontWeight.bold,
+            //                                     fontSize: ScreenUtil.instance
+            //                                         .setSp(15))),
+            //                             SizedBox(
+            //                                 height: ScreenUtil.instance
+            //                                     .setWidth(8)),
+            //                             Row(
+            //                               children: <Widget>[
+            //                                 userTimelineList[i]['type'] ==
+            //                                         'love'
+            //                                     ? Image.asset(
+            //                                         'assets/icons/aset_icon/like.png',
+            //                                         scale: 3,
+            //                                       )
+            //                                     : Container(),
+            //                                 SizedBox(
+            //                                     width: userTimelineList[i]
+            //                                                 ['type'] ==
+            //                                             'love'
+            //                                         ? 8
+            //                                         : 0),
+            //                                 userTimelineList[i]['type'] ==
+            //                                         'love'
+            //                                     ? Text('Loved')
+            //                                     : Container(),
+            //                                 SizedBox(
+            //                                     width: userTimelineList[i]
+            //                                                 ['type'] ==
+            //                                             'love'
+            //                                         ? 8
+            //                                         : 0),
+            //                                 userTimelineList[i]['type'] ==
+            //                                             'video' ||
+            //                                         userTimelineList[i]
+            //                                                 ['type'] ==
+            //                                             'photo'
+            //                                     ? Container(
+            //                                         width: ScreenUtil.instance
+            //                                             .setWidth(360 - 70.0),
+            //                                         child: Text(
+            //                                             userTimelineList[i]
+            //                                                         ['name'] ==
+            //                                                     null
+            //                                                 ? ''
+            //                                                 : userTimelineList[
+            //                                                     i]['name'],
+            //                                             maxLines: 10,
+            //                                             style: TextStyle(
+            //                                                 color: Color(
+            //                                                     0xFF8A8A8B))),
+            //                                       )
+            //                                     : Text(
+            //                                         userTimelineList[i]
+            //                                                     ['name'] ==
+            //                                                 null
+            //                                             ? ''
+            //                                             : userTimelineList[i]
+            //                                                 ['name'],
+            //                                         maxLines: 10,
+            //                                         style: TextStyle(
+            //                                             color:
+            //                                                 Color(0xFF8A8A8B))),
+            //                               ],
+            //                             )
+            //                           ])),
+            //                   // Container(
+            //                   //   child: Image.asset('assets/btn_ticket/free-limited.png', scale: 7,),)
+            //                   userTimelineList[i]['type'] == 'event'
+            //                       ? Container(
+            //                           child: Image.asset(
+            //                             'assets/btn_ticket/free-limited.png',
+            //                             scale: 7,
+            //                           ),
+            //                         )
+            //                       : userTimelineList[i]['type'] == 'eventgoing'
+            //                           ? Container(
+            //                               child: Image.asset(
+            //                                 'assets/btn_ticket/going.png',
+            //                                 scale: 7,
+            //                               ),
+            //                             )
+            //                           : Container()
+            //                 ],
+            //               )
+            //             ],
+            //           ),
+            //         ),
+            //         Container(
+            //           margin: EdgeInsets.only(left: 13, top: 13, bottom: 13),
+            //           child: Row(
+            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //               children: <Widget>[
+            //                 Container(
+            //                   padding: EdgeInsets.symmetric(horizontal: 10),
+            //                   height: ScreenUtil.instance.setWidth(30),
+            //                   decoration: BoxDecoration(
+            //                       color: Colors.white,
+            //                       borderRadius: BorderRadius.circular(15),
+            //                       boxShadow: <BoxShadow>[
+            //                         BoxShadow(
+            //                             color: Colors.black.withOpacity(0.1),
+            //                             blurRadius: 2,
+            //                             spreadRadius: 1.5)
+            //                       ]),
+            //                   child: Row(
+            //                       mainAxisAlignment: MainAxisAlignment.center,
+            //                       children: <Widget>[
+            //                         Image.asset(
+            //                           'assets/icons/icon_apps/love.png',
+            //                           color: _loveCount.length > 0
+            //                               ? Colors.red
+            //                               : Colors.grey,
+            //                           scale: 3.5,
+            //                         ),
+            //                         SizedBox(
+            //                             width: ScreenUtil.instance.setWidth(5)),
+            //                         Text(_loveCount.length.toString(),
+            //                             style: TextStyle(
+            //                                 color: Color(
+            //                                     0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
+            //                       ]),
+            //                 ),
+            //                 Container(
+            //                   padding: EdgeInsets.symmetric(horizontal: 10),
+            //                   height: ScreenUtil.instance.setWidth(30),
+            //                   decoration: BoxDecoration(
+            //                       color: Colors.white,
+            //                       borderRadius: BorderRadius.circular(15),
+            //                       boxShadow: <BoxShadow>[
+            //                         BoxShadow(
+            //                             color: Colors.black.withOpacity(0.1),
+            //                             blurRadius: 2,
+            //                             spreadRadius: 1.5)
+            //                       ]),
+            //                   child: Row(
+            //                       mainAxisAlignment: MainAxisAlignment.center,
+            //                       children: <Widget>[
+            //                         Image.asset(
+            //                           'assets/icons/icon_apps/comment.png',
+            //                           scale: 3.5,
+            //                         ),
+            //                         SizedBox(
+            //                             width: ScreenUtil.instance.setWidth(5)),
+            //                         Text(commentList.length.toString(),
+            //                             style: TextStyle(
+            //                                 color: Color(
+            //                                     0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
+            //                       ]),
+            //                 ),
+            //                 SizedBox(
+            //                     width: _loveCount.length > 99 ? 100 : 150),
+            //                 GestureDetector(
+            //                   onTap: () async {
+            //                     SharedPreferences prefs =
+            //                         await SharedPreferences.getInstance();
+            //                     if (userTimelineList[i]['userID'] ==
+            //                         prefs.getString('Last User ID')) {
+            //                       showModalBottomSheet(
+            //                           context: context,
+            //                           builder: (BuildContext context) {
+            //                             return showMoreOption(
+            //                                 userTimelineList[i]['id'],
+            //                                 userTimelineList[i]['type']);
+            //                           });
+            //                     } else {
+            //                       showModalBottomSheet(
+            //                           context: context,
+            //                           builder: (BuildContext context) {
+            //                             return showMoreOptionReport(
+            //                                 userTimelineList[i]['id'],
+            //                                 userTimelineList[i]['type']);
+            //                           });
+            //                     }
+            //                   },
+            //                   child: Container(
+            //                     padding: EdgeInsets.symmetric(horizontal: 10),
+            //                     height: ScreenUtil.instance.setWidth(30),
+            //                     child: Icon(Icons.more_horiz),
+            //                   ),
+            //                 )
+            //               ]),
+            //         )
+            //       ],
+            //     ));
           },
         ));
   }

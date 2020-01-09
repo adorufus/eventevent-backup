@@ -19,6 +19,7 @@ class TimelineItem extends StatefulWidget {
   final String fullName;
   final String type;
   final String name;
+  final DateTime dateTime;
   final String photoFull;
   final String description;
   final String picture;
@@ -36,7 +37,7 @@ class TimelineItem extends StatefulWidget {
       this.isVerified,
       this.fullName,
       this.type,
-      this.name, this.photoFull, this.description, this.picture, this.pictureFull, this.userId, this.commentTotalRows, this.loveCount, this.isLoved, this.impressionId})
+      this.name, this.photoFull, this.description, this.picture, this.pictureFull, this.userId, this.commentTotalRows, this.loveCount, this.isLoved, this.impressionId, this.dateTime})
       : super(key: key);
 
   @override
@@ -48,6 +49,7 @@ class _TimelineItemState extends State<TimelineItem>
   List timelineList = [];
   bool isLoading = false;
   bool _isLoved;
+  String dateUploaded = 'now';
 
   int _loveCount = 0;
 
@@ -57,6 +59,17 @@ class _TimelineItemState extends State<TimelineItem>
   @override
   void initState() {
     setState(() {
+      print(widget.dateTime.toString());
+      var diff = DateTime.now().difference(widget.dateTime);
+      if(diff.inSeconds < 59){
+        dateUploaded = 'Now';
+      }
+      else if(diff.inDays > 0 && diff.inDays < 2){
+        dateUploaded = 'a day ago';
+      }
+      else{
+        dateUploaded = widget.dateTime.day.toString() + ' - ' + widget.dateTime.month.toString() + ' - ' + widget.dateTime.year.toString();
+      }
       _isLoved = widget.isLoved;
       print('isLoved: ' + _isLoved.toString());
       _loveCount = widget.loveCount;
@@ -155,7 +168,7 @@ class _TimelineItemState extends State<TimelineItem>
                       Column(
                         children: <Widget>[
                           Text(
-                            'a minute ago',
+                            dateUploaded,
                             style: TextStyle(
                                 fontSize: ScreenUtil.instance.setSp(10)),
                           ),

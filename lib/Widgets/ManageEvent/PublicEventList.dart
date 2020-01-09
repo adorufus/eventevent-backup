@@ -4,7 +4,8 @@ import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -33,7 +34,8 @@ class PublicEventListState extends State<PublicEventList> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -70,7 +72,9 @@ class PublicEventListState extends State<PublicEventList> {
 
                       if (publicData[i]['ticket_type']['type'] == 'paid' ||
                           publicData[i]['ticket_type']['type'] ==
-                              'paid_seating' || publicData[i]['ticket_type']['type'] == 'paid_live_stream') {
+                              'paid_seating' ||
+                          publicData[i]['ticket_type']['type'] ==
+                              'paid_live_stream') {
                         if (publicData[i]['ticket']['availableTicketStatus'] ==
                             '1') {
                           itemColor = Color(0xFF34B323);
@@ -107,6 +111,10 @@ class PublicEventListState extends State<PublicEventList> {
                         itemPriceText = publicData[i]['ticket_type']['name'];
                       } else if (publicData[i]['ticket_type']['type'] ==
                           'free') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText = publicData[i]['ticket_type']['name'];
+                      } else if (publicData[i]['ticket_type']['type'] ==
+                          'free_live_stream') {
                         itemColor = Color(0xFFFFAA00);
                         itemPriceText = publicData[i]['ticket_type']['name'];
                       } else if (publicData[i]['ticket_type']['type'] ==
@@ -253,14 +261,11 @@ class PublicEventListState extends State<PublicEventList> {
     );
   }
 
-  
-
   Future fetchMyEvent() async {
-    
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print(prefs.getString('Last User ID'));
     String uri = BaseApi().apiUrl +
-        '/user/${widget.type}?X-API-KEY=$API_KEY&page=1&userID=${widget.userId == prefs.getString('Last User ID') ? prefs.getString('Last User ID') : widget.userId }&isPrivate=0';
+        '/user/${widget.type}?X-API-KEY=$API_KEY&page=1&userID=${widget.userId == prefs.getString('Last User ID') ? prefs.getString('Last User ID') : widget.userId}&isPrivate=0';
 
     print(uri);
     final response = await http.get(

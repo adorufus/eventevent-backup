@@ -197,6 +197,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
             isVerified: timelineList[i]['isVerified'],
             name: timelineList[i]['name'],
             photo: timelineList[i]['photo'],
+            dateTime: DateTime.parse(timelineList[i]['createdDate']),
             photoFull: timelineList[i]['photoFull'],
             picture: timelineList[i]['picture'],
             pictureFull: timelineList[i]['pictureFull'],

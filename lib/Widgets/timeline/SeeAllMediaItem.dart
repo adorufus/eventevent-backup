@@ -414,21 +414,40 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MediaDetails(
-                                      userPicture: latestMedia[i]['creator']
-                                          ['photo'],
-                                      articleDetail: latestMedia[i]['content'],
-                                      imageCount: 'img' + i.toString(),
-                                      username: latestMedia[i]['creator']
-                                          ['username'],
-                                      imageUri: latestMedia[i]['banner'],
-                                      mediaTitle: latestMedia[i]['title'],
-                                      autoFocus: false,
-                                      mediaId: latestMedia[i]['id'],
-                                      videoUrl: latestMedia[i]['video'],
-                                      youtubeUrl: latestMedia[i]['youtube'],
-                                      isVideo: widget.isVideo,
-                                    )));
+                                builder: (context) => widget.isVideo == false
+                                    ? MediaDetails(
+                                        userPicture: latestMedia[i]['creator']
+                                            ['photo'],
+                                        articleDetail: latestMedia[i]
+                                            ['content'],
+                                        imageCount: 'img' + i.toString(),
+                                        username: latestMedia[i]['creator']
+                                            ['username'],
+                                        imageUri: latestMedia[i]['banner'],
+                                        mediaTitle: latestMedia[i]['title'],
+                                        autoFocus: false,
+                                        mediaId: latestMedia[i]['id'],
+                                        isVideo: false,
+                                      )
+                                    : MediaDetails(
+                                        isVideo: true,
+                                        videoUrl: latestMedia[i]['video'],
+                                        youtubeUrl: latestMedia[i]
+                                            ['youtube'],
+                                        userPicture: latestMedia[i]
+                                            ['creator']['photo'],
+                                        articleDetail: latestMedia[i]
+                                            ['content'],
+                                        imageCount: 'img' + i.toString(),
+                                        username: latestMedia[i]['creator']
+                                            ['username'],
+                                        imageUri: latestMedia[i]
+                                            ['thumbnail_timeline'],
+                                        mediaTitle: latestMedia[i]
+                                            ['title'],
+                                        autoFocus: false,
+                                        mediaId: latestMedia[i]['id'],
+                                      )));
                       },
                       child: new LatestMediaItem(
                         isVideo: widget.isVideo,
