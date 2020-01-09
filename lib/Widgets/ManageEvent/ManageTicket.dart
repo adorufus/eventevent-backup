@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/ManageEvent/AddNewTicket.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,7 +55,7 @@ class ManageTicketState extends State<ManageTicket> {
       body: ticketList == null
           ? Container(
               child: Center(
-                child: CircularProgressIndicator(),
+                child: CupertinoActivityIndicator(radius: 2),
               ),
             )
           : Container(

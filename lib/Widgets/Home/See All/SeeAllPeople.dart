@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/Home/PeopleItem.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/FollowUnfollow.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
@@ -179,7 +180,7 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
                   height: ScreenUtil.instance.setWidth(25),
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: CircularProgressIndicator(),
+                    child: CupertinoActivityIndicator(radius: 2),
                   ),
                 ),
               )
@@ -230,7 +231,7 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
                   height: ScreenUtil.instance.setWidth(25),
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: CircularProgressIndicator(),
+                    child: CupertinoActivityIndicator(radius: 2),
                   ),
                 ),
               )

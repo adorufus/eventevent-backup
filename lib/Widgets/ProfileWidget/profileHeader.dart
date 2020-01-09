@@ -741,7 +741,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                     ? Container(
                         padding: EdgeInsets.only(top: 80),
                         alignment: Alignment.topCenter,
-                        child: CircularProgressIndicator(),
+                        child: CupertinoActivityIndicator(radius: 2),
                       )
                     : timeline(),
                 widget.currentUserId == userId
@@ -798,7 +798,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
           if (mode == LoadStatus.idle) {
             body = Text("Load data");
           } else if (mode == LoadStatus.loading) {
-            body = CircularProgressIndicator();
+            body = CupertinoActivityIndicator(radius: 2);
           } else if (mode == LoadStatus.failed) {
             body = Text("Load Failed!");
           } else if (mode == LoadStatus.canLoading) {

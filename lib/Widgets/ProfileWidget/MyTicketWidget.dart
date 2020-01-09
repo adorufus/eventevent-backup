@@ -6,6 +6,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/cupertino.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -83,7 +84,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
     return ticketDetailData == null
         ? Container(
             padding: EdgeInsets.only(top: 80),
-            alignment: Alignment.topCenter, child: CircularProgressIndicator())
+            alignment: Alignment.topCenter, child: CupertinoActivityIndicator(radius: 2))
         : SmartRefresher(
             enablePullDown: false,
             enablePullUp: true,
@@ -93,7 +94,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
               if (mode == LoadStatus.idle) {
                 body = Text("Load data");
               } else if (mode == LoadStatus.loading) {
-                body = CircularProgressIndicator();
+                body = CupertinoActivityIndicator(radius: 2);
               } else if (mode == LoadStatus.failed) {
                 body = Text("Load Failed!");
               } else if (mode == LoadStatus.canLoading) {

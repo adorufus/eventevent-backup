@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/cupertino.dart';
 
 class LovedOnYourFollowingDetails extends StatefulWidget {
   final username;
@@ -43,7 +44,7 @@ class _LovedOnYourFollowingDetailsState extends State<LovedOnYourFollowingDetail
 
   @override
   Widget build(BuildContext context) {
-    return mediaDetails == null ? Container(child: Center(child: CircularProgressIndicator())) :  Scaffold(
+    return mediaDetails == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2))) :  Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(
@@ -162,7 +163,7 @@ class _LovedOnYourFollowingDetailsState extends State<LovedOnYourFollowingDetail
       ),
       body: ListView(
         children: <Widget>[
-          mediaDetails == null ? CircularProgressIndicator() : Container(
+          mediaDetails == null ? CupertinoActivityIndicator(radius: 2) : Container(
             margin: EdgeInsets.symmetric(horizontal: 13),
             child: Row(
               children: <Widget>[
@@ -214,7 +215,7 @@ class _LovedOnYourFollowingDetailsState extends State<LovedOnYourFollowingDetail
                   return Container();
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CupertinoActivityIndicator(radius: 2));
                 } 
                 if (snapshot.data == null) {
                   print('loading');

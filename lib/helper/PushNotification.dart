@@ -177,7 +177,7 @@ class PushNotificationState extends State<PushNotification> {
           child: notificationData == null
               ? Container(
                   child: Center(
-                    child: CircularProgressIndicator(),
+                    child: CupertinoActivityIndicator(radius: 2),
                   ),
                 )
               : SmartRefresher(
@@ -190,7 +190,7 @@ class PushNotificationState extends State<PushNotification> {
                     if (mode == LoadStatus.idle) {
                       body = Text("Load data");
                     } else if (mode == LoadStatus.loading) {
-                      body = CircularProgressIndicator();
+                      body = CupertinoActivityIndicator(radius: 2);
                     } else if (mode == LoadStatus.failed) {
                       body = Text("Load Failed!");
                     } else if (mode == LoadStatus.canLoading) {

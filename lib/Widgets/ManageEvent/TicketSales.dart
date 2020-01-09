@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/ManageEvent/Buyers.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,7 +62,7 @@ class TicketSalesState extends State<TicketSales> {
       body: ticketSalesData == null || ticketData == null
           ? Container(
               child: Center(
-                child: CircularProgressIndicator(),
+                child: CupertinoActivityIndicator(radius: 2),
               ),
             )
           : Container(

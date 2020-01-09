@@ -7,6 +7,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -217,7 +218,7 @@ class SearchState extends State<Search> {
       return isLoading == true
           ? Container(
               child: Center(
-                child: CircularProgressIndicator(),
+                child: CupertinoActivityIndicator(radius: 2),
               ),
             )
           : ListView.builder(
@@ -415,7 +416,7 @@ class SearchState extends State<Search> {
     return isLoading == true
         ? Container(
             child: Center(
-              child: CircularProgressIndicator(),
+              child: CupertinoActivityIndicator(radius: 2),
             ),
           )
         : ListView.builder(

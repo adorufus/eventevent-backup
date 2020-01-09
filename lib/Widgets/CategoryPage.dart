@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -119,7 +120,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       height: ScreenUtil.instance.setWidth(25),
                       child: FittedBox(
                         fit: BoxFit.fill,
-                        child: CircularProgressIndicator(),
+                        child: CupertinoActivityIndicator(radius: 2),
                       ),
                     ),
                   )
@@ -132,7 +133,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       if (mode == LoadStatus.idle) {
                         body = Text("Load data");
                       } else if (mode == LoadStatus.loading) {
-                        body = CircularProgressIndicator();
+                        body = CupertinoActivityIndicator(radius: 2);
                       } else if (mode == LoadStatus.failed) {
                         body = Text("Load Failed!");
                       } else if (mode == LoadStatus.canLoading) {

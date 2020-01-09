@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/Widgets/TransactionHistory.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
@@ -110,7 +111,7 @@ class _WaitingTransactionAlfamartState
       body: paymentData == null
           ? Container(
               child: Center(
-                child: CircularProgressIndicator(),
+                child: CupertinoActivityIndicator(radius: 2),
               ),
             )
           : ListView(

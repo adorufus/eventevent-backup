@@ -7,6 +7,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -120,7 +121,7 @@ class PaymentBcaState extends State<PaymentBCA> {
       ),
       body: paymentData == null
           ? Container(
-              child: Center(child: CircularProgressIndicator()),
+              child: Center(child: CupertinoActivityIndicator(radius: 2)),
             )
           : Container(
               height: MediaQuery.of(context).size.height,

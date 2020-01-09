@@ -478,7 +478,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                         context: context,
                         builder: (context) {
                           return Container(
-                            color: Color(0xFF737373),
+                            color: Colors.white,
                             child: Container(
                               padding: EdgeInsets.only(
                                   top: 13, left: 25, right: 25, bottom: 30),
@@ -648,6 +648,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                     }
                   });
                 },
+                backgroundColor: Colors.white,
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                       title: Text(

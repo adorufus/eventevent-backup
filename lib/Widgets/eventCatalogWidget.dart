@@ -225,7 +225,7 @@ class _EventCatalogState extends State<EventCatalog>
                           fit: BoxFit.cover,
                           placeholder: (context, url) => new Container(
                             child: Center(
-                              child: CircularProgressIndicator(),
+                              child: CupertinoActivityIndicator(radius: 2),
                             ),
                           )),
                     ),
@@ -441,7 +441,7 @@ class _EventCatalogState extends State<EventCatalog>
         if (mode == LoadStatus.idle) {
           body = Text("Load data");
         } else if (mode == LoadStatus.loading) {
-          body = CircularProgressIndicator();
+          body = CupertinoActivityIndicator(radius: 2);
         } else if (mode == LoadStatus.failed) {
           body = Text("Load Failed!");
         } else if (mode == LoadStatus.canLoading) {
@@ -617,7 +617,7 @@ class _EventCatalogState extends State<EventCatalog>
                   height: ScreenUtil.instance.setWidth(247),
                   child: mediaData == null
                       ? Container(
-                          child: Center(child: CircularProgressIndicator()),
+                          child: Center(child: CupertinoActivityIndicator(radius: 2)),
                         )
                       : ListView.builder(
                           itemCount: mediaData == null ? 0 : mediaData.length,
@@ -1015,7 +1015,7 @@ class _EventCatalogState extends State<EventCatalog>
     return Container(
         height: ScreenUtil.instance.setWidth(310),
         child: isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? Center(child: CupertinoActivityIndicator(radius: 2))
             : new ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: discoverData == null ? 0 : discoverData.length,
@@ -1111,7 +1111,7 @@ class _EventCatalogState extends State<EventCatalog>
     return Container(
       height: ScreenUtil.instance.setWidth(80),
       child: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CupertinoActivityIndicator(radius: 2))
           : ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount:
@@ -1301,7 +1301,7 @@ class _EventCatalogState extends State<EventCatalog>
     return Container(
       height: ScreenUtil.instance.setWidth(80),
       child: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: CupertinoActivityIndicator(radius: 2))
           : ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount:

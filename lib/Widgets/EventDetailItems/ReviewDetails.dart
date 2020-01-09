@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/cupertino.dart';
 
 class ReviewDetails extends StatefulWidget {
   final eventName;
@@ -174,7 +175,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                     case ConnectionState.waiting:
                       Container(
                         child: Center(
-                          child: CircularProgressIndicator(),
+                          child: CupertinoActivityIndicator(radius: 2),
                         ),
                       );
                       break;

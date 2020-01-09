@@ -7,6 +7,7 @@ import 'package:eventevent/Widgets/timeline/popularMediaItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/cupertino.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -232,7 +233,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                   height: ScreenUtil.instance.setWidth(25),
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: CircularProgressIndicator(),
+                    child: CupertinoActivityIndicator(radius: 2),
                   ),
                 ),
               )
@@ -245,7 +246,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                   if (mode == LoadStatus.idle) {
                     body = Text("Load data");
                   } else if (mode == LoadStatus.loading) {
-                    body = CircularProgressIndicator();
+                    body = CupertinoActivityIndicator(radius: 2);
                   } else if (mode == LoadStatus.failed) {
                     body = Text("Load Failed!");
                   } else if (mode == LoadStatus.canLoading) {
@@ -330,7 +331,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                   height: ScreenUtil.instance.setWidth(25),
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: CircularProgressIndicator(),
+                    child: CupertinoActivityIndicator(radius: 2),
                   ),
                 ),
               )
@@ -343,7 +344,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                   if (mode == LoadStatus.idle) {
                     body = Text("Load data");
                   } else if (mode == LoadStatus.loading) {
-                    body = CircularProgressIndicator();
+                    body = CupertinoActivityIndicator(radius: 2);
                   } else if (mode == LoadStatus.failed) {
                     body = Text("Load Failed!");
                   } else if (mode == LoadStatus.canLoading) {

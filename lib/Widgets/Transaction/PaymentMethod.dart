@@ -5,7 +5,7 @@ import 'package:eventevent/Widgets/Transaction/Xendit/vaList.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -100,7 +100,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                 ),
               ),
               paymentMethodList == null
-                  ? CircularProgressIndicator()
+                  ? CupertinoActivityIndicator(radius: 2)
                   : Container(
                       height: MediaQuery.of(context).size.height * 1.5,
                       width: MediaQuery.of(context).size.width,

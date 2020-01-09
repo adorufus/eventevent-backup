@@ -5,6 +5,7 @@ import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
@@ -212,7 +213,7 @@ class EditEventState extends State<EditEvent>{
                               builder: (BuildContext context) {
                                 return Container(
                                   child: Center(
-                                    child: CircularProgressIndicator(),
+                                    child: CupertinoActivityIndicator(radius: 2),
                                   ),
                                 );
                               }
@@ -253,7 +254,7 @@ class EditEventState extends State<EditEvent>{
             )
           ],
         ),
-        body: categoryList.length == null || isLoading == true ? Container(child: Center(child: CircularProgressIndicator())) :  Container(
+        body: categoryList.length == null || isLoading == true ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2))) :  Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: ListView(

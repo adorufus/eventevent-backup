@@ -341,7 +341,7 @@ class WithdrawBankState extends State<WithdrawBank> {
     return balanceData == null
         ? Container(
             child: Center(
-              child: CircularProgressIndicator(),
+              child: CupertinoActivityIndicator(radius: 2),
             ),
           )
         : ListView(
@@ -642,7 +642,7 @@ class WithdrawBankState extends State<WithdrawBank> {
     Color amountColor;
 
     return historyList == null
-        ? Container(child: Center(child: CircularProgressIndicator()))
+        ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2)))
         : ListView.builder(
             shrinkWrap: true,
             itemCount: historyList == null ? 0 : historyList.length,

@@ -95,7 +95,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           Positioned(
               child: isLoading == true
                   ? Container(
-                      child: Center(child: CircularProgressIndicator()),
+                      child: Center(child: CupertinoActivityIndicator(radius: 2)),
                       color: Colors.black.withOpacity(0.5),
                     )
                   : Container())

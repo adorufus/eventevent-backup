@@ -5,6 +5,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
@@ -309,7 +310,7 @@ class _MediaDetailsState extends State<MediaDetails> {
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 13),
-            child: mediaDetails['media_content'] == null ? Container(child: Center(child: CircularProgressIndicator(),),) : Html(
+            child: mediaDetails['media_content'] == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2),),) : Html(
               data: mediaDetails['media_content'][0]['content_text'],
               onLinkTap: (url) {
                 print('loading..');

@@ -69,7 +69,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     return userData == null
         ? Container(
             color: Colors.white,
-            child: Center(child: CircularProgressIndicator()),
+            child: Center(child: CupertinoActivityIndicator(radius: 2)),
           )
         : ProfileHeader(
             username: username,

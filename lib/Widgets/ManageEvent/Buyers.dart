@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/Invoice.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
@@ -108,7 +109,7 @@ class BuyersState extends State<Buyers> {
           )
         ],
       ),
-      body: buyerList.length == 0 || buyerListExport.length == 0 ? Container(child: Center(child: CircularProgressIndicator(),),) : ListView.builder(
+      body: buyerList.length == 0 || buyerListExport.length == 0 ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2),),) : ListView.builder(
         padding: EdgeInsets.only(bottom: 15),
         itemCount: buyerList == null ? 0 : buyerList.length,
         itemBuilder: (BuildContext context, i) {

@@ -6,6 +6,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -84,7 +85,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                     if (mode == LoadStatus.idle) {
                       body = Text("Load data");
                     } else if (mode == LoadStatus.loading) {
-                      body = CircularProgressIndicator();
+                      body = CupertinoActivityIndicator(radius: 2);
                     } else if (mode == LoadStatus.failed) {
                       body = Text("Load Failed!");
                     } else if (mode == LoadStatus.canLoading) {

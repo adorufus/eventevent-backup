@@ -5,6 +5,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CategoryEventWidget extends StatefulWidget {
@@ -40,7 +41,7 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
     )..init(context);
     mappedCategoryData = categoryEventData?.map((categoryData) {
           return categoryData == null
-              ? CircularProgressIndicator()
+              ? CupertinoActivityIndicator(radius: 2)
               : Builder(
                   builder: (BuildContext context) {
                     return GestureDetector(
@@ -101,7 +102,7 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
                 height: ScreenUtil.instance.setWidth(25),
                 child: FittedBox(
                   fit: BoxFit.fill,
-                  child: CircularProgressIndicator(),
+                  child: CupertinoActivityIndicator(radius: 2),
                 ),
               ),
             )

@@ -5,6 +5,7 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:googleapis/plusdomains/v1.dart';
 import 'package:http/http.dart' as http;
@@ -62,7 +63,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
 
     print(widget.postID);
 
-    return mediaDetails == null ? Container(child: Center(child: CircularProgressIndicator(),),) :  Scaffold(
+    return mediaDetails == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2),),) :  Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(
@@ -272,7 +273,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
                   return Container();
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CupertinoActivityIndicator(radius: 2));
                 } 
                 if (snapshot.data == null) {
                   print('loading');

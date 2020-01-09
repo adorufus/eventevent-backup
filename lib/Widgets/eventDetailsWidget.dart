@@ -310,7 +310,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     return detailData == null
         ? Container(
             color: Colors.white,
-            child: Center(child: CircularProgressIndicator()))
+            child: Center(child: CupertinoActivityIndicator(radius: 2)))
         : Scaffold(
             appBar: PreferredSize(
               preferredSize: Size(null, 100),
@@ -352,7 +352,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                       },
                       child: detailData['createdByID'] == null
                           ? Container(
-                              child: Center(child: CircularProgressIndicator()),
+                              child: Center(child: CupertinoActivityIndicator(radius: 2)),
                             )
                           : detailData['createdByID'] != currentUserId
                               ? Container()
@@ -784,7 +784,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               children: <Widget>[
                 detailData == null
                     ? Container(
-                        child: Center(child: CircularProgressIndicator()))
+                        child: Center(child: CupertinoActivityIndicator(radius: 2)))
                     // :
                     : Container(
                         color: Colors.white,
@@ -2408,7 +2408,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                 Positioned(
                     child: isLoading == true
                         ? Container(
-                            child: Center(child: CircularProgressIndicator()),
+                            child: Center(child: CupertinoActivityIndicator(radius: 2)),
                             color: Colors.black.withOpacity(0.5),
                           )
                         : Container())

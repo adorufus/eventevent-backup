@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -179,7 +180,7 @@ class _EventDetailCommentState extends State<EventDetailComment> {
                   return Container();
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Container(child: Center(child: CircularProgressIndicator()));
+                  return Container(child: Center(child: CupertinoActivityIndicator(radius: 2)));
                 }
                 if (snapshot.data == null) {
                   print('loading');
