@@ -155,7 +155,7 @@ class _CollectionPageState extends State<CollectionPage> {
           if (mode == LoadStatus.idle) {
             body = Container();
           } else if (mode == LoadStatus.loading) {
-            body = CupertinoActivityIndicator(radius: 2);
+            body = CupertinoActivityIndicator(radius: 20);
           } else if (mode == LoadStatus.failed) {
             body = Text("Load Failed!");
           } else if (mode == LoadStatus.canLoading) {
@@ -286,7 +286,7 @@ class _CollectionPageState extends State<CollectionPage> {
                         height: ScreenUtil.instance.setWidth(25),
                         child: FittedBox(
                           fit: BoxFit.fill,
-                          child: CupertinoActivityIndicator(radius: 2),
+                          child: CupertinoActivityIndicator(radius: 20),
                         ),
                       ),
                     )

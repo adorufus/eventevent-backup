@@ -101,7 +101,7 @@ class PostEvent7State extends State<PostEvent7> {
           ],
         ),
         body: categoryEventData == null
-            ? Center(child: CupertinoActivityIndicator(radius: 2))
+            ? Center(child: CupertinoActivityIndicator(radius: 20))
             : Container(
                 color: Colors.white,
                 padding: EdgeInsets.only(left: 15, top: 15),

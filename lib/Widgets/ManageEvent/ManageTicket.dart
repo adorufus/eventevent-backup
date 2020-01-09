@@ -55,7 +55,7 @@ class ManageTicketState extends State<ManageTicket> {
       body: ticketList == null
           ? Container(
               child: Center(
-                child: CupertinoActivityIndicator(radius: 2),
+                child: CupertinoActivityIndicator(radius: 20),
               ),
             )
           : Container(

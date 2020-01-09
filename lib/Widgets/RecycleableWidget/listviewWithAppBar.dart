@@ -74,7 +74,7 @@ class _ListViewWithAppBar extends State<ListViewWithAppBar> {
       body: profileData == null
           ? Container(
               child: Center(
-                child: CupertinoActivityIndicator(radius: 2),
+                child: CupertinoActivityIndicator(radius: 20),
               ),
             )
           : isEmpty == true

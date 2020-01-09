@@ -85,7 +85,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
         body: transactionList == null
             ? Container(
                 child: Center(
-                  child: CupertinoActivityIndicator(radius: 2),
+                  child: CupertinoActivityIndicator(radius: 20),
                 ),
               )
             : Container(

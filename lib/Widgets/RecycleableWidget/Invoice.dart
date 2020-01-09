@@ -78,7 +78,7 @@ class InvoiceState extends State<Invoice> {
           style: TextStyle(color: eventajaGreenTeal),
         ),
       ),
-      body: transactionDetail == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2)),) : Container(
+      body: transactionDetail == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20)),) : Container(
         width: MediaQuery.of(context).size.width,
         child: ListView(
           children: <Widget>[

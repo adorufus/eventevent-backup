@@ -109,7 +109,7 @@ class BuyersState extends State<Buyers> {
           )
         ],
       ),
-      body: buyerList.length == 0 || buyerListExport.length == 0 ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2),),) : ListView.builder(
+      body: buyerList.length == 0 || buyerListExport.length == 0 ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20),),) : ListView.builder(
         padding: EdgeInsets.only(bottom: 15),
         itemCount: buyerList == null ? 0 : buyerList.length,
         itemBuilder: (BuildContext context, i) {

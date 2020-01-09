@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
+import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -117,7 +119,8 @@ class _SeeAllItemState extends State<SeeAllItem> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -126,7 +129,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
       allowFontScaling: true,
     )..init(context);
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
         appBar: PreferredSize(
           preferredSize: Size(null, 100),
           child: Container(
@@ -159,7 +162,9 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     SizedBox(width: MediaQuery.of(context).size.width / 2.8),
                     Text(
                       'All Event',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: ScreenUtil.instance.setSp(14)),
                     )
                   ],
                 ),
@@ -188,7 +193,8 @@ class _SeeAllItemState extends State<SeeAllItem> {
                           SizedBox(width: ScreenUtil.instance.setWidth(8)),
                           Text('Popular',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.5))),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil.instance.setSp(12.5))),
                         ],
                       ),
                     ),
@@ -204,7 +210,8 @@ class _SeeAllItemState extends State<SeeAllItem> {
                           SizedBox(width: ScreenUtil.instance.setWidth(8)),
                           Text('Discover',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.5))),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil.instance.setSp(12.5))),
                         ],
                       ),
                     )
@@ -234,7 +241,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                   height: ScreenUtil.instance.setWidth(25),
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: CupertinoActivityIndicator(radius: 2),
+                    child: CupertinoActivityIndicator(radius: 20),
                   ),
                 ),
               )
@@ -247,7 +254,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                   if (mode == LoadStatus.idle) {
                     body = Text("Load data");
                   } else if (mode == LoadStatus.loading) {
-                    body = CupertinoActivityIndicator(radius: 2);
+                    body = CupertinoActivityIndicator(radius: 20);
                   } else if (mode == LoadStatus.failed) {
                     body = Text("Load Failed!");
                   } else if (mode == LoadStatus.canLoading) {
@@ -256,7 +263,9 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     body = Container();
                   }
 
-                  return Container(height: ScreenUtil.instance.setWidth(35), child: Center(child: body));
+                  return Container(
+                      height: ScreenUtil.instance.setWidth(35),
+                      child: Center(child: body));
                 }),
                 controller: refreshController,
                 onRefresh: () {
@@ -363,16 +372,30 @@ class _SeeAllItemState extends State<SeeAllItem> {
                         }
                       }
                     }
-                    return new LatestEventItem(
-                        image: popularEventList[i]['picture_timeline'],
-                        title: popularEventList[i]['name'],
-                        location: popularEventList[i]['address'],
-                        itemColor: itemColor,
-                        itemPrice: itemPriceText,
-                        type: popularEventList[i]['ticket_type']['type'],
-                        date: DateTime.parse(popularEventList[i]['dateStart']),
-                        isAvailable: popularEventList[i]['ticket']
-                            ['availableTicketStatus']);
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    EventDetailsConstructView(
+                                        id: popularEventList[i]['id'],
+                                        name: popularEventList[i]['name'],
+                                        image: popularEventList[i]
+                                            ['photoFull'])));
+                      },
+                      child: new LatestEventItem(
+                          image: popularEventList[i]['picture_timeline'],
+                          title: popularEventList[i]['name'],
+                          location: popularEventList[i]['address'],
+                          itemColor: itemColor,
+                          itemPrice: itemPriceText,
+                          type: popularEventList[i]['ticket_type']['type'],
+                          date:
+                              DateTime.parse(popularEventList[i]['dateStart']),
+                          isAvailable: popularEventList[i]['ticket']
+                              ['availableTicketStatus']),
+                    );
                   },
                 )));
   }
@@ -386,7 +409,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                   height: ScreenUtil.instance.setWidth(25),
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: CupertinoActivityIndicator(radius: 2),
+                    child: CupertinoActivityIndicator(radius: 20),
                   ),
                 ),
               )
@@ -399,7 +422,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                   if (mode == LoadStatus.idle) {
                     body = Text("Load data");
                   } else if (mode == LoadStatus.loading) {
-                    body = CupertinoActivityIndicator(radius: 2);
+                    body = CupertinoActivityIndicator(radius: 20);
                   } else if (mode == LoadStatus.failed) {
                     body = Text("Load Failed!");
                   } else if (mode == LoadStatus.canLoading) {
@@ -408,7 +431,9 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     body = Container();
                   }
 
-                  return Container(height: ScreenUtil.instance.setWidth(35), child: Center(child: body));
+                  return Container(
+                      height: ScreenUtil.instance.setWidth(35),
+                      child: Center(child: body));
                 }),
                 controller: refreshController,
                 onRefresh: () {
@@ -435,105 +460,120 @@ class _SeeAllItemState extends State<SeeAllItem> {
                 },
                 onLoading: _onDiscoverLoading,
                 child: ListView.builder(
-                shrinkWrap: true,
-                itemCount:
-                    discoverEventList == null ? 0 : discoverEventList.length,
-                itemBuilder: (BuildContext context, i) {
-                  Color itemColor;
-                  String itemPriceText;
+                  shrinkWrap: true,
+                  itemCount:
+                      discoverEventList == null ? 0 : discoverEventList.length,
+                  itemBuilder: (BuildContext context, i) {
+                    Color itemColor;
+                    String itemPriceText;
 
-                  if (discoverEventList[i]['ticket_type']['type'] == 'paid' ||
-                      discoverEventList[i]['ticket_type']['type'] ==
-                          'paid_seating') {
-                    if (discoverEventList[i]['ticket']
-                            ['availableTicketStatus'] ==
-                        '1') {
-                      itemColor = Color(0xFF34B323);
-                      itemPriceText =
-                          discoverEventList[i]['ticket']['cheapestTicket'];
-                    } else {
-                      if (discoverEventList[i]['ticket']['salesStatus'] ==
-                          'comingSoon') {
-                        itemColor = Color(0xFF34B323).withOpacity(0.3);
-                        itemPriceText = 'COMING SOON';
-                      } else if (discoverEventList[i]['ticket']
-                              ['salesStatus'] ==
-                          'endSales') {
-                        itemColor = Color(0xFF8E1E2D);
-                        if (discoverEventList[i]['status'] == 'ended') {
-                          itemPriceText = 'EVENT HAS ENDED';
-                        }
-                        itemPriceText = 'SALES ENDED';
+                    if (discoverEventList[i]['ticket_type']['type'] == 'paid' ||
+                        discoverEventList[i]['ticket_type']['type'] ==
+                            'paid_seating') {
+                      if (discoverEventList[i]['ticket']
+                              ['availableTicketStatus'] ==
+                          '1') {
+                        itemColor = Color(0xFF34B323);
+                        itemPriceText =
+                            discoverEventList[i]['ticket']['cheapestTicket'];
                       } else {
-                        itemColor = Color(0xFF8E1E2D);
-                        itemPriceText = 'SOLD OUT';
+                        if (discoverEventList[i]['ticket']['salesStatus'] ==
+                            'comingSoon') {
+                          itemColor = Color(0xFF34B323).withOpacity(0.3);
+                          itemPriceText = 'COMING SOON';
+                        } else if (discoverEventList[i]['ticket']
+                                ['salesStatus'] ==
+                            'endSales') {
+                          itemColor = Color(0xFF8E1E2D);
+                          if (discoverEventList[i]['status'] == 'ended') {
+                            itemPriceText = 'EVENT HAS ENDED';
+                          }
+                          itemPriceText = 'SALES ENDED';
+                        } else {
+                          itemColor = Color(0xFF8E1E2D);
+                          itemPriceText = 'SOLD OUT';
+                        }
                       }
-                    }
-                  } else if (discoverEventList[i]['ticket_type']['type'] ==
-                      'no_ticket') {
-                    itemColor = Color(0xFF652D90);
-                    itemPriceText = 'NO TICKET';
-                  } else if (discoverEventList[i]['ticket_type']['type'] ==
-                      'on_the_spot') {
-                    itemColor = Color(0xFF652D90);
-                    itemPriceText = discoverEventList[i]['ticket_type']['name'];
-                  } else if (discoverEventList[i]['ticket_type']['type'] ==
-                      'free') {
-                    itemColor = Color(0xFFFFAA00);
-                    itemPriceText = discoverEventList[i]['ticket_type']['name'];
-                  } else if (discoverEventList[i]['ticket_type']['type'] ==
-                      'free') {
-                    itemColor = Color(0xFFFFAA00);
-                    itemPriceText = discoverEventList[i]['ticket_type']['name'];
-                  } else if (discoverEventList[i]['ticket_type']['type'] ==
-                      'free_limited') {
-                    if (discoverEventList[i]['ticket']
-                            ['availableTicketStatus'] ==
-                        '1') {
+                    } else if (discoverEventList[i]['ticket_type']['type'] ==
+                        'no_ticket') {
+                      itemColor = Color(0xFF652D90);
+                      itemPriceText = 'NO TICKET';
+                    } else if (discoverEventList[i]['ticket_type']['type'] ==
+                        'on_the_spot') {
+                      itemColor = Color(0xFF652D90);
+                      itemPriceText =
+                          discoverEventList[i]['ticket_type']['name'];
+                    } else if (discoverEventList[i]['ticket_type']['type'] ==
+                        'free') {
                       itemColor = Color(0xFFFFAA00);
                       itemPriceText =
                           discoverEventList[i]['ticket_type']['name'];
-                    } else {
-                      if (discoverEventList[i]['ticket']['salesStatus'] ==
-                          'comingSoon') {
-                        itemColor = Color(0xFFFFAA00).withOpacity(0.3);
-                        itemPriceText = 'COMING SOON';
-                      } else if (discoverEventList[i]['ticket']
-                              ['salesStatus'] ==
-                          'endSales') {
-                        itemColor = Color(0xFF8E1E2D);
-                        if (discoverEventList[i]['status'] == 'ended') {
-                          itemPriceText = 'EVENT HAS ENDED';
-                        }
-                        itemPriceText = 'SALES ENDED';
+                    } else if (discoverEventList[i]['ticket_type']['type'] ==
+                        'free') {
+                      itemColor = Color(0xFFFFAA00);
+                      itemPriceText =
+                          discoverEventList[i]['ticket_type']['name'];
+                    } else if (discoverEventList[i]['ticket_type']['type'] ==
+                        'free_limited') {
+                      if (discoverEventList[i]['ticket']
+                              ['availableTicketStatus'] ==
+                          '1') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText =
+                            discoverEventList[i]['ticket_type']['name'];
                       } else {
-                        itemColor = Color(0xFF8E1E2D);
-                        itemPriceText = 'SOLD OUT';
+                        if (discoverEventList[i]['ticket']['salesStatus'] ==
+                            'comingSoon') {
+                          itemColor = Color(0xFFFFAA00).withOpacity(0.3);
+                          itemPriceText = 'COMING SOON';
+                        } else if (discoverEventList[i]['ticket']
+                                ['salesStatus'] ==
+                            'endSales') {
+                          itemColor = Color(0xFF8E1E2D);
+                          if (discoverEventList[i]['status'] == 'ended') {
+                            itemPriceText = 'EVENT HAS ENDED';
+                          }
+                          itemPriceText = 'SALES ENDED';
+                        } else {
+                          itemColor = Color(0xFF8E1E2D);
+                          itemPriceText = 'SOLD OUT';
+                        }
                       }
                     }
-                  }
 
-                  return new LatestEventItem(
-                      image: discoverEventList[i]['picture_timeline'],
-                      title: discoverEventList[i]['name'],
-                      location: discoverEventList[i]['address'],
-                      itemColor: itemColor,
-                      itemPrice: itemPriceText,
-                      type: discoverEventList[i]['ticket_type']['type'],
-                      date: DateTime.parse(discoverEventList[i]['dateStart']),
-                      isAvailable: discoverEventList[i]['ticket']
-                          ['availableTicketStatus']);
-                },
-              )));
+                    return GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          EventDetailsConstructView(
+                                              id: discoverEventList[i]['id'],
+                                              name: discoverEventList[i]['name'],
+                                              image: discoverEventList[i]['photoFull'])));
+                      },
+                      child: new LatestEventItem(
+                          image: discoverEventList[i]['picture_timeline'],
+                          title: discoverEventList[i]['name'],
+                          location: discoverEventList[i]['address'],
+                          itemColor: itemColor,
+                          itemPrice: itemPriceText,
+                          type: discoverEventList[i]['ticket_type']['type'],
+                          date:
+                              DateTime.parse(discoverEventList[i]['dateStart']),
+                          isAvailable: discoverEventList[i]['ticket']
+                              ['availableTicketStatus']),
+                    );
+                  },
+                )));
   }
 
   Future<http.Response> popularEventData({int newPage}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int currentPage = 1;
-    
 
-    setState((){
-      if(newPage != null){
+    setState(() {
+      if (newPage != null) {
         currentPage += newPage;
       }
 
@@ -554,8 +594,8 @@ class _SeeAllItemState extends State<SeeAllItem> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int currentPage = 1;
 
-    setState((){
-      if(newPage != null || newPage != 0){
+    setState(() {
+      if (newPage != null || newPage != 0) {
         currentPage += newPage;
       }
     });

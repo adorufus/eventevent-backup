@@ -118,7 +118,7 @@ class _TransactionFormState extends State<TransactionForm> {
     )..init(context);
     return formData == null
         ? Container(
-            child: Center(child: CupertinoActivityIndicator(radius: 2)),
+            child: Center(child: CupertinoActivityIndicator(radius: 20)),
           )
         : Scaffold(
             bottomNavigationBar: GestureDetector(

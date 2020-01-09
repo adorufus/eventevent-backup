@@ -310,7 +310,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     return detailData == null
         ? Container(
             color: Colors.white,
-            child: Center(child: CupertinoActivityIndicator(radius: 2)))
+            child: Center(child: CupertinoActivityIndicator(radius: 20)))
         : Scaffold(
             appBar: PreferredSize(
               preferredSize: Size(null, 100),
@@ -352,7 +352,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                       },
                       child: detailData['createdByID'] == null
                           ? Container(
-                              child: Center(child: CupertinoActivityIndicator(radius: 2)),
+                              child: Center(child: CupertinoActivityIndicator(radius: 20)),
                             )
                           : detailData['createdByID'] != currentUserId
                               ? Container()
@@ -480,7 +480,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               onTap: () {
                 if (ticketStat['salesStatus'] == null ||
                     ticketStat['salesStatus'] == 'null') {
-                  if (detailData['ticket_type']['type'] == 'free') {
+                  if (detailData['ticket_type']['type'] == 'free' || detailData['ticket_type']['type'] == 'no_ticket') {
                     print('show modal');
                     showModalBottomSheet(
                       context: context,
@@ -662,25 +662,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                       },
                     );
                   }
-                } else if (ticketType['type'] == 'no_ticket') {
-                  print('no ticket');
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return new CupertinoAlertDialog(
-                          title: new Text("Dialog Title"),
-                          content: new Text("This is my content"),
-                          actions: <Widget>[
-                            CupertinoDialogAction(
-                              isDefaultAction: true,
-                              child: Text("Yes"),
-                            ),
-                            CupertinoDialogAction(
-                              child: Text("No"),
-                            )
-                          ],
-                        );
-                      });
                 } else {
                   if (ticketStat['salesStatus'] == 'endSales' ||
                       ticketStat['availableTicketStatus'] == '0') {
@@ -784,7 +765,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               children: <Widget>[
                 detailData == null
                     ? Container(
-                        child: Center(child: CupertinoActivityIndicator(radius: 2)))
+                        child: Center(child: CupertinoActivityIndicator(radius: 20)))
                     // :
                     : Container(
                         color: Colors.white,
@@ -1046,7 +1027,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     if (detailData[
                                                                 'ticket_type']
                                                             ['type'] ==
-                                                        'free') {
+                                                        'free' || detailData[
+                                                                'ticket_type']
+                                                            ['type'] ==
+                                                        'no_ticket') {
                                                       print('show modal');
                                                       if (detailData[
                                                               'isGoing'] ==
@@ -1268,33 +1252,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           },
                                                         );
                                                       }
-                                                    } else if (ticketType[
-                                                            'type'] ==
-                                                        'no_ticket') {
-                                                      print('no ticket');
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return new CupertinoAlertDialog(
-                                                              title: new Text(
-                                                                  "Dialog Title"),
-                                                              content: new Text(
-                                                                  "This is my content"),
-                                                              actions: <Widget>[
-                                                                CupertinoDialogAction(
-                                                                  isDefaultAction:
-                                                                      true,
-                                                                  child: Text(
-                                                                      "Yes"),
-                                                                ),
-                                                                CupertinoDialogAction(
-                                                                  child: Text(
-                                                                      "No"),
-                                                                )
-                                                              ],
-                                                            );
-                                                          });
-                                                    }
+                                                    } 
                                                   } else {
                                                     if (ticketStat[
                                                                 'salesStatus'] ==
@@ -2408,7 +2366,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                 Positioned(
                     child: isLoading == true
                         ? Container(
-                            child: Center(child: CupertinoActivityIndicator(radius: 2)),
+                            child: Center(child: CupertinoActivityIndicator(radius: 20)),
                             color: Colors.black.withOpacity(0.5),
                           )
                         : Container())

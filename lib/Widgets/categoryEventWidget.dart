@@ -41,7 +41,7 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
     )..init(context);
     mappedCategoryData = categoryEventData?.map((categoryData) {
           return categoryData == null
-              ? CupertinoActivityIndicator(radius: 2)
+              ? CupertinoActivityIndicator(radius: 20)
               : Builder(
                   builder: (BuildContext context) {
                     return GestureDetector(
@@ -102,7 +102,7 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
                 height: ScreenUtil.instance.setWidth(25),
                 child: FittedBox(
                   fit: BoxFit.fill,
-                  child: CupertinoActivityIndicator(radius: 2),
+                  child: CupertinoActivityIndicator(radius: 20),
                 ),
               ),
             )

@@ -63,7 +63,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
 
     print(widget.postID);
 
-    return mediaDetails == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2),),) :  Scaffold(
+    return mediaDetails == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20),),) :  Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(
@@ -273,7 +273,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
                   return Container();
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CupertinoActivityIndicator(radius: 2));
+                  return Center(child: CupertinoActivityIndicator(radius: 20));
                 } 
                 if (snapshot.data == null) {
                   print('loading');

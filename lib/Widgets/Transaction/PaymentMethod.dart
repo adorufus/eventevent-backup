@@ -100,7 +100,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                 ),
               ),
               paymentMethodList == null
-                  ? CupertinoActivityIndicator(radius: 2)
+                  ? CupertinoActivityIndicator(radius: 20)
                   : Container(
                       height: MediaQuery.of(context).size.height * 1.5,
                       width: MediaQuery.of(context).size.width,
@@ -144,7 +144,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                   Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TicketReview()));
                                 }
                             },
-                            child: Padding(
+                            child: Container(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,6 +167,13 @@ class PaymentMethodState extends State<PaymentMethod> {
                                         EdgeInsets.symmetric(horizontal: 10),
                                     decoration: BoxDecoration(
                                         color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 1.5,
+                                            spreadRadius: 2,
+                                            color: Color(0xff8a8a8b).withOpacity(.5)
+                                          )
+                                        ],
                                         borderRadius:
                                             BorderRadius.circular(15)),
                                     child: Row(

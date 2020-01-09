@@ -204,7 +204,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                             Text(
                                 ticketListData[i]['availableTicketStatus'] ==
                                         '0'
-                                    ? 'loading'
+                                    ? 'Sold Out'
                                     : 'Available',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,

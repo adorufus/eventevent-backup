@@ -217,11 +217,11 @@ class TimelineDashboardState extends State<TimelineDashboard>
     )..init(context);
     mappedDataBanner = bannerData?.map((bannerData) {
           return bannerData == null
-              ? Center(child: CupertinoActivityIndicator(radius: 2))
+              ? Center(child: CupertinoActivityIndicator(radius: 20))
               : Builder(
                   builder: (BuildContext context) {
                     return bannerData == null
-                        ? Center(child: CupertinoActivityIndicator(radius: 2))
+                        ? Center(child: CupertinoActivityIndicator(radius: 20))
                         : GestureDetector(
                             onTap: () {
                               Navigator.push(
@@ -264,7 +264,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
       child: mediaData == null
           ? Container(
               child: Center(
-                child: CupertinoActivityIndicator(radius: 2),
+                child: CupertinoActivityIndicator(radius: 20),
               ),
             )
           : Scaffold(
@@ -365,7 +365,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                               child: isLoading == true
                                   ? Container(
                                       child: Center(
-                                          child: CupertinoActivityIndicator(radius: 2)),
+                                          child: CupertinoActivityIndicator(radius: 20)),
                                       color: Colors.black.withOpacity(0.5),
                                     )
                                   : Container())
@@ -829,7 +829,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
     return mediaData == null
         ? Container(
             child: Center(
-            child: CupertinoActivityIndicator(radius: 2),
+            child: CupertinoActivityIndicator(radius: 20),
           ))
         : ColumnBuilder(
             itemCount: latestMediaPhoto == null ? 0 : latestMediaPhoto.length,
@@ -919,7 +919,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
       child: popularMediaVideo == null
           ? Container(
               child: Center(
-              child: CupertinoActivityIndicator(radius: 2),
+              child: CupertinoActivityIndicator(radius: 20),
             ))
           : ListView.builder(
               itemCount:
@@ -1058,7 +1058,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
       items: bannerData == null
           ? [
               Center(
-                child: CupertinoActivityIndicator(radius: 2),
+                child: CupertinoActivityIndicator(radius: 20),
               )
             ]
           : mappedDataBanner,

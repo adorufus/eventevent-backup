@@ -51,7 +51,7 @@ class PublicEventListState extends State<PublicEventList> {
             : publicData == null
                 ? Container(
                     child: Center(
-                    child: CupertinoActivityIndicator(radius: 2),
+                    child: CupertinoActivityIndicator(radius: 20),
                   ))
                 : ListView.builder(
                     shrinkWrap: true,

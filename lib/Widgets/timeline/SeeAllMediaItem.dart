@@ -5,7 +5,8 @@ import 'package:eventevent/Widgets/timeline/LatestMediaItem.dart';
 import 'package:eventevent/Widgets/timeline/MediaDetails.dart';
 import 'package:eventevent/Widgets/timeline/popularMediaItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -110,7 +111,8 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -152,8 +154,9 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                     SizedBox(width: MediaQuery.of(context).size.width / 2.8),
                     Text(
                       'All Media',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: ScreenUtil.instance.setSp(14)),
                     )
                   ],
                 ),
@@ -187,7 +190,8 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                           SizedBox(width: ScreenUtil.instance.setWidth(8)),
                           Text('Popular',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.5))),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil.instance.setSp(12.5))),
                         ],
                       ),
                     ),
@@ -203,7 +207,8 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                           SizedBox(width: ScreenUtil.instance.setWidth(8)),
                           Text('Latest',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.5))),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil.instance.setSp(12.5))),
                         ],
                       ),
                     )
@@ -233,7 +238,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                   height: ScreenUtil.instance.setWidth(25),
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: CupertinoActivityIndicator(radius: 2),
+                    child: CupertinoActivityIndicator(radius: 20),
                   ),
                 ),
               )
@@ -246,7 +251,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                   if (mode == LoadStatus.idle) {
                     body = Text("Load data");
                   } else if (mode == LoadStatus.loading) {
-                    body = CupertinoActivityIndicator(radius: 2);
+                    body = CupertinoActivityIndicator(radius: 20);
                   } else if (mode == LoadStatus.failed) {
                     body = Text("Load Failed!");
                   } else if (mode == LoadStatus.canLoading) {
@@ -255,7 +260,9 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                     body = Container();
                   }
 
-                  return Container(height: ScreenUtil.instance.setWidth(35), child: Center(child: body));
+                  return Container(
+                      height: ScreenUtil.instance.setWidth(35),
+                      child: Center(child: body));
                 }),
                 controller: refreshController,
                 onRefresh: () {
@@ -289,22 +296,40 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MediaDetails(
-                                      userPicture: popularMedia[i]['creator']
-                                          ['photo'],
-                                      articleDetail: popularMedia[i]
-                                          ['content'],
-                                      imageCount: 'img' + i.toString(),
-                                      username: popularMedia[i]['creator']
-                                          ['username'],
-                                      imageUri: popularMedia[i]['banner'],
-                                      mediaTitle: popularMedia[i]['title'],
-                                      autoFocus: false,
-                                      mediaId: popularMedia[i]['id'],
-                                      videoUrl: popularMedia[i]['video'],
-                                      youtubeUrl: popularMedia[i]['youtube'],
-                                      isVideo: widget.isVideo,
-                                    )));
+                                builder: (context) => widget.isVideo == false
+                                    ? MediaDetails(
+                                        userPicture: popularMedia[i]['creator']
+                                            ['photo'],
+                                        articleDetail: popularMedia[i]
+                                            ['content'],
+                                        imageCount: 'img' + i.toString(),
+                                        username: popularMedia[i]['creator']
+                                            ['username'],
+                                        imageUri: popularMedia[i]['banner'],
+                                        mediaTitle: popularMedia[i]['title'],
+                                        autoFocus: false,
+                                        mediaId: popularMedia[i]['id'],
+                                        isVideo: false,
+                                      )
+                                    : MediaDetails(
+                                        isVideo: true,
+                                        videoUrl: popularMedia[i]['video'],
+                                        youtubeUrl: popularMedia[i]
+                                            ['youtube'],
+                                        userPicture: popularMedia[i]
+                                            ['creator']['photo'],
+                                        articleDetail: popularMedia[i]
+                                            ['content'],
+                                        imageCount: 'img' + i.toString(),
+                                        username: popularMedia[i]['creator']
+                                            ['username'],
+                                        imageUri: popularMedia[i]
+                                            ['thumbnail_timeline'],
+                                        mediaTitle: popularMedia[i]
+                                            ['title'],
+                                        autoFocus: false,
+                                        mediaId: popularMedia[i]['id'],
+                                      )));
                       },
                       child: new LatestMediaItem(
                         isVideo: widget.isVideo,
@@ -331,7 +356,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                   height: ScreenUtil.instance.setWidth(25),
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: CupertinoActivityIndicator(radius: 2),
+                    child: CupertinoActivityIndicator(radius: 20),
                   ),
                 ),
               )
@@ -344,7 +369,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                   if (mode == LoadStatus.idle) {
                     body = Text("Load data");
                   } else if (mode == LoadStatus.loading) {
-                    body = CupertinoActivityIndicator(radius: 2);
+                    body = CupertinoActivityIndicator(radius: 20);
                   } else if (mode == LoadStatus.failed) {
                     body = Text("Load Failed!");
                   } else if (mode == LoadStatus.canLoading) {
@@ -353,7 +378,9 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                     body = Container();
                   }
 
-                  return Container(height: ScreenUtil.instance.setWidth(35), child: Center(child: body));
+                  return Container(
+                      height: ScreenUtil.instance.setWidth(35),
+                      child: Center(child: body));
                 }),
                 controller: refreshController,
                 onRefresh: () {
@@ -390,8 +417,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                                 builder: (context) => MediaDetails(
                                       userPicture: latestMedia[i]['creator']
                                           ['photo'],
-                                      articleDetail: latestMedia[i]
-                                          ['content'],
+                                      articleDetail: latestMedia[i]['content'],
                                       imageCount: 'img' + i.toString(),
                                       username: latestMedia[i]['creator']
                                           ['username'],

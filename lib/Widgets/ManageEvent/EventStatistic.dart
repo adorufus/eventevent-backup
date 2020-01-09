@@ -76,7 +76,7 @@ class EventStatisticState extends State<EventStatistic>{
         centerTitle: true,
         title: Text('EVENT STATISTIC', style: TextStyle(color: eventajaGreenTeal),),
       ),
-      body: sharedData == null || ticketData == null || checkinData == null || dataMap == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2),)) : Container(
+      body: sharedData == null || ticketData == null || checkinData == null || dataMap == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20),)) : Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: ListView(
           children: <Widget>[

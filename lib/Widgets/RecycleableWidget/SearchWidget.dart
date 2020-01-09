@@ -218,7 +218,7 @@ class SearchState extends State<Search> {
       return isLoading == true
           ? Container(
               child: Center(
-                child: CupertinoActivityIndicator(radius: 2),
+                child: CupertinoActivityIndicator(radius: 20),
               ),
             )
           : ListView.builder(
@@ -416,7 +416,7 @@ class SearchState extends State<Search> {
     return isLoading == true
         ? Container(
             child: Center(
-              child: CupertinoActivityIndicator(radius: 2),
+              child: CupertinoActivityIndicator(radius: 20),
             ),
           )
         : ListView.builder(

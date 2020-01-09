@@ -42,6 +42,7 @@ Future<Null> main() async {
 
   // HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   cameras = await availableCameras();
 

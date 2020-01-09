@@ -44,7 +44,7 @@ class _LovedOnYourFollowingDetailsState extends State<LovedOnYourFollowingDetail
 
   @override
   Widget build(BuildContext context) {
-    return mediaDetails == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2))) :  Scaffold(
+    return mediaDetails == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20))) :  Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(
@@ -163,7 +163,7 @@ class _LovedOnYourFollowingDetailsState extends State<LovedOnYourFollowingDetail
       ),
       body: ListView(
         children: <Widget>[
-          mediaDetails == null ? CupertinoActivityIndicator(radius: 2) : Container(
+          mediaDetails == null ? CupertinoActivityIndicator(radius: 20) : Container(
             margin: EdgeInsets.symmetric(horizontal: 13),
             child: Row(
               children: <Widget>[
@@ -215,7 +215,7 @@ class _LovedOnYourFollowingDetailsState extends State<LovedOnYourFollowingDetail
                   return Container();
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CupertinoActivityIndicator(radius: 2));
+                  return Center(child: CupertinoActivityIndicator(radius: 20));
                 } 
                 if (snapshot.data == null) {
                   print('loading');

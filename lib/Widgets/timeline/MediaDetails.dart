@@ -310,7 +310,7 @@ class _MediaDetailsState extends State<MediaDetails> {
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 13),
-            child: mediaDetails['media_content'] == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2),),) : Html(
+            child: mediaDetails['media_content'] == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20),),) : Html(
               data: mediaDetails['media_content'][0]['content_text'],
               onLinkTap: (url) {
                 print('loading..');

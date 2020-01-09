@@ -121,7 +121,7 @@ class PaymentBcaState extends State<PaymentBCA> {
       ),
       body: paymentData == null
           ? Container(
-              child: Center(child: CupertinoActivityIndicator(radius: 2)),
+              child: Center(child: CupertinoActivityIndicator(radius: 20)),
             )
           : Container(
               height: MediaQuery.of(context).size.height,

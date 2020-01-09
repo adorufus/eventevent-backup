@@ -183,7 +183,7 @@ class _MyTicketState extends State<MyTicket> {
                   break;
                 case ConnectionState.waiting:
                   return Center(
-                    child: CupertinoActivityIndicator(radius: 2),
+                    child: CupertinoActivityIndicator(radius: 20),
                   );
                   break;
                 case ConnectionState.active:
@@ -207,7 +207,7 @@ class _MyTicketState extends State<MyTicket> {
                           //           height: ScreenUtil.instance.setWidth(25),
                           //           child: FittedBox(
                           //             fit: BoxFit.fill,
-                          //             child: CupertinoActivityIndicator(radius: 2),
+                          //             child: CupertinoActivityIndicator(radius: 20),
                           //           ),
                           //         ),
                           //       )
@@ -221,7 +221,7 @@ class _MyTicketState extends State<MyTicket> {
                           if (mode == LoadStatus.idle) {
                             body = Text("Load data");
                           } else if (mode == LoadStatus.loading) {
-                            body = CupertinoActivityIndicator(radius: 2);
+                            body = CupertinoActivityIndicator(radius: 20);
                           } else if (mode == LoadStatus.failed) {
                             body = Text("Load Failed!");
                           } else if (mode == LoadStatus.canLoading) {

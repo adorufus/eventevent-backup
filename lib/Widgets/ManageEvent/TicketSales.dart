@@ -62,7 +62,7 @@ class TicketSalesState extends State<TicketSales> {
       body: ticketSalesData == null || ticketData == null
           ? Container(
               child: Center(
-                child: CupertinoActivityIndicator(radius: 2),
+                child: CupertinoActivityIndicator(radius: 20),
               ),
             )
           : Container(

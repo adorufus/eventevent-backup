@@ -120,7 +120,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                         height: ScreenUtil.instance.setWidth(120),
                         width: ScreenUtil.instance.setWidth(120),
                         child: SizedBox(
-                            height: ScreenUtil.instance.setWidth(50), width: ScreenUtil.instance.setWidth(50), child: CupertinoActivityIndicator(radius: 2)),
+                            height: ScreenUtil.instance.setWidth(50), width: ScreenUtil.instance.setWidth(50), child: CupertinoActivityIndicator(radius: 20)),
                       ),
                     ),
                   );
@@ -142,7 +142,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
           )
         ],
       ),
-      body: userData == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2)),) : buildMainView(),
+      body: userData == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20)),) : buildMainView(),
     );
   }
 

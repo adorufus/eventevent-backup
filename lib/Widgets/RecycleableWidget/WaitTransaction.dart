@@ -183,7 +183,7 @@ class _WaitTransactionState extends State<WaitTransaction> with TickerProviderSt
       ),
       body: paymentData == null
           ? Container(
-              child: Center(child: CupertinoActivityIndicator(radius: 2)),
+              child: Center(child: CupertinoActivityIndicator(radius: 20)),
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.center,

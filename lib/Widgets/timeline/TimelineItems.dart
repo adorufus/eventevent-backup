@@ -114,7 +114,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
         if (mode == LoadStatus.idle) {
           body = Text("Load data");
         } else if (mode == LoadStatus.loading) {
-          body = CupertinoActivityIndicator(radius: 2);
+          body = CupertinoActivityIndicator(radius: 20);
         } else if (mode == LoadStatus.failed) {
           body = Text("Load Failed!");
         } else if (mode == LoadStatus.canLoading) {

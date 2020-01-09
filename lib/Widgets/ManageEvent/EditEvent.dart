@@ -213,7 +213,7 @@ class EditEventState extends State<EditEvent>{
                               builder: (BuildContext context) {
                                 return Container(
                                   child: Center(
-                                    child: CupertinoActivityIndicator(radius: 2),
+                                    child: CupertinoActivityIndicator(radius: 20),
                                   ),
                                 );
                               }
@@ -254,7 +254,7 @@ class EditEventState extends State<EditEvent>{
             )
           ],
         ),
-        body: categoryList.length == null || isLoading == true ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2))) :  Container(
+        body: categoryList.length == null || isLoading == true ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20))) :  Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: ListView(

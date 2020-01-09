@@ -84,7 +84,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
     return ticketDetailData == null
         ? Container(
             padding: EdgeInsets.only(top: 80),
-            alignment: Alignment.topCenter, child: CupertinoActivityIndicator(radius: 2))
+            alignment: Alignment.topCenter, child: CupertinoActivityIndicator(radius: 20))
         : SmartRefresher(
             enablePullDown: false,
             enablePullUp: true,
@@ -94,7 +94,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
               if (mode == LoadStatus.idle) {
                 body = Text("Load data");
               } else if (mode == LoadStatus.loading) {
-                body = CupertinoActivityIndicator(radius: 2);
+                body = CupertinoActivityIndicator(radius: 20);
               } else if (mode == LoadStatus.failed) {
                 body = Text("Load Failed!");
               } else if (mode == LoadStatus.canLoading) {

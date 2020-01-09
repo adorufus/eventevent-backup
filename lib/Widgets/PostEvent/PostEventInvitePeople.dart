@@ -72,7 +72,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
             )
           ],
         ),
-        body: data == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 2)),) : Container(
+        body: data == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20)),) : Container(
           color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,

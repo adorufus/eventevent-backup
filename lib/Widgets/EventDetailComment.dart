@@ -180,7 +180,7 @@ class _EventDetailCommentState extends State<EventDetailComment> {
                   return Container();
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Container(child: Center(child: CupertinoActivityIndicator(radius: 2)));
+                  return Container(child: Center(child: CupertinoActivityIndicator(radius: 20)));
                 }
                 if (snapshot.data == null) {
                   print('loading');

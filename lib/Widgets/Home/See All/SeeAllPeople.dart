@@ -180,7 +180,7 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
                   height: ScreenUtil.instance.setWidth(25),
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: CupertinoActivityIndicator(radius: 2),
+                    child: CupertinoActivityIndicator(radius: 20),
                   ),
                 ),
               )
@@ -231,7 +231,7 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
                   height: ScreenUtil.instance.setWidth(25),
                   child: FittedBox(
                     fit: BoxFit.fill,
-                    child: CupertinoActivityIndicator(radius: 2),
+                    child: CupertinoActivityIndicator(radius: 20),
                   ),
                 ),
               )
