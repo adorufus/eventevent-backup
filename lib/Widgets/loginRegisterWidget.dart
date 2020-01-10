@@ -302,7 +302,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                     LoginWidget()));
                       },
                       child: Container(
-                        width: ScreenUtil.instance.setWidth(147.41),
+                        width: ScreenUtil.instance.setWidth(160.41),
                         height: ScreenUtil.instance.setHeight(37.02),
                         decoration: BoxDecoration(
                             color: eventajaGreenTeal,
@@ -325,7 +325,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         ),
                       ),
                     ),
-                    SizedBox(width: ScreenUtil.instance.setWidth(13)),
+                    SizedBox(width: ScreenUtil.instance.setWidth(20)),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -335,7 +335,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                     RegisterWidget()));
                       },
                       child: Container(
-                        width: ScreenUtil.instance.setWidth(147.41),
+                        width: ScreenUtil.instance.setWidth(160.41),
                         height: ScreenUtil.instance.setHeight(37.02),
                         decoration: BoxDecoration(
                             color: eventajaGreenTeal,

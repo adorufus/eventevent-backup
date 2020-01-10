@@ -2481,7 +2481,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       );
     } else if (currentTab == 1) {
       return EventDetailTimeline(
-        id: detailData['createdByID'],
+        id: detailData['id'],
       );
     } else if (currentTab == 2) {
       return ListView(

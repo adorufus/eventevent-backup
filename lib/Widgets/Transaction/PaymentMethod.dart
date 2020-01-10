@@ -145,7 +145,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                 }
                             },
                             child: Container(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 5),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -161,7 +161,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                     ),
                                   ),
                                   Container(
-                                    height: ScreenUtil.instance.setWidth(80),
+                                    height: ScreenUtil.instance.setWidth(60),
                                     width: MediaQuery.of(context).size.width,
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 10),
@@ -170,8 +170,8 @@ class PaymentMethodState extends State<PaymentMethod> {
                                         boxShadow: [
                                           BoxShadow(
                                             blurRadius: 1.5,
-                                            spreadRadius: 2,
-                                            color: Color(0xff8a8a8b).withOpacity(.5)
+                                            spreadRadius: 1.5,
+                                            color: Color(0xff8a8a8b).withOpacity(.1)
                                           )
                                         ],
                                         borderRadius:
@@ -189,11 +189,11 @@ class PaymentMethodState extends State<PaymentMethod> {
                                                 : NetworkImage(
                                                     paymentMethodList[i]
                                                         ['photo']),
-                                            width: ScreenUtil.instance.setWidth(250),
+                                            width: ScreenUtil.instance.setWidth(150),
                                           )),
                                         ),
-                                        SizedBox(
-                                          width: ScreenUtil.instance.setWidth(50),
+                                        Expanded(
+                                          child: SizedBox(),
                                         ),
                                         Icon(
                                           Icons.navigate_next,

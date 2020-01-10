@@ -188,7 +188,7 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
                             timelineList[i]['type'] == 'event' ||
                             timelineList[i]['type'] == 'eventgoing' ||
                             timelineList[i]['eventID'] != null &&
-                                timelineList[i]['type'] == 'love'
+                                timelineList[i]['type'] != 'love'
                             ? GestureDetector(
                             onTap: () {
                               if (timelineList[i]['type'] == 'photo') {
@@ -246,15 +246,38 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
                             : Container(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
+                            timelineList[i]['type'] == 'love' ? Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(3),
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                        timelineList[i]['type'] == 'video'
+                                            ? timelineList[i]['picture']
+                                            : timelineList[i]
+                                        ['pictureFull'],
+                                      ),
+                                      fit: BoxFit.cover)),
+                              height: ScreenUtil.instance.setWidth(100),
+                              width: ScreenUtil.instance.setWidth(66),
+                              child: Center(
+                                child: timelineList[i]['type'] == 'video'
+                                    ? Icon(
+                                  Icons.play_circle_filled,
+                                  size: 80,
+                                  color: Colors.white,
+                                )
+                                    : Container(),
+                              ),
+                            ) : Container(),
                             Container(
                                 margin: EdgeInsets.only(top: 15),
                                 child: Column(
                                     crossAxisAlignment:
                                     CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Text(timelineList[i]['fullName'],
+                                      Text(timelineList[i]['name'],
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: ScreenUtil.instance
@@ -264,25 +287,6 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
                                           ScreenUtil.instance.setWidth(8)),
                                       Row(
                                         children: <Widget>[
-                                          timelineList[i]['type'] == 'love'
-                                              ? Image.asset(
-                                            'assets/icons/aset_icon/like.png',
-                                            scale: 3,
-                                          )
-                                              : Container(),
-                                          SizedBox(
-                                              width: timelineList[i]['type'] ==
-                                                  'love'
-                                                  ? 8
-                                                  : 0),
-                                          timelineList[i]['type'] == 'love'
-                                              ? Text('Loved')
-                                              : Container(),
-                                          SizedBox(
-                                              width: timelineList[i]['type'] ==
-                                                  'love'
-                                                  ? 8
-                                                  : 0),
                                           timelineList[i]['type'] == 'video' ||
                                               timelineList[i]['type'] ==
                                                   'photo'
@@ -302,12 +306,12 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
                                           )
                                               : Container(
                                             width: ScreenUtil.instance
-                                                .setWidth(150),
+                                                .setWidth(250),
                                             child: Text(
                                               timelineList[i]['name'] ==
                                                   null
                                                   ? ''
-                                                  : timelineList[i]
+                                                  : timelineList[i]['type'] == 'love' ? timelineList[i]['locationName'] : timelineList[i]
                                               ['name'],
                                               maxLines: 1,
                                               style: TextStyle(
@@ -877,7 +881,7 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
     });
 
     String url = BaseApi().apiUrl +
-        '/timeline/user?X-API-KEY=$API_KEY&page=$currentPage&userID=${widget.id}';
+        '/event_activity/list?X-API-KEY=$API_KEY&page=$currentPage&eventID=${widget.id}';
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,

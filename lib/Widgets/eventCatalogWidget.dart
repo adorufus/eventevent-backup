@@ -74,7 +74,7 @@ class _EventCatalogState extends State<EventCatalog>
   List child;
   List latestMediaVideo;
   ListenPage geoPage = new ListenPage();
-  List mediaData = [];
+  List mediaData;
   Widget errReasonWidget = Container();
 
   String ticketPriceImageURI = 'assets/btn_ticket/paid-value.png';
@@ -495,14 +495,15 @@ class _EventCatalogState extends State<EventCatalog>
                   padding: EdgeInsets.only(bottom: 0),
                   child: Stack(
                     children: <Widget>[
-                      banner(),
+                      bannerData == null ? CupertinoActivityIndicator
+                      (radius: 13.5,) : banner(),
                     ],
                   ),
                 ),
                 popularEventTitle(),
                 Container(
                     height: ScreenUtil.instance.setWidth(340),
-                    child: ListView.builder(
+                    child: data == null ? CupertinoActivityIndicator(radius: 13.5) : ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: data == null ? 0 : data.length,
                         itemBuilder: (BuildContext context, i) {
@@ -615,11 +616,7 @@ class _EventCatalogState extends State<EventCatalog>
                 mediaHeader(),
                 Container(
                   height: ScreenUtil.instance.setWidth(247),
-                  child: mediaData == null
-                      ? Container(
-                          child: Center(child: CupertinoActivityIndicator(radius: 20)),
-                        )
-                      : ListView.builder(
+                  child: data == null ? CupertinoActivityIndicator(radius: 13.5) : ListView.builder(
                           itemCount: mediaData == null ? 0 : mediaData.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, i) {
@@ -890,7 +887,7 @@ class _EventCatalogState extends State<EventCatalog>
   Widget popularEventContent() {
     return Container(
         height: ScreenUtil.instance.setWidth(269),
-        child: new ListView.builder(
+        child:  data == null ? CupertinoActivityIndicator(radius: 13.5) : new ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: data == null ? 0 : data.length,
                 itemBuilder: (BuildContext context, i) {
@@ -1352,9 +1349,9 @@ class _EventCatalogState extends State<EventCatalog>
   ///Construct BannerCarousel Widget
   ///
   Widget banner() {
-    return CarouselSlider(
+    return bannerData == null ? CupertinoActivityIndicator(radius: 13.5) :  CarouselSlider(
       height: ScreenUtil.instance.setWidth(200),
-      items: bannerData.length < 1 ? [Container()] : mappedDataBanner,
+      items: bannerData.length < 1 ? [CupertinoActivityIndicator(radius: 13.5,)] : mappedDataBanner,
       enlargeCenterPage: false,
       initialPage: 0,
       autoPlay: true,
@@ -1853,7 +1850,7 @@ class _EventCatalogState extends State<EventCatalog>
   }
 
   Widget latestVideoContent() {
-    return ColumnBuilder(
+    return latestMediaVideo == null ? CupertinoActivityIndicator(radius: 13.5) : ColumnBuilder(
       itemCount: latestMediaVideo == null ? 0 : latestMediaVideo.length,
       itemBuilder: (BuildContext context, i) {
         return GestureDetector(
