@@ -49,9 +49,9 @@ class PostEventReviewState extends State<PostEventReview> {
   LocationData currentLocation;
   StreamSubscription<LocationData> locationSubcription;
 
-  List<String> categoryList = new List<String>();
-  List<String> categoryIdList = new List<String>();
-  List<String> additionalMedia = new List<String>();
+  List<String> categoryList = [];
+  List<String> categoryIdList = [];
+  List<String> additionalMedia = [];
 
   TextEditingController eventNameController = new TextEditingController();
 
@@ -131,6 +131,8 @@ class PostEventReviewState extends State<PostEventReview> {
     });
   }
 
+  var thisScaffold = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
@@ -140,7 +142,6 @@ class PostEventReviewState extends State<PostEventReview> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    var thisScaffold = new GlobalKey<ScaffoldState>();
     return Scaffold(
         resizeToAvoidBottomInset: true,
         key: thisScaffold,
@@ -278,11 +279,7 @@ class PostEventReviewState extends State<PostEventReview> {
                                   child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        categoryList[0] +
-                                            ', ' +
-                                            categoryList[1] +
-                                            ', ' +
-                                            categoryList[2],
+                                        categoryList.toString(),
                                         style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
                                       )))
                             ],
@@ -699,8 +696,8 @@ class PostEventReviewState extends State<PostEventReview> {
   Widget showMap() {
     StaticMapsProvider mapProvider = new StaticMapsProvider(
       GOOGLE_API_KEY: 'AIzaSyDjNpeyufzT81GAhQkCe85x83kxzfA7qbI',
-      height: ScreenUtil.instance.setWidth(1024),
-      width: ScreenUtil.instance.setWidth(1024),
+      height: 1024,
+      width: 1024,
       latitude: lat,
       longitude: long,
       isRedirectToGMAP: false,

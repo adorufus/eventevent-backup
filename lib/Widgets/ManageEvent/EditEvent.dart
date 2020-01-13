@@ -706,8 +706,8 @@ class EditEventState extends State<EditEvent>{
   Widget showMap(BuildContext context) {
     StaticMapsProvider mapProvider = new StaticMapsProvider(
       GOOGLE_API_KEY: 'AIzaSyDjNpeyufzT81GAhQkCe85x83kxzfA7qbI',
-      height: ScreenUtil.instance.setWidth(1024),
-      width: ScreenUtil.instance.setWidth(1024),
+      height: 1024,
+      width: 1024,
       latitude: lat,
       longitude: long,
       isRedirectToGMAP: false,
