@@ -141,7 +141,7 @@ class PostEventPosterState extends State<PostEventPoster> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             image: DecorationImage(
-                                image: ExactAssetImage(posterFile.path),
+                                image: FileImage(posterFile),
                                 fit: BoxFit.fill)),
                       ),
               )

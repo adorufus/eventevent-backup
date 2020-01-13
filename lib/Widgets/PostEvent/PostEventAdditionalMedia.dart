@@ -280,8 +280,8 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
           ratioX: 2.0,
           ratioY: 3.0,
         ),
-        maxWidth: ScreenUtil.instance.setWidth(512),
-        maxHeight: ScreenUtil.instance.setWidth(512));
+        maxWidth: 512,
+        maxHeight: 512);
 
     print(croppedImage.path);
     setState(() {
