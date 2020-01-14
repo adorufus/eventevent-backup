@@ -229,7 +229,7 @@ class SearchState extends State<Search> {
 
                 if (filteredEvents[i]['ticket_type']['type'] == 'paid' ||
                     filteredEvents[i]['ticket_type']['type'] ==
-                        'paid_seating') {
+                        'paid_seating' || filteredEvents[i]['ticket_type']['type'] == 'paid_live_stream') {
                   if (filteredEvents[i]['ticket']['availableTicketStatus'] ==
                       '1') {
                     itemColor = Color(0xFF34B323);

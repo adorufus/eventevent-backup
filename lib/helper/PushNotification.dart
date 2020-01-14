@@ -465,6 +465,14 @@ class PushNotificationState extends State<PushNotification> {
       navigationHandler(EventDetailsConstructView(
         id: notificationData[index]['id'],
       ));
+    } else if (notificationData[index]['type'] == 'eventdetail_comment') {
+      navigationHandler(EventDetailsConstructView(
+        id: notificationData[index]['id'],
+      ));
+    } else if (notificationData[index]['type'] == 'eventdetail_love') {
+      navigationHandler(EventDetailsConstructView(
+        id: notificationData[index]['id'],
+      ));
     } else if (notificationData[index]['type'] == 'photo_impression') {
       navigationHandler(UserMediaDetail(
         postID: notificationData[index]['id'],

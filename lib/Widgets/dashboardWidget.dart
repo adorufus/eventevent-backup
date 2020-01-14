@@ -304,6 +304,14 @@ class _DashboardWidgetState extends State<DashboardWidget>
         navigationHandler(EventDetailsConstructView(
           id: payloadData['data']['id'],
         ));
+      } else if (payloadData['data']['type'] == 'eventdetail_comment') {
+        navigationHandler(EventDetailsConstructView(
+          id: payloadData['data']['id'],
+        ));
+      } else if (payloadData['data']['type'] == 'eventdetail_love') {
+        navigationHandler(EventDetailsConstructView(
+          id: payloadData['data']['id'],
+        ));
       } else if (payloadData['data']['type'] == 'photo_impression') {
         navigationHandler(UserMediaDetail(
           postID: payloadData['data']['id'],
