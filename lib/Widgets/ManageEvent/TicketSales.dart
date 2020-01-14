@@ -215,7 +215,12 @@ class TicketSalesState extends State<TicketSales> {
                           itemBuilder: (BuildContext context, i) {
                             return GestureDetector(
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Buyers(eventName: widget.eventName, ticketID: ticketData[i]['id'],)));
+                                try{
+                                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Buyers(eventName: widget.eventName, ticketID: ticketData[i]['id'],)));
+                                }
+                                catch(e){
+                                  print('error occured: ' + e);
+                                }
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
