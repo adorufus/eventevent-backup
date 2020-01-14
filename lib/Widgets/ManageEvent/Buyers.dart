@@ -45,6 +45,7 @@ class BuyersState extends State<Buyers> {
           buyerList = extractedData['data'];
         });
       } else {
+        print(response.body);
         print('gagal');
       }
     });
@@ -57,6 +58,7 @@ class BuyersState extends State<Buyers> {
         });
         print('Buyer List Export: ' + buyerListExport.length.toString());
       } else {
+        print(response.body);
         print('gagal');
       }
     });
@@ -232,12 +234,19 @@ class BuyersState extends State<Buyers> {
     String url = BaseApi().apiUrl +
         '/tickets/user?X-API-KEY=$API_KEY&ticketID=${widget.ticketID}&page=all';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
-    });
+    try{
+      final response = await http.get(url, headers: {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': prefs.getString('Session')
+      });
 
-    return response;
+      return response;
+    }
+    catch (e){
+      print('error occured: ' + e);
+    }
+
+    return null;
   }
 
   Future<http.Response> getBuyerList() async {
