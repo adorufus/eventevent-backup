@@ -90,21 +90,15 @@ class _TransactionFormState extends State<TransactionForm> {
     aditionalNotesController = TextEditingController();
   }
 
+  TextEditingController customFormController = new TextEditingController();
+
   List<String> answer;
   List<String> questionId;
 
-  Map<String, dynamic> formIds = new HashMap();
-  Map<String, dynamic> formAnswer;
+  List formIds;
+  List formAnswer;
 
-  void addFormToList() {
-    for (var i = 0; i < questionId.length; i++) {
-      formIds['id'] = questionId[i];
-    }
-
-    for(var i = 0; i < answer.length; i++){
-      formAnswer['answer'] = answer[i];
-    }
-  }
+  void addFormToList() {}
 
   @override
   Widget build(BuildContext context) {
@@ -124,14 +118,35 @@ class _TransactionFormState extends State<TransactionForm> {
             bottomNavigationBar: GestureDetector(
               onTap: () {
                 saveInput();
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        widget.ticketType == 'free_limited'
-                            ? TicketReview(
-                                ticketType: widget.ticketType,
-                                customForm: [formIds, formAnswer],
-                              )
-                            : PaymentMethod()));
+                // for (var i = 0; i < questionId.length; i++) {
+                //   formIds['id'] = questionId[i];
+                // }
+
+                // for (var i = 0; i < answer.length; i++) {
+                //   formAnswer['answer'] = answer[i];
+                // }
+                if(customFormList != null ){
+                  for(var formItem in customFormList){
+                    print(formItem);
+                    formIds.add(formItem['id']);
+                  }
+
+                  print(formIds);
+                }
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return widget.ticketType == 'free_limited'
+                          ? TicketReview(
+                              ticketType: widget.ticketType,
+                              customForm: {
+                                'forms': [formIds, formAnswer]
+                              },
+                            )
+                          : PaymentMethod();
+                    },
+                  ),
+                );
               },
               child: Container(
                   height: ScreenUtil.instance.setWidth(50),
@@ -384,7 +399,7 @@ class _TransactionFormState extends State<TransactionForm> {
               Radio(
                   value: int.parse(customFormList[index]['option'][i]['order']),
                   groupValue: _radioValue,
-                  onChanged: (int i){
+                  onChanged: (int i) {
                     setState(() {
                       _radioValue = i;
                       answer.add(i.toString());
@@ -396,20 +411,9 @@ class _TransactionFormState extends State<TransactionForm> {
           });
     } else if (customFormList[index]['type'] == '1') {
       return TextFormField(
+        controller: customFormController,
         keyboardType: TextInputType.multiline,
         textInputAction: TextInputAction.done,
-        onFieldSubmitted: (value){
-          setState((){
-            answer.add(value);
-          });
-          print(answer);
-        },
-        onSaved: (value){
-          setState((){
-            answer.add(value);
-          });
-          print(answer);
-        },
         decoration: InputDecoration(
             border: InputBorder.none,
             hintMaxLines: 100,
