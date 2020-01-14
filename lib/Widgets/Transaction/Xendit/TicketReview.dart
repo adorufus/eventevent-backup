@@ -445,7 +445,8 @@ class _TicketReviewState extends State<TicketReview> {
       'phone': prefs.getString('ticket_about_phone'),
       'note': prefs.getString('ticket_about_aditional'),
       'payment_method_id': prefs.getString('payment_method_id'),
-      'identifier': uuid.v4().toString()
+      'identifier': uuid.v4().toString(),
+      'form[]': prefs.getStringList('')
     };
 
     Map<String, dynamic> bodyFreeLimit = {
@@ -458,7 +459,7 @@ class _TicketReviewState extends State<TicketReview> {
       'phone': prefs.getString('ticket_about_phone'),
       'note': prefs.getString('ticket_about_aditional'),
       'identifier': uuid.v4().toString(),
-      'form[0]': ''
+      'form[]': ''
     };
 
     

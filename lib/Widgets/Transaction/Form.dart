@@ -384,15 +384,31 @@ class _TransactionFormState extends State<TransactionForm> {
               Radio(
                   value: int.parse(customFormList[index]['option'][i]['order']),
                   groupValue: _radioValue,
-                  onChanged: (int i) => setState(() => _radioValue = i)),
+                  onChanged: (int i){
+                    setState(() {
+                      _radioValue = i;
+                      answer.add(i.toString());
+                      print(answer);
+                    });
+                  }),
               Text(customFormList[index]['option'][i]['name'])
             ]);
           });
     } else if (customFormList[index]['type'] == '1') {
       return TextFormField(
         keyboardType: TextInputType.multiline,
+        textInputAction: TextInputAction.done,
         onFieldSubmitted: (value){
-          answer.add(value);
+          setState((){
+            answer.add(value);
+          });
+          print(answer);
+        },
+        onSaved: (value){
+          setState((){
+            answer.add(value);
+          });
+          print(answer);
         },
         decoration: InputDecoration(
             border: InputBorder.none,
@@ -411,12 +427,14 @@ class _TransactionFormState extends State<TransactionForm> {
     preferences.setString('ticket_about_phone', phoneController.text);
     preferences.setString(
         'ticket_about_aditional', aditionalNotesController.text);
+    preferences.setStringList('ticket_custom_form_list', answer);
 
     print(preferences.getString('ticket_about_firstname'));
     print(preferences.getString('ticket_about_lastname'));
     print(preferences.getString('ticket_about_email'));
     print(preferences.getString('ticket_about_phone'));
     print(preferences.getString('ticket_about_aditional'));
+    print(preferences.getStringList('ticket_custom_form_list').toString());
   }
 
   Future getCustomForm() async {
