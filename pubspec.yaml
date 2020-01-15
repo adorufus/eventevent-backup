@@ -30,6 +30,7 @@ dependencies:
   path_provider:
   carousel_pro: ^1.0.0
   carousel_slider: ^1.3.0
+  mime:
   place_picker: 0.9.11
   # google_places_picker:
   #   git:

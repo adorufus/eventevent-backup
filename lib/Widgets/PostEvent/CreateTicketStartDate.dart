@@ -128,6 +128,7 @@ class CreateTicketStartDateState extends State<CreateTicketStartDate> {
               dp.DayPicker(
                 selectedDate: _selectedDate,
                 onChanged: onDateChanged,
+                currentDate: DateTime.now(),
                 firstDate: _firstDate,
                 lastDate: _lastDate,
                 datePickerStyles: styles,

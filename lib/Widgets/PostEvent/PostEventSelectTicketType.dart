@@ -1,14 +1,17 @@
 import 'dart:convert';
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:async/async.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
@@ -20,7 +23,6 @@ import 'PostEventInvitePeople.dart';
 class SelectTicketType extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    
     return SelectTicketTypeState();
   }
 }
@@ -33,12 +35,14 @@ class SelectTicketTypeState extends State<SelectTicketType> {
   String base64Image;
   File imageFile;
   bool isLoading;
-  Dio dio = new Dio();
+  Dio dio = new Dio(BaseOptions(
+      connectTimeout: 10000, baseUrl: BaseApi().apiUrl, receiveTimeout: 10000));
   FormData formData = new FormData();
 
   @override
   void initState() {
     super.initState();
+
     getTicketTypeList();
     getData();
   }
@@ -57,7 +61,8 @@ class SelectTicketTypeState extends State<SelectTicketType> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -65,7 +70,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    
+
     return Scaffold(
         key: thisState,
         appBar: AppBar(
@@ -116,7 +121,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
               }
               return ListTile(
                 onTap: () {
-                  postPhoto(i, context);
+                  postEvent(i, context);
                   //postEvent(i);
                 },
                 contentPadding:
@@ -131,7 +136,9 @@ class SelectTicketTypeState extends State<SelectTicketType> {
                 ),
                 title: Text(
                   ticketType[i]['name'] == null ? '' : ticketType[i]['name'],
-                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(18),
+                      fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(ticketType[i]['description'] == null
                     ? ''
@@ -155,9 +162,131 @@ class SelectTicketTypeState extends State<SelectTicketType> {
     if (response.statusCode == 200) {
       setState(() {
         var extractedData = json.decode(response.body);
-        ticketType = extractedData['data'];    
+        ticketType = extractedData['data'];
       });
     }
+  }
+
+  Future postEvent(int index, BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Cookie cookie = Cookie.fromSetCookieValue(prefs.getString('Session'));
+
+    print(lookupMimeType(imageFile.path));
+
+    try {
+      Map<String, dynamic> body = {
+        'X-API-KEY': API_KEY,
+        'eventTypeID':
+            (int.parse(prefs.getString('POST_EVENT_TYPE')) + 1).toString(),
+        'ticketTypeID': ticketType[index]['id'],
+        'name': prefs.getString('POST_EVENT_NAME'),
+        'address': prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'),
+        'latitude': prefs.getString('CREATE_EVENT_LOCATION_LAT'),
+        'longitude': prefs.getString('CREATE_EVENT_LOCATION_LONG'),
+        'dateStart': prefs.getString('POST_EVENT_START_DATE'),
+        'timeStart': prefs.getString('POST_EVENT_START_TIME'),
+        'dateEnd': prefs.getString('POST_EVENT_END_DATE'),
+        'timeEnd': prefs.getString('POST_EVENT_END_TIME'),
+        'description': prefs.getString('CREATE_EVENT_DESCRIPTION'),
+        'phone': prefs.getString('CREATE_EVENT_TELEPHONE'),
+        'email': prefs.getString('CREATE_EVENT_EMAIL'),
+        'website': prefs.getString('CREATE_EVENT_WEBSITE'),
+        'isPrivate': prefs.getString('POST_EVENT_TYPE'),
+        'modifiedById': prefs.getString('Last User ID'),
+        'photo': UploadFileInfo(
+            imageFile, "eventevent-${DateTime.now().toString()}.jpg",
+            contentType: ContentType('image', 'jpeg'))
+      };
+
+      List categoryList = prefs.getStringList('POST_EVENT_CATEGORY_ID');
+      print(categoryList);
+
+      for (int i = 0; i < categoryList.length; i++) {
+        setState(() {
+          body['category[$i]'] = categoryList[i];
+        });
+      }
+
+      var data = FormData.from(body);
+      Response response = await dio.post('/event/create',
+          options: Options(headers: {
+            'Authorization': AUTHORIZATION_KEY,
+            'cookie': prefs.getString('Session')
+          }, cookies: [
+            cookie
+          ], responseType: ResponseType.plain),
+          data: data);
+
+      var extractedData = json.decode(response.data);
+
+      if (response.statusCode == 400) {
+        print(response.data);
+      } else if (response.statusCode == 201 || response.statusCode == 200) {
+        print(response.data);
+        print('ini untuk setup ticket');
+        print(ticketType[index]['id']);
+        if (ticketType[index]['isSetupTicket'] == '1') {
+          print('paid: ' + response.data);
+
+          setState(() {
+            prefs.setString('SETUP_TICKET_PAID_TICKET_TYPE',
+                ticketType[index]['paid_ticket_type']['id']);
+            prefs.setString(
+                'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
+            prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
+          });
+          Navigator.of(context).push(
+              CupertinoPageRoute(builder: (context) => CreateTicketName()));
+        } else {
+          if (isPrivate == '0') {
+            if (ticketType[index]['id'] == '1' ||
+                ticketType[index]['2'] ||
+                ticketType[index]['3']) {
+
+              print('non Paid: ' + response.data);
+              setState(() {
+                var extractedData = json.decode(response.data);
+                prefs.setString(
+                    'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
+                prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
+              });
+              Navigator.of(context).push(
+                  CupertinoPageRoute(builder: (context) => FinishPostEvent()));
+            }
+          } else {
+            print(ticketType[index]['id']);
+            if (ticketType[index]['id'] == '1' ||
+                ticketType[index]['id'] == '2' ||
+                ticketType[index]['id'] == '3') {
+              
+
+              print('non paid: ' + response.data);
+              setState(() {
+                var extractedData = json.decode(response.data);
+                prefs.setString(
+                    'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
+                prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
+              });
+              Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) => PostEventInvitePeople()));
+            }
+          }
+        }
+      }
+    } catch (e) {
+      if (e is DioError) {
+        print(e.message);
+      }
+    }
+
+//    if(response.statusCode == 400){
+//      print(response.statusMessage);
+//    }
+//
+//    print(response.data.stream);
+//
+//    print(response.data.statusCode);
   }
 
   Future postPhoto(int index, BuildContext context) async {
@@ -175,26 +304,45 @@ class SelectTicketTypeState extends State<SelectTicketType> {
     var request = new http.MultipartRequest("POST", Uri.parse(url));
     var parsed;
     request.headers.addAll(headers);
-    request.fields.addAll({
-//      'X-API-KEY': API_KEY,
-      'eventTypeID':
-          (int.parse(prefs.getString('POST_EVENT_TYPE')) + 1).toString(),
-      'ticketTypeID': ticketType[index]['id'],
-      'name': prefs.getString('POST_EVENT_NAME'),
-      'address': prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'),
-      'latitude': prefs.getString('CREATE_EVENT_LOCATION_LAT'),
-      'longitude': prefs.getString('CREATE_EVENT_LOCATION_LONG'),
-      'dateStart': prefs.getString('POST_EVENT_START_DATE'),
-      'timeStart': prefs.getString('POST_EVENT_START_TIME'),
-      'dateEnd': prefs.getString('POST_EVENT_END_DATE'),
-      'timeEnd': prefs.getString('POST_EVENT_END_TIME'),
-      'description': prefs.getString('CREATE_EVENT_DESCRIPTION'),
-      'phone': prefs.getString('CREATE_EVENT_TELEPHONE'),
-      'email': prefs.getString('CREATE_EVENT_EMAIL'),
-      'website': prefs.getString('CREATE_EVENT_WEBSITE'),
-      'isPrivate': prefs.getString('POST_EVENT_TYPE'),
-      'modifiedById': prefs.getString('Last User ID'),
-    });
+    request.fields['name'] = prefs.getString('POST_EVENT_NAME');
+    request.fields['eventTypeID'] =
+        (int.parse(prefs.getString('POST_EVENT_TYPE')) + 1).toString();
+    request.fields['ticketTypeID'] = ticketType[index]['id'];
+    request.fields['address'] =
+        prefs.getString('CREATE_EVENT_LOCATION_ADDRESS');
+    request.fields['latitude'] = prefs.getString('CREATE_EVENT_LOCATION_LAT');
+    request.fields['longitude'] = prefs.getString('CREATE_EVENT_LOCATION_LONG');
+    request.fields['dateStart'] = prefs.getString('POST_EVENT_START_DATE');
+    request.fields['timeStart'] = prefs.getString('POST_EVENT_START_TIME');
+    request.fields['dateEnd'] = prefs.getString('POST_EVENT_END_DATE');
+    request.fields['timeEnd'] = prefs.getString('POST_EVENT_END_TIME');
+    request.fields['description'] = prefs.getString('CREATE_EVENT_DESCRIPTION');
+    request.fields['phone'] = prefs.getString('CREATE_EVENT_TELEPHONE');
+    request.fields['email'] = prefs.getString('CREATE_EVENT_EMAIL');
+    request.fields['website'] = prefs.getString('CREATE_EVENT_WEBSITE');
+    request.fields['isPrivate'] = prefs.getString('POST_EVENT_TYPE');
+    request.fields['modifiedById'] = prefs.getString('Last User ID');
+
+//    request.fields.addAll({
+////      'X-API-KEY': API_KEY,
+//      'eventTypeID':
+//          (int.parse(prefs.getString('POST_EVENT_TYPE')) + 1).toString(),
+//      'ticketTypeID': ticketType[index]['id'],
+//      'name': prefs.getString('POST_EVENT_NAME'),
+//      'address': prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'),
+//      'latitude': prefs.getString('CREATE_EVENT_LOCATION_LAT'),
+//      'longitude': prefs.getString('CREATE_EVENT_LOCATION_LONG'),
+//      'dateStart': prefs.getString('POST_EVENT_START_DATE'),
+//      'timeStart': prefs.getString('POST_EVENT_START_TIME'),
+//      'dateEnd': prefs.getString('POST_EVENT_END_DATE'),
+//      'timeEnd': prefs.getString('POST_EVENT_END_TIME'),
+//      'description': prefs.getString('CREATE_EVENT_DESCRIPTION'),
+//      'phone': prefs.getString('CREATE_EVENT_TELEPHONE'),
+//      'email': prefs.getString('CREATE_EVENT_EMAIL'),
+//      'website': prefs.getString('CREATE_EVENT_WEBSITE'),
+//      'isPrivate': prefs.getString('POST_EVENT_TYPE'),
+//      'modifiedById': prefs.getString('Last User ID'),
+//    });
     for (int i = 0;
         i < prefs.getStringList('POST_EVENT_CATEGORY_ID').length;
         i++) {
@@ -206,6 +354,8 @@ class SelectTicketTypeState extends State<SelectTicketType> {
     var multipartFile = new http.MultipartFile('photo', stream, length,
         filename: basename(imageFile.path));
     request.files.add(multipartFile);
+
+//    request.finalize();
 
     print(request.fields.toString());
 
@@ -223,13 +373,14 @@ class SelectTicketTypeState extends State<SelectTicketType> {
         print('ini untuk setup ticket');
         print(ticketType[index]['id']);
         if (ticketType[index]['isSetupTicket'] == '1') {
-
           print('paid: ' + response2.body);
 
           setState(() {
             var extractedData = json.decode(response2.body);
-            prefs.setString('SETUP_TICKET_PAID_TICKET_TYPE', ticketType[index]['paid_ticket_type']['id']);
-            prefs.setString('NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
+            prefs.setString('SETUP_TICKET_PAID_TICKET_TYPE',
+                ticketType[index]['paid_ticket_type']['id']);
+            prefs.setString(
+                'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
             prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
           });
           Navigator.of(context).push(
@@ -244,7 +395,8 @@ class SelectTicketTypeState extends State<SelectTicketType> {
               print('non Paid: ' + myResponse.body);
               setState(() {
                 var extractedData = json.decode(myResponse.body);
-                prefs.setString('NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
+                prefs.setString(
+                    'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
                 prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
               });
               Navigator.of(context).push(
@@ -260,7 +412,8 @@ class SelectTicketTypeState extends State<SelectTicketType> {
               print('non paid: ' + myResponse.body);
               setState(() {
                 var extractedData = json.decode(myResponse.body);
-                prefs.setString('NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
+                prefs.setString(
+                    'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
                 prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
               });
               Navigator.of(context).push(CupertinoPageRoute(

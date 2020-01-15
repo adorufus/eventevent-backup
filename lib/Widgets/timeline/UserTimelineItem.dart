@@ -29,7 +29,6 @@ class TimelineItem extends StatefulWidget {
   final commentTotalRows;
   final String impressionId;
 
-
   const TimelineItem(
       {Key key,
       this.id,
@@ -37,7 +36,17 @@ class TimelineItem extends StatefulWidget {
       this.isVerified,
       this.fullName,
       this.type,
-      this.name, this.photoFull, this.description, this.picture, this.pictureFull, this.userId, this.commentTotalRows, this.loveCount, this.isLoved, this.impressionId, this.dateTime})
+      this.name,
+      this.photoFull,
+      this.description,
+      this.picture,
+      this.pictureFull,
+      this.userId,
+      this.commentTotalRows,
+      this.loveCount,
+      this.isLoved,
+      this.impressionId,
+      this.dateTime})
       : super(key: key);
 
   @override
@@ -61,14 +70,16 @@ class _TimelineItemState extends State<TimelineItem>
     setState(() {
       print(widget.dateTime.toString());
       var diff = DateTime.now().difference(widget.dateTime);
-      if(diff.inSeconds < 59){
+      if (diff.inSeconds < 59) {
         dateUploaded = 'Now';
-      }
-      else if(diff.inDays > 0 && diff.inDays < 2){
+      } else if (diff.inDays > 0 && diff.inDays < 2) {
         dateUploaded = 'a day ago';
-      }
-      else{
-        dateUploaded = widget.dateTime.day.toString() + ' - ' + widget.dateTime.month.toString() + ' - ' + widget.dateTime.year.toString();
+      } else {
+        dateUploaded = widget.dateTime.day.toString() +
+            ' - ' +
+            widget.dateTime.month.toString() +
+            ' - ' +
+            widget.dateTime.year.toString();
       }
       _isLoved = widget.isLoved;
       print('isLoved: ' + _isLoved.toString());
@@ -189,8 +200,7 @@ class _TimelineItemState extends State<TimelineItem>
                           widget.type == 'photo' ||
                           widget.type == 'event' ||
                           widget.type == 'eventgoing' ||
-                          widget.id != null &&
-                              widget.type == 'love'
+                          widget.id != null && widget.type != 'love'
                       ? GestureDetector(
                           onTap: () {
                             if (widget.type == 'photo') {
@@ -239,15 +249,39 @@ class _TimelineItemState extends State<TimelineItem>
                           ))
                       : Container(),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
+                      widget.type == 'love'
+                          ? Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(3),
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                        widget.type == 'video'
+                                            ? widget.picture
+                                            : widget.pictureFull,
+                                      ),
+                                      fit: BoxFit.cover)),
+                              height: ScreenUtil.instance.setWidth(100),
+                              width: ScreenUtil.instance.setWidth(66),
+                              child: Center(
+                                child: widget.type == 'video'
+                                    ? Icon(
+                                        Icons.play_circle_filled,
+                                        size: 80,
+                                        color: Colors.white,
+                                      )
+                                    : Container(),
+                              ),
+                            )
+                          : Container(),
+                          widget.type == 'love' ? Expanded(child: SizedBox(),) : Container(),
                       Container(
                           margin: EdgeInsets.only(top: 15),
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(widget.fullName,
+                                Text(widget.type == 'love' ? widget.name : widget.fullName,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize:
@@ -256,19 +290,6 @@ class _TimelineItemState extends State<TimelineItem>
                                     height: ScreenUtil.instance.setWidth(8)),
                                 Row(
                                   children: <Widget>[
-                                    widget.type == 'love'
-                                        ? Image.asset(
-                                            'assets/icons/aset_icon/like.png',
-                                            scale: 3,
-                                          )
-                                        : Container(),
-                                    SizedBox(
-                                        width: widget.type == 'love' ? 8 : 0),
-                                    widget.type == 'love'
-                                        ? Text('Loved')
-                                        : Container(),
-                                    SizedBox(
-                                        width: widget.type == 'love' ? 8 : 0),
                                     widget.type == 'video' ||
                                             widget.type == 'photo'
                                         ? Container(
@@ -284,7 +305,7 @@ class _TimelineItemState extends State<TimelineItem>
                                           )
                                         : Container(
                                             width: ScreenUtil.instance
-                                                .setWidth(150),
+                                                .setWidth(widget.type != 'love' ? 150 : 250),
                                             child: Text(
                                               widget.name == null
                                                   ? ''
@@ -298,6 +319,7 @@ class _TimelineItemState extends State<TimelineItem>
                                   ],
                                 )
                               ])),
+                              Expanded(child: SizedBox(),),
                       // Container(
                       //   child: Image.asset('assets/btn_ticket/free-limited.png', scale: 7,),)
                       widget.type == 'event'
@@ -317,8 +339,8 @@ class _TimelineItemState extends State<TimelineItem>
                               : widget.type == 'relationship'
                                   ? CircleAvatar(
                                       backgroundColor: Color(0xff8a8a8b),
-                                      backgroundImage: NetworkImage(
-                                          widget.picture),
+                                      backgroundImage:
+                                          NetworkImage(widget.picture),
                                     )
                                   : Container()
                     ],
@@ -334,10 +356,10 @@ class _TimelineItemState extends State<TimelineItem>
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          if(_isLoved == false){
+                          if (_isLoved == false) {
                             _loveCount += 1;
                             _isLoved = true;
-                            doLove(widget.id, '6').then((response){
+                            doLove(widget.id, '6').then((response) {
                               print(response.body);
                               print(response.statusCode);
                             });
@@ -367,12 +389,13 @@ class _TimelineItemState extends State<TimelineItem>
                             children: <Widget>[
                               Image.asset(
                                 'assets/icons/icon_apps/love.png',
-                                color: _loveCount > 0
-                                    ? Colors.red
-                                    : Colors.grey,
+                                color:
+                                    _loveCount > 0 ? Colors.red : Colors.grey,
                                 scale: 3.5,
                               ),
-                              SizedBox(width: ScreenUtil.instance.setWidth(_loveCount < 1 ? 0 : 5)),
+                              SizedBox(
+                                  width: ScreenUtil.instance
+                                      .setWidth(_loveCount < 1 ? 0 : 5)),
                               Text(_loveCount < 1 ? '' : _loveCount.toString(),
                                   style: TextStyle(
                                       color: Color(
@@ -411,13 +434,11 @@ class _TimelineItemState extends State<TimelineItem>
                       onTap: () async {
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
-                        if (widget.userId ==
-                            prefs.getString('Last User ID')) {
+                        if (widget.userId == prefs.getString('Last User ID')) {
                           showModalBottomSheet(
                               context: context,
                               builder: (BuildContext context) {
-                                return showMoreOption(
-                                    widget.id, widget.type,
+                                return showMoreOption(widget.id, widget.type,
                                     imageUrl: widget.picture);
                               });
                         } else {
@@ -803,34 +824,25 @@ class _TimelineItemState extends State<TimelineItem>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String url = '';
 
-    if(widget.type == 'video'){
+    if (widget.type == 'video') {
       url = BaseApi().apiUrl + '/video/impression';
-    }
-    else if(widget.type == 'photo'){
+    } else if (widget.type == 'photo') {
       url = BaseApi().apiUrl + '/photo_impression/post';
-    }
-    else if(widget.type == 'event'){
+    } else if (widget.type == 'event') {
       url = BaseApi().apiUrl + '/event_impression/post';
-    }
-    else if(widget.type == 'eventgoing'){
+    } else if (widget.type == 'eventgoing') {
       url = BaseApi().apiUrl + '/usergoing_impression/post';
-    }
-    else if(widget.type == 'love'){
+    } else if (widget.type == 'love') {
       url = BaseApi().apiUrl + '/love_impression/post';
-    }
-    else if(widget.type == 'relationship'){
+    } else if (widget.type == 'relationship') {
       url = BaseApi().apiUrl + '/relationship_impression/post';
-    }
-    else if(widget.type == 'thought'){
+    } else if (widget.type == 'thought') {
       url = BaseApi().apiUrl + '/thought_impression/post';
-    }
-    else if(widget.type == 'eventcheckin'){
+    } else if (widget.type == 'eventcheckin') {
       url = BaseApi().apiUrl + '/eventcheckin_impression/post';
-    }
-    else if(widget.type == 'checkin'){
+    } else if (widget.type == 'checkin') {
       url = BaseApi().apiUrl + '/photo_impression/post';
-    }
-    else if(widget.type == 'combined_relationship'){
+    } else if (widget.type == 'combined_relationship') {
       url = BaseApi().apiUrl + '/combined_relationship_impression/post';
     }
 
@@ -851,35 +863,26 @@ class _TimelineItemState extends State<TimelineItem>
 
     String url = '';
 
-    if(widget.type == 'video'){
+    if (widget.type == 'video') {
       print(widget.id);
       url = BaseApi().apiUrl + '/video/delete_impression';
-    }
-    else if(widget.type == 'photo'){
+    } else if (widget.type == 'photo') {
       url = BaseApi().apiUrl + '/photo_impression/delete';
-    }
-    else if(widget.type == 'event'){
+    } else if (widget.type == 'event') {
       url = BaseApi().apiUrl + '/event_impression/delete';
-    }
-    else if(widget.type == 'eventgoing'){
+    } else if (widget.type == 'eventgoing') {
       url = BaseApi().apiUrl + '/usergoing_impression/delete';
-    }
-    else if(widget.type == 'love'){
+    } else if (widget.type == 'love') {
       url = BaseApi().apiUrl + '/love_impression/delete';
-    }
-    else if(widget.type == 'relationship'){
+    } else if (widget.type == 'relationship') {
       url = BaseApi().apiUrl + '/relationship_impression/delete';
-    }
-    else if(widget.type == 'thought'){
+    } else if (widget.type == 'thought') {
       url = BaseApi().apiUrl + '/thought_impression/delete';
-    }
-    else if(widget.type == 'eventcheckin'){
+    } else if (widget.type == 'eventcheckin') {
       url = BaseApi().apiUrl + '/eventcheckin_impression/delete';
-    }
-    else if(widget.type == 'checkin'){
+    } else if (widget.type == 'checkin') {
       url = BaseApi().apiUrl + '/photo_impression/delete';
-    }
-    else if(widget.type == 'combined_relationship'){
+    } else if (widget.type == 'combined_relationship') {
       url = BaseApi().apiUrl + '/combined_relationship_impression/delete';
     }
 
