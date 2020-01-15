@@ -267,7 +267,7 @@ class SearchState extends State<Search> {
                   itemColor = Color(0xFFFFAA00);
                   itemPriceText = filteredEvents[i]['ticket_type']['name'];
                 } else if (filteredEvents[i]['ticket_type']['type'] ==
-                    'free_limited') {
+                    'free_limited' || filteredEvents[i]['ticket_type']['type'] == 'free_live_stream') {
                   if (filteredEvents[i]['ticket']['availableTicketStatus'] ==
                       '1') {
                     itemColor = Color(0xFFFFAA00);

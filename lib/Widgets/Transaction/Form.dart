@@ -95,7 +95,7 @@ class _TransactionFormState extends State<TransactionForm> {
   List<String> answer;
   List<String> questionId;
 
-  List formIds;
+  List<Map<String, dynamic>> formIds;
   List formAnswer;
 
   void addFormToList() {}
@@ -125,28 +125,31 @@ class _TransactionFormState extends State<TransactionForm> {
                 // for (var i = 0; i < answer.length; i++) {
                 //   formAnswer['answer'] = answer[i];
                 // }
-                if(customFormList != null ){
-                  for(var formItem in customFormList){
-                    print(formItem);
-                    formIds.add(formItem['id']);
+                if (customFormList != null) {
+                  for (var formItem in customFormList) {
+                    print('form item: ' + formItem.toString());
+                    print('form id: ' + formItem['id'].toString());
+
+                    formIds.addAll(formItem);
+
+                    print(formIds);
                   }
 
-                  print(formIds);
+                  Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return widget.ticketType == 'free_limited'
+                              ? TicketReview(
+                                  ticketType: widget.ticketType,
+                                  customForm: formIds,
+                                )
+                              : PaymentMethod();
+                        },
+                      ),
+                    );
+
+                  // print(formIds);
                 }
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return widget.ticketType == 'free_limited'
-                          ? TicketReview(
-                              ticketType: widget.ticketType,
-                              customForm: {
-                                'forms': [formIds, formAnswer]
-                              },
-                            )
-                          : PaymentMethod();
-                    },
-                  ),
-                );
               },
               child: Container(
                   height: ScreenUtil.instance.setWidth(50),
@@ -345,6 +348,11 @@ class _TransactionFormState extends State<TransactionForm> {
           } else {
             isRequired = false;
           }
+
+          setState(() {
+            formIds.add(customFormData[i]['id']);
+            print(formIds);
+          });
 
           return customFormList == null
               ? Container()

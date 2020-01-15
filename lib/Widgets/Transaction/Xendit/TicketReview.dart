@@ -20,7 +20,7 @@ import '../CC.dart';
 
 class TicketReview extends StatefulWidget {
   final ticketType;
-  final Map customForm;
+  final List<Map<String, dynamic>> customForm;
 
   const TicketReview({Key key, this.ticketType, this.customForm})
       : super(key: key);
