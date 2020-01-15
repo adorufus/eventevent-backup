@@ -164,6 +164,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, String> headers = {
       "Authorization": AUTHORIZATION_KEY,
+      "X-API-KEY": API_KEY,
       "cookie": prefs.getString('Session')
     };
 
@@ -175,7 +176,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
     var parsed;
     request.headers.addAll(headers);
     request.fields.addAll({
-      'X-API-KEY': '47d32cb10889cbde94e5f5f28ab461e52890034b',
+//      'X-API-KEY': API_KEY,
       'eventTypeID':
           (int.parse(prefs.getString('POST_EVENT_TYPE')) + 1).toString(),
       'ticketTypeID': ticketType[index]['id'],
@@ -210,7 +211,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
 
     request.send().then((response) async {
       print(response.statusCode);
-      print(response);
+      print(response.stream.toString());
       var response2 = await http.Response.fromStream(response);
       print(response2.body);
       // response.stream.transform(utf8.decoder).map((value) => print(value[0]));
