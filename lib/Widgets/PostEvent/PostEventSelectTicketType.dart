@@ -206,6 +206,8 @@ class SelectTicketTypeState extends State<SelectTicketType> {
         filename: basename(imageFile.path));
     request.files.add(multipartFile);
 
+    print(request.fields.toString());
+
     request.send().then((response) async {
       print(response.statusCode);
       print(response);
