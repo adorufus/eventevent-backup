@@ -576,6 +576,9 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                               widget.following == null
                                           ? Colors.grey
                                           : Colors.black)),
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(9),
+                              ),
                               Text('FOLLOWING',
                                   style: TextStyle(
                                       fontSize: 7,
