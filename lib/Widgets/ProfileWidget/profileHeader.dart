@@ -364,7 +364,6 @@ class _ProfileHeaderState extends State<ProfileHeader>
               Container(
                 height: ScreenUtil.instance.setWidth(60.63),
                 margin: EdgeInsets.symmetric(horizontal: 13, vertical: 28),
-                padding: EdgeInsets.symmetric(horizontal: 13),
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -381,6 +380,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       GestureDetector(
+                        behavior: HitTestBehavior.translucent,
                         onTap: widget.eventCreatedCount == '0'
                             ? () {}
                             : () {
@@ -391,40 +391,40 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                           type: 'created',
                                         )));
                               },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              widget.eventCreatedCount == null
-                                  ? '0'
-                                  : widget.eventCreatedCount,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                      int.parse(widget.eventCreatedCount) > 999
-                                          ? 14
-                                          : 17,
-                                  color: widget.eventCreatedCount == "0" ||
-                                          widget.eventCreatedCount == null
-                                      ? Colors.grey
-                                      : Colors.black),
-                            ),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(9),
-                            ),
-                            Text('EVENT CREATED',
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 18),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                widget.eventCreatedCount == null
+                                    ? '0'
+                                    : widget.eventCreatedCount,
                                 style: TextStyle(
-                                    fontSize: 7,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize:
+                                        int.parse(widget.eventCreatedCount) > 999
+                                            ? 14
+                                            : 17,
                                     color: widget.eventCreatedCount == "0" ||
                                             widget.eventCreatedCount == null
                                         ? Colors.grey
-                                        : Colors.black))
-                          ],
+                                        : Colors.black),
+                              ),
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(9),
+                              ),
+                              Text('EVENT CREATED',
+                                  style: TextStyle(
+                                      fontSize: 7,
+                                      color: widget.eventCreatedCount == "0" ||
+                                              widget.eventCreatedCount == null
+                                          ? Colors.grey
+                                          : Colors.black))
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(16),
                       ),
                       Container(
                         width: 0,
@@ -434,10 +434,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                 right: createBorderSide(context,
                                     color: Color(0xFF8A8A8B)))),
                       ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(18),
-                      ),
                       GestureDetector(
+                        behavior: HitTestBehavior.translucent,
                         onTap: widget.eventGoingCount == '0'
                             ? () {}
                             : () {
@@ -445,41 +443,41 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                     builder: (BuildContext context) =>
                                         EventList(type: 'going', userId: widget.currentUserId,)));
                               },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                                widget.eventGoingCount ==
-                                        null
-                                    ? '0'
-                                    : widget.eventGoingCount,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize:
-                                        int.parse(widget.eventCreatedCount) >
-                                                999
-                                            ? 14
-                                            : 17,
-                                    color: widget.eventGoingCount == "0" ||
-                                            widget.eventGoingCount == null
-                                        ? Colors.grey
-                                        : Colors.black)),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(9),
-                            ),
-                            Text('EVENT GOING',
-                                style: TextStyle(
-                                    fontSize: 7,
-                                    color: widget.eventGoingCount == "0" ||
-                                            widget.eventGoingCount == null
-                                        ? Colors.grey
-                                        : Colors.black))
-                          ],
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 18, right: 18),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                  widget.eventGoingCount ==
+                                          null
+                                      ? '0'
+                                      : widget.eventGoingCount,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          int.parse(widget.eventCreatedCount) >
+                                                  999
+                                              ? 14
+                                              : 17,
+                                      color: widget.eventGoingCount == "0" ||
+                                              widget.eventGoingCount == null
+                                          ? Colors.grey
+                                          : Colors.black)),
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(9),
+                              ),
+                              Text('EVENT GOING',
+                                  style: TextStyle(
+                                      fontSize: 7,
+                                      color: widget.eventGoingCount == "0" ||
+                                              widget.eventGoingCount == null
+                                          ? Colors.grey
+                                          : Colors.black))
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(18),
                       ),
                       Container(
                         width: 0,
@@ -489,10 +487,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                 right: createBorderSide(context,
                                     color: Color(0xFF8A8A8B)))),
                       ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(23),
-                      ),
                       GestureDetector(
+                        behavior: HitTestBehavior.translucent,
                         onTap: widget.follower == '0'
                             ? () {}
                             : () {
@@ -504,38 +500,39 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                               '/user/follower?X-API-KEY=$API_KEY&userID=${widget.currentUserId}&page=1',
                                         )));
                               },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                                widget.follower == null ? '0' : widget.follower,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize:
-                                        int.parse(widget.eventCreatedCount) >
-                                                999
-                                            ? 14
-                                            : 17,
-                                    color: widget.follower == "0" ||
-                                            widget.follower == null
-                                        ? Colors.grey
-                                        : Colors.black)),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(9),
-                            ),
-                            Text('FOLLOWER',
-                                style: TextStyle(
-                                    fontSize: 7,
-                                    color: widget.follower == "0" ||
-                                            widget.follower == null
-                                        ? Colors.grey
-                                        : Colors.black))
-                          ],
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 23, right: 23),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                  widget.follower == null ? '0' : widget.follower,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          int.parse(widget.eventCreatedCount) >
+                                                  999
+                                              ? 14
+                                              : 17,
+                                      color: widget.follower == "0" ||
+                                              widget.follower == null
+                                          ? Colors.grey
+                                          : Colors.black)),
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(9),
+                              ),
+                              Text('FOLLOWER',
+                                  style: TextStyle(
+                                      fontSize: 7,
+                                      color: widget.follower == "0" ||
+                                              widget.follower == null
+                                          ? Colors.grey
+                                          : Colors.black))
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(23),
                       ),
                       Container(
                         width: 0,
@@ -545,10 +542,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                 right: createBorderSide(context,
                                     color: Color(0xFF8A8A8B)))),
                       ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(23),
-                      ),
                       GestureDetector(
+                        behavior: HitTestBehavior.translucent,
                         onTap: widget.following == '0'
                             ? () {}
                             : () {
@@ -560,35 +555,35 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                               '/user/following?X-API-KEY=${API_KEY}&userID=${widget.currentUserId}&page=1',
                                         )));
                               },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                                widget.following == null
-                                    ? '0'
-                                    : widget.following,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize:
-                                        int.parse(widget.eventCreatedCount) >
-                                                999
-                                            ? 14
-                                            : 17,
-                                    color: widget.following == "0" ||
-                                            widget.following == null
-                                        ? Colors.grey
-                                        : Colors.black)),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(9),
-                            ),
-                            Text('FOLLOWING',
-                                style: TextStyle(
-                                    fontSize: 7,
-                                    color: widget.following == "0"
-                                        ? Colors.grey
-                                        : Colors.black))
-                          ],
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 23, right: 9),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                  widget.following == null
+                                      ? '0'
+                                      : widget.following,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          int.parse(widget.eventCreatedCount) >
+                                                  999
+                                              ? 14
+                                              : 17,
+                                      color: widget.following == "0" ||
+                                              widget.following == null
+                                          ? Colors.grey
+                                          : Colors.black)),
+                              Text('FOLLOWING',
+                                  style: TextStyle(
+                                      fontSize: 7,
+                                      color: widget.following == "0"
+                                          ? Colors.grey
+                                          : Colors.black))
+                            ],
+                          ),
                         ),
                       )
                     ],
