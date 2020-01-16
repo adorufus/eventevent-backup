@@ -21,6 +21,22 @@ class EventList extends StatefulWidget{
 
 class EventListState extends State<EventList>{
 
+  String currentUserId = '';
+
+  getUserDetail() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    setState((){
+      currentUserId = preferences.getString('Last User ID');
+    });
+  }
+
+  @override
+  void initState() {
+    getUserDetail();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
@@ -48,7 +64,7 @@ class EventListState extends State<EventList>{
         color: Colors.white,
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        child: DefaultTabController(
+        child: widget.userId == currentUserId ? DefaultTabController(
           length: 2,
           initialIndex: 0,
           child: ListView(
@@ -78,7 +94,7 @@ class EventListState extends State<EventList>{
               )
             ],
           ),
-        )
+        ) : PublicEventList(type: widget.type, userId: widget.userId,)
       ),
     );
   }

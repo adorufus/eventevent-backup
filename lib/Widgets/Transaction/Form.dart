@@ -90,8 +90,8 @@ class _TransactionFormState extends State<TransactionForm> {
     aditionalNotesController = TextEditingController();
   }
 
-  TextEditingController customFormController = new TextEditingController();
-
+  List<TextEditingController> customFormController = [];
+  
   List<String> answer;
   List<String> questionId;
 
@@ -349,10 +349,10 @@ class _TransactionFormState extends State<TransactionForm> {
             isRequired = false;
           }
 
-          setState(() {
-            formIds.add(customFormData[i]['id']);
-            print(formIds);
-          });
+          // setState(() {
+          //   // formIds.add(customFormData[i]['id']);
+          //   print(formIds);
+          // });
 
           return customFormList == null
               ? Container()
@@ -396,6 +396,7 @@ class _TransactionFormState extends State<TransactionForm> {
   int _radioValue = 0;
 
   Widget formType(int index) {
+
     if (customFormList[index]['type'] == '2') {
       return ColumnBuilder(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -419,7 +420,6 @@ class _TransactionFormState extends State<TransactionForm> {
           });
     } else if (customFormList[index]['type'] == '1') {
       return TextFormField(
-        controller: customFormController,
         keyboardType: TextInputType.multiline,
         textInputAction: TextInputAction.done,
         decoration: InputDecoration(

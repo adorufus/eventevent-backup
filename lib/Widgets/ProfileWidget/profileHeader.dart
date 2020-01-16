@@ -384,12 +384,15 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         onTap: widget.eventCreatedCount == '0'
                             ? () {}
                             : () {
-                                Navigator.of(context).push(MaterialPageRoute(
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         EventList(
-                                          userId: widget.currentUserId,
-                                          type: 'created',
-                                        )));
+                                      userId: widget.currentUserId,
+                                      type: 'created',
+                                    ),
+                                  ),
+                                );
                               },
                         child: Padding(
                           padding: const EdgeInsets.only(left: 10, right: 18),
@@ -404,7 +407,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize:
-                                        int.parse(widget.eventCreatedCount) > 999
+                                        int.parse(widget.eventCreatedCount) >
+                                                999
                                             ? 14
                                             : 17,
                                     color: widget.eventCreatedCount == "0" ||
@@ -441,7 +445,10 @@ class _ProfileHeaderState extends State<ProfileHeader>
                             : () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        EventList(type: 'going', userId: widget.currentUserId,)));
+                                        EventList(
+                                          type: 'going',
+                                          userId: widget.currentUserId,
+                                        )));
                               },
                         child: Padding(
                           padding: const EdgeInsets.only(left: 18, right: 18),
@@ -450,8 +457,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                  widget.eventGoingCount ==
-                                          null
+                                  widget.eventGoingCount == null
                                       ? '0'
                                       : widget.eventGoingCount,
                                   style: TextStyle(
@@ -508,7 +514,9 @@ class _ProfileHeaderState extends State<ProfileHeader>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                  widget.follower == null ? '0' : widget.follower,
+                                  widget.follower == null
+                                      ? '0'
+                                      : widget.follower,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize:
@@ -818,10 +826,10 @@ class _ProfileHeaderState extends State<ProfileHeader>
           itemBuilder: (context, i) {
             List _loveCount = userTimelineList[i]['impression']['data'];
             List commentList = userTimelineList[i]['comment']['data'];
-            
+
             Map impressionData;
 
-            for(var impres in userTimelineList[i]['impression']['data']){
+            for (var impres in userTimelineList[i]['impression']['data']) {
               impressionData = impres;
               print(impressionData.toString());
             }
@@ -840,10 +848,17 @@ class _ProfileHeaderState extends State<ProfileHeader>
               pictureFull: userTimelineList[i]['pictureFull'],
               type: userTimelineList[i]['type'],
               userId: userTimelineList[i]['userID'],
-              impressionId: userTimelineList[i]['impression']['data'].length == 0 ? '' : impressionData['id'],
+              impressionId:
+                  userTimelineList[i]['impression']['data'].length == 0
+                      ? ''
+                      : impressionData['id'],
               loveCount: userTimelineList[i]['impression']['data'].length,
-              isLoved: userTimelineList[i]['impression']['data'].length == 0 ? false : impressionData.containsValue(widget.currentUserId) == true ? true : false,
-            ); 
+              isLoved: userTimelineList[i]['impression']['data'].length == 0
+                  ? false
+                  : impressionData.containsValue(widget.currentUserId) == true
+                      ? true
+                      : false,
+            );
             // Container(
             //     margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
             //     decoration: BoxDecoration(
