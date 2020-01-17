@@ -221,8 +221,15 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
                   width: ScreenUtil.instance.setWidth(100),
                   height: ScreenUtil.instance.setWidth(40),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: Colors.black, width: 0.5)
+                    color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 1.5,
+                          color: Color(0xff8a8a8b).withOpacity(0.2),
+                          spreadRadius: 2
+                        )
+                      ]
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

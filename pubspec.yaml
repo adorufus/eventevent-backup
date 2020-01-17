@@ -84,7 +84,9 @@ dependencies:
   youtube_player_flutter: 6.0.3+2
   flutter_typeahead: ^1.7.0
   percent_indicator: ^2.1.1+1
+  supernova_flutter_ui_toolkit: ^0.0.2
   sqflite: any
+  rive: any
   share:
     git:
      url: https://github.com/d-silveira/flutter-share.git
@@ -122,8 +124,11 @@ flutter:
           weight: 700
 
   assets:
+    - assets/flare/splashicon.flr
+    - assets/flare/eventevent.flr
     - assets/docs.png
     - assets/qr-code.png
+    - assets/eventevent.png
     - assets/bottom-bar/home-white.png
     - assets/bottom-bar/home-green.png
     - assets/bottom-bar/notification-white.png

@@ -6,6 +6,7 @@ import 'package:eventevent/Widgets/Transaction/Xendit/TicketReview.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -90,10 +91,10 @@ class _TransactionFormState extends State<TransactionForm> {
     aditionalNotesController = TextEditingController();
   }
 
-  List<TextEditingController> customFormController = [];
-  
-  List<String> answer;
-  List<String> questionId;
+  List<TextEditingController> customFormControllers = [];
+
+  List answer = [];
+  List questionId = [];
 
   List<Map<String, dynamic>> formIds;
   List formAnswer;
@@ -126,27 +127,41 @@ class _TransactionFormState extends State<TransactionForm> {
                 //   formAnswer['answer'] = answer[i];
                 // }
                 if (customFormList != null) {
-                  for (var formItem in customFormList) {
-                    print('form item: ' + formItem.toString());
-                    print('form id: ' + formItem['id'].toString());
+                  // for (var formItem in customFormList) {
+                  //   print('form item: ' + formItem.toString());
+                  //   print('form id: ' + formItem['id'].toString());
 
-                    formIds.addAll(formItem);
+                  //   formIds.addAll(formItem);
 
-                    print(formIds);
+                  //   print(formIds);
+                  // }
+
+                  for(var customForm in customFormList){
+                    questionId.add(customForm['id']);
                   }
 
+                  print(questionId);
+
                   Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) {
-                          return widget.ticketType == 'free_limited'
-                              ? TicketReview(
-                                  ticketType: widget.ticketType,
-                                  customForm: formIds,
-                                )
-                              : PaymentMethod();
-                        },
-                      ),
-                    );
+                    MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return widget.ticketType == 'free_limited'
+                            ? TicketReview(
+                                ticketType: widget.ticketType,
+                                customFormList: answer,
+                                customFormId: questionId,
+                              )
+                            : PaymentMethod(
+                              answerList: answer,
+                              customFormId: questionId,
+                            );
+                      },
+                    ),
+                  ).then((val){
+                    answer.clear();
+                    questionId.clear();
+                  });
+                  
 
                   // print(formIds);
                 }
@@ -328,7 +343,9 @@ class _TransactionFormState extends State<TransactionForm> {
                     ),
                   ),
                   SizedBox(height: ScreenUtil.instance.setWidth(30)),
-                  customFormData['status'] == null ? Container() : customForm()
+                  customFormData['status'] == null || customFormList == null
+                      ? Container()
+                      : customForm()
                 ],
               ),
             ),
@@ -338,53 +355,92 @@ class _TransactionFormState extends State<TransactionForm> {
   Widget customForm() {
     if (customFormData['status'] == 'OK' &&
         customFormData['data']['isCustomForm'] == '1') {
-      return ColumnBuilder(
+      return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
-        itemCount: customFormList == null ? 0 : customFormList.length,
-        itemBuilder: (BuildContext context, i) {
-          if (customFormList[i]['isRequired'] == "1") {
+        children: mapIndexed(customFormList, (index, item) {
+          if (item['isRequired'] == "1") {
             isRequired = true;
           } else {
             isRequired = false;
           }
 
-          // setState(() {
-          //   // formIds.add(customFormData[i]['id']);
-          //   print(formIds);
-          // });
-
-          return customFormList == null
-              ? Container()
-              : Container(
-                  margin: EdgeInsets.only(bottom: 30),
-                  padding: EdgeInsets.all(15),
-                  alignment: Alignment.centerLeft,
-                  color: Colors.white,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(children: <Widget>[
-                          isRequired == false
-                              ? Container()
-                              : Text('*',
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: ScreenUtil.instance.setSp(20))),
-                          SizedBox(width: ScreenUtil.instance.setWidth(5)),
-                          Text(
-                              customFormList[i]['name'] == null
-                                  ? ''
-                                  : customFormList[i]['name'],
-                              style: TextStyle(
-                                  fontSize: ScreenUtil.instance.setSp(16),
-                                  fontWeight: FontWeight.bold))
-                        ]),
-                        formType(i)
-                      ]),
-                );
-        },
+          return Container(
+            margin: EdgeInsets.only(bottom: 30),
+            padding: EdgeInsets.all(15),
+            alignment: Alignment.centerLeft,
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    isRequired == false
+                        ? Container()
+                        : Text('*',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: ScreenUtil.instance.setSp(20))),
+                    SizedBox(width: ScreenUtil.instance.setWidth(5)),
+                    Text(item['name'] == null ? '' : item['name'],
+                        style: TextStyle(
+                            fontSize: ScreenUtil.instance.setSp(16),
+                            fontWeight: FontWeight.bold))
+                  ],
+                ),
+                formType(index)
+              ],
+            ),
+          );
+        }).toList(),
       );
+      // return ColumnBuilder(
+      //   crossAxisAlignment: CrossAxisAlignment.start,
+      //   mainAxisAlignment: MainAxisAlignment.start,
+      //   itemCount: customFormList == null ? 0 : customFormList.length,
+      //   itemBuilder: (BuildContext context, i) {
+      //     if (customFormList[i]['isRequired'] == "1") {
+      //       isRequired = true;
+      //     } else {
+      //       isRequired = false;
+      //     }
+
+      //     // setState(() {
+      //     //   // formIds.add(customFormData[i]['id']);
+      //     //   print(formIds);
+      //     // });
+
+      //     return customFormList == null
+      //         ? Container()
+      //         : Container(
+      //             margin: EdgeInsets.only(bottom: 30),
+      //             padding: EdgeInsets.all(15),
+      //             alignment: Alignment.centerLeft,
+      //             color: Colors.white,
+      //             child: Column(
+      //                 crossAxisAlignment: CrossAxisAlignment.start,
+      //                 children: <Widget>[
+      //                   Row(children: <Widget>[
+      //                     isRequired == false
+      //                         ? Container()
+      //                         : Text('*',
+      //                             style: TextStyle(
+      //                                 color: Colors.red,
+      //                                 fontSize: ScreenUtil.instance.setSp(20))),
+      //                     SizedBox(width: ScreenUtil.instance.setWidth(5)),
+      //                     Text(
+      //                         customFormList[i]['name'] == null
+      //                             ? ''
+      //                             : customFormList[i]['name'],
+      //                         style: TextStyle(
+      //                             fontSize: ScreenUtil.instance.setSp(16),
+      //                             fontWeight: FontWeight.bold))
+      //                   ]),
+      //                   formType(i)
+      //                 ]),
+      //           );
+      //   },
+      // );
     }
     // else if(customFormData['status'] == ['NOK']){
     //   return Container();
@@ -396,7 +452,6 @@ class _TransactionFormState extends State<TransactionForm> {
   int _radioValue = 0;
 
   Widget formType(int index) {
-
     if (customFormList[index]['type'] == '2') {
       return ColumnBuilder(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -420,6 +475,7 @@ class _TransactionFormState extends State<TransactionForm> {
           });
     } else if (customFormList[index]['type'] == '1') {
       return TextFormField(
+        controller: customFormControllers[index],
         keyboardType: TextInputType.multiline,
         textInputAction: TextInputAction.done,
         decoration: InputDecoration(
@@ -431,6 +487,11 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   Future saveInput() async {
+    for (int i = 0; i < customFormControllers.length; i++) {
+      answer.add(customFormControllers[i].text);
+    }
+    print('answer list: ' + answer.toString());
+
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     preferences.setString('ticket_about_firstname', firstnameController.text);
@@ -439,7 +500,7 @@ class _TransactionFormState extends State<TransactionForm> {
     preferences.setString('ticket_about_phone', phoneController.text);
     preferences.setString(
         'ticket_about_aditional', aditionalNotesController.text);
-    preferences.setStringList('ticket_custom_form_list', answer);
+    // preferences.setStringList('ticket_custom_form_list', answer);
 
     print(preferences.getString('ticket_about_firstname'));
     print(preferences.getString('ticket_about_lastname'));
@@ -471,6 +532,13 @@ class _TransactionFormState extends State<TransactionForm> {
         var extractedData = json.decode(response.body);
         customFormData = json.decode(response.body);
         customFormList = extractedData['data']['question'];
+
+        for (int i = 0; i < customFormList.length; i++) {
+          customFormControllers.add(TextEditingController());
+        }
+
+        print(
+        'customFormController list:' + customFormControllers.length.toString());
       });
     } else if (response.statusCode == 400) {
       setState(() {

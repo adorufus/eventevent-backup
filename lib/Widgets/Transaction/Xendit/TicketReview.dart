@@ -21,8 +21,10 @@ import '../CC.dart';
 class TicketReview extends StatefulWidget {
   final ticketType;
   final List<Map<String, dynamic>> customForm;
+  final List customFormList;
+  final List customFormId;
 
-  const TicketReview({Key key, this.ticketType, this.customForm})
+  const TicketReview({Key key, this.ticketType, this.customForm, this.customFormList, this.customFormId})
       : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -109,6 +111,7 @@ class _TicketReviewState extends State<TicketReview> {
   void initState() {
     super.initState();
     getEventDetails();
+    print('answer list' + widget.customFormList.toString());
   }
 
   @override
@@ -471,6 +474,23 @@ class _TicketReviewState extends State<TicketReview> {
       'identifier': uuid.v4().toString(),
     };
 
+    for(int i = 0; i < widget.customFormId.length; i++){
+      body['form[$i][id]'] = widget.customFormId[i];
+      bodyFreeLimit['form[$i][id]'] = widget.customFormId[i];
+    }
+
+    for(int i = 0; i < widget.customFormList.length; i++){
+      body['form[$i][answer]'] = widget.customFormList[i];
+      bodyFreeLimit['form[$i][answer]'] = widget.customFormList[i];
+    }
+
+    if(widget.ticketType == 'free_limited'){
+      print(bodyFreeLimit);
+    }
+    else{
+      print(body);
+    }
+
     // for(int i = 0; i < widget.customForm.length; i++){
     //   var customForm = widget.customForm;
     //   bodyFreeLimit.putIfAbsent('form[$i][id]', customForm[i]['id']);
@@ -478,88 +498,81 @@ class _TicketReviewState extends State<TicketReview> {
     // }
 
     String purchaseUri = BaseApi().apiUrl + '/ticket_transaction/post';
-
-    final request = http.MultipartRequest("POST", Uri.parse(purchaseUri));
-    request.headers
-        .addAll({'Authorization': AUTHORIZATION_KEY, 'cookie': session});
-
-    request.fields
-        .addAll(widget.ticketType == 'free_limited' ? bodyFreeLimit : body);
     
-//     final response = await http.post(purchaseUri,
-//         headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session},
-//         body: widget.ticketType == 'free_limited' ? bodyFreeLimit : body);
+    final response = await http.post(purchaseUri,
+        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session},
+        body: widget.ticketType == 'free_limited' ? bodyFreeLimit : body);
 
-//     print(response.statusCode);
-//     print(response.body);
+    print(response.statusCode);
+    print(response.body);
 
-//     if (response.statusCode == 200) {
-//       print('mantab gan');
-//       print(response.body);
-//       var extractedData = json.decode(response.body);
-//       setState(() {
-//         paymentData = extractedData['data'];
-//         print(paymentData['expired_time']);
-//         getPaymentData(paymentData['expired_time']);
-//       });
-//       if(widget.ticketType == 'free_limited'){
-//         Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SuccessPage()));
-//       }
-//       else if (paymentData['payment_method_id'] == '1') {
-//         Navigator.push(
-//             context,
-//             MaterialPageRoute(
-//                 builder: (BuildContext context) => CreditCardInput(
-//                       transactionID: paymentData['id'],
-//                       expDate: paymentData['expired_time'],
-//                     )));
-//       } else if (paymentData['payment_method_id'] == '4') {
-//         Navigator.of(context).push(
-//             MaterialPageRoute(
-//                 builder: (BuildContext context) => WaitingGopay(
-//                       amount: paymentData['amount'],
-//                       deadline: paymentData['expired_time'],
-//                       gopaytoken: paymentData['gopay'],
-//                       expDate: paymentData['expired_time'],
-//                       transactionID: paymentData['id'],
-//                     )),);
-//       } else if (paymentData['payment_method_id'] == '2') {
-//         Navigator.of(context).push(
-//             MaterialPageRoute(
-//                 builder: (BuildContext context) => WaitTransaction(
-//                     expDate: paymentData['expired_time'],
-//                     transactionID: paymentData['id'],
-//                     finalPrice: total.toString())),);
-//       } else if (paymentData['payment_method_id'] == '3') {
-//         Navigator.of(context).push(
-//           MaterialPageRoute(
-//               builder: (BuildContext context) => WaitingTransactionAlfamart(
-//                     transactionID: paymentData['id'],
-//                     expDate: paymentData['expired_time'],
-//                   )),
-//         );
-//       } else if (paymentData['payment_method_id'] == '5') {
-// //        launch(paymentData['payment']['data_vendor']['payment_url']);
-//         Navigator.push(context, MaterialPageRoute(
-//           builder: (context) => WebViewTest(
-//             url: paymentData['payment']['data_vendor']['payment_url'],
-//           )
-//         ));
-//       } else if (paymentData['payment_method_id'] == '9') {
-//         Navigator.of(context).push(
-//             MaterialPageRoute(
-//                 builder: (BuildContext context) => WaitTransaction(
-//                     expDate: paymentData['expired_time'],
-//                     transactionID: paymentData['id'],
-//                     finalPrice: total.toString())),);
-//       } else if (paymentData['payment_method_id'] == '7') {
-//         Navigator.of(context).push(
-//             MaterialPageRoute(
-//                 builder: (BuildContext context) => PaymentBCA(
-//                       expDate: paymentData['expired_time'],
-//                       transactionID: paymentData['id'],
-//                     )),);
-//       }
-//     }
+    if (response.statusCode == 200) {
+      print('mantab gan');
+      print(response.body);
+      var extractedData = json.decode(response.body);
+      setState(() {
+        paymentData = extractedData['data'];
+        print(paymentData['expired_time']);
+        getPaymentData(paymentData['expired_time']);
+      });
+      if(widget.ticketType == 'free_limited'){
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SuccessPage()));
+      }
+      else if (paymentData['payment_method_id'] == '1') {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => CreditCardInput(
+                      transactionID: paymentData['id'],
+                      expDate: paymentData['expired_time'],
+                    )));
+      } else if (paymentData['payment_method_id'] == '4') {
+        Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (BuildContext context) => WaitingGopay(
+                      amount: paymentData['amount'],
+                      deadline: paymentData['expired_time'],
+                      gopaytoken: paymentData['gopay'],
+                      expDate: paymentData['expired_time'],
+                      transactionID: paymentData['id'],
+                    )),);
+      } else if (paymentData['payment_method_id'] == '2') {
+        Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (BuildContext context) => WaitTransaction(
+                    expDate: paymentData['expired_time'],
+                    transactionID: paymentData['id'],
+                    finalPrice: total.toString())),);
+      } else if (paymentData['payment_method_id'] == '3') {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (BuildContext context) => WaitingTransactionAlfamart(
+                    transactionID: paymentData['id'],
+                    expDate: paymentData['expired_time'],
+                  )),
+        );
+      } else if (paymentData['payment_method_id'] == '5') {
+//        launch(paymentData['payment']['data_vendor']['payment_url']);
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => WebViewTest(
+            url: paymentData['payment']['data_vendor']['payment_url'],
+          )
+        ));
+      } else if (paymentData['payment_method_id'] == '9') {
+        Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (BuildContext context) => WaitTransaction(
+                    expDate: paymentData['expired_time'],
+                    transactionID: paymentData['id'],
+                    finalPrice: total.toString())),);
+      } else if (paymentData['payment_method_id'] == '7') {
+        Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (BuildContext context) => PaymentBCA(
+                      expDate: paymentData['expired_time'],
+                      transactionID: paymentData['id'],
+                    )),);
+      }
+    }
   }
 }

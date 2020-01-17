@@ -4,7 +4,8 @@ import 'package:eventevent/Widgets/Transaction/Xendit/TicketReview.dart';
 import 'package:eventevent/Widgets/Transaction/Xendit/vaList.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,7 +13,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Alfamart/WaitingTransactionAlfamart.dart';
 
 class PaymentMethod extends StatefulWidget {
-  
+  final List answerList;
+  final List customFormId;
+
+  const PaymentMethod({Key key, this.answerList, this.customFormId})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -36,7 +41,7 @@ class PaymentMethodState extends State<PaymentMethod> {
     print(paymentAmount);
   }
 
-  savePaymentInfo(String fee, String methodID, {String paymentCode}) async{
+  savePaymentInfo(String fee, String methodID, {String paymentCode}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     prefs.setString('ticket_fee', fee);
@@ -52,7 +57,8 @@ class PaymentMethodState extends State<PaymentMethod> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -91,7 +97,9 @@ class PaymentMethodState extends State<PaymentMethod> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Text('Transfer Amount'.toUpperCase(),
-                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.grey)),
+                        style: TextStyle(
+                            fontSize: ScreenUtil.instance.setSp(20),
+                            color: Colors.grey)),
                     SizedBox(height: ScreenUtil.instance.setWidth(20)),
                     Text('Rp. $paymentAmount',
                         style: TextStyle(
@@ -111,38 +119,93 @@ class PaymentMethodState extends State<PaymentMethod> {
                             : paymentMethodList.length,
                         itemBuilder: (BuildContext context, i) {
                           return GestureDetector(
-                            onTap: (){
-                              if(paymentMethodList[i]['vendor'] == 'xendit'.toLowerCase()){
-                                savePaymentInfo(paymentMethodList[i]['fee'], paymentMethodList[i]['id']);
+                            onTap: () {
+                              if (paymentMethodList[i]['vendor'] ==
+                                  'xendit'.toLowerCase()) {
+                                savePaymentInfo(paymentMethodList[i]['fee'],
+                                    paymentMethodList[i]['id']);
                                 print(paymentMethodList[i]['id']);
-                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext contex) => VirtualAccountListWidget()));
-                              }
-                              else if(paymentMethodList[i]['id'] == '3'){
-                                savePaymentInfo(paymentMethodList[i]['fee'], paymentMethodList[i]['id']);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext contex) =>
+                                            VirtualAccountListWidget()));
+                              } else if (paymentMethodList[i]['id'] == '3') {
+                                savePaymentInfo(paymentMethodList[i]['fee'],
+                                    paymentMethodList[i]['id']);
                                 print(paymentMethodList[i]['id']);
-                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TicketReview()));
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        TicketReview(
+                                      customFormId: widget.customFormId,
+                                      customFormList: widget.answerList,
+                                    ),
+                                  ),
+                                );
+                              } else if (paymentMethodList[i]['vendor'] ==
+                                  'midtrans'.toLowerCase()) {
+                                if (paymentMethodList[i]['id'] == '1') {
+                                  savePaymentInfo(paymentMethodList[i]['fee'],
+                                      paymentMethodList[i]['id']);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          TicketReview(
+                                        customFormId: widget.customFormId,
+                                        customFormList: widget.answerList,
+                                      ),
+                                    ),
+                                  );
+                                } else if (paymentMethodList[i]['id'] == '5') {
+                                  savePaymentInfo(paymentMethodList[i]['fee'],
+                                      paymentMethodList[i]['id']);
+                                  print('payment method used: ' +
+                                      paymentMethodList[i]['id']);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          TicketReview(
+                                        customFormId: widget.customFormId,
+                                        customFormList: widget.answerList,
+                                      ),
+                                    ),
+                                  );
+                                } else if (paymentMethodList[i]['id'] == '4') {
+                                  savePaymentInfo(paymentMethodList[i]['fee'],
+                                      paymentMethodList[i]['id']);
+                                  print('payment method used: ' +
+                                      paymentMethodList[i]['id']);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          TicketReview(
+                                        customFormId: widget.customFormId,
+                                        customFormList: widget.answerList,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              } else if (paymentMethodList[i]['id'] == '7') {
+                                savePaymentInfo(paymentMethodList[i]['fee'],
+                                    paymentMethodList[i]['id']);
+                                print('payment method used: ' +
+                                    paymentMethodList[i]['id']);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        TicketReview(
+                                      customFormId: widget.customFormId,
+                                      customFormList: widget.answerList,
+                                    ),
+                                  ),
+                                );
                               }
-                              else if(paymentMethodList[i]['vendor'] == 'midtrans'.toLowerCase()){
-                                if(paymentMethodList[i]['id'] == '1'){
-                                  savePaymentInfo(paymentMethodList[i]['fee'], paymentMethodList[i]['id']);
-                                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TicketReview()));
-                                }
-                                else if(paymentMethodList[i]['id'] == '5'){
-                                  savePaymentInfo(paymentMethodList[i]['fee'], paymentMethodList[i]['id']);
-                                  print('payment method used: ' + paymentMethodList[i]['id']);
-                                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TicketReview()));
-                                }
-                                else if(paymentMethodList[i]['id'] == '4'){
-                                  savePaymentInfo(paymentMethodList[i]['fee'], paymentMethodList[i]['id']);
-                                  print('payment method used: ' + paymentMethodList[i]['id']);
-                                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TicketReview()));
-                                }
-                              }
-                              else if(paymentMethodList[i]['id'] == '7'){
-                                  savePaymentInfo(paymentMethodList[i]['fee'], paymentMethodList[i]['id']);
-                                  print('payment method used: ' + paymentMethodList[i]['id']);
-                                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TicketReview()));
-                                }
                             },
                             child: Container(
                               padding: const EdgeInsets.all(8.0),
@@ -169,10 +232,10 @@ class PaymentMethodState extends State<PaymentMethod> {
                                         color: Colors.white,
                                         boxShadow: [
                                           BoxShadow(
-                                            blurRadius: 1.5,
-                                            spreadRadius: 2,
-                                            color: Color(0xff8a8a8b).withOpacity(.5)
-                                          )
+                                              blurRadius: 1.5,
+                                              spreadRadius: 2,
+                                              color: Color(0xff8a8a8b)
+                                                  .withOpacity(.5))
                                         ],
                                         borderRadius:
                                             BorderRadius.circular(15)),
@@ -189,11 +252,13 @@ class PaymentMethodState extends State<PaymentMethod> {
                                                 : NetworkImage(
                                                     paymentMethodList[i]
                                                         ['photo']),
-                                            width: ScreenUtil.instance.setWidth(250),
+                                            width: ScreenUtil.instance
+                                                .setWidth(250),
                                           )),
                                         ),
                                         SizedBox(
-                                          width: ScreenUtil.instance.setWidth(50),
+                                          width:
+                                              ScreenUtil.instance.setWidth(50),
                                         ),
                                         Icon(
                                           Icons.navigate_next,
@@ -227,8 +292,10 @@ class PaymentMethodState extends State<PaymentMethod> {
     String paymentMethodURI = BaseApi().apiUrl +
         '/payment_method/list?X-API-KEY=${API_KEY}&indomaret=true';
 
-    final response = await http.get(paymentMethodURI,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session}).timeout(Duration(seconds: 30));
+    final response = await http.get(paymentMethodURI, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': session
+    }).timeout(Duration(seconds: 30));
 
     print(response.body);
 
@@ -240,7 +307,5 @@ class PaymentMethodState extends State<PaymentMethod> {
     }
   }
 
-  Future getMidtransFee() async {
-    
-  }
+  Future getMidtransFee() async {}
 }
