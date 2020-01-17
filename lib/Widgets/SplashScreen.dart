@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -76,14 +77,11 @@ class _SplashScreenState extends State<SplashScreen> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          color: Colors.white,
+          color: eventajaGreenTeal,
           child: Center(
-            child: Hero(
-              tag: 'eventeventlogo',
-                child: Image.asset(
-              'assets/icons/logo_company.png',
-              scale: 2,
-            )),
+            child: Container(
+              child: FlareActor('assets/flare/eventevent.flr', animation: 'Splash', sizeFromArtboard: true, artboard: 'Artboard',),
+            )
           ),
         ),
       ),

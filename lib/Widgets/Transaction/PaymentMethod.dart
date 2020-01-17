@@ -15,8 +15,9 @@ import 'Alfamart/WaitingTransactionAlfamart.dart';
 class PaymentMethod extends StatefulWidget {
   final List answerList;
   final List customFormId;
+  final bool isCustomForm;
 
-  const PaymentMethod({Key key, this.answerList, this.customFormId})
+  const PaymentMethod({Key key, this.answerList, this.customFormId, this.isCustomForm})
       : super(key: key);
 
   @override
@@ -120,16 +121,22 @@ class PaymentMethodState extends State<PaymentMethod> {
                         itemBuilder: (BuildContext context, i) {
                           return GestureDetector(
                             onTap: () {
-                              if (paymentMethodList[i]['vendor'] ==
+                              if (paymentMethodList[i]['method'] ==
                                   'xendit'.toLowerCase()) {
                                 savePaymentInfo(paymentMethodList[i]['fee'],
                                     paymentMethodList[i]['id']);
                                 print(paymentMethodList[i]['id']);
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext contex) =>
-                                            VirtualAccountListWidget()));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext contex) =>
+                                        TicketReview(
+                                          isCustomForm: widget.isCustomForm,
+                                      customFormId: widget.customFormId,
+                                      customFormList: widget.answerList,
+                                    ),
+                                  ),
+                                );
                               } else if (paymentMethodList[i]['id'] == '3') {
                                 savePaymentInfo(paymentMethodList[i]['fee'],
                                     paymentMethodList[i]['id']);
@@ -139,6 +146,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         TicketReview(
+                                          isCustomForm: widget.isCustomForm,
                                       customFormId: widget.customFormId,
                                       customFormList: widget.answerList,
                                     ),
@@ -154,6 +162,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           TicketReview(
+                                            isCustomForm: widget.isCustomForm,
                                         customFormId: widget.customFormId,
                                         customFormList: widget.answerList,
                                       ),
@@ -169,6 +178,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           TicketReview(
+                                            isCustomForm: widget.isCustomForm,
                                         customFormId: widget.customFormId,
                                         customFormList: widget.answerList,
                                       ),
@@ -184,6 +194,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           TicketReview(
+                                            isCustomForm: widget.isCustomForm,
                                         customFormId: widget.customFormId,
                                         customFormList: widget.answerList,
                                       ),
@@ -199,8 +210,9 @@ class PaymentMethodState extends State<PaymentMethod> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        TicketReview(
+                                        widget.customFormId == null || widget.customFormId == null ? TicketReview(isCustomForm: widget.isCustomForm,) : TicketReview(
                                       customFormId: widget.customFormId,
+                                      isCustomForm: widget.isCustomForm,
                                       customFormList: widget.answerList,
                                     ),
                                   ),

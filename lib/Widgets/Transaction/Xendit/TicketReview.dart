@@ -23,8 +23,15 @@ class TicketReview extends StatefulWidget {
   final List<Map<String, dynamic>> customForm;
   final List customFormList;
   final List customFormId;
+  final bool isCustomForm;
 
-  const TicketReview({Key key, this.ticketType, this.customForm, this.customFormList, this.customFormId})
+  const TicketReview(
+      {Key key,
+      this.ticketType,
+      this.customForm,
+      this.customFormList,
+      this.customFormId,
+      this.isCustomForm})
       : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -474,20 +481,21 @@ class _TicketReviewState extends State<TicketReview> {
       'identifier': uuid.v4().toString(),
     };
 
-    for(int i = 0; i < widget.customFormId.length; i++){
-      body['form[$i][id]'] = widget.customFormId[i];
-      bodyFreeLimit['form[$i][id]'] = widget.customFormId[i];
+    if (widget.isCustomForm == true) {
+      for (int i = 0; i < widget.customFormId.length; i++) {
+        body['form[$i][id]'] = widget.customFormId[i];
+        bodyFreeLimit['form[$i][id]'] = widget.customFormId[i];
+      }
+
+      for (int i = 0; i < widget.customFormList.length; i++) {
+        body['form[$i][answer]'] = widget.customFormList[i];
+        bodyFreeLimit['form[$i][answer]'] = widget.customFormList[i];
+      }
     }
 
-    for(int i = 0; i < widget.customFormList.length; i++){
-      body['form[$i][answer]'] = widget.customFormList[i];
-      bodyFreeLimit['form[$i][answer]'] = widget.customFormList[i];
-    }
-
-    if(widget.ticketType == 'free_limited'){
+    if (widget.ticketType == 'free_limited') {
       print(bodyFreeLimit);
-    }
-    else{
+    } else {
       print(body);
     }
 
@@ -498,7 +506,7 @@ class _TicketReviewState extends State<TicketReview> {
     // }
 
     String purchaseUri = BaseApi().apiUrl + '/ticket_transaction/post';
-    
+
     final response = await http.post(purchaseUri,
         headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session},
         body: widget.ticketType == 'free_limited' ? bodyFreeLimit : body);
@@ -515,10 +523,12 @@ class _TicketReviewState extends State<TicketReview> {
         print(paymentData['expired_time']);
         getPaymentData(paymentData['expired_time']);
       });
-      if(widget.ticketType == 'free_limited'){
-        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SuccessPage()));
-      }
-      else if (paymentData['payment_method_id'] == '1') {
+      if (widget.ticketType == 'free_limited') {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => SuccessPage()));
+      } else if (paymentData['payment_method_id'] == '1') {
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -528,21 +538,23 @@ class _TicketReviewState extends State<TicketReview> {
                     )));
       } else if (paymentData['payment_method_id'] == '4') {
         Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (BuildContext context) => WaitingGopay(
-                      amount: paymentData['amount'],
-                      deadline: paymentData['expired_time'],
-                      gopaytoken: paymentData['gopay'],
-                      expDate: paymentData['expired_time'],
-                      transactionID: paymentData['id'],
-                    )),);
-      } else if (paymentData['payment_method_id'] == '2') {
-        Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (BuildContext context) => WaitTransaction(
+          MaterialPageRoute(
+              builder: (BuildContext context) => WaitingGopay(
+                    amount: paymentData['amount'],
+                    deadline: paymentData['expired_time'],
+                    gopaytoken: paymentData['gopay'],
                     expDate: paymentData['expired_time'],
                     transactionID: paymentData['id'],
-                    finalPrice: total.toString())),);
+                  )),
+        );
+      } else if (paymentData['payment_method_id'] == '2') {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (BuildContext context) => WaitTransaction(
+                  expDate: paymentData['expired_time'],
+                  transactionID: paymentData['id'],
+                  finalPrice: total.toString())),
+        );
       } else if (paymentData['payment_method_id'] == '3') {
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -553,25 +565,25 @@ class _TicketReviewState extends State<TicketReview> {
         );
       } else if (paymentData['payment_method_id'] == '5') {
 //        launch(paymentData['payment']['data_vendor']['payment_url']);
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) => WebViewTest(
-            url: paymentData['payment']['data_vendor']['payment_url'],
-          )
-        ));
-      } else if (paymentData['payment_method_id'] == '9') {
-        Navigator.of(context).push(
+        Navigator.push(
+            context,
             MaterialPageRoute(
-                builder: (BuildContext context) => WaitTransaction(
-                    expDate: paymentData['expired_time'],
-                    transactionID: paymentData['id'],
-                    finalPrice: total.toString())),);
+                builder: (context) => WebViewTest(
+                      url: paymentData['payment']['data_vendor']['payment_url'],
+                    )));
+      } else if (paymentData['payment_method_id'] == '9') {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) => WebViewTest(
+                  url: paymentData['payment']['data_vendor']['invoice_url'],
+                )));
       } else if (paymentData['payment_method_id'] == '7') {
         Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (BuildContext context) => PaymentBCA(
-                      expDate: paymentData['expired_time'],
-                      transactionID: paymentData['id'],
-                    )),);
+          MaterialPageRoute(
+              builder: (BuildContext context) => PaymentBCA(
+                    expDate: paymentData['expired_time'],
+                    transactionID: paymentData['id'],
+                  )),
+        );
       }
     }
   }

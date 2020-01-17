@@ -127,44 +127,43 @@ class _TransactionFormState extends State<TransactionForm> {
                 //   formAnswer['answer'] = answer[i];
                 // }
                 if (customFormList != null) {
-                  // for (var formItem in customFormList) {
-                  //   print('form item: ' + formItem.toString());
-                  //   print('form id: ' + formItem['id'].toString());
-
-                  //   formIds.addAll(formItem);
-
-                  //   print(formIds);
-                  // }
-
-                  for(var customForm in customFormList){
+                  for (var customForm in customFormList) {
                     questionId.add(customForm['id']);
                   }
+                }
 
-                  print(questionId);
+                print(questionId);
 
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return widget.ticketType == 'free_limited'
-                            ? TicketReview(
-                                ticketType: widget.ticketType,
-                                customFormList: answer,
-                                customFormId: questionId,
-                              )
-                            : PaymentMethod(
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return widget.ticketType == 'free_limited'
+                          ? customFormList == null
+                              ? TicketReview(
+                                  ticketType: widget.ticketType,
+                                  isCustomForm: false,
+                                )
+                              : TicketReview(
+                                  ticketType: widget.ticketType,
+                                  customFormList: answer,
+                                  customFormId: questionId,
+                                  isCustomForm: true,
+                                )
+                          : customFormList == null ? PaymentMethod(
+                            isCustomForm: false
+                          ) : PaymentMethod(
+                            isCustomForm: true,
                               answerList: answer,
                               customFormId: questionId,
                             );
-                      },
-                    ),
-                  ).then((val){
-                    answer.clear();
-                    questionId.clear();
-                  });
-                  
+                    },
+                  ),
+                ).then((val) {
+                  answer.clear();
+                  questionId.clear();
+                });
 
-                  // print(formIds);
-                }
+                // print(formIds);
               },
               child: Container(
                   height: ScreenUtil.instance.setWidth(50),
@@ -537,8 +536,8 @@ class _TransactionFormState extends State<TransactionForm> {
           customFormControllers.add(TextEditingController());
         }
 
-        print(
-        'customFormController list:' + customFormControllers.length.toString());
+        print('customFormController list:' +
+            customFormControllers.length.toString());
       });
     } else if (response.statusCode == 400) {
       setState(() {
