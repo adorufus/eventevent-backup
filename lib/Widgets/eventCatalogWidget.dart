@@ -2097,6 +2097,8 @@ class _EventCatalogState extends State<EventCatalog>
       'cookie': preferences.getString('Session')
     };
 
+    print(headerProd);
+
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
       'signature': signature

@@ -76,7 +76,7 @@ class PostMediaState extends State<PostMedia> {
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    DashboardWidget()));
+                                    DashboardWidget(isRest: false,)));
                       } else {
                         scaffoldKey.currentState.showSnackBar(SnackBar(
                             backgroundColor: Colors.red,

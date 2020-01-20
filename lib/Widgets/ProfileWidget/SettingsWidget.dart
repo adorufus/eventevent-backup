@@ -5,13 +5,16 @@ import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/PrivacyPolicy
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/Terms.dart';
 import 'package:eventevent/Widgets/ProfileWidget/editProfile.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
+import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:launch_review/launch_review.dart';
+import 'package:http/http.dart' as http;
 
 class SettingsWidget extends StatefulWidget {
   @override
@@ -22,6 +25,7 @@ class SettingsWidget extends StatefulWidget {
 
 class _SettingsWidgetState extends State<SettingsWidget> {
   String appVersion = 'Current version v';
+  bool isLoading = false;
 
   Future setSharedPreferencesToEmpty() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -72,251 +76,283 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         ),
         centerTitle: true,
       ),
-      body: ListView(
+      body: Stack(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Text(
-              'REVIEW',
-              style: TextStyle(
-                  fontSize: ScreenUtil.instance.setSp(18),
-                  color: Colors.grey[600]),
-            ),
-          ),
-          SizedBox(
-            height: ScreenUtil.instance.setWidth(10),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
-            child: Column(
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    LaunchReview.launch(androidAppId: 'com.eventevent.android');
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
-                    child: Text(
-                      'Rate EventEvent on App Store / Google Play',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(18),
-                          color: Colors.grey[700]),
-                    ),
-                  ),
+          ListView(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: Text(
+                  'REVIEW',
+                  style: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(18),
+                      color: Colors.grey[600]),
                 ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: ScreenUtil.instance.setWidth(25),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Text(
-              'BANK ACCOUNT & WITHDRAW',
-              style: TextStyle(
-                  fontSize: ScreenUtil.instance.setSp(18),
-                  color: Colors.grey[600]),
-            ),
-          ),
-          SizedBox(
-            height: ScreenUtil.instance.setWidth(10),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
-            child: Column(
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                BankAccountList()));
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 30, top: 15),
-                    child: Text(
-                      'Bank Account',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(18),
-                          color: Colors.grey[700]),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Divider(
-                    color: Colors.grey,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => WithdrawBank()));
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
-                    child: Text(
-                      'Withdraw',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(18),
-                          color: Colors.grey[700]),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: ScreenUtil.instance.setWidth(25),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Text(
-              'ACCOUNT SETTINGS',
-              style: TextStyle(
-                  fontSize: ScreenUtil.instance.setSp(18),
-                  color: Colors.grey[600]),
-            ),
-          ),
-          SizedBox(
-            height: ScreenUtil.instance.setWidth(10),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
-            child: Column(
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                EditProfileWidget()));
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 30, top: 15),
-                    child: Text(
-                      'Edit Profile',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(18),
-                          color: Colors.grey[700]),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Divider(
-                    color: Colors.grey,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                ChangePassword()));
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
-                    child: Text(
-                      'Change Password',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(18),
-                          color: Colors.grey[700]),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: ScreenUtil.instance.setWidth(25),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Text(
-              'FEEDBACK',
-              style: TextStyle(
-                  fontSize: ScreenUtil.instance.setSp(18),
-                  color: Colors.grey[600]),
-            ),
-          ),
-          SizedBox(
-            height: ScreenUtil.instance.setWidth(10),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
-            child: Column(
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => GiveFeedback()));
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
-                    child: Text(
-                      'Give us feedback',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(18),
-                          color: Colors.grey[700]),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: ScreenUtil.instance.setWidth(25),
-          ),
-          GestureDetector(
-            onTap: () {
-              showCupertinoDialog(
-                  context: context,
-                  builder: (context) {
-                    return CupertinoAlertDialog(
-                      title: Text('Oops'),
-                      content: Text('Do you want to log out?'),
-                      actions: <Widget>[
-                        CupertinoDialogAction(
-                          child: Text('No'),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(10),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        LaunchReview.launch(
+                            androidAppId: 'com.eventevent.android');
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.white,
+                        padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
+                        child: Text(
+                          'Rate EventEvent on App Store / Google Play',
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(18),
+                              color: Colors.grey[700]),
                         ),
-                        CupertinoDialogAction(
-                          child: Text('Yes'),
-                          onPressed: () {
-                            setSharedPreferencesToEmpty();
-                            requestLogout(context);
-                          },
-                        )
-                      ],
-                    );
-                  });
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(25),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: Text(
+                  'BANK ACCOUNT & WITHDRAW',
+                  style: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(18),
+                      color: Colors.grey[600]),
+                ),
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(10),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    BankAccountList()));
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.white,
+                        padding: EdgeInsets.only(left: 30, top: 15),
+                        child: Text(
+                          'Bank Account',
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(18),
+                              color: Colors.grey[700]),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Divider(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    WithdrawBank()));
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.white,
+                        padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
+                        child: Text(
+                          'Withdraw',
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(18),
+                              color: Colors.grey[700]),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(25),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: Text(
+                  'ACCOUNT SETTINGS',
+                  style: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(18),
+                      color: Colors.grey[600]),
+                ),
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(10),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    EditProfileWidget()));
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.white,
+                        padding: EdgeInsets.only(left: 30, top: 15),
+                        child: Text(
+                          'Edit Profile',
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(18),
+                              color: Colors.grey[700]),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Divider(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    ChangePassword()));
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.white,
+                        padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
+                        child: Text(
+                          'Change Password',
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(18),
+                              color: Colors.grey[700]),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(25),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: Text(
+                  'FEEDBACK',
+                  style: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(18),
+                      color: Colors.grey[600]),
+                ),
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(10),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    GiveFeedback()));
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.white,
+                        padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
+                        child: Text(
+                          'Give us feedback',
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(18),
+                              color: Colors.grey[700]),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(25),
+              ),
+              GestureDetector(
+                onTap: () {
+                  showCupertinoDialog(
+                      context: context,
+                      builder: (context) {
+                        return CupertinoAlertDialog(
+                          title: Text('Oops'),
+                          content: Text('Do you want to log out?'),
+                          actions: <Widget>[
+                            CupertinoDialogAction(
+                              child: Text('No'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            CupertinoDialogAction(
+                              child: Text('Yes'),
+                              onPressed: () {
+                                setSharedPreferencesToEmpty();
+
+                                requestLogout(context).then((response) async {
+                                  SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
+
+                                  if (prefs.getBool('isUsingGoogle') == true) {
+                                    googleSignIn.signOut();
+                                  }
+
+                                  if (response.statusCode == 200) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoginRegisterWidget()),
+                                        (Route<dynamic> route) => false);
+                                    prefs.clear();
+                                    print(prefs.getKeys());
+                                  } else {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    print(response.body);
+                                  }
+                                });
+                              },
+                            )
+                          ],
+                        );
+                      });
 //              showDialog(
 //                  context: context,
 //                  builder: (BuildContext context){
@@ -376,105 +412,137 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 //                    );
 //                  }
 //              );
-            },
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              color: Colors.white,
-              padding: EdgeInsets.only(left: 30, bottom: 10, top: 10),
-              child: Text(
-                'Log Out',
-                style: TextStyle(
-                    color: Colors.red, fontSize: ScreenUtil.instance.setSp(18)),
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.white,
+                  padding: EdgeInsets.only(left: 30, bottom: 10, top: 10),
+                  child: Text(
+                    'Log Out',
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: ScreenUtil.instance.setSp(18)),
+                  ),
+                ),
               ),
-            ),
-          ),
-          SizedBox(
-            height: ScreenUtil.instance.setWidth(25),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 25),
-            child: Text(
-              'Terms and Condition',
-              style: TextStyle(
-                  fontSize: ScreenUtil.instance.setSp(18),
-                  color: Colors.grey[600]),
-            ),
-          ),
-          SizedBox(
-            height: ScreenUtil.instance.setWidth(10),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
-            child: Column(
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => Terms()));
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 30, top: 15),
-                    child: Text(
-                      'Terms',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(18),
-                          color: Colors.grey[700]),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Divider(
-                    color: Colors.grey,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                PrivacyPolicy()));
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.white,
-                    padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
-                    child: Text(
-                      'Privacy Policy',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(18),
-                          color: Colors.grey[700]),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: ScreenUtil.instance.setWidth(25),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: ScreenUtil.instance.setWidth(50),
-                color: Colors.white,
-                child: Center(
-                    child: Text(
-                  appVersion,
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(25),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: Text(
+                  'Terms and Condition',
                   style: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: ScreenUtil.instance.setSp(18)),
-                ))),
+                      fontSize: ScreenUtil.instance.setSp(18),
+                      color: Colors.grey[600]),
+                ),
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(10),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => Terms()));
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.white,
+                        padding: EdgeInsets.only(left: 30, top: 15),
+                        child: Text(
+                          'Terms',
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(18),
+                              color: Colors.grey[700]),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Divider(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    PrivacyPolicy()));
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.white,
+                        padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
+                        child: Text(
+                          'Privacy Policy',
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(18),
+                              color: Colors.grey[700]),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(25),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: ScreenUtil.instance.setWidth(50),
+                    color: Colors.white,
+                    child: Center(
+                        child: Text(
+                      appVersion,
+                      style: TextStyle(
+                          color: Colors.grey[700],
+                          fontSize: ScreenUtil.instance.setSp(18)),
+                    ))),
+              ),
+            ],
           ),
+          isLoading == false
+              ? Container()
+              : Center(
+                  child: CupertinoActivityIndicator(
+                    animating: true,
+                    radius: 15,
+                  ),
+                )
         ],
       ),
     );
+  }
+
+  Future<http.Response> requestLogout(BuildContext context) async {
+    final logoutApiUrl = BaseApi().apiUrl + '/signout';
+
+    Map<String, String> body = {'X-API-KEY': apiKey};
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      isLoading = true;
+    });
+
+    final response = await http.post(logoutApiUrl, body: body, headers: {
+      'Authorization': "Basic YWRtaW46MTIzNA==",
+      'cookie': prefs.getString('Session')
+    });
+
+    print(response.statusCode);
+
+    return response;
   }
 }

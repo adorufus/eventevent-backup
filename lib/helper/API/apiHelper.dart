@@ -21,30 +21,3 @@ GoogleSignIn googleSignIn = new GoogleSignIn();
 
 
 
-requestLogout(BuildContext context) async {
-  final logoutApiUrl = BaseApi().apiUrl + '/signout';
-
-  Map<String, String> body = {
-    'X-API-KEY': apiKey
-  };
-
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  
-  final response = await http.post(
-    logoutApiUrl,
-    body: body,
-    headers: {'Authorization': "Basic YWRtaW46MTIzNA==", 'cookie': prefs.getString('Session')}
-  );
-
-  print(response.statusCode);
-
-  if(prefs.getBool('isUsingGoogle') == true){
-    googleSignIn.signOut();
-  }
-
-  if(response.statusCode == 200){
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginRegisterWidget()), (Route<dynamic> route) => false);
-    prefs.clear();
-    print(prefs.getKeys());
-  }
-}
