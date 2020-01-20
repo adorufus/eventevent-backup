@@ -57,7 +57,11 @@ class TicketSalesState extends State<TicketSales> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal),
+        leading: GestureDetector(
+          onTap: (){
+            Navigator.pop(context);
+          },
+          child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal)),
       ),
       body: ticketSalesData == null || ticketData == null
           ? Container(
