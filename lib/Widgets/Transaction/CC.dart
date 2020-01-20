@@ -294,6 +294,7 @@ class CreditCardInputState extends State<CreditCardInput> {
                       Text('Card Number',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       Container(
+                        width: 200,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white
@@ -324,6 +325,7 @@ class CreditCardInputState extends State<CreditCardInput> {
                       Text('Cardholder name',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       Container(
+                        width: 200,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white
@@ -360,7 +362,7 @@ class CreditCardInputState extends State<CreditCardInput> {
                           children: <Widget>[
                             Container(
                               color: Colors.white,
-                              height: ScreenUtil.instance.setWidth(100),
+                              width: ScreenUtil.instance.setWidth(100),
                               child: DropdownButtonFormField<int>(
                                   items: <int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30].map((int value){
                                 return new DropdownMenuItem<int>(
@@ -376,7 +378,7 @@ class CreditCardInputState extends State<CreditCardInput> {
                             ),
                             SizedBox(width: ScreenUtil.instance.setWidth(15)),
                             Container(
-                              height: ScreenUtil.instance.setWidth(100),
+                              width: ScreenUtil.instance.setWidth(100),
                               child: TextFormField(
                                 decoration: InputDecoration(
                                     hintText: 'Year',
@@ -394,7 +396,7 @@ class CreditCardInputState extends State<CreditCardInput> {
                             SizedBox(width: ScreenUtil.instance.setWidth(15)),
                             Container(
                               color: Colors.white,
-                              height: ScreenUtil.instance.setWidth(100),
+                              width: ScreenUtil.instance.setWidth(100),
                               child: TextFormField(
                                 decoration: InputDecoration(
                                     hintText: 'CVV',
