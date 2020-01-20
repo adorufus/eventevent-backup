@@ -7,7 +7,8 @@ import 'package:eventevent/Widgets/loginWidget.dart';
 import 'package:eventevent/Widgets/registerWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/FirebaseMessagingHelper.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -65,7 +66,8 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
     final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
-    final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+    final FirebaseUser user =
+        (await _auth.signInWithCredential(credential)).user;
     assert(user.email != null);
     assert(user.displayName != null);
     assert(!user.isAnonymous);
@@ -112,7 +114,9 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget(isRest: false,)));
+              builder: (BuildContext context) => DashboardWidget(
+                    isRest: false,
+                  )));
     } else {
       var extractedData = json.decode(response.body);
       if (extractedData['desc'] == 'User is not register') {
@@ -146,7 +150,9 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget(isRest: false,)));
+              builder: (BuildContext context) => DashboardWidget(
+                    isRest: false,
+                  )));
     } else {
       var extractedData = json.decode(response.body);
       String message = extractedData['desc'];
@@ -232,30 +238,29 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
             children: <Widget>[
               SizedBox(height: ScreenUtil.instance.setWidth(10)),
               Align(
-                  alignment: Alignment.topRight,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  DashboardWidget(isRest: true)));
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(right: 25),
-                      width: 30,
-                      child: Text(
-                        'SKIP',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xff8a8a8b)),
-                      ),
+                alignment: Alignment.topRight,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                DashboardWidget(isRest: true)));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(right: 25),
+                    width: 30,
+                    child: Text(
+                      'SKIP',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff8a8a8b)),
                     ),
                   ),
                 ),
+              ),
               Padding(
-                padding:
-                    EdgeInsets.only(top: ScreenUtil.instance.setWidth(50)),
+                padding: EdgeInsets.only(top: ScreenUtil.instance.setWidth(50)),
               ),
               Hero(
                 tag: 'eventeventlogo',
@@ -269,15 +274,14 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                 widthFactor: ScreenUtil.instance.setWidth(.8),
                 child: Container(
                     width: ScreenUtil.instance.setWidth(306.93),
-                    height: ScreenUtil.instance.setHeight(197.18),
+                    height: ScreenUtil.instance.setHeight(229.50),
                     child: Image.asset(
                       'assets/icons/icon_apps/illustrasi.png',
                       fit: BoxFit.fill,
                     )),
               ),
               Padding(
-                padding:
-                    EdgeInsets.only(top: ScreenUtil.instance.setWidth(100)),
+                padding: EdgeInsets.only(top: ScreenUtil.instance.setWidth(70)),
               ),
               Center(
                 child: Text('DAFTAR DAN MULAI',
@@ -302,7 +306,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                     LoginWidget()));
                       },
                       child: Container(
-                        width: ScreenUtil.instance.setWidth(147.41),
+                        width: ScreenUtil.instance.setWidth(160.41),
                         height: ScreenUtil.instance.setHeight(37.02),
                         decoration: BoxDecoration(
                             color: eventajaGreenTeal,
@@ -325,7 +329,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         ),
                       ),
                     ),
-                    SizedBox(width: ScreenUtil.instance.setWidth(13)),
+                    SizedBox(width: ScreenUtil.instance.setWidth(20)),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -335,7 +339,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                     RegisterWidget()));
                       },
                       child: Container(
-                        width: ScreenUtil.instance.setWidth(147.41),
+                        width: ScreenUtil.instance.setWidth(160.41),
                         height: ScreenUtil.instance.setHeight(37.02),
                         decoration: BoxDecoration(
                             color: eventajaGreenTeal,
@@ -461,8 +465,9 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text('By registering, you are agree with',
-                        style:
-                            TextStyle(fontSize: ScreenUtil.instance.setSp(11))),
+                        style: TextStyle(
+                            color: Color(0xff8a8a8b),
+                            fontSize: ScreenUtil.instance.setSp(11))),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context,
@@ -471,13 +476,15 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                       child: Text(
                         ' Terms',
                         style: TextStyle(
+                            color: Color(0xff8a8a8b),
                             fontSize: ScreenUtil.instance.setSp(12),
                             fontWeight: FontWeight.bold),
                       ),
                     ),
                     Text(' and',
-                        style:
-                            TextStyle(fontSize: ScreenUtil.instance.setSp(11))),
+                        style: TextStyle(
+                            color: Color(0xff8a8a8b),
+                            fontSize: ScreenUtil.instance.setSp(11))),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -488,6 +495,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                       child: Text(
                         ' Privacy Policy',
                         style: TextStyle(
+                            color: Color(0xff8a8a8b),
                             fontSize: ScreenUtil.instance.setSp(12),
                             fontWeight: FontWeight.bold),
                       ),
