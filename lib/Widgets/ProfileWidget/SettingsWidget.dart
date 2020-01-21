@@ -319,6 +319,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                             CupertinoDialogAction(
                               child: Text('Yes'),
                               onPressed: () {
+                                setState(() {
+                                  isLoading = true;
+                                });
                                 setSharedPreferencesToEmpty();
 
                                 requestLogout(context).then((response) async {
@@ -535,6 +538,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     setState(() {
       isLoading = true;
     });
+
+    Future.delayed(Duration(seconds: 3));
 
     final response = await http.post(logoutApiUrl, body: body, headers: {
       'Authorization': "Basic YWRtaW46MTIzNA==",

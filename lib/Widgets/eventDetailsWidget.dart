@@ -676,7 +676,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                 }
               },
               child: Container(
-                height: 63.7,
+                height: 80,
                 padding: EdgeInsets.symmetric(horizontal: 25.7),
                 decoration: BoxDecoration(color: Colors.white, boxShadow: [
                   BoxShadow(
