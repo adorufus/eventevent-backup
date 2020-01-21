@@ -5,6 +5,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/API/registerModel.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -189,10 +190,13 @@ class GoogleRegisterState extends State<GoogleRegister> {
           onTap: (){
             postRegister()
             .catchError((e){
-              _scaffoldKey.currentState.showSnackBar(SnackBar(
-                content: Text(e.toString()),
-                backgroundColor: Colors.red,
-              ));
+              Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: e.toString(),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
             });
           },
           child: Container(
@@ -260,11 +264,13 @@ class GoogleRegisterState extends State<GoogleRegister> {
     else if(response.statusCode == 400){
       final responseJson = json.decode(response.body);
       print(responseJson['desc']);
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: responseJson['desc'],
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
-        content: Text(responseJson['desc'], style: TextStyle(color: Colors.white),),
-      ));
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
   }
 }

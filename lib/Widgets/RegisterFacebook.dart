@@ -5,6 +5,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/API/registerModel.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
@@ -251,11 +252,13 @@ class RegisterFacebookState extends State<RegisterFacebook> {
     else{
       final responseJson = json.decode(response.body);
       print(responseJson['desc']);
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: responseJson['desc'],
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
-        content: Text(responseJson['desc'], style: TextStyle(color: Colors.white),),
-      ));
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
   }
 }

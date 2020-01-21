@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/PostEvent/PostEventPoster.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -293,10 +294,13 @@ class PostEvent7State extends State<PostEvent7> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (_selectedDate.day == null || _selectedDate.day.toString() == '') {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Choose event end date!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Choose event end date!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
       prefs.setStringList('POST_EVENT_CATEGORY', myListName);
       prefs.setStringList('POST_EVENT_CATEGORY_ID', myList);

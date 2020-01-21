@@ -37,7 +37,7 @@ class BuyersState extends State<Buyers> {
   @override
   void initState() {
     super.initState();
-    print('counter list' + Counter().counter.length.toString());
+    // print('counter list' + Counter().counter.length.toString());
     getBuyerList().then((response) {
       var extractedData = json.decode(response.body);
       if (response.statusCode == 200) {
@@ -62,13 +62,6 @@ class BuyersState extends State<Buyers> {
         print('gagal');
       }
     });
-    // .timeout(Duration(seconds: 8), onTimeout: () {
-    //   scaffoldKey.currentState.showSnackBar(SnackBar(
-    //     backgroundColor: Colors.red,
-    //     content:
-    //         Text('Request Time Out!', style: TextStyle(color: Colors.white)),
-    //   ));
-    // });
   }
 
   @override

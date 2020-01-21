@@ -87,7 +87,7 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
             },
           ),
           centerTitle: true,
-          title: Text('Name Event', style: TextStyle(
+          title: Text('Ticket Quantity', style: TextStyle(
             color: eventajaGreenTeal,
             fontSize: ScreenUtil.instance.setSp(25)
           ),),

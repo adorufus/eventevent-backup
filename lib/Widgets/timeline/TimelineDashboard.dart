@@ -10,6 +10,7 @@ import 'package:eventevent/Widgets/timeline/SeeAllMediaItem.dart';
 import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
 import 'package:eventevent/Widgets/timeline/popularMediaItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -70,30 +71,30 @@ class TimelineDashboardState extends State<TimelineDashboard>
           popularMediaVideo = extractedData['data']['data'];
         });
       } else if (response.statusCode == 404) {
-        scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-          content: Text(
-            '404: something not found',
-            style: TextStyle(color: Colors.white),
-          ),
+        Flushbar(
+          flushbarPosition: FlushbarPosition.TOP,
+          message: '404: something not found',
           backgroundColor: Colors.red,
-        ));
+          duration: Duration(seconds: 3),
+          animationDuration: Duration(milliseconds: 500),
+        )..show(context);
       }
     }).catchError((e) {
-      scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Error: ' + e.toString(),
         backgroundColor: Colors.red,
-        content: Text(
-          'Error Occured: ' + e.toString(),
-          style: TextStyle(color: Colors.white),
-        ),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }).timeout(Duration(seconds: 10), onTimeout: () {
-      scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Request Timeout!',
         backgroundColor: Colors.red,
-        content: Text(
-          'Request Timeout',
-          style: TextStyle(color: Colors.white),
-        ),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     });
 
     @override
@@ -111,30 +112,30 @@ class TimelineDashboardState extends State<TimelineDashboard>
           latestMediaPhoto = extractedData['data']['data'];
         });
       } else if (response.statusCode == 404) {
-        scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-          content: Text(
-            '404: something not found',
-            style: TextStyle(color: Colors.white),
-          ),
+        Flushbar(
+          flushbarPosition: FlushbarPosition.TOP,
+          message: '404: something not found',
           backgroundColor: Colors.red,
-        ));
+          duration: Duration(seconds: 3),
+          animationDuration: Duration(milliseconds: 500),
+        )..show(context);
       }
     }).catchError((e) {
-      scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Error: ' + e.toString(),
         backgroundColor: Colors.red,
-        content: Text(
-          'Error Occured: ' + e.toString(),
-          style: TextStyle(color: Colors.white),
-        ),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }).timeout(Duration(seconds: 10), onTimeout: () {
-      scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Request Timeout!',
         backgroundColor: Colors.red,
-        content: Text(
-          'Request Timeout',
-          style: TextStyle(color: Colors.white),
-        ),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     });
 
     getLatestMediaVideo().then((response) {
@@ -145,30 +146,30 @@ class TimelineDashboardState extends State<TimelineDashboard>
           latestMediaVideo = extractedData['data']['data'];
         });
       } else if (response.statusCode == 404) {
-        scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-          content: Text(
-            '404: something not found',
-            style: TextStyle(color: Colors.white),
-          ),
+        Flushbar(
+          flushbarPosition: FlushbarPosition.TOP,
+          message: '404: something not found',
           backgroundColor: Colors.red,
-        ));
+          duration: Duration(seconds: 3),
+          animationDuration: Duration(milliseconds: 500),
+        )..show(context);
       }
     }).catchError((e) {
-      scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Error: ' + e.toString(),
         backgroundColor: Colors.red,
-        content: Text(
-          'Error Occured: ' + e.toString(),
-          style: TextStyle(color: Colors.white),
-        ),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }).timeout(Duration(seconds: 10), onTimeout: () {
-      scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Request Timeout!',
         backgroundColor: Colors.red,
-        content: Text(
-          'Request Timeout',
-          style: TextStyle(color: Colors.white),
-        ),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     });
 
     getBanner().then((response) {
@@ -357,15 +358,19 @@ class TimelineDashboardState extends State<TimelineDashboard>
                       child: Stack(
                         children: <Widget>[
                           TabBarView(
-                            children: <Widget>[emedia(), UserTimelineItem(
-                              currentUserId: currentUserId,
-                            )],
+                            children: <Widget>[
+                              emedia(),
+                              UserTimelineItem(
+                                currentUserId: currentUserId,
+                              )
+                            ],
                           ),
                           Positioned(
                               child: isLoading == true
                                   ? Container(
                                       child: Center(
-                                          child: CupertinoActivityIndicator(radius: 20)),
+                                          child: CupertinoActivityIndicator(
+                                              radius: 20)),
                                       color: Colors.black.withOpacity(0.5),
                                     )
                                   : Container())
@@ -398,32 +403,32 @@ class TimelineDashboardState extends State<TimelineDashboard>
             });
           } else if (response.statusCode == 404) {
             isLoading = false;
-            scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-              content: Text(
-                '404: something not found',
-                style: TextStyle(color: Colors.white),
-              ),
+            Flushbar(
+              flushbarPosition: FlushbarPosition.TOP,
+              message: '404: something not found',
               backgroundColor: Colors.red,
-            ));
+              duration: Duration(seconds: 3),
+              animationDuration: Duration(milliseconds: 500),
+            )..show(context);
           }
         }).catchError((e) {
           isLoading = false;
-          scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(
-              'Error Occured: ' + e.toString(),
-              style: TextStyle(color: Colors.white),
-            ),
-          ));
+          Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Error: ' + e.toString(),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
         }).timeout(Duration(seconds: 10), onTimeout: () {
           isLoading = false;
-          scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(
-              'Request Timeout',
-              style: TextStyle(color: Colors.white),
-            ),
-          ));
+          Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Request Timeout',
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
         });
 
         getLatestMediaPhoto().then((response) {
@@ -436,32 +441,32 @@ class TimelineDashboardState extends State<TimelineDashboard>
             });
           } else if (response.statusCode == 404) {
             isLoading = false;
-            scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-              content: Text(
-                '404: something not found',
-                style: TextStyle(color: Colors.white),
-              ),
+            Flushbar(
+              flushbarPosition: FlushbarPosition.TOP,
+              message: '404: something not found',
               backgroundColor: Colors.red,
-            ));
+              duration: Duration(seconds: 3),
+              animationDuration: Duration(milliseconds: 500),
+            )..show(context);
           }
         }).catchError((e) {
           isLoading = false;
-          scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(
-              'Error Occured: ' + e.toString(),
-              style: TextStyle(color: Colors.white),
-            ),
-          ));
+          Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Error: ' + e.toString(),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
         }).timeout(Duration(seconds: 10), onTimeout: () {
           isLoading = false;
-          scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(
-              'Request Timeout',
-              style: TextStyle(color: Colors.white),
-            ),
-          ));
+          Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Request Timeout',
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
         });
 
         getLatestMediaVideo().then((response) {
@@ -474,32 +479,32 @@ class TimelineDashboardState extends State<TimelineDashboard>
             });
           } else if (response.statusCode == 404) {
             isLoading = false;
-            scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-              content: Text(
-                '404: something not found',
-                style: TextStyle(color: Colors.white),
-              ),
+            Flushbar(
+              flushbarPosition: FlushbarPosition.TOP,
+              message: '404: something not found',
               backgroundColor: Colors.red,
-            ));
+              duration: Duration(seconds: 3),
+              animationDuration: Duration(milliseconds: 500),
+            )..show(context);
           }
         }).catchError((e) {
           isLoading = false;
-          scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(
-              'Error Occured: ' + e.toString(),
-              style: TextStyle(color: Colors.white),
-            ),
-          ));
+          Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Error: ' + e.toString(),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
         }).timeout(Duration(seconds: 10), onTimeout: () {
           isLoading = false;
-          scaffoldGlobalKey.currentState.showSnackBar(SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(
-              'Request Timeout',
-              style: TextStyle(color: Colors.white),
-            ),
-          ));
+          Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Request Timeout',
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
         });
         isLoading = false;
         getUserData();

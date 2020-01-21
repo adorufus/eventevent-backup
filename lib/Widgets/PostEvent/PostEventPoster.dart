@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -221,10 +222,13 @@ class PostEventPosterState extends State<PostEventPoster> {
   void navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (posterFile == null) {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Choose poster!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Choose poster!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
       setState(() {
         prefs.setString('POST_EVENT_POSTER', posterFile.path);

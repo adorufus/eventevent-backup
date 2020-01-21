@@ -151,6 +151,7 @@ class _TicketReviewState extends State<TicketReview> {
             uuid: uuid,
             ticketType: widget.ticketType,
             total: total,
+            loadingType: 'buy ticket',
           )));
         },
         child: Container(

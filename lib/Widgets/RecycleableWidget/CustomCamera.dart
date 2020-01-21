@@ -1,8 +1,11 @@
 import 'dart:async';
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/RecycleableWidget/PostMedia.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:camera/camera.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:path_provider/path_provider.dart';
@@ -49,7 +52,8 @@ class CustomCameraState extends State<CustomCamera> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -84,7 +88,7 @@ class CustomCameraState extends State<CustomCamera> {
                 left: 5,
                 top: 5,
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     Navigator.pop(context);
                   },
                   child: Container(
@@ -165,10 +169,13 @@ class CustomCameraState extends State<CustomCamera> {
                                         isVideo: true,
                                       )));
                         } catch (e) {
-                          scaffoldKey.currentState.showSnackBar(SnackBar(
+                          Flushbar(
+                            flushbarPosition: FlushbarPosition.TOP,
+                            message: e.toString(),
                             backgroundColor: Colors.red,
-                            content: Text(e.toString()),
-                          ));
+                            duration: Duration(seconds: 3),
+                            animationDuration: Duration(milliseconds: 500),
+                          )..show(context);
                         }
                       },
                       child: Container(

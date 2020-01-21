@@ -1,5 +1,7 @@
 import 'dart:convert';
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/ForgotPassword.dart';
 import 'package:eventevent/Widgets/RegisterFacebook.dart';
@@ -10,7 +12,8 @@ import 'package:eventevent/helper/API/loginModel.dart';
 import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
@@ -47,8 +50,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   bool hidePassword = true;
 
   @override
-  Widget build(BuildContext context) { 
-
+  Widget build(BuildContext context) {
     double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
@@ -74,7 +76,9 @@ class _LoginWidgetState extends State<LoginWidget> {
         ),
         middle: Text(
           'Login',
-          style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: eventajaGreenTeal),
+          style: TextStyle(
+              fontSize: ScreenUtil.instance.setSp(20),
+              color: eventajaGreenTeal),
         ),
       ),
       backgroundColor: Colors.white,
@@ -95,7 +99,8 @@ class _LoginWidgetState extends State<LoginWidget> {
           Positioned(
               child: isLoading == true
                   ? Container(
-                      child: Center(child: CupertinoActivityIndicator(radius: 20)),
+                      child:
+                          Center(child: CupertinoActivityIndicator(radius: 20)),
                       color: Colors.black.withOpacity(0.5),
                     )
                   : Container())
@@ -144,12 +149,19 @@ class _LoginWidgetState extends State<LoginWidget> {
               ),
             ),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 setState(() {
                   hidePassword = !hidePassword;
                 });
               },
-              child: Container(height: ScreenUtil.instance.setWidth(20), width: ScreenUtil.instance.setWidth(20), child: Icon(Icons.remove_red_eye, color: hidePassword == true ? Colors.grey : eventajaGreenTeal,)),
+              child: Container(
+                  height: ScreenUtil.instance.setWidth(20),
+                  width: ScreenUtil.instance.setWidth(20),
+                  child: Icon(
+                    Icons.remove_red_eye,
+                    color:
+                        hidePassword == true ? Colors.grey : eventajaGreenTeal,
+                  )),
             )
           ],
         ),
@@ -163,31 +175,29 @@ class _LoginWidgetState extends State<LoginWidget> {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             child: Text('Login',
-                style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.white)),
+                style: TextStyle(
+                    fontSize: ScreenUtil.instance.setSp(15),
+                    color: Colors.white)),
             color: eventajaGreenTeal,
             onPressed: () {
               if (_usernameController.text.length == 0 ||
                   _usernameController.text == null) {
-                _scaffoldKey.currentState.showSnackBar(
-                  SnackBar(
-                    backgroundColor: Colors.red,
-                    content: Text(
-                      'Email / Username cannot be empty',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                );
+                Flushbar(
+                  flushbarPosition: FlushbarPosition.TOP,
+                  message: 'Email / username cannot be empty',
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 3),
+                  animationDuration: Duration(milliseconds: 500),
+                )..show(context);
               } else if (_passwordController.text.length == 0 ||
                   _passwordController.text == null) {
-                _scaffoldKey.currentState.showSnackBar(
-                  SnackBar(
-                    backgroundColor: Colors.red,
-                    content: Text(
-                      'Password connot be empty',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                );
+                Flushbar(
+                  flushbarPosition: FlushbarPosition.TOP,
+                  message: 'Password cannot be empty',
+                  backgroundColor: Colors.red,
+                  animationDuration: Duration(milliseconds: 500),
+                  duration: Duration(seconds: 3),
+                )..show(context);
               } else {
                 requestLogin(context, _usernameController.text,
                     _passwordController.text, _scaffoldKey);
@@ -217,94 +227,95 @@ class _LoginWidgetState extends State<LoginWidget> {
           height: ScreenUtil.instance.setWidth(15),
         ),
         GestureDetector(
-              onTap: () {
-                initiateFacebookLogin();
-              },
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 26),
-                width: MediaQuery.of(context).size.width,
-                height: ScreenUtil.instance.setWidth(37.02),
-                decoration: BoxDecoration(
-                    color: Color(0xFF4C64B5),
-                    borderRadius: BorderRadius.circular(180),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          blurRadius: 2,
-                          color: Color(0xFF4C64B5).withOpacity(0.5),
-                          spreadRadius: 1.5)
-                    ]),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                        height: ScreenUtil.instance.setWidth(37),
-                        width: ScreenUtil.instance.setWidth(37),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Color(0xFF324b9c)),
-                        child: Center(
-                            child: Image.asset('assets/drawable/facebook.png',
-                                scale: 3))),
-                    Flexible(
-                      child: Center(
-                        child: Text(
-                          'LOGIN WITH FACEBOOK',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenUtil.instance.setSp(12),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
+          onTap: () {
+            initiateFacebookLogin();
+          },
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 26),
+            width: MediaQuery.of(context).size.width,
+            height: ScreenUtil.instance.setWidth(37.02),
+            decoration: BoxDecoration(
+                color: Color(0xFF4C64B5),
+                borderRadius: BorderRadius.circular(180),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      blurRadius: 2,
+                      color: Color(0xFF4C64B5).withOpacity(0.5),
+                      spreadRadius: 1.5)
+                ]),
+            child: Row(
+              children: <Widget>[
+                Container(
+                    height: ScreenUtil.instance.setWidth(37),
+                    width: ScreenUtil.instance.setWidth(37),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Color(0xFF324b9c)),
+                    child: Center(
+                        child: Image.asset('assets/drawable/facebook.png',
+                            scale: 3))),
+                Flexible(
+                  child: Center(
+                    child: Text(
+                      'LOGIN WITH FACEBOOK',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenUtil.instance.setSp(12),
+                          fontWeight: FontWeight.bold),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-            SizedBox(height: ScreenUtil.instance.setWidth(10)),
-            GestureDetector(
-              onTap: () {
-                goLoginGoogle().then((result) {
-                  print(result.accessToken);
-                  print(result.idToken);
-                  proccesGoogle(result.accessToken, result.idToken);
-                }).catchError((e) {
-                  print(e);
-                });
-              },
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 26),
-                width: MediaQuery.of(context).size.width,
-                height: ScreenUtil.instance.setWidth(37.02),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(180),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          blurRadius: 2,
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 1.5)
-                    ]),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Container(
-                      height: ScreenUtil.instance.setWidth(37),
-                      width: ScreenUtil.instance.setWidth(37),
-                      decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Color(0xFFf9f9f9)),
-                      child: Image.asset('assets/drawable/google.png', scale: 3),
-                    ),
-                    Flexible(
-                      child: Center(
-                        child: Text(
-                          'LOGIN WITH GOOGLE',
-                          style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(12), fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ],
+          ),
+        ),
+        SizedBox(height: ScreenUtil.instance.setWidth(10)),
+        GestureDetector(
+          onTap: () {
+            goLoginGoogle().then((result) {
+              print(result.accessToken);
+              print(result.idToken);
+              proccesGoogle(result.accessToken, result.idToken);
+            }).catchError((e) {
+              print(e);
+            });
+          },
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 26),
+            width: MediaQuery.of(context).size.width,
+            height: ScreenUtil.instance.setWidth(37.02),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(180),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      blurRadius: 2,
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 1.5)
+                ]),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Container(
+                  height: ScreenUtil.instance.setWidth(37),
+                  width: ScreenUtil.instance.setWidth(37),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: Color(0xFFf9f9f9)),
+                  child: Image.asset('assets/drawable/google.png', scale: 3),
                 ),
-              ),
+                Flexible(
+                  child: Center(
+                    child: Text(
+                      'LOGIN WITH GOOGLE',
+                      style: TextStyle(
+                          fontSize: ScreenUtil.instance.setSp(12),
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
             ),
+          ),
+        ),
       ],
     );
   }
@@ -317,7 +328,8 @@ class _LoginWidgetState extends State<LoginWidget> {
     final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
-    final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+    final FirebaseUser user =
+        (await _auth.signInWithCredential(credential)).user;
     assert(user.email != null);
     assert(user.displayName != null);
     assert(!user.isAnonymous);
@@ -364,7 +376,9 @@ class _LoginWidgetState extends State<LoginWidget> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget(isRest: false,)));
+              builder: (BuildContext context) => DashboardWidget(
+                    isRest: false,
+                  )));
     } else {
       var extractedData = json.decode(response.body);
       if (extractedData['desc'] == 'User is not register') {
@@ -398,7 +412,9 @@ class _LoginWidgetState extends State<LoginWidget> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget(isRest: false,)));
+              builder: (BuildContext context) => DashboardWidget(
+                    isRest: false,
+                  )));
     } else {
       var extractedData = json.decode(response.body);
       String message = extractedData['desc'];
@@ -502,32 +518,46 @@ class _LoginWidgetState extends State<LoginWidget> {
 
       var extractedData = json.decode(response.body);
 
-      ClevertapHandler.pushUserProfile(extractedData['data']['fullName'], "", extractedData['data']['email'], extractedData['data']['pictureNormalURL'], extractedData['data']['birthday'], extractedData['data']['username'], extractedData['data']['gender'], extractedData['data']['phone']);
+      ClevertapHandler.pushUserProfile(
+          extractedData['data']['fullName'],
+          "",
+          extractedData['data']['email'],
+          extractedData['data']['pictureNormalURL'],
+          extractedData['data']['birthday'],
+          extractedData['data']['username'],
+          extractedData['data']['gender'],
+          extractedData['data']['phone']);
 
       SharedPrefs().saveCurrentSession(response, responseJson);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false,)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => DashboardWidget(
+                    isRest: false,
+                  )));
       return LoginModel.fromJson(responseJson);
     }
 
     ///Jika statusCode == 400 maka munculin Snackbar error Belum teregister / salah input akun
     else if (response.statusCode == 400) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'You\'re not registered!',
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
-        content: Text(
-          'You\'re not registered!',
-          style: TextStyle(color: Colors.white),
-        ),
-      ));
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
 
     ///Jika statusCode == 408 maka munculin Snackbar error Request Timeout!
     else if (response.statusCode == 408) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Request Timeout!',
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
-        content: Text('Request Timeout! please retry submiting data'),
-      ));
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
 
     ///Else, simpan sessi gagal

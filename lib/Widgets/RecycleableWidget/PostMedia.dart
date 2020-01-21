@@ -1,10 +1,13 @@
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -30,7 +33,8 @@ class PostMediaState extends State<PostMedia> {
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -39,7 +43,7 @@ class PostMediaState extends State<PostMedia> {
       allowFontScaling: true,
     )..init(context);
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
           elevation: 1,
@@ -64,7 +68,8 @@ class PostMediaState extends State<PostMedia> {
 
                   postMedia().then((request) {
                     request.send().then((response) async {
-                      var realResponse = await http.Response.fromStream(response);
+                      var realResponse =
+                          await http.Response.fromStream(response);
                       print(response.statusCode);
                       if (response.statusCode == null) {
                         isLoading = true;
@@ -76,27 +81,33 @@ class PostMediaState extends State<PostMedia> {
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    DashboardWidget(isRest: false,)));
+                                    DashboardWidget(
+                                      isRest: false,
+                                    )));
                       } else {
-                        scaffoldKey.currentState.showSnackBar(SnackBar(
-                            backgroundColor: Colors.red,
-                            duration: Duration(seconds: 60),
-                            content: Text(
-                              response.statusCode.toString() +
-                                  ': ' +
-                                  response.reasonPhrase +
-                                  ', ' +
-                                  realResponse.body +
-                                  ', ' +
-                                  widget.imagePath.path,
-                            )));
+                        Flushbar(
+                          flushbarPosition: FlushbarPosition.TOP,
+                          message: response.statusCode.toString() +
+                              ': ' +
+                              response.reasonPhrase +
+                              ', ' +
+                              realResponse.body +
+                              ', ' +
+                              widget.imagePath.path,
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 3),
+                          animationDuration: Duration(milliseconds: 500),
+                        )..show(context);
                       }
                     });
                   }).catchError((error) {
-                    scaffoldKey.currentState.showSnackBar(SnackBar(
+                    Flushbar(
+                      flushbarPosition: FlushbarPosition.TOP,
+                      message: error.toString(),
                       backgroundColor: Colors.red,
-                      content: Text(error.toString()),
-                    ));
+                      duration: Duration(seconds: 3),
+                      animationDuration: Duration(milliseconds: 500),
+                    )..show(context);
                   });
                 },
                 child: Center(
@@ -176,8 +187,11 @@ class PostMediaState extends State<PostMedia> {
     print(url);
 
     final request = new http.MultipartRequest("POST", Uri.parse(url));
-    request.fields
-        .addAll({'X-API-KEY': API_KEY, 'caption': captionController.text, 'description': captionController.text});
+    request.fields.addAll({
+      'X-API-KEY': API_KEY,
+      'caption': captionController.text,
+      'description': captionController.text
+    });
     request.headers.addAll({
       'Authorization': AUTHORIZATION_KEY,
       'cookie': prefs.getString('Session')

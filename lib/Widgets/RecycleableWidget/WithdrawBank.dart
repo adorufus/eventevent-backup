@@ -6,6 +6,7 @@ import 'package:eventevent/Widgets/RecycleableWidget/WithdrawConfirmation.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
@@ -58,11 +59,13 @@ class WithdrawBankState extends State<WithdrawBank> {
         print('gagal');
       }
     }).timeout(Duration(seconds: 8), onTimeout: () {
-      scaffoldKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Request Time Out!',
         backgroundColor: Colors.red,
-        content:
-            Text('Request Time Out!', style: TextStyle(color: Colors.white)),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     });
   }
 
@@ -233,7 +236,10 @@ class WithdrawBankState extends State<WithdrawBank> {
             Align(
                 alignment: Alignment.topCenter,
                 child: Text(
-                    'Available Balance For Withdraw: ' + '\nRp. ${balanceData['amount']},-', style: TextStyle(color: eventajaGreenTeal), textAlign: TextAlign.center)),
+                    'Available Balance For Withdraw: ' +
+                        '\nRp. ${balanceData['amount']},-',
+                    style: TextStyle(color: eventajaGreenTeal),
+                    textAlign: TextAlign.center)),
             SizedBox(height: ScreenUtil.instance.setWidth(26)),
             Container(
                 width: MediaQuery.of(context).size.width,
@@ -275,33 +281,30 @@ class WithdrawBankState extends State<WithdrawBank> {
                             'WITHDRAW_AMOUNT', amountController.text);
 
                         if (amountController.text == '') {
-                          scaffoldKey.currentState.showSnackBar(SnackBar(
-                            content: Text(
-                              'Input withdraw amount first!',
-                              style: TextStyle(color: Colors.white),
-                            ),
+                          Flushbar(
+                            flushbarPosition: FlushbarPosition.TOP,
+                            message: 'Input withdraw amount first!',
                             backgroundColor: Colors.red,
                             duration: Duration(seconds: 3),
-                          ));
+                            animationDuration: Duration(milliseconds: 500),
+                          )..show(context);
                         } else if (int.parse(amountController.text) < 10000) {
-                          scaffoldKey.currentState.showSnackBar(SnackBar(
-                            content: Text(
-                              'Minimum withdraw amount is Rp. 10.000,-',
-                              style: TextStyle(color: Colors.white),
-                            ),
+                          Flushbar(
+                            flushbarPosition: FlushbarPosition.TOP,
+                            message: 'Minimum withdraw amount is Rp. 10.000,-',
                             backgroundColor: Colors.red,
                             duration: Duration(seconds: 3),
-                          ));
+                            animationDuration: Duration(milliseconds: 500),
+                          )..show(context);
                         } else if (int.parse(amountController.text) >
                             int.parse(balanceData['amount'])) {
-                          scaffoldKey.currentState.showSnackBar(SnackBar(
-                            content: Text(
-                              'Withdraw amount is bigger than your balance! ',
-                              style: TextStyle(color: Colors.white),
-                            ),
+                          Flushbar(
+                            flushbarPosition: FlushbarPosition.TOP,
+                            message: 'Withdraw amount is bigger than your balance! ',
                             backgroundColor: Colors.red,
                             duration: Duration(seconds: 3),
-                          ));
+                            animationDuration: Duration(milliseconds: 500),
+                          )..show(context);
                         } else {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) =>
@@ -642,7 +645,8 @@ class WithdrawBankState extends State<WithdrawBank> {
     Color amountColor;
 
     return historyList == null
-        ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20)))
+        ? Container(
+            child: Center(child: CupertinoActivityIndicator(radius: 20)))
         : ListView.builder(
             shrinkWrap: true,
             itemCount: historyList == null ? 0 : historyList.length,

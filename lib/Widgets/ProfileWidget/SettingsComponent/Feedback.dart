@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -103,21 +104,25 @@ class GiveFeedbackState extends State<GiveFeedback>{
     var extractedData = json.decode(response.body);
 
     if(response.statusCode == 200 || response.statusCode == 201){
-      scaffoldKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Feedback submited, thank you',
         backgroundColor: eventajaGreenTeal,
-        content: Text('Feedback submited, thank you', style: TextStyle(color: Colors.white),),
         duration: Duration(seconds: 3),
-      ));
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
       Future.delayed(Duration(seconds: 3), (){
         Navigator.pop(context);
       });
     }
     else{
-      scaffoldKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: extractedData['desc'],
         backgroundColor: Colors.red,
-        content: Text(extractedData['desc'], style: TextStyle(color: Colors.white),),
         duration: Duration(seconds: 3),
-      ));
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
 
   }

@@ -1,5 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:eventevent/Widgets/PostEvent/CreateTicketName.dart';
+import 'package:eventevent/Widgets/PostEvent/FinishPostEvent.dart';
+import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WaitTransaction.dart';
 import 'package:eventevent/Widgets/Transaction/Alfamart/WaitingTransactionAlfamart.dart';
 import 'package:eventevent/Widgets/Transaction/BCA/InputBankData.dart';
@@ -8,12 +13,16 @@ import 'package:eventevent/Widgets/Transaction/GOPAY/WaitingGopay.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/WebView.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
+import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProcessingPayment extends StatefulWidget {
+  //if the loading from payment
   final uuid;
   final isCustomForm;
   final ticketType;
@@ -21,18 +30,44 @@ class ProcessingPayment extends StatefulWidget {
   final customFormList;
   final total;
 
-  const ProcessingPayment({Key key, this.uuid, this.isCustomForm, this.ticketType, this.customFormId, this.customFormList, this.total}) : super(key: key);
+  final loadingType;
+
+  //if the loading from create event
+  final imageFile;
+  final isPrivate;
+  final index;
+  final context;
+
+  const ProcessingPayment(
+      {Key key,
+      this.uuid,
+      this.isCustomForm,
+      this.ticketType,
+      this.customFormId,
+      this.customFormList,
+      this.total,
+      this.loadingType,
+      this.imageFile,
+      this.isPrivate,
+      this.index,
+      this.context})
+      : super(key: key);
 
   @override
   _ProcessingPaymentState createState() => _ProcessingPaymentState();
 }
 
 class _ProcessingPaymentState extends State<ProcessingPayment> {
-
   bool isLoading = false;
 
   Map<String, dynamic> paymentData;
   String expDate;
+
+  Dio dio = new Dio(BaseOptions(
+      connectTimeout: 10000, baseUrl: BaseApi().apiUrl, receiveTimeout: 10000));
+  FormData formData = new FormData();
+
+  double progress = 0;
 
   Future getPaymentData(String expired) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -103,7 +138,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
     // }
 
     String purchaseUri = BaseApi().apiUrl + '/ticket_transaction/post';
-    
+
     setState(() {
       isLoading = true;
     });
@@ -114,14 +149,13 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
 
     var length = response.contentLength;
     var recieved = 0;
-    
+
     print('content length' + length.toString());
 
     print(response.statusCode);
     print(response.body);
 
     if (response.statusCode == 200) {
-      
       print('mantab gan');
       print(response.body);
       var extractedData = json.decode(response.body);
@@ -195,10 +229,132 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       }
     }
   }
-  
+
+  Future postEvent(int index, BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Cookie cookie = Cookie.fromSetCookieValue(prefs.getString('Session'));
+
+    print(lookupMimeType(widget.imageFile.path));
+
+    try {
+      Map<String, dynamic> body = {
+        'X-API-KEY': API_KEY,
+        'eventTypeID':
+            (int.parse(prefs.getString('POST_EVENT_TYPE')) + 1).toString(),
+        'ticketTypeID': widget.ticketType[index]['id'],
+        'name': prefs.getString('POST_EVENT_NAME'),
+        'address': prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'),
+        'latitude': prefs.getString('CREATE_EVENT_LOCATION_LAT'),
+        'longitude': prefs.getString('CREATE_EVENT_LOCATION_LONG'),
+        'dateStart': prefs.getString('POST_EVENT_START_DATE'),
+        'timeStart': prefs.getString('POST_EVENT_START_TIME'),
+        'dateEnd': prefs.getString('POST_EVENT_END_DATE'),
+        'timeEnd': prefs.getString('POST_EVENT_END_TIME'),
+        'description': prefs.getString('CREATE_EVENT_DESCRIPTION'),
+        'phone': prefs.getString('CREATE_EVENT_TELEPHONE'),
+        'email': prefs.getString('CREATE_EVENT_EMAIL'),
+        'website': prefs.getString('CREATE_EVENT_WEBSITE'),
+        'isPrivate': prefs.getString('POST_EVENT_TYPE'),
+        'modifiedById': prefs.getString('Last User ID'),
+        'photo': UploadFileInfo(
+            widget.imageFile, "eventevent-${DateTime.now().toString()}.jpg",
+            contentType: ContentType('image', 'jpeg'))
+      };
+
+      List categoryList = prefs.getStringList('POST_EVENT_CATEGORY_ID');
+      print(categoryList);
+
+      for (int i = 0; i < categoryList.length; i++) {
+        setState(() {
+          body['category[$i]'] = categoryList[i];
+        });
+      }
+
+      var data = FormData.from(body);
+      Response response = await dio.post('/event/create',
+          options: Options(headers: {
+            'Authorization': AUTHORIZATION_KEY,
+            'cookie': prefs.getString('Session')
+          }, cookies: [
+            cookie
+          ], responseType: ResponseType.plain),
+          data: data, onSendProgress: (sent, total) {
+        print(
+            'data uploaded: ' + sent.toString() + ' from ' + total.toString());
+        setState(() {
+          progress = ((sent / total) * 100);
+          print(progress);
+        });
+      });
+
+      var extractedData = json.decode(response.data);
+
+      if (response.statusCode == 400) {
+        print(response.data);
+      } else if (response.statusCode == 201 || response.statusCode == 200) {
+        print(response.data);
+        print('ini untuk setup ticket');
+        print(widget.ticketType[index]['id']);
+        if (widget.ticketType[index]['isSetupTicket'] == '1') {
+          print('paid: ' + response.data);
+
+          setState(() {
+            prefs.setString('SETUP_TICKET_PAID_TICKET_TYPE',
+                widget.ticketType[index]['paid_ticket_type']['id']);
+            prefs.setString(
+                'NEW_EVENT_TICKET_TYPE_ID', widget.ticketType[index]['id']);
+            prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
+          });
+          Navigator.of(context).push(
+              CupertinoPageRoute(builder: (context) => CreateTicketName()));
+        } else {
+          if (widget.isPrivate == '0') {
+            if (widget.ticketType[index]['id'] == '1' ||
+                widget.ticketType[index]['2'] ||
+                widget.ticketType[index]['3']) {
+              print('non Paid: ' + response.data);
+              setState(() {
+                var extractedData = json.decode(response.data);
+                prefs.setString(
+                    'NEW_EVENT_TICKET_TYPE_ID', widget.ticketType[index]['id']);
+                prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
+              });
+              Navigator.of(context).push(
+                  CupertinoPageRoute(builder: (context) => FinishPostEvent()));
+            }
+          } else {
+            print(widget.ticketType[index]['id']);
+            if (widget.ticketType[index]['id'] == '1' ||
+                widget.ticketType[index]['id'] == '2' ||
+                widget.ticketType[index]['id'] == '3') {
+              print('non paid: ' + response.data);
+              setState(() {
+                var extractedData = json.decode(response.data);
+                prefs.setString(
+                    'NEW_EVENT_TICKET_TYPE_ID', widget.ticketType[index]['id']);
+                prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
+              });
+              Navigator.of(context).push(CupertinoPageRoute(
+                  builder: (context) => PostEventInvitePeople()));
+            }
+          }
+        }
+      }
+    } catch (e) {
+      if (e is DioError) {
+        print(e.message);
+      }
+    }
+  }
+
   @override
   void initState() {
-    postPurchaseTicket();
+    if (widget.loadingType == 'create event') {
+      postEvent(widget.index, context);
+    } else {
+      postPurchaseTicket();
+    }
     super.initState();
   }
 
@@ -208,10 +364,28 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       body: Container(
         color: Colors.white,
         child: Center(
-          child: CupertinoActivityIndicator(
-            radius: 15,
-            animating: true,
-          ),
+          child: widget.loadingType == 'create event'
+              ? Container(
+                  width: 200,
+                  height: 20,
+                  child: LiquidLinearProgressIndicator(
+                    backgroundColor: Color(0xff8a8a8b),
+                    valueColor: AlwaysStoppedAnimation(eventajaGreenTeal),
+                    direction: Axis.horizontal,
+                    value: progress,
+                    center: Text(
+                      "Uploading: ${progress.toStringAsFixed(0)}%",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                )
+              : CupertinoActivityIndicator(
+                  radius: 15,
+                  animating: true,
+                ),
         ),
       ),
     );

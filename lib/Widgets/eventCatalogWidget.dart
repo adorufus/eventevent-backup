@@ -22,6 +22,7 @@ import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/Models/PopularEventModels.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -1721,12 +1722,13 @@ class _EventCatalogState extends State<EventCatalog>
         isLoading = false;
       });
 
-      Scaffold.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 3),
-        content:
-        Text(response.reasonPhrase, style: TextStyle(color: Colors.white)),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: response.reasonPhrase,
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
   }
 
@@ -1791,12 +1793,13 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Scaffold.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 3),
-        content:
-            Text(response.reasonPhrase, style: TextStyle(color: Colors.white)),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: response.reasonPhrase,
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else if (extractedData['desc'] == 'Event Not Found') {
       setState(() {
         isLoading = false;
@@ -1941,12 +1944,13 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Scaffold.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 3),
-        content:
-            Text(response.reasonPhrase, style: TextStyle(color: Colors.white)),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: response.reasonPhrase,
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
   }
 
@@ -2004,12 +2008,13 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Scaffold.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 3),
-        content:
-            Text(response.reasonPhrase, style: TextStyle(color: Colors.white)),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: response.reasonPhrase,
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
   }
 
@@ -2066,12 +2071,13 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Scaffold.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 3),
-        content:
-            Text(response.reasonPhrase, style: TextStyle(color: Colors.white)),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: response.reasonPhrase,
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
   }
 
@@ -2128,12 +2134,13 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Scaffold.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 3),
-        content:
-            Text(response.reasonPhrase, style: TextStyle(color: Colors.white)),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: response.reasonPhrase,
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
   }
 }

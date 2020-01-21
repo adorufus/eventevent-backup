@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io'; import 'package:flushbar/flushbar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/PostEvent/CreateTicketReview.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -206,10 +207,13 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
   void navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (posterFile == null) {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Ticket picture cannot be empty!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Ticket picture cannot be empty',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
       setState(() {
         prefs.setString('SETUP_TICKET_POSTER', posterFile.path);

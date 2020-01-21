@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -243,11 +244,13 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
 
     if(response.statusCode == 400){
       Navigator.pop(context);
-      scaffoldKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: extractedData['desc'],
         backgroundColor: Colors.red,
-        content: Text(extractedData['desc']),
-        duration: Duration(seconds: 2),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
   }
 }

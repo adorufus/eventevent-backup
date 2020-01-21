@@ -1,4 +1,5 @@
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
@@ -149,10 +150,13 @@ class CreateTicketEndDateState extends State<CreateTicketEndDate> {
   navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_selectedDate.day == null || _selectedDate.day.toString() == '') {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Choose sales end date!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Choose sales end date!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
       prefs.setString('SETUP_TICKET_END_DATE', _selectedDate.year.toString() + '-' + _selectedDate.month.toString() + '-' + _selectedDate.day.toString());
       print(prefs.getString('SETUP_TICKET_END_DATE'));

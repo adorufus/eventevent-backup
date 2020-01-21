@@ -1,4 +1,5 @@
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
@@ -157,10 +158,13 @@ class CreateTicketStartTimeState extends State<CreateTicketStartTime> {
   navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_selectedDate.hour == null || _selectedDate.hour.toString() == '' || _selectedDate.minute == null || _selectedDate.minute.toString() == '') {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Choose sales start time!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Choose sales start time!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
       prefs.setString('SETUP_TICKET_START_TIME', _selectedDate.hour.toString() + ':' + _selectedDate.minute.toString());
       print(prefs.getString('SETUP_TICKET_START_TIME'));

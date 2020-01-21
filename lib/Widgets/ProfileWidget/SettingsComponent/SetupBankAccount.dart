@@ -4,7 +4,9 @@ import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankAccountLi
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankList.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,7 +26,8 @@ class SetupBankAccountState extends State<SetupBankAccount> {
   String bankID;
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -45,10 +48,10 @@ class SetupBankAccountState extends State<SetupBankAccount> {
             elevation: 0,
             backgroundColor: Colors.white,
             leading: GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
               },
-                          child: Image.asset(
+              child: Image.asset(
                 'assets/icons/icon_apps/arrow.png',
                 scale: 5.5,
                 alignment: Alignment.centerLeft,
@@ -56,8 +59,8 @@ class SetupBankAccountState extends State<SetupBankAccount> {
             ),
             title: Text('Setup Bank Account'),
             centerTitle: true,
-            
-            textTheme: TextTheme(title: TextStyle(
+            textTheme: TextTheme(
+                title: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: ScreenUtil.instance.setSp(14),
               color: Colors.black,
@@ -75,7 +78,9 @@ class SetupBankAccountState extends State<SetupBankAccount> {
           ),
           Text(
             'Account Name',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18)),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: ScreenUtil.instance.setSp(18)),
           ),
           SizedBox(
             height: ScreenUtil.instance.setWidth(10),
@@ -98,7 +103,9 @@ class SetupBankAccountState extends State<SetupBankAccount> {
           ),
           Text(
             'Account Number',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18)),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: ScreenUtil.instance.setSp(18)),
           ),
           SizedBox(
             height: ScreenUtil.instance.setWidth(10),
@@ -121,7 +128,9 @@ class SetupBankAccountState extends State<SetupBankAccount> {
           ),
           Text(
             'Bank Name',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18)),
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: ScreenUtil.instance.setSp(18)),
           ),
           SizedBox(
             height: ScreenUtil.instance.setWidth(10),
@@ -161,12 +170,13 @@ class SetupBankAccountState extends State<SetupBankAccount> {
                           builder: (BuildContext context) =>
                               BankAccountList()));
                 } else {
-                  scaffoldKey.currentState.showSnackBar(SnackBar(
-                      backgroundColor: Colors.red,
-                      content: Text(
-                        extractedData['desc'],
-                        style: TextStyle(color: Colors.white),
-                      )));
+                  Flushbar(
+                    flushbarPosition: FlushbarPosition.TOP,
+                    message: extractedData['desc'],
+                    backgroundColor: Colors.red,
+                    duration: Duration(seconds: 3),
+                    animationDuration: Duration(milliseconds: 500),
+                  )..show(context);
                 }
               });
             },

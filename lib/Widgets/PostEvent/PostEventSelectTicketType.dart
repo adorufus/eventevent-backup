@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:eventevent/Widgets/Transaction/ProcessingPayment.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:async/async.dart';
@@ -35,9 +36,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
   String base64Image;
   File imageFile;
   bool isLoading;
-  Dio dio = new Dio(BaseOptions(
-      connectTimeout: 10000, baseUrl: BaseApi().apiUrl, receiveTimeout: 10000));
-  FormData formData = new FormData();
+  
 
   @override
   void initState() {
@@ -121,7 +120,18 @@ class SelectTicketTypeState extends State<SelectTicketType> {
               }
               return ListTile(
                 onTap: () {
-                  postEvent(i, context);
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return ProcessingPayment(
+                        loadingType: 'create event',
+                        ticketType: ticketType,
+                        isPrivate: isPrivate,
+                        imageFile: imageFile,
+                        index: i,
+                        context: context
+                      );
+                    }
+                  ));
                   //postEvent(i);
                 },
                 contentPadding:
@@ -165,128 +175,6 @@ class SelectTicketTypeState extends State<SelectTicketType> {
         ticketType = extractedData['data'];
       });
     }
-  }
-
-  Future postEvent(int index, BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    Cookie cookie = Cookie.fromSetCookieValue(prefs.getString('Session'));
-
-    print(lookupMimeType(imageFile.path));
-
-    try {
-      Map<String, dynamic> body = {
-        'X-API-KEY': API_KEY,
-        'eventTypeID':
-            (int.parse(prefs.getString('POST_EVENT_TYPE')) + 1).toString(),
-        'ticketTypeID': ticketType[index]['id'],
-        'name': prefs.getString('POST_EVENT_NAME'),
-        'address': prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'),
-        'latitude': prefs.getString('CREATE_EVENT_LOCATION_LAT'),
-        'longitude': prefs.getString('CREATE_EVENT_LOCATION_LONG'),
-        'dateStart': prefs.getString('POST_EVENT_START_DATE'),
-        'timeStart': prefs.getString('POST_EVENT_START_TIME'),
-        'dateEnd': prefs.getString('POST_EVENT_END_DATE'),
-        'timeEnd': prefs.getString('POST_EVENT_END_TIME'),
-        'description': prefs.getString('CREATE_EVENT_DESCRIPTION'),
-        'phone': prefs.getString('CREATE_EVENT_TELEPHONE'),
-        'email': prefs.getString('CREATE_EVENT_EMAIL'),
-        'website': prefs.getString('CREATE_EVENT_WEBSITE'),
-        'isPrivate': prefs.getString('POST_EVENT_TYPE'),
-        'modifiedById': prefs.getString('Last User ID'),
-        'photo': UploadFileInfo(
-            imageFile, "eventevent-${DateTime.now().toString()}.jpg",
-            contentType: ContentType('image', 'jpeg'))
-      };
-
-      List categoryList = prefs.getStringList('POST_EVENT_CATEGORY_ID');
-      print(categoryList);
-
-      for (int i = 0; i < categoryList.length; i++) {
-        setState(() {
-          body['category[$i]'] = categoryList[i];
-        });
-      }
-
-      var data = FormData.from(body);
-      Response response = await dio.post('/event/create',
-          options: Options(headers: {
-            'Authorization': AUTHORIZATION_KEY,
-            'cookie': prefs.getString('Session')
-          }, cookies: [
-            cookie
-          ], responseType: ResponseType.plain),
-          data: data);
-
-      var extractedData = json.decode(response.data);
-
-      if (response.statusCode == 400) {
-        print(response.data);
-      } else if (response.statusCode == 201 || response.statusCode == 200) {
-        print(response.data);
-        print('ini untuk setup ticket');
-        print(ticketType[index]['id']);
-        if (ticketType[index]['isSetupTicket'] == '1') {
-          print('paid: ' + response.data);
-
-          setState(() {
-            prefs.setString('SETUP_TICKET_PAID_TICKET_TYPE',
-                ticketType[index]['paid_ticket_type']['id']);
-            prefs.setString(
-                'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
-            prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
-          });
-          Navigator.of(context).push(
-              CupertinoPageRoute(builder: (context) => CreateTicketName()));
-        } else {
-          if (isPrivate == '0') {
-            if (ticketType[index]['id'] == '1' ||
-                ticketType[index]['2'] ||
-                ticketType[index]['3']) {
-
-              print('non Paid: ' + response.data);
-              setState(() {
-                var extractedData = json.decode(response.data);
-                prefs.setString(
-                    'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
-                prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
-              });
-              Navigator.of(context).push(
-                  CupertinoPageRoute(builder: (context) => FinishPostEvent()));
-            }
-          } else {
-            print(ticketType[index]['id']);
-            if (ticketType[index]['id'] == '1' ||
-                ticketType[index]['id'] == '2' ||
-                ticketType[index]['id'] == '3') {
-              
-
-              print('non paid: ' + response.data);
-              setState(() {
-                var extractedData = json.decode(response.data);
-                prefs.setString(
-                    'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
-                prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
-              });
-              Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => PostEventInvitePeople()));
-            }
-          }
-        }
-      }
-    } catch (e) {
-      if (e is DioError) {
-        print(e.message);
-      }
-    }
-
-//    if(response.statusCode == 400){
-//      print(response.statusMessage);
-//    }
-//
-//    print(response.data.stream);
-//
-//    print(response.data.statusCode);
   }
 
   Future postPhoto(int index, BuildContext context) async {

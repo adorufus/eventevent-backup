@@ -1,5 +1,6 @@
 import 'package:eventevent/Widgets/PostEvent/CreateTicketMinBought.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
@@ -156,10 +157,13 @@ class CreateTicketEndTimeState extends State<CreateTicketEndTime> {
   navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_selectedDate.hour == null || _selectedDate.hour.toString() == '' || _selectedDate.minute == null || _selectedDate.minute.toString() == '') {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Choose sales end time!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Choose sales end time!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
       prefs.setString('SETUP_TICKET_END_TIME', _selectedDate.hour.toString() + ':' + _selectedDate.minute.toString());
       print(prefs.getString('SETUP_TICKET_END_TIME'));

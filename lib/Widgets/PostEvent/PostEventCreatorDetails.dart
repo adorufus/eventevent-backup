@@ -1,4 +1,5 @@
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -226,16 +227,22 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if(telephoneController.text == null || telephoneController.text == ''){
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Telephone cannot be empty'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Phone cannot be empty!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
     else if(descriptionController.text == null || descriptionController.text == ''){
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Description cannot be empty'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Description cannot be empty',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
     else{
       prefs.setString('CREATE_EVENT_TELEPHONE', telephoneController.text);

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:eventevent/Widgets/PostEvent/Components/IOSMap.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
@@ -126,10 +127,13 @@ showPlacePicker() async {
 
   navigateToNextStep(){
     if(placeName == null || placeName == ''){
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Please select location first!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Please select location first!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
     else{
       saveDataAndNext();

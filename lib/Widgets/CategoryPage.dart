@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,13 +38,13 @@ class _CategoryPageState extends State<CategoryPage> {
         refreshController.refreshCompleted();
       }
     }).catchError((e) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: e.toString(),
         backgroundColor: Colors.red,
-        content: Text(
-          e.toString(),
-          style: TextStyle(color: Colors.white),
-        ),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     });
     super.initState();
   }

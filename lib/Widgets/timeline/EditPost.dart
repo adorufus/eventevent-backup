@@ -1,11 +1,14 @@
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/Widgets/timeline/TimelineDashboard.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -19,7 +22,8 @@ class EditPost extends StatefulWidget {
   final bool isVideo;
   final postId;
 
-  const EditPost({Key key, this.imagePath, this.thumbnailPath, this.isVideo, this.postId})
+  const EditPost(
+      {Key key, this.imagePath, this.thumbnailPath, this.isVideo, this.postId})
       : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -32,7 +36,8 @@ class EditPostState extends State<EditPost> {
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -41,7 +46,7 @@ class EditPostState extends State<EditPost> {
       allowFontScaling: true,
     )..init(context);
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
           elevation: 1,
@@ -64,39 +69,38 @@ class EditPostState extends State<EditPost> {
                 onTap: () {
                   bool isLoading = false;
                   postMedia().then((response) async {
-                      print(response.statusCode);
-                      if (response.statusCode == null) {
-                        isLoading = true;
-                      } else if (response.statusCode == 201 ||
-                          response.statusCode == 200) {
-                        isLoading = false;
-                        print('berhasil');
-                        Navigator.pop(context, () => setState((){}));
-                        //push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (BuildContext context) =>
-                        //             TimelineDashboard()));
-                      } else {
-                        scaffoldKey.currentState.showSnackBar(SnackBar(
-                            backgroundColor: Colors.red,
-                            duration: Duration(seconds: 60),
-                            content: Text(
-                              response.statusCode.toString() +
-                                  ': ' +
-                                  response.reasonPhrase +
-                                  ', ' +
-                                  response.body +
-                                  ', ' +
-                                  widget.imagePath,
-                            )));
-                      }
-                    })..catchError((error) {
-                    scaffoldKey.currentState.showSnackBar(SnackBar(
-                      backgroundColor: Colors.red,
-                      content: Text(error.toString()),
-                    ));
-                  });
+                    print(response.statusCode);
+                    if (response.statusCode == null) {
+                      isLoading = true;
+                    } else if (response.statusCode == 201 ||
+                        response.statusCode == 200) {
+                      isLoading = false;
+                      print('berhasil');
+                      Navigator.pop(context, () => setState(() {}));
+                      //push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (BuildContext context) =>
+                      //             TimelineDashboard()));
+                    } else {
+                      Flushbar(
+                        flushbarPosition: FlushbarPosition.TOP,
+                        message: response.body + ': ' + widget.imagePath ,
+                        backgroundColor: Colors.red,
+                        duration: Duration(seconds: 3),
+                        animationDuration: Duration(milliseconds: 500),
+                      )..show(context);
+                    }
+                  })
+                    ..catchError((error) {
+                      Flushbar(
+                        flushbarPosition: FlushbarPosition.TOP,
+                        message: error.toString(),
+                        backgroundColor: Colors.red,
+                        duration: Duration(seconds: 3),
+                        animationDuration: Duration(milliseconds: 500),
+                      )..show(context);
+                    });
                 },
                 child: Center(
                   child: Text(
@@ -168,18 +172,14 @@ class EditPostState extends State<EditPost> {
     }
 
     String url = BaseApi().apiUrl + theUrl;
-    final response = await http.post(
-      url,
-      body: {
-        'X-API-KEY': API_KEY,
-        'id': widget.postId,
-        'caption': captionController.text
-      },
-      headers: {
-        'Authorization': AUTHORIZATION_KEY,
-        'cookie': prefs.getString('Session')
-      }
-    );
+    final response = await http.post(url, body: {
+      'X-API-KEY': API_KEY,
+      'id': widget.postId,
+      'caption': captionController.text
+    }, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session')
+    });
 
     return response;
   }

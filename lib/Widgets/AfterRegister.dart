@@ -1,5 +1,7 @@
 import 'dart:convert';
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -7,7 +9,8 @@ import 'package:eventevent/helper/API/registerModel.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,7 +23,8 @@ class AfterRegister extends StatefulWidget {
   final email;
   final password;
 
-  const AfterRegister({Key key, this.username, this.email, this.password}) : super(key: key);
+  const AfterRegister({Key key, this.username, this.email, this.password})
+      : super(key: key);
 
   @override
   _AfterRegisterState createState() => _AfterRegisterState();
@@ -54,20 +58,19 @@ class _AfterRegisterState extends State<AfterRegister> {
 
   DateTime _dateTime;
 
-  
-
   bool isPasswordObsecure = true;
 
-  Future getImage() async{
+  Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-    setState((){
+    setState(() {
       profilePictureFile = image;
     });
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -79,8 +82,8 @@ class _AfterRegisterState extends State<AfterRegister> {
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
+          elevation: 0,
+          backgroundColor: Colors.white,
           leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);
@@ -92,13 +95,13 @@ class _AfterRegisterState extends State<AfterRegister> {
             ),
           ),
           centerTitle: true,
-          title: Text('COMPLETE YOUR PROFILE', style: TextStyle(color: eventajaGreenTeal))),
+          title: Text('COMPLETE YOUR PROFILE',
+              style: TextStyle(color: eventajaGreenTeal))),
       body: ListView(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: registerGoogleWidget()
-          )
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: registerGoogleWidget())
         ],
       ),
     );
@@ -109,42 +112,47 @@ class _AfterRegisterState extends State<AfterRegister> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        SizedBox(height: ScreenUtil.instance.setWidth(10),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(10),
+        ),
         GestureDetector(
-          onTap: (){
-            getImage();
-          },
-          child: Column(
-            children: <Widget>[
+            onTap: () {
+              getImage();
+            },
+            child: Column(children: <Widget>[
               CircleAvatar(
                 radius: 80,
                 backgroundColor: eventajaGreenTeal,
-                backgroundImage: FileImage(
-                  profilePictureFile
-                ),
+                backgroundImage: FileImage(profilePictureFile),
               ),
-              SizedBox(height: ScreenUtil.instance.setWidth(10),),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(10),
+              ),
               Text('Tap to change / edit photo')
-            ]
-          )
+            ])),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
         TextFormField(
           controller: firstNameController,
           decoration: InputDecoration(
             hintText: 'First Name',
           ),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         TextFormField(
           controller: lastNameController,
           decoration: InputDecoration(
             hintText: 'Last Name',
           ),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         TextFormField(
-          onTap: (){
+          onTap: () {
             showDatePicker();
           },
           controller: birthdateController,
@@ -152,7 +160,9 @@ class _AfterRegisterState extends State<AfterRegister> {
             hintText: 'Birth Date',
           ),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         TextFormField(
           controller: phoneController,
           keyboardType: TextInputType.phone,
@@ -160,13 +170,15 @@ class _AfterRegisterState extends State<AfterRegister> {
             hintText: '(Phone, e.g. 0818123456)',
           ),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Radio(
               groupValue: currentValue,
-              onChanged: (int i) => setState((){
+              onChanged: (int i) => setState(() {
                 currentValue = i;
                 gender = 'Male';
               }),
@@ -176,7 +188,7 @@ class _AfterRegisterState extends State<AfterRegister> {
             SizedBox(width: ScreenUtil.instance.setWidth(30)),
             Radio(
               groupValue: currentValue,
-              onChanged: (int i) => setState((){
+              onChanged: (int i) => setState(() {
                 currentValue = i;
                 gender = 'Female';
               }),
@@ -186,7 +198,7 @@ class _AfterRegisterState extends State<AfterRegister> {
             SizedBox(width: ScreenUtil.instance.setWidth(30)),
             Radio(
               groupValue: currentValue,
-              onChanged: (int i) => setState((){
+              onChanged: (int i) => setState(() {
                 currentValue = i;
                 gender = 'Other';
               }),
@@ -195,38 +207,46 @@ class _AfterRegisterState extends State<AfterRegister> {
             Text('Other')
           ],
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         GestureDetector(
-          onTap: (){
+          onTap: () {
             requestRegister(
-              context,
-              widget.username,
-              widget.email,
-              widget.password,
-              firstNameController.text,
-              lastNameController.text,
-              birthdateController.text,
-              phoneController.text,
-              gender,
-              _scaffoldKey
-            )
-            .catchError((e){
-              _scaffoldKey.currentState.showSnackBar(SnackBar(
-                content: Text(e.toString()),
+                    context,
+                    widget.username,
+                    widget.email,
+                    widget.password,
+                    firstNameController.text,
+                    lastNameController.text,
+                    birthdateController.text,
+                    phoneController.text,
+                    gender,
+                    _scaffoldKey)
+                .catchError((e) {
+              Flushbar(
+                flushbarPosition: FlushbarPosition.TOP,
+                message: '${e.toString()}',
                 backgroundColor: Colors.red,
-              ));
+                duration: Duration(seconds: 3),
+                animationDuration: Duration(milliseconds: 500),
+              )..show(context);
             });
           },
           child: Container(
             height: ScreenUtil.instance.setWidth(50),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: eventajaGreenTeal,
-              borderRadius: BorderRadius.circular(30)
-            ),
+                color: eventajaGreenTeal,
+                borderRadius: BorderRadius.circular(30)),
             child: Center(
-              child: Text('DONE', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18) ,color: Colors.white, fontWeight: FontWeight.bold),)
-            ),
+                child: Text(
+              'DONE',
+              style: TextStyle(
+                  fontSize: ScreenUtil.instance.setSp(18),
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            )),
           ),
         )
       ],
@@ -244,7 +264,7 @@ class _AfterRegisterState extends State<AfterRegister> {
       String phoneNumber,
       String genderSpec,
       GlobalKey<ScaffoldState> _scaffoldKey) async {
-        SharedPreferences prefs =await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     final registerApiUrl = BaseApi().apiUrl + '/signup/register';
 
     print(username);
@@ -294,55 +314,56 @@ class _AfterRegisterState extends State<AfterRegister> {
     } else if (response.statusCode == 400) {
       final responseJson = json.decode(response.body);
       //Register registerModel = new Register.fromJson(responseJson);
-
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: responseJson['desc'].toString(),
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
-        content: Text(
-          responseJson['desc'],
-          style: TextStyle(color: Colors.white),
-        ),
-      ));
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else if (myResponse.containsKey('username')) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Username already taken',
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
-        content: Text(
-          'Username already taken',
-          style: TextStyle(color: Colors.white),
-        ),
-      ));
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
   }
-  
 
-  void showDatePicker(){
-    DatePicker.showDatePicker(
-      context,
-      pickerTheme: DateTimePickerTheme(
-        showTitle: true,
-        confirm: Text('Done', style: TextStyle(color: eventajaGreenTeal),),
-        cancel: Text('Cancel', style: TextStyle(color: Colors.red),)
-      ),
-      minDateTime: DateTime.parse(MIN_DATETIME),
-      maxDateTime: DateTime.parse(MAX_DATETIME),
-      initialDateTime: _dateTime,
-      dateFormat: _format,
-      locale: _locale,
-      onClose: () => {},
-      onCancel: () => {},
-      onChange: (dateTime, List<int> index){
-        setState((){
-          _dateTime = dateTime;
-          birthdateController.text = '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+  void showDatePicker() {
+    DatePicker.showDatePicker(context,
+        pickerTheme: DateTimePickerTheme(
+            showTitle: true,
+            confirm: Text(
+              'Done',
+              style: TextStyle(color: eventajaGreenTeal),
+            ),
+            cancel: Text(
+              'Cancel',
+              style: TextStyle(color: Colors.red),
+            )),
+        minDateTime: DateTime.parse(MIN_DATETIME),
+        maxDateTime: DateTime.parse(MAX_DATETIME),
+        initialDateTime: _dateTime,
+        dateFormat: _format,
+        locale: _locale,
+        onClose: () => {},
+        onCancel: () => {},
+        onChange: (dateTime, List<int> index) {
+          setState(() {
+            _dateTime = dateTime;
+            birthdateController.text =
+                '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+          });
+        },
+        onConfirm: (dateTime, List<int> index) {
+          setState(() {
+            _dateTime = dateTime;
+            birthdateController.text =
+                '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+          });
         });
-      },
-      onConfirm: (dateTime, List<int> index){
-        setState((){
-          _dateTime = dateTime;
-          birthdateController.text = '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
-        });
-      }
-    );
   }
 }

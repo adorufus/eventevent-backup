@@ -552,20 +552,7 @@ class PushNotificationState extends State<PushNotification> {
     // BackgroundFetch.finish();
   }
 
-  // loadNotification(GlobalKey<ScaffoldState> scaffoldKey) async {
-  //   getNotification().then((res) async {
-  //     setState(() {
-  //       _notificationStreamController.add(res);
-  //       print(res['desc']);
-  //       return res;
-  //     });
-  //   }).timeout(Duration(minutes: 5), onTimeout: () {
-  //     scaffoldKey.currentState.showSnackBar(SnackBar(
-  //       content: Text('Request Timeout!'),
-  //       backgroundColor: Colors.red,
-  //     ));
-  //   });
-  // }
+  
 
   @override
   void dispose() {
