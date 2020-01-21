@@ -94,12 +94,15 @@ class BuyersState extends State<Buyers> {
           style: TextStyle(color: eventajaGreenTeal),
         ),
         actions: <Widget>[
-          GestureDetector(
-            onTap: () {
-              exportCSV();
-            },
-            child: Center(
-              child: Text('Export', style: TextStyle(color: eventajaGreenTeal)),
+          Padding(
+            padding: EdgeInsets.only(right: 13),
+                      child: GestureDetector(
+              onTap: () {
+                exportCSV();
+              },
+              child: Center(
+                child: Text('Export', style: TextStyle(color: eventajaGreenTeal)),
+              ),
             ),
           )
         ],
@@ -162,7 +165,7 @@ class BuyersState extends State<Buyers> {
 
     print('buyerList length' + buyerListExport.length.toString());
 
-    for (var buyers in buyerListExport) {
+    for (Map buyers in buyerListExport) {
       print('buyers: ' + buyers.toString());
       List<dynamic> row = List();
 
@@ -171,7 +174,8 @@ class BuyersState extends State<Buyers> {
       row.add('@' + buyers['user']['username']);
       row.add(buyers['quantity']);
       row.add(buyers['note']);
-      if (buyers['form'] != null || buyers['form'].length != 0) {
+      if(buyers.containsKey('form')){
+        if (buyers['form'] != null || buyers['form'].length != 0) {
         for (var formList in buyers['form']) {
           setState(() {
             formLists = formList;
@@ -179,7 +183,8 @@ class BuyersState extends State<Buyers> {
           row.add(formList['answer']);
         }
       }
-
+      }
+      
       rows.add(row);
 
       print('banyak user beli tiket: ' + rows.length.toString());
@@ -205,8 +210,19 @@ class BuyersState extends State<Buyers> {
     print(checkPermission.toString());
 
     if (checkPermission == PermissionStatus.granted) {
-      String dir = (await getExternalStorageDirectory()).absolute.path +
+      
+    }
+
+    String dir;
+
+    if(Platform.isAndroid){
+      dir = (await getExternalStorageDirectory()).absolute.path +
           '/report_${widget.eventName}';
+    }
+    else if(Platform.isIOS){
+      dir = (await getLibraryDirectory()).absolute.path + '/report_${widget.eventName}';
+    }
+
       String file = "$dir";
       print(file);
       File f = new File(file + ".csv");
@@ -218,7 +234,6 @@ class BuyersState extends State<Buyers> {
       print('saved');
       // Share.file(path: f.path, mimeType: ShareType.TYPE_FILE, title: 'text');
       ShareExtend.share(f.path, "file");
-    }
   }
 
   Future<http.Response> getBuyerExport() async {

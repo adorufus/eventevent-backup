@@ -65,6 +65,8 @@
 	<string>EventEvent need to use the camera</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Needed to access location</string>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>Allow to acces media library</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Needed to access location</string>
 	<key>NSMicrophoneUsageDescription</key>

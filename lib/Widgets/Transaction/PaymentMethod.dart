@@ -236,7 +236,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                     ),
                                   ),
                                   Container(
-                                    height: ScreenUtil.instance.setWidth(80),
+                                    height: ScreenUtil.instance.setWidth(60),
                                     width: MediaQuery.of(context).size.width,
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 10),
@@ -265,12 +265,11 @@ class PaymentMethodState extends State<PaymentMethod> {
                                                     paymentMethodList[i]
                                                         ['photo']),
                                             width: ScreenUtil.instance
-                                                .setWidth(250),
+                                                .setWidth(150),
                                           )),
                                         ),
-                                        SizedBox(
-                                          width:
-                                              ScreenUtil.instance.setWidth(50),
+                                        Expanded(
+                                          child: SizedBox()
                                         ),
                                         Icon(
                                           Icons.navigate_next,
