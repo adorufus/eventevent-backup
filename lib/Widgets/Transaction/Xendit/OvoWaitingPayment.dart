@@ -134,12 +134,12 @@ class _OvoWaitingPaymentState
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             SizedBox(
-                              height: ScreenUtil.instance.setWidth(10),
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Text('Complete Payment In',
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: ScreenUtil.instance.setSp(18),
+                                    fontSize: ScreenUtil.instance.setSp(14),
                                     fontWeight: FontWeight.bold)),
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
@@ -149,7 +149,7 @@ class _OvoWaitingPaymentState
                               whenTimeExpires: () {
 
                               },
-                              countDownTimerStyle: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(25),
+                              countDownTimerStyle: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(38),
                 fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
@@ -161,19 +161,19 @@ class _OvoWaitingPaymentState
                               children: <Widget>[
                                 Text('H',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(18))),
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('M',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(18))),
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('S',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(18))),
                               ],
                             ),
                             SizedBox(
@@ -185,11 +185,11 @@ class _OvoWaitingPaymentState
                                 Text(
                                   'Complete payment before ',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Colors.white, fontSize: 14),
                                 ),
                                 Text('${widget.expDate}',
                                     style: TextStyle(
-                                        color: Colors.white,
+                                        color: Colors.white, fontSize: 12,
                                         fontWeight: FontWeight.bold))
                               ],
                             )

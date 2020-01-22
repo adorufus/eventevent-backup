@@ -198,7 +198,7 @@ class _WaitTransactionState extends State<WaitTransaction>
                 Container(
                   height: ScreenUtil.instance.setWidth(380),
                   color: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -214,12 +214,12 @@ class _WaitTransactionState extends State<WaitTransaction>
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             SizedBox(
-                              height: ScreenUtil.instance.setWidth(10),
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Text('Complete Payment In',
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: ScreenUtil.instance.setSp(18),
+                                    fontSize: ScreenUtil.instance.setSp(14),
                                     fontWeight: FontWeight.bold)),
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
@@ -229,7 +229,7 @@ class _WaitTransactionState extends State<WaitTransaction>
                               whenTimeExpires: () {},
                               countDownTimerStyle: TextStyle(
                                   color: Colors.white,
-                                  fontSize: ScreenUtil.instance.setSp(25),
+                                  fontSize: ScreenUtil.instance.setSp(38),
                                   fontWeight: FontWeight.bold),
                             ),
 //                            AnimatedBuilder(
@@ -280,11 +280,11 @@ class _WaitTransactionState extends State<WaitTransaction>
                                 Text(
                                   'Complete payment before ',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Colors.white, fontSize: 14),
                                 ),
                                 Text('${widget.expDate}',
                                     style: TextStyle(
-                                        color: Colors.white,
+                                        color: Colors.white, fontSize: 12,
                                         fontWeight: FontWeight.bold))
                               ],
                             )
@@ -308,7 +308,7 @@ class _WaitTransactionState extends State<WaitTransaction>
                           Text(
                             'Rp. ' + widget.finalPrice.toString(),
                             style: TextStyle(
-                                fontSize: 50, fontWeight: FontWeight.bold),
+                                fontSize: 35, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
@@ -374,7 +374,7 @@ class _WaitTransactionState extends State<WaitTransaction>
                         Align(
                           alignment: Alignment.centerLeft,
                           child: SizedBox(
-                            height: ScreenUtil.instance.setWidth(30),
+                            height: ScreenUtil.instance.setWidth(60),
                             child: Image.asset(
                                 paymentData['payment']['vendor'] == 'bca'
                                     ? 'assets/drawable/bca.png'

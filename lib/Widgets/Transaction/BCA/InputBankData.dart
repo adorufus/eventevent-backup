@@ -166,7 +166,7 @@ class PaymentBcaState extends State<PaymentBCA> {
                           whenTimeExpires: () {},
                           countDownTimerStyle: TextStyle(
                               color: Colors.white,
-                              fontSize: ScreenUtil.instance.setSp(25),
+                              fontSize: ScreenUtil.instance.setSp(38),
                               fontWeight: FontWeight.bold),
                         ),
                         SizedBox(
