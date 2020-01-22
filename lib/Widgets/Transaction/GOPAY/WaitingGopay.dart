@@ -102,7 +102,7 @@ class _WaitingGopayState extends State<WaitingGopay>{
         },
         child: Container(
                   height: ScreenUtil.instance.setWidth(50),
-                  color: Colors.deepOrangeAccent,
+                  color: Colors.orange,
                   child: Center(
                     child: Text(
                       'PAY WITH GO-PAY',

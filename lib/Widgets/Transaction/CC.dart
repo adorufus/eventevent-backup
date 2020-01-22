@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/countdownCounter.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -40,33 +41,12 @@ class CreditCardInputState extends State<CreditCardInput> {
   Image amexImg;
   Image discoverImg;
 
+  int seconds;
+
 
   DateTime dateTime;
 
   Map<String, dynamic> paymentData;
-
-  void startCounter(String expired) {
-    int hoursStart, minuteStart, secondStart;
-    String strHour, strMinute, strSecond;
-
-    dateTime = DateTime.parse(expired);
-
-    hoursStart = dateTime.hour;
-    minuteStart = dateTime.minute;
-    secondStart = dateTime.second;
-
-    setState(() {
-      hour = hoursStart.toString();
-      min = minuteStart.toString();
-      sec = secondStart.toString();
-    });
-
-    print(hoursStart.toString() +
-        minuteStart.toString() +
-        secondStart.toString());
-
-    // timer = new CountdownTimer();
-  }
 
   @override
   void initState() {
@@ -82,6 +62,9 @@ class CreditCardInputState extends State<CreditCardInput> {
     mastercardImg = Image.asset('assets/drawable/mastercard.png');
     amexImg = Image.asset('assets/drawable/amex.png');
     discoverImg = Image.asset('assets/drawable/discover.png');
+    final salesDay = DateTime.parse(widget.expDate);
+    final remaining = salesDay.difference(DateTime.now());
+    seconds = remaining.inSeconds;
   }
 
   @override
@@ -106,7 +89,7 @@ class CreditCardInputState extends State<CreditCardInput> {
         },
         child: Container(
             height: ScreenUtil.instance.setWidth(50),
-            color: Colors.deepOrangeAccent,
+            color: Colors.orange,
             child: Center(
               child: Text(
                 'CONFIRM',
@@ -160,56 +143,13 @@ class CreditCardInputState extends State<CreditCardInput> {
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
                             ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text('${hour}',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: ScreenUtil.instance.setSp(20),
-                                        fontWeight: FontWeight.bold)),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  ':',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  '$min',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  ':',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                ),
-                                Text(
-                                  '$sec',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(20),
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
+                            CountDownTimer(
+                              secondsRemaining: seconds,
+                              whenTimeExpires: () {
+
+                              },
+                              countDownTimerStyle: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(18),
+                                  fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
@@ -446,7 +386,6 @@ class CreditCardInputState extends State<CreditCardInput> {
       var extractedData = json.decode(response.body);
       setState(() {
         paymentData = extractedData['data'];
-        startCounter(paymentData['expired_time']);
         print(paymentData);
       });
     }

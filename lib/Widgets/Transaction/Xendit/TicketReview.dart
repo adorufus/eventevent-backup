@@ -156,7 +156,7 @@ class _TicketReviewState extends State<TicketReview> {
         },
         child: Container(
             height: ScreenUtil.instance.setWidth(50),
-            color: Colors.deepOrangeAccent,
+            color: Colors.orange,
             child: Center(
               child: Text(
                 'PURCHASE',

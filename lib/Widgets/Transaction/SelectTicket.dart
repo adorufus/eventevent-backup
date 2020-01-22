@@ -121,21 +121,33 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                 ticketPrice = 'Free Limited';
               } else if (int.parse(ticketListData[i]['final_price']) > 0) {
                 itemColor = Color(0xFF34B323);
-                ticketPrice = ticketListData[i]['final_price'];
+                ticketPrice = 'Rp. ' + ticketListData[i]['final_price'];
               }
+            }
+
+            if (ticketListData[i]['is_single_ticket'] == '1' &&
+                ticketListData[i]['user_have_ticket'] == '1') {
+              itemColor = Color(0xff36b323).withOpacity(.2);
+              ticketPrice = 'Rp. ' + ticketListData[i]['final_price'];
             }
 
             if (ticketListData[i]['availableTicketStatus'] == '0' &&
                 int.parse(ticketListData[i]['final_price']) > 0) {
               itemColor = Color(0xFF34B323).withOpacity(.2);
-              ticketPrice = ticketListData[i]['final_price'];
+              ticketPrice = 'Rp. ' + ticketListData[i]['final_price'];
             }
           } else if (ticketListData[i]['event']['ticket_type']['type'] ==
                   'free_limited' ||
               ticketListData[i]['event']['ticket_type']['type'] ==
                   'free_limited_seating') {
-            itemColor = Color(0xFFFFAA00);
-            ticketPrice = 'Free Limited';
+            if (ticketListData[i]['is_single_ticket'] == '1' &&
+                ticketListData[i]['user_have_ticket'] == '1') {
+              itemColor = Color(0xff36b323).withOpacity(.2);
+              ticketPrice = 'Free Limited';
+            } else {
+              itemColor = Color(0xFFFFAA00);
+              ticketPrice = 'Free Limited';
+            }
           }
 
           return GestureDetector(
@@ -144,127 +156,164 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                   ticketListData[i]['min_ticket'],
                   ticketListData[i]['max_ticket'],
                   ticketListData[i]['final_price']);
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      SelectedTicketQuantityWidget(
-                        eventName: ticketListData[i]['event']['name'],
-                        eventAddress: ticketListData[i]['event']['address'],
-                        eventDate: ticketListData[i]['event']['dateStart'],
-                        ticketName: ticketListData[i]['ticket_name'],
-                        eventImage: ticketListData[i]['ticket_image']
-                            ['secure_url'],
-                        ticketDetail: ticketListData[i]['descriptions'],
-                        ticketPrice: ticketListData[i]['final_price'],
-                        ticketID: ticketListData[i]['id'],
-                        ticketType: ticketListData[i]['paid_ticket_type']
-                            ['type'],
-                        eventStartTime: ticketListData[i]['event']['timeStart'],
-                        eventEndTime: ticketListData[i]['event']['timeEnd'],
-                      )));
+              if (ticketListData[i]['is_single_ticket'] == '1' &&
+                      ticketListData[i]['user_have_ticket'] == '1' ||
+                  ticketListData[i]['availableTicketStatus'] == '0') {
+                //do nothing
+              } else {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        SelectedTicketQuantityWidget(
+                      eventName: ticketListData[i]['event']['name'],
+                      eventAddress: ticketListData[i]['event']['address'],
+                      eventDate: ticketListData[i]['event']['dateStart'],
+                      ticketName: ticketListData[i]['ticket_name'],
+                      eventImage: ticketListData[i]['ticket_image']
+                          ['secure_url'],
+                      ticketDetail: ticketListData[i]['descriptions'],
+                      ticketPrice: ticketListData[i]['final_price'],
+                      ticketID: ticketListData[i]['id'],
+                      ticketType: ticketListData[i]['paid_ticket_type']['type'],
+                      eventStartTime: ticketListData[i]['event']['timeStart'],
+                      eventEndTime: ticketListData[i]['event']['timeEnd'],
+                    ),
+                  ),
+                );
+              }
             },
-            child: Container(
-                height: ScreenUtil.instance.setWidth(170),
-                width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.only(left: 20, right: 5, top: 10),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        height: ScreenUtil.instance.setWidth(150),
-                        width: ScreenUtil.instance.setWidth(100),
+            child: Stack(
+              children: <Widget>[
+                Container(
+                    height: ScreenUtil.instance.setWidth(170),
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.only(left: 20, right: 5, top: 10),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            height: ScreenUtil.instance.setWidth(150),
+                            width: ScreenUtil.instance.setWidth(100),
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: ticketListData[i]['ticket_image']
+                                                ['secure_url'] ==
+                                            null
+                                        ? AssetImage('assets/grey-fade.jpg')
+                                        : NetworkImage(ticketListData[i]
+                                            ['ticket_image']['secure_url']))),
+                          ),
+                          SizedBox(
+                            width: ScreenUtil.instance.setWidth(15),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  ticketListData[i]['ticket_name'],
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil.instance.setSp(15),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                    ticketListData[i]
+                                                ['availableTicketStatus'] ==
+                                            '0'
+                                        ? 'Sold Out'
+                                        : 'Available',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey)),
+                                SizedBox(
+                                  height: ScreenUtil.instance.setWidth(25),
+                                ),
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width - 180,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 20,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil.instance.setWidth(20),
+                                ),
+                                Container(
+                                  height: ScreenUtil.instance.setWidth(28),
+                                  width: ScreenUtil.instance.setWidth(133),
+                                  decoration: BoxDecoration(
+                                      boxShadow: <BoxShadow>[
+                                        BoxShadow(
+                                            color: itemColor.withOpacity(0.4),
+                                            blurRadius: 2,
+                                            spreadRadius: 1.5)
+                                      ],
+                                      color: itemColor,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Center(
+                                      child: Text(
+                                    ticketPrice,
+                                    // type == 'paid' ||
+                                    //         type == 'paid_seating'
+                                    //     ? isAvailable == '1'
+                                    //         ? 'Rp. ' +
+                                    //             itemPrice.toUpperCase() +
+                                    //             ',-'
+                                    //         : itemPrice.toUpperCase()
+                                    //     : itemPrice.toUpperCase(),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: ScreenUtil.instance.setSp(10),
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                ),
+                                Text(
+                                    ticketListData[i]['is_single_ticket'] == '0'
+                                        ? ''
+                                        : 'Limited to one purchase only')
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )),
+                ticketListData[i]['is_single_ticket'] == '1' &&
+                        ticketListData[i]['user_have_ticket'] == '1'
+                    ? Container(
+                        height: ScreenUtil.instance.setWidth(170),
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.only(left: 20, right: 5, top: 10),
                         decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: ticketListData[i]['ticket_image']
-                                            ['secure_url'] ==
-                                        null
-                                    ? AssetImage('assets/grey-fade.jpg')
-                                    : NetworkImage(ticketListData[i]
-                                        ['ticket_image']['secure_url']))),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(15),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              ticketListData[i]['ticket_name'],
-                              style: TextStyle(
-                                  fontSize: ScreenUtil.instance.setSp(15),
-                                  fontWeight: FontWeight.bold),
+                          color: Colors.white.withOpacity(.8),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'You Cannot Buy This Ticket Again',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold
                             ),
-                            Text(
-                                ticketListData[i]['availableTicketStatus'] ==
-                                        '0'
-                                    ? 'Sold Out'
-                                    : 'Available',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey)),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(25),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width - 180,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 20,
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(20),
-                            ),
-                            Container(
-                              height: ScreenUtil.instance.setWidth(28),
-                              width: ScreenUtil.instance.setWidth(133),
-                              decoration: BoxDecoration(
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        color: itemColor.withOpacity(0.4),
-                                        blurRadius: 2,
-                                        spreadRadius: 1.5)
-                                  ],
-                                  color: itemColor,
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Center(
-                                  child: Text(
-                                ticketPrice,
-                                // type == 'paid' ||
-                                //         type == 'paid_seating'
-                                //     ? isAvailable == '1'
-                                //         ? 'Rp. ' +
-                                //             itemPrice.toUpperCase() +
-                                //             ',-'
-                                //         : itemPrice.toUpperCase()
-                                //     : itemPrice.toUpperCase(),
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: ScreenUtil.instance.setSp(10),
-                                    fontWeight: FontWeight.bold),
-                              )),
-                            ),
-                            Text(ticketListData[i]['is_single_ticket'] == '0'
-                                ? ''
-                                : 'Limited to one purchase only')
-                          ],
+                          ),
                         ),
                       )
-                    ],
-                  ),
-                )),
+                    : Container()
+              ],
+            ),
           );
         },
       ),

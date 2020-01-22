@@ -88,7 +88,7 @@ class _WaitingTransactionAlfamartState
       //   child: Container(
       //     height: ScreenUtil.instance.setWidth(50),
       //     width: MediaQuery.of(context).size.width,
-      //     color: Colors.orangeAccent,
+      //     color: Colors.orange,
       //     child: Text('test succes page'),
       //   ),
       // ),

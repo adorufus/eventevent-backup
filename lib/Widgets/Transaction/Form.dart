@@ -111,244 +111,244 @@ class _TransactionFormState extends State<TransactionForm> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    return formData == null
-        ? Container(
-            child: Center(child: CupertinoActivityIndicator(radius: 20)),
-          )
-        : Scaffold(
-            bottomNavigationBar: GestureDetector(
-              onTap: () {
-                saveInput();
-                // for (var i = 0; i < questionId.length; i++) {
-                //   formIds['id'] = questionId[i];
-                // }
+    return Scaffold(
+      bottomNavigationBar: GestureDetector(
+        onTap: () {
+          saveInput();
+          // for (var i = 0; i < questionId.length; i++) {
+          //   formIds['id'] = questionId[i];
+          // }
 
-                // for (var i = 0; i < answer.length; i++) {
-                //   formAnswer['answer'] = answer[i];
-                // }
-                if (customFormList != null) {
-                  for (var customForm in customFormList) {
-                    questionId.add(customForm['id']);
-                  }
-                }
+          // for (var i = 0; i < answer.length; i++) {
+          //   formAnswer['answer'] = answer[i];
+          // }
+          if (customFormList != null) {
+            for (var customForm in customFormList) {
+              questionId.add(customForm['id']);
+            }
+          }
 
-                print(questionId);
+          print(questionId);
 
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return widget.ticketType == 'free_limited'
-                          ? customFormList == null
-                              ? TicketReview(
-                                  ticketType: widget.ticketType,
-                                  isCustomForm: false,
-                                )
-                              : TicketReview(
-                                  ticketType: widget.ticketType,
-                                  customFormList: answer,
-                                  customFormId: questionId,
-                                  isCustomForm: true,
-                                )
-                          : customFormList == null ? PaymentMethod(
-                            isCustomForm: false
-                          ) : PaymentMethod(
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) {
+                return widget.ticketType == 'free_limited'
+                    ? customFormList == null
+                        ? TicketReview(
+                            ticketType: widget.ticketType,
+                            isCustomForm: false,
+                          )
+                        : TicketReview(
+                            ticketType: widget.ticketType,
+                            customFormList: answer,
+                            customFormId: questionId,
                             isCustomForm: true,
-                              answerList: answer,
-                              customFormId: questionId,
-                            );
-                    },
-                  ),
-                ).then((val) {
-                  answer.clear();
-                  questionId.clear();
-                });
-
-                // print(formIds);
+                          )
+                    : customFormList == null
+                        ? PaymentMethod(isCustomForm: false)
+                        : PaymentMethod(
+                            isCustomForm: true,
+                            answerList: answer,
+                            customFormId: questionId,
+                          );
               },
-              child: Container(
-                  height: ScreenUtil.instance.setWidth(50),
-                  color: Colors.deepOrangeAccent,
-                  child: Center(
-                    child: Text(
-                      'OK',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: ScreenUtil.instance.setSp(20)),
-                    ),
-                  )),
             ),
-            appBar: AppBar(
-              elevation: 1,
-              backgroundColor: Colors.white,
-              leading: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: eventajaGreenTeal,
-                  size: 30,
+          ).then((val) {
+            answer.clear();
+            questionId.clear();
+          });
+
+          // print(formIds);
+        },
+        child: formData == null
+            ? Container(
+                child: Center(child: CupertinoActivityIndicator(radius: 20)),
+              )
+            : Container(
+                height: ScreenUtil.instance.setWidth(50),
+                color: Colors.orange,
+                child: Center(
+                  child: Text(
+                    'OK',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: ScreenUtil.instance.setSp(20)),
+                  ),
+                )),
+      ),
+      appBar: AppBar(
+        elevation: 1,
+        backgroundColor: Colors.white,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: eventajaGreenTeal,
+            size: 30,
+          ),
+        ),
+        centerTitle: true,
+        title: Text(
+          'ABOUT YOU',
+          style: TextStyle(color: eventajaGreenTeal),
+        ),
+      ),
+      body: Container(
+        color: Colors.black.withOpacity(0.05),
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: ListView(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.all(15),
+              child: Text(
+                'Tell us about yourself, these information will be useful for connecting event organisers and attendees.',
+                textAlign: TextAlign.start,
+                style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
+              ),
+            ),
+            Container(
+              color: Colors.white,
+              child: Container(
+                margin: EdgeInsets.all(15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'First Name',
+                      style: TextStyle(
+                          fontSize: ScreenUtil.instance.setSp(16),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    TextFormField(
+                      controller: firstnameController,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Put your first name...'),
+                    ),
+                  ],
                 ),
               ),
-              centerTitle: true,
-              title: Text(
-                'ABOUT YOU',
-                style: TextStyle(color: eventajaGreenTeal),
+            ),
+            SizedBox(
+              height: ScreenUtil.instance.setWidth(30),
+            ),
+            Container(
+              color: Colors.white,
+              child: Container(
+                margin: EdgeInsets.all(15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Last Name',
+                      style: TextStyle(
+                          fontSize: ScreenUtil.instance.setSp(16),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    TextFormField(
+                      controller: lastnameController,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Put your last name...'),
+                    ),
+                  ],
+                ),
               ),
             ),
-            body: Container(
-              color: Colors.black.withOpacity(0.05),
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: ListView(
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.all(15),
-                    child: Text(
-                      'Tell us about yourself, these information will be useful for connecting event organisers and attendees.',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
+            SizedBox(
+              height: ScreenUtil.instance.setWidth(30),
+            ),
+            Container(
+              color: Colors.white,
+              child: Container(
+                margin: EdgeInsets.all(15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'E-mail',
+                      style: TextStyle(
+                          fontSize: ScreenUtil.instance.setSp(16),
+                          fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: Container(
-                      margin: EdgeInsets.all(15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'First Name',
-                            style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(16),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          TextFormField(
-                            controller: firstnameController,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Put your first name...'),
-                          ),
-                        ],
-                      ),
+                    TextFormField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Put your e-mail'),
                     ),
-                  ),
-                  SizedBox(
-                    height: ScreenUtil.instance.setWidth(30),
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: Container(
-                      margin: EdgeInsets.all(15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Last Name',
-                            style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(16),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          TextFormField(
-                            controller: lastnameController,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Put your last name...'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: ScreenUtil.instance.setWidth(30),
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: Container(
-                      margin: EdgeInsets.all(15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'E-mail',
-                            style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(16),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          TextFormField(
-                            controller: emailController,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Put your e-mail'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: ScreenUtil.instance.setWidth(30),
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: Container(
-                      margin: EdgeInsets.all(15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Phone Number',
-                            style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(16),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          TextFormField(
-                            controller: phoneController,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: '(e.g. 0818123456)'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: ScreenUtil.instance.setWidth(30),
-                  ),
-                  Container(
-                    color: Colors.white,
-                    child: Container(
-                      margin: EdgeInsets.all(15),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Aditional Notes',
-                            style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(16),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          TextFormField(
-                            controller: aditionalNotesController,
-                            keyboardType: TextInputType.multiline,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintMaxLines: 100,
-                                hintText:
-                                    'Additional notes for event organizer... Example: Please find the best seat for me.'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: ScreenUtil.instance.setWidth(30)),
-                  customFormData['status'] == null || customFormList == null
-                      ? Container()
-                      : customForm()
-                ],
+                  ],
+                ),
               ),
             ),
-          );
+            SizedBox(
+              height: ScreenUtil.instance.setWidth(30),
+            ),
+            Container(
+              color: Colors.white,
+              child: Container(
+                margin: EdgeInsets.all(15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Phone Number',
+                      style: TextStyle(
+                          fontSize: ScreenUtil.instance.setSp(16),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    TextFormField(
+                      controller: phoneController,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: '(e.g. 0818123456)'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: ScreenUtil.instance.setWidth(30),
+            ),
+            Container(
+              color: Colors.white,
+              child: Container(
+                margin: EdgeInsets.all(15),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Aditional Notes',
+                      style: TextStyle(
+                          fontSize: ScreenUtil.instance.setSp(16),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    TextFormField(
+                      controller: aditionalNotesController,
+                      keyboardType: TextInputType.multiline,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintMaxLines: 100,
+                          hintText:
+                              'Additional notes for event organizer... Example: Please find the best seat for me.'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: ScreenUtil.instance.setWidth(30)),
+            customFormList == null
+                ? Container()
+                : customForm()
+          ],
+        ),
+      ),
+    );
   }
 
   Widget customForm() {

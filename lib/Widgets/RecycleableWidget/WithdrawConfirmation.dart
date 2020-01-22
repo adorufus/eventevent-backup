@@ -153,7 +153,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
         },
         child: Container(
           height: ScreenUtil.instance.setWidth(50),
-          color: Colors.deepOrangeAccent,
+          color: Colors.orange,
           child: Center(child: Text('CONFIRM', style: TextStyle(color: Colors.white),),),
         ),
       ),

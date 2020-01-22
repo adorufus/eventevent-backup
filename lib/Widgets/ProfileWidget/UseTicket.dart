@@ -129,7 +129,7 @@ class UseTicketState extends State<UseTicket> {
               ? Colors.grey
               : widget.usedStatus == 'EXPIRED'
                   ? Colors.red
-                  : Colors.deepOrangeAccent,
+                  : Colors.orange,
           child: Center(
             child: Text(
               widget.usedStatus == 'USED'
