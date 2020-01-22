@@ -1,20 +1,37 @@
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoveItem extends StatefulWidget {
   final isComment;
   final loveCount;
   final commentCount;
+  final isAlreadyCommented;
+  final isAlreadyLoved;
 
-  const LoveItem({Key key, this.isComment, this.loveCount, this.commentCount}) : super(key: key);
+  const LoveItem(
+      {Key key,
+      this.isComment,
+      this.loveCount,
+      this.commentCount, this.isAlreadyCommented, this.isAlreadyLoved,})
+      : super(key: key);
 
   @override
   _LoveItemState createState() => _LoveItemState();
 }
 
 class _LoveItemState extends State<LoveItem> {
+  Map commentData;
+
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -22,6 +39,7 @@ class _LoveItemState extends State<LoveItem> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 13),
       height: ScreenUtil.instance.setWidth(30),
@@ -37,8 +55,14 @@ class _LoveItemState extends State<LoveItem> {
       child:
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
         Image.asset(
-          widget.isComment == false ? 'assets/icons/icon_apps/love.png' : 'assets/icons/icon_apps/comment.png',
-          color: widget.isComment == false ? Colors.red : eventajaGreenTeal,
+          widget.isComment == false
+              ? 'assets/icons/icon_apps/love.png'
+              : 'assets/icons/icon_apps/comment.png',
+          color: widget.isComment == false
+              ? widget.isAlreadyLoved == false ? Color(0xff8a8a8b) : Colors.red
+              : widget.isAlreadyCommented == false
+                  ? Color(0xff8a8a8b)
+                  : eventajaGreenTeal,
           scale: 3.5,
         ),
         SizedBox(width: ScreenUtil.instance.setWidth(5)),

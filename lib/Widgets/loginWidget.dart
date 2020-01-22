@@ -358,6 +358,10 @@ class _LoginWidgetState extends State<LoginWidget> {
     String url = BaseApi().apiUrl +
         '/signin/google?X-API-KEY=$API_KEY&access_token=$access_token';
 
+        setState((){
+          isLoading = true;
+        });
+
     final response = await http.get(
       url,
       headers: {
@@ -368,6 +372,10 @@ class _LoginWidgetState extends State<LoginWidget> {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
+      setState((){
+        isLoading = false;
+      });
+      
       var extractedData = json.decode(response.body);
 
       prefs.setString('Session', response.headers['set-cookie']);

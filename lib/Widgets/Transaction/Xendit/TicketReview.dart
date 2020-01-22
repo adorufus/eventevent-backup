@@ -253,7 +253,7 @@ class _TicketReviewState extends State<TicketReview> {
               padding:
                   EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 15),
               color: Colors.white,
-              height: ScreenUtil.instance.setWidth(150),
+              height: ScreenUtil.instance.setWidth(200),
               width: MediaQuery.of(context).size.width,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -352,7 +352,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                       },
                       child: detailData['createdByID'] == null
                           ? Container(
-                              child: Center(child: CupertinoActivityIndicator(radius: 20)),
+                              child: Center(
+                                  child:
+                                      CupertinoActivityIndicator(radius: 20)),
                             )
                           : detailData['createdByID'] != currentUserId
                               ? Container()
@@ -480,7 +482,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               onTap: () {
                 if (ticketStat['salesStatus'] == null ||
                     ticketStat['salesStatus'] == 'null') {
-                  if (detailData['ticket_type']['type'] == 'free' || detailData['ticket_type']['type'] == 'no_ticket') {
+                  if (detailData['ticket_type']['type'] == 'free' ||
+                      detailData['ticket_type']['type'] == 'no_ticket') {
                     print('show modal');
                     showModalBottomSheet(
                       context: context,
@@ -765,7 +768,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               children: <Widget>[
                 detailData == null
                     ? Container(
-                        child: Center(child: CupertinoActivityIndicator(radius: 20)))
+                        child: Center(
+                            child: CupertinoActivityIndicator(radius: 20)))
                     // :
                     : Container(
                         color: Colors.white,
@@ -1024,13 +1028,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       ticketStat[
                                                               'salesStatus'] ==
                                                           'null') {
-                                                    if (detailData[
-                                                                'ticket_type']
-                                                            ['type'] ==
-                                                        'free' || detailData[
-                                                                'ticket_type']
-                                                            ['type'] ==
-                                                        'no_ticket') {
+                                                    if (detailData['ticket_type']
+                                                                ['type'] ==
+                                                            'free' ||
+                                                        detailData['ticket_type']
+                                                                ['type'] ==
+                                                            'no_ticket') {
                                                       print('show modal');
                                                       if (detailData[
                                                               'isGoing'] ==
@@ -1252,7 +1255,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           },
                                                         );
                                                       }
-                                                    } 
+                                                    }
                                                   } else {
                                                     if (ticketStat[
                                                                 'salesStatus'] ==
@@ -1334,16 +1337,38 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   children: <Widget>[
                                     LoveItem(
                                       isComment: false,
+                                      isAlreadyLoved:
+                                          detailData['isLoved'] == '1'
+                                              ? true
+                                              : false,
                                       loveCount: detailData['countLove'],
                                     ),
                                     SizedBox(
                                       width: ScreenUtil.instance.setWidth(10),
                                     ),
-                                    LoveItem(
-                                        isComment: true,
-                                        commentCount:
-                                            detailData['total_comment']
-                                                .toString()),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EventDetailComment(
+                                                      eventID: detailData['id'],
+                                                    )));
+                                      },
+                                      child: LoveItem(
+                                          isComment: true,
+                                          isAlreadyCommented:
+                                              detailData['comment'].length < 1
+                                                  ? false
+                                                  : commentData.containsValue(
+                                                              currentUserId) ==
+                                                          true
+                                                      ? true
+                                                      : false,
+                                          commentCount:
+                                              detailData['total_comment']
+                                                  .toString()),
+                                    ),
                                     Expanded(
                                       child: SizedBox(),
                                     ),
@@ -2149,8 +2174,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       builder: (BuildContext
                                                               context) =>
                                                           ShowQr(
-                                                            qrUrl: detailData['qrcode']['secure_url'],
-                                                            eventName: detailData['name'],
+                                                            qrUrl: detailData[
+                                                                    'qrcode']
+                                                                ['secure_url'],
+                                                            eventName:
+                                                                detailData[
+                                                                    'name'],
                                                           )));
                                             },
                                             child: SizedBox(
@@ -2366,7 +2395,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                 Positioned(
                     child: isLoading == true
                         ? Container(
-                            child: Center(child: CupertinoActivityIndicator(radius: 20)),
+                            child: Center(
+                                child: CupertinoActivityIndicator(radius: 20)),
                             color: Colors.black.withOpacity(0.5),
                           )
                         : Container())
@@ -2517,8 +2547,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
           ),
           detailData['comment'].length == 0
               ? Container(
-            height: 15,
-          )
+                  height: 15,
+                )
               : ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
@@ -2636,6 +2666,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
   DateTime ticketStartDate;
 
+  Map commentData;
+
   Future getEventDetailsSpecificInfo() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -2682,6 +2714,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
           ticketStartDate =
               DateTime.parse(detailData['ticket']['sales_start_date']);
         }
+
+        for (var data in detailData['comment']) {
+          commentData = data;
+        }
+
+        print(commentData);
 
         // print(_dDay.toString());
         // setState((){

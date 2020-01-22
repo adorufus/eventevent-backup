@@ -17,7 +17,8 @@ class PaymentMethod extends StatefulWidget {
   final List customFormId;
   final bool isCustomForm;
 
-  const PaymentMethod({Key key, this.answerList, this.customFormId, this.isCustomForm})
+  const PaymentMethod(
+      {Key key, this.answerList, this.customFormId, this.isCustomForm})
       : super(key: key);
 
   @override
@@ -122,20 +123,15 @@ class PaymentMethodState extends State<PaymentMethod> {
                           return GestureDetector(
                             onTap: () {
                               if (paymentMethodList[i]['method'] ==
-                                  'xendit'.toLowerCase()) {
+                                  'Virtual Account') {
                                 savePaymentInfo(paymentMethodList[i]['fee'],
                                     paymentMethodList[i]['id']);
                                 print(paymentMethodList[i]['id']);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (BuildContext contex) =>
-                                        TicketReview(
-                                          isCustomForm: widget.isCustomForm,
-                                      customFormId: widget.customFormId,
-                                      customFormList: widget.answerList,
-                                    ),
-                                  ),
+                                      builder: (BuildContext contex) =>
+                                          VirtualAccountListWidget()),
                                 );
                               } else if (paymentMethodList[i]['id'] == '3') {
                                 savePaymentInfo(paymentMethodList[i]['fee'],
@@ -146,7 +142,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         TicketReview(
-                                          isCustomForm: widget.isCustomForm,
+                                      isCustomForm: widget.isCustomForm,
                                       customFormId: widget.customFormId,
                                       customFormList: widget.answerList,
                                     ),
@@ -162,7 +158,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           TicketReview(
-                                            isCustomForm: widget.isCustomForm,
+                                        isCustomForm: widget.isCustomForm,
                                         customFormId: widget.customFormId,
                                         customFormList: widget.answerList,
                                       ),
@@ -178,7 +174,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           TicketReview(
-                                            isCustomForm: widget.isCustomForm,
+                                        isCustomForm: widget.isCustomForm,
                                         customFormId: widget.customFormId,
                                         customFormList: widget.answerList,
                                       ),
@@ -194,13 +190,27 @@ class PaymentMethodState extends State<PaymentMethod> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           TicketReview(
-                                            isCustomForm: widget.isCustomForm,
+                                        isCustomForm: widget.isCustomForm,
                                         customFormId: widget.customFormId,
                                         customFormList: widget.answerList,
                                       ),
                                     ),
                                   );
                                 }
+                              } else if (paymentMethodList[i]['id'] == '9') {
+                                savePaymentInfo(paymentMethodList[i]['fee'],
+                                    paymentMethodList[i]['id']);
+                                print('payment method used: ' +
+                                    paymentMethodList[i]['id']);
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) => widget.customFormId == null || widget.answerList == null ? TicketReview(
+                                        isCustomForm: widget.isCustomForm
+                                      ) : TicketReview(
+                                        customFormId: widget.customFormId,
+                                        isCustomForm: widget.isCustomForm,
+                                        customFormList: widget.answerList
+                                      )
+                                    ));
                               } else if (paymentMethodList[i]['id'] == '7') {
                                 savePaymentInfo(paymentMethodList[i]['fee'],
                                     paymentMethodList[i]['id']);
@@ -209,12 +219,18 @@ class PaymentMethodState extends State<PaymentMethod> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        widget.customFormId == null || widget.customFormId == null ? TicketReview(isCustomForm: widget.isCustomForm,) : TicketReview(
-                                      customFormId: widget.customFormId,
-                                      isCustomForm: widget.isCustomForm,
-                                      customFormList: widget.answerList,
-                                    ),
+                                    builder: (BuildContext context) => widget
+                                                    .customFormId ==
+                                                null ||
+                                            widget.answerList == null
+                                        ? TicketReview(
+                                            isCustomForm: widget.isCustomForm,
+                                          )
+                                        : TicketReview(
+                                            customFormId: widget.customFormId,
+                                            isCustomForm: widget.isCustomForm,
+                                            customFormList: widget.answerList,
+                                          ),
                                   ),
                                 );
                               }
@@ -268,9 +284,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                                 .setWidth(150),
                                           )),
                                         ),
-                                        Expanded(
-                                          child: SizedBox()
-                                        ),
+                                        Expanded(child: SizedBox()),
                                         Icon(
                                           Icons.navigate_next,
                                           color: Colors.black,

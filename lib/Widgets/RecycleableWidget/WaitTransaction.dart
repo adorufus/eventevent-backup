@@ -229,7 +229,7 @@ class _WaitTransactionState extends State<WaitTransaction>
                               whenTimeExpires: () {},
                               countDownTimerStyle: TextStyle(
                                   color: Colors.white,
-                                  fontSize: ScreenUtil.instance.setSp(18),
+                                  fontSize: ScreenUtil.instance.setSp(25),
                                   fontWeight: FontWeight.bold),
                             ),
 //                            AnimatedBuilder(

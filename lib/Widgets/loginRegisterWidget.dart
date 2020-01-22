@@ -91,10 +91,16 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
     return googleAuth;
   }
 
+  bool isLoading = false;
+
   Future proccesGoogle(String access_token, String id_token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String url = BaseApi().apiUrl +
         '/signin/google?X-API-KEY=$API_KEY&access_token=$access_token';
+
+    setState(() {
+      isLoading = true;
+    });
 
     final response = await http.get(
       url,
@@ -106,6 +112,10 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
+      setState((){
+        isLoading = false;
+      });
+
       var extractedData = json.decode(response.body);
 
       prefs.setString('Session', response.headers['set-cookie']);
@@ -232,282 +242,301 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
     return SafeArea(
       bottom: false,
       child: Scaffold(
-        body: Container(
-          child: ListView(
-            physics: NeverScrollableScrollPhysics(),
-            children: <Widget>[
-              SizedBox(height: ScreenUtil.instance.setWidth(10)),
-              Align(
-                alignment: Alignment.topRight,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                DashboardWidget(isRest: true)));
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(right: 25),
-                    width: 30,
-                    child: Text(
-                      'SKIP',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xff8a8a8b)),
+        body: Stack(
+          children: <Widget>[
+            Container(
+              child: ListView(
+                physics: NeverScrollableScrollPhysics(),
+                children: <Widget>[
+                  SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    DashboardWidget(isRest: true)));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 25),
+                        width: 30,
+                        child: Text(
+                          'SKIP',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff8a8a8b)),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: ScreenUtil.instance.setWidth(50)),
-              ),
-              Hero(
-                tag: 'eventeventlogo',
-                child: Image.asset(
-                  'assets/icons/logo_company.png',
-                  scale: 4,
-                ),
-              ),
-              SizedBox(height: ScreenUtil.instance.setWidth(30)),
-              FractionallySizedBox(
-                widthFactor: ScreenUtil.instance.setWidth(.8),
-                child: Container(
-                    width: ScreenUtil.instance.setWidth(306.93),
-                    height: ScreenUtil.instance.setHeight(229.50),
+                  Padding(
+                    padding:
+                        EdgeInsets.only(top: ScreenUtil.instance.setWidth(50)),
+                  ),
+                  Hero(
+                    tag: 'eventeventlogo',
                     child: Image.asset(
-                      'assets/icons/icon_apps/illustrasi.png',
-                      fit: BoxFit.fill,
-                    )),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: ScreenUtil.instance.setWidth(70)),
-              ),
-              Center(
-                child: Text('DAFTAR DAN MULAI',
-                    style: TextStyle(
-                        fontSize: ScreenUtil.instance.setSp(10.0),
-                        color: Colors.grey)),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                    vertical: ScreenUtil.instance.setWidth(10),
-                    horizontal: ScreenUtil.instance.setWidth(26)),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    LoginWidget()));
-                      },
-                      child: Container(
-                        width: ScreenUtil.instance.setWidth(160.41),
-                        height: ScreenUtil.instance.setHeight(37.02),
-                        decoration: BoxDecoration(
-                            color: eventajaGreenTeal,
-                            borderRadius: BorderRadius.circular(
-                                ScreenUtil.instance.setWidth(180)),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  blurRadius: 2,
-                                  color: eventajaGreenTeal.withOpacity(0.3),
-                                  spreadRadius: 1.5)
-                            ]),
-                        child: Center(
-                          child: Text(
-                            'LOGIN',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: ScreenUtil.instance.setSp(12),
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
+                      'assets/icons/logo_company.png',
+                      scale: 4,
                     ),
-                    SizedBox(width: ScreenUtil.instance.setWidth(20)),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    RegisterWidget()));
-                      },
-                      child: Container(
-                        width: ScreenUtil.instance.setWidth(160.41),
-                        height: ScreenUtil.instance.setHeight(37.02),
-                        decoration: BoxDecoration(
-                            color: eventajaGreenTeal,
-                            borderRadius: BorderRadius.circular(
-                                ScreenUtil.instance.setWidth(180)),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  blurRadius: 2,
-                                  color: eventajaGreenTeal.withOpacity(0.3),
-                                  spreadRadius: 1.5)
-                            ]),
-                        child: Center(
-                          child: Text(
-                            'REGISTER',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: ScreenUtil.instance.setSp(12),
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  initiateFacebookLogin();
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil.instance.setWidth(26)),
-                  width: MediaQuery.of(context).size.width,
-                  height: ScreenUtil.instance.setHeight(37.02),
-                  decoration: BoxDecoration(
-                      color: Color(0xFF4C64B5),
-                      borderRadius: BorderRadius.circular(180),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            blurRadius: 2,
-                            color: Color(0xFF4C64B5).withOpacity(0.5),
-                            spreadRadius: 1.5)
-                      ]),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                          height: ScreenUtil.instance.setHeight(37),
-                          width: ScreenUtil.instance.setWidth(37),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle, color: Color(0xFF324b9c)),
-                          child: Center(
-                              child: Image.asset('assets/drawable/facebook.png',
-                                  scale: 3))),
-                      Flexible(
-                        child: Center(
-                          child: Text(
-                            'LOGIN WITH FACEBOOK',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: ScreenUtil.instance.setSp(12),
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
-                ),
-              ),
-              SizedBox(height: ScreenUtil.instance.setHeight(10)),
-              GestureDetector(
-                onTap: () {
-                  goLoginGoogle().then((result) {
-                    print(result.accessToken);
-                    print(result.idToken);
-                    proccesGoogle(result.accessToken, result.idToken);
-                  }).catchError((e) {
-                    print(e);
-                  });
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil.instance.setWidth(26)),
-                  width: MediaQuery.of(context).size.width,
-                  height: ScreenUtil.instance.setHeight(37.02),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(180),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            blurRadius: 2,
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 1.5)
-                      ]),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      Container(
-                        height: ScreenUtil.instance.setHeight(37),
-                        width: ScreenUtil.instance.setWidth(37),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Color(0xFFf9f9f9)),
-                        child:
-                            Image.asset('assets/drawable/google.png', scale: 3),
+                  SizedBox(height: ScreenUtil.instance.setWidth(30)),
+                  FractionallySizedBox(
+                    widthFactor: ScreenUtil.instance.setWidth(.8),
+                    child: Container(
+                        width: ScreenUtil.instance.setWidth(306.93),
+                        height: ScreenUtil.instance.setHeight(229.50),
+                        child: Image.asset(
+                          'assets/icons/icon_apps/illustrasi.png',
+                          fit: BoxFit.fill,
+                        )),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.only(top: ScreenUtil.instance.setWidth(70)),
+                  ),
+                  Center(
+                    child: Text('DAFTAR DAN MULAI',
+                        style: TextStyle(
+                            fontSize: ScreenUtil.instance.setSp(10.0),
+                            color: Colors.grey)),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                        vertical: ScreenUtil.instance.setWidth(10),
+                        horizontal: ScreenUtil.instance.setWidth(26)),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        LoginWidget()));
+                          },
+                          child: Container(
+                            width: ScreenUtil.instance.setWidth(160.41),
+                            height: ScreenUtil.instance.setHeight(37.02),
+                            decoration: BoxDecoration(
+                                color: eventajaGreenTeal,
+                                borderRadius: BorderRadius.circular(
+                                    ScreenUtil.instance.setWidth(180)),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      blurRadius: 2,
+                                      color: eventajaGreenTeal.withOpacity(0.3),
+                                      spreadRadius: 1.5)
+                                ]),
+                            child: Center(
+                              child: Text(
+                                'LOGIN',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil.instance.setSp(12),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: ScreenUtil.instance.setWidth(20)),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        RegisterWidget()));
+                          },
+                          child: Container(
+                            width: ScreenUtil.instance.setWidth(160.41),
+                            height: ScreenUtil.instance.setHeight(37.02),
+                            decoration: BoxDecoration(
+                                color: eventajaGreenTeal,
+                                borderRadius: BorderRadius.circular(
+                                    ScreenUtil.instance.setWidth(180)),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      blurRadius: 2,
+                                      color: eventajaGreenTeal.withOpacity(0.3),
+                                      spreadRadius: 1.5)
+                                ]),
+                            child: Center(
+                              child: Text(
+                                'REGISTER',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil.instance.setSp(12),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      initiateFacebookLogin();
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil.instance.setWidth(26)),
+                      width: MediaQuery.of(context).size.width,
+                      height: ScreenUtil.instance.setHeight(37.02),
+                      decoration: BoxDecoration(
+                          color: Color(0xFF4C64B5),
+                          borderRadius: BorderRadius.circular(180),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                blurRadius: 2,
+                                color: Color(0xFF4C64B5).withOpacity(0.5),
+                                spreadRadius: 1.5)
+                          ]),
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                              height: ScreenUtil.instance.setHeight(37),
+                              width: ScreenUtil.instance.setWidth(37),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFF324b9c)),
+                              child: Center(
+                                  child: Image.asset(
+                                      'assets/drawable/facebook.png',
+                                      scale: 3))),
+                          Flexible(
+                            child: Center(
+                              child: Text(
+                                'LOGIN WITH FACEBOOK',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil.instance.setSp(12),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      Flexible(
-                        child: Center(
-                          child: Text(
-                            'LOGIN WITH GOOGLE',
+                    ),
+                  ),
+                  SizedBox(height: ScreenUtil.instance.setHeight(10)),
+                  GestureDetector(
+                    onTap: () {
+                      goLoginGoogle().then((result) {
+                        print(result.accessToken);
+                        print(result.idToken);
+                        proccesGoogle(result.accessToken, result.idToken);
+                      }).catchError((e) {
+                        print(e);
+                      });
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil.instance.setWidth(26)),
+                      width: MediaQuery.of(context).size.width,
+                      height: ScreenUtil.instance.setHeight(37.02),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(180),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                blurRadius: 2,
+                                color: Colors.black.withOpacity(0.1),
+                                spreadRadius: 1.5)
+                          ]),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Container(
+                            height: ScreenUtil.instance.setHeight(37),
+                            width: ScreenUtil.instance.setWidth(37),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFFf9f9f9)),
+                            child: Image.asset('assets/drawable/google.png',
+                                scale: 3),
+                          ),
+                          Flexible(
+                            child: Center(
+                              child: Text(
+                                'LOGIN WITH GOOGLE',
+                                style: TextStyle(
+                                    fontSize: ScreenUtil.instance.setSp(12),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 15, left: 5, right: 5),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('By registering, you are agree with',
                             style: TextStyle(
+                                color: Color(0xff8a8a8b),
+                                fontSize: ScreenUtil.instance.setSp(11))),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Terms()));
+                          },
+                          child: Text(
+                            ' Terms',
+                            style: TextStyle(
+                                color: Color(0xff8a8a8b),
                                 fontSize: ScreenUtil.instance.setSp(12),
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ),
-                    ],
+                        Text(' and',
+                            style: TextStyle(
+                                color: Color(0xff8a8a8b),
+                                fontSize: ScreenUtil.instance.setSp(11))),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PrivacyPolicy()));
+                          },
+                          child: Text(
+                            ' Privacy Policy',
+                            style: TextStyle(
+                                color: Color(0xff8a8a8b),
+                                fontSize: ScreenUtil.instance.setSp(12),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                  SizedBox(
+                    height: ScreenUtil.instance.setWidth(50),
+                  )
+                ],
+              ),
+            ),
+            isLoading == true ? Container(
+              child: Center(
+                child: CupertinoActivityIndicator(
+                  animating: true,
+                  radius: 15,
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 15, left: 5, right: 5),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('By registering, you are agree with',
-                        style: TextStyle(
-                            color: Color(0xff8a8a8b),
-                            fontSize: ScreenUtil.instance.setSp(11))),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Terms()));
-                      },
-                      child: Text(
-                        ' Terms',
-                        style: TextStyle(
-                            color: Color(0xff8a8a8b),
-                            fontSize: ScreenUtil.instance.setSp(12),
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Text(' and',
-                        style: TextStyle(
-                            color: Color(0xff8a8a8b),
-                            fontSize: ScreenUtil.instance.setSp(11))),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PrivacyPolicy()));
-                      },
-                      child: Text(
-                        ' Privacy Policy',
-                        style: TextStyle(
-                            color: Color(0xff8a8a8b),
-                            fontSize: ScreenUtil.instance.setSp(12),
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: ScreenUtil.instance.setWidth(50),
-              )
-            ],
-          ),
+            ) : Container()
+          ],
         ),
       ),
     );

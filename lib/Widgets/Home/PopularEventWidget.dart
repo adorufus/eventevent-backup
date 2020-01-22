@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class PopularEventWidget extends StatelessWidget {
   final imageUrl;
   final title;
-  final location;
+  final String location;
   final String price;
   final Color color;
   final type;
@@ -22,7 +22,8 @@ class PopularEventWidget extends StatelessWidget {
       this.price,
       this.color,
       this.type,
-      this.isAvailable, this.date})
+      this.isAvailable,
+      this.date})
       : super(key: key);
 
   @override
@@ -59,7 +60,8 @@ class PopularEventWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: Color(0xFFB5B5B5),
                     image: DecorationImage(
-                        image: CachedNetworkImageProvider(imageUrl), fit: BoxFit.cover),
+                        image: CachedNetworkImageProvider(imageUrl),
+                        fit: BoxFit.cover),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(15),
                       topRight: Radius.circular(15),
@@ -75,7 +77,8 @@ class PopularEventWidget extends StatelessWidget {
                           title,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),
+                              fontSize: ScreenUtil.instance.setSp(15),
+                              fontWeight: FontWeight.bold),
                         )),
                     SizedBox(height: ScreenUtil.instance.setWidth(4)),
                     Row(
@@ -87,9 +90,11 @@ class PopularEventWidget extends StatelessWidget {
                         SizedBox(width: ScreenUtil.instance.setWidth(3)),
                         Container(
                           width: ScreenUtil.instance.setWidth(112),
-                          child: Text(location,
+                          child: Text(
+                              location.contains('\n\n') ? 'location not set' : location,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: ScreenUtil.instance.setSp(13))),
+                              style: TextStyle(
+                                  fontSize: ScreenUtil.instance.setSp(13))),
                         )
                       ],
                     ),

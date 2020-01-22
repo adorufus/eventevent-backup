@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'PostEvent/PostEvent.dart';
 import 'eventCatalogWidget.dart';
@@ -72,6 +73,16 @@ class _DashboardWidgetState extends State<DashboardWidget>
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   String urlPrefix = '';
 
+  RateMyApp rateMyApp = RateMyApp(
+    preferencesPrefix: 'rateMyApp_',
+    minDays: 1,
+    minLaunches: 1,
+    remindDays: 2,
+    remindLaunches: 5,
+    googlePlayIdentifier: 'com.eventevent.android',
+    appStoreIdentifier: 'com.trikarya.eventevent',
+  );
+
   _saveCurrentRoute(String lastRoute) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setString('LastScreenRoute', lastRoute);
@@ -87,6 +98,37 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
   @override
   void initState() {
+    rateMyApp.init().then((_) {
+        rateMyApp.showStarRateDialog(context,
+            title: 'Enjoying EventEvent?',
+            message: 'Please leave a rating!', onRatingChanged: (stars) {
+          return [
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                if (stars != null) {
+                  DoNotOpenAgainCondition(rateMyApp);
+                  rateMyApp.save().then((val) {
+                    Navigator.pop(context);
+                  });
+                } else {
+                  Navigator.pop(context);
+                }
+              },
+            )
+          ];
+        },
+            dialogStyle: DialogStyle(
+                titleAlign: TextAlign.center,
+                messageAlign: TextAlign.center,
+                messagePadding: EdgeInsets.only(bottom: 20)),
+            starRatingOptions: StarRatingOptions(
+              starsFillColor: eventajaGreenTeal,
+              allowHalfRating: true,
+              initialRating: 5,
+            ));
+    });
+    
     _saveCurrentRoute('/Dashboard');
     WidgetsBinding.instance.addObserver(this);
     super.initState();

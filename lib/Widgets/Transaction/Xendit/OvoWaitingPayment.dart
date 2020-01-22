@@ -149,7 +149,7 @@ class _OvoWaitingPaymentState
                               whenTimeExpires: () {
 
                               },
-                              countDownTimerStyle: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(18),
+                              countDownTimerStyle: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(25),
                 fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
