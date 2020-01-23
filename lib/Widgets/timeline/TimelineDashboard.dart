@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/dashboardWidget.dart';
+import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/Widgets/openMedia.dart';
 import 'package:eventevent/Widgets/timeline/EditPost.dart';
 import 'package:eventevent/Widgets/timeline/LatestMediaItem.dart';
@@ -24,6 +25,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TimelineDashboard extends StatefulWidget {
+  final isRest;
+
+  const TimelineDashboard({Key key, this.isRest}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return TimelineDashboardState();
@@ -360,7 +364,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                           TabBarView(
                             children: <Widget>[
                               emedia(),
-                              UserTimelineItem(
+                              widget.isRest == true ? LoginRegisterWidget() : UserTimelineItem(
                                 currentUserId: currentUserId,
                               )
                             ],
@@ -1193,12 +1197,12 @@ class TimelineDashboardState extends State<TimelineDashboard>
   Future<http.Response> getBanner() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl +
+    String url = BaseApi().restUrl +
         '/media/banner?X-API-KEY=$API_KEY&search=&page=1&limit=10';
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
+      'signature': signature
     });
 
     return response;

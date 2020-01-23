@@ -67,7 +67,7 @@ class DashboardWidget extends StatefulWidget {
 }
 
 class _DashboardWidgetState extends State<DashboardWidget>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   int _selectedPage = 0;
   String currentUserId;
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -495,7 +495,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
     final _pageOptions = [
       EventCatalog(isRest: widget.isRest),
-      widget.isRest == true ? LoginRegisterWidget() : TimelineDashboard(),
+      TimelineDashboard(isRest: widget.isRest),
       widget.isRest == true ? LoginRegisterWidget() : Container(),
       widget.isRest == true ? LoginRegisterWidget() : PushNotification(),
       widget.isRest == true
@@ -523,7 +523,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                 currentIndex: _selectedPage,
                 onTap: (int index) {
                   setState(() {
-                    if (index == 2) {
+                    if (index == 2 && widget.isRest == false) {
                       showModalBottomSheet(
                         context: context,
                         builder: (context) {
@@ -853,4 +853,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
           );
         });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/RecycleableWidget/WaitTransaction.dart';
+import 'package:eventevent/Widgets/Transaction/BCA/InputBankData.dart';
 import 'package:eventevent/Widgets/Transaction/ExpiredPage.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/Widgets/notification/TransactionHistoryItem.dart';
@@ -116,7 +117,10 @@ class TransactionHistoryState extends State<TransactionHistory> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        WaitTransaction(
+                                        transactionList[i]['payment']['method'] == 'Bca' ? PaymentBCA(
+                                          expDate: transactionList[i]['expired_time'],
+                                          transactionID: transactionList[i]['id'],
+                                        ) : WaitTransaction(
                                           transactionID: transactionList[i]['id'],
                                           expDate: transactionList[i]
                                               ['expired_time'],

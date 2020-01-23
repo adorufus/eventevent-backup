@@ -39,6 +39,7 @@ class WithdrawBankState extends State<WithdrawBank> {
   String account_name;
   String account_number;
   String bank_name;
+  Map bankJson;
 
   @override
   void initState() {
@@ -402,7 +403,7 @@ class WithdrawBankState extends State<WithdrawBank> {
               // SizedBox(
               //   height: ScreenUtil.instance.setWidth(25),
               // ),
-              bankList.length == 3
+              bankList != null && bankList.length == 3
                   ? Container()
                   : GestureDetector(
                       onTap: () {
@@ -457,7 +458,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                   )),
               ColumnBuilder(
                 mainAxisAlignment: MainAxisAlignment.center,
-                itemCount: bankList.length == null ? 0 : bankList.length,
+                itemCount: bankList == null ? 0 : bankList.length,
                 itemBuilder: (BuildContext context, i) {
                   String bankImageUri = '';
 
@@ -628,13 +629,15 @@ class WithdrawBankState extends State<WithdrawBank> {
       'cookie': prefs.getString('Session')
     });
 
-    print(response.statusCode);
-    print(response.body);
+    print('getBank: ' + response.statusCode.toString());
+    print('getBank:' + response.body);
 
     if (response.statusCode == 200) {
       setState(() {
         var extractedData = json.decode(response.body);
+        bankJson = extractedData;
         bankList = extractedData['data'];
+        print('bankJson: ' + bankJson.toString());
       });
     }
   }
@@ -644,7 +647,7 @@ class WithdrawBankState extends State<WithdrawBank> {
     Color transactionColor;
     Color amountColor;
 
-    return historyList == null
+    return historyList == null || bankJson == null
         ? Container(
             child: Center(child: CupertinoActivityIndicator(radius: 20)))
         : ListView.builder(

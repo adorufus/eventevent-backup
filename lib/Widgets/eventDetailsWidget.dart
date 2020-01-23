@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:eventevent/Widgets/EventDetailComment.dart';
 import 'package:eventevent/Widgets/EventDetailItems/FeedbackLogic.dart';
 import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
+import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/timeline/EventDetailTimeline.dart';
 import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
@@ -1442,13 +1443,45 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 13),
-                                              child: Text(
-                                                'Who\'s Invited',
-                                                style: TextStyle(
-                                                    color: Color(0xff8a8a8b),
-                                                    fontSize: ScreenUtil
-                                                        .instance
-                                                        .setSp(11)),
+                                              child: prefix0.Row(
+                                                children: <prefix0.Widget>[
+                                                  Text(
+                                                    'Who\'s Invited',
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0xff8a8a8b),
+                                                        fontSize: ScreenUtil
+                                                            .instance
+                                                            .setSp(11)),
+                                                  ),
+                                                  Expanded(
+                                                    child: SizedBox(),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  SeeWhosGoingInvitedWidget(
+                                                                    eventId:
+                                                                        detailData[
+                                                                            'id'],
+                                                                    peopleType:
+                                                                        'invited',
+                                                                  )));
+                                                    },
+                                                    child: Container(
+                                                      height: 30,
+                                                      child: Text(
+                                                        'See All >',
+                                                        style: TextStyle(
+                                                            color:
+                                                                eventajaGreenTeal),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
                                               ),
                                             ),
                                             SizedBox(
@@ -1549,12 +1582,40 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 13),
-                                      child: Text(
-                                        'Who\'s Going',
-                                        style: TextStyle(
-                                            color: Color(0xff8a8a8b),
-                                            fontSize:
-                                                ScreenUtil.instance.setSp(11)),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Text(
+                                            'Who\'s Going',
+                                            style: TextStyle(
+                                                color: Color(0xff8a8a8b),
+                                                fontSize: ScreenUtil.instance
+                                                    .setSp(11)),
+                                          ),
+                                          Expanded(
+                                            child: SizedBox(),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          SeeWhosGoingInvitedWidget(
+                                                            eventId: detailData[
+                                                                'id'],
+                                                            peopleType: 'going',
+                                                          )));
+                                            },
+                                            child: Container(
+                                              height: 30,
+                                              child: Text(
+                                                'See All >',
+                                                style: TextStyle(
+                                                    color: eventajaGreenTeal),
+                                              ),
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ),
                                     SizedBox(

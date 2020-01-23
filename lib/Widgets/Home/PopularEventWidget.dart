@@ -12,6 +12,7 @@ class PopularEventWidget extends StatelessWidget {
   final Color color;
   final type;
   final isAvailable;
+  final isGoing;
   final DateTime date;
 
   const PopularEventWidget(
@@ -23,7 +24,8 @@ class PopularEventWidget extends StatelessWidget {
       this.color,
       this.type,
       this.isAvailable,
-      this.date})
+      this.date,
+      this.isGoing})
       : super(key: key);
 
   @override
@@ -91,7 +93,9 @@ class PopularEventWidget extends StatelessWidget {
                         Container(
                           width: ScreenUtil.instance.setWidth(112),
                           child: Text(
-                              location.contains('\n\n') ? 'location not set' : location,
+                              location.contains('\n\n')
+                                  ? 'location not set'
+                                  : location,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: ScreenUtil.instance.setSp(13))),
@@ -115,11 +119,7 @@ class PopularEventWidget extends StatelessWidget {
                     ], color: color, borderRadius: BorderRadius.circular(15)),
                     child: Center(
                         child: Text(
-                      type == 'paid' || type == 'paid_seating'
-                          ? isAvailable == '1'
-                              ? 'Rp. ' + price.toUpperCase() + ',-'
-                              : price.toUpperCase()
-                          : price.toUpperCase(),
+                      price.toUpperCase(),
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: ScreenUtil.instance.setSp(10),

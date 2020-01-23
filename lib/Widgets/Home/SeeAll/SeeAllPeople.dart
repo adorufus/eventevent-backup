@@ -6,7 +6,8 @@ import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/FollowUnfollow.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,7 +57,8 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -65,7 +67,7 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
       allowFontScaling: true,
     )..init(context);
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
         appBar: PreferredSize(
           preferredSize: Size(null, 100),
           child: Container(
@@ -98,7 +100,9 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
                     SizedBox(width: MediaQuery.of(context).size.width / 2.8),
                     Text(
                       'All People',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: ScreenUtil.instance.setSp(14)),
                     )
                   ],
                 ),
@@ -129,7 +133,8 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
                           SizedBox(width: ScreenUtil.instance.setWidth(8)),
                           Text('Popular',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.5))),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil.instance.setSp(12.5))),
                         ],
                       ),
                     ),
@@ -145,7 +150,8 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
                           SizedBox(width: ScreenUtil.instance.setWidth(8)),
                           Text('Discover',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(12.5))),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil.instance.setSp(12.5))),
                         ],
                       ),
                     )

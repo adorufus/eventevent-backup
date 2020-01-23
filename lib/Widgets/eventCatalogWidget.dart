@@ -60,7 +60,10 @@ class EventCatalog extends StatefulWidget {
 }
 
 class _EventCatalogState extends State<EventCatalog>
-    with WidgetsBindingObserver {
+    with
+        WidgetsBindingObserver,
+        AutomaticKeepAliveClientMixin<EventCatalog>,
+        TickerProviderStateMixin {
   TimelineDashboardState timelineState = new TimelineDashboardState();
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
@@ -89,12 +92,27 @@ class _EventCatalogState extends State<EventCatalog>
   ScrollController _scrollController = new ScrollController();
   List<Widget> mappedDataBanner;
   var session;
+  TabController tabController;
+  int currentTabIndex = 0;
+
+  List<bool> hasInit = [true, false, false];
+  List<Widget> pages = [];
 
   ///Inisialisasi semua fungsi untuk fetching dan hal hal lain yang dibutuhkan
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     super.initState();
+
+    // tabController = TabController(length: pages.length, vsync: this)
+    // ..addListener((){
+    //   int selectedIndex = tabController.index;
+    //   if(currentTabIndex != selectedIndex){
+    //     if(!hasInit[selectedIndex]){
+    //       pages[selectedIndex] = realPage;
+    //     }
+    //   }
+    // });
 
     if (!mounted) {
       return;
@@ -154,6 +172,8 @@ class _EventCatalogState extends State<EventCatalog>
     //WidgetsBinding.instance.addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
   }
 
+  bool isOnlyContainer = false;
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -166,6 +186,9 @@ class _EventCatalogState extends State<EventCatalog>
     print('state = $state');
     super.didChangeAppLifecycleState(state);
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -225,10 +248,10 @@ class _EventCatalogState extends State<EventCatalog>
                           imageUrl: bannerData["image"],
                           fit: BoxFit.cover,
                           placeholder: (context, url) => new Container(
-                            child: Center(
-                              child: CupertinoActivityIndicator(radius: 20),
-                            ),
-                          )),
+                                child: Center(
+                                  child: CupertinoActivityIndicator(radius: 20),
+                                ),
+                              )),
                     ),
                   ));
             },
@@ -345,6 +368,17 @@ class _EventCatalogState extends State<EventCatalog>
                     Container(
                       color: Colors.white,
                       child: TabBar(
+                        onTap: (val) {
+                          setState(() {
+                            if (val == 2 || val == 0) {
+                              isOnlyContainer = true;
+                            } else {
+                              isOnlyContainer = false;
+                            }
+                          });
+
+                          print(isOnlyContainer);
+                        },
                         labelColor: Colors.black,
                         labelStyle: TextStyle(fontFamily: 'Proxima'),
                         tabs: [
@@ -357,7 +391,8 @@ class _EventCatalogState extends State<EventCatalog>
                                   'assets/icons/icon_apps/home.png',
                                   scale: 4.5,
                                 ),
-                                SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                                SizedBox(
+                                    width: ScreenUtil.instance.setWidth(10)),
                                 Text('Home',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -375,7 +410,8 @@ class _EventCatalogState extends State<EventCatalog>
                                   'assets/icons/icon_apps/nearby.png',
                                   scale: 4.5,
                                 ),
-                                SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                                SizedBox(
+                                    width: ScreenUtil.instance.setWidth(10)),
                                 Text('Nearby',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -393,7 +429,8 @@ class _EventCatalogState extends State<EventCatalog>
                                   'assets/icons/icon_apps/latest.png',
                                   scale: 4.5,
                                 ),
-                                SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                                SizedBox(
+                                    width: ScreenUtil.instance.setWidth(10)),
                                 Text('Latest',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -413,7 +450,7 @@ class _EventCatalogState extends State<EventCatalog>
                         physics: NeverScrollableScrollPhysics(),
                         children: [
                           home(),
-                          Container(
+                          isOnlyContainer == true ? Container() : Container(
                             child: Center(
                               child: ListenPage(),
                             ),
@@ -496,128 +533,144 @@ class _EventCatalogState extends State<EventCatalog>
                   padding: EdgeInsets.only(bottom: 0),
                   child: Stack(
                     children: <Widget>[
-                      bannerData == null ? CupertinoActivityIndicator
-                      (radius: 13.5,) : banner(),
+                      bannerData == null
+                          ? CupertinoActivityIndicator(
+                              radius: 13.5,
+                            )
+                          : banner(),
                     ],
                   ),
                 ),
                 popularEventTitle(),
                 Container(
                     height: ScreenUtil.instance.setWidth(340),
-                    child: data == null ? CupertinoActivityIndicator(radius: 13.5) : ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: data == null ? 0 : data.length,
-                        itemBuilder: (BuildContext context, i) {
-                          Color itemColor;
-                          String itemPriceText;
-                          if (data[i]['isGoing'] == '1') {
-                            itemColor = Colors.blue;
-                            itemPriceText = 'Going!';
-                          } else {
-                            if (data[i]['ticket_type']['type'] == 'paid' ||
-                                data[i]['ticket_type']['type'] ==
-                                    'paid_seating') {
-                              if (data[i]['ticket']['availableTicketStatus'] ==
-                                  '1') {
-                                if (data[i]['ticket']['cheapestTicket'] ==
-                                    '0') {
-                                  itemColor = Color(0xFFFFAA00);
-                                  itemPriceText = 'Free Limited';
-                                } else {
-                                  itemColor = Color(0xFF34B323);
+                    child: data == null
+                        ? CupertinoActivityIndicator(radius: 13.5)
+                        : ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: data == null ? 0 : data.length,
+                            itemBuilder: (BuildContext context, i) {
+                              Color itemColor;
+                              String itemPriceText;
+                              if (data[i]['isGoing'] == '1') {
+                                itemColor = Colors.blue;
+                                itemPriceText = 'Going!';
+                              } else {
+                                if (data[i]['ticket_type']['type'] == 'paid' ||
+                                    data[i]['ticket_type']['type'] ==
+                                        'paid_seating') {
+                                  if (data[i]['ticket']
+                                          ['availableTicketStatus'] ==
+                                      '1') {
+                                    if (data[i]['ticket']['cheapestTicket'] ==
+                                        '0') {
+                                      itemColor = Color(0xFFFFAA00);
+                                      itemPriceText = 'Free Limited';
+                                    } else {
+                                      itemColor = Color(0xFF34B323);
+                                      itemPriceText =
+                                         'Rp. ' + data[i]['ticket']['cheapestTicket'] + ',-';
+                                    }
+                                  } else {
+                                    if (data[i]['ticket']['salesStatus'] ==
+                                        'comingSoon') {
+                                      itemColor =
+                                          Color(0xFF34B323).withOpacity(0.3);
+                                      itemPriceText = 'COMING SOON';
+                                    } else if (data[i]['ticket']
+                                            ['salesStatus'] ==
+                                        'endSales') {
+                                      itemColor = Color(0xFF8E1E2D);
+                                      if (data[i]['status'] == 'ended') {
+                                        itemPriceText = 'EVENT HAS ENDED';
+                                      }
+                                      itemPriceText = 'SALES ENDED';
+                                    } else {
+                                      itemColor = Color(0xFF8E1E2D);
+                                      itemPriceText = 'SOLD OUT';
+                                    }
+                                  }
+                                } else if (data[i]['ticket_type']['type'] ==
+                                    'no_ticket') {
+                                  itemColor = Color(0xFF652D90);
+                                  itemPriceText = 'NO TICKET';
+                                } else if (data[i]['ticket_type']['type'] ==
+                                    'on_the_spot') {
+                                  itemColor = Color(0xFF652D90);
                                   itemPriceText =
-                                      data[i]['ticket']['cheapestTicket'];
-                                }
-                              } else {
-                                if (data[i]['ticket']['salesStatus'] ==
-                                    'comingSoon') {
-                                  itemColor =
-                                      Color(0xFF34B323).withOpacity(0.3);
-                                  itemPriceText = 'COMING SOON';
-                                } else if (data[i]['ticket']['salesStatus'] ==
-                                    'endSales') {
-                                  itemColor = Color(0xFF8E1E2D);
-                                  if (data[i]['status'] == 'ended') {
-                                    itemPriceText = 'EVENT HAS ENDED';
-                                  }
-                                  itemPriceText = 'SALES ENDED';
-                                } else {
-                                  itemColor = Color(0xFF8E1E2D);
-                                  itemPriceText = 'SOLD OUT';
-                                }
-                              }
-                            } else if (data[i]['ticket_type']['type'] ==
-                                'no_ticket') {
-                              itemColor = Color(0xFF652D90);
-                              itemPriceText = 'NO TICKET';
-                            } else if (data[i]['ticket_type']['type'] ==
-                                'on_the_spot') {
-                              itemColor = Color(0xFF652D90);
-                              itemPriceText = data[i]['ticket_type']['name'];
-                            } else if (data[i]['ticket_type']['type'] ==
-                                'free') {
-                              itemColor = Color(0xFFFFAA00);
-                              itemPriceText = data[i]['ticket_type']['name'];
-                            } else if (data[i]['ticket_type']['type'] ==
-                                'free') {
-                              itemColor = Color(0xFFFFAA00);
-                              itemPriceText = data[i]['ticket_type']['name'];
-                            } else if (data[i]['ticket_type']['type'] ==
-                                'free_limited') {
-                              if (data[i]['ticket']['availableTicketStatus'] ==
-                                  '1') {
-                                itemColor = Color(0xFFFFAA00);
-                                itemPriceText = data[i]['ticket_type']['name'];
-                              } else {
-                                if (data[i]['ticket']['salesStatus'] ==
-                                    'comingSoon') {
-                                  itemColor =
-                                      Color(0xFF34B323).withOpacity(0.3);
-                                  itemPriceText = 'COMING SOON';
-                                } else if (data[i]['ticket']['salesStatus'] ==
-                                    'endSales') {
-                                  itemColor = Color(0xFF8E1E2D);
-                                  if (data[i]['status'] == 'ended') {
-                                    itemPriceText = 'EVENT HAS ENDED';
-                                  }
-                                  itemPriceText = 'SALES ENDED';
-                                } else {
+                                      data[i]['ticket_type']['name'];
+                                } else if (data[i]['ticket_type']['type'] ==
+                                    'free') {
                                   itemColor = Color(0xFFFFAA00);
-                                  itemPriceText = 'SOLD OUT';
+                                  itemPriceText =
+                                      data[i]['ticket_type']['name'];
+                                } else if (data[i]['ticket_type']['type'] ==
+                                    'free') {
+                                  itemColor = Color(0xFFFFAA00);
+                                  itemPriceText =
+                                      data[i]['ticket_type']['name'];
+                                } else if (data[i]['ticket_type']['type'] ==
+                                    'free_limited') {
+                                  if (data[i]['ticket']
+                                          ['availableTicketStatus'] ==
+                                      '1') {
+                                    itemColor = Color(0xFFFFAA00);
+                                    itemPriceText =
+                                        data[i]['ticket_type']['name'];
+                                  } else {
+                                    if (data[i]['ticket']['salesStatus'] ==
+                                        'comingSoon') {
+                                      itemColor =
+                                          Color(0xFF34B323).withOpacity(0.3);
+                                      itemPriceText = 'COMING SOON';
+                                    } else if (data[i]['ticket']
+                                            ['salesStatus'] ==
+                                        'endSales') {
+                                      itemColor = Color(0xFF8E1E2D);
+                                      if (data[i]['status'] == 'ended') {
+                                        itemPriceText = 'EVENT HAS ENDED';
+                                      }
+                                      itemPriceText = 'SALES ENDED';
+                                    } else {
+                                      itemColor = Color(0xFFFFAA00);
+                                      itemPriceText = 'SOLD OUT';
+                                    }
+                                  }
                                 }
                               }
-                            }
-                          }
 
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          EventDetailsConstructView(
-                                              id: data[i]['id'],
-                                              name: data[i]['name'],
-                                              image: data[i]['photoFull'])));
-                            },
-                            child: PopularEventWidget(
-                              imageUrl: data[i]['picture'],
-                              title: data[i]["name"],
-                              location: data[i]["address"],
-                              color: itemColor,
-                              price: itemPriceText,
-                              type: data[i]['ticket_type']['type'],
-                              date: DateTime.parse(data[i]['dateStart']),
-                              isAvailable: data[i]['ticket']
-                                  ['availableTicketStatus'],
-                            ),
-                          );
-                        })),
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              EventDetailsConstructView(
+                                                  id: data[i]['id'],
+                                                  name: data[i]['name'],
+                                                  image: data[i]
+                                                      ['photoFull'])));
+                                },
+                                child: PopularEventWidget(
+                                  imageUrl: data[i]['picture'],
+                                  title: data[i]["name"],
+                                  location: data[i]["address"],
+                                  color: itemColor,
+                                  price: itemPriceText,
+                                  type: data[i]['ticket_type']['type'],
+                                  date: DateTime.parse(data[i]['dateStart']),
+                                  isAvailable: data[i]['ticket']
+                                      ['availableTicketStatus'],
+                                ),
+                              );
+                            })),
                 SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 mediaHeader(),
                 Container(
                   height: ScreenUtil.instance.setWidth(247),
-                  child: data == null ? CupertinoActivityIndicator(radius: 13.5) : ListView.builder(
+                  child: data == null
+                      ? CupertinoActivityIndicator(radius: 13.5)
+                      : ListView.builder(
                           itemCount: mediaData == null ? 0 : mediaData.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, i) {
@@ -711,7 +764,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 '1') {
                               itemColor = Color(0xFF34B323);
                               itemPriceText =
-                                  discoverData[i]['ticket']['cheapestTicket'];
+                                 'Rp. ' + discoverData[i]['ticket']['cheapestTicket'] + ',-';
                             } else {
                               if (discoverData[i]['ticket']['salesStatus'] ==
                                   'comingSoon') {
@@ -795,6 +848,7 @@ class _EventCatalogState extends State<EventCatalog>
                             location: discoverData[i]["address"],
                             price: itemPriceText,
                             color: itemColor,
+                            isGoing: discoverData[i]['isGoing'] == '1' ? true : false,
                             date: DateTime.parse(discoverData[i]['dateStart']),
                             type: discoverData[i]['ticket_type']['type'],
                             isAvailable: discoverData[i]['ticket']
@@ -888,7 +942,9 @@ class _EventCatalogState extends State<EventCatalog>
   Widget popularEventContent() {
     return Container(
         height: ScreenUtil.instance.setWidth(269),
-        child:  data == null ? CupertinoActivityIndicator(radius: 13.5) : new ListView.builder(
+        child: data == null
+            ? CupertinoActivityIndicator(radius: 13.5)
+            : new ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: data == null ? 0 : data.length,
                 itemBuilder: (BuildContext context, i) {
@@ -1177,7 +1233,9 @@ class _EventCatalogState extends State<EventCatalog>
           ),
           SizedBox(height: ScreenUtil.instance.setWidth(5)),
           Text('Check out our hand-picked collectoins bellow',
-              style: TextStyle(color: Color(0xFF868686), fontSize: ScreenUtil.instance.setSp(14))),
+              style: TextStyle(
+                  color: Color(0xFF868686),
+                  fontSize: ScreenUtil.instance.setSp(14))),
         ],
       ),
     );
@@ -1187,63 +1245,63 @@ class _EventCatalogState extends State<EventCatalog>
     return Container(
       height: ScreenUtil.instance.setWidth(90),
       child: collectionData == null
-              ? errReasonWidget
-              : ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: collectionData == null ? 0 : collectionData.length,
-                  itemBuilder: (BuildContext context, i) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => CollectionPage(
-                                  headerImage: collectionData[i]['image'],
-                                  categoryId: collectionData[i]['id'],
-                                  collectionName: collectionData[i]['name'],
-                                )));
-                      },
-                      child: new Container(
-                        width: ScreenUtil.instance.setWidth(150),
-                        margin: i == 0
-                            ? EdgeInsets.only(left: 13)
-                            : EdgeInsets.only(left: 13),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              height: ScreenUtil.instance.setWidth(70),
-                              width: ScreenUtil.instance.setWidth(150),
-                              decoration: BoxDecoration(
-                                  color: Color(0xff8a8a8b),
+          ? errReasonWidget
+          : ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: collectionData == null ? 0 : collectionData.length,
+              itemBuilder: (BuildContext context, i) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CollectionPage(
+                              headerImage: collectionData[i]['image'],
+                              categoryId: collectionData[i]['id'],
+                              collectionName: collectionData[i]['name'],
+                            )));
+                  },
+                  child: new Container(
+                    width: ScreenUtil.instance.setWidth(150),
+                    margin: i == 0
+                        ? EdgeInsets.only(left: 13)
+                        : EdgeInsets.only(left: 13),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          height: ScreenUtil.instance.setWidth(70),
+                          width: ScreenUtil.instance.setWidth(150),
+                          decoration: BoxDecoration(
+                              color: Color(0xff8a8a8b),
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                    blurRadius: 2,
+                                    color: Colors.black.withOpacity(0.1),
+                                    spreadRadius: 1.5)
+                              ]),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: CachedNetworkImage(
+                              imageUrl: collectionData[i]['image'],
+                              placeholder: (context, url) => Container(
+                                child: ClipRRect(
                                   borderRadius: BorderRadius.circular(5),
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        blurRadius: 2,
-                                        color: Colors.black.withOpacity(0.1),
-                                        spreadRadius: 1.5)
-                                  ]),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5),
-                                child: CachedNetworkImage(
-                                  imageUrl: collectionData[i]['image'],
-                                  placeholder: (context, url) => Container(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(5),
-                                      child: Image.asset(
-                                        'assets/grey-fade.jpg',
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
+                                  child: Image.asset(
+                                    'assets/grey-fade.jpg',
+                                    fit: BoxFit.fill,
                                   ),
-                                  fit: BoxFit.fill,
                                 ),
                               ),
+                              fit: BoxFit.fill,
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 
@@ -1350,20 +1408,28 @@ class _EventCatalogState extends State<EventCatalog>
   ///Construct BannerCarousel Widget
   ///
   Widget banner() {
-    return bannerData == null ? CupertinoActivityIndicator(radius: 13.5) :  CarouselSlider(
-      height: ScreenUtil.instance.setWidth(200),
-      items: bannerData.length < 1 ? [CupertinoActivityIndicator(radius: 13.5,)] : mappedDataBanner,
-      enlargeCenterPage: false,
-      initialPage: 0,
-      autoPlay: true,
-      aspectRatio: 2.0,
-      viewportFraction: 1.0,
-      onPageChanged: (index) {
-        setState(() {
-          _current = index;
-        });
-      },
-    );
+    return bannerData == null
+        ? CupertinoActivityIndicator(radius: 13.5)
+        : CarouselSlider(
+            height: ScreenUtil.instance.setWidth(200),
+            items: bannerData.length < 1
+                ? [
+                    CupertinoActivityIndicator(
+                      radius: 13.5,
+                    )
+                  ]
+                : mappedDataBanner,
+            enlargeCenterPage: false,
+            initialPage: 0,
+            autoPlay: true,
+            aspectRatio: 2.0,
+            viewportFraction: 1.0,
+            onPageChanged: (index) {
+              setState(() {
+                _current = index;
+              });
+            },
+          );
   }
 
   Widget bannerCarousel() {
@@ -1736,8 +1802,6 @@ class _EventCatalogState extends State<EventCatalog>
     yield await fetchBanner();
   }
 
-
-
   BannerManager() {
     BannerList.listen((list) => _bannerCount.add(list.length));
   }
@@ -1853,40 +1917,45 @@ class _EventCatalogState extends State<EventCatalog>
   }
 
   Widget latestVideoContent() {
-    return latestMediaVideo == null ? CupertinoActivityIndicator(radius: 13.5) : ColumnBuilder(
-      itemCount: latestMediaVideo == null ? 0 : latestMediaVideo.length,
-      itemBuilder: (BuildContext context, i) {
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MediaDetails(
-                          isVideo: true,
-                          videoUrl: latestMediaVideo[i]['video'],
-                          youtubeUrl: latestMediaVideo[i]['youtube'],
-                          userPicture: latestMediaVideo[i]['creator']['photo'],
-                          articleDetail: latestMediaVideo[i]['content'],
-                          imageCount: 'img' + i.toString(),
-                          username: latestMediaVideo[i]['creator']['username'],
-                          imageUri: latestMediaVideo[i]['thumbnail_timeline'],
-                          mediaTitle: latestMediaVideo[i]['title'],
-                          autoFocus: false,
-                          mediaId: latestMediaVideo[i]['id'],
-                        )));
-          },
-          child: LatestMediaItem(
-            isVideo: true,
-            image: latestMediaVideo[i]['thumbnail_timeline'],
-            title: latestMediaVideo[i]['title'],
-            username: latestMediaVideo[i]['creator']['username'],
-            userImage: latestMediaVideo[i]['creator']['photo'],
-            likeCount: latestMediaVideo[i]['count_loved'],
-            commentCount: latestMediaVideo[i]['comment'],
-          ),
-        );
-      },
-    );
+    return latestMediaVideo == null
+        ? CupertinoActivityIndicator(radius: 13.5)
+        : ColumnBuilder(
+            itemCount: latestMediaVideo == null ? 0 : latestMediaVideo.length,
+            itemBuilder: (BuildContext context, i) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MediaDetails(
+                                isVideo: true,
+                                videoUrl: latestMediaVideo[i]['video'],
+                                youtubeUrl: latestMediaVideo[i]['youtube'],
+                                userPicture: latestMediaVideo[i]['creator']
+                                    ['photo'],
+                                articleDetail: latestMediaVideo[i]['content'],
+                                imageCount: 'img' + i.toString(),
+                                username: latestMediaVideo[i]['creator']
+                                    ['username'],
+                                imageUri: latestMediaVideo[i]
+                                    ['thumbnail_timeline'],
+                                mediaTitle: latestMediaVideo[i]['title'],
+                                autoFocus: false,
+                                mediaId: latestMediaVideo[i]['id'],
+                              )));
+                },
+                child: LatestMediaItem(
+                  isVideo: true,
+                  image: latestMediaVideo[i]['thumbnail_timeline'],
+                  title: latestMediaVideo[i]['title'],
+                  username: latestMediaVideo[i]['creator']['username'],
+                  userImage: latestMediaVideo[i]['creator']['photo'],
+                  likeCount: latestMediaVideo[i]['count_loved'],
+                  commentCount: latestMediaVideo[i]['comment'],
+                ),
+              );
+            },
+          );
   }
 
   ///Untuk Fetching gambar PopularPeople
