@@ -210,7 +210,7 @@ class _EventDetailCommentState extends State<EventDetailComment> {
                             fontSize: ScreenUtil.instance.setSp(12),
                             fontWeight: FontWeight.bold),
                       ),
-                      subtitle: Text(commentList[i]['response'], style: TextStyle(color: ),),
+                      subtitle: Text(commentList[i]['response'],),
                     );
                   },
                 );
