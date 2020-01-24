@@ -269,8 +269,11 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
   void imageCaptureCamera() async {
     var galleryFile = await ImagePicker.pickImage(
       source: ImageSource.camera,
-    );
+    );  
+
     if (!mounted) return;
+
+    cropImage(galleryFile);
   }
 
   cropImage(File galleryFile) async {

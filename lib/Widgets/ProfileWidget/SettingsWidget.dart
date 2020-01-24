@@ -356,65 +356,6 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                           ],
                         );
                       });
-//              showDialog(
-//                  context: context,
-//                  builder: (BuildContext context){
-//                    return GestureDetector(
-//                      onTap: (){
-//                        Navigator.pop(context);
-//                      },
-//                      child: Material(
-//                        color: Colors.transparent,
-//                        child: Center(
-//                          child: Container(
-//                            padding: EdgeInsets.symmetric(horizontal: ScreenUtil.instance.setWidth(8), vertical: ScreenUtil.instance.setWidth(8)),
-//                            decoration: BoxDecoration(
-//                                color: Colors.white,
-//                                borderRadius: BorderRadius.circular(10)
-//                            ),
-//                            height: ScreenUtil.instance.setWidth(150),
-//                            width: ScreenUtil.instance.setWidth(250),
-//                            child: Column(
-//                              mainAxisAlignment: MainAxisAlignment.center,
-//                              children: <Widget>[
-//                                SizedBox(height: ScreenUtil.instance.setWidth(10),),
-//                                Text('Oops', style: TextStyle(color: Colors.black54,fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
-//                                SizedBox(height: ScreenUtil.instance.setWidth(10),),
-//                                Text('Do you want to log out?', textAlign: TextAlign.center,),
-//                                SizedBox(
-//                                  height: ScreenUtil.instance.setWidth(13),
-//                                ),
-//                                Row(
-//                                  mainAxisAlignment: MainAxisAlignment.center,
-//                                  crossAxisAlignment: CrossAxisAlignment.center,
-//                                  children: <Widget>[
-//                                    GestureDetector(
-//                                      onTap: (){
-//                                        Navigator.pop(context);
-//                                      },
-//                                      child: Text('Cancel', style: TextStyle(color: Colors.lightBlue, fontWeight: FontWeight.bold),),
-//                                    ),
-//                                    SizedBox(
-//                                      width: ScreenUtil.instance.setWidth(50),
-//                                    ),
-//                                    GestureDetector(
-//                                      onTap: (){
-//                                        setSharedPreferencesToEmpty();
-//                                        requestLogout(context);
-//                                      },
-//                                      child: Text('Ok', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
-//                                    )
-//
-//                                  ],
-//                                )
-//                              ],
-//                            ),
-//                          ),
-//                        ),
-//                      ),
-//                    );
-//                  }
-//              );
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -487,6 +428,32 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
                         child: Text(
                           'Privacy Policy',
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(18),
+                              color: Colors.grey[700]),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Divider(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    PrivacyPolicy()));
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.white,
+                        padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
+                        child: Text(
+                          'Open Source Library',
                           style: TextStyle(
                               fontSize: ScreenUtil.instance.setSp(18),
                               color: Colors.grey[700]),

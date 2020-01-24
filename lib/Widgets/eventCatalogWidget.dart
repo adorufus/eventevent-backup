@@ -12,6 +12,7 @@ import 'package:eventevent/Widgets/Home/SeeAll/SeeAllPeople.dart';
 import 'package:eventevent/Widgets/LatestEventWidget.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/SearchWidget.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
+import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/Widgets/openMedia.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/Widgets/timeline/LatestMediaItem.dart';
@@ -1794,7 +1795,9 @@ class _EventCatalogState extends State<EventCatalog>
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
-      )..show(context);
+      )..show(context).then((val){
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+      });
     }
   }
 
@@ -1864,6 +1867,7 @@ class _EventCatalogState extends State<EventCatalog>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     } else if (extractedData['desc'] == 'Event Not Found') {
       setState(() {
         isLoading = false;
@@ -2020,6 +2024,7 @@ class _EventCatalogState extends State<EventCatalog>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     }
   }
 
@@ -2084,6 +2089,7 @@ class _EventCatalogState extends State<EventCatalog>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     }
   }
 
@@ -2147,6 +2153,7 @@ class _EventCatalogState extends State<EventCatalog>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     }
   }
 
@@ -2210,6 +2217,7 @@ class _EventCatalogState extends State<EventCatalog>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     }
   }
 }

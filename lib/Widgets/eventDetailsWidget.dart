@@ -34,6 +34,7 @@ import 'package:marquee/marquee.dart';
 //import 'package:eventevent/helper/MarqueeWidget.dart';
 import 'package:marquee_flutter/marquee_flutter.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:share/share.dart';
 import 'package:share_extend/share_extend.dart';
@@ -2510,11 +2511,24 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MediaPlayer(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => detailData['additional']
+                                                  [i]['extension'] ==
+                                              'image/jpeg' ||
+                                          detailData['additional'][i]
+                                                  ['extension'] ==
+                                              'image/png'
+                                      ? PhotoView(
+                                          imageProvider: NetworkImage(
+                                              detailData['additional'][i]
+                                                  ['posterPathFull']),
+                                        )
+                                      : MediaPlayer(
                                           videoUri: detailData['additional'][i]
-                                              ['posterPathFull'])));
+                                              ['posterPathFull']),
+                                ),
+                              );
                             },
                             child: Container(
                               margin: EdgeInsets.only(left: 10),
@@ -2530,8 +2544,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   borderRadius: BorderRadius.circular(15)),
                               child: Center(
                                   child: detailData['additional'][i]
-                                              ['extension'] ==
-                                          'image/jpeg'
+                                                  ['extension'] ==
+                                              'image/jpeg' ||
+                                          detailData['additional'][i]
+                                                  ['extension'] ==
+                                              'image/png'
                                       ? Container()
                                       : Icon(
                                           Icons.play_circle_filled,
@@ -2949,7 +2966,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     });
 
     String url = BaseApi().apiUrl +
-        'timeline/user?X-API-KEY=$API_KEY&page=1&userID=$currentUserId';
+        '/timeline/user?X-API-KEY=$API_KEY&page=1&userID=$currentUserId';
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,

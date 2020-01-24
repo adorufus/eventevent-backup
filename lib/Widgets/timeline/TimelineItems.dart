@@ -152,7 +152,13 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
         });
       },
       onLoading: _onLoading,
-      child: ListView.builder(
+      child: timelineList == null ? Center(child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Image.asset('assets/icons/empty_state/public_timeline.png', scale: 1.5,),
+          Text('Your timeline is empty :(', style: TextStyle(fontWeight: FontWeight.bold),)
+        ],
+      ),) : ListView.builder(
         shrinkWrap: true,
         itemCount: timelineList == null ? 0 : timelineList.length,
         itemBuilder: (BuildContext context, i) {

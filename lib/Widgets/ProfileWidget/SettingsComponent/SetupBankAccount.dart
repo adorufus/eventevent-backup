@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankAccountList.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankList.dart';
+import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
+import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flushbar/flushbar.dart';
@@ -112,6 +114,7 @@ class SetupBankAccountState extends State<SetupBankAccount> {
           ),
           TextFormField(
             controller: accNumber,
+            keyboardType: TextInputType.number,
             decoration: InputDecoration(
                 hintText: 'Put your account number...',
                 fillColor: Colors.white,
@@ -164,11 +167,12 @@ class SetupBankAccountState extends State<SetupBankAccount> {
                 print(response.body);
                 var extractedData = json.decode(response.body);
                 if (response.statusCode == 201 || response.statusCode == 200) {
-                  Navigator.pushReplacement(
+                  Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              BankAccountList()));
+                          builder: (BuildContext context) => DashboardWidget(isRest: false, selectedPage: 3,)),
+                      ModalRoute.withName('/WithdrawBank'));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => WithdrawBank()));
                 } else {
                   Flushbar(
                     flushbarPosition: FlushbarPosition.TOP,

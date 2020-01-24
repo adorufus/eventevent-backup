@@ -87,7 +87,7 @@ class BankAccountListState extends State<BankAccountList> {
                           alignment: Alignment.centerRight,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Container(
                                   child: Text(
@@ -101,7 +101,6 @@ class BankAccountListState extends State<BankAccountList> {
                                     bankList[i]['bank_name'],
                                     style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
                                     overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.end,
                                   )),
                               Text(
                                 bankList[i]['account_number'],

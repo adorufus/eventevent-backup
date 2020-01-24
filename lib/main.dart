@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
+import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:http/http.dart' as http;
@@ -98,6 +99,7 @@ class RunApp extends StatelessWidget {
                     statusBarColor: Colors.white,
                     statusBarIconBrightness: Brightness.dark),
                 child: LoginRegisterWidget()),
+        '/WithdrawBank': (BuildContext context) => WithdrawBank(),
         '/Login': (BuildContext context) => AnnotatedRegion(
             value: SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
