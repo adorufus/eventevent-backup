@@ -9,6 +9,8 @@ import 'package:eventevent/Widgets/timeline/EventDetailTimeline.dart';
 import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:flutter/material.dart' as prefix0;
+import 'package:flutter/services.dart';
+import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/LoveItem.dart';
@@ -125,11 +127,67 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
   List timelineList = [];
 
+  BranchContentMetaData metaData;
+  BranchUniversalObject buo;
+  BranchLinkProperties lp;
+  BranchEvent eventStandard;
+  BranchEvent eventCustom;
+
+  StreamSubscription<Map> streamSubscription;
+  StreamController<String> controllerData = StreamController<String>();
+  StreamController<String> controllerInitSession = StreamController<String>();
+  StreamController<String> controllerUrl = StreamController<String>();
+
+  void listenDynamicLink() async {
+    streamSubscription = FlutterBranchSdk.initSession().listen((data) {
+      if (data.containsKey("+clicked_branch_link") &&
+          data["+clicked_branch_link"] == true) {
+        print("custom_string: ${data["custom_string"]}");
+      }
+    }, onError: (error) {
+      PlatformException platformException = error as PlatformException;
+      print(
+          'InitSession error: ${platformException.code} - ${platformException.message}');
+      controllerInitSession.add(
+          'InitSession error: ${platformException.code} - ${platformException.message}');
+    });
+  }
+
+  void initDeepLinkData() {
+    metaData = BranchContentMetaData()
+        .addCustomMetadata('event_name', '')
+        .addCustomMetadata('event_id', widget.id)
+        .addCustomMetadata('image_url', '');
+
+    buo = BranchUniversalObject(
+        canonicalIdentifier: 'event_${widget.id}',
+        title: '',
+        imageUrl: '',
+        contentDescription: 'you can see the event description on the app',
+        contentMetadata: metaData,
+        publiclyIndex: true,
+        locallyIndex: true);
+
+    print(buo);
+
+    FlutterBranchSdk.registerView(buo: buo);
+    FlutterBranchSdk.listOnSearch(buo: buo);
+
+    lp = BranchLinkProperties(
+      feature: "sharing",
+    );
+
+    lp.addControlParam(
+        '\$desktop_url', 'http://eventevent.com/event/${widget.id}');
+  }
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
+    FlutterBranchSdk.validateSDKIntegration();
+
     super.initState();
     //testGetData();
     try {
@@ -157,7 +215,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       }
     });
 
+    listenDynamicLink();
+    initDeepLinkData();
+
     getEventDetailsSpecificInfo();
+
     getInvitedUser();
     getData();
     _currentTime = DateTime.now();
@@ -196,11 +258,24 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     //         .setContentDescription('')
     //         .setContentImageUrl(widget.image)
     //         .setContentIndexingMode(BUO_CONTENT_INDEX_MODE.PUBLIC)
-    //         .setLocalIndexMode(BUO_CONTENT_INDEX_MODE.PUBLIC),
+    //         .setLocalIndexMode(BUO_CONTENT_INDEX_MODE.LOCAL),
     //     lpFeature: 'sharing',
     //     lpControlParams: {
     //       '\$desktop_url': 'http://eventevent.com/event/${widget.id}'
     //     });
+  }
+
+  void generateLink() async {
+    BranchResponse response =
+        await FlutterBranchSdk.getShortUrl(buo: buo, linkProperties: lp);
+
+    if (response.success) {
+      print('generated link: ' + response.result);
+      controllerUrl.sink.add('${response.result}');
+    } else {
+      controllerUrl.sink
+          .add('Error: ${response.errorCode} - ${response.errorDescription}');
+    }
   }
 
   Future branchIoInit() async {

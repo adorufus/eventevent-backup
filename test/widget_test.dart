@@ -9,10 +9,13 @@ import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutt
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:eventevent/main.dart';
+import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    final eventDetail = EventDetailsConstructView();
+
     // Build our app and trigger a frame.
     await tester.pumpWidget(RunApp());
 
