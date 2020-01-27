@@ -28,7 +28,6 @@ import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_branch_io_plugin/flutter_branch_io_plugin.dart';
 import 'dart:ui';
 import 'package:marquee/marquee.dart';
 //import 'package:eventevent/helper/MarqueeWidget.dart';
@@ -44,7 +43,6 @@ import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_android_lifecycle/flutter_android_lifecycle.dart';
 
 class EventDetailsConstructView extends StatefulWidget {
   final Map<String, dynamic> eventDetailsData;
@@ -167,42 +165,42 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   }
 
   void setUpBranch() {
-    FlutterBranchIoPlugin.setupBranchIO();
+    // FlutterBranchIoPlugin.setupBranchIO();
 
-    FlutterBranchIoPlugin.listenToDeepLinkStream().listen((string) {
-      print("DEEPLINK $string");
-      setState(() {
-        this._data = string;
-      });
-    });
+    // FlutterBranchIoPlugin.listenToDeepLinkStream().listen((string) {
+    //   print("DEEPLINK $string");
+    //   setState(() {
+    //     this._data = string;
+    //   });
+    // });
 
-    FlutterAndroidLifecycle.listenToOnStartStream().listen((string) {
-      print("ONSTART");
-      FlutterBranchIoPlugin.setupBranchIO();
-    });
+    // FlutterAndroidLifecycle.listenToOnStartStream().listen((string) {
+    //   print("ONSTART");
+    //   FlutterBranchIoPlugin.setupBranchIO();
+    // });
 
-    FlutterBranchIoPlugin.listenToGeneratedLinkStream().listen((link) {
-      print('GET LINK IN FLUTTER');
-      print('thelink' + link);
-      setState(() {
-        this.generatedLink = link;
+    // FlutterBranchIoPlugin.listenToGeneratedLinkStream().listen((link) {
+    //   print('GET LINK IN FLUTTER');
+    //   print('thelink' + link);
+    //   setState(() {
+    //     this.generatedLink = link;
 
-        print('thisgeneratedlink: ' + generatedLink);
-      });
-    });
+    //     print('thisgeneratedlink: ' + generatedLink);
+    //   });
+    // });
 
-    FlutterBranchIoPlugin.generateLink(
-        FlutterBranchUniversalObject()
-            .setCanonicalIdentifier('event_' + widget.id)
-            .setTitle(widget.name)
-            .setContentDescription('')
-            .setContentImageUrl(widget.image)
-            .setContentIndexingMode(BUO_CONTENT_INDEX_MODE.PUBLIC)
-            .setLocalIndexMode(BUO_CONTENT_INDEX_MODE.PUBLIC),
-        lpFeature: 'sharing',
-        lpControlParams: {
-          '\$desktop_url': 'http://eventevent.com/event/${widget.id}'
-        });
+    // FlutterBranchIoPlugin.generateLink(
+    //     FlutterBranchUniversalObject()
+    //         .setCanonicalIdentifier('event_' + widget.id)
+    //         .setTitle(widget.name)
+    //         .setContentDescription('')
+    //         .setContentImageUrl(widget.image)
+    //         .setContentIndexingMode(BUO_CONTENT_INDEX_MODE.PUBLIC)
+    //         .setLocalIndexMode(BUO_CONTENT_INDEX_MODE.PUBLIC),
+    //     lpFeature: 'sharing',
+    //     lpControlParams: {
+    //       '\$desktop_url': 'http://eventevent.com/event/${widget.id}'
+    //     });
   }
 
   Future branchIoInit() async {

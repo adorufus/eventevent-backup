@@ -345,6 +345,9 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       if (e is DioError) {
         print(e.message);
       }
+      if (e is FileSystemException){
+        print(e.message);
+      }
     }
   }
 

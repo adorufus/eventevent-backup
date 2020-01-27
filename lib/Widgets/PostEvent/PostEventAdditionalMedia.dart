@@ -36,6 +36,7 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
+
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
@@ -269,7 +270,7 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
   void imageCaptureCamera() async {
     var galleryFile = await ImagePicker.pickImage(
       source: ImageSource.camera,
-    );  
+    );
 
     if (!mounted) return;
 
