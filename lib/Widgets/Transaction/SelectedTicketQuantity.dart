@@ -18,8 +18,10 @@ class SelectedTicketQuantityWidget extends StatefulWidget{
   final ticketPrice;
   final ticketID;
   final ticketType;
+  final isSingleTicket;
+  final minTicket;
 
-  const SelectedTicketQuantityWidget({Key key, this.eventDate, this.eventName, this.ticketName, this.eventAddress, this.eventImage, this.ticketDetail, this.ticketPrice, this.ticketID, this.ticketType, this.eventStartTime, this.eventEndTime}) : super(key: key);
+  const SelectedTicketQuantityWidget({Key key, this.eventDate, this.eventName, this.ticketName, this.eventAddress, this.eventImage, this.ticketDetail, this.ticketPrice, this.ticketID, this.ticketType, this.eventStartTime, this.eventEndTime, this.isSingleTicket, this.minTicket}) : super(key: key);
 
 
   @override
@@ -29,7 +31,7 @@ class SelectedTicketQuantityWidget extends StatefulWidget{
 }
 
 class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWidget> {
-  int ticketCount = 1;
+  int ticketCount;
   int priceCount;
   int priceCount2;
   int counterMin, counterMax, counter;
@@ -59,6 +61,10 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
   @override
   void initState() {
     super.initState();
+    setState(() {
+      ticketCount = widget.minTicket;
+    });
+
     getPreferences(counterMin, counterMax, price);
     setPreferences(widget.ticketPrice, ticketCount.toString());
   }
@@ -256,9 +262,14 @@ class _SelectedTicketQuantityWidgetState extends State<SelectedTicketQuantityWid
                       ),
                       GestureDetector(
                           onTap: (){
-                            add();
+                            if(widget.isSingleTicket == true){
+                              //do nothing
+                            }
+                            else{
+                              add();
+                            }
                           },
-                          child: Text('+', style: TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(25), fontWeight: FontWeight.bold),)
+                          child: Text('+', style: TextStyle(color: widget.isSingleTicket == true ? Colors.grey.withOpacity(0.5) : Colors.black54, fontSize: ScreenUtil.instance.setSp(25), fontWeight: FontWeight.bold),)
                       )
                     ],
                   ),

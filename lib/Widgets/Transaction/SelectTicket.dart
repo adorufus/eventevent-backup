@@ -171,6 +171,9 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                       ticketName: ticketListData[i]['ticket_name'],
                       eventImage: ticketListData[i]['ticket_image']
                           ['secure_url'],
+                      isSingleTicket:
+                          ticketListData[i]['is_single_ticket'] ? true : false,
+                      minTicket: ticketListData[i]['min_ticket'],
                       ticketDetail: ticketListData[i]['descriptions'],
                       ticketPrice: ticketListData[i]['final_price'],
                       ticketID: ticketListData[i]['id'],
@@ -305,9 +308,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                             'You Cannot Buy This Ticket Again',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold
-                            ),
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
                       )

@@ -107,7 +107,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
               child: Text('Ok'),
               onPressed: () {
                 if (stars != null) {
-                  DoNotOpenAgainCondition(rateMyApp);
+                  DoNotOpenAgainCondition(rateMyApp).doNotOpenAgain = true;
                   rateMyApp.save().then((val) {
                     Navigator.pop(context);
                   });

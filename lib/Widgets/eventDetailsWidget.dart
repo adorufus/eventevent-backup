@@ -215,8 +215,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       }
     });
 
-    listenDynamicLink();
-    initDeepLinkData();
+    // listenDynamicLink();
+    // initDeepLinkData();
 
     getEventDetailsSpecificInfo();
 
