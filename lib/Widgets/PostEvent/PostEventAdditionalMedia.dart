@@ -1,11 +1,16 @@
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thumbnails/thumbnails.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import 'PostEventReview.dart';
 
@@ -19,7 +24,8 @@ class PostEventAdditionalMedia extends StatefulWidget {
 class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
   GlobalKey<ScaffoldState> thisScaffold = new GlobalKey<ScaffoldState>();
 
-  List<String> additionalMediaList = <String>['', '', '', '', ''];
+  List<String> additionalMediaList = [];
+  List<String> additionalMediaPhoto = [];
 
   File additional1;
   File additional2;
@@ -28,7 +34,8 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
   File additional5;
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -66,7 +73,9 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -129,60 +138,60 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(right: 10),
-                      child: additionalMediaList[0] == ''
+                      child: additionalMediaPhoto.length < 1
                           ? Container()
                           : Container(
                               child: Image.file(
-                                File(additionalMediaList[0]),
+                                File(additionalMediaPhoto[0]),
                                 fit: BoxFit.fill,
                               ),
                             ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: additionalMediaList[1] == ''
+                      child: additionalMediaPhoto.length < 2
                           ? Container()
                           : Container(
                               child: Image.file(
-                                File(additionalMediaList[1]),
+                                File(additionalMediaPhoto[1]),
                                 fit: BoxFit.fill,
                               ),
                             ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: additionalMediaList[2] == ''
+                      child: additionalMediaPhoto.length < 3
                           ? Container()
                           : Container(
                               child: Image.file(
-                                File(additionalMediaList[2]),
+                                File(additionalMediaPhoto[2]),
                                 fit: BoxFit.fill,
                               ),
                             ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: additionalMediaList[3] == ''
+                      child: additionalMediaPhoto.length < 4
                           ? Container()
                           : Container(
                               child: Image.file(
-                                File(additionalMediaList[3]),
+                                File(additionalMediaPhoto[3]),
                                 fit: BoxFit.fill,
                               ),
                             ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: additionalMediaList[4] == ''
+                      child: additionalMediaPhoto.length < 5
                           ? Container()
                           : Container(
                               child: Image.file(
-                                File(additionalMediaList[4]),
+                                File(additionalMediaPhoto[4]),
                                 fit: BoxFit.fill,
                               ),
                             ),
                     ),
-                    additionalMediaList[4] == ''
+                    additionalMediaList.length < 5
                         ? GestureDetector(
                             onTap: () {
                               _showDialog();
@@ -217,28 +226,34 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              new ListTile(
-                leading: new Icon(Icons.photo_library),
-                title: new Text('Choose Photo from Library'),
-                onTap: () {
-                  imageSelectorGalery();
-                  Navigator.pop(context);
-                },
-              ),
-              new ListTile(
-                leading: new Icon(Icons.videocam),
-                title: new Text('Choose Video from Library'),
-                onTap: () {
-                  videoSelectorGalery();
-                  Navigator.pop(context);
-                },
-              ),
-              new ListTile(
-                  leading: new Icon(Icons.camera_alt),
-                  title: new Text('Take Photo from Camera'),
-                  onTap: () {
-                    imageCaptureCamera();
-                  }),
+              additionalMediaList.length == 4
+                  ? Container()
+                  : ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Choose Photo from Library'),
+                      onTap: () {
+                        imageSelectorGalery();
+                        Navigator.pop(context);
+                      },
+                    ),
+              additionalMediaList.length != 4
+                  ? Container()
+                  : ListTile(
+                      leading: new Icon(Icons.videocam),
+                      title: new Text('Choose Video from Library'),
+                      onTap: () {
+                        videoSelectorGalery();
+                        Navigator.pop(context);
+                      },
+                    ),
+              additionalMediaList.length == 4
+                  ? Container()
+                  : ListTile(
+                      leading: new Icon(Icons.camera_alt),
+                      title: new Text('Take Photo from Camera'),
+                      onTap: () {
+                        imageCaptureCamera();
+                      }),
               new ListTile(
                 leading: new Icon(Icons.close),
                 title: new Text('Cancel'),
@@ -255,16 +270,35 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
     var galleryFile = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     print(galleryFile.path);
+
     cropImage(galleryFile);
   }
 
   videoSelectorGalery() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     var galleryFile = await ImagePicker.pickVideo(source: ImageSource.gallery);
 
     print(galleryFile.path);
+
+    var appDocDir = await getApplicationDocumentsDirectory();
+
+    String fileFolder = appDocDir.path;
+
+    String thumbnail = await Thumbnails.getThumbnail(
+      thumbnailFolder: fileFolder,
+      videoFile: galleryFile.path,
+      imageType: ThumbFormat.JPEG,
+      quality: 50,
+    );
+
+    print(thumbnail);
+
     setState(() {
-      additionalMediaList.add(galleryFile.path);
+      preferences.setString('POST_EVENT_ADDITIONAL_VIDEO', galleryFile.path);
+      print(preferences.getString('POST_EVENT_ADDITIONAL_VIDEO'));
     });
+
+    cropImage(File(thumbnail));
   }
 
   void imageCaptureCamera() async {
@@ -289,48 +323,20 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
 
     print(croppedImage.path);
     setState(() {
-      if (additionalMediaList[0] == '') {
-        additionalMediaList[0] = croppedImage.path;
-      } else {
-        if (additionalMediaList[1] == '') {
-          additionalMediaList[1] = croppedImage.path;
-        } else {
-          if (additionalMediaList[2] == '') {
-            additionalMediaList[2] = croppedImage.path;
-          } else {
-            if (additionalMediaList[3] == '') {
-              additionalMediaList[3] = croppedImage.path;
-            } else {
-              if (additionalMediaList[4] == '') {
-                additionalMediaList[4] = croppedImage.path;
-              }
-            }
-          }
-        }
-      }
+      additionalMediaPhoto.add(croppedImage.path.toString());
+      additionalMediaList.add(croppedImage.path.toString());
     });
 
     print(additionalMediaList);
+    print(additionalMediaPhoto);
   }
 
   saveAndContinue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_1', additionalMediaList[0]);
-    prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_2', additionalMediaList[1]);
-    prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_3', additionalMediaList[2]);
-    prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_4', additionalMediaList[3]);
-    prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_5', additionalMediaList[4]);
+    prefs.setStringList('POST_EVENT_ADDITIONAL_MEDIA', additionalMediaList);
 
-    print(prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_1') +
-        ' ' +
-        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_2') +
-        ' ' +
-        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_3') +
-        ' ' +
-        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_4') +
-        ' ' +
-        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_5'));
+    print(prefs.getStringList('POST_EVENT_ADDITIONAL_MEDIA'));
 
     Navigator.push(
         context,

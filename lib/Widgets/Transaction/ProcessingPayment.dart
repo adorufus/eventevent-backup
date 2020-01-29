@@ -34,6 +34,7 @@ class ProcessingPayment extends StatefulWidget {
 
   //if the loading from create event
   final imageFile;
+  final List<String> additionalMedia;
   final isPrivate;
   final index;
   final context;
@@ -50,7 +51,8 @@ class ProcessingPayment extends StatefulWidget {
       this.imageFile,
       this.isPrivate,
       this.index,
-      this.context})
+      this.context,
+      this.additionalMedia})
       : super(key: key);
 
   @override
@@ -234,6 +236,18 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     Cookie cookie = Cookie.fromSetCookieValue(prefs.getString('Session'));
+    List<File> additionalMediaFiles = [];
+    File additionalVideo = File(prefs.getString('POST_EVENT_ADDITIONAL_VIDEO'));
+
+    print('additional video' + additionalVideo.path);
+
+    setState(() {
+      for (var i = 0; i < widget.additionalMedia.length; i++) {
+        additionalMediaFiles.add(File(widget.additionalMedia[i]));
+      }
+
+      print(additionalMediaFiles);
+    });
 
     print(lookupMimeType(widget.imageFile.path));
 
@@ -257,10 +271,17 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
         'website': prefs.getString('CREATE_EVENT_WEBSITE'),
         'isPrivate': prefs.getString('POST_EVENT_TYPE'),
         'modifiedById': prefs.getString('Last User ID'),
+        'additionalMedia': UploadFileInfo(additionalVideo, "eventevent-video-${DateTime.now().toString()}.mp4", contentType: ContentType('video', 'mp4')),
         'photo': UploadFileInfo(
             widget.imageFile, "eventevent-${DateTime.now().toString()}.jpg",
-            contentType: ContentType('image', 'jpeg'))
+            contentType: ContentType('image', 'jpeg')),
       };
+
+      for (int i = 0; i < additionalMediaFiles.length; i++) {
+        body['additionalPhoto[$i]'] = UploadFileInfo(additionalMediaFiles[i],
+            "eventevent-additionalFile[$i]-${DateTime.now()}.jpg",
+            contentType: ContentType('image', 'jpeg'));
+      }
 
       List categoryList = prefs.getStringList('POST_EVENT_CATEGORY_ID');
       print(categoryList);
@@ -345,7 +366,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       if (e is DioError) {
         print(e.message);
       }
-      if (e is FileSystemException){
+      if (e is FileSystemException) {
         print(e.message);
       }
     }

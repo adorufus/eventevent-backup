@@ -35,6 +35,8 @@ class SelectTicketTypeState extends State<SelectTicketType> {
   String isPrivate;
   String base64Image;
   File imageFile;
+  List<String> additionalMediaList = [];
+  List<File> additionalMediaFiles = [];
   bool isLoading;
   
 
@@ -52,6 +54,10 @@ class SelectTicketTypeState extends State<SelectTicketType> {
 
     setState(() {
       isPrivate = prefs.getString('POST_EVENT_TYPE');
+      additionalMediaList.addAll(prefs.getStringList('POST_EVENT_ADDITIONAL_MEDIA'));
+
+      print(additionalMediaFiles);
+
       imageFile = new File(prefs.getString('POST_EVENT_POSTER'));
       print(imageFile.path);
       base64Image = base64Encode(imageFile.readAsBytesSync());
@@ -128,6 +134,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
                         isPrivate: isPrivate,
                         imageFile: imageFile,
                         index: i,
+                        additionalMedia: additionalMediaList,
                         context: context
                       );
                     }

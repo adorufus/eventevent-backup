@@ -27,8 +27,8 @@ class PostEventMapState extends State<PostEventMap>{
   TextEditingController additionalInfoController = new TextEditingController();
 
   String placeName = '';
-  String lat = '';
-  String long = '';
+  String lat = '-6.121435';
+  String long = '106.774124';
   String err;
   Location location = new Location();
   LocationData currentLocation;

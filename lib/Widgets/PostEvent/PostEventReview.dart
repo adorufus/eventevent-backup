@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io'; import 'package:eventevent/helper/utils.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -77,13 +78,7 @@ class PostEventReviewState extends State<PostEventReview> {
       websiteController.text = prefs.getString('CREATE_EVENT_WEBSITE');
       additionalInfoMapController.text =
           prefs.getString('CREATE_EVENT_ADDITIONAL_INFO');
-      additionalMedia = [
-        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_1'),
-        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_2'),
-        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_3'),
-        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_4'),
-        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_5')
-      ];
+      additionalMedia = prefs.getStringList('POST_EVENT_ADDITIONAL_MEDIA');
     });
   }
 
@@ -91,11 +86,7 @@ class PostEventReviewState extends State<PostEventReview> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     setState(() {
-      prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_1', additionalMedia[0]);
-      prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_2', additionalMedia[1]);
-      prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_3', additionalMedia[2]);
-      prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_4', additionalMedia[3]);
-      prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_5', additionalMedia[4]);
+      prefs.setStringList('POST_EVENT_ADDITIONAL_MEDIA', additionalMedia);
       prefs.setString('POST_EVENT_NAME', eventNameController.text);
       prefs.setString('POST_EVENT_POSTER', imageUri);
       prefs.setString('POST_EVENT_TYPE', eventType);
@@ -612,83 +603,96 @@ class PostEventReviewState extends State<PostEventReview> {
       child: ListView(
         padding: EdgeInsets.only(left: 10),
         scrollDirection: Axis.horizontal,
-        children: <Widget>[
-          Padding(
+        children: mapIndexed(additionalMedia, (index, item){
+          return Padding(
             padding: EdgeInsets.only(right: 10),
-            child: additionalMedia[0] == ''
+            child: additionalMedia[index] == null
                 ? Container()
                 : Container(
                     child: Image.file(
-                      File(additionalMedia[0]),
+                      File(additionalMedia[index]),
                       fit: BoxFit.fill,
                     ),
                   ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia[1] == ''
-                ? Container()
-                : Container(
-                    child: Image.file(
-                      File(additionalMedia[1]),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia[2] == ''
-                ? Container()
-                : Container(
-                    child: Image.file(
-                      File(additionalMedia[2]),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia[3] == ''
-                ? Container()
-                : Container(
-                    child: Image.file(
-                      File(additionalMedia[3]),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia[4] == ''
-                ? Container()
-                : Container(
-                    child: Image.file(
-                      File(additionalMedia[4]),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-          ),
-          additionalMedia[4] == ''
-              ? GestureDetector(
-                  onTap: () {
-                    //_showDialog();
-                  },
-                  child: Container(
-                    color: Colors.grey,
-                    height: ScreenUtil.instance.setWidth(200),
-                    width: ScreenUtil.instance.setWidth(150),
-                    child: Center(
-                      child: SizedBox(
-                        height: ScreenUtil.instance.setWidth(50),
-                        width: ScreenUtil.instance.setWidth(50),
-                        child: Image.asset(
-                            'assets/bottom-bar/new-something-white.png'),
-                      ),
-                    ),
-                  ),
-                )
-              : Container(),
-        ],
+          );
+        }).toList(),
+        // children: <Widget>[
+        //   Padding(
+        //     padding: EdgeInsets.only(right: 10),
+        //     child: additionalMedia.length < 1
+        //         ? Container()
+        //         : Container(
+        //             child: Image.file(
+        //               File(additionalMedia[0]),
+        //               fit: BoxFit.fill,
+        //             ),
+        //           ),
+        //   ),
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 10),
+        //     child: additionalMedia.length < 2
+        //         ? Container()
+        //         : Container(
+        //             child: Image.file(
+        //               File(additionalMedia[1]),
+        //               fit: BoxFit.fill,
+        //             ),
+        //           ),
+        //   ),
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 10),
+        //     child: additionalMedia.length < 3
+        //         ? Container()
+        //         : Container(
+        //             child: Image.file(
+        //               File(additionalMedia[2]),
+        //               fit: BoxFit.fill,
+        //             ),
+        //           ),
+        //   ),
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 10),
+        //     child: additionalMedia.length < 4
+        //         ? Container()
+        //         : Container(
+        //             child: Image.file(
+        //               File(additionalMedia[3]),
+        //               fit: BoxFit.fill,
+        //             ),
+        //           ),
+        //   ),
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 10),
+        //     child: additionalMedia.length < 5
+        //         ? Container()
+        //         : Container(
+        //             child: Image.file(
+        //               File(additionalMedia[4]),
+        //               fit: BoxFit.fill,
+        //             ),
+        //           ),
+        //   ),
+        //   additionalMedia.length < 5
+        //       ? GestureDetector(
+        //           onTap: () {
+        //             //_showDialog();
+        //           },
+        //           child: Container(
+        //             color: Colors.grey,
+        //             height: ScreenUtil.instance.setWidth(200),
+        //             width: ScreenUtil.instance.setWidth(150),
+        //             child: Center(
+        //               child: SizedBox(
+        //                 height: ScreenUtil.instance.setWidth(50),
+        //                 width: ScreenUtil.instance.setWidth(50),
+        //                 child: Image.asset(
+        //                     'assets/bottom-bar/new-something-white.png'),
+        //               ),
+        //             ),
+        //           ),
+        //         )
+        //       : Container(),
+        // ],
       ),
     );
   }
