@@ -73,15 +73,15 @@ class _DashboardWidgetState extends State<DashboardWidget>
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   String urlPrefix = '';
 
-  RateMyApp rateMyApp = RateMyApp(
-    preferencesPrefix: 'rateMyApp_',
-    minDays: 1,
-    minLaunches: 1,
-    remindDays: 2,
-    remindLaunches: 5,
-    googlePlayIdentifier: 'com.eventevent.android',
-    appStoreIdentifier: 'com.trikarya.eventevent',
-  );
+  // RateMyApp rateMyApp = RateMyApp(
+  //   preferencesPrefix: 'rateMyApp_',
+  //   minDays: 1,
+  //   minLaunches: 1,
+  //   remindDays: 2,
+  //   remindLaunches: 5,
+  //   googlePlayIdentifier: 'com.eventevent.android',
+  //   appStoreIdentifier: 'com.trikarya.eventevent',
+  // );
 
   _saveCurrentRoute(String lastRoute) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -98,36 +98,36 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
   @override
   void initState() {
-    rateMyApp.init().then((_) {
-        rateMyApp.showStarRateDialog(context,
-            title: 'Enjoying EventEvent?',
-            message: 'Please leave a rating!', onRatingChanged: (stars) {
-          return [
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                if (stars != null) {
-                  DoNotOpenAgainCondition(rateMyApp).doNotOpenAgain = true;
-                  rateMyApp.save().then((val) {
-                    Navigator.pop(context);
-                  });
-                } else {
-                  Navigator.pop(context);
-                }
-              },
-            )
-          ];
-        },
-            dialogStyle: DialogStyle(
-                titleAlign: TextAlign.center,
-                messageAlign: TextAlign.center,
-                messagePadding: EdgeInsets.only(bottom: 20)),
-            starRatingOptions: StarRatingOptions(
-              starsFillColor: eventajaGreenTeal,
-              allowHalfRating: true,
-              initialRating: 5,
-            ));
-    });
+    // rateMyApp.init().then((_) {
+    //     rateMyApp.showStarRateDialog(context,
+    //         title: 'Enjoying EventEvent?',
+    //         message: 'Please leave a rating!', onRatingChanged: (stars) {
+    //       return [
+    //         FlatButton(
+    //           child: Text('Ok'),
+    //           onPressed: () {
+    //             if (stars != null) {
+    //               DoNotOpenAgainCondition(rateMyApp).doNotOpenAgain = true;
+    //               rateMyApp.save().then((val) {
+    //                 Navigator.pop(context);
+    //               });
+    //             } else {
+    //               Navigator.pop(context);
+    //             }
+    //           },
+    //         )
+    //       ];
+    //     },
+    //         dialogStyle: DialogStyle(
+    //             titleAlign: TextAlign.center,
+    //             messageAlign: TextAlign.center,
+    //             messagePadding: EdgeInsets.only(bottom: 20)),
+    //         starRatingOptions: StarRatingOptions(
+    //           starsFillColor: eventajaGreenTeal,
+    //           allowHalfRating: true,
+    //           initialRating: 5,
+    //         ));
+    // });
     
     _saveCurrentRoute('/Dashboard');
     WidgetsBinding.instance.addObserver(this);
