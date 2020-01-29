@@ -172,7 +172,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                       eventImage: ticketListData[i]['ticket_image']
                           ['secure_url'],
                       isSingleTicket:
-                          ticketListData[i]['is_single_ticket'] ? true : false,
+                          ticketListData[i]['is_single_ticket'] == '1' ? true : false,
                       minTicket: ticketListData[i]['min_ticket'],
                       ticketDetail: ticketListData[i]['descriptions'],
                       ticketPrice: ticketListData[i]['final_price'],
