@@ -366,6 +366,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                               emedia(),
                               widget.isRest == true ? LoginRegisterWidget() : UserTimelineItem(
                                 currentUserId: currentUserId,
+                                timelineType: 'timeline',
                               )
                             ],
                           ),

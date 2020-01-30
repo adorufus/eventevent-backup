@@ -82,6 +82,7 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
               : impressionData.containsValue(currentUserId) == true
                   ? true
                   : false;
+                  
           print('isLoved: ' + _isLoved.toString());
           _loveCount = timelineList[i]['impression']['data'].length;
 

@@ -6,6 +6,7 @@ import 'package:eventevent/Widgets/EventDetailItems/FeedbackLogic.dart';
 import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
 import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/timeline/EventDetailTimeline.dart';
+import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
 import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:flutter/material.dart' as prefix0;
@@ -2661,8 +2662,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         ),
       );
     } else if (currentTab == 1) {
-      return EventDetailTimeline(
-        id: detailData['id'],
+      return UserTimelineItem(
+        currentUserId: currentUserId,
+        eventId: detailData['id'],
+        timelineType: 'eventDetail',
       );
     } else if (currentTab == 2) {
       return ListView(

@@ -17,8 +17,10 @@ import 'package:http/http.dart' as http;
 
 class UserTimelineItem extends StatefulWidget {
   final currentUserId;
+  final eventId;
+  final timelineType;
 
-  const UserTimelineItem({Key key, this.currentUserId}) : super(key: key);
+  const UserTimelineItem({Key key, this.currentUserId, this.eventId, this.timelineType}) : super(key: key);
 
   @override
   _UserTimelineItemState createState() => _UserTimelineItemState();
@@ -38,17 +40,26 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
   Future<http.Response> getTimelineList({int newPage}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int currentPage = 1;
+    String type = 'timeline';
 
     setState(() {
       if (newPage != null) {
         currentPage += newPage;
       }
 
+      if(widget.timelineType == 'eventDetail'){
+        type = 'event_activty';
+      }
+      else{
+        type = 'timeline';
+      }
+
       print(currentPage);
     });
+    
 
     String url = BaseApi().apiUrl +
-        '/timeline/list?X-API-KEY=$API_KEY&page=$currentPage';
+        '/$type/list?X-API-KEY=$API_KEY&page=$currentPage' + widget.timelineType == 'event_activty' ? '&eventID=${widget.eventId}' : '';
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,
