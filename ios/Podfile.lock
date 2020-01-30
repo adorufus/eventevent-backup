@@ -5,9 +5,9 @@ PODS:
   - Bolts/AppLinks (1.9.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.9.0)
-  - Branch (0.27.1):
-    - Branch/Core (= 0.27.1)
-  - Branch/Core (0.27.1)
+  - Branch (0.31.3):
+    - Branch/Core (= 0.31.3)
+  - Branch/Core (0.31.3)
   - camera (0.0.1):
     - Flutter
   - CleverTap-iOS-SDK (3.6.0):
@@ -102,12 +102,10 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 6.2)
     - Protobuf (>= 3.9.2, ~> 3.9)
   - Flutter (1.0.0)
-  - flutter_android_lifecycle (0.0.1):
-    - Flutter
   - flutter_barcode_scanner (0.1.7):
     - Flutter
-  - flutter_branch_io_plugin (0.0.1):
-    - Branch
+  - flutter_branch_sdk (0.0.1):
+    - Branch (~> 0.31.3)
     - Flutter
   - flutter_facebook_login (0.0.1):
     - FBSDKCoreKit (= 4.39.1)
@@ -185,6 +183,15 @@ PODS:
     - Flutter
   - launch_review (0.0.1):
     - Flutter
+  - libwebp (1.1.0):
+    - libwebp/demux (= 1.1.0)
+    - libwebp/mux (= 1.1.0)
+    - libwebp/webp (= 1.1.0)
+  - libwebp/demux (1.1.0):
+    - libwebp/webp
+  - libwebp/mux (1.1.0):
+    - libwebp/demux
+  - libwebp/webp (1.1.0)
   - location (0.0.1):
     - Flutter
   - nanopb (0.3.9011):
@@ -199,6 +206,8 @@ PODS:
   - permission_handler (3.3.0):
     - Flutter
   - Protobuf (3.11.2)
+  - rate_my_app (0.1):
+    - Flutter
   - screen (0.0.1):
     - Flutter
   - SDWebImage (5.0.6):
@@ -220,6 +229,8 @@ PODS:
   - thumbnails (0.0.1):
     - Flutter
   - TOCropViewController (2.5.2)
+  - uni_links (0.0.1):
+    - Flutter
   - url_launcher (0.0.1):
     - Flutter
   - url_launcher_macos (0.0.1):
@@ -230,6 +241,9 @@ PODS:
     - Flutter
   - video_player_web (0.0.1):
     - Flutter
+  - video_thumbnail (0.0.1):
+    - Flutter
+    - libwebp
   - webview_flutter (0.0.1):
     - Flutter
 
@@ -247,9 +261,8 @@ DEPENDENCIES:
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
-  - flutter_android_lifecycle (from `.symlinks/plugins/flutter_android_lifecycle/ios`)
   - flutter_barcode_scanner (from `.symlinks/plugins/flutter_barcode_scanner/ios`)
-  - flutter_branch_io_plugin (from `.symlinks/plugins/flutter_branch_io_plugin/ios`)
+  - flutter_branch_sdk (from `.symlinks/plugins/flutter_branch_sdk/ios`)
   - flutter_facebook_login (from `.symlinks/plugins/flutter_facebook_login/ios`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
@@ -265,6 +278,7 @@ DEPENDENCIES:
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - rate_my_app (from `.symlinks/plugins/rate_my_app/ios`)
   - screen (from `.symlinks/plugins/screen/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - share_extend (from `.symlinks/plugins/share_extend/ios`)
@@ -273,11 +287,13 @@ DEPENDENCIES:
   - shared_preferences_web (from `.symlinks/plugins/shared_preferences_web/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - thumbnails (from `.symlinks/plugins/thumbnails/ios`)
+  - uni_links (from `.symlinks/plugins/uni_links/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - url_launcher_macos (from `.symlinks/plugins/url_launcher_macos/ios`)
   - url_launcher_web (from `.symlinks/plugins/url_launcher_web/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
   - video_player_web (from `.symlinks/plugins/video_player_web/ios`)
+  - video_thumbnail (from `.symlinks/plugins/video_thumbnail/ios`)
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
@@ -308,6 +324,7 @@ SPEC REPOS:
     - GoogleToolboxForMac
     - GoogleUtilities
     - GTMSessionFetcher
+    - libwebp
     - nanopb
     - Protobuf
     - SDWebImage
@@ -334,12 +351,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
-  flutter_android_lifecycle:
-    :path: ".symlinks/plugins/flutter_android_lifecycle/ios"
   flutter_barcode_scanner:
     :path: ".symlinks/plugins/flutter_barcode_scanner/ios"
-  flutter_branch_io_plugin:
-    :path: ".symlinks/plugins/flutter_branch_io_plugin/ios"
+  flutter_branch_sdk:
+    :path: ".symlinks/plugins/flutter_branch_sdk/ios"
   flutter_facebook_login:
     :path: ".symlinks/plugins/flutter_facebook_login/ios"
   flutter_keyboard_visibility:
@@ -370,6 +385,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
+  rate_my_app:
+    :path: ".symlinks/plugins/rate_my_app/ios"
   screen:
     :path: ".symlinks/plugins/screen/ios"
   share:
@@ -386,6 +403,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
   thumbnails:
     :path: ".symlinks/plugins/thumbnails/ios"
+  uni_links:
+    :path: ".symlinks/plugins/uni_links/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
   url_launcher_macos:
@@ -396,12 +415,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/video_player/ios"
   video_player_web:
     :path: ".symlinks/plugins/video_player_web/ios"
+  video_thumbnail:
+    :path: ".symlinks/plugins/video_thumbnail/ios"
   webview_flutter:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  Branch: 1ace77c04b6e3efbf982bf4364f0662bfac156a0
+  Branch: 9b299693ee54b308ff8c18146afe1f711c2069ec
   camera: 38cc83ae9a5667bb5a71c7d9edaf60a91920fd4e
   CleverTap-iOS-SDK: 664ae5dccfe2673c21a842b624f2558d34f76d14
   clevertap_flutter: a35b2b54bac7bcf5a743eeea3e385853fb374b75
@@ -427,9 +448,8 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: ce993a3c3670a8f5d47ce371ac5d143c560608c5
   FirebaseMessaging: 089b7a4991425783384acc8bcefcd78c0af913bd
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_android_lifecycle: 0ea4104ce1dd692e456ec460b82221986482fa24
   flutter_barcode_scanner: b3d8246e13f26f9a1ed686c4e7e4cd0893d58eb4
-  flutter_branch_io_plugin: 07390ff005e059dd45cf144c03d1ee781a106020
+  flutter_branch_sdk: 9aad83816f3cedfb05926d936f5f771e2baf9200
   flutter_facebook_login: be61e24a4b7d621515353c6b4583d1981bdaa3d6
   flutter_keyboard_visibility: 6195387fb6d8f46e5cd6dda4a4154e41f800f545
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
@@ -450,12 +470,14 @@ SPEC CHECKSUMS:
   image_cropper: 3c16d7651730ffe85897f5a1c4e2547e6b54989a
   image_picker: e3eacd46b94694dde7cf2705955cece853aa1a8f
   launch_review: 75d5a956ba8eaa493e9c9d4bf4c05e505e8d5ed0
+  libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   package_info: 48b108e75b8802c2d5e126f208ef540561c98aef
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
   permission_handler: 67637977b227d62d46bfbf524f335f8568de5a73
   Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
+  rate_my_app: 45513a2f4d9a55b7b46d19b64fc13882fd101157
   screen: abd91ca7bf3426e1cc3646d27e9b2358d6bf07b0
   SDWebImage: 920f1a2ff1ca8296ad34f6e0510a1ef1d70ac965
   share: ee3d34d3969ad17fc3043eab552e4f082aacfed1
@@ -466,11 +488,13 @@ SPEC CHECKSUMS:
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
   thumbnails: bb4f4e9bb4b51c8ae4e6ad9a2fa81373f9b634ad
   TOCropViewController: e9da34f484aedd4e5d5a8ab230ba217cfe16c729
+  uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
   url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
   url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313
   url_launcher_web: e5527357f037c87560776e36436bf2b0288b965c
   video_player: 69c5f029fac4ffe4fc8a85ea7f7b793709661549
   video_player_web: da8cadb8274ed4f8dbee8d7171b420dedd437ce7
+  video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   webview_flutter: db3aba222b23e4dc432e0c5882834123dc50ff9f
 
 PODFILE CHECKSUM: f8a0226f8c438acd8d440c95d894abe93561d619
