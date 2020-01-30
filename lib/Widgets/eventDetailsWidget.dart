@@ -865,6 +865,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                             refreshController.refreshCompleted();
                           },
                           child: ListView(
+                            shrinkWrap: true,
                             children: <Widget>[
                               Container(
                                 padding: EdgeInsets.symmetric(
