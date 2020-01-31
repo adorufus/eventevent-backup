@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:eventevent/Widgets/EventDetailComment.dart';
 import 'package:eventevent/Widgets/EventDetailItems/FeedbackLogic.dart';
 import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
+import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/timeline/EventDetailTimeline.dart';
 import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
@@ -538,6 +539,14 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         EditEvent()));
                                       },
                                       child: Text('Edit Event'),
+                                    ),
+                                    RaisedButton(
+                                      child: Text('Edit Custom Form'),
+                                      onPressed: (){
+                                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManageCustomForm(
+                                          eventId: detailData['id'],
+                                        )));
+                                      },
                                     )
                                   ],
                                 ),

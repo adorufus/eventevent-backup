@@ -142,11 +142,20 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                   'free_limited_seating') {
             if (ticketListData[i]['is_single_ticket'] == '1' &&
                 ticketListData[i]['user_have_ticket'] == '1') {
+              if (int.parse(ticketListData[i]['final_price']) > 0) {
+                itemColor = Color(0xff36b323).withOpacity(.2);
+                ticketPrice = 'Rp. ' + ticketListData[i]['final_price'];
+              }
               itemColor = Color(0xff36b323).withOpacity(.2);
               ticketPrice = 'Free Limited';
             } else {
-              itemColor = Color(0xFFFFAA00);
-              ticketPrice = 'Free Limited';
+              if (int.parse(ticketListData[i]['final_price']) > 0) {
+                itemColor = Color(0xFF34B323);
+                ticketPrice = 'Rp. ' + ticketListData[i]['final_price'];
+              } else {
+                itemColor = Color(0xFFFFAA00);
+                ticketPrice = 'Free Limited';
+              }
             }
           }
 
@@ -172,7 +181,9 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                       eventImage: ticketListData[i]['ticket_image']
                           ['secure_url'],
                       isSingleTicket:
-                          ticketListData[i]['is_single_ticket'] == '1' ? true : false,
+                          ticketListData[i]['is_single_ticket'] == '1'
+                              ? true
+                              : false,
                       minTicket: ticketListData[i]['min_ticket'],
                       ticketDetail: ticketListData[i]['descriptions'],
                       ticketPrice: ticketListData[i]['final_price'],

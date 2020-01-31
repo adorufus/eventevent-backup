@@ -50,6 +50,13 @@ class _LoginWidgetState extends State<LoginWidget> {
   bool hidePassword = true;
 
   @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
