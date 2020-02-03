@@ -60,7 +60,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="eventevent.app.link" />
-                <data android:scheme="https" android:host="eventevent-alternate.app.link" />
             </intent-filter>
             
         </activity>
@@ -68,6 +67,14 @@
         <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_ijCwqgMyqksKHN0YEnvjJiocuzi2ciR4" />
         <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_ecBBrlUxulAJKN48BeudKfohrxm7lh1i" />
         <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
+
+        <receiver
+            android:name="io.branch.referral.InstallListener"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
 
         <activity android:name="com.yalantis.ucrop.UCropActivity" android:screenOrientation="portrait" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>

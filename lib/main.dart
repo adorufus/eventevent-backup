@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -63,13 +65,47 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   // Or do other work.
 }
 
-class RunApp extends StatelessWidget {
+class RunApp extends StatefulWidget {
   // This widget is the root of your application.
 
-  Widget homeScreenWidget = LoginRegisterWidget();
   static FirebaseAnalytics analytics = new FirebaseAnalytics();
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);
+
+  @override
+  _RunAppState createState() => _RunAppState();
+}
+
+class _RunAppState extends State<RunApp> {
+  Widget homeScreenWidget = LoginRegisterWidget();
+  StreamSubscription<Map> streamSubscription;
+  StreamController<String> controllerData = StreamController<String>();
+  StreamController<String> controllerInitSession = StreamController<String>();
+
+  void listenDynamicLink() async {
+    streamSubscription = FlutterBranchSdk.initSession().listen((data) {
+      controllerData.sink.add((data.toString()));
+      if (data.containsKey("+clicked_branch_link") &&
+          data["+clicked_branch_link"] == true) {
+        print(data);
+        print(data['event_id']);
+      }
+      print(data);
+      print(data['event_id']);
+    }, onError: (error) {
+      PlatformException platformException = error as PlatformException;
+      print(
+          'InitSession error: ${platformException.code} - ${platformException.message}');
+      controllerInitSession.add(
+          'InitSession error: ${platformException.code} - ${platformException.message}');
+    });
+  }
+
+  @override
+  void initState() {
+    listenDynamicLink();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

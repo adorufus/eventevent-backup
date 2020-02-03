@@ -134,41 +134,28 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   BranchLinkProperties lp;
   BranchEvent eventStandard;
   BranchEvent eventCustom;
-
-  StreamSubscription<Map> streamSubscription;
   StreamController<String> controllerData = StreamController<String>();
-  StreamController<String> controllerInitSession = StreamController<String>();
   StreamController<String> controllerUrl = StreamController<String>();
 
-  void listenDynamicLink() async {
-    streamSubscription = FlutterBranchSdk.initSession().listen((data) {
-      if (data.containsKey("+clicked_branch_link") &&
-          data["+clicked_branch_link"] == true) {
-        print("custom_string: ${data["custom_string"]}");
-      }
-    }, onError: (error) {
-      PlatformException platformException = error as PlatformException;
-      print(
-          'InitSession error: ${platformException.code} - ${platformException.message}');
-      controllerInitSession.add(
-          'InitSession error: ${platformException.code} - ${platformException.message}');
+  
+
+  void initDeepLinkData(String eventName, String imageUrl, String eventId) {
+    setState(() {
+      metaData = BranchContentMetaData()
+          .addCustomMetadata('event_name', eventName)
+          .addCustomMetadata('event_id', eventId)
+          .addCustomMetadata('image_url', imageUrl);
+
+      buo = BranchUniversalObject(
+          canonicalIdentifier: 'event_$eventId',
+          title: eventName,
+          imageUrl: imageUrl,
+          contentDescription: 'you can see the event description on the app',
+          contentMetadata: metaData,
+          publiclyIndex: true,
+          keywords: [],
+          locallyIndex: true);
     });
-  }
-
-  void initDeepLinkData() {
-    metaData = BranchContentMetaData()
-        .addCustomMetadata('event_name', '')
-        .addCustomMetadata('event_id', widget.id)
-        .addCustomMetadata('image_url', '');
-
-    buo = BranchUniversalObject(
-        canonicalIdentifier: 'event_${widget.id}',
-        title: '',
-        imageUrl: '',
-        contentDescription: 'you can see the event description on the app',
-        contentMetadata: metaData,
-        publiclyIndex: true,
-        locallyIndex: true);
 
     print(buo);
 
@@ -216,9 +203,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         });
       }
     });
-
-    // listenDynamicLink();
-    // initDeepLinkData();
+    
 
     getEventDetailsSpecificInfo();
 
@@ -273,7 +258,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
     if (response.success) {
       print('generated link: ' + response.result);
-      controllerUrl.sink.add('${response.result}');
+      setState((){
+        generatedLink = response.result;
+      });
     } else {
       controllerUrl.sink
           .add('Error: ${response.errorCode} - ${response.errorDescription}');
@@ -303,7 +290,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     var extractedData = json.decode(response.body);
 
     setState(() {
-      generatedLink = extractedData['url'];
+      // generatedLink = extractedData['url'];
     });
   }
 
@@ -450,6 +437,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     SizedBox(width: ScreenUtil.instance.setWidth(8)),
                     GestureDetector(
                       onTap: () {
+                        generateLink();
                         ShareExtend.share(generatedLink, 'text');
                       },
                       child: Icon(
@@ -542,10 +530,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     ),
                                     RaisedButton(
                                       child: Text('Edit Custom Form'),
-                                      onPressed: (){
-                                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManageCustomForm(
-                                          eventId: detailData['id'],
-                                        )));
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ManageCustomForm(
+                                                      eventId: detailData['id'],
+                                                    )));
                                       },
                                     )
                                   ],
@@ -2872,6 +2863,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         website = detailData['website'];
         eventID = detailData['id'];
         loveCount = int.parse(isLoved);
+
+        initDeepLinkData(detailData['name'], detailData['photo'], detailData['id']);
 
         if (detailData['ticket']['sales_start_date'] == null) {
         } else {
