@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -14,6 +15,8 @@ import 'package:eventevent/helper/PushNotification.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -83,6 +86,30 @@ class _DashboardWidgetState extends State<DashboardWidget>
   //   appStoreIdentifier: 'com.trikarya.eventevent',
   // );
 
+  StreamSubscription<Map> streamSubscription;
+  StreamController<String> controllerData = StreamController<String>();
+  StreamController<String> controllerInitSession = StreamController<String>();
+
+  void listenDynamicLink() async {
+    streamSubscription = FlutterBranchSdk.initSession().listen((data) {
+      controllerData.sink.add((data.toString()));
+      if (data.containsKey("+clicked_branch_link") &&
+          data["+clicked_branch_link"] == true) {
+        print(data);
+        print(data['event_id']);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailsConstructView(id: data['event_id'],)));
+      }
+      print(data);
+      print(data['event_id']);
+    }, onError: (error) {
+      PlatformException platformException = error as PlatformException;
+      print(
+          'InitSession error: ${platformException.code} - ${platformException.message}');
+      controllerInitSession.add(
+          'InitSession error: ${platformException.code} - ${platformException.message}');
+    });
+  }
+
   _saveCurrentRoute(String lastRoute) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setString('LastScreenRoute', lastRoute);
@@ -128,6 +155,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
     //           initialRating: 5,
     //         ));
     // });
+
+    listenDynamicLink();
     
     _saveCurrentRoute('/Dashboard');
     WidgetsBinding.instance.addObserver(this);

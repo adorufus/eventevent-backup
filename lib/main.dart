@@ -78,32 +78,13 @@ class RunApp extends StatefulWidget {
 
 class _RunAppState extends State<RunApp> {
   Widget homeScreenWidget = LoginRegisterWidget();
-  StreamSubscription<Map> streamSubscription;
-  StreamController<String> controllerData = StreamController<String>();
-  StreamController<String> controllerInitSession = StreamController<String>();
+  
 
-  void listenDynamicLink() async {
-    streamSubscription = FlutterBranchSdk.initSession().listen((data) {
-      controllerData.sink.add((data.toString()));
-      if (data.containsKey("+clicked_branch_link") &&
-          data["+clicked_branch_link"] == true) {
-        print(data);
-        print(data['event_id']);
-      }
-      print(data);
-      print(data['event_id']);
-    }, onError: (error) {
-      PlatformException platformException = error as PlatformException;
-      print(
-          'InitSession error: ${platformException.code} - ${platformException.message}');
-      controllerInitSession.add(
-          'InitSession error: ${platformException.code} - ${platformException.message}');
-    });
-  }
+  
 
   @override
   void initState() {
-    listenDynamicLink();
+    
     super.initState();
   }
 
