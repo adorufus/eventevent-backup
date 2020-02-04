@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -293,7 +294,7 @@ class SearchState extends State<Search> {
 
                 return GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailsConstructView(id: filteredEvents[i]['id'], image: filteredEvents[i]['picture'], name: filteredEvents[i]['name'],)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailLoadingScreen(eventId: filteredEvents[i]['id'])));
                   },
                   child: LatestEventItem(
                     image: filteredEvents[i]['picture'],

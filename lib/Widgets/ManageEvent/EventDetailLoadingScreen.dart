@@ -299,33 +299,36 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
         });
         preferences.setString('eventID', detailData['id']);
 
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EventDetailsConstructView(
-          buo: buo,
-          commentData: commentData,
-          creatorFullName: creatorFullName,
-          creatorImageUri: creatorImageUri,
-          creatorName: creatorName,
-          dateTime: dateTime,
-          dDay: _dDay,
-          detailData: detailData,
-          email: email,
-          endTime: endTime,
-          getEventDetailSpecificInfo: getEventDetailsSpecificInfo,
-          goingData: goingData,
-          id: widget.eventId,
-          isPrivate: isPrivate,
-          itemColor: itemColor,
-          lat: lat,
-          long: long,
-          lp: lp,
-          phoneNumber: phoneNumber,
-          startTime: startTime,
-          ticketPrice: ticketPrice,
-          ticketStat: ticketStat,
-          ticketType: ticketType,
-          website: website,
-        )));
-
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                settings: RouteSettings(isInitialRoute: true),
+                builder: (context) => EventDetailsConstructView(
+                      buo: buo,
+                      commentData: commentData,
+                      creatorFullName: creatorFullName,
+                      creatorImageUri: creatorImageUri,
+                      creatorName: creatorName,
+                      dateTime: dateTime,
+                      dDay: _dDay,
+                      detailData: detailData,
+                      email: email,
+                      endTime: endTime,
+                      getEventDetailSpecificInfo: getEventDetailsSpecificInfo,
+                      goingData: goingData,
+                      id: widget.eventId,
+                      isPrivate: isPrivate,
+                      itemColor: itemColor,
+                      lat: lat,
+                      long: long,
+                      lp: lp,
+                      phoneNumber: phoneNumber,
+                      startTime: startTime,
+                      ticketPrice: ticketPrice,
+                      ticketStat: ticketStat,
+                      ticketType: ticketType,
+                      website: website,
+                    )));
 
         print(detailData['id']);
         print(loveCount);
@@ -346,416 +349,377 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-      children: <Widget>[
-        Container(
-          color: Colors.white,
-          child: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 11, vertical: 13),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      width: ScreenUtil.instance.setWidth(122.86 * 1.3),
-                      height: ScreenUtil.instance.setWidth(184.06 * 1.3),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          image: DecorationImage(
-                              image: AssetImage('assets/grey-fade.jpg'),
-                              fit: BoxFit.fill)),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 13),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(30),
-                                width: ScreenUtil.instance.setWidth(30),
-                                child: Container(
-                                  height: ScreenUtil.instance.setWidth(30),
-                                  width: ScreenUtil.instance.setWidth(30),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/grey-fade.jpg'))),
-                                ),
-                              ),
-                              SizedBox(
-                                width: ScreenUtil.instance.setWidth(5),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'loading',
-                                    style: TextStyle(
-                                        fontSize: ScreenUtil.instance.setSp(12),
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text('loading',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(11))),
-                                ],
-                              )
-                            ],
-                          ),
-                          SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                          Container(
-                              width: ScreenUtil.instance.setWidth(180),
-                              child: Text(
-                                'loading',
-                                style: TextStyle(
-                                    fontSize: ScreenUtil.instance.setSp(12),
-                                    color: Colors.grey),
-                              )),
-                          SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                          Container(
-                              height: ScreenUtil.instance.setWidth(35),
-                              width: ScreenUtil.instance.setWidth(180),
-                              child: Text(
-                                'loading',
-                                style: TextStyle(
-                                    fontSize: ScreenUtil.instance.setSp(15),
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey),
-                              )),
-                          SizedBox(height: ScreenUtil.instance.setWidth(17)),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(
-                                width: ScreenUtil.instance.setWidth(10),
-                                height: ScreenUtil.instance.setWidth(12),
-                                child: Image.asset(
-                                    'assets/icons/location-transparent.png',
-                                    color: Colors.grey),
-                              ),
-                              SizedBox(width: ScreenUtil.instance.setWidth(5)),
-                              Text(
-                                'loading',
-                                style: TextStyle(
-                                    fontSize: ScreenUtil.instance.setSp(11)),
-                                maxLines: 1,
-                              )
-                            ],
-                          ),
-                          SizedBox(height: ScreenUtil.instance.setWidth(5)),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(
-                                width: ScreenUtil.instance.setWidth(10),
-                                height: ScreenUtil.instance.setWidth(12),
-                                child: Image.asset(
-                                  'assets/icons/btn_time_green.png',
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              SizedBox(width: ScreenUtil.instance.setWidth(5)),
-                              Text('loading',
-                                  style: TextStyle(
-                                      fontSize: ScreenUtil.instance.setSp(11))),
-                            ],
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(15),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: ScreenUtil.instance.setWidth(15)),
-              Container(
-                width: ScreenUtil.instance.setWidth(333.7),
-                height: ScreenUtil.instance.setWidth(59.1),
-                margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 5,
-                          spreadRadius: 1.5,
-                          color: Color(0xff8a8a8b).withOpacity(.5))
-                    ]),
-                child: Row(
-                  children: <Widget>[
-                    LoveItem(
-                      isComment: false,
-                      isAlreadyLoved: false,
-                      loveCount: '',
-                    ),
-                    SizedBox(
-                      width: ScreenUtil.instance.setWidth(10),
-                    ),
-                    LoveItem(
-                        isComment: true,
-                        isAlreadyCommented: false,
-                        commentCount: ''),
-                    Expanded(
-                      child: SizedBox(),
-                    ),
-                    SizedBox(
-                      height: ScreenUtil.instance.setWidth(33),
-                      width: ScreenUtil.instance.setWidth(33),
-                      child: Image.asset('assets/icons/btn_phone.png'),
-                    ),
-                    SizedBox(
-                      height: ScreenUtil.instance.setWidth(33),
-                      width: ScreenUtil.instance.setWidth(33),
-                      child: Image.asset('assets/icons/btn_mail.png'),
-                    ),
-                    SizedBox(
-                      height: ScreenUtil.instance.setWidth(33),
-                      width: ScreenUtil.instance.setWidth(33),
-                      child: Image.asset(
-                        'assets/icons/btn_web.png',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 0),
-                child: Container(
-                  // margin: EdgeInsets.symmetric(
-                  //     horizontal: 13, vertical: 13),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 13),
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              'Who\'s Invited',
-                              style: TextStyle(
-                                  color: Color(0xff8a8a8b),
-                                  fontSize: ScreenUtil.instance.setSp(11)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                      Container(
-                        height: ScreenUtil.instance.setWidth(30),
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 10,
-                          itemBuilder: (BuildContext context, i) {
-                            return Padding(
-                              padding: EdgeInsets.only(left: 13),
-                              child: Container(
-                                constraints: BoxConstraints(
-                                    maxHeight: ScreenUtil.instance.setWidth(30),
-                                    maxWidth: ScreenUtil.instance.setWidth(30),
-                                    minHeight: ScreenUtil.instance.setWidth(30),
-                                    minWidth: ScreenUtil.instance.setWidth(30)),
-                                height: ScreenUtil.instance.setWidth(30),
-                                width: ScreenUtil.instance.setWidth(30),
-                                decoration: BoxDecoration(
-                                    boxShadow: <BoxShadow>[
-                                      BoxShadow(
-                                          color: Colors.black26,
-                                          offset: Offset(1.0, 1.0),
-                                          blurRadius: 3)
-                                    ],
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image:
-                                            AssetImage('assets/grey-fade.jpg'),
-                                        fit: BoxFit.fill)),
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                    ],
+        appBar: PreferredSize(
+            preferredSize: Size(null, 100),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: ScreenUtil.instance.setWidth(75),
+              padding: EdgeInsets.symmetric(horizontal: 13),
+              color: Colors.white,
+              child: AppBar(
+                elevation: 0,
+                backgroundColor: Colors.white,
+                leading: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Image.asset(
+                    'assets/icons/icon_apps/arrow.png',
+                    scale: 5.5,
+                    alignment: Alignment.centerLeft,
                   ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 0, vertical: 13),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 13),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            'Who\'s Going',
-                            style: TextStyle(
-                                color: Color(0xff8a8a8b),
-                                fontSize: ScreenUtil.instance.setSp(11)),
+            ),),
+        body: Stack(
+          children: <Widget>[
+            Container(
+              color: Colors.white,
+              child: ListView(
+                shrinkWrap: true,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 11, vertical: 13),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          width: ScreenUtil.instance.setWidth(122.86 * 1.3),
+                          height: ScreenUtil.instance.setWidth(184.06 * 1.3),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              image: DecorationImage(
+                                  image: AssetImage('assets/grey-fade.jpg'),
+                                  fit: BoxFit.fill)),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 13),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(
+                                    height: ScreenUtil.instance.setWidth(30),
+                                    width: ScreenUtil.instance.setWidth(30),
+                                    child: Container(
+                                      height: ScreenUtil.instance.setWidth(30),
+                                      width: ScreenUtil.instance.setWidth(30),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/grey-fade.jpg'))),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: ScreenUtil.instance.setWidth(5),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        'loading',
+                                        style: TextStyle(
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(12),
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text('loading',
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: ScreenUtil.instance
+                                                  .setSp(11))),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10)),
+                              Container(
+                                  width: ScreenUtil.instance.setWidth(180),
+                                  child: Text(
+                                    'loading',
+                                    style: TextStyle(
+                                        fontSize: ScreenUtil.instance.setSp(12),
+                                        color: Colors.grey),
+                                  )),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10)),
+                              Container(
+                                  height: ScreenUtil.instance.setWidth(35),
+                                  width: ScreenUtil.instance.setWidth(180),
+                                  child: Text(
+                                    'loading',
+                                    style: TextStyle(
+                                        fontSize: ScreenUtil.instance.setSp(15),
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey),
+                                  )),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(17)),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: ScreenUtil.instance.setWidth(10),
+                                    height: ScreenUtil.instance.setWidth(12),
+                                    child: Image.asset(
+                                        'assets/icons/location-transparent.png',
+                                        color: Colors.grey),
+                                  ),
+                                  SizedBox(
+                                      width: ScreenUtil.instance.setWidth(5)),
+                                  Text(
+                                    'loading',
+                                    style: TextStyle(
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(11)),
+                                    maxLines: 1,
+                                  )
+                                ],
+                              ),
+                              SizedBox(height: ScreenUtil.instance.setWidth(5)),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: ScreenUtil.instance.setWidth(10),
+                                    height: ScreenUtil.instance.setWidth(12),
+                                    child: Image.asset(
+                                      'assets/icons/btn_time_green.png',
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      width: ScreenUtil.instance.setWidth(5)),
+                                  Text('loading',
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(11))),
+                                ],
+                              ),
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(15),
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            child: SizedBox(),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                    Container(
-                      height: ScreenUtil.instance.setWidth(50),
-                      width: MediaQuery.of(context).size.width,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 10,
-                        itemBuilder: (BuildContext context, i) {
-                          return new Container(
-                            margin: EdgeInsets.only(left: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
+                  ),
+                  SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                  Container(
+                    width: ScreenUtil.instance.setWidth(333.7),
+                    height: ScreenUtil.instance.setWidth(59.1),
+                    margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 5,
+                              spreadRadius: 1.5,
+                              color: Color(0xff8a8a8b).withOpacity(.5))
+                        ]),
+                    child: Row(
+                      children: <Widget>[
+                        LoveItem(
+                          isComment: false,
+                          isAlreadyLoved: false,
+                          loveCount: '',
+                        ),
+                        SizedBox(
+                          width: ScreenUtil.instance.setWidth(10),
+                        ),
+                        LoveItem(
+                            isComment: true,
+                            isAlreadyCommented: false,
+                            commentCount: ''),
+                        Expanded(
+                          child: SizedBox(),
+                        ),
+                        SizedBox(
+                          height: ScreenUtil.instance.setWidth(33),
+                          width: ScreenUtil.instance.setWidth(33),
+                          child: Image.asset('assets/icons/btn_phone.png'),
+                        ),
+                        SizedBox(
+                          height: ScreenUtil.instance.setWidth(33),
+                          width: ScreenUtil.instance.setWidth(33),
+                          child: Image.asset('assets/icons/btn_mail.png'),
+                        ),
+                        SizedBox(
+                          height: ScreenUtil.instance.setWidth(33),
+                          width: ScreenUtil.instance.setWidth(33),
+                          child: Image.asset(
+                            'assets/icons/btn_web.png',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 0),
+                    child: Container(
+                      // margin: EdgeInsets.symmetric(
+                      //     horizontal: 13, vertical: 13),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 13),
+                            child: Row(
                               children: <Widget>[
-                                Container(
-                                  height: ScreenUtil.instance.setWidth(30),
-                                  width: ScreenUtil.instance.setWidth(30),
-                                  decoration: BoxDecoration(
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                            color: Colors.black26,
-                                            offset: Offset(1.0, 1.0),
-                                            blurRadius: 3)
-                                      ],
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                        image:
-                                            AssetImage('assets/grey-fade.jpg'),
-                                        fit: BoxFit.fill,
-                                      )),
+                                Text(
+                                  'Who\'s Invited',
+                                  style: TextStyle(
+                                      color: Color(0xff8a8a8b),
+                                      fontSize: ScreenUtil.instance.setSp(11)),
                                 ),
                               ],
                             ),
-                          );
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: ScreenUtil.instance.setWidth(20),
-              ),
-              Container(),
-              SizedBox(
-                height: ScreenUtil.instance.setWidth(5),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
-                height: ScreenUtil.instance.setWidth(40),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Flexible(
-                      child: Container(
-                        height: ScreenUtil.instance.setWidth(115),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            // Row(
-                            //   children: <Widget>[
-                            //     CircleAvatar(
-                            //       backgroundImage: ,
-                            //     )
-                            //   ],
-                            // )
-                            Text(
-                              'Detail',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey),
-                            ),
-                            Divider(
-                              thickness: 2,
-                              color: Theme.of(context).dividerColor,
-                            )
-                          ],
-                        ),
+                          ),
+                          SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                        ],
                       ),
                     ),
-                    Flexible(
-                      child: Container(
-                        height: ScreenUtil.instance.setWidth(112),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            // Row(
-                            //   children: <Widget>[
-                            //     CircleAvatar(
-                            //       backgroundImage: ,
-                            //     )
-                            //   ],
-                            // )
-                            Text(
-                              'Activity',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey),
-                            ),
-                            Divider(
-                              thickness: 2,
-                              color: Theme.of(context).dividerColor,
-                            )
-                          ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 0, vertical: 13),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 13),
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                'Who\'s Going',
+                                style: TextStyle(
+                                    color: Color(0xff8a8a8b),
+                                    fontSize: ScreenUtil.instance.setSp(11)),
+                              ),
+                              Expanded(
+                                child: SizedBox(),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+                        SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                      ],
                     ),
-                    Flexible(
-                      child: Container(
-                        height: ScreenUtil.instance.setWidth(112),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            // Row(
-                            //   children: <Widget>[
-                            //     CircleAvatar(
-                            //       backgroundImage: ,
-                            //     )
-                            //   ],
-                            // )
-                            Text(
-                              'Comments',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil.instance.setWidth(20),
+                  ),
+                  Container(),
+                  SizedBox(
+                    height: ScreenUtil.instance.setWidth(5),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+                    height: ScreenUtil.instance.setWidth(40),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                          child: Container(
+                            height: ScreenUtil.instance.setWidth(115),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                // Row(
+                                //   children: <Widget>[
+                                //     CircleAvatar(
+                                //       backgroundImage: ,
+                                //     )
+                                //   ],
+                                // )
+                                Text(
+                                  'Detail',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey),
+                                ),
+                                Divider(
+                                  thickness: 2,
+                                  color: Theme.of(context).dividerColor,
+                                )
+                              ],
                             ),
-                            Divider(
-                              thickness: 2,
-                              color: Theme.of(context).dividerColor,
-                            )
-                          ],
+                          ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
+                        Flexible(
+                          child: Container(
+                            height: ScreenUtil.instance.setWidth(112),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                // Row(
+                                //   children: <Widget>[
+                                //     CircleAvatar(
+                                //       backgroundImage: ,
+                                //     )
+                                //   ],
+                                // )
+                                Text(
+                                  'Activity',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey),
+                                ),
+                                Divider(
+                                  thickness: 2,
+                                  color: Theme.of(context).dividerColor,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: Container(
+                            height: ScreenUtil.instance.setWidth(112),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                // Row(
+                                //   children: <Widget>[
+                                //     CircleAvatar(
+                                //       backgroundImage: ,
+                                //     )
+                                //   ],
+                                // )
+                                Text(
+                                  'Comments',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey),
+                                ),
+                                Divider(
+                                  thickness: 2,
+                                  color: Theme.of(context).dividerColor,
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ],
-    ));
+            ),
+          ],
+        ));
   }
 }
