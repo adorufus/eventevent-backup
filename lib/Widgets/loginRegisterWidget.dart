@@ -295,7 +295,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                   ),
                   Padding(
                     padding:
-                        EdgeInsets.only(top: ScreenUtil.instance.setWidth(70)),
+                        EdgeInsets.only(top: ScreenUtil.instance.setWidth(130)),
                   ),
                   Center(
                     child: Text('DAFTAR DAN MULAI',
