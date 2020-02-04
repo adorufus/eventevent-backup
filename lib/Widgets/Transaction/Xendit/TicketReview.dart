@@ -9,6 +9,7 @@ import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -143,16 +144,29 @@ class _TicketReviewState extends State<TicketReview> {
         ),
       ),
       bottomNavigationBar: GestureDetector(
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ProcessingPayment(
-            customFormList: widget.customFormList,
-            customFormId: widget.customFormId,
-            isCustomForm: widget.isCustomForm,
-            uuid: uuid,
-            ticketType: widget.ticketType,
-            total: total,
-            loadingType: 'buy ticket',
-          )));
+        onTap: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProcessingPayment(
+                customFormList: widget.customFormList,
+                customFormId: widget.customFormId,
+                isCustomForm: widget.isCustomForm,
+                uuid: uuid,
+                ticketType: widget.ticketType,
+                total: total,
+                loadingType: 'buy ticket',
+              ),
+            ),
+          ).then((val){
+            Flushbar(
+            flushbarPosition: FlushbarPosition.TOP,
+            message: '$val',
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+            animationDuration: Duration(milliseconds: 500),
+          )..show(context);
+          });
         },
         child: Container(
             height: ScreenUtil.instance.setWidth(50),

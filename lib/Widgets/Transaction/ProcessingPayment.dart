@@ -157,10 +157,12 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
     print(response.statusCode);
     print(response.body);
 
+    var extractedData = json.decode(response.body);
+
     if (response.statusCode == 200) {
       print('mantab gan');
       print(response.body);
-      var extractedData = json.decode(response.body);
+      
       setState(() {
         isLoading = false;
         paymentData = extractedData['data'];
@@ -230,6 +232,10 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
         );
       }
     }
+    else{
+        print("error: " + extractedData['desc']);
+        Navigator.pop(context, extractedData['desc']);
+      }
   }
 
   Future postEvent(int index, BuildContext context) async {
