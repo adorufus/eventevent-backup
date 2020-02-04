@@ -10,6 +10,7 @@ import 'package:eventevent/Widgets/Home/PopularEventWidget.dart';
 import 'package:eventevent/Widgets/Home/SeeAll/SeeAllItem.dart';
 import 'package:eventevent/Widgets/Home/SeeAll/SeeAllPeople.dart';
 import 'package:eventevent/Widgets/LatestEventWidget.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/SearchWidget.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
@@ -208,23 +209,31 @@ class _EventCatalogState extends State<EventCatalog>
               return GestureDetector(
                   onTap: () {
                     if (bannerData['type'] == 'event') {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EventDetailsConstructView(
-                                  id: bannerData['eventID'],
-                                  name: bannerData['name'],
-                                  image: bannerData['photoFull'])));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return EventDetailLoadingScreen(
+                            eventId: bannerData['eventId']);
+                        // EventDetailsConstructView(
+                        //     id: bannerData['eventID'],
+                        //     name: bannerData['name'],
+                        //     image: bannerData['photoFull']);
+                      }));
                     } else if (bannerData['type'] == 'nolink') {
                       return;
                     } else if (bannerData['type'] == 'category') {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EventDetailsConstructView(
-                                  id: bannerData['categoryID'],
-                                  name: bannerData['name'],
-                                  image: bannerData['photoFull'])));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return EventDetailLoadingScreen(
+                                eventId: bannerData['categoryID']);
+                            //  EventDetailsConstructView(
+                            //     id: bannerData['categoryID'],
+                            //     name: bannerData['name'],
+                            //     image: bannerData['photoFull']);
+                          },
+                        ),
+                      );
                     }
                   },
                   child: Container(
@@ -451,11 +460,13 @@ class _EventCatalogState extends State<EventCatalog>
                         physics: NeverScrollableScrollPhysics(),
                         children: [
                           home(),
-                          isOnlyContainer == true ? Container() : Container(
-                            child: Center(
-                              child: ListenPage(),
-                            ),
-                          ),
+                          isOnlyContainer == true
+                              ? Container()
+                              : Container(
+                                  child: Center(
+                                    child: ListenPage(),
+                                  ),
+                                ),
                           LatestEventWidget(),
                         ],
                       ),
@@ -569,8 +580,9 @@ class _EventCatalogState extends State<EventCatalog>
                                       itemPriceText = 'Free Limited';
                                     } else {
                                       itemColor = Color(0xFF34B323);
-                                      itemPriceText =
-                                         'Rp. ' + data[i]['ticket']['cheapestTicket'] + ',-';
+                                      itemPriceText = 'Rp. ' +
+                                          data[i]['ticket']['cheapestTicket'] +
+                                          ',-';
                                     }
                                   } else {
                                     if (data[i]['ticket']['salesStatus'] ==
@@ -646,11 +658,8 @@ class _EventCatalogState extends State<EventCatalog>
                                       context,
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
-                                              EventDetailsConstructView(
-                                                  id: data[i]['id'],
-                                                  name: data[i]['name'],
-                                                  image: data[i]
-                                                      ['photoFull'])));
+                                              EventDetailLoadingScreen(
+                                                  eventId: data[i]['id'])));
                                 },
                                 child: PopularEventWidget(
                                   imageUrl: data[i]['picture'],
@@ -764,8 +773,9 @@ class _EventCatalogState extends State<EventCatalog>
                                     ['availableTicketStatus'] ==
                                 '1') {
                               itemColor = Color(0xFF34B323);
-                              itemPriceText =
-                                 'Rp. ' + discoverData[i]['ticket']['cheapestTicket'] + ',-';
+                              itemPriceText = 'Rp. ' +
+                                  discoverData[i]['ticket']['cheapestTicket'] +
+                                  ',-';
                             } else {
                               if (discoverData[i]['ticket']['salesStatus'] ==
                                   'comingSoon') {
@@ -837,11 +847,8 @@ class _EventCatalogState extends State<EventCatalog>
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        EventDetailsConstructView(
-                                            id: discoverData[i]['id'],
-                                            name: discoverData[i]['name'],
-                                            image: discoverData[i]
-                                                ['photoFull'])));
+                                        EventDetailLoadingScreen(
+                                            eventId: discoverData[i]['id'])));
                           },
                           child: PopularEventWidget(
                             imageUrl: discoverData[i]['picture'],
@@ -849,7 +856,9 @@ class _EventCatalogState extends State<EventCatalog>
                             location: discoverData[i]["address"],
                             price: itemPriceText,
                             color: itemColor,
-                            isGoing: discoverData[i]['isGoing'] == '1' ? true : false,
+                            isGoing: discoverData[i]['isGoing'] == '1'
+                                ? true
+                                : false,
                             date: DateTime.parse(discoverData[i]['dateStart']),
                             type: discoverData[i]['ticket_type']['type'],
                             isAvailable: discoverData[i]['ticket']
@@ -965,14 +974,14 @@ class _EventCatalogState extends State<EventCatalog>
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            EventDetailsConstructView(
-                                                eventDetailsData: data[i],
-                                                id: data[i]['id'],
-                                                name: data[i]['name'],
-                                                image: data[i]['photoFull'])));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        EventDetailLoadingScreen(
+                                          eventId: data[i]['id'],
+                                        ),
+                                  ),
+                                );
                               },
                               child: Container(
                                 height: ScreenUtil.instance.setWidth(250),
@@ -1795,9 +1804,10 @@ class _EventCatalogState extends State<EventCatalog>
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
-      )..show(context).then((val){
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
-      });
+      )..show(context).then((val) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+        });
     }
   }
 
@@ -1867,7 +1877,8 @@ class _EventCatalogState extends State<EventCatalog>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     } else if (extractedData['desc'] == 'Event Not Found') {
       setState(() {
         isLoading = false;
@@ -2024,7 +2035,8 @@ class _EventCatalogState extends State<EventCatalog>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     }
   }
 
@@ -2089,7 +2101,8 @@ class _EventCatalogState extends State<EventCatalog>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     }
   }
 
@@ -2153,7 +2166,8 @@ class _EventCatalogState extends State<EventCatalog>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     }
   }
 
@@ -2217,7 +2231,8 @@ class _EventCatalogState extends State<EventCatalog>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     }
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/PostMedia.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
@@ -97,7 +98,9 @@ class _DashboardWidgetState extends State<DashboardWidget>
           data["+clicked_branch_link"] == true) {
         print(data);
         print(data['event_id']);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailsConstructView(id: data['event_id'],)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailLoadingScreen(
+          eventId: data['event_id'],
+        )));
       }
       print(data);
       print(data['event_id']);
@@ -288,8 +291,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
       print(payloadData.toString());
 
       if (payloadData['data']['type'] == 'reminder_event') {
-        navigationHandler(EventDetailsConstructView(
-          id: payloadData['data']['id'],
+        navigationHandler(EventDetailLoadingScreen(
+          eventId: payloadData['data']['id'],
         ));
       } else if (payloadData['data']['type'] == 'relationship') {
         navigationHandler(ProfileWidget(
@@ -297,8 +300,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
           initialIndex: 0,
         ));
       } else if (payloadData['data']['type'] == 'live_stream_cancel') {
-        navigationHandler(EventDetailsConstructView(
-          id: payloadData['data']['id'],
+        navigationHandler(EventDetailLoadingScreen(
+          eventId: payloadData['data']['id']
         ));
       } else if (payloadData['data']['type'] == 'photo_comment') {
         navigationHandler(UserMediaDetail(
@@ -372,16 +375,16 @@ class _DashboardWidgetState extends State<DashboardWidget>
           autoFocus: true,
         ));
       } else if (payloadData['data']['type'] == 'eventgoingstatus') {
-        navigationHandler(EventDetailsConstructView(
-          id: payloadData['data']['id'],
+        navigationHandler(EventDetailLoadingScreen(
+          eventId: payloadData['data']['id']
         ));
       } else if (payloadData['data']['type'] == 'eventdetail_comment') {
-        navigationHandler(EventDetailsConstructView(
-          id: payloadData['data']['id'],
+        navigationHandler(EventDetailLoadingScreen(
+          eventId: payloadData['data']['id']
         ));
       } else if (payloadData['data']['type'] == 'eventdetail_love') {
-        navigationHandler(EventDetailsConstructView(
-          id: payloadData['data']['id'],
+        navigationHandler(EventDetailLoadingScreen(
+          eventId: payloadData['data']['id']
         ));
       } else if (payloadData['data']['type'] == 'photo_impression') {
         navigationHandler(UserMediaDetail(
@@ -390,10 +393,14 @@ class _DashboardWidgetState extends State<DashboardWidget>
         ));
       } else if (payloadData['data']['type'] == 'event') {
         navigationHandler(
-            EventDetailsConstructView(id: payloadData['data']['id']));
+            EventDetailLoadingScreen(
+              eventId: payloadData['data']['id']
+            ));
       } else if (payloadData['data']['type'] == 'eventinvite') {
         navigationHandler(
-            EventDetailsConstructView(id: payloadData['data']['id']));
+            EventDetailLoadingScreen(
+              eventId: payloadData['data']['id']
+            ));
       } else if (payloadData['data']['type'] == 'reminder_qr') {
         navigationHandler(ShowQr(
           qrUrl: payloadData['data']['id'],

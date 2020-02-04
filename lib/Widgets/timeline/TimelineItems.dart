@@ -207,7 +207,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
               print(impressionData.toString());
             }
 
-            print('is have current user id: ' + timelineList[2]['impression']['data'].contains('userID: ${widget.currentUserId}').toString());
+            // print('is have current user id: ' + timelineList[2]['impression']['data'].contains('userID: ${widget.currentUserId}').toString());
 
             return TimelineItem(
               id: timelineList[i]['id'],

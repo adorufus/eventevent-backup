@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:flushbar/flushbar.dart';
@@ -256,8 +257,9 @@ class _CategoryPageState extends State<CategoryPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        EventDetailsConstructView(
-                                            id: eventByCategoryList[i]['id'])));
+                                        EventDetailLoadingScreen(
+                                          eventId: eventByCategoryList[i]['id']
+                                        )));
                           },
                           child: new LatestEventItem(
                             image: eventByCategoryList[i]['picture_timeline'],

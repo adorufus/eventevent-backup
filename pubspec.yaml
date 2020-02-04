@@ -75,6 +75,7 @@ dependencies:
   pie_chart: ^1.2.0
   launch_review: ^2.0.0
   flutter_screenutil:
+  firebase_core: ^0.4.3+3
 #  firebase_core: 0.2.5+1
   #flutter_gopay_midtrans: ^1.0.4
   # background_fetch: ^0.2.0

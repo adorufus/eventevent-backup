@@ -1,4 +1,5 @@
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -243,8 +244,7 @@ class PublicEventListState extends State<PublicEventList> {
                               context,
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      EventDetailsConstructView(
-                                          id: publicData[i]['eventID'])));
+                                      EventDetailLoadingScreen(eventId: publicData[i]['id'])));
                         },
                         child: new LatestEventItem(
                           image: publicData[i]['picture'],

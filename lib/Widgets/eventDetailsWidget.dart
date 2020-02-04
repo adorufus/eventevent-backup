@@ -32,6 +32,7 @@ import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:googleapis/people/v1.dart';
 import 'dart:ui';
 import 'package:marquee/marquee.dart';
 //import 'package:eventevent/helper/MarqueeWidget.dart';
@@ -53,8 +54,54 @@ class EventDetailsConstructView extends StatefulWidget {
   final String id;
   final String name;
   final String image;
+  final buo;
+  final lp;
+  final Map<String, dynamic> detailData;
+  final Map<String, dynamic> ticketStat;
+  final Function getEventDetailSpecificInfo;
+  final ticketType;
+  final itemColor;
+  final ticketPrice;
+  final creatorImageUri;
+  final creatorFullName;
+  final creatorName;
+  final dateTime;
+  final startTime;
+  final endTime;
+  final phoneNumber;
+  final commentData;
+  final email;
+  final website;
+  final isPrivate;
+  final goingData;
+  final lat;
+  final long;
+  final dDay;
+
   EventDetailsConstructView(
-      {Key key, this.eventDetailsData, this.id, this.name, this.image})
+      {Key key,
+      this.eventDetailsData,
+      this.id,
+      this.name,
+      this.image,
+      this.buo,
+      this.lp,
+      this.detailData,
+      this.ticketStat,
+      this.getEventDetailSpecificInfo,
+      this.ticketType,
+      this.itemColor,
+      this.ticketPrice,
+      this.creatorImageUri,
+      this.creatorFullName,
+      this.creatorName,
+      this.dateTime,
+      this.startTime,
+      this.endTime,
+      this.phoneNumber,
+      this.commentData,
+      this.email,
+      this.website, this.isPrivate, this.goingData, this.lat, this.long, this.dDay})
       : super(key: key);
 
   @override
@@ -66,29 +113,12 @@ class EventDetailsConstructView extends StatefulWidget {
 class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     with AutomaticKeepAliveClientMixin<EventDetailsConstructView> {
   ScrollController _scrollController = new ScrollController();
-  String creatorFullName = "";
-  String creatorName = "";
-  String creatorImageUri = " ";
-  String startTime = "";
-  String endTime = "";
-  String isGoing = "";
-  String address = "";
-  String lat = "";
-  String long = "";
-  String isPrivate = '0';
-  String ticketTypeURI = "";
-  String ticketPrice = "";
-  String isLoved = "0";
-  String email = 'assets/icons/btn_email.png';
-  String phoneNumber = 'assets/icons/btn_phone.png';
-  String website = 'assets/icons/btn_web.png';
-  String loveBtn = 'assets/icons/btn_love_small.png';
-  String eventID = "";
-  String currentUserId = "";
 
   TextEditingController feedbackInputController = new TextEditingController();
 
-  int loveCount = 0;
+  StreamController<String> controllerData = StreamController<String>();
+  StreamController<String> controllerUrl = StreamController<String>();
+
   int loveClickedCount = 0;
   int currentTab = 0;
 
@@ -96,11 +126,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   bool isTicketUnavailable;
   bool isLoveClicked = false;
 
-  Map<String, dynamic> detailData;
-  Map<String, dynamic> invitedData = Map<String, dynamic>();
-  Map<String, dynamic> ticketType = Map<String, dynamic>();
-  Map<String, dynamic> ticketStat = Map<String, dynamic>();
-  List goingData = [];
   List invitedUserList = [];
 
   RefreshController refreshController =
@@ -108,9 +133,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
   Timer _timer;
   DateTime _currentTime;
-  DateTime _dDay;
-
-  Color itemColor = Colors.red;
 
   Color reviewColor = Colors.grey;
   Color reviewColorBad = Colors.grey;
@@ -121,54 +143,14 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   String generatedLink = '-';
   String error = '-';
   String defaultTab = '0';
-  String dateTime = '-';
-  String month = '-';
 
   bool isGoodFeedback = false;
   bool isBadFeedback = false;
 
+  Map<String, dynamic> invitedData = Map<String, dynamic>();
+
   List timelineList = [];
-
-  BranchContentMetaData metaData;
-  BranchUniversalObject buo;
-  BranchLinkProperties lp;
-  BranchEvent eventStandard;
-  BranchEvent eventCustom;
-  StreamController<String> controllerData = StreamController<String>();
-  StreamController<String> controllerUrl = StreamController<String>();
-
-  
-
-  void initDeepLinkData(String eventName, String imageUrl, String eventId) {
-    setState(() {
-      metaData = BranchContentMetaData()
-          .addCustomMetadata('event_name', eventName)
-          .addCustomMetadata('event_id', eventId)
-          .addCustomMetadata('image_url', imageUrl);
-
-      buo = BranchUniversalObject(
-          canonicalIdentifier: 'event_$eventId',
-          title: eventName,
-          imageUrl: imageUrl,
-          contentDescription: 'you can see the event description on the app',
-          contentMetadata: metaData,
-          publiclyIndex: true,
-          keywords: [],
-          locallyIndex: true);
-    });
-
-    print(buo);
-
-    FlutterBranchSdk.registerView(buo: buo);
-    FlutterBranchSdk.listOnSearch(buo: buo);
-
-    lp = BranchLinkProperties(
-      feature: "sharing",
-    );
-
-    lp.addControlParam(
-        '\$desktop_url', 'http://eventevent.com/event/${widget.id}');
-  }
+  String currentUserId = "";
 
   @override
   bool get wantKeepAlive => true;
@@ -203,9 +185,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         });
       }
     });
-    
-
-    getEventDetailsSpecificInfo();
 
     getInvitedUser();
     getData();
@@ -253,12 +232,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   }
 
   void generateLink() async {
-    BranchResponse response =
-        await FlutterBranchSdk.getShortUrl(buo: buo, linkProperties: lp);
+    BranchResponse response = await FlutterBranchSdk.getShortUrl(
+        buo: widget.buo, linkProperties: widget.lp);
 
     if (response.success) {
       print('generated link: ' + response.result);
-      setState((){
+      setState(() {
         generatedLink = response.result;
       });
     } else {
@@ -371,7 +350,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    return detailData == null
+    return widget.detailData == null
         ? Container(
             color: Colors.white,
             child: Center(child: CupertinoActivityIndicator(radius: 20)))
@@ -402,9 +381,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
                         prefs.setString(
-                            'EVENT_VIEWED', detailData['countView']);
-                        prefs.setString('EVENT_LOVED', detailData['countLove']);
-                        prefs.setString('EVENT_NAME', detailData['name']);
+                            'EVENT_VIEWED', widget.detailData['countView']);
+                        prefs.setString(
+                            'EVENT_LOVED', widget.detailData['countLove']);
+                        prefs.setString(
+                            'EVENT_NAME', widget.detailData['name']);
 
                         print(prefs.getString('EVENT_VIEWED'));
                         print(prefs.getString('EVENT_LOVED'));
@@ -414,13 +395,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                             builder: (BuildContext context) =>
                                 EventStatistic()));
                       },
-                      child: detailData['createdByID'] == null
+                      child: widget.detailData['createdByID'] == null
                           ? Container(
                               child: Center(
                                   child:
                                       CupertinoActivityIndicator(radius: 20)),
                             )
-                          : detailData['createdByID'] != currentUserId
+                          : widget.detailData['createdByID'] != currentUserId
                               ? Container()
                               : Icon(
                                   Icons.insert_chart,
@@ -468,53 +449,55 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             new List<String>();
                                         for (var i = 0;
                                             i <
-                                                detailData['category']['data']
+                                                widget
+                                                    .detailData['category']
+                                                        ['data']
                                                     .length;
                                             i++) {
                                           print(i.toString());
                                           categoryList.add(
-                                              detailData['category']['data'][i]
-                                                  ['name']);
+                                              widget.detailData['category']
+                                                  ['data'][i]['name']);
                                           categoryIdList.add(
-                                              detailData['category']['data'][i]
-                                                  ['id']);
+                                              widget.detailData['category']
+                                                  ['data'][i]['id']);
                                         }
 
-                                        prefs.setString(
-                                            'NEW_EVENT_ID', detailData['id']);
-                                        prefs.setString(
-                                            'EVENT_NAME', detailData['name']);
+                                        prefs.setString('NEW_EVENT_ID',
+                                            widget.detailData['id']);
+                                        prefs.setString('EVENT_NAME',
+                                            widget.detailData['name']);
                                         prefs.setString('EVENT_TYPE',
-                                            detailData['isPrivate']);
+                                            widget.detailData['isPrivate']);
                                         prefs.setStringList(
                                             'EVENT_CATEGORY', categoryList);
                                         prefs.setStringList(
                                             'EVENT_CATEGORY_ID_LIST',
                                             categoryIdList);
                                         prefs.setString('DATE_START',
-                                            detailData['dateStart']);
-                                        prefs.setString(
-                                            'DATE_END', detailData['dateEnd']);
+                                            widget.detailData['dateStart']);
+                                        prefs.setString('DATE_END',
+                                            widget.detailData['dateEnd']);
                                         prefs.setString('TIME_START',
-                                            detailData['timeStart']);
-                                        prefs.setString(
-                                            'TIME_END', detailData['timeEnd']);
+                                            widget.detailData['timeStart']);
+                                        prefs.setString('TIME_END',
+                                            widget.detailData['timeEnd']);
                                         prefs.setString('EVENT_DESCRIPTION',
-                                            detailData['description']);
-                                        prefs.setString(
-                                            'EVENT_PHONE', detailData['phone']);
-                                        prefs.setString(
-                                            'EVENT_EMAIL', detailData['email']);
+                                            widget.detailData['description']);
+                                        prefs.setString('EVENT_PHONE',
+                                            widget.detailData['phone']);
+                                        prefs.setString('EVENT_EMAIL',
+                                            widget.detailData['email']);
                                         prefs.setString('EVENT_WEBSITE',
-                                            detailData['website']);
+                                            widget.detailData['website']);
                                         prefs.setString('EVENT_LAT',
-                                            detailData['latitude']);
+                                            widget.detailData['latitude']);
                                         prefs.setString('EVENT_LONG',
-                                            detailData['longitude']);
+                                            widget.detailData['longitude']);
                                         prefs.setString('EVENT_ADDRESS',
-                                            detailData['address']);
+                                            widget.detailData['address']);
                                         prefs.setString('EVENT_IMAGE',
-                                            detailData['photoFull']);
+                                            widget.detailData['photoFull']);
 
                                         print(prefs
                                             .getStringList('EVENT_CATEGORY')
@@ -535,7 +518,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     ManageCustomForm(
-                                                      eventId: detailData['id'],
+                                                      eventId: widget
+                                                          .detailData['id'],
                                                     )));
                                       },
                                     )
@@ -556,10 +540,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             ),
             bottomNavigationBar: GestureDetector(
               onTap: () {
-                if (ticketStat['salesStatus'] == null ||
-                    ticketStat['salesStatus'] == 'null') {
-                  if (detailData['ticket_type']['type'] == 'free' ||
-                      detailData['ticket_type']['type'] == 'no_ticket') {
+                if (widget.ticketStat['salesStatus'] == null ||
+                    widget.ticketStat['salesStatus'] == 'null') {
+                  if (widget.detailData['ticket_type']['type'] == 'free' ||
+                      widget.detailData['ticket_type']['type'] == 'no_ticket') {
                     print('show modal');
                     showModalBottomSheet(
                       context: context,
@@ -592,7 +576,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 12,
-                                          fontWeight: prefix0.FontWeight.bold),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ),
@@ -623,8 +607,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 BorderRadius.circular(12),
                                             color: Colors.grey,
                                             image: DecorationImage(
-                                                image: NetworkImage(
-                                                    detailData['photo']))),
+                                                image: NetworkImage(widget
+                                                    .detailData['photo']))),
                                       ),
                                       SizedBox(
                                         width: 12,
@@ -640,7 +624,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               width: ScreenUtil.instance
                                                   .setWidth(200),
                                               child: Text(
-                                                detailData['name'],
+                                                widget.detailData['name'],
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -653,7 +637,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             Container(
                                                 width: 210,
                                                 child: Text(
-                                                  detailData['description'],
+                                                  widget.detailData[
+                                                      'description'],
                                                   maxLines: 8,
                                                 ))
                                           ],
@@ -705,7 +690,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             print(response.body);
 
                                             if (response.statusCode == 201) {
-                                              getEventDetailsSpecificInfo();
+                                              widget
+                                                  .getEventDetailSpecificInfo();
                                               isLoading = false;
                                             } else {
                                               isLoading = false;
@@ -742,14 +728,15 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     );
                   }
                 } else {
-                  if (ticketStat['salesStatus'] == 'endSales' ||
-                      ticketStat['availableTicketStatus'] == '0') {
+                  if (widget.ticketStat['salesStatus'] == 'endSales' ||
+                      widget.ticketStat['availablewidget.ticketStatus'] ==
+                          '0') {
                     return;
                   } else {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => SelectTicketWidget(
-                              eventID: detailData['id'],
-                              eventDate: detailData['dateStart'],
+                              eventID: widget.detailData['id'],
+                              eventDate: widget.detailData['dateStart'],
                             )));
                   }
                 }
@@ -778,12 +765,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     ),
                     GestureDetector(
                       onTap: () {
-                        if (ticketStat['salesStatus'] == null) {
-                        } else if (ticketType['type'] == 'free') {
+                        if (widget.ticketStat['salesStatus'] == null) {
+                        } else if (widget.ticketType['type'] == 'free') {
                           showCupertinoDialog(
                               context: context,
                               builder: (BuildContext context) => SuccessPage());
-                        } else if (ticketType['type'] == 'no_ticket') {
+                        } else if (widget.ticketType['type'] == 'no_ticket') {
                           print('no ticket');
                           showDialog(
                               context: context,
@@ -801,15 +788,17 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                 ],
                               ));
                         } else {
-                          if (ticketStat['salesStatus'] == 'endSales' ||
-                              ticketStat['availableTicketStatus'] == '0') {
+                          if (widget.ticketStat['salesStatus'] == 'endSales' ||
+                              widget.ticketStat[
+                                      'availablewidget.ticketStatus'] ==
+                                  '0') {
                             return;
                           } else {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     SelectTicketWidget(
-                                      eventID: detailData['id'],
-                                      eventDate: detailData['dateStart'],
+                                      eventID: widget.detailData['id'],
+                                      eventDate: widget.detailData['dateStart'],
                                     )));
                           }
                         }
@@ -820,15 +809,15 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                         decoration: BoxDecoration(
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: itemColor.withOpacity(0.4),
+                                  color: widget.itemColor.withOpacity(0.4),
                                   blurRadius: 2,
                                   spreadRadius: 1.5)
                             ],
-                            color: itemColor,
+                            color: widget.itemColor,
                             borderRadius: BorderRadius.circular(15)),
                         child: Center(
                             child: Text(
-                          ticketPrice,
+                          widget.ticketPrice,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: ScreenUtil.instance.setSp(13),
@@ -842,7 +831,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             ),
             body: Stack(
               children: <Widget>[
-                detailData == null
+                widget.detailData == null
                     ? Container(
                         child: Center(
                             child: CupertinoActivityIndicator(radius: 20)))
@@ -855,7 +844,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                           enablePullUp: false,
                           onRefresh: () {
                             setState(() {
-                              getEventDetailsSpecificInfo();
+                              widget.getEventDetailSpecificInfo();
                               getInvitedUser();
                               getData();
                               _currentTime = DateTime.now();
@@ -882,11 +871,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           borderRadius:
                                               BorderRadius.circular(12),
                                           image: DecorationImage(
-                                              image: detailData['photo'] == null
+                                              image: widget.detailData[
+                                                          'photo'] ==
+                                                      null
                                                   ? AssetImage(
                                                       'assets/grey-fade.jpg')
-                                                  : NetworkImage(
-                                                      detailData['photo']),
+                                                  : NetworkImage(widget
+                                                      .detailData['photo']),
                                               fit: BoxFit.fill)),
                                     ),
                                     Container(
@@ -919,9 +910,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           shape:
                                                               BoxShape.circle,
                                                           image: DecorationImage(
-                                                              image: NetworkImage(
-                                                                  creatorImageUri
-                                                                      .toString()))),
+                                                              image: NetworkImage(widget
+                                                                  .creatorImageUri
+                                                                  .toString()))),
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -934,9 +925,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             .start,
                                                     children: <Widget>[
                                                       Text(
-                                                        creatorFullName == null
+                                                        widget.creatorFullName ==
+                                                                null
                                                             ? 'loading'
-                                                            : creatorFullName
+                                                            : widget
+                                                                .creatorFullName
                                                                 .toString(),
                                                         style: TextStyle(
                                                             fontSize: ScreenUtil
@@ -949,9 +942,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                     .bold),
                                                       ),
                                                       Text(
-                                                          creatorName == null
+                                                          widget.creatorName ==
+                                                                  null
                                                               ? 'loading'
-                                                              : creatorName
+                                                              : widget
+                                                                  .creatorName
                                                                   .toString(),
                                                           style: TextStyle(
                                                               color:
@@ -972,7 +967,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   width: ScreenUtil.instance
                                                       .setWidth(180),
                                                   child: Text(
-                                                    dateTime,
+                                                    widget.dateTime,
                                                     style: TextStyle(
                                                         fontSize: ScreenUtil
                                                             .instance
@@ -984,18 +979,21 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       .setWidth(10)),
                                               Container(
                                                   height: ScreenUtil.instance
-                                                      .setWidth(
-                                                          detailData['name']
-                                                                      .length <
-                                                                  30
-                                                              ? 15
-                                                              : 35),
+                                                      .setWidth(widget
+                                                                  .detailData[
+                                                                      'name']
+                                                                  .length <
+                                                              30
+                                                          ? 15
+                                                          : 35),
                                                   width: ScreenUtil.instance
                                                       .setWidth(180),
                                                   child: Text(
-                                                    detailData['name'] == null
+                                                    widget.detailData['name'] ==
+                                                            null
                                                         ? '-'
-                                                        : detailData['name']
+                                                        : widget
+                                                            .detailData['name']
                                                             .toUpperCase(),
                                                     style: TextStyle(
                                                         fontSize: ScreenUtil
@@ -1023,12 +1021,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   SizedBox(
                                                       width: ScreenUtil.instance
                                                           .setWidth(5)),
-                                                  detailData['address']
+                                                  widget.detailData['address']
                                                               .toString()
                                                               .length <
                                                           30
                                                       ? Text(
-                                                          detailData['address'],
+                                                          widget.detailData[
+                                                              'address'],
                                                           style: TextStyle(
                                                               fontSize:
                                                                   ScreenUtil
@@ -1045,11 +1044,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                               .instance
                                                               .setWidth(170),
                                                           child: MarqueeWidget(
-                                                            text: detailData[
+                                                            text: widget.detailData[
                                                                         'address'] ==
                                                                     null
                                                                 ? '-'
-                                                                : detailData[
+                                                                : widget.detailData[
                                                                     'address'],
                                                             scrollAxis:
                                                                 Axis.horizontal,
@@ -1084,9 +1083,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       width: ScreenUtil.instance
                                                           .setWidth(5)),
                                                   Text(
-                                                      startTime.toString() +
+                                                      widget.startTime
+                                                              .toString() +
                                                           ' to ' +
-                                                          endTime.toString(),
+                                                          widget.endTime
+                                                              .toString(),
                                                       style: TextStyle(
                                                           fontSize: ScreenUtil
                                                               .instance
@@ -1099,20 +1100,22 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               ),
                                               GestureDetector(
                                                 onTap: () {
-                                                  if (ticketStat[
+                                                  if (widget.ticketStat[
                                                               'salesStatus'] ==
                                                           null ||
-                                                      ticketStat[
+                                                      widget.ticketStat[
                                                               'salesStatus'] ==
                                                           'null') {
-                                                    if (detailData['ticket_type']
+                                                    if (widget.detailData[
+                                                                    'ticket_type']
                                                                 ['type'] ==
                                                             'free' ||
-                                                        detailData['ticket_type']
+                                                        widget.detailData[
+                                                                    'ticket_type']
                                                                 ['type'] ==
                                                             'no_ticket') {
                                                       print('show modal');
-                                                      if (detailData[
+                                                      if (widget.detailData[
                                                               'isGoing'] ==
                                                           '1') {
                                                         ungoing()
@@ -1126,7 +1129,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                   200 ||
                                                               response.statusCode ==
                                                                   201) {
-                                                            getEventDetailsSpecificInfo();
+                                                            widget
+                                                                .getEventDetailSpecificInfo();
                                                             isLoading = false;
                                                           } else {
                                                             isLoading = false;
@@ -1183,7 +1187,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                           style: TextStyle(
                                                                               color: Colors.white,
                                                                               fontSize: 12,
-                                                                              fontWeight: prefix0.FontWeight.bold),
+                                                                              fontWeight: FontWeight.bold),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -1217,7 +1221,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                             decoration: BoxDecoration(
                                                                                 borderRadius: BorderRadius.circular(12),
                                                                                 color: Colors.grey,
-                                                                                image: DecorationImage(image: NetworkImage(detailData['photo']))),
+                                                                                image: DecorationImage(image: NetworkImage(widget.detailData['photo']))),
                                                                           ),
                                                                           SizedBox(
                                                                             width:
@@ -1232,7 +1236,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                                 Container(
                                                                                   width: ScreenUtil.instance.setWidth(200),
                                                                                   child: Text(
-                                                                                    detailData['name'],
+                                                                                    widget.detailData['name'],
                                                                                     style: TextStyle(fontWeight: FontWeight.bold),
                                                                                     maxLines: 2,
                                                                                   ),
@@ -1243,7 +1247,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                                 Container(
                                                                                     width: 210,
                                                                                     child: Text(
-                                                                                      detailData['description'],
+                                                                                      widget.detailData['description'],
                                                                                       maxLines: 8,
                                                                                     ))
                                                                               ],
@@ -1300,7 +1304,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                                 print(response.body);
 
                                                                                 if (response.statusCode == 201) {
-                                                                                  getEventDetailsSpecificInfo();
+                                                                                  widget.getEventDetailSpecificInfo();
                                                                                   isLoading = false;
                                                                                 } else {
                                                                                   isLoading = false;
@@ -1334,11 +1338,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       }
                                                     }
                                                   } else {
-                                                    if (ticketStat[
+                                                    if (widget.ticketStat[
                                                                 'salesStatus'] ==
                                                             'endSales' ||
-                                                        ticketStat[
-                                                                'availableTicketStatus'] ==
+                                                        widget.ticketStat[
+                                                                'availablewidget.ticketStatus'] ==
                                                             '0') {
                                                       return;
                                                     } else {
@@ -1347,12 +1351,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                               builder: (BuildContext
                                                                       context) =>
                                                                   SelectTicketWidget(
-                                                                    eventID:
-                                                                        detailData[
-                                                                            'id'],
-                                                                    eventDate:
-                                                                        detailData[
-                                                                            'dateStart'],
+                                                                    eventID: widget
+                                                                            .detailData[
+                                                                        'id'],
+                                                                    eventDate: widget
+                                                                            .detailData[
+                                                                        'dateStart'],
                                                                   )));
                                                     }
                                                   }
@@ -1365,19 +1369,20 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   decoration: BoxDecoration(
                                                       boxShadow: <BoxShadow>[
                                                         BoxShadow(
-                                                            color: itemColor
+                                                            color: widget
+                                                                .itemColor
                                                                 .withOpacity(
                                                                     0.4),
                                                             blurRadius: 2,
                                                             spreadRadius: 1.5)
                                                       ],
-                                                      color: itemColor,
+                                                      color: widget.itemColor,
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               15)),
                                                   child: Center(
                                                       child: Text(
-                                                    ticketPrice,
+                                                    widget.ticketPrice,
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: ScreenUtil
@@ -1415,10 +1420,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     LoveItem(
                                       isComment: false,
                                       isAlreadyLoved:
-                                          detailData['isLoved'] == '1'
+                                          widget.detailData['isLoved'] == '1'
                                               ? true
                                               : false,
-                                      loveCount: detailData['countLove'],
+                                      loveCount: widget.detailData['countLove'],
                                     ),
                                     SizedBox(
                                       width: ScreenUtil.instance.setWidth(10),
@@ -1429,68 +1434,74 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     EventDetailComment(
-                                                      eventID: detailData['id'],
+                                                      eventID: widget
+                                                          .detailData['id'],
                                                     )));
                                       },
                                       child: LoveItem(
                                           isComment: true,
-                                          isAlreadyCommented:
-                                              detailData['comment'].length < 1
-                                                  ? false
-                                                  : commentData.containsValue(
+                                          isAlreadyCommented: widget
+                                                      .detailData['comment']
+                                                      .length <
+                                                  1
+                                              ? false
+                                              : widget.commentData
+                                                          .containsValue(
                                                               currentUserId) ==
-                                                          true
-                                                      ? true
-                                                      : false,
-                                          commentCount:
-                                              detailData['total_comment']
-                                                  .toString()),
+                                                      true
+                                                  ? true
+                                                  : false,
+                                          commentCount: widget
+                                              .detailData['total_comment']
+                                              .toString()),
                                     ),
                                     Expanded(
                                       child: SizedBox(),
                                     ),
                                     GestureDetector(
-                                      onTap: phoneNumber == null ||
-                                              phoneNumber == ""
+                                      onTap: widget.phoneNumber == null ||
+                                              widget.phoneNumber == ""
                                           ? () {}
-                                          : () => launch(
-                                              "tel:" + phoneNumber.toString()),
+                                          : () => launch("tel:" +
+                                              widget.phoneNumber.toString()),
                                       child: SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(33),
                                         width: ScreenUtil.instance.setWidth(33),
-                                        child: Image.asset(phoneNumber ==
+                                        child: Image.asset(widget.phoneNumber ==
                                                     null ||
-                                                phoneNumber == ""
+                                                widget.phoneNumber == ""
                                             ? 'assets/icons/btn_phone.png'
                                             : 'assets/icons/btn_phone_active.png'),
                                       ),
                                     ),
                                     GestureDetector(
-                                      onTap: email == null || email == ""
+                                      onTap: widget.email == null ||
+                                              widget.email == ""
                                           ? () {}
-                                          : () => launch(
-                                              "mailto:" + email.toString()),
+                                          : () => launch("mailto:" +
+                                              widget.email.toString()),
                                       child: SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(33),
                                         width: ScreenUtil.instance.setWidth(33),
-                                        child: Image.asset(email == null ||
-                                                email == ""
+                                        child: Image.asset(widget.email ==
+                                                    null ||
+                                                widget.email == ""
                                             ? 'assets/icons/btn_mail.png'
                                             : 'assets/icons/btn_mail_active.png'),
                                       ),
                                     ),
                                     GestureDetector(
-                                      onTap: website == null || website == ""
+                                      onTap: widget.website == null || widget.website == ""
                                           ? () {}
-                                          : () => launch(website.toString()),
+                                          : () => launch(widget.website.toString()),
                                       child: SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(33),
                                         width: ScreenUtil.instance.setWidth(33),
                                         child: Image.asset(
-                                          website == null || website == ""
+                                          widget.website == null || widget.website == ""
                                               ? 'assets/icons/btn_web.png'
                                               : 'assets/icons/btn_web_active.png',
                                         ),
@@ -1499,12 +1510,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   ],
                                 ),
                               ),
-                              isPrivate == "0"
+                              widget.isPrivate == "0"
                                   ? Container()
                                   : SizedBox(
                                       height: ScreenUtil.instance.setWidth(20),
                                     ),
-                              isPrivate == "0"
+                              widget.isPrivate == "0"
                                   ? Container()
                                   : Padding(
                                       padding: EdgeInsets.only(left: 0),
@@ -1519,8 +1530,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 13),
-                                              child: prefix0.Row(
-                                                children: <prefix0.Widget>[
+                                              child: Row(
+                                                children: <Widget>[
                                                   Text(
                                                     'Who\'s Invited',
                                                     style: TextStyle(
@@ -1540,9 +1551,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           MaterialPageRoute(
                                                               builder: (context) =>
                                                                   SeeWhosGoingInvitedWidget(
-                                                                    eventId:
-                                                                        detailData[
-                                                                            'id'],
+                                                                    eventId: widget
+                                                                            .detailData[
+                                                                        'id'],
                                                                     peopleType:
                                                                         'invited',
                                                                   )));
@@ -1645,7 +1656,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                         ),
                                       ),
                                     ),
-                              detailData['ticket']['salesStatus'] ==
+                              widget.detailData['ticket']['salesStatus'] ==
                                       'comingSoon'
                                   ? countdownTimer()
                                   : Container(),
@@ -1677,7 +1688,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           SeeWhosGoingInvitedWidget(
-                                                            eventId: detailData[
+                                                            eventId: widget
+                                                                    .detailData[
                                                                 'id'],
                                                             peopleType: 'going',
                                                           )));
@@ -1702,9 +1714,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       width: MediaQuery.of(context).size.width,
                                       child: ListView.builder(
                                         scrollDirection: Axis.horizontal,
-                                        itemCount: goingData == null
+                                        itemCount: widget.goingData == null
                                             ? 0
-                                            : goingData.length,
+                                            : widget.goingData.length,
                                         itemBuilder: (BuildContext context, i) {
                                           return GestureDetector(
                                             onTap: () {
@@ -1714,10 +1726,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                               context) =>
                                                           ProfileWidget(
                                                             initialIndex: 0,
-                                                            userId: detailData[
-                                                                        'going']
-                                                                    ['data'][i]
-                                                                ['id'],
+                                                            userId: widget
+                                                                        .detailData[
+                                                                    'going'][
+                                                                'data'][i]['id'],
                                                           )));
                                             },
                                             child: new Container(
@@ -1745,7 +1757,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         shape: BoxShape.circle,
                                                         image: DecorationImage(
                                                           image: CachedNetworkImageProvider(
-                                                              detailData['going']
+                                                              widget.detailData[
+                                                                          'going']
                                                                       ['data']
                                                                   [i]['photo']),
                                                           fit: BoxFit.fill,
@@ -1761,12 +1774,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   ],
                                 ),
                               ),
-                              detailData['status'] == 'ended'
+                              widget.detailData['status'] == 'ended'
                                   ? SizedBox(
                                       height: ScreenUtil.instance.setWidth(20),
                                     )
                                   : Container(),
-                              detailData['status'] == 'ended'
+                              widget.detailData['status'] == 'ended'
                                   ? Container(
                                       // height: ScreenUtil.instance.setWidth(150),
                                       margin:
@@ -1790,18 +1803,19 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         MaterialPageRoute(
                                                             builder: (context) =>
                                                                 ReviewDetails(
-                                                                  eventId:
-                                                                      detailData[
-                                                                          'id'],
-                                                                  eventName:
-                                                                      detailData[
-                                                                          'name'],
-                                                                  goodReview: detailData[
-                                                                              'event_review']
-                                                                          [
-                                                                          'percent_review']
-                                                                      ['good'],
-                                                                  badReview: detailData[
+                                                                  eventId: widget
+                                                                          .detailData[
+                                                                      'id'],
+                                                                  eventName: widget
+                                                                          .detailData[
+                                                                      'name'],
+                                                                  goodReview: widget
+                                                                              .detailData[
+                                                                          'event_review']
+                                                                      [
+                                                                      'percent_review']['good'],
+                                                                  badReview: widget
+                                                                              .detailData[
                                                                           'event_review']
                                                                       [
                                                                       'percent_review']['bad'],
@@ -1832,7 +1846,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       .setWidth(10),
                                                   progressColor:
                                                       eventajaGreenTeal,
-                                                  percent: int.parse(detailData[
+                                                  percent: int.parse(widget
+                                                                      .detailData[
                                                                   'event_review']
                                                               ['percent_review']
                                                           ['good']) /
@@ -1843,7 +1858,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 width: ScreenUtil.instance
                                                     .setWidth(40),
                                                 child: Text(
-                                                  (detailData['event_review']
+                                                  (widget.detailData[
+                                                                  'event_review']
                                                               ['percent_review']
                                                           ['good'] +
                                                       '%'),
@@ -1851,8 +1867,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       color: eventajaGreenTeal,
                                                       fontWeight:
                                                           FontWeight.bold),
-                                                  textAlign:
-                                                      prefix0.TextAlign.end,
+                                                  textAlign: TextAlign.end,
                                                 ),
                                               )
                                             ],
@@ -1872,18 +1887,20 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       .instance
                                                       .setWidth(10),
                                                   progressColor: Colors.red,
-                                                  percent: int.parse(detailData[
+                                                  percent: int.parse(widget
+                                                                      .detailData[
                                                                   'event_review']
                                                               ['percent_review']
                                                           ['bad']) /
                                                       100,
                                                 ),
                                               ),
-                                              prefix0.Container(
+                                              Container(
                                                 width: ScreenUtil.instance
                                                     .setWidth(40),
                                                 child: Text(
-                                                  detailData['event_review']
+                                                  widget.detailData[
+                                                                  'event_review']
                                                               ['percent_review']
                                                           ['bad'] +
                                                       '%',
@@ -1897,17 +1914,22 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             ],
                                           ),
                                           SizedBox(
-                                            height: detailData['event_review']
+                                            height: widget.detailData[
+                                                                'event_review']
                                                             ['user_review'] ==
                                                         '1' ||
-                                                    detailData['isGoing'] == '0'
+                                                    widget.detailData[
+                                                            'isGoing'] ==
+                                                        '0'
                                                 ? 0
                                                 : 15,
                                           ),
-                                          detailData['event_review']
+                                          widget.detailData['event_review']
                                                           ['user_review'] ==
                                                       '1' ||
-                                                  detailData['isGoing'] == '0'
+                                                  widget.detailData[
+                                                          'isGoing'] ==
+                                                      '0'
                                               ? Container()
                                               : GestureDetector(
                                                   onTap: () {
@@ -1964,7 +1986,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                           style: TextStyle(
                                                                               color: Colors.white,
                                                                               fontSize: 12,
-                                                                              fontWeight: prefix0.FontWeight.bold),
+                                                                              fontWeight: FontWeight.bold),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -2001,14 +2023,14 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                             },
                                                                             child:
                                                                                 Column(
-                                                                              crossAxisAlignment: prefix0.CrossAxisAlignment.center,
+                                                                              crossAxisAlignment: CrossAxisAlignment.center,
                                                                               children: <Widget>[
                                                                                 Icon(
                                                                                   Icons.thumb_up,
                                                                                   size: 100,
                                                                                   color: reviewColor,
                                                                                 ),
-                                                                                Text('GOOD', style: prefix0.TextStyle(color: reviewColor, fontSize: 14))
+                                                                                Text('GOOD', style: TextStyle(color: reviewColor, fontSize: 14))
                                                                               ],
                                                                             ),
                                                                           ),
@@ -2031,14 +2053,14 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                             },
                                                                             child:
                                                                                 Column(
-                                                                              crossAxisAlignment: prefix0.CrossAxisAlignment.center,
+                                                                              crossAxisAlignment: CrossAxisAlignment.center,
                                                                               children: <Widget>[
                                                                                 Icon(
                                                                                   Icons.thumb_down,
                                                                                   size: 100,
                                                                                   color: reviewColorBad,
                                                                                 ),
-                                                                                Text('BAD', style: prefix0.TextStyle(color: reviewColorBad, fontSize: 14))
+                                                                                Text('BAD', style: TextStyle(color: reviewColorBad, fontSize: 14))
                                                                               ],
                                                                             ),
                                                                           ),
@@ -2106,11 +2128,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                           isLoading =
                                                                               true;
 
-                                                                          FeedbackLogic.postFeedback(detailData['id'], typeId, feedbackInputController.text).then(
+                                                                          FeedbackLogic.postFeedback(widget.detailData['id'], typeId, feedbackInputController.text).then(
                                                                               (response) {
                                                                             if (response.statusCode == 201 ||
                                                                                 response.statusCode == 200) {
-                                                                              getEventDetailsSpecificInfo();
+                                                                              widget.getEventDetailSpecificInfo();
                                                                               isLoading = false;
                                                                             } else {
                                                                               isLoading = false;
@@ -2214,7 +2236,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                               SizedBox(
                                 height: ScreenUtil.instance.setWidth(20),
                               ),
-                              detailData['createdByID'] != currentUserId
+                              widget.detailData['createdByID'] != currentUserId
                                   ? Container()
                                   : Container(
                                       width:
@@ -2244,13 +2266,14 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                         children: <Widget>[
                                           GestureDetector(
                                             onTap: () {
-                                              saveId(detailData['id']);
+                                              saveId(widget.detailData['id']);
                                               Navigator.of(context).push(
                                                   MaterialPageRoute(
                                                       builder: (BuildContext
                                                               context) =>
                                                           ManageTicket(
-                                                            eventID: detailData[
+                                                            eventID: widget
+                                                                    .detailData[
                                                                 'id'],
                                                           )));
                                             },
@@ -2295,13 +2318,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   await SharedPreferences
                                                       .getInstance();
                                               prefs.setString('NEW_EVENT_ID',
-                                                  detailData['id']);
+                                                  widget.detailData['id']);
                                               prefs.setString(
                                                   'QR_URI',
-                                                  detailData['qrcode']
+                                                  widget.detailData['qrcode']
                                                       ['secure_url']);
                                               prefs.setString('EVENT_NAME',
-                                                  detailData['name']);
+                                                  widget.detailData['name']);
                                               print(prefs
                                                   .getString('NEW_EVENT_ID'));
                                               print(prefs.getString('QR_URI'));
@@ -2311,12 +2334,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       builder: (BuildContext
                                                               context) =>
                                                           ShowQr(
-                                                            qrUrl: detailData[
+                                                            qrUrl: widget
+                                                                        .detailData[
                                                                     'qrcode']
                                                                 ['secure_url'],
-                                                            eventName:
-                                                                detailData[
-                                                                    'name'],
+                                                            eventName: widget
+                                                                    .detailData[
+                                                                'name'],
                                                           )));
                                             },
                                             child: SizedBox(
@@ -2357,11 +2381,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       builder: (BuildContext
                                                               context) =>
                                                           TicketSales(
-                                                            eventID: detailData[
+                                                            eventID: widget
+                                                                    .detailData[
                                                                 'id'],
-                                                            eventName:
-                                                                detailData[
-                                                                    'name'],
+                                                            eventName: widget
+                                                                    .detailData[
+                                                                'name'],
                                                           )));
                                             },
                                             child: SizedBox(
@@ -2565,43 +2590,45 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    detailData['name'],
+                    widget.detailData['name'],
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                   SizedBox(
                     height: ScreenUtil.instance.setWidth(
-                        detailData['additional'].length == 0 ? 0 : 29),
+                        widget.detailData['additional'].length == 0 ? 0 : 29),
                   ),
                   Container(
                     height: 200,
                     child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: detailData['additional'].length == 0
+                        itemCount: widget.detailData['additional'].length == 0
                             ? 0
-                            : detailData['additional'].length,
+                            : widget.detailData['additional'].length,
                         itemBuilder: (context, i) {
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => detailData['additional']
+                                  builder: (context) => widget
+                                                      .detailData['additional']
                                                   [i]['extension'] ==
                                               'image/jpeg' ||
-                                          detailData['additional'][i]
+                                          widget.detailData['additional'][i]
                                                   ['extension'] ==
                                               'image/png'
                                       ? PhotoView(
                                           imageProvider: NetworkImage(
-                                              detailData['additional'][i]
+                                              widget.detailData['additional'][i]
                                                   ['posterPathFull']),
                                         )
                                       : MediaPlayer(
-                                          videoUri: detailData['additional'][i]
-                                              ['posterPathFull']),
+                                          videoUri:
+                                              widget.detailData['additional'][i]
+                                                  ['posterPathFull']),
                                 ),
                               );
                             },
@@ -2613,15 +2640,15 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   color: Color(0xff8a8a8b),
                                   image: DecorationImage(
                                       image: NetworkImage(
-                                          detailData['additional'][i]
+                                          widget.detailData['additional'][i]
                                               ['posterPathThumb']),
                                       fit: BoxFit.cover),
                                   borderRadius: BorderRadius.circular(15)),
                               child: Center(
-                                  child: detailData['additional'][i]
+                                  child: widget.detailData['additional'][i]
                                                   ['extension'] ==
                                               'image/jpeg' ||
-                                          detailData['additional'][i]
+                                          widget.detailData['additional'][i]
                                                   ['extension'] ==
                                               'image/png'
                                       ? Container()
@@ -2637,7 +2664,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                   SizedBox(
                     height: ScreenUtil.instance.setWidth(29),
                   ),
-                  Text(detailData['description'])
+                  Text(widget.detailData['description'])
                 ],
               ),
             ),
@@ -2665,7 +2692,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     } else if (currentTab == 1) {
       return UserTimelineItem(
         currentUserId: currentUserId,
-        eventId: detailData['id'],
+        eventId: widget.detailData['id'],
         timelineType: 'eventDetail',
       );
     } else if (currentTab == 2) {
@@ -2677,7 +2704,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => EventDetailComment(
-                        eventID: detailData['id'],
+                        eventID: widget.detailData['id'],
                       )));
             },
             child: Container(
@@ -2700,29 +2727,30 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               ),
             ),
           ),
-          detailData['comment'].length == 0
+          widget.detailData['comment'].length == 0
               ? Container(
                   height: 15,
                 )
               : ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: detailData['comment'] == null
+                  itemCount: widget.detailData['comment'] == null
                       ? 0
-                      : detailData['comment'].length,
+                      : widget.detailData['comment'].length,
                   itemBuilder: (context, i) {
                     return ListTile(
                       leading: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(detailData['comment'][i]['photo']),
+                        backgroundImage: NetworkImage(
+                            widget.detailData['comment'][i]['photo']),
                       ),
                       title: Text(
-                        detailData['comment'][i]['fullName'] + '' + ': ',
+                        widget.detailData['comment'][i]['fullName'] + '' + ': ',
                         style: TextStyle(
                             fontSize: ScreenUtil.instance.setSp(12),
                             fontWeight: FontWeight.bold),
                       ),
-                      subtitle: Text(detailData['comment'][i]['response']),
+                      subtitle:
+                          Text(widget.detailData['comment'][i]['response']),
                     );
                   },
                 )
@@ -2743,7 +2771,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   }
 
   Widget countdownTimer() {
-    final salesDay = _dDay;
+    final salesDay = widget.dDay;
     final remaining = salesDay.difference(_currentTime);
 
     final days = remaining.inDays;
@@ -2760,7 +2788,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
           child: Column(
         children: <Widget>[
           Text(
-              'Ticket sales start from ${_dDay.day} - ${_dDay.month} - ${_dDay.year}'),
+              'Ticket sales start from ${widget.dDay.day} - ${widget.dDay.month} - ${widget.dDay.year}'),
           Text(countdownAsString,
               style: TextStyle(
                   fontSize: ScreenUtil.instance.setSp(18),
@@ -2775,8 +2803,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       GOOGLE_API_KEY: 'AIzaSyDjNpeyufzT81GAhQkCe85x83kxzfA7qbI',
       height: 200,
       width: MediaQuery.of(context).size.width.round(),
-      latitude: lat,
-      longitude: long,
+      latitude: widget.lat,
+      longitude: widget.long,
     );
 
     String mapURI = mapProvider.toStringDeep();
@@ -2792,7 +2820,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   }
 
   testGetData() {
-    print(detailData['name']);
+    print(widget.detailData['name']);
   }
 
   Future getInvitedUser() async {
@@ -2816,219 +2844,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       });
 
       print(invitedUserList);
-    }
-  }
-
-  DateTime ticketStartDate;
-
-  Map commentData;
-
-  Future getEventDetailsSpecificInfo() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-
-    setState(() {
-      session = preferences.getString('Session');
-    });
-
-    final detailsInfoUrl = BaseApi().apiUrl +
-        '/event/detail?X-API-KEY=$API_KEY&eventID=${widget.id}';
-    final response = await http.get(detailsInfoUrl, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': session
-    });
-
-    print('event detail page -> ' + response.statusCode.toString());
-    print('event detail page -> ' + response.body);
-
-    if (response.statusCode == 200) {
-      setState(() {
-        var extractedData = json.decode(response.body);
-        detailData = extractedData['data'];
-        goingData = detailData['going']['data'];
-        ticketType = extractedData['data']['ticket_type'];
-        ticketStat = extractedData['data']['ticket'];
-        creatorFullName = extractedData['data']['creatorFullName'];
-        creatorName = extractedData['data']['creatorName'];
-        creatorImageUri = extractedData['data']['creatorPhoto'];
-        startTime = extractedData['data']['timeStart'];
-        endTime = extractedData['data']['timeEnd'];
-        isGoing = extractedData['data']['isGoing'];
-        address = detailData['address'];
-        lat = detailData['latitude'];
-        long = detailData['longitude'];
-        isPrivate = detailData['isPrivate'];
-        isLoved = detailData['isLoved'];
-        email = detailData['email'];
-        phoneNumber = detailData['phone'];
-        website = detailData['website'];
-        eventID = detailData['id'];
-        loveCount = int.parse(isLoved);
-
-        initDeepLinkData(detailData['name'], detailData['photo'], detailData['id']);
-
-        if (detailData['ticket']['sales_start_date'] == null) {
-        } else {
-          ticketStartDate =
-              DateTime.parse(detailData['ticket']['sales_start_date']);
-        }
-
-        for (var data in detailData['comment']) {
-          commentData = data;
-        }
-
-        print(commentData);
-
-        // print(_dDay.toString());
-        // setState((){
-        //   if(detailData['status'] == 'active'){
-        //     if(detailData['ticket_type']['type'] == 'free'){
-        //       ticketTypeURI = 'assets/btn_ticket/free.png';
-        //     }
-        //     else if(detailData['ticket_type']['type'] == 'free_limited'){
-        //       ticketTypeURI = 'assets/btn_ticket/free-limited.png';
-        //     }
-        //     else if(detailData['ticket_type']['type'] == 'on_the_spot'){
-        //       ticketTypeURI = 'assets/btn_ticket/paid-value.png';
-        //     }
-        //     else if(detailData['ticket_type']['type'] == 'paid'){
-        //       ticketTypeURI = 'assets/btn_ticket/paid-value.png';
-        //     }
-        //     else if(detailData['ticketTypeID'] == '2'){
-        //       ticketTypeURI = 'assets/btn_ticket/paid-value.png';
-        //     }
-        //   }
-
-        //   if(detailData['ticket_type']['type'] == 'no_ticket'){
-        //       ticketTypeURI = 'assets/btn_ticket/paid-value.png';
-        //     }
-        // });
-
-        print('type' + detailData['ticket_type'].toString());
-
-        setState(() {
-          _dDay = DateTime.parse(detailData['dateStart']);
-
-          switch (_dDay.month) {
-            case 1:
-              month = 'January';
-              break;
-            case 2:
-              month = 'February';
-              break;
-            case 3:
-              month = 'March';
-              break;
-            case 4:
-              month = 'April';
-              break;
-            case 5:
-              month = 'May';
-              break;
-            case 6:
-              month = 'June';
-              break;
-            case 7:
-              month = 'July';
-              break;
-            case 8:
-              month = 'August';
-              break;
-            case 9:
-              month = 'September';
-              break;
-            case 10:
-              month = 'October';
-              break;
-            case 11:
-              month = 'November';
-              break;
-            case 12:
-              month = 'December';
-              break;
-          }
-
-          dateTime =
-              _dDay.day.toString() + ' ' + month + ' ' + _dDay.year.toString();
-        });
-
-        print('isGoing' + detailData['isGoing'].toString());
-
-        if (detailData['isGoing'] == '1') {
-          itemColor = Colors.blue;
-          ticketPrice = 'Going!';
-        } else {
-          if (detailData['ticket_type']['type'] == 'paid' ||
-              detailData['ticket_type']['type'] == 'paid_seating') {
-            if (detailData['ticket']['availableTicketStatus'] == '1') {
-              if (detailData['ticket']['cheapestTicket'] == '0') {
-                itemColor = Color(0xFFFFAA00);
-                ticketPrice = 'Free Limited';
-              } else {
-                itemColor = Color(0xFF34B323);
-                ticketPrice =
-                    'Rp. ' + detailData['ticket']['cheapestTicket'] + ' ,-';
-              }
-            } else {
-              if (detailData['ticket']['salesStatus'] == 'comingSoon') {
-                itemColor = Color(0xFF34B323).withOpacity(0.3);
-                ticketPrice = 'COMING SOON';
-              } else if (detailData['ticket']['salesStatus'] == 'endSales') {
-                itemColor = Color(0xFF8E1E2D);
-                if (detailData['status'] == 'ended') {
-                  ticketPrice = 'EVENT HAS ENDED';
-                }
-                ticketPrice = 'SALES ENDED';
-              } else {
-                itemColor = Color(0xFF8E1E2D);
-                ticketPrice = 'SOLD OUT';
-              }
-            }
-          } else if (detailData['ticket_type']['type'] == 'no_ticket') {
-            itemColor = Color(0xFF652D90);
-            ticketPrice = 'NO TICKET';
-          } else if (detailData['ticket_type']['type'] == 'on_the_spot') {
-            itemColor = Color(0xFF652D90);
-            ticketPrice = detailData['ticket_type']['name'];
-          } else if (detailData['ticket_type']['type'] == 'free') {
-            itemColor = Color(0xFFFFAA00);
-            ticketPrice = detailData['ticket_type']['name'];
-          } else if (detailData['ticket_type']['type'] == 'free') {
-            itemColor = Color(0xFFFFAA00);
-            ticketPrice = detailData['ticket_type']['name'];
-          } else if (detailData['ticket_type']['type'] == 'free_limited') {
-            if (detailData['ticket']['availableTicketStatus'] == '1') {
-              itemColor = Color(0xFFFFAA00);
-              ticketPrice = 'Free Limited';
-            } else {
-              if (detailData['ticket']['salesStatus'] == 'comingSoon') {
-                itemColor = Color(0xFF34B323).withOpacity(0.3);
-                ticketPrice = 'COMING SOON';
-              } else if (detailData['ticket']['salesStatus'] == 'endSales') {
-                itemColor = Color(0xFF8E1E2D);
-                if (detailData['status'] == 'ended') {
-                  ticketPrice = 'EVENT HAS ENDED';
-                }
-                ticketPrice = 'SALES ENDED';
-              } else {
-                itemColor = Color(0xFFFFAA00);
-                ticketPrice = 'SOLD OUT';
-              }
-            }
-          }
-        }
-      });
-      preferences.setString('eventID', detailData['id']);
-      print(detailData['id']);
-      print(loveCount);
-      print(isPrivate);
-      print(creatorFullName);
-      print(creatorName);
-      print(creatorImageUri);
-      print(startTime);
-      print(endTime);
-      print(ticketTypeURI);
-      print(ticketType['isSetupTicket']);
-      print(ticketStat);
     }
   }
 

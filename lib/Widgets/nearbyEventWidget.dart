@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -316,8 +317,9 @@ class _ListenPageState extends State<ListenPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        EventDetailsConstructView(
-                                            id: nearbyEventData[i]['id'])));
+                                        EventDetailLoadingScreen(
+                                          eventId: nearbyEventData[i]['id']
+                                        )));
                           },
                           child: new LatestEventItem(
                             image: nearbyEventData[i]['picture_timeline'],

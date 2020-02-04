@@ -1,3 +1,4 @@
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,7 +62,7 @@ class FinishPostEventState extends State<FinishPostEvent>{
             ),
             GestureDetector(
               onTap: (){
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => EventDetailsConstructView(id: newEventId,)), ModalRoute.withName('/PostEvent'));
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => EventDetailLoadingScreen(eventId: newEventId)), ModalRoute.withName('/PostEvent'));
               },
               child: SizedBox(
                 height: ScreenUtil.instance.setWidth(50), 

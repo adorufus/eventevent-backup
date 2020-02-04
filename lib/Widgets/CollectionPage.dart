@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -388,9 +389,9 @@ class _CollectionPageState extends State<CollectionPage> {
                                         settings:
                                             RouteSettings(name: 'EventDetails'),
                                         builder: (BuildContext context) =>
-                                            EventDetailsConstructView(
-                                                id: eventByCategoryList[i]
-                                                    ['id'])));
+                                            EventDetailLoadingScreen(
+                                              eventId: eventByCategoryList[i]['id']
+                                            )));
                               },
                               child: new LatestEventItem(
                                 image: eventByCategoryList[i]['picture'],

@@ -1,4 +1,5 @@
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -112,7 +113,8 @@ class PrivateEventListState extends State<PrivateEventList> {
                         if (response.statusCode == 200) {
                           setState(() {
                             var extractedData = json.decode(response.body);
-                            privateData = extractedData['data']['private']['data'];
+                            privateData =
+                                extractedData['data']['private']['data'];
                             assert(privateData != null);
 
                             print(privateData);
@@ -234,11 +236,13 @@ class PrivateEventListState extends State<PrivateEventList> {
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        EventDetailsConstructView(
-                                            id: privateData[i]['id'])));
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    EventDetailLoadingScreen(
+                                        eventId: privateData[i]['id']),
+                              ),
+                            );
                           },
                           child: new LatestEventItem(
                             image: privateData[i]['picture'],

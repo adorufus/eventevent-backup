@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:flutter/material.dart';
@@ -378,11 +379,9 @@ class _SeeAllItemState extends State<SeeAllItem> {
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    EventDetailsConstructView(
-                                        id: popularEventList[i]['id'],
-                                        name: popularEventList[i]['name'],
-                                        image: popularEventList[i]
-                                            ['photoFull'])));
+                                    EventDetailLoadingScreen(
+                                      eventId: popularEventList[i]['id']
+                                    )));
                       },
                       child: new LatestEventItem(
                           image: popularEventList[i]['picture_timeline'],
@@ -547,10 +546,9 @@ class _SeeAllItemState extends State<SeeAllItem> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          EventDetailsConstructView(
-                                              id: discoverEventList[i]['id'],
-                                              name: discoverEventList[i]['name'],
-                                              image: discoverEventList[i]['photoFull'])));
+                                         EventDetailLoadingScreen(
+                                           eventId: discoverEventList[i]['id']
+                                         )));
                       },
                       child: new LatestEventItem(
                           image: discoverEventList[i]['picture_timeline'],

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -208,8 +209,9 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                               context,
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      EventDetailsConstructView(
-                                          id: latestEventData[i]['id'])));
+                                      EventDetailLoadingScreen(
+                                        eventId: latestEventData[i]['id']
+                                      )));
                         },
                         child: new LatestEventItem(
                           image: latestEventData[i]['picture_timeline'],

@@ -1,5 +1,6 @@
 import 'dart:convert' show json, utf8;
 
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/Widgets/TransactionHistory.dart';
@@ -378,18 +379,14 @@ class PushNotificationState extends State<PushNotification> {
 
   doNavigateOnPressedNotification(int index) {
     if (notificationData[index]['type'] == 'reminder_event') {
-      navigationHandler(EventDetailsConstructView(
-        id: notificationData[index]['id'],
-      ));
+      navigationHandler(EventDetailLoadingScreen(eventId: notificationData[index]['id'],));
     } else if (notificationData[index]['type'] == 'relationship') {
       navigationHandler(ProfileWidget(
         userId: notificationData[index]['id'],
         initialIndex: 0,
       ));
     } else if (notificationData[index]['type'] == 'live_stream_cancel') {
-      navigationHandler(EventDetailsConstructView(
-        id: notificationData[index]['id'],
-      ));
+      navigationHandler(EventDetailLoadingScreen(eventId: notificationData[index]['id']));
     } else if (notificationData[index]['type'] == 'photo_comment') {
       navigationHandler(UserMediaDetail(
         postID: notificationData[index]['id'],
@@ -462,17 +459,11 @@ class PushNotificationState extends State<PushNotification> {
         autoFocus: true,
       ));
     } else if (notificationData[index]['type'] == 'eventgoingstatus') {
-      navigationHandler(EventDetailsConstructView(
-        id: notificationData[index]['id'],
-      ));
+      navigationHandler(EventDetailLoadingScreen(eventId: notificationData[index]['id']));
     } else if (notificationData[index]['type'] == 'eventdetail_comment') {
-      navigationHandler(EventDetailsConstructView(
-        id: notificationData[index]['id'],
-      ));
+      navigationHandler(EventDetailLoadingScreen(eventId: notificationData[index]['id']));
     } else if (notificationData[index]['type'] == 'eventdetail_love') {
-      navigationHandler(EventDetailsConstructView(
-        id: notificationData[index]['id'],
-      ));
+      navigationHandler(EventDetailLoadingScreen(eventId: notificationData[index]['id']));
     } else if (notificationData[index]['type'] == 'photo_impression') {
       navigationHandler(UserMediaDetail(
         postID: notificationData[index]['id'],
@@ -480,10 +471,10 @@ class PushNotificationState extends State<PushNotification> {
       ));
     } else if (notificationData[index]['type'] == 'event') {
       navigationHandler(
-          EventDetailsConstructView(id: notificationData[index]['id']));
+          EventDetailLoadingScreen(eventId: notificationData[index]['id']));
     } else if (notificationData[index]['type'] == 'eventinvite') {
       navigationHandler(
-          EventDetailsConstructView(id: notificationData[index]['id']));
+          EventDetailLoadingScreen(eventId: notificationData[index]['id']));
     } else if (notificationData[index]['type'] == 'reminder_qr') {
       navigationHandler(ShowQr(
         qrUrl: notificationData[index][''],
