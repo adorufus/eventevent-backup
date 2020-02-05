@@ -157,7 +157,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
   @override
   void initState() {
-    FlutterBranchSdk.validateSDKIntegration();
+    // FlutterBranchSdk.validateSDKIntegration();
+    generateLink();
 
     super.initState();
     //testGetData();
@@ -418,7 +419,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     SizedBox(width: ScreenUtil.instance.setWidth(8)),
                     GestureDetector(
                       onTap: () {
-                        generateLink();
                         ShareExtend.share(generatedLink, 'text');
                       },
                       child: Icon(
