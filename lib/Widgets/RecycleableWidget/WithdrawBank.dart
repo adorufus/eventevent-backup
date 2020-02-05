@@ -491,9 +491,14 @@ class WithdrawBankState extends State<WithdrawBank> {
                             accountNumber: bankList[i]['account_number'],
                             bankName: bankList[i]['bank_name'],
                             userBankId: bankList[i]['id'],
+                            bankIndex: i
                           ),
                         ),
-                      );
+                      ).then((val){
+                        if(val != null){
+                          bankList.removeAt(val);
+                        }
+                      });
                     },
                     child: Container(
                       height: ScreenUtil.instance.setWidth(85),

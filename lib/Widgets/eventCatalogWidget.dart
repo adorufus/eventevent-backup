@@ -208,11 +208,11 @@ class _EventCatalogState extends State<EventCatalog>
             builder: (BuildContext context) {
               return GestureDetector(
                   onTap: () {
-                    if (bannerData['type'] == 'event') {
+                    if (bannerData['type'] == 'event' && bannerData['eventID'] != "") {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return EventDetailLoadingScreen(
-                            eventId: bannerData['eventId']);
+                            eventId: bannerData['eventID']);
                         // EventDetailsConstructView(
                         //     id: bannerData['eventID'],
                         //     name: bannerData['name'],

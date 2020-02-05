@@ -104,8 +104,8 @@ class _RunAppState extends State<RunApp> {
       // home: CrashlyticsTester(),
       home: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
-            statusBarColor: eventajaGreenTeal,
-            statusBarIconBrightness: Brightness.light),
+            statusBarColor: Colors.white,
+            statusBarIconBrightness: Brightness.dark),
         child: SplashScreen(
             analytics: RunApp.analytics, observer: RunApp.observer),
       ),

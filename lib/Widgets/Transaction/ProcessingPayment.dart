@@ -400,6 +400,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                   height: 20,
                   child: LiquidLinearProgressIndicator(
                     backgroundColor: Color(0xff8a8a8b),
+                    borderRadius: 15,
                     valueColor: AlwaysStoppedAnimation(eventajaGreenTeal),
                     direction: Axis.horizontal,
                     value: progress,

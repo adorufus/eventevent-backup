@@ -203,12 +203,15 @@ class _TimelineItemState extends State<TimelineItem>
                           widget.id != null && widget.type != 'love'
                       ? GestureDetector(
                           onTap: () {
-                            if (widget.type == 'photo') {
+                            if (widget.type == 'photo' ||
+                                widget.type == 'event' ||
+                                widget.type == 'eventgoing') {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => UserMediaDetail(
                                             postID: widget.id,
+                                            type: widget.type,
                                             imageUri: widget.photoFull,
                                             articleDetail: widget.description,
                                             mediaTitle: widget.description,
@@ -275,13 +278,20 @@ class _TimelineItemState extends State<TimelineItem>
                               ),
                             )
                           : Container(),
-                          widget.type == 'love' ? Expanded(child: SizedBox(),) : Container(),
+                      widget.type == 'love'
+                          ? Expanded(
+                              child: SizedBox(),
+                            )
+                          : Container(),
                       Container(
                           margin: EdgeInsets.only(top: 15),
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(widget.type == 'love' ? widget.name : widget.fullName,
+                                Text(
+                                    widget.type == 'love'
+                                        ? widget.name
+                                        : widget.fullName,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize:
@@ -304,8 +314,10 @@ class _TimelineItemState extends State<TimelineItem>
                                                     color: Color(0xFF8A8A8B))),
                                           )
                                         : Container(
-                                            width: ScreenUtil.instance
-                                                .setWidth(widget.type != 'love' ? 150 : 250),
+                                            width: ScreenUtil.instance.setWidth(
+                                                widget.type != 'love'
+                                                    ? 150
+                                                    : 250),
                                             child: Text(
                                               widget.name == null
                                                   ? ''
@@ -319,7 +331,9 @@ class _TimelineItemState extends State<TimelineItem>
                                   ],
                                 )
                               ])),
-                              Expanded(child: SizedBox(),),
+                      Expanded(
+                        child: SizedBox(),
+                      ),
                       // Container(
                       //   child: Image.asset('assets/btn_ticket/free-limited.png', scale: 7,),)
                       widget.type == 'event'

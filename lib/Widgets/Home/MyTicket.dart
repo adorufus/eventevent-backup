@@ -21,7 +21,7 @@ class _MyTicketState extends State<MyTicket> {
   List filteredTickets = new List();
   List tickets = new List();
   RefreshController refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
   TextEditingController searchController = new TextEditingController();
 
   int newPage = 0;

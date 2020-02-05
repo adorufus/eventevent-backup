@@ -8,6 +8,7 @@ import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -446,7 +447,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    PrivacyPolicy()));
+                                    WebViewTest(
+                                      url: 'https://eventevent.com/opensourcelibrary',
+                                    )));
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -462,7 +465,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     ),
                   ],
                 ),
-              ),
+              ),  
               SizedBox(
                 height: ScreenUtil.instance.setWidth(25),
               ),
