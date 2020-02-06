@@ -20,6 +20,7 @@ class MediaItem extends StatefulWidget {
   final commentCount;
   final youtube;
   final videoUrl;
+  final isRest;
 
   const MediaItem(
       {Key key,
@@ -32,7 +33,7 @@ class MediaItem extends StatefulWidget {
       this.articleDetail,
       this.mediaId,
       this.likeCount,
-      this.commentCount, this.youtube, this.videoUrl})
+      this.commentCount, this.youtube, this.videoUrl, @required this.isRest})
       : super(key: key);
 
   @override
@@ -221,6 +222,7 @@ class _MediaItemState extends State<MediaItem> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => MediaDetails(
+                                            isRest: widget.isRest,
                                                 username: widget.username,
                                                 mediaTitle: widget.title,
                                                 userPicture: widget.userPicture,

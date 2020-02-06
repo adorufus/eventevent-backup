@@ -690,6 +690,7 @@ class _EventCatalogState extends State<EventCatalog>
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => MediaDetails(
+                                          isRest: widget.isRest,
                                               videoUrl: mediaData[i]['video'],
                                               youtubeUrl: mediaData[i]
                                                   ['youtube'],
@@ -708,6 +709,7 @@ class _EventCatalogState extends State<EventCatalog>
                                             )));
                               },
                               child: MediaItem(
+                                isRest: widget.isRest,
                                 isVideo: true,
                                 image: mediaData[i]['thumbnail_timeline'],
                                 title: mediaData[i]['title'],
@@ -1487,7 +1489,9 @@ class _EventCatalogState extends State<EventCatalog>
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          SeeAllMediaItem(initialIndex: 0, isVideo: true)));
+                          SeeAllMediaItem(
+                            isRest: widget.isRest,
+                            initialIndex: 0, isVideo: true)));
                 },
                 child: Text(
                   'See All',
@@ -1872,13 +1876,14 @@ class _EventCatalogState extends State<EventCatalog>
       });
       Flushbar(
         flushbarPosition: FlushbarPosition.TOP,
-        message: response.reasonPhrase,
+        message: 'Collections' + response.reasonPhrase,
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
-      )..show(context);
-      Navigator.of(context).pushReplacement(
+      )..show(context).then((val){
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+      });
     } else if (extractedData['desc'] == 'Event Not Found') {
       setState(() {
         isLoading = false;
@@ -1913,6 +1918,7 @@ class _EventCatalogState extends State<EventCatalog>
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => SeeAllMediaItem(
+                            isRest: widget.isRest,
                                 initialIndex: 1,
                                 isVideo: true,
                               )));
@@ -1943,6 +1949,7 @@ class _EventCatalogState extends State<EventCatalog>
                       context,
                       MaterialPageRoute(
                           builder: (context) => MediaDetails(
+                            isRest: widget.isRest,
                                 isVideo: true,
                                 videoUrl: latestMediaVideo[i]['video'],
                                 youtubeUrl: latestMediaVideo[i]['youtube'],
@@ -1960,6 +1967,7 @@ class _EventCatalogState extends State<EventCatalog>
                               )));
                 },
                 child: LatestMediaItem(
+                  isRest: widget.isRest,
                   isVideo: true,
                   image: latestMediaVideo[i]['thumbnail_timeline'],
                   title: latestMediaVideo[i]['title'],
@@ -2034,9 +2042,10 @@ class _EventCatalogState extends State<EventCatalog>
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
-      )..show(context);
-      Navigator.of(context).pushReplacement(
+      )..show(context).then((val){
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+      });
     }
   }
 
@@ -2100,9 +2109,10 @@ class _EventCatalogState extends State<EventCatalog>
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
-      )..show(context);
-      Navigator.of(context).pushReplacement(
+      )..show(context).then((val){
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+      });
     }
   }
 
@@ -2165,9 +2175,10 @@ class _EventCatalogState extends State<EventCatalog>
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
-      )..show(context);
-      Navigator.of(context).pushReplacement(
+      )..show(context).then((val){
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+      });
     }
   }
 
@@ -2230,9 +2241,10 @@ class _EventCatalogState extends State<EventCatalog>
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
-      )..show(context);
-      Navigator.of(context).pushReplacement(
+      )..show(context).then((val){
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+      });
     }
   }
 }

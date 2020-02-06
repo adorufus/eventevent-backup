@@ -220,7 +220,9 @@ class TicketSalesState extends State<TicketSales> {
                             return GestureDetector(
                               onTap: (){
                                 try{
-                                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Buyers(eventName: widget.eventName, ticketID: ticketData[i]['id'],)));
+                                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Buyers(
+                                    ticketName: ticketData[i]['ticket_name'],
+                                    eventName: widget.eventName, ticketID: ticketData[i]['id'],)));
                                 }
                                 catch(e){
                                   print('error occured: ' + e);

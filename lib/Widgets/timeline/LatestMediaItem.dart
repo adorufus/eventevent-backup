@@ -15,6 +15,7 @@ class LatestMediaItem extends StatefulWidget {
   final youtube;
   final videoUrl;
   final mediaId;
+  final isRest;
 
   const LatestMediaItem(
       {Key key,
@@ -27,7 +28,7 @@ class LatestMediaItem extends StatefulWidget {
       this.commentCount,
       this.youtube,
       this.videoUrl,
-      this.article, this.mediaId})
+      this.article, this.mediaId, @required this.isRest})
       : super(key: key);
 
   @override
@@ -155,6 +156,7 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MediaDetails(
+                                      isRest: widget.isRest,
                                         username: widget.username,
                                         mediaTitle: widget.title,
                                         userPicture: widget.userImage,

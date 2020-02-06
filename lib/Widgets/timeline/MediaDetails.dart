@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:chewie/chewie.dart';
+import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -24,6 +26,7 @@ class MediaDetails extends StatefulWidget {
   final youtubeUrl;
   final videoUrl;
   final mediaId;
+  final isRest;
 
   const MediaDetails(
       {Key key,
@@ -37,7 +40,8 @@ class MediaDetails extends StatefulWidget {
       this.isVideo,
       this.youtubeUrl: 'https://test.com/',
       this.videoUrl,
-      this.mediaId})
+      this.mediaId,
+      this.isRest})
       : super(key: key);
 
   @override
@@ -62,9 +66,9 @@ class _MediaDetailsState extends State<MediaDetails> {
 
   @override
   void initState() {
-    getMediaDetails().then((response){
+    getMediaDetails().then((response) {
       var extractedData = json.decode(response.body);
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         setState(() {
           mediaDetails = extractedData['data'];
         });
@@ -101,7 +105,8 @@ class _MediaDetailsState extends State<MediaDetails> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -143,132 +148,155 @@ class _MediaDetailsState extends State<MediaDetails> {
       ),
       bottomNavigationBar: Padding(
         padding: MediaQuery.of(context).viewInsets,
-        child: Container(
-          height: ScreenUtil.instance.setWidth(70),
-          width: MediaQuery.of(context).size.width,
-          child: Row(
-            children: <Widget>[
-              Container(
+        child: widget.isRest == true
+            ? GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+                },
+                child: Container(
                   width: MediaQuery.of(context).size.width,
-                  child: TypeAheadFormField(
-                    textFieldConfiguration: TextFieldConfiguration(
-                      controller: textEditingController,
-                      autofocus: widget.autoFocus,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(0)),
-                              borderSide: BorderSide(color: Colors.black)),
-                          hintText: 'Add a comment..',
-                          suffix: GestureDetector(
-                            onTap: () {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              postComment(widget.mediaId,
-                                      textEditingController.text)
-                                  .then((response) {
-                                var extractedData = json.decode(response.body);
+                  height: ScreenUtil.instance.setWidth(70),
+                  color: eventajaGreenTeal,
+                  child: Center(
+                      child: Text(
+                    'Login First To Comment',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  )),
+                ),
+              )
+            : Container(
+                height: ScreenUtil.instance.setWidth(70),
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: TypeAheadFormField(
+                          textFieldConfiguration: TextFieldConfiguration(
+                            controller: textEditingController,
+                            autofocus: widget.autoFocus,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(0)),
+                                    borderSide:
+                                        BorderSide(color: Colors.black)),
+                                hintText: 'Add a comment..',
+                                suffix: GestureDetector(
+                                  onTap: () {
+                                    FocusScope.of(context)
+                                        .requestFocus(FocusNode());
+                                    postComment(widget.mediaId,
+                                            textEditingController.text)
+                                        .then((response) {
+                                      var extractedData =
+                                          json.decode(response.body);
 
-                                if (response.statusCode == 200 ||
-                                    response.statusCode == 201) {
-                                  print(response.body);
-                                  isLoading = false;
-                                  print('****Comment Posted!*****');
-                                  textEditingController.text = '';
-                                  setState(() {});
-                                } else {
-                                  isLoading = false;
-                                  print(response.body);
-                                  print('****Comment Failed****');
-                                  print('reason: ${extractedData['desc']}');
-                                }
-                              }).catchError((e) {
-                                isLoading = false;
-                                print('****Comment Failed****');
-                                print('reason: ' + e.toString());
-                              });
-                            },
-                            child: Container(
-                                child: Text(
-                              'Send',
-                              style: TextStyle(
-                                  color: eventajaGreenTeal,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                          )),
-                    ),
-                    suggestionsCallback: (text) async {
-                      for (var texts in text.split(' ')) {
-                        print(texts);
-                        if(texts.startsWith('@')){
-                          return await searchUser(texts);
-                        }
-                      }
-                      return null;
-                    },
-                    direction: AxisDirection.up,
-                    itemBuilder: (context, suggestion) {
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(suggestion['photo']),
-                        ),
-                        title: Text(suggestion['username']),
-                      );
-                    },
-                    transitionBuilder: (context, suggestionBox, controller) {
-                      return suggestionBox;
-                    },
-                    onSuggestionSelected: (suggestion) {
-                      textEditingController.text += suggestion;
-                    },
-                  )
-                  //TextFormField(
-                  //   controller: textEditingController,
-                  //   autofocus: widget.autoFocus,
-                  //   decoration: InputDecoration(
-                  //       border: OutlineInputBorder(
-                  //           borderRadius: BorderRadius.all(Radius.circular(0)),
-                  //           borderSide: BorderSide(color: Colors.black)),
-                  //       hintText: 'Add a comment..',
-                  //       suffix: GestureDetector(
-                  //         onTap: () {
-                  //           FocusScope.of(context).requestFocus(FocusNode());
-                  //           postComment(
-                  //                   widget.mediaId, textEditingController.text)
-                  //               .then((response) {
-                  //             var extractedData = json.decode(response.body);
+                                      if (response.statusCode == 200 ||
+                                          response.statusCode == 201) {
+                                        print(response.body);
+                                        isLoading = false;
+                                        print('****Comment Posted!*****');
+                                        textEditingController.text = '';
+                                        setState(() {});
+                                      } else {
+                                        isLoading = false;
+                                        print(response.body);
+                                        print('****Comment Failed****');
+                                        print(
+                                            'reason: ${extractedData['desc']}');
+                                      }
+                                    }).catchError((e) {
+                                      isLoading = false;
+                                      print('****Comment Failed****');
+                                      print('reason: ' + e.toString());
+                                    });
+                                  },
+                                  child: Container(
+                                      child: Text(
+                                    'Send',
+                                    style: TextStyle(
+                                        color: eventajaGreenTeal,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                )),
+                          ),
+                          suggestionsCallback: (text) async {
+                            for (var texts in text.split(' ')) {
+                              print(texts);
+                              if (texts.startsWith('@')) {
+                                return await searchUser(texts);
+                              }
+                            }
+                            return null;
+                          },
+                          direction: AxisDirection.up,
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(suggestion['photo']),
+                              ),
+                              title: Text(suggestion['username']),
+                            );
+                          },
+                          transitionBuilder:
+                              (context, suggestionBox, controller) {
+                            return suggestionBox;
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            textEditingController.text += suggestion;
+                          },
+                        )
+                        //TextFormField(
+                        //   controller: textEditingController,
+                        //   autofocus: widget.autoFocus,
+                        //   decoration: InputDecoration(
+                        //       border: OutlineInputBorder(
+                        //           borderRadius: BorderRadius.all(Radius.circular(0)),
+                        //           borderSide: BorderSide(color: Colors.black)),
+                        //       hintText: 'Add a comment..',
+                        //       suffix: GestureDetector(
+                        //         onTap: () {
+                        //           FocusScope.of(context).requestFocus(FocusNode());
+                        //           postComment(
+                        //                   widget.mediaId, textEditingController.text)
+                        //               .then((response) {
+                        //             var extractedData = json.decode(response.body);
 
-                  //             if (response.statusCode == 200 ||
-                  //                 response.statusCode == 201) {
-                  //               print(response.body);
-                  //               isLoading = false;
-                  //               print('****Comment Posted!*****');
-                  //               textEditingController.text = '';
-                  //               setState(() {});
-                  //             } else {
-                  //               isLoading = false;
-                  //               print(response.body);
-                  //               print('****Comment Failed****');
-                  //               print('reason: ${extractedData['desc']}');
-                  //             }
-                  //           }).catchError((e) {
-                  //             isLoading = false;
-                  //             print('****Comment Failed****');
-                  //             print('reason: ' + e.toString());
-                  //           });
-                  //         },
-                  //         child: Container(
-                  //             child: Text(
-                  //           'Send',
-                  //           style: TextStyle(
-                  //               color: eventajaGreenTeal,
-                  //               fontWeight: FontWeight.bold),
-                  //         )),
-                  //       )),
-                  // ),
-                  )
-            ],
-          ),
-        ),
+                        //             if (response.statusCode == 200 ||
+                        //                 response.statusCode == 201) {
+                        //               print(response.body);
+                        //               isLoading = false;
+                        //               print('****Comment Posted!*****');
+                        //               textEditingController.text = '';
+                        //               setState(() {});
+                        //             } else {
+                        //               isLoading = false;
+                        //               print(response.body);
+                        //               print('****Comment Failed****');
+                        //               print('reason: ${extractedData['desc']}');
+                        //             }
+                        //           }).catchError((e) {
+                        //             isLoading = false;
+                        //             print('****Comment Failed****');
+                        //             print('reason: ' + e.toString());
+                        //           });
+                        //         },
+                        //         child: Container(
+                        //             child: Text(
+                        //           'Send',
+                        //           style: TextStyle(
+                        //               color: eventajaGreenTeal,
+                        //               fontWeight: FontWeight.bold),
+                        //         )),
+                        //       )),
+                        // ),
+                        )
+                  ],
+                ),
+              ),
       ),
       body: ListView(
         children: <Widget>[
@@ -300,7 +328,9 @@ class _MediaDetailsState extends State<MediaDetails> {
                     width: MediaQuery.of(context).size.width - 217.7,
                     child: Text(
                       '@' + widget.username.toString(),
-                      style: TextStyle(color: Color(0xFF8A8A8B), fontSize: ScreenUtil.instance.setSp(14)),
+                      style: TextStyle(
+                          color: Color(0xFF8A8A8B),
+                          fontSize: ScreenUtil.instance.setSp(14)),
                     )),
               ],
             ),
@@ -310,12 +340,18 @@ class _MediaDetailsState extends State<MediaDetails> {
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 13),
-            child: mediaDetails['media_content'] == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20),),) : Html(
-              data: mediaDetails['media_content'][0]['content_text'],
-              onLinkTap: (url) {
-                print('loading..');
-              },
-            ),
+            child: mediaDetails['media_content'] == null
+                ? Container(
+                    child: Center(
+                      child: CupertinoActivityIndicator(radius: 20),
+                    ),
+                  )
+                : Html(
+                    data: mediaDetails['media_content'][0]['content_text'],
+                    onLinkTap: (url) {
+                      print('loading..');
+                    },
+                  ),
           ),
           SizedBox(
             height: ScreenUtil.instance.setWidth(10),
@@ -375,7 +411,8 @@ class _MediaDetailsState extends State<MediaDetails> {
                             commentList[i]['lastName'] +
                             ': ',
                         style: TextStyle(
-                            fontSize: ScreenUtil.instance.setSp(12), fontWeight: FontWeight.bold),
+                            fontSize: ScreenUtil.instance.setSp(12),
+                            fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(commentList[i]['comment']),
                     );
@@ -441,8 +478,18 @@ class _MediaDetailsState extends State<MediaDetails> {
   Future getCommentList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl +
-        '/media/detail?X-API-KEY=$API_KEY&id=${widget.mediaId}';
+    var baseUrl = BaseApi().apiUrl;
+
+    setState(() {
+      if (widget.isRest == true) {
+        baseUrl = BaseApi().restUrl;
+      } else {
+        baseUrl = BaseApi().apiUrl;
+      }
+    });
+
+    String url =
+        baseUrl + '/media/detail?X-API-KEY=$API_KEY&id=${widget.mediaId}';
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,
@@ -456,15 +503,14 @@ class _MediaDetailsState extends State<MediaDetails> {
 
   Future<http.Response> getMediaDetails() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String url = BaseApi().apiUrl + '/media/detail?X-API-KEY=$API_KEY&id=${widget.mediaId}';
+    String url = BaseApi().restUrl +
+        '/media/detail?X-API-KEY=$API_KEY&id=${widget.mediaId}';
 
-    final response = await http.get(
-        url,
-      headers: {
-          'Authorization': AUTHORIZATION_KEY,
-        'cookie': preferences.getString('Session')
-      }
-    );
+    final response = await http.get(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'signature': signature,
+      'cookie': preferences.getString('Session')
+    });
 
     print(response.body);
 

@@ -188,7 +188,7 @@ class SearchState extends State<Search> {
                           child: TabBarView(
                             children: <Widget>[
                               notFound == true
-                                  ? Container(child: Text('Not Found'))
+                                  ? Center(child: Container(child: Text('Not Found')))
                                   : _buildList(),
                               _buildListProfile()
                             ],

@@ -18,13 +18,14 @@ class SeeAllMediaItem extends StatefulWidget {
   final bool isVideo;
   final likeCount;
   final commentCount;
+  final isRest;
 
   const SeeAllMediaItem(
       {Key key,
       this.initialIndex,
       this.isVideo,
       this.likeCount,
-      this.commentCount})
+      this.commentCount, @required this.isRest})
       : super(key: key);
 
   @override
@@ -298,6 +299,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                             MaterialPageRoute(
                                 builder: (context) => widget.isVideo == false
                                     ? MediaDetails(
+                                      isRest: widget.isRest,
                                         userPicture: popularMedia[i]['creator']
                                             ['photo'],
                                         articleDetail: popularMedia[i]
@@ -312,6 +314,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                                         isVideo: false,
                                       )
                                     : MediaDetails(
+                                      isRest: widget.isRest,
                                         isVideo: true,
                                         videoUrl: popularMedia[i]['video'],
                                         youtubeUrl: popularMedia[i]
@@ -332,6 +335,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                                       )));
                       },
                       child: new LatestMediaItem(
+                        isRest: widget.isRest,
                         isVideo: widget.isVideo,
                         image: widget.isVideo == true
                             ? popularMedia[i]['thumbnail_timeline']
@@ -416,6 +420,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                             MaterialPageRoute(
                                 builder: (context) => widget.isVideo == false
                                     ? MediaDetails(
+                                      isRest: widget.isRest,
                                         userPicture: latestMedia[i]['creator']
                                             ['photo'],
                                         articleDetail: latestMedia[i]
@@ -430,6 +435,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                                         isVideo: false,
                                       )
                                     : MediaDetails(
+                                      isRest: widget.isRest,
                                         isVideo: true,
                                         videoUrl: latestMedia[i]['video'],
                                         youtubeUrl: latestMedia[i]
@@ -450,6 +456,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                                       )));
                       },
                       child: new LatestMediaItem(
+                        isRest: widget.isRest,
                         isVideo: widget.isVideo,
                         image: widget.isVideo == true
                             ? latestMedia[i]['thumbnail_timeline']

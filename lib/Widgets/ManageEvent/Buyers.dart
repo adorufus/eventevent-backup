@@ -20,8 +20,9 @@ import 'package:share_extend/share_extend.dart';
 class Buyers extends StatefulWidget {
   final ticketID;
   final eventName;
+  final ticketName;
 
-  const Buyers({Key key, this.ticketID, this.eventName}) : super(key: key);
+  const Buyers({Key key, this.ticketID, this.eventName, this.ticketName}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -217,10 +218,10 @@ class BuyersState extends State<Buyers> {
 
     if(Platform.isAndroid){
       dir = (await getExternalStorageDirectory()).absolute.path +
-          '/report_${widget.eventName}';
+          '/report_${widget.ticketName}';
     }
     else if(Platform.isIOS){
-      dir = (await getLibraryDirectory()).absolute.path + '/report_${widget.eventName}';
+      dir = (await getLibraryDirectory()).absolute.path + '/report_${widget.ticketName}';
     }
 
       String file = "$dir";

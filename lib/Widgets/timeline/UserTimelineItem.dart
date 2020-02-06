@@ -5,6 +5,7 @@ import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
@@ -364,115 +365,119 @@ class _TimelineItemState extends State<TimelineItem>
             ),
             Container(
               margin: EdgeInsets.only(left: 13, top: 13, bottom: 13),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (_isLoved == false) {
-                            _loveCount += 1;
-                            _isLoved = true;
-                            doLove(widget.id, '6').then((response) {
-                              print(response.body);
-                              print(response.statusCode);
-                            });
-                            doRefresh();
-                          } else {
-                            _loveCount -= 1;
-                            _isLoved = false;
-                            unLove(widget.id);
-                            doRefresh();
-                          }
+              child: Row(children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (_isLoved == false) {
+                        _loveCount += 1;
+                        _isLoved = true;
+                        doLove(widget.id, '6').then((response) {
+                          print(response.body);
+                          print(response.statusCode);
                         });
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: ScreenUtil.instance.setWidth(30),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 2,
-                                  spreadRadius: 1.5)
-                            ]),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Image.asset(
-                                'assets/icons/icon_apps/love.png',
-                                color:
-                                    _loveCount > 0 ? Colors.red : Colors.grey,
-                                scale: 3.5,
-                              ),
-                              SizedBox(
-                                  width: ScreenUtil.instance
-                                      .setWidth(_loveCount < 1 ? 0 : 5)),
-                              Text(_loveCount < 1 ? '' : _loveCount.toString(),
-                                  style: TextStyle(
-                                      color: Color(
-                                          0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
-                            ]),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: ScreenUtil.instance.setWidth(30),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 2,
-                                spreadRadius: 1.5)
-                          ]),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Image.asset(
-                              'assets/icons/icon_apps/comment.png',
-                              scale: 3.5,
-                            ),
-                            SizedBox(width: ScreenUtil.instance.setWidth(5)),
-                            Text(widget.commentTotalRows,
-                                style: TextStyle(
-                                    color: Color(
-                                        0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
-                          ]),
-                    ),
-                    SizedBox(width: _loveCount > 99 ? 100 : 150),
-                    GestureDetector(
-                      onTap: () async {
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        if (widget.userId == prefs.getString('Last User ID')) {
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return showMoreOption(widget.id, widget.type,
-                                    imageUrl: widget.picture);
-                              });
-                        } else {
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return showMoreOptionReport(
-                                  widget.id,
-                                  widget.type,
-                                );
-                              });
-                        }
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: ScreenUtil.instance.setWidth(30),
-                        child: Icon(Icons.more_horiz),
-                      ),
-                    )
-                  ]),
+                        doRefresh();
+                      } else {
+                        _loveCount -= 1;
+                        _isLoved = false;
+                        unLove(widget.id);
+                        doRefresh();
+                      }
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: _loveCount < 1 ? 7 : 10),
+                    height: ScreenUtil.instance.setWidth(30),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 2,
+                              spreadRadius: 1.5)
+                        ]),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            'assets/icons/icon_apps/love.png',
+                            color: _loveCount > 0 ? Colors.red : Colors.grey,
+                            scale: 3.5,
+                          ),
+                          SizedBox(
+                              width: ScreenUtil.instance
+                                  .setWidth(_loveCount < 1 ? 0 : 5)),
+                          Text(_loveCount < 1 ? '' : _loveCount.toString(),
+                              style: TextStyle(
+                                  color: Color(
+                                      0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
+                        ]),
+                  ),
+                ),
+                SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                GestureDetector(
+                  onTap: (){
+
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: int.parse(widget.commentTotalRows) < 1 ? 8 : 10),
+                    height: ScreenUtil.instance.setWidth(30),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 2,
+                              spreadRadius: 1.5)
+                        ]),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            'assets/icons/icon_apps/comment.png',
+                            scale: 3.5,
+                            color: int.parse(widget.commentTotalRows) < 1 ? Colors.grey : eventajaGreenTeal,
+                          ),
+                          SizedBox(width: ScreenUtil.instance.setWidth(int.parse(widget.commentTotalRows) < 1 ? 0 : 5)),
+                          Text(int.parse(widget.commentTotalRows) < 1 ? '' : widget.commentTotalRows,
+                              style: TextStyle(
+                                  color: Color(
+                                      0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
+                        ]),
+                  ),
+                ),
+                Expanded(child: SizedBox()),
+                GestureDetector(
+                  onTap: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    if (widget.userId == prefs.getString('Last User ID')) {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return showMoreOption(widget.id, widget.type,
+                                imageUrl: widget.picture);
+                          });
+                    } else {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return showMoreOptionReport(
+                              widget.id,
+                              widget.type,
+                            );
+                          });
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    height: ScreenUtil.instance.setWidth(30),
+                    child: Icon(Icons.more_horiz),
+                  ),
+                )
+              ]),
             )
           ],
         ));

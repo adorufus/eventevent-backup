@@ -364,10 +364,12 @@ class TimelineDashboardState extends State<TimelineDashboard>
                           TabBarView(
                             children: <Widget>[
                               emedia(),
-                              widget.isRest == true ? LoginRegisterWidget() : UserTimelineItem(
-                                currentUserId: currentUserId,
-                                timelineType: 'timeline',
-                              )
+                              widget.isRest == true
+                                  ? LoginRegisterWidget()
+                                  : UserTimelineItem(
+                                      currentUserId: currentUserId,
+                                      timelineType: 'timeline',
+                                    )
                             ],
                           ),
                           Positioned(
@@ -419,21 +421,21 @@ class TimelineDashboardState extends State<TimelineDashboard>
         }).catchError((e) {
           isLoading = false;
           Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: 'Error: ' + e.toString(),
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context);
+            flushbarPosition: FlushbarPosition.TOP,
+            message: 'Error: ' + e.toString(),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+            animationDuration: Duration(milliseconds: 500),
+          )..show(context);
         }).timeout(Duration(seconds: 10), onTimeout: () {
           isLoading = false;
           Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: 'Request Timeout',
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context);
+            flushbarPosition: FlushbarPosition.TOP,
+            message: 'Request Timeout',
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+            animationDuration: Duration(milliseconds: 500),
+          )..show(context);
         });
 
         getLatestMediaPhoto().then((response) {
@@ -457,21 +459,21 @@ class TimelineDashboardState extends State<TimelineDashboard>
         }).catchError((e) {
           isLoading = false;
           Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: 'Error: ' + e.toString(),
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context);
+            flushbarPosition: FlushbarPosition.TOP,
+            message: 'Error: ' + e.toString(),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+            animationDuration: Duration(milliseconds: 500),
+          )..show(context);
         }).timeout(Duration(seconds: 10), onTimeout: () {
           isLoading = false;
           Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: 'Request Timeout',
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context);
+            flushbarPosition: FlushbarPosition.TOP,
+            message: 'Request Timeout',
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+            animationDuration: Duration(milliseconds: 500),
+          )..show(context);
         });
 
         getLatestMediaVideo().then((response) {
@@ -495,21 +497,21 @@ class TimelineDashboardState extends State<TimelineDashboard>
         }).catchError((e) {
           isLoading = false;
           Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: 'Error: ' + e.toString(),
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context);
+            flushbarPosition: FlushbarPosition.TOP,
+            message: 'Error: ' + e.toString(),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+            animationDuration: Duration(milliseconds: 500),
+          )..show(context);
         }).timeout(Duration(seconds: 10), onTimeout: () {
           isLoading = false;
           Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: 'Request Timeout',
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context);
+            flushbarPosition: FlushbarPosition.TOP,
+            message: 'Request Timeout',
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+            animationDuration: Duration(milliseconds: 500),
+          )..show(context);
         });
         isLoading = false;
         getUserData();
@@ -598,6 +600,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => SeeAllMediaItem(
+                                isRest: widget.isRest,
                                 initialIndex: 0,
                                 isVideo: false,
                               )));
@@ -631,6 +634,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                     context,
                     MaterialPageRoute(
                         builder: (context) => MediaDetails(
+                              isRest: widget.isRest,
                               userPicture: mediaData[i]['creator']['photo'],
                               articleDetail: mediaData[i]['content'],
                               imageCount: 'img' + i.toString(),
@@ -643,6 +647,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                             )));
               },
               child: MediaItem(
+                isRest: widget.isRest,
                 isVideo: false,
                 image: mediaData[i]['banner_timeline'],
                 title: mediaData[i]['title'],
@@ -817,6 +822,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => SeeAllMediaItem(
+                                isRest: widget.isRest,
                                 initialIndex: 1,
                                 isVideo: false,
                               )));
@@ -850,6 +856,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                       context,
                       MaterialPageRoute(
                           builder: (context) => MediaDetails(
+                                isRest: widget.isRest,
                                 userPicture: latestMediaPhoto[i]['creator']
                                     ['photo'],
                                 articleDetail: latestMediaPhoto[i]['content'],
@@ -864,6 +871,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                               )));
                 },
                 child: LatestMediaItem(
+                  isRest: widget.isRest,
                   isVideo: false,
                   image: latestMediaPhoto[i]['banner_timeline'],
                   mediaId: latestMediaPhoto[i]['id'],
@@ -903,6 +911,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => SeeAllMediaItem(
+                            isRest: widget.isRest,
                                 initialIndex: 0,
                                 isVideo: true,
                               )));
@@ -940,6 +949,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                         context,
                         MaterialPageRoute(
                             builder: (context) => MediaDetails(
+                                  isRest: widget.isRest,
                                   isVideo: true,
                                   videoUrl: popularMediaVideo[i]['video'],
                                   youtubeUrl: popularMediaVideo[i]['youtube'],
@@ -958,6 +968,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                 )));
                   },
                   child: MediaItem(
+                    isRest: widget.isRest,
                     isVideo: true,
                     image: popularMediaVideo[i]['thumbnail_timeline'],
                     title: popularMediaVideo[i]['title'],
@@ -999,6 +1010,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => SeeAllMediaItem(
+                                isRest: widget.isRest,
                                 initialIndex: 1,
                                 isVideo: true,
                               )));
@@ -1027,6 +1039,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 context,
                 MaterialPageRoute(
                     builder: (context) => MediaDetails(
+                          isRest: widget.isRest,
                           isVideo: true,
                           videoUrl: latestMediaVideo[i]['video'],
                           youtubeUrl: latestMediaVideo[i]['youtube'],
@@ -1041,6 +1054,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                         )));
           },
           child: LatestMediaItem(
+            isRest: widget.isRest,
             isVideo: true,
             youtube: latestMediaVideo[i]['youtube'] ?? '/',
             videoUrl: latestMediaVideo[i]['video'] ?? '/',
@@ -1201,10 +1215,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
     String url = BaseApi().restUrl +
         '/media/banner?X-API-KEY=$API_KEY&search=&page=1&limit=10';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
-    });
+    final response = await http.get(url,
+        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
 
     return response;
   }
