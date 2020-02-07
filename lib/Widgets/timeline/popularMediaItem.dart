@@ -66,7 +66,7 @@ class _MediaItemState extends State<MediaItem> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    print(MediaQuery.of(context).size.width);
+    // print(MediaQuery.of(context).size.width);
 
     return Container(
         margin: EdgeInsets.only(left: 13, top: 8, bottom: 8, right: 0),

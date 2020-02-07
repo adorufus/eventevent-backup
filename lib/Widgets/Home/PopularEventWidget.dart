@@ -39,7 +39,7 @@ class PopularEventWidget extends StatelessWidget {
       allowFontScaling: true,
     )..init(context);
 
-    print(MediaQuery.of(context).size.width);
+    // print(MediaQuery.of(context).size.width);
 
     return Stack(
       children: <Widget>[
@@ -60,7 +60,7 @@ class PopularEventWidget extends StatelessWidget {
               Container(
                 height: ScreenUtil.instance.setWidth(225),
                 decoration: BoxDecoration(
-                    color: Color(0xFFB5B5B5),
+                    color: Color(0xFFB5B5B5).withOpacity(.5),
                     image: DecorationImage(
                         image: CachedNetworkImageProvider(imageUrl),
                         fit: BoxFit.cover),

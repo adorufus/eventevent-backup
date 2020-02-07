@@ -10,6 +10,7 @@ import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 
 class EventDetailLoadingScreen extends StatefulWidget {
   final eventId;
@@ -350,27 +351,28 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
-            preferredSize: Size(null, 100),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: ScreenUtil.instance.setWidth(75),
-              padding: EdgeInsets.symmetric(horizontal: 13),
-              color: Colors.white,
-              child: AppBar(
-                elevation: 0,
-                backgroundColor: Colors.white,
-                leading: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Image.asset(
-                    'assets/icons/icon_apps/arrow.png',
-                    scale: 5.5,
-                    alignment: Alignment.centerLeft,
-                  ),
+          preferredSize: Size(null, 100),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: ScreenUtil.instance.setWidth(75),
+            padding: EdgeInsets.symmetric(horizontal: 13),
+            color: Colors.white,
+            child: AppBar(
+              elevation: 0,
+              backgroundColor: Colors.white,
+              leading: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Image.asset(
+                  'assets/icons/icon_apps/arrow.png',
+                  scale: 5.5,
+                  alignment: Alignment.centerLeft,
                 ),
               ),
-            ),),
+            ),
+          ),
+        ),
         body: Stack(
           children: <Widget>[
             Container(
@@ -383,14 +385,19 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Container(
-                          width: ScreenUtil.instance.setWidth(122.86 * 1.3),
-                          height: ScreenUtil.instance.setWidth(184.06 * 1.3),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              image: DecorationImage(
-                                  image: AssetImage('assets/grey-fade.jpg'),
-                                  fit: BoxFit.fill)),
+                        Shimmer.fromColors(
+                          baseColor: Colors.grey[300],
+                          highlightColor: Colors.grey[100],
+                          enabled: true,
+                          child: Container(
+                            width: ScreenUtil.instance.setWidth(122.86 * 1.3),
+                            height: ScreenUtil.instance.setWidth(184.06 * 1.3),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                image: DecorationImage(
+                                    image: AssetImage('assets/grey-fade.jpg'),
+                                    fit: BoxFit.fill)),
+                          ),
                         ),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 13),
@@ -405,14 +412,20 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                                   SizedBox(
                                     height: ScreenUtil.instance.setWidth(30),
                                     width: ScreenUtil.instance.setWidth(30),
-                                    child: Container(
-                                      height: ScreenUtil.instance.setWidth(30),
-                                      width: ScreenUtil.instance.setWidth(30),
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              image: AssetImage(
-                                                  'assets/grey-fade.jpg'))),
+                                    child: Shimmer.fromColors(
+                                      baseColor: Colors.grey[300],
+                                      highlightColor: Colors.grey[100],
+                                      enabled: true,
+                                      child: Container(
+                                        height:
+                                            ScreenUtil.instance.setWidth(30),
+                                        width: ScreenUtil.instance.setWidth(30),
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/grey-fade.jpg'))),
+                                      ),
                                     ),
                                   ),
                                   SizedBox(

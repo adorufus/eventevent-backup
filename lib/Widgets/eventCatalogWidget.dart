@@ -5,6 +5,7 @@ import 'package:eventevent/Database/Database.dart';
 import 'package:eventevent/Database/Models/EventBannerModel.dart';
 import 'package:eventevent/Models/BannerModels.dart';
 import 'package:eventevent/Widgets/CollectionPage.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/MyTicket.dart';
 import 'package:eventevent/Widgets/Home/PopularEventWidget.dart';
 import 'package:eventevent/Widgets/Home/SeeAll/SeeAllItem.dart';
@@ -241,7 +242,10 @@ class _EventCatalogState extends State<EventCatalog>
                     margin: EdgeInsets.only(
                         left: 13, right: 13, bottom: 15, top: 13),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      image: DecorationImage(
+                        image: AssetImage('assets/grey-fade.jpg'),
+                        fit: BoxFit.cover
+                      ),
                       shape: BoxShape.rectangle,
                       boxShadow: <BoxShadow>[
                         BoxShadow(
@@ -257,11 +261,7 @@ class _EventCatalogState extends State<EventCatalog>
                       child: CachedNetworkImage(
                           imageUrl: bannerData["image"],
                           fit: BoxFit.cover,
-                          placeholder: (context, url) => new Container(
-                                child: Center(
-                                  child: CupertinoActivityIndicator(radius: 20),
-                                ),
-                              )),
+                          placeholder: (context, url) => Container()),
                     ),
                   ));
             },
@@ -546,9 +546,7 @@ class _EventCatalogState extends State<EventCatalog>
                   child: Stack(
                     children: <Widget>[
                       bannerData == null
-                          ? CupertinoActivityIndicator(
-                              radius: 13.5,
-                            )
+                          ? HomeLoadingScreen().bannerLoading(context)
                           : banner(),
                     ],
                   ),
@@ -557,7 +555,7 @@ class _EventCatalogState extends State<EventCatalog>
                 Container(
                     height: ScreenUtil.instance.setWidth(340),
                     child: data == null
-                        ? CupertinoActivityIndicator(radius: 13.5)
+                        ? HomeLoadingScreen().eventLoading()
                         : ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: data == null ? 0 : data.length,
@@ -679,7 +677,7 @@ class _EventCatalogState extends State<EventCatalog>
                 Container(
                   height: ScreenUtil.instance.setWidth(247),
                   child: data == null
-                      ? CupertinoActivityIndicator(radius: 13.5)
+                      ? HomeLoadingScreen().mediaLoading()
                       : ListView.builder(
                           itemCount: mediaData == null ? 0 : mediaData.length,
                           scrollDirection: Axis.horizontal,
@@ -754,7 +752,7 @@ class _EventCatalogState extends State<EventCatalog>
           SizedBox(height: ScreenUtil.instance.setWidth(15)),
           discoverEvent(),
           discoverData == null
-              ? Container()
+              ? HomeLoadingScreen().eventLoading()
               : Container(
                   height: ScreenUtil.instance.setWidth(340),
                   child: ListView.builder(
@@ -1176,8 +1174,8 @@ class _EventCatalogState extends State<EventCatalog>
   Widget popularPeopleImage() {
     return Container(
       height: ScreenUtil.instance.setWidth(80),
-      child: isLoading
-          ? Center(child: CupertinoActivityIndicator(radius: 20))
+      child: popularPeopleData == null
+          ? HomeLoadingScreen().peopleLoading()
           : ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount:
@@ -1257,7 +1255,7 @@ class _EventCatalogState extends State<EventCatalog>
     return Container(
       height: ScreenUtil.instance.setWidth(90),
       child: collectionData == null
-          ? errReasonWidget
+          ? HomeLoadingScreen().collectionLoading()
           : ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: collectionData == null ? 0 : collectionData.length,
@@ -1283,7 +1281,6 @@ class _EventCatalogState extends State<EventCatalog>
                           height: ScreenUtil.instance.setWidth(70),
                           width: ScreenUtil.instance.setWidth(150),
                           decoration: BoxDecoration(
-                              color: Color(0xff8a8a8b),
                               borderRadius: BorderRadius.circular(5),
                               boxShadow: <BoxShadow>[
                                 BoxShadow(
@@ -1368,8 +1365,8 @@ class _EventCatalogState extends State<EventCatalog>
   Widget discoverPeopleImage() {
     return Container(
       height: ScreenUtil.instance.setWidth(80),
-      child: isLoading
-          ? Center(child: CupertinoActivityIndicator(radius: 20))
+      child: discoverPeopleData == null
+          ? HomeLoadingScreen().peopleLoading()
           : ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount:
@@ -1395,6 +1392,7 @@ class _EventCatalogState extends State<EventCatalog>
                           height: ScreenUtil.instance.setWidth(40.50),
                           width: ScreenUtil.instance.setWidth(41.50),
                           decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.5),
                               boxShadow: <BoxShadow>[
                                 BoxShadow(
                                     color: Colors.black26,
@@ -1421,14 +1419,12 @@ class _EventCatalogState extends State<EventCatalog>
   ///
   Widget banner() {
     return bannerData == null
-        ? CupertinoActivityIndicator(radius: 13.5)
-        : CarouselSlider(
+        ? HomeLoadingScreen().bannerLoading(context)
+        : bannerData.length < 1 ? HomeLoadingScreen().bannerLoading(context) : CarouselSlider(
             height: ScreenUtil.instance.setWidth(200),
             items: bannerData.length < 1
                 ? [
-                    CupertinoActivityIndicator(
-                      radius: 13.5,
-                    )
+                    HomeLoadingScreen().bannerLoading(context)
                   ]
                 : mappedDataBanner,
             enlargeCenterPage: false,
@@ -1939,7 +1935,7 @@ class _EventCatalogState extends State<EventCatalog>
 
   Widget latestVideoContent() {
     return latestMediaVideo == null
-        ? CupertinoActivityIndicator(radius: 13.5)
+        ? HomeLoadingScreen().mediaLoading()
         : ColumnBuilder(
             itemCount: latestMediaVideo == null ? 0 : latestMediaVideo.length,
             itemBuilder: (BuildContext context, i) {

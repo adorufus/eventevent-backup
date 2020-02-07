@@ -64,7 +64,7 @@ class _PeopleItemState extends State<PeopleItem> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    print(MediaQuery.of(context).size.width);
+    // print(MediaQuery.of(context).size.width);
     return Container(
       margin: EdgeInsets.only(
           left: 13, right: 13, top: widget.topPadding, bottom: 13),

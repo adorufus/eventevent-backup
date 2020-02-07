@@ -58,7 +58,7 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    print(MediaQuery.of(context).size.width);
+    // print(MediaQuery.of(context).size.width);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 13, vertical: 6),
       height: ScreenUtil.instance.setWidth(110),

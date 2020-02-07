@@ -28,7 +28,7 @@ class LatestEventItem extends StatelessWidget {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    print(MediaQuery.of(context).size.width);
+    // print(MediaQuery.of(context).size.width);
     return Container(
       margin: EdgeInsets.only(left: 13, right:13, top: 13),
       height: ScreenUtil.instance.setWidth(150.18),

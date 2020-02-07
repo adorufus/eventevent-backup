@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:eventevent/Providers/EventListProviders.dart';
 import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
@@ -84,7 +85,6 @@ class _RunAppState extends State<RunApp> {
 
   @override
   void initState() {
-    
     super.initState();
   }
 

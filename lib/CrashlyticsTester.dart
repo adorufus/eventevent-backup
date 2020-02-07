@@ -1,4 +1,5 @@
 
+import 'package:eventevent/Providers/EventListProviders.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CrashlyticsTester extends StatefulWidget {
@@ -15,6 +16,7 @@ class _CrashlyticsTesterState extends State<CrashlyticsTester> {
   bool isSelected = false;
 
   selectItem(index) {
+
     setState(() {
       _selectedItem = index;
       isSelected = !isSelected;
