@@ -872,12 +872,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               BorderRadius.circular(12),
                                           image: DecorationImage(
                                               image: widget.detailData[
-                                                          'photo'] ==
+                                                          'photo_timeline'] ==
                                                       null
                                                   ? AssetImage(
                                                       'assets/grey-fade.jpg')
                                                   : NetworkImage(widget
-                                                      .detailData['photo']),
+                                                      .detailData['photo_timeline']),
                                               fit: BoxFit.fill)),
                                     ),
                                     Container(

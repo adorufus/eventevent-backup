@@ -660,7 +660,7 @@ class _EventCatalogState extends State<EventCatalog>
                                                   eventId: data[i]['id'])));
                                 },
                                 child: PopularEventWidget(
-                                  imageUrl: data[i]['picture'],
+                                  imageUrl: data[i]['picture_timeline'],
                                   title: data[i]["name"],
                                   location: data[i]["address"],
                                   color: itemColor,
@@ -699,7 +699,7 @@ class _EventCatalogState extends State<EventCatalog>
                                               imageCount: 'img' + i.toString(),
                                               username: mediaData[i]['creator']
                                                   ['username'],
-                                              imageUri: mediaData[i]['banner'],
+                                              imageUri: mediaData[i]['banner_timeline'],
                                               mediaTitle: mediaData[i]['title'],
                                               isVideo: true,
                                               mediaId: mediaData[i]['id'],
@@ -757,7 +757,7 @@ class _EventCatalogState extends State<EventCatalog>
                   height: ScreenUtil.instance.setWidth(340),
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: data == null ? 0 : data.length,
+                      itemCount: discoverData == null ? 0 : discoverData.length,
                       itemBuilder: (BuildContext context, i) {
                         Color itemColor;
                         String itemPriceText;
@@ -851,7 +851,7 @@ class _EventCatalogState extends State<EventCatalog>
                                             eventId: discoverData[i]['id'])));
                           },
                           child: PopularEventWidget(
-                            imageUrl: discoverData[i]['picture'],
+                            imageUrl: discoverData[i]['picture_timeline'],
                             title: discoverData[i]["name"],
                             location: discoverData[i]["address"],
                             price: itemPriceText,

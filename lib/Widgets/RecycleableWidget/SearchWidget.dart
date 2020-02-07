@@ -297,7 +297,7 @@ class SearchState extends State<Search> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailLoadingScreen(eventId: filteredEvents[i]['id'])));
                   },
                   child: LatestEventItem(
-                    image: filteredEvents[i]['picture'],
+                    image: filteredEvents[i]['picture_timeline'],
                     isAvailable: filteredEvents[i]['ticket']
                         ['availableTicketStatus'],
                     itemPrice: itemPriceText,
