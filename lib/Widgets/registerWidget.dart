@@ -27,6 +27,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  FocusNode _usernameFocusNode = FocusNode();
+  FocusNode _emailFocusNode = FocusNode();
+
   bool hidePassword = true;
   Widget validationEmailIcon;
   Widget validationUsernameIcon;
@@ -34,6 +37,132 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   String emailStatus = '';
 
   bool isLoading = false;
+
+  @override
+  void initState() {
+    _usernameFocusNode.addListener(() {
+      print(_usernameFocusNode.hasFocus);
+      if (_usernameFocusNode.hasFocus == false) {
+        isLoading = true;
+        Flushbar(
+          flushbarPosition: FlushbarPosition.TOP,
+          message: 'Checking username...',
+          backgroundColor: Colors.grey,
+          duration: Duration(seconds: 3),
+          animationDuration: Duration(milliseconds: 500),
+        )..show(context);
+        checkUsername(_usernameController.text).then((response) async {
+          var extractedData = json.decode(response.body);
+
+          if (extractedData['status'] == 'NOK') {
+            isLoading = false;
+            setState(() {
+              usernameStatus = 'nonavail';
+              validationUsernameIcon = Icon(
+                Icons.close,
+                color: Colors.red,
+              );
+            });
+            Flushbar(
+              flushbarPosition: FlushbarPosition.TOP,
+              message: extractedData['desc'],
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 3),
+              animationDuration: Duration(milliseconds: 500),
+            )..show(context);
+          } else if (response.statusCode == 200) {
+            isLoading = false;
+            setState(() {
+              usernameStatus = 'avail';
+              validationUsernameIcon = Icon(
+                Icons.check,
+                color: eventajaGreenTeal,
+              );
+            });
+            Flushbar(
+              flushbarPosition: FlushbarPosition.TOP,
+              message: 'Username available',
+              backgroundColor: eventajaGreenTeal,
+              duration: Duration(seconds: 3),
+              animationDuration: Duration(milliseconds: 500),
+            )..show(context);
+          }
+        });
+      }
+    });
+    _emailFocusNode.addListener((){
+      if(_emailFocusNode.hasFocus == false){
+        setState(() {
+              isLoading = true;
+            });
+            Pattern pattern =
+                r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+            RegExp regex = new RegExp(pattern);
+            if (!regex.hasMatch(_emailController.text)) {
+              isLoading = false;
+              setState(() {
+                validationEmailIcon = Icon(
+                  Icons.close,
+                  color: Colors.red,
+                );
+              });
+              Flushbar(
+                flushbarPosition: FlushbarPosition.TOP,
+                message: 'Invalid Email Format!',
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 3),
+                animationDuration: Duration(milliseconds: 500),
+              )..show(context);
+            } else {
+              Flushbar(
+                flushbarPosition: FlushbarPosition.TOP,
+                message: 'Checking Email...',
+                backgroundColor: Colors.grey,
+                duration: Duration(seconds: 3),
+                animationDuration: Duration(milliseconds: 500),
+              )..show(context);
+              checkEmail(_emailController.text).then((response) {
+                var extractedData = json.decode(response.body);
+
+                if (extractedData['status'] == 'NOK') {
+                  isLoading = false;
+                  setState(() {
+                    emailStatus = 'nonavail';
+                    validationEmailIcon = Icon(
+                      Icons.close,
+                      color: Colors.red,
+                    );
+                  });
+                  Flushbar(
+                    flushbarPosition: FlushbarPosition.TOP,
+                    message: extractedData['desc'],
+                    backgroundColor: Colors.red,
+                    duration: Duration(seconds: 3),
+                    animationDuration: Duration(milliseconds: 500),
+                  )..show(context);
+                } else if (response.statusCode == 200) {
+                  isLoading = false;
+                  setState(() {
+                    emailStatus = 'avail';
+                    validationEmailIcon = Icon(
+                      Icons.check,
+                      color: eventajaGreenTeal,
+                    );
+                  });
+                  Flushbar(
+                    flushbarPosition: FlushbarPosition.TOP,
+                    message: 'Email available',
+                    backgroundColor: eventajaGreenTeal,
+                    duration: Duration(seconds: 3),
+                    animationDuration: Duration(milliseconds: 500),
+                  )..show(context);
+                }
+              });
+            }
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +235,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         TextFormField(
           controller: _usernameController,
           keyboardType: TextInputType.text,
+          focusNode: _usernameFocusNode,
           autofocus: false,
           onFieldSubmitted: (i) async {
             isLoading = true;
@@ -168,6 +298,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           controller: _emailController,
           keyboardType: TextInputType.text,
           autofocus: false,
+          focusNode: _emailFocusNode,
           onFieldSubmitted: (i) async {
             setState(() {
               isLoading = true;

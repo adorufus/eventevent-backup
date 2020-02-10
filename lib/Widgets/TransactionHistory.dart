@@ -122,51 +122,58 @@ class TransactionHistoryState extends State<TransactionHistory> {
                       finalPrice: transactionList[i]['amount'],
                     );
 
-                    if (transactionList[i]['payment']['method'] == 'Bca') {
-                      page = PaymentBCA(
-                        expDate: transactionList[i]['expired_time'],
-                        transactionID: transactionList[i]['id'],
-                      );
-                    } else if (transactionList[i]['payment']['method'] ==
-                        'Virtual Account') {
-                      page = WaitTransaction(
-                        transactionID: transactionList[i]['id'],
-                        expDate: transactionList[i]['expired_time'],
-                        finalPrice: transactionList[i]['amount'],
-                      );
-                    } else if (transactionList[i]['payment']['method'] ==
-                        'Alfamart') {
-                      page = WaitingTransactionAlfamart(
-                        expDate: transactionList[i]['expired_time'],
-                        transactionID: transactionList[i]['id'],
-                      );
-                    } else if (transactionList[i]['payment']['method'] ==
-                        'Gopay') {
-                      page = WaitingGopay(
-                        expDate: transactionList[i]['expired_time'],
-                        transactionID: transactionList[i]['id'],
-                        amount: transactionList[i]['amount'],
-                        deadline: transactionList[i]['expired_time'],
-                        gopaytoken: transactionList[i]['payment_vendor_code'],
-                      );
-                    } else if (transactionList[i]['payment']['method'] ==
-                        'Indomaret') {
-                      page = WebViewTest(
-                        url: transactionList[i]['payment']['data_vendor']
-                            ['payment_url'],
-                      );
-                    } else if (transactionList[i]['payment']['method'] ==
-                        'OVO') {
-                      page = WebViewTest(
-                        url: transactionList[i]['payment']['data_vendor']
-                            ['invoice_url'],
-                      );
-                    } else if (transactionList[i]['payment']['method'] ==
-                        'Credit Card') {
-                      page = CreditCardInput(
-                        transactionID: transactionList[i]['id'],
-                        expDate: transactionList[i]['expired_date'],
-                      );
+                    if (transactionList[i].containsKey("payment").toString() ==
+                        'true') {
+                      if (transactionList[i]['payment']['method'] == 'Bca') {
+                        page = PaymentBCA(
+                          expDate: transactionList[i]['expired_time'],
+                          transactionID: transactionList[i]['id'],
+                        );
+                      } else if (transactionList[i]['payment']['method'] ==
+                          'Virtual Account') {
+                        page = WaitTransaction(
+                          transactionID: transactionList[i]['id'],
+                          expDate: transactionList[i]['expired_time'],
+                          finalPrice: transactionList[i]['amount'],
+                        );
+                      } else if (transactionList[i]['payment']['method'] ==
+                          'Alfamart') {
+                        page = WaitingTransactionAlfamart(
+                          expDate: transactionList[i]['expired_time'],
+                          transactionID: transactionList[i]['id'],
+                        );
+                      } else if (transactionList[i]['payment']['method'] ==
+                          'Gopay') {
+                        page = WaitingGopay(
+                          expDate: transactionList[i]['expired_time'],
+                          transactionID: transactionList[i]['id'],
+                          amount: transactionList[i]['amount'],
+                          deadline: transactionList[i]['expired_time'],
+                          gopaytoken: transactionList[i]['payment_vendor_code'],
+                        );
+                      } else if (transactionList[i]['payment']['method'] ==
+                          'Indomaret') {
+                        page = WebViewTest(
+                          url: transactionList[i]['payment']['data_vendor']
+                              ['payment_url'],
+                        );
+                      } else if (transactionList[i]['payment']['method'] ==
+                          'OVO') {
+                        page = WebViewTest(
+                          url: transactionList[i]['payment']['data_vendor']
+                              ['invoice_url'],
+                        );
+                      } else if (transactionList[i]['payment']['method'] ==
+                          'Credit Card') {
+                        page = CreditCardInput(
+                          transactionID: transactionList[i]['id'],
+                          expDate: transactionList[i]['expired_date'],
+                        );
+                      }
+                    }
+                    else{
+                      //do nothing
+                      page = SuccessPage();
                     }
 
                     return GestureDetector(

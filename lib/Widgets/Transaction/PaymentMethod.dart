@@ -280,7 +280,9 @@ class PaymentMethodState extends State<PaymentMethod> {
                                                 : NetworkImage(
                                                     paymentMethodList[i]
                                                         ['photo']),
-                                            width: ScreenUtil.instance
+                                            width: paymentMethodList[i]['method'] ==
+                                  'Virtual Account' ? ScreenUtil.instance
+                                                .setWidth(200) : ScreenUtil.instance
                                                 .setWidth(150),
                                           )),
                                         ),

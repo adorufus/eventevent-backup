@@ -2599,7 +2599,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     height: ScreenUtil.instance.setWidth(
                         widget.detailData['additional'].length == 0 ? 0 : 29),
                   ),
-                  Container(
+                  widget.detailData['additional'].length == 0 ? Container() : Container(
                     height: 200,
                     child: ListView.builder(
                         shrinkWrap: true,
@@ -2635,7 +2635,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                             child: Container(
                               margin: EdgeInsets.only(left: 10),
                               height: ScreenUtil.instance.setWidth(206),
-                              width: ScreenUtil.instance.setWidth(206),
+                              width: ScreenUtil.instance.setWidth(274.67),
                               decoration: BoxDecoration(
                                   color: Color(0xff8a8a8b),
                                   image: DecorationImage(

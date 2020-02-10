@@ -311,7 +311,7 @@ class PaymentBcaState extends State<PaymentBCA> {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: SizedBox(
-                                  height: ScreenUtil.instance.setWidth(20),
+                                  width: ScreenUtil.instance.setWidth(50),
                                   child: Image.asset('assets/drawable/bca.png'),
                                 ),
                               ),

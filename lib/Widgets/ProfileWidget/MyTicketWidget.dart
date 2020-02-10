@@ -154,7 +154,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                               )));
                     },
                     child: new MyTicketItem(
-                      image: ticketDetailData[i].containsKey('ticket_image').toString() == 'false' ? '' : ticketDetailData[i]['ticket_image']['secure_url'],
+                      image: ticketDetailData[i].containsKey('ticket_image').toString() == 'false' || ticketDetailData[i]['ticket_image'] == false ? '' : ticketDetailData[i]['ticket_image']['secure_url'],
                       title: ticketDetailData[i]['event']['name'],
                       ticketCode: ticketDetailData[i]['ticket_code'],
                       ticketStatus: ticketStatusText,

@@ -163,7 +163,9 @@ class PrivateEventListState extends State<PrivateEventList> {
 
                         if (privateData[i]['ticket_type']['type'] == 'paid' ||
                             privateData[i]['ticket_type']['type'] ==
-                                'paid_seating') {
+                                'paid_seating' ||
+                          privateData[i]['ticket_type']['type'] ==
+                              'paid_live_stream') {
                           if (privateData[i]['ticket']
                                   ['availableTicketStatus'] ==
                               '1') {
