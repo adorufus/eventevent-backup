@@ -276,6 +276,7 @@ flutter:
     - assets/drawable/username-valid.png
     - assets/drawable/cake.png
     - assets/logo_eventevent.png
+    - assets/map_bw.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

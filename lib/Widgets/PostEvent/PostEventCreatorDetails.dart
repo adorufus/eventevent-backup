@@ -114,7 +114,7 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                     Text('*', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 35),),
                     SizedBox(height: ScreenUtil.instance.setWidth(10),),
                     Text('Telephone', style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.black54, fontWeight: FontWeight.bold),),
-                    SizedBox(width: ScreenUtil.instance.setWidth(20),),
+                    SizedBox(width: ScreenUtil.instance.setWidth(52),),
                     Container(
                       width: ScreenUtil.instance.setWidth(180),
                       height: ScreenUtil.instance.setWidth(35),

@@ -6,7 +6,8 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +23,7 @@ class PostEventMap extends StatefulWidget {
   }
 }
 
-class PostEventMapState extends State<PostEventMap>{
+class PostEventMapState extends State<PostEventMap> {
   var thisScaffold = new GlobalKey<ScaffoldState>();
   TextEditingController additionalInfoController = new TextEditingController();
 
@@ -34,11 +35,13 @@ class PostEventMapState extends State<PostEventMap>{
   LocationData currentLocation;
   StreamSubscription<LocationData> locationSubcription;
 
-showPlacePicker() async {
+  showPlacePicker() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     LocationResult place = await Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => PlacePicker('AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI', displayLocation: LatLng(currentLocation.latitude, currentLocation.longitude)
-    )));
+        builder: (context) => PlacePicker(
+            'AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI',
+            displayLocation:
+                LatLng(currentLocation.latitude, currentLocation.longitude))));
 
     if (!mounted) {
       return;
@@ -49,8 +52,10 @@ showPlacePicker() async {
       lat = place.latLng.latitude.toString();
       long = place.latLng.longitude.toString();
       prefs.setString('CREATE_EVENT_LOCATION_ADDRESS', place.formattedAddress);
-      prefs.setString('CREATE_EVENT_LOCATION_LAT', place.latLng.latitude.toString());
-      prefs.setString('CREATE_EVENT_LOCATION_LONG', place.latLng.longitude.toString());
+      prefs.setString(
+          'CREATE_EVENT_LOCATION_LAT', place.latLng.latitude.toString());
+      prefs.setString(
+          'CREATE_EVENT_LOCATION_LONG', place.latLng.longitude.toString());
     });
 
     print(prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'));
@@ -81,14 +86,15 @@ showPlacePicker() async {
     });
   }
 
-  saveDataAndNext() async{
+  saveDataAndNext() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if(additionalInfoController.text == null || additionalInfoController.text == ''){
+    if (additionalInfoController.text == null ||
+        additionalInfoController.text == '') {
       prefs.setString('CREATE_EVENT_ADDITIONAL_INFO', '');
-    }
-    else{
-      prefs.setString('CREATE_EVENT_ADDITIONAL_INFO', additionalInfoController.text);
+    } else {
+      prefs.setString(
+          'CREATE_EVENT_ADDITIONAL_INFO', additionalInfoController.text);
     }
   }
 
@@ -106,14 +112,20 @@ showPlacePicker() async {
       height: ScreenUtil.instance.setWidth(300),
       width: MediaQuery.of(context).size.width,
       child: Stack(alignment: Alignment.bottomCenter, children: <Widget>[
-        Positioned(
-          left: 15,
-          child: GestureDetector(
-              onTap: () {
-                showPlacePicker();
-              },
-              child: mapProvider),
-        ),
+        GestureDetector(
+            onTap: () {
+              showPlacePicker();
+            },
+            child: placeName == '' ? Container(
+              height: 300,
+              width: 300,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/map_bw.jpg'),
+                  colorFilter: ColorFilter.mode(Colors.black.withOpacity(.2), BlendMode.dstATop)
+                )
+              ),
+            ) : mapProvider),
         Center(
           child: SizedBox(
             height: ScreenUtil.instance.setWidth(50),
@@ -125,8 +137,8 @@ showPlacePicker() async {
     );
   }
 
-  navigateToNextStep(){
-    if(placeName == null || placeName == ''){
+  navigateToNextStep() {
+    if (placeName == null || placeName == '') {
       Flushbar(
         flushbarPosition: FlushbarPosition.TOP,
         message: 'Please select location first!',
@@ -134,10 +146,10 @@ showPlacePicker() async {
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
-    }
-    else{
+    } else {
       saveDataAndNext();
-      Navigator.of(context).push(CupertinoPageRoute(builder: (BuildContext context) => PostEventCreatorDetails()));
+      Navigator.of(context).push(CupertinoPageRoute(
+          builder: (BuildContext context) => PostEventCreatorDetails()));
     }
   }
 
@@ -154,7 +166,8 @@ showPlacePicker() async {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -192,7 +205,9 @@ showPlacePicker() async {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -293,7 +308,8 @@ showPlacePicker() async {
                         decoration: InputDecoration(
                             fillColor: Colors.grey.withOpacity(0.2),
                             filled: true,
-                            hintText: 'Type additional information here, example: Near lion statue, or on the second floor',
+                            hintText:
+                                'Type additional information here, example: Near lion statue, or on the second floor',
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide:

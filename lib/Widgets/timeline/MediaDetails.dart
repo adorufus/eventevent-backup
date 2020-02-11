@@ -345,8 +345,8 @@ class _MediaDetailsState extends State<MediaDetails> {
                 ? Container(
                   width: 200,
                   child: PlaceholderLines(
-                    count: 5,
-                    align: TextAlign.center,
+                    count: 10,
+                    align: TextAlign.left,
                     lineHeight: 10,
                     color: Colors.grey,
                     animate: true,
