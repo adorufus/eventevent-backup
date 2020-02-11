@@ -5,6 +5,7 @@ import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_placeholder_textlines/placeholder_lines.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/cupertino.dart';
@@ -342,10 +343,15 @@ class _MediaDetailsState extends State<MediaDetails> {
             margin: EdgeInsets.symmetric(horizontal: 13),
             child: mediaDetails['media_content'] == null
                 ? Container(
-                    child: Center(
-                      child: CupertinoActivityIndicator(radius: 20),
-                    ),
-                  )
+                  width: 200,
+                  child: PlaceholderLines(
+                    count: 5,
+                    align: TextAlign.center,
+                    lineHeight: 10,
+                    color: Colors.grey,
+                    animate: true,
+                  ),
+                )
                 : Html(
                     data: mediaDetails['media_content'][0]['content_text'],
                     onLinkTap: (url) {
