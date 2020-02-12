@@ -276,7 +276,9 @@ class PostEventMapState extends State<PostEventMap> {
                       SizedBox(
                         height: ScreenUtil.instance.setWidth(12),
                       ),
-                      Container(
+                      placeName == '' ? Container(
+                        child: Text('Select event location from the map above', style: TextStyle(color: Colors.grey),)
+                      ) : Container(
                         height: ScreenUtil.instance.setWidth(80),
                         width: MediaQuery.of(context).size.width,
                         margin: EdgeInsets.only(right: 18),

@@ -144,8 +144,8 @@ class SelectTicketTypeState extends State<SelectTicketType> {
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 25, horizontal: 10),
                 leading: SizedBox(
-                  height: ScreenUtil.instance.setWidth(40),
-                  width: ScreenUtil.instance.setWidth(140),
+                  height: ScreenUtil.instance.setWidth(35),
+                  width: ScreenUtil.instance.setWidth(120),
                   child: Image.asset(
                     imageUri,
                     fit: BoxFit.fill,
@@ -157,9 +157,13 @@ class SelectTicketTypeState extends State<SelectTicketType> {
                       fontSize: ScreenUtil.instance.setSp(18),
                       fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text(ticketType[i]['description'] == null
-                    ? ''
-                    : ticketType[i]['description']),
+                subtitle: Column(
+                  children: <Widget>[
+                    Text(ticketType[i]['description'] == null
+                        ? ''
+                        : ticketType[i]['description']),
+                  ],
+                ),
               );
             },
           ),

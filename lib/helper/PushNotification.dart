@@ -314,10 +314,18 @@ class PushNotificationState extends State<PushNotification> {
                           ? 0
                           : notificationData.length,
                       itemBuilder: (context, i) {
-                        return Container(
-                          height: ScreenUtil.instance.setWidth(60),
-                          margin: EdgeInsets.symmetric(horizontal: 13),
-                          child:
+                        return GestureDetector(
+                          onTap: () {
+                            doNavigateOnPressedNotification(i);
+                          },
+                          child: Container(
+                              color: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 13, vertical: 10),
+                              margin: EdgeInsets.only(
+                                top: 5,
+                              ),
+                              child: notificationUi(i)
                               // Container(
                               //     child: Row(
                               //   crossAxisAlignment: CrossAxisAlignment.center,
@@ -325,7 +333,8 @@ class PushNotificationState extends State<PushNotification> {
                               //   children: <Widget>[
                               //     Image.asset('assets/icons/icon_apps/nearby.png',
                               //         scale: 3),
-                              //         SizedBox(width: ScreenUtil.instance.setWidth(13)),
+                              //     SizedBox(
+                              //         width: ScreenUtil.instance.setWidth(13)),
                               //     Column(
                               //       crossAxisAlignment: CrossAxisAlignment.start,
                               //       mainAxisAlignment: MainAxisAlignment.center,
@@ -333,7 +342,8 @@ class PushNotificationState extends State<PushNotification> {
                               //         Text(
                               //           notificationData[i]['fullName'] + ':',
                               //           style: TextStyle(
-                              //               fontSize: ScreenUtil.instance.setSp(13),
+                              //               fontSize:
+                              //                   ScreenUtil.instance.setSp(13),
                               //               fontWeight: FontWeight.bold),
                               //         ),
                               //         Container(
@@ -349,26 +359,27 @@ class PushNotificationState extends State<PushNotification> {
                               //   ],
                               // ))
 
-                              ListTile(
-                            onTap: () {
-                              doNavigateOnPressedNotification(i);
-                            },
-                            contentPadding: EdgeInsets.only(bottom: 15),
-                            leading: Container(
-                              height: ScreenUtil.instance.setWidth(25),
-                              width: ScreenUtil.instance.setWidth(25),
-                              child: Image.asset(
-                                'assets/icons/icon_apps/announcement.png',
+                              //     ListTile(
+                              //   onTap: () {
+                              //     doNavigateOnPressedNotification(i);
+                              //   },
+                              //   contentPadding: EdgeInsets.only(bottom: 15),
+                              //   leading: Container(
+                              //     height: ScreenUtil.instance.setWidth(25),
+                              //     width: ScreenUtil.instance.setWidth(25),
+                              //     child: Image.asset(
+                              //       'assets/icons/icon_apps/announcement.png',
+                              //     ),
+                              //   ),
+                              //   title: Text(
+                              //     notificationData[i]['fullName'] + ':',
+                              //     style: TextStyle(
+                              //         fontSize: ScreenUtil.instance.setSp(13),
+                              //         fontWeight: FontWeight.bold),
+                              //   ),
+                              //   subtitle: Text(notificationData[i]['caption']),
+                              // ),
                               ),
-                            ),
-                            title: Text(
-                              notificationData[i]['fullName'] + ':',
-                              style: TextStyle(
-                                  fontSize: ScreenUtil.instance.setSp(13),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Text(notificationData[i]['caption']),
-                          ),
                         );
                       },
                     ),
@@ -377,16 +388,370 @@ class PushNotificationState extends State<PushNotification> {
         ));
   }
 
+  Widget notificationUi(int index) {
+    if (notificationData[index]['type'] == 'reminder_qr' ||
+        notificationData[index]['type'] == 'reminder_ticket') {
+      return Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Image.asset('assets/icons/icon_apps/nearby.png', scale: 3),
+            SizedBox(width: 15),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  notificationData[index]['caption'],
+                  style: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(13),
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            Expanded(
+              child: SizedBox(),
+            ),
+            Container(
+                height: 50,
+                width: 37.5,
+                child: Image.network(notificationData[index]['photo']))
+          ],
+        ),
+      );
+    } else if (notificationData[index]['type'] == 'transaction') {
+      return Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Container(
+                height: ScreenUtil.instance.setWidth(25),
+                width: ScreenUtil.instance.setWidth(25),
+                child:
+                    Icon(Icons.check_circle_outline, color: eventajaGreenTeal)),
+            SizedBox(width: 15),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    'Payment Success',
+                    maxLines: 2,
+                    style: TextStyle(
+                        fontSize: ScreenUtil.instance.setSp(13),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                    child: Text(
+                  '${notificationData[index]['detail'][0]['quantity']}x ${notificationData[index]['detail'][0]['paid_ticket']['ticket_name']}',
+                  maxLines: 2,
+                ))
+              ],
+            ),
+            Expanded(
+              child: SizedBox(),
+            ),
+            Container(
+                height: 50,
+                width: 37.5,
+                child: Image.network(notificationData[index]['photo']))
+          ],
+        ),
+      );
+    } else if (notificationData[index]['type'] == 'announcement') {
+      return Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Container(
+                height: ScreenUtil.instance.setWidth(25),
+                width: ScreenUtil.instance.setWidth(25),
+                child: Image.asset('assets/icons/icon_apps/announcement.png')),
+            SizedBox(width: 15),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: ScreenUtil.instance.setWidth(250),
+                  child: Text(
+                    notificationData[index]['fullName'],
+                    maxLines: 2,
+                    style: TextStyle(
+                        fontSize: ScreenUtil.instance.setSp(13),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                    width: ScreenUtil.instance.setWidth(300),
+                    child: Text(
+                      notificationData[index]['caption'],
+                      maxLines: 2,
+                    ))
+              ],
+            ),
+          ],
+        ),
+      );
+    } else if (notificationData[index]['type'] == 'withdraw' ||
+        notificationData[index]['type'] == 'balance') {
+      return Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            CircleAvatar(
+              radius: 13,
+              backgroundColor: eventajaGreenTeal,
+              child: Center(
+                  child: Icon(
+                Icons.attach_money,
+                color: Colors.white,
+              )),
+            ),
+            SizedBox(width: 15),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  notificationData[index]['type'] == 'balance'
+                      ? notificationData[index]['caption']
+                      : 'Withdraw Complete',
+                  style: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(13),
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(notificationData[index]['type'] == 'balance'
+                    ? notificationData[index]['detail'][0]['description']
+                    : notificationData[index]['caption'])
+              ],
+            ),
+            Expanded(
+              child: SizedBox(),
+            ),
+            notificationData[index]['type'] == 'balance'
+                ? Container()
+                : Text('Rp. ' +
+                    notificationData[index]['detail'][0]['amount'] +
+                    ',-')
+          ],
+        ),
+      );
+    } else if (notificationData[index]['type'] == 'eventcheckin_comment' ||
+        notificationData[index]['type'] == 'love' ||
+        notificationData[index]['type'] == 'photo_comment' ||
+        notificationData[index]['type'] == 'relationship_impression' ||
+        notificationData[index]['type'] == 'thought_impression' ||
+        notificationData[index]['type'] == 'combined_relationship_impression' ||
+        notificationData[index]['type'] == 'combined_relationship_comment' ||
+        notificationData[index]['type'] == 'eventcheckin_impression' ||
+        notificationData[index]['type'] == 'photo_impression' ||
+        notificationData[index]['type'] == 'photo_comment' ||
+        notificationData[index]['type'] == 'love_comment' ||
+        notificationData[index]['type'] == 'love_impression' ||
+        notificationData[index]['type'] == 'relationship' ||
+        notificationData[index]['type'] == 'relationship_comment' ||
+        notificationData[index]['type'] == 'event_comment') {
+      return Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            CircleAvatar(
+              radius: 15,
+              backgroundImage: NetworkImage(notificationData[index]['photo']),
+            ),
+            SizedBox(width: 15),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Text(
+                      notificationData[index]['fullName'] + ': ',
+                      style: TextStyle(
+                          fontSize: ScreenUtil.instance.setSp(13),
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Text(notificationData[index]['caption'])
+              ],
+            ),
+            Expanded(
+              child: SizedBox(),
+            ),
+            notificationData[index]['type'] ==
+                        'combined_relationship_comment' ||
+                    notificationData[index]['type'] == 'photo_comment' ||
+                    notificationData[index]['type'] == 'relationship' ||
+                    notificationData[index]['type'] == 'relationship_comment' ||
+                    notificationData[index]['type'] == 'event_comment'
+                ? Container()
+                : notificationData[index]['type'] ==
+                            'relationship_impression' ||
+                        notificationData[index]['type'] ==
+                            'thought_impression' ||
+                        notificationData[index]['type'] ==
+                            'combined_relationship_impression' ||
+                        notificationData[index]['type'] == 'photo_impression'
+                    ? Container(
+                        height: ScreenUtil.instance.setWidth(25),
+                        width: ScreenUtil.instance.setWidth(25),
+                        child: Image.asset('assets/icons/icon_apps/love.png'),
+                      )
+                    : Container(
+                        height: 50,
+                        width: 37.5,
+                        child: Image.network(
+                            notificationData[index]['detail'][0]['picture']))
+          ],
+        ),
+      );
+    } else if (notificationData[index]['type'] == 'reminder_event' ||
+        notificationData[index]['type'] == 'live_stream_cancel' ||
+        notificationData[index]['type'] == 'eventgoingstatus' ||
+        notificationData[index]['type'] == 'eventdetail_comment' ||
+        notificationData[index]['type'] == 'eventdetail_love' ||
+        notificationData[index]['type'] == 'event' ||
+        notificationData[index]['type'] == 'eventinvite') {
+      return Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Image.asset('assets/icons/icon_apps/nearby.png', scale: 3),
+            SizedBox(width: 15),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                notificationData[index]['type'] == 'eventgoingstatus'
+                    ? Container(
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              notificationData[index]['fullName'],
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      )
+                    : Text(
+                        notificationData[index]['caption'],
+                        maxLines: 2,
+                        style: TextStyle(
+                            fontSize: ScreenUtil.instance.setSp(13),
+                            fontWeight: FontWeight.bold),
+                      ),
+                notificationData[index]['type'] == 'eventgoingstatus'
+                    ? Text(' is going to your event')
+                    : Container(),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                        height: 120,
+                        width: 90,
+                        child: notificationData[index]['detail'].length < 1
+                            ? Image.asset(
+                                'assets/grey-fade.jpg',
+                                fit: BoxFit.fill,
+                              )
+                            : Image.network(
+                                notificationData[index]['detail'][0]['picture'],
+                                fit: BoxFit.cover,
+                              )),
+                    SizedBox(width: 8),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          width: ScreenUtil.instance.setWidth(199),
+                          child: Text(
+                            notificationData[index]['detail'].length < 1
+                                ? '-'
+                                : notificationData[index]['detail'][0]['name'],
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Container(
+                          width: ScreenUtil.instance.setWidth(199),
+                          child: Text(
+                            notificationData[index]['detail'].length < 1
+                                ? '-'
+                                : notificationData[index]['detail'][0]
+                                    ['address'],
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
+          ],
+        ),
+      );
+    } else if (notificationData[index]['type'] == 'feedback') {
+      return Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+                height: 50,
+                width: 37.5,
+                child: Image.network(
+                    notificationData[index]['detail'][0]['picture'])),
+            SizedBox(width: 15),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'How\'s the event?',
+                  style: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(13),
+                      fontWeight: FontWeight.bold),
+                ),
+                Text('Give feedback')
+              ],
+            ),
+            Expanded(
+              child: SizedBox(),
+            ),
+            Icon(Icons.thumb_up),
+            SizedBox(
+              width: 5,
+            ),
+            Icon(Icons.thumb_down),
+          ],
+        ),
+      );
+    }
+
+    return Container();
+  }
+
   doNavigateOnPressedNotification(int index) {
     if (notificationData[index]['type'] == 'reminder_event') {
-      navigationHandler(EventDetailLoadingScreen(eventId: notificationData[index]['id'],));
+      navigationHandler(EventDetailLoadingScreen(
+        eventId: notificationData[index]['id'],
+      ));
     } else if (notificationData[index]['type'] == 'relationship') {
       navigationHandler(ProfileWidget(
         userId: notificationData[index]['id'],
         initialIndex: 0,
       ));
     } else if (notificationData[index]['type'] == 'live_stream_cancel') {
-      navigationHandler(EventDetailLoadingScreen(eventId: notificationData[index]['id']));
+      navigationHandler(
+          EventDetailLoadingScreen(eventId: notificationData[index]['id']));
     } else if (notificationData[index]['type'] == 'photo_comment') {
       navigationHandler(UserMediaDetail(
         postID: notificationData[index]['id'],
@@ -459,11 +824,14 @@ class PushNotificationState extends State<PushNotification> {
         autoFocus: true,
       ));
     } else if (notificationData[index]['type'] == 'eventgoingstatus') {
-      navigationHandler(EventDetailLoadingScreen(eventId: notificationData[index]['id']));
+      navigationHandler(
+          EventDetailLoadingScreen(eventId: notificationData[index]['id']));
     } else if (notificationData[index]['type'] == 'eventdetail_comment') {
-      navigationHandler(EventDetailLoadingScreen(eventId: notificationData[index]['id']));
+      navigationHandler(
+          EventDetailLoadingScreen(eventId: notificationData[index]['id']));
     } else if (notificationData[index]['type'] == 'eventdetail_love') {
-      navigationHandler(EventDetailLoadingScreen(eventId: notificationData[index]['id']));
+      navigationHandler(
+          EventDetailLoadingScreen(eventId: notificationData[index]['id']));
     } else if (notificationData[index]['type'] == 'photo_impression') {
       navigationHandler(UserMediaDetail(
         postID: notificationData[index]['id'],
@@ -542,8 +910,6 @@ class PushNotificationState extends State<PushNotification> {
     print(response.statusCode);
     // BackgroundFetch.finish();
   }
-
-  
 
   @override
   void dispose() {

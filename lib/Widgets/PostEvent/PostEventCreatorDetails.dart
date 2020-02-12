@@ -71,7 +71,7 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
         ),
         body: Container(
             color: Colors.white,
-            padding: EdgeInsets.only(left: 15, top: 15),
+            padding: EdgeInsets.only(left: 15, top: 15, right: 15),
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: SingleChildScrollView(
@@ -114,9 +114,9 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                     Text('*', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 35),),
                     SizedBox(height: ScreenUtil.instance.setWidth(10),),
                     Text('Telephone', style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.black54, fontWeight: FontWeight.bold),),
-                    SizedBox(width: ScreenUtil.instance.setWidth(52),),
+                    Expanded(child: SizedBox()),
                     Container(
-                      width: ScreenUtil.instance.setWidth(180),
+                      width: ScreenUtil.instance.setWidth(220),
                       height: ScreenUtil.instance.setWidth(35),
                       child: TextFormField(
                         keyboardType: TextInputType.phone,
@@ -141,11 +141,11 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(height: ScreenUtil.instance.setWidth(40), width: ScreenUtil.instance.setWidth(40), child: Image.asset('assets/icons/btn_mail_active.png'),),
-                    SizedBox(width: ScreenUtil.instance.setWidth(24),),
+                    SizedBox(width: ScreenUtil.instance.setWidth(9),),
                     Text('Email', style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.black54, fontWeight: FontWeight.bold),),
-                    SizedBox(width: ScreenUtil.instance.setWidth(52),),
+                    Expanded(child: SizedBox()),
                     Container(
-                      width: ScreenUtil.instance.setWidth(180),
+                      width: ScreenUtil.instance.setWidth(220),
                       height: ScreenUtil.instance.setWidth(35),
                       child: TextFormField(
                         controller: emailController,
@@ -171,9 +171,9 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                     SizedBox(height: ScreenUtil.instance.setWidth(40), width: ScreenUtil.instance.setWidth(40), child: Image.asset('assets/icons/btn_web_active.png'),),
                     SizedBox(width: ScreenUtil.instance.setWidth(9),),
                     Text('Website', style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.black54, fontWeight: FontWeight.bold),),
-                    SizedBox(width: ScreenUtil.instance.setWidth(52),),
+                    Expanded(child: SizedBox()),
                     Container(
-                      width: ScreenUtil.instance.setWidth(180),
+                      width: ScreenUtil.instance.setWidth(220),
                       height: ScreenUtil.instance.setWidth(35),
                       child: TextFormField(
                         controller: websiteController,
@@ -206,9 +206,12 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                   controller: descriptionController,
                   maxLines: 10,
                   decoration: InputDecoration(
-                    fillColor: Colors.grey.withOpacity(0.3),
+                    fillColor: Colors.grey.withOpacity(0.2),
                     filled: true,
                     hintText: 'Type your event description here',
+                    hintStyle: TextStyle(
+                      color: Colors.grey.withOpacity(.5)
+                    ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.circular(7),

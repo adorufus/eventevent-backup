@@ -639,7 +639,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                               articleDetail: mediaData[i]['content'],
                               imageCount: 'img' + i.toString(),
                               username: mediaData[i]['creator']['username'],
-                              imageUri: mediaData[i]['banner'],
+                              imageUri: mediaData[i]['banner_timeline'],
                               mediaTitle: mediaData[i]['title'],
                               autoFocus: false,
                               mediaId: mediaData[i]['id'],
@@ -863,7 +863,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                 imageCount: 'img' + i.toString(),
                                 username: latestMediaPhoto[i]['creator']
                                     ['username'],
-                                imageUri: latestMediaPhoto[i]['banner'],
+                                imageUri: latestMediaPhoto[i]['banner_timeline'],
                                 mediaTitle: latestMediaPhoto[i]['title'],
                                 autoFocus: false,
                                 mediaId: latestMediaPhoto[i]['id'],

@@ -22,7 +22,8 @@ class Buyers extends StatefulWidget {
   final eventName;
   final ticketName;
 
-  const Buyers({Key key, this.ticketID, this.eventName, this.ticketName}) : super(key: key);
+  const Buyers({Key key, this.ticketID, this.eventName, this.ticketName})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -97,60 +98,68 @@ class BuyersState extends State<Buyers> {
         actions: <Widget>[
           Padding(
             padding: EdgeInsets.only(right: 13),
-                      child: GestureDetector(
+            child: GestureDetector(
               onTap: () {
                 exportCSV();
               },
               child: Center(
-                child: Text('Export', style: TextStyle(color: eventajaGreenTeal)),
+                child:
+                    Text('Export', style: TextStyle(color: eventajaGreenTeal)),
               ),
             ),
           )
         ],
       ),
-      body: buyerList.length == 0 || buyerListExport.length == 0 ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20),),) : ListView.builder(
-        padding: EdgeInsets.only(bottom: 15),
-        itemCount: buyerList == null ? 0 : buyerList.length,
-        itemBuilder: (BuildContext context, i) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => Invoice(
-                        transactionID: buyerList[i]['id'],
-                      )));
-            },
-            child: Container(
-              margin: EdgeInsets.only(bottom: 15),
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              color: Colors.white,
-              child: Row(
-                children: <Widget>[
-                  Center(
-                      child: CircleAvatar(
-                    backgroundImage:
-                        NetworkImage(buyerList[i]['user']['pictureAvatarURL']),
-                  )),
-                  SizedBox(width: ScreenUtil.instance.setWidth(50)),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(buyerList[i]['user']['fullName']),
-                      Text('@' + buyerList[i]['user']['username']),
-                      Text('Ticket quantity: ' + buyerList[i]['quantity']),
-                    ],
-                  ),
-                  SizedBox(
-                    width: ScreenUtil.instance.setWidth(45),
-                  ),
-                  Center(
-                    child: Text('See Invoice >'),
-                  ),
-                ],
+      body: buyerList.length == 0 || buyerListExport.length == 0
+          ? Container(
+              child: Center(
+                child: CupertinoActivityIndicator(radius: 20),
               ),
+            )
+          : ListView.builder(
+              padding: EdgeInsets.only(bottom: 15),
+              itemCount: buyerList == null ? 0 : buyerList.length,
+              itemBuilder: (BuildContext context, i) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => Invoice(
+                              transactionID: buyerList[i]['id'],
+                            )));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 15),
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    color: Colors.white,
+                    child: Row(
+                      children: <Widget>[
+                        Center(
+                            child: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              buyerList[i]['user']['pictureAvatarURL']),
+                        )),
+                        SizedBox(width: ScreenUtil.instance.setWidth(50)),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(buyerList[i]['user']['fullName']),
+                            Text('@' + buyerList[i]['user']['username']),
+                            Text(
+                                'Ticket quantity: ' + buyerList[i]['quantity']),
+                          ],
+                        ),
+                        SizedBox(
+                          width: ScreenUtil.instance.setWidth(45),
+                        ),
+                        Center(
+                          child: Text('See Invoice >'),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 
@@ -174,18 +183,24 @@ class BuyersState extends State<Buyers> {
       row.add(buyers['user']['fullName']);
       row.add('@' + buyers['user']['username']);
       row.add(buyers['quantity']);
-      row.add(buyers['note']);
-      if(buyers.containsKey('form')){
+      row.add(buyers['email']);
+      row.add(buyers['phone']);
+      row.add(buyers['created_at']);
+      row.add(buyers['amount'] == '0' ? 'Free' : 'Rp. ${buyers['amount']}');
+      row.add(buyers['note'] == '' ? '-' : buyers['note']);
+      if (buyers.containsKey('form')) {
         if (buyers['form'] != null || buyers['form'].length != 0) {
-        for (var formList in buyers['form']) {
-          setState(() {
-            formLists = formList;
-          });
-          row.add(formList['answer']);
+          for (var formList in buyers['form']) {
+            setState(() {
+              formLists = formList;
+            });
+            row.add(formList['answer']);
+          }
+        } else {
+          row.add('-');
         }
       }
-      }
-      
+
       rows.add(row);
 
       print('banyak user beli tiket: ' + rows.length.toString());
@@ -199,8 +214,12 @@ class BuyersState extends State<Buyers> {
       'Full Name',
       'Username',
       'Quantity',
+      'Buyer E-mail',
+      'Buyer Phone',
+      'Date',
+      'Total Paid',
       'Note',
-      formLists.length != 0 ? formLists['question'] : ''
+      formLists.length != 0 ? formLists['question'] : 'Custom Form'
     ]);
 
     Map<PermissionGroup, PermissionStatus> permissions =
@@ -210,31 +229,29 @@ class BuyersState extends State<Buyers> {
 
     print(checkPermission.toString());
 
-    if (checkPermission == PermissionStatus.granted) {
-      
-    }
+    if (checkPermission == PermissionStatus.granted) {}
 
     String dir;
 
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       dir = (await getExternalStorageDirectory()).absolute.path +
           '/report_${widget.ticketName}';
+    } else if (Platform.isIOS) {
+      dir = (await getLibraryDirectory()).absolute.path +
+          '/report_${widget.ticketName}';
     }
-    else if(Platform.isIOS){
-      dir = (await getLibraryDirectory()).absolute.path + '/report_${widget.ticketName}';
-    }
 
-      String file = "$dir";
-      print(file);
-      File f = new File(file + ".csv");
+    String file = "$dir";
+    print(file);
+    File f = new File(file + ".csv");
 
-      String csv = const ListToCsvConverter().convert(rows);
-      print(csv);
-      f.writeAsString(csv);
+    String csv = const ListToCsvConverter().convert(rows);
+    print(csv);
+    f.writeAsString(csv);
 
-      print('saved');
-      // Share.file(path: f.path, mimeType: ShareType.TYPE_FILE, title: 'text');
-      ShareExtend.share(f.path, "file");
+    print('saved');
+    // Share.file(path: f.path, mimeType: ShareType.TYPE_FILE, title: 'text');
+    ShareExtend.share(f.path, "file");
   }
 
   Future<http.Response> getBuyerExport() async {
@@ -243,15 +260,14 @@ class BuyersState extends State<Buyers> {
     String url = BaseApi().apiUrl +
         '/tickets/user?X-API-KEY=$API_KEY&ticketID=${widget.ticketID}&page=all';
 
-    try{
+    try {
       final response = await http.get(url, headers: {
         'Authorization': AUTHORIZATION_KEY,
         'cookie': prefs.getString('Session')
       });
 
       return response;
-    }
-    catch (e){
+    } catch (e) {
       print('error occured: ' + e);
     }
 
