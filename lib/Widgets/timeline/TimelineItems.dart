@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/timeline/EditPost.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
@@ -33,7 +34,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
 
   int newPage = 0;
 
-  List timelineList = [];
+  List timelineList;
 
   bool isLoading = false;
 
@@ -120,7 +121,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
-      child: SmartRefresher(
+      child: timelineList == null ? HomeLoadingScreen().timelineLoading() : SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,
         footer: CustomFooter(builder: (BuildContext context, LoadStatus mode) {
@@ -166,7 +167,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
           });
         },
         onLoading: _onLoading,
-        child: timelineList == null ? Center(child: Column(
+        child: timelineList.length < 1 ? Center(child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Image.asset('assets/icons/empty_state/public_timeline.png', scale: 1.5,),

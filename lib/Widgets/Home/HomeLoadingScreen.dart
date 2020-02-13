@@ -4,63 +4,403 @@ import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_placeholder_textlines/placeholder_lines.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
 
 class HomeLoadingScreen {
-  static List<dynamic> categoryCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+  static List<dynamic> categoryCount = [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ];
 
   List<Widget> mappedCategoryData = categoryCount?.map((categoryData) {
-      return SizedBox(
-        height: ScreenUtil.instance.setWidth(85),
-        width: ScreenUtil.instance.setWidth(80),
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Shimmer.fromColors(
-                baseColor: Colors.grey[300],
-                highlightColor: Colors.grey[100],
-                enabled: true,
-                child: Container(
-                  padding: EdgeInsets.only(bottom: 20),
-                  width: ScreenUtil.instance.setWidth(41.50),
-                  height: ScreenUtil.instance.setWidth(40.50),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 2,
-                            spreadRadius: 1.5,
-                            offset: Offset(0.0, 0.0))
-                      ],
-                      image: DecorationImage(
-                          image: AssetImage(
-                        'assets/grey-fade.jpg',
-                      ))),
+        return SizedBox(
+          height: ScreenUtil.instance.setWidth(85),
+          width: ScreenUtil.instance.setWidth(80),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Shimmer.fromColors(
+                  baseColor: Colors.grey[300],
+                  highlightColor: Colors.grey[100],
+                  enabled: true,
+                  child: Container(
+                    padding: EdgeInsets.only(bottom: 20),
+                    width: ScreenUtil.instance.setWidth(41.50),
+                    height: ScreenUtil.instance.setWidth(40.50),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 2,
+                              spreadRadius: 1.5,
+                              offset: Offset(0.0, 0.0))
+                        ],
+                        image: DecorationImage(
+                            image: AssetImage(
+                          'assets/grey-fade.jpg',
+                        ))),
+                  ),
                 ),
+                SizedBox(height: ScreenUtil.instance.setWidth(9)),
+                Text(
+                  '',
+                  style: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(10),
+                      color: Color(0xFF8A8A8B)),
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                )
+              ],
+            ),
+          ),
+        );
+      })?.toList() ??
+      [];
+
+  Widget myTicketLoading() {
+    return ListView.builder(
+      shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: 10,
+        itemBuilder: (context, i) {
+          return Container(
+            child: Container(
+              margin: EdgeInsets.only(left: 13, right: 13, top: 13),
+              height: ScreenUtil.instance.setWidth(150.18),
+              decoration: BoxDecoration(boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 2,
+                    spreadRadius: 1.5)
+              ], color: Colors.white, borderRadius: BorderRadius.circular(15)),
+              child: Row(
+                children: <Widget>[
+                  Shimmer.fromColors(
+                    baseColor: Colors.grey[300],
+                    highlightColor: Colors.grey[100],
+                    enabled: true,
+                    child: Container(
+                      width: ScreenUtil.instance.setWidth(100.19),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/grey-fade.jpg'),
+                            fit: BoxFit.fill),
+                        color: Color(0xFFB5B5B5),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 19.35, top: 15.66, right: 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: ScreenUtil.instance.setWidth(5)),
+                        Container(
+                          width: 200,
+                          child: PlaceholderLines(
+                            count: 3,
+                            align: TextAlign.left,
+                            lineHeight: 10,
+                            color: Colors.grey,
+                            animate: true,
+                          ),
+                        ),
+                        SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                        Shimmer.fromColors(
+                          baseColor: Colors.grey[300],
+                          highlightColor: Colors.grey[100],
+                          enabled: true,
+                          child: Container(
+                            height: ScreenUtil.instance.setWidth(28),
+                            width: ScreenUtil.instance.setWidth(133),
+                            decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(15)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
-              SizedBox(height: ScreenUtil.instance.setWidth(9)),
-              Text(
-                '',
-                style: TextStyle(
-                    fontSize: ScreenUtil.instance.setSp(10),
-                    color: Color(0xFF8A8A8B)),
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-              )
-            ],
+            ),
+          );
+        });
+  }
+
+  Widget timelineLoading() {
+    return ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, i) {
+          return Container(
+              margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+              decoration: BoxDecoration(
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 2,
+                        spreadRadius: 1.5)
+                  ],
+                  color: Color(0xFFF9F9F9),
+                  borderRadius: BorderRadius.circular(15)),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15)),
+                    padding: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  Shimmer.fromColors(
+                                    baseColor: Colors.grey[300],
+                                    highlightColor: Colors.grey[100],
+                                    enabled: true,
+                                    child: CircleAvatar(
+                                      backgroundImage:
+                                          AssetImage('assets/grey-fade.jpg'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: ScreenUtil.instance.setWidth(8),
+                                  ),
+                                  Container(
+                                      width:
+                                          ScreenUtil.instance.setWidth(200.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Container(
+                                            width: 100,
+                                            child: PlaceholderLines(
+                                              count: 2,
+                                              align: TextAlign.left,
+                                              lineHeight: 10,
+                                              color: Colors.grey,
+                                              animate: true,
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                ]),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        Shimmer.fromColors(
+                          baseColor: Colors.grey[300],
+                          highlightColor: Colors.grey[100],
+                          enabled: true,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                image: DecorationImage(
+                                    image: AssetImage('assets/grey-fade.jpg'),
+                                    fit: BoxFit.cover)),
+                            height: ScreenUtil.instance.setWidth(400),
+                            width: MediaQuery.of(context).size.width,
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Container(),
+                            Container(),
+                            Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 13, vertical: 11),
+                              width: 200,
+                              child: PlaceholderLines(
+                                count: 2,
+                                align: TextAlign.left,
+                                lineHeight: 10,
+                                color: Colors.grey,
+                                animate: true,
+                              ),
+                            ),
+                            Expanded(
+                              child: SizedBox(),
+                            ),
+                            // Container(
+                            //   child: Image.asset('assets/btn_ticket/free-limited.png', scale: 7,),)
+                            Container()
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ));
+          ;
+        });
+  }
+
+  Widget profileLoading(BuildContext context) {
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size(null, 75),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: ScreenUtil.instance.setWidth(60),
+          padding: EdgeInsets.symmetric(horizontal: 13),
+          color: Colors.white,
+          child: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
           ),
         ),
-      );
-    })?.toList() ?? [];
+      ),
+      body: ListView(
+        physics: NeverScrollableScrollPhysics(),
+        children: <Widget>[
+          Container(
+            color: Colors.white,
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Shimmer.fromColors(
+                      baseColor: Colors.grey[300],
+                      highlightColor: Colors.grey[100],
+                      enabled: true,
+                      child: Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 28, vertical: 3),
+                        height: ScreenUtil.instance.setWidth(110),
+                        width: ScreenUtil.instance.setWidth(110),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 5,
+                                  offset: Offset(1, 1))
+                            ],
+                            image: DecorationImage(
+                                image: AssetImage('assets/grey-fade.png'),
+                                fit: BoxFit.cover)),
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'loading',
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: ScreenUtil.instance.setSp(17),
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: ScreenUtil.instance.setWidth(4),
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              'loading',
+                              style: TextStyle(
+                                  fontSize: ScreenUtil.instance.setSp(12),
+                                  color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: ScreenUtil.instance.setWidth(4),
+                        ),
+                        Container(
+                          width: ScreenUtil.instance.setWidth(180),
+                          child: Text(
+                            'loading',
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: ScreenUtil.instance.setSp(12)),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        SizedBox(
+                          height: ScreenUtil.instance.setWidth(4),
+                        ),
+                        Text(
+                          'loading',
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: ScreenUtil.instance.setSp(12)),
+                        ),
+                        SizedBox(
+                          height: ScreenUtil.instance.setWidth(20),
+                        ),
+                        Container(
+                          height: ScreenUtil.instance.setWidth(32.93),
+                          width: ScreenUtil.instance.setWidth(82.31),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.grey[350]),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                Container(
+                  height: ScreenUtil.instance.setWidth(60.63),
+                  margin: EdgeInsets.symmetric(horizontal: 13, vertical: 28),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            blurRadius: 2,
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 1.5)
+                      ]),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
 
   Widget collectionLoading() {
-
     return Container(
       height: ScreenUtil.instance.setWidth(90),
       child: ListView.builder(

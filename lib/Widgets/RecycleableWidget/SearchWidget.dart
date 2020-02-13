@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
@@ -217,11 +218,7 @@ class SearchState extends State<Search> {
       filteredEvents = tempList;
 
       return isLoading == true
-          ? Container(
-              child: Center(
-                child: CupertinoActivityIndicator(radius: 20),
-              ),
-            )
+          ? HomeLoadingScreen().myTicketLoading()
           : ListView.builder(
               itemCount: events == null ? 0 : filteredEvents.length,
               itemBuilder: (BuildContext context, i) {

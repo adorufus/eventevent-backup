@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventList.dart';
 import 'package:eventevent/Widgets/ManageEvent/PublicEventList.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsWidget.dart';
@@ -745,11 +746,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
             child: TabBarView(
               children: <Widget>[
                 userTimelineList == null
-                    ? Container(
-                        padding: EdgeInsets.only(top: 80),
-                        alignment: Alignment.topCenter,
-                        child: CupertinoActivityIndicator(radius: 20),
-                      )
+                    ? HomeLoadingScreen().timelineLoading()
                     : timeline(),
                 widget.currentUserId == userId
                     ? MyTicketWidget()

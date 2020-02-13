@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/Widgets/editProfileWidget.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
@@ -67,10 +68,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       allowFontScaling: true,
     )..init(context);
     return userData == null
-        ? Container(
-            color: Colors.white,
-            child: Center(child: CupertinoActivityIndicator(radius: 20)),
-          )
+        ? HomeLoadingScreen().profileLoading(context)
         : ProfileHeader(
             username: username,
             fullName: fullName,

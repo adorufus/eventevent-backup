@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
@@ -77,7 +78,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          child: SmartRefresher(
+          child: latestEventData == null ? HomeLoadingScreen().myTicketLoading() : SmartRefresher(
                   enablePullDown: true,
                   enablePullUp: true,
                   footer: CustomFooter(

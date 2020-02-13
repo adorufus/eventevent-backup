@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WaitTransaction.dart';
 import 'package:eventevent/Widgets/Transaction/Alfamart/WaitingTransactionAlfamart.dart';
 import 'package:eventevent/Widgets/Transaction/BCA/InputBankData.dart';
@@ -25,7 +26,7 @@ class TransactionHistory extends StatefulWidget {
 }
 
 class TransactionHistoryState extends State<TransactionHistory> {
-  List transactionList = [];
+  List transactionList;
   Color paymentStatusColor;
   String paymentStatusText;
 
@@ -90,11 +91,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
               ),
             )),
         body: transactionList == null
-            ? Container(
-                child: Center(
-                  child: CupertinoActivityIndicator(radius: 20),
-                ),
-              )
+            ? HomeLoadingScreen().myTicketLoading()
             : Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,

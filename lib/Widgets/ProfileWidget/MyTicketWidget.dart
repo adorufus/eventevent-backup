@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/SeeAll/MyTicketItem.dart';
 
 import 'package:eventevent/Widgets/ProfileWidget/UseTicket.dart';
@@ -83,9 +84,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
       allowFontScaling: true,
     )..init(context);
     return ticketDetailData == null
-        ? Container(
-            padding: EdgeInsets.only(top: 80),
-            alignment: Alignment.topCenter, child: CupertinoActivityIndicator(radius: 20))
+        ? HomeLoadingScreen().myTicketLoading()
         : SmartRefresher(
             enablePullDown: false,
             enablePullUp: true,

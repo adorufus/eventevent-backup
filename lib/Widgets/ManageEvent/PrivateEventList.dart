@@ -1,3 +1,4 @@
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
@@ -95,10 +96,7 @@ class PrivateEventListState extends State<PrivateEventList> {
                 reasonText: 'You Have No Event Created Yet',
               )
             : privateData == null
-                ? Container(
-                    child: Center(
-                    child: CupertinoActivityIndicator(radius: 20),
-                  ))
+                ? HomeLoadingScreen().myTicketLoading()
                 : SmartRefresher(
                     controller: refreshController,
                     enablePullDown: true,

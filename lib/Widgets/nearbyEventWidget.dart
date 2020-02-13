@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
@@ -118,16 +119,7 @@ class _ListenPageState extends State<ListenPage> {
       child: Scaffold(
         body: Container(
           child: nearbyEventData == null
-              ? Center(
-                  child: Container(
-                    width: ScreenUtil.instance.setWidth(25),
-                    height: ScreenUtil.instance.setWidth(25),
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: CupertinoActivityIndicator(radius: 20),
-                    ),
-                  ),
-                )
+              ? HomeLoadingScreen().myTicketLoading()
               : SmartRefresher(
                   enablePullDown: true,
                   enablePullUp: true,

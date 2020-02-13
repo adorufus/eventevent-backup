@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
@@ -236,16 +237,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
   Widget popularEvent() {
     return Container(
         child: popularEventList == null
-            ? Center(
-                child: Container(
-                  width: ScreenUtil.instance.setWidth(25),
-                  height: ScreenUtil.instance.setWidth(25),
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: CupertinoActivityIndicator(radius: 20),
-                  ),
-                ),
-              )
+            ? HomeLoadingScreen().myTicketLoading()
             : SmartRefresher(
                 enablePullDown: true,
                 enablePullUp: true,
@@ -402,16 +394,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
   Widget discoverEvent() {
     return Container(
         child: discoverEventList == null
-            ? Center(
-                child: Container(
-                  width: ScreenUtil.instance.setWidth(25),
-                  height: ScreenUtil.instance.setWidth(25),
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: CupertinoActivityIndicator(radius: 20),
-                  ),
-                ),
-              )
+            ? HomeLoadingScreen().myTicketLoading()
             : SmartRefresher(
                 enablePullDown: true,
                 enablePullUp: true,
@@ -593,7 +576,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
     int currentPage = 1;
 
     setState(() {
-      if (newPage != null || newPage != 0) {
+      if (newPage != null) {
         currentPage += newPage;
       }
     });

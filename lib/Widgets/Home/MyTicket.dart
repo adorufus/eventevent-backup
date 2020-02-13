@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/SeeAll/MyTicketItem.dart';
 import 'package:eventevent/Widgets/ProfileWidget/UseTicket.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -21,7 +22,7 @@ class _MyTicketState extends State<MyTicket> {
   List filteredTickets = new List();
   List tickets = new List();
   RefreshController refreshController =
-      RefreshController(initialRefresh: true);
+      RefreshController(initialRefresh: false);
   TextEditingController searchController = new TextEditingController();
 
   int newPage = 0;
@@ -172,7 +173,7 @@ class _MyTicketState extends State<MyTicket> {
             ),
           ),
         ),
-        body: SmartRefresher(
+        body: myTicketList == null ? HomeLoadingScreen().myTicketLoading() : SmartRefresher(
           enablePullDown: true,
           enablePullUp: true,
           footer: CustomFooter(

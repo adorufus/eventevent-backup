@@ -201,7 +201,7 @@ class _TimelineItemState extends State<TimelineItem>
                           widget.type == 'photo' ||
                           widget.type == 'event' ||
                           widget.type == 'eventgoing' ||
-                          widget.id != null && widget.type != 'love'
+                          widget.id != null && widget.type != 'love' && widget.type != 'relationship' && widget.type != 'combined_relationship'
                       ? GestureDetector(
                           onTap: () {
                             if (widget.type == 'photo' ||
