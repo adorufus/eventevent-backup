@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/Widgets/openMedia.dart';
@@ -37,9 +38,9 @@ class TimelineDashboard extends StatefulWidget {
 class TimelineDashboardState extends State<TimelineDashboard>
     with WidgetsBindingObserver {
   List mediaData = [];
-  List popularMediaVideo = [];
+  List popularMediaVideo;
   List latestMediaPhoto = [];
-  List latestMediaVideo = [];
+  List latestMediaVideo;
   List bannerData;
   String currentUserId;
   bool isLoved;
@@ -843,10 +844,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
 
   Widget latestMediaContent() {
     return mediaData == null
-        ? Container(
-            child: Center(
-            child: CupertinoActivityIndicator(radius: 20),
-          ))
+        ? HomeLoadingScreen().mediaLoading()
         : ColumnBuilder(
             itemCount: latestMediaPhoto == null ? 0 : latestMediaPhoto.length,
             itemBuilder: (BuildContext context, i) {
@@ -934,10 +932,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
     return Container(
       height: ScreenUtil.instance.setWidth(247),
       child: popularMediaVideo == null
-          ? Container(
-              child: Center(
-              child: CupertinoActivityIndicator(radius: 20),
-            ))
+          ? HomeLoadingScreen().mediaLoading()
           : ListView.builder(
               itemCount:
                   popularMediaVideo == null ? 0 : popularMediaVideo.length,
@@ -1030,7 +1025,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
   }
 
   Widget latestVideoContent() {
-    return ColumnBuilder(
+    return latestMediaVideo == null ? HomeLoadingScreen().mediaLoading() : ColumnBuilder(
       itemCount: latestMediaVideo == null ? 0 : latestMediaVideo.length,
       itemBuilder: (BuildContext context, i) {
         return GestureDetector(
@@ -1079,9 +1074,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
       height: ScreenUtil.instance.setWidth(200),
       items: bannerData == null
           ? [
-              Center(
-                child: CupertinoActivityIndicator(radius: 20),
-              )
+              HomeLoadingScreen().bannerLoading(context)
             ]
           : mappedDataBanner,
       autoPlayInterval: Duration(seconds: 3),

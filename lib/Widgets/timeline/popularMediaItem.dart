@@ -147,6 +147,7 @@ class _MediaItemState extends State<MediaItem> {
                             height: ScreenUtil.instance.setWidth(40),
                             child: Text(
                               widget.title,
+                              maxLines: 2,
                               style: TextStyle(
                                   fontSize: ScreenUtil.instance.setSp(15),
                                   fontWeight: FontWeight.bold),
