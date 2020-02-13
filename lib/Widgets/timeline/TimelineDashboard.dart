@@ -861,7 +861,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                 imageCount: 'img' + i.toString(),
                                 username: latestMediaPhoto[i]['creator']
                                     ['username'],
-                                imageUri: latestMediaPhoto[i]['banner_timeline'],
+                                imageUri: latestMediaPhoto[i]
+                                    ['banner_timeline'],
                                 mediaTitle: latestMediaPhoto[i]['title'],
                                 autoFocus: false,
                                 mediaId: latestMediaPhoto[i]['id'],
@@ -909,7 +910,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => SeeAllMediaItem(
-                            isRest: widget.isRest,
+                                isRest: widget.isRest,
                                 initialIndex: 0,
                                 isVideo: true,
                               )));
@@ -964,6 +965,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                   },
                   child: MediaItem(
                     isRest: widget.isRest,
+                    videoUrl: popularMediaVideo[i]['video'],
+                    youtube: popularMediaVideo[i]['youtube'],
                     isVideo: true,
                     image: popularMediaVideo[i]['thumbnail_timeline'],
                     title: popularMediaVideo[i]['title'],
@@ -1025,45 +1028,50 @@ class TimelineDashboardState extends State<TimelineDashboard>
   }
 
   Widget latestVideoContent() {
-    return latestMediaVideo == null ? HomeLoadingScreen().mediaLoading() : ColumnBuilder(
-      itemCount: latestMediaVideo == null ? 0 : latestMediaVideo.length,
-      itemBuilder: (BuildContext context, i) {
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MediaDetails(
-                          isRest: widget.isRest,
-                          isVideo: true,
-                          videoUrl: latestMediaVideo[i]['video'],
-                          youtubeUrl: latestMediaVideo[i]['youtube'],
-                          userPicture: latestMediaVideo[i]['creator']['photo'],
-                          articleDetail: latestMediaVideo[i]['content'],
-                          imageCount: 'img' + i.toString(),
-                          username: latestMediaVideo[i]['creator']['username'],
-                          imageUri: latestMediaVideo[i]['thumbnail_timeline'],
-                          mediaTitle: latestMediaVideo[i]['title'],
-                          autoFocus: false,
-                          mediaId: latestMediaVideo[i]['id'],
-                        )));
-          },
-          child: LatestMediaItem(
-            isRest: widget.isRest,
-            isVideo: true,
-            youtube: latestMediaVideo[i]['youtube'] ?? '/',
-            videoUrl: latestMediaVideo[i]['video'] ?? '/',
-            mediaId: latestMediaVideo[i]['id'],
-            image: latestMediaVideo[i]['thumbnail_timeline'],
-            title: latestMediaVideo[i]['title'],
-            username: latestMediaVideo[i]['creator']['username'],
-            userImage: latestMediaVideo[i]['creator']['photo'],
-            likeCount: latestMediaVideo[i]['count_loved'],
-            commentCount: latestMediaVideo[i]['comment'],
-          ),
-        );
-      },
-    );
+    return latestMediaVideo == null
+        ? HomeLoadingScreen().mediaLoading()
+        : ColumnBuilder(
+            itemCount: latestMediaVideo == null ? 0 : latestMediaVideo.length,
+            itemBuilder: (BuildContext context, i) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MediaDetails(
+                                isRest: widget.isRest,
+                                isVideo: true,
+                                videoUrl: latestMediaVideo[i]['video'],
+                                youtubeUrl: latestMediaVideo[i]['youtube'],
+                                userPicture: latestMediaVideo[i]['creator']
+                                    ['photo'],
+                                articleDetail: latestMediaVideo[i]['content'],
+                                imageCount: 'img' + i.toString(),
+                                username: latestMediaVideo[i]['creator']
+                                    ['username'],
+                                imageUri: latestMediaVideo[i]
+                                    ['thumbnail_timeline'],
+                                mediaTitle: latestMediaVideo[i]['title'],
+                                autoFocus: false,
+                                mediaId: latestMediaVideo[i]['id'],
+                              )));
+                },
+                child: LatestMediaItem(
+                  isRest: widget.isRest,
+                  isVideo: true,
+                  youtube: latestMediaVideo[i]['youtube'] ?? '/',
+                  videoUrl: latestMediaVideo[i]['video'] ?? '/',
+                  mediaId: latestMediaVideo[i]['id'],
+                  image: latestMediaVideo[i]['thumbnail_timeline'],
+                  title: latestMediaVideo[i]['title'],
+                  username: latestMediaVideo[i]['creator']['username'],
+                  userImage: latestMediaVideo[i]['creator']['photo'],
+                  likeCount: latestMediaVideo[i]['count_loved'],
+                  commentCount: latestMediaVideo[i]['comment'],
+                ),
+              );
+            },
+          );
   }
 
   List<Widget> mappedDataBanner;
@@ -1073,9 +1081,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
     return CarouselSlider(
       height: ScreenUtil.instance.setWidth(200),
       items: bannerData == null
-          ? [
-              HomeLoadingScreen().bannerLoading(context)
-            ]
+          ? [HomeLoadingScreen().bannerLoading(context)]
           : mappedDataBanner,
       autoPlayInterval: Duration(seconds: 3),
       enlargeCenterPage: false,

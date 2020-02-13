@@ -2634,7 +2634,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                             },
                             child: Container(
                               margin: EdgeInsets.only(left: 10),
-                              height: ScreenUtil.instance.setWidth(double.parse(widget.detailData['additional'][i]['pictureHeight'])),
+                              height: ScreenUtil.instance.setHeight(double.parse(widget.detailData['additional'][i]['pictureHeight'])),
                               width: ScreenUtil.instance.setWidth(double.parse(widget.detailData['additional'][i]['pictureWidth'])),
                               decoration: BoxDecoration(
                                   color: Color(0xff8a8a8b),
