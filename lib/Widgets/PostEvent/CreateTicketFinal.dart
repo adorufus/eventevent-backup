@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'dart:io'; 
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:async/async.dart';
@@ -7,7 +8,7 @@ import 'package:eventevent/Widgets/PostEvent/FinishPostEvent.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
@@ -16,7 +17,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CreateTicketFinal extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    
     return CreateTicketFinalState();
   }
 }
@@ -40,6 +40,9 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
 
   File imageFile;
 
+  Dio dio = new Dio(BaseOptions(
+      connectTimeout: 5000, baseUrl: BaseApi().apiUrl, receiveTimeout: 5000));
+
   getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -59,13 +62,13 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
 
   @override
   void initState() {
-    
     super.initState();
     getData();
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -73,7 +76,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    
+
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
@@ -141,12 +144,14 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                         color: Colors.black54,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(10)),
                                   Container(
                                       width: ScreenUtil.instance.setWidth(170),
                                       height: ScreenUtil.instance.setWidth(40),
                                       child: Text(ticketQuantity)),
-                                  SizedBox(height: ScreenUtil.instance.setWidth(7)),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(7)),
                                   Text(
                                     'Ticket Sales Starts',
                                     style: TextStyle(
@@ -154,12 +159,14 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                         color: Colors.black54,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(10)),
                                   Container(
                                       width: ScreenUtil.instance.setWidth(170),
                                       height: ScreenUtil.instance.setWidth(40),
                                       child: Text(startDate + ' ' + startTime)),
-                                  SizedBox(height: ScreenUtil.instance.setWidth(7)),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(7)),
                                   Text(
                                     'Ticket Sales Ends',
                                     style: TextStyle(
@@ -167,7 +174,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                         color: Colors.black54,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(10)),
                                   Container(
                                       width: ScreenUtil.instance.setWidth(170),
                                       height: ScreenUtil.instance.setWidth(40),
@@ -192,7 +200,9 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         SizedBox(height: ScreenUtil.instance.setWidth(15)),
                         Divider(),
                         SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                        ticketTypeId == '5' || ticketTypeId == '10' ? Container() : serviceFee(context),
+                        ticketTypeId == '5' || ticketTypeId == '10'
+                            ? Container()
+                            : serviceFee(context),
                         SizedBox(
                           height: ScreenUtil.instance.setWidth(15),
                         ),
@@ -245,8 +255,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                       Radio(
                         groupValue: _curValue,
                         onChanged: (int i) => setState(() {
-                              _curValue = i;
-                            }),
+                          _curValue = i;
+                        }),
                         value: 0,
                       ),
                       SizedBox(height: ScreenUtil.instance.setWidth(10)),
@@ -255,7 +265,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         children: <Widget>[
                           Text('Paid by you',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(20))),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil.instance.setSp(20))),
                           SizedBox(height: ScreenUtil.instance.setWidth(10)),
                           Container(
                               height: ScreenUtil.instance.setWidth(50),
@@ -373,8 +384,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                       Radio(
                         groupValue: _curValue,
                         onChanged: (int i) => setState(() {
-                              _curValue = i;
-                            }),
+                          _curValue = i;
+                        }),
                         value: 1,
                       ),
                       SizedBox(height: ScreenUtil.instance.setWidth(10)),
@@ -383,7 +394,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         children: <Widget>[
                           Text('Paid by attendee',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(20))),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil.instance.setSp(20))),
                           SizedBox(height: ScreenUtil.instance.setWidth(10)),
                           Container(
                               height: ScreenUtil.instance.setWidth(50),
@@ -492,117 +504,125 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
 
   Future saveFinalData(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String url = BaseApi().apiUrl + '/ticket_setup/post';
-    var stream =
-        new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
-    var length = await imageFile.length();
 
-    final request = new http.MultipartRequest("POST", Uri.parse(url));
-    request.headers.addAll({
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
-    });
-
-    if(_curValue == 0){
+    if (_curValue == 0) {
       setState(() {
         ticketPaidBy = 'owner';
         finalPrice = price;
         merchantPrice = price;
       });
-    }
-    else if(_curValue == 1){
+    } else if (_curValue == 1) {
       setState(() {
         ticketPaidBy = 'attandee';
         finalPrice = (int.parse(price) + 5000).toString();
         merchantPrice = price;
       });
-    }
-    else if(_curValue == 2){
-      setState((){
+    } else if (_curValue == 2) {
+      setState(() {
         ticketPaidBy = 'op1';
         finalPrice = (int.parse(price) + 10000).toString();
         merchantPrice = price;
       });
     }
 
-    print(prefs.getString('SETUP_TICKET_NAME'));
-    print(prefs.getString('SETUP_TICKET_DESCRIPTION'));
-    print(prefs.getString('SETUP_TICKET_QTY'));
-    print(prefs.getString('SETUP_TICKET_PRICE'));
-    print(prefs.getString('SETUP_TICKET_MIN_BOUGHT'));
-    print(prefs.getString('SETUP_TICKET_MAX_BOUGHT'));
-    print(prefs.getString('SETUP_TICKET_START_DATE'));
-    print(prefs.getString('SETUP_TICKET_START_TIME'));
-    print(prefs.getString('SETUP_TICKET_END_DATE'));
-    print(prefs.getString('SETUP_TICKET_END_TIME'));
-    print(prefs.getString('SETUP_TICKET_SHOW_REMAINING_TICKET'));
-    print(ticketPaidBy);
-    print(finalPrice);
+    try {
+      Map<String, dynamic> body = {
+        'X-API-KEY': API_KEY,
+        'eventID': prefs.getInt('NEW_EVENT_ID').toString(),
+        'ticket_name': prefs.getString('SETUP_TICKET_NAME'),
+        'quantity': prefs.getString('SETUP_TICKET_QTY'),
+        'price': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
+                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
+            ? '0'
+            : price,
+        'min_ticket': prefs.getString('SETUP_TICKET_MIN_BOUGHT'),
+        'max_ticket': prefs.getString('SETUP_TICKET_MAX_BOUGHT'),
+        'sales_start_date': prefs.getString('SETUP_TICKET_START_DATE') +
+            ' ' +
+            prefs.getString('SETUP_TICKET_START_TIME') +
+            ':00',
+        'sales_end_date': prefs.getString('SETUP_TICKET_END_DATE') +
+            ' ' +
+            prefs.getString('SETUP_TICKET_END_TIME') +
+            ':00',
+        'descriptions': prefs.getString('SETUP_TICKET_DESCRIPTION'),
+        'show_remaining_ticket':
+            prefs.getString('SETUP_TICKET_SHOW_REMAINING_TICKET'),
+        'fee_paid_by': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
+                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
+            ? ''
+            : ticketPaidBy,
+        'final_price': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
+                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
+            ? '0'
+            : finalPrice,
+        'paid_ticket_type_id': prefs.getString('SETUP_TICKET_PAID_TICKET_TYPE'),
+        'merchant_price': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
+                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
+            ? '0'
+            : merchantPrice,
+        'is_single_ticket': prefs.getString('SETUP_TICKET_IS_ONE_PURCHASE'),
+        'ticket_image': UploadFileInfo(
+            imageFile, "eventeventticket-${DateTime.now().toString()}.jpg",
+            contentType: ContentType('image', 'jpeg'))
+      };
 
-    request.fields.addAll({
-      'X-API-KEY': API_KEY,
-      'eventID': prefs.getInt('NEW_EVENT_ID').toString(),
-      'ticket_name': prefs.getString('SETUP_TICKET_NAME'),
-      'quantity': prefs.getString('SETUP_TICKET_QTY'),
-      'price': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
-              prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
-          ? '0'
-          : price,
-      'min_ticket': prefs.getString('SETUP_TICKET_MIN_BOUGHT'),
-      'max_ticket': prefs.getString('SETUP_TICKET_MAX_BOUGHT'),
-      'sales_start_date': prefs.getString('SETUP_TICKET_START_DATE') +
-          ' ' +
-          prefs.getString('SETUP_TICKET_START_TIME') +
-          ':00',
-      'sales_end_date': prefs.getString('SETUP_TICKET_END_DATE') +
-          ' ' +
-          prefs.getString('SETUP_TICKET_END_TIME') +
-          ':00',
-      'descriptions': prefs.getString('SETUP_TICKET_DESCRIPTION'),
-      'show_remaining_ticket':
-          prefs.getString('SETUP_TICKET_SHOW_REMAINING_TICKET'),
-      'fee_paid_by': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
-              prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
-          ? ''
-          : ticketPaidBy,
-      'final_price': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
-              prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
-          ? '0'
-          : finalPrice,
-      'paid_ticket_type_id': prefs.getString('SETUP_TICKET_PAID_TICKET_TYPE'),
-      'merchant_price': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
-              prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
-          ? '0'
-          : merchantPrice,
-      'is_single_ticket': prefs.getString('SETUP_TICKET_IS_ONE_PURCHASE'),
-    });
-    request.files.add(new http.MultipartFile('ticket_image', stream, length,
-        filename: basename(imageFile.path)));
+      print(prefs.getString('SETUP_TICKET_NAME'));
+      print(prefs.getString('SETUP_TICKET_DESCRIPTION'));
+      print(prefs.getString('SETUP_TICKET_QTY'));
+      print(prefs.getString('SETUP_TICKET_PRICE'));
+      print(prefs.getString('SETUP_TICKET_MIN_BOUGHT'));
+      print(prefs.getString('SETUP_TICKET_MAX_BOUGHT'));
+      print(prefs.getString('SETUP_TICKET_START_DATE'));
+      print(prefs.getString('SETUP_TICKET_START_TIME'));
+      print(prefs.getString('SETUP_TICKET_END_DATE'));
+      print(prefs.getString('SETUP_TICKET_END_TIME'));
+      print(prefs.getString('SETUP_TICKET_SHOW_REMAINING_TICKET'));
+      print(ticketPaidBy);
+      print(finalPrice);
 
-    request.send().then((response) async {
-      print(response.statusCode);
-      var myResponse = await http.Response.fromStream(response);
+      var data = FormData.from(body);
+      Response response = await dio.post(
+        '/ticket_setup/post',
+        options: Options(
+          headers: {
+            'Authorization': AUTHORIZATION_KEY,
+            'cookie': prefs.getString('Session')
+          },
+          cookies: [Cookie.fromSetCookieValue(prefs.getString('Session'))],
+          responseType: ResponseType.plain,
+        ),
+        data: data,
+      );
+
+      var extractedData = json.decode(response.data);
+
+      print(response.data);
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        print(myResponse.body);
+        print(response.data);
+        print('proccessing.....');
         if (prefs.getString('POST_EVENT_TYPE') == '0') {
-          setState(() {
-            var extractedData = json.decode(myResponse.body);
-          });
           Navigator.of(context).push(CupertinoPageRoute(
               builder: (BuildContext context) => FinishPostEvent()));
         } else {
-          print(myResponse.body);
-          setState(() {
-            var extractedData = json.decode(myResponse.body);
-          });
           Navigator.of(context).push(CupertinoPageRoute(
               builder: (BuildContext context) => PostEventInvitePeople()));
         }
       }
-      else{
-        print(myResponse.body);
+      else {
+        print(response.data + response.statusCode);
       }
-    });
+    } catch (e) {
+      if(e is DioError){
+        print(e.message);
+      }
+      if(e is FileSystemException){
+        print(e.message);
+      }
+      if(e is NoSuchMethodError){
+        print(e.stackTrace);
+      }
+    }
   }
 }

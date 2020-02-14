@@ -542,287 +542,293 @@ class _DashboardWidgetState extends State<DashboardWidget>
             ),
     ];
 
-    return SafeArea(
-      bottom: false,
-      child: WillPopScope(
-        onWillPop: _onWillPop,
-        child: Scaffold(
-          resizeToAvoidBottomPadding: false,
-          // appBar: AppBar(
-          //   leading: ,
-          // ),
-          key: scaffoldKey,
-          backgroundColor: Colors.grey[100],
-          bottomNavigationBar: SafeArea(
-            bottom: true,
-            child: CupertinoTabBar(
-                currentIndex: _selectedPage,
-                onTap: (int index) {
-                  setState(() {
-                    if (index == 2 && widget.isRest == false) {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return Container(
-                            color: Colors.white,
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                  top: 13, left: 25, right: 25, bottom: 30),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(15),
-                                  )),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 50),
-                                      child: SizedBox(
-                                          height:
-                                              ScreenUtil.instance.setWidth(5),
-                                          width:
-                                              ScreenUtil.instance.setWidth(50),
-                                          child: Image.asset(
-                                            'assets/icons/icon_line.png',
-                                            fit: BoxFit.fill,
-                                          ))),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(35)),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              settings: RouteSettings(
-                                                  name: 'PostEvent'),
-                                              builder: (BuildContext context) =>
-                                                  PostEvent()));
-                                    },
-                                    child: Container(
-                                      color: Colors.white,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                'New Event',
-                                                style: TextStyle(
-                                                    fontSize: ScreenUtil
-                                                        .instance
-                                                        .setSp(16),
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              SizedBox(
-                                                  height: ScreenUtil.instance
-                                                      .setWidth(5)),
-                                              Text(
-                                                'Create & sell your own event',
-                                                style: TextStyle(
-                                                  fontSize: ScreenUtil.instance
-                                                      .setSp(10),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          Container(
-                                            height: ScreenUtil.instance
-                                                .setWidth(44),
-                                            width: ScreenUtil.instance
-                                                .setWidth(50),
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: AssetImage(
-                                                        'assets/icons/page_post_event.png'),
-                                                    fit: BoxFit.fill),
-                                                borderRadius: BorderRadius.circular(11),
-                                                boxShadow: <BoxShadow>[
-                                                  BoxShadow(
-                                                      blurRadius: 10,
-                                                      color: Colors.grey
-                                                          .withOpacity(0.3),
-                                                      spreadRadius: .5)
-                                                ]),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(19)),
-                                  Divider(),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(16)),
-                                  GestureDetector(
-                                    onTap: () {
-                                      // imageCaputreCamera();
-                                      Navigator.of(context)
-                                          .pushNamed('/CustomCamera');
-                                    },
-                                    child: Container(
-                                      color: Colors.white,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                'Post Media',
-                                                style: TextStyle(
-                                                    fontSize: ScreenUtil
-                                                        .instance
-                                                        .setSp(16),
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              SizedBox(
-                                                  height: ScreenUtil.instance
-                                                      .setWidth(4)),
-                                              Text(
-                                                  'Share your excitement to the others ',
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark
+      ),
+          child: SafeArea(
+        bottom: false,
+        child: WillPopScope(
+          onWillPop: _onWillPop,
+          child: Scaffold(
+            resizeToAvoidBottomPadding: false,
+            // appBar: AppBar(
+            //   leading: ,
+            // ),
+            key: scaffoldKey,
+            backgroundColor: Colors.grey[100],
+            bottomNavigationBar: SafeArea(
+              bottom: true,
+              child: CupertinoTabBar(
+                  currentIndex: _selectedPage,
+                  onTap: (int index) {
+                    setState(() {
+                      if (index == 2 && widget.isRest == false) {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return Container(
+                              color: Colors.white,
+                              child: Container(
+                                padding: EdgeInsets.only(
+                                    top: 13, left: 25, right: 25, bottom: 30),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      topRight: Radius.circular(15),
+                                    )),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 50),
+                                        child: SizedBox(
+                                            height:
+                                                ScreenUtil.instance.setWidth(5),
+                                            width:
+                                                ScreenUtil.instance.setWidth(50),
+                                            child: Image.asset(
+                                              'assets/icons/icon_line.png',
+                                              fit: BoxFit.fill,
+                                            ))),
+                                    SizedBox(
+                                        height: ScreenUtil.instance.setWidth(35)),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                settings: RouteSettings(
+                                                    name: 'PostEvent'),
+                                                builder: (BuildContext context) =>
+                                                    PostEvent()));
+                                      },
+                                      child: Container(
+                                        color: Colors.white,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: <Widget>[
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(
+                                                  'New Event',
                                                   style: TextStyle(
-                                                    fontSize: ScreenUtil
-                                                        .instance
+                                                      fontSize: ScreenUtil
+                                                          .instance
+                                                          .setSp(16),
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                    height: ScreenUtil.instance
+                                                        .setWidth(5)),
+                                                Text(
+                                                  'Create & sell your own event',
+                                                  style: TextStyle(
+                                                    fontSize: ScreenUtil.instance
                                                         .setSp(10),
-                                                  ))
-                                            ],
-                                          ),
-                                          Container(
-                                            height: ScreenUtil.instance
-                                                .setWidth(44),
-                                            width: ScreenUtil.instance
-                                                .setWidth(50),
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: AssetImage(
-                                                        'assets/icons/page_post_media.png'),
-                                                    fit: BoxFit.fill),
-                                                borderRadius: BorderRadius.circular(11),
-                                                boxShadow: <BoxShadow>[
-                                                  BoxShadow(
-                                                      blurRadius: 10,
-                                                      color: Colors.grey
-                                                          .withOpacity(0.3),
-                                                      spreadRadius: .5)
-                                                ]),
-                                          )
-                                        ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Container(
+                                              height: ScreenUtil.instance
+                                                  .setWidth(44),
+                                              width: ScreenUtil.instance
+                                                  .setWidth(50),
+                                              decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: AssetImage(
+                                                          'assets/icons/page_post_event.png'),
+                                                      fit: BoxFit.fill),
+                                                  borderRadius: BorderRadius.circular(11),
+                                                  boxShadow: <BoxShadow>[
+                                                    BoxShadow(
+                                                        blurRadius: 10,
+                                                        color: Colors.grey
+                                                            .withOpacity(0.3),
+                                                        spreadRadius: .5)
+                                                  ]),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  )
-                                ],
+                                    SizedBox(
+                                        height: ScreenUtil.instance.setWidth(19)),
+                                    Divider(),
+                                    SizedBox(
+                                        height: ScreenUtil.instance.setWidth(16)),
+                                    GestureDetector(
+                                      onTap: () {
+                                        // imageCaputreCamera();
+                                        Navigator.of(context)
+                                            .pushNamed('/CustomCamera');
+                                      },
+                                      child: Container(
+                                        color: Colors.white,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: <Widget>[
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(
+                                                  'Post Media',
+                                                  style: TextStyle(
+                                                      fontSize: ScreenUtil
+                                                          .instance
+                                                          .setSp(16),
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                    height: ScreenUtil.instance
+                                                        .setWidth(4)),
+                                                Text(
+                                                    'Share your excitement to the others ',
+                                                    style: TextStyle(
+                                                      fontSize: ScreenUtil
+                                                          .instance
+                                                          .setSp(10),
+                                                    ))
+                                              ],
+                                            ),
+                                            Container(
+                                              height: ScreenUtil.instance
+                                                  .setWidth(44),
+                                              width: ScreenUtil.instance
+                                                  .setWidth(50),
+                                              decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: AssetImage(
+                                                          'assets/icons/page_post_media.png'),
+                                                      fit: BoxFit.fill),
+                                                  borderRadius: BorderRadius.circular(11),
+                                                  boxShadow: <BoxShadow>[
+                                                    BoxShadow(
+                                                        blurRadius: 10,
+                                                        color: Colors.grey
+                                                            .withOpacity(0.3),
+                                                        spreadRadius: .5)
+                                                  ]),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        elevation: 1,
-                      );
-                    } else {
-                      _selectedPage = index;
-                    }
-                  });
-                },
-                backgroundColor: Colors.white,
-                items: <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
+                            );
+                          },
+                          elevation: 1,
+                        );
+                      } else {
+                        _selectedPage = index;
+                      }
+                    });
+                  },
+                  backgroundColor: Colors.white,
+                  items: <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                        title: Text(
+                          'Discover',
+                          style: TextStyle(
+                              color: Colors.black26,
+                              fontSize: ScreenUtil.instance.setSp(10)),
+                        ),
+                        icon: Image.asset("assets/icons/aset_icon/eventevent.png",
+                            height: ScreenUtil.instance.setWidth(25),
+                            width: ScreenUtil.instance.setWidth(25)),
+                        activeIcon: Image.asset(
+                          "assets/icons/aset_icon/eventevent.png",
+                          height: ScreenUtil.instance.setWidth(25),
+                          width: ScreenUtil.instance.setWidth(25),
+                          color: eventajaGreenTeal,
+                        )),
+                    BottomNavigationBarItem(
+                        title: Text(
+                          'Media',
+                          style: TextStyle(
+                              color: Colors.black26,
+                              fontSize: ScreenUtil.instance.setSp(10)),
+                        ),
+                        icon: Image.asset(
+                          "assets/icons/aset_icon/timeline.png",
+                          height: ScreenUtil.instance.setWidth(25),
+                          width: ScreenUtil.instance.setWidth(25),
+                        ),
+                        activeIcon: Image.asset(
+                          "assets/icons/aset_icon/timeline.png",
+                          height: ScreenUtil.instance.setWidth(25),
+                          width: ScreenUtil.instance.setWidth(25),
+                          color: eventajaGreenTeal,
+                        )),
+                    BottomNavigationBarItem(
+                        title: Text(
+                          'Post',
+                          style: TextStyle(
+                              color: Colors.black26,
+                              fontSize: ScreenUtil.instance.setSp(10)),
+                        ),
+                        icon: Image.asset("assets/icons/aset_icon/post.png",
+                            height: ScreenUtil.instance.setWidth(25),
+                            width: ScreenUtil.instance.setWidth(25)),
+                        activeIcon: Image.asset(
+                          "assets/icons/aset_icon/post.png",
+                          height: ScreenUtil.instance.setWidth(25),
+                          width: ScreenUtil.instance.setWidth(25),
+                          color: eventajaGreenTeal,
+                        )),
+                    BottomNavigationBarItem(
                       title: Text(
-                        'Discover',
+                        'Notification',
                         style: TextStyle(
                             color: Colors.black26,
                             fontSize: ScreenUtil.instance.setSp(10)),
                       ),
-                      icon: Image.asset("assets/icons/aset_icon/eventevent.png",
+                      icon: Image.asset("assets/icons/aset_icon/notif.png",
                           height: ScreenUtil.instance.setWidth(25),
                           width: ScreenUtil.instance.setWidth(25)),
                       activeIcon: Image.asset(
-                        "assets/icons/aset_icon/eventevent.png",
+                        "assets/icons/aset_icon/notif.png",
                         height: ScreenUtil.instance.setWidth(25),
                         width: ScreenUtil.instance.setWidth(25),
                         color: eventajaGreenTeal,
-                      )),
-                  BottomNavigationBarItem(
+                      ),
+                    ),
+                    BottomNavigationBarItem(
                       title: Text(
-                        'Media',
+                        'Profile',
                         style: TextStyle(
                             color: Colors.black26,
                             fontSize: ScreenUtil.instance.setSp(10)),
                       ),
-                      icon: Image.asset(
-                        "assets/icons/aset_icon/timeline.png",
-                        height: ScreenUtil.instance.setWidth(25),
-                        width: ScreenUtil.instance.setWidth(25),
-                      ),
-                      activeIcon: Image.asset(
-                        "assets/icons/aset_icon/timeline.png",
-                        height: ScreenUtil.instance.setWidth(25),
-                        width: ScreenUtil.instance.setWidth(25),
-                        color: eventajaGreenTeal,
-                      )),
-                  BottomNavigationBarItem(
-                      title: Text(
-                        'Post',
-                        style: TextStyle(
-                            color: Colors.black26,
-                            fontSize: ScreenUtil.instance.setSp(10)),
-                      ),
-                      icon: Image.asset("assets/icons/aset_icon/post.png",
+                      icon: Image.asset("assets/icons/aset_icon/profile.png",
                           height: ScreenUtil.instance.setWidth(25),
                           width: ScreenUtil.instance.setWidth(25)),
                       activeIcon: Image.asset(
-                        "assets/icons/aset_icon/post.png",
+                        "assets/icons/aset_icon/profile.png",
                         height: ScreenUtil.instance.setWidth(25),
                         width: ScreenUtil.instance.setWidth(25),
                         color: eventajaGreenTeal,
-                      )),
-                  BottomNavigationBarItem(
-                    title: Text(
-                      'Notification',
-                      style: TextStyle(
-                          color: Colors.black26,
-                          fontSize: ScreenUtil.instance.setSp(10)),
-                    ),
-                    icon: Image.asset("assets/icons/aset_icon/notif.png",
-                        height: ScreenUtil.instance.setWidth(25),
-                        width: ScreenUtil.instance.setWidth(25)),
-                    activeIcon: Image.asset(
-                      "assets/icons/aset_icon/notif.png",
-                      height: ScreenUtil.instance.setWidth(25),
-                      width: ScreenUtil.instance.setWidth(25),
-                      color: eventajaGreenTeal,
-                    ),
-                  ),
-                  BottomNavigationBarItem(
-                    title: Text(
-                      'Profile',
-                      style: TextStyle(
-                          color: Colors.black26,
-                          fontSize: ScreenUtil.instance.setSp(10)),
-                    ),
-                    icon: Image.asset("assets/icons/aset_icon/profile.png",
-                        height: ScreenUtil.instance.setWidth(25),
-                        width: ScreenUtil.instance.setWidth(25)),
-                    activeIcon: Image.asset(
-                      "assets/icons/aset_icon/profile.png",
-                      height: ScreenUtil.instance.setWidth(25),
-                      width: ScreenUtil.instance.setWidth(25),
-                      color: eventajaGreenTeal,
-                    ),
-                  )
-                ]),
+                      ),
+                    )
+                  ]),
+            ),
+            body: _pageOptions[_selectedPage],
           ),
-          body: _pageOptions[_selectedPage],
         ),
       ),
     );

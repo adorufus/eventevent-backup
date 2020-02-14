@@ -77,6 +77,7 @@ class EventDetailsConstructView extends StatefulWidget {
   final lat;
   final long;
   final dDay;
+  final eventStartDate;
 
   EventDetailsConstructView(
       {Key key,
@@ -101,7 +102,13 @@ class EventDetailsConstructView extends StatefulWidget {
       this.phoneNumber,
       this.commentData,
       this.email,
-      this.website, this.isPrivate, this.goingData, this.lat, this.long, this.dDay})
+      this.website,
+      this.isPrivate,
+      this.goingData,
+      this.lat,
+      this.long,
+      this.dDay,
+      this.eventStartDate})
       : super(key: key);
 
   @override
@@ -876,8 +883,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       null
                                                   ? AssetImage(
                                                       'assets/grey-fade.jpg')
-                                                  : NetworkImage(widget
-                                                      .detailData['photo_timeline']),
+                                                  : NetworkImage(
+                                                      widget.detailData[
+                                                          'photo_timeline']),
                                               fit: BoxFit.fill)),
                                     ),
                                     Container(
@@ -1493,15 +1501,18 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       ),
                                     ),
                                     GestureDetector(
-                                      onTap: widget.website == null || widget.website == ""
+                                      onTap: widget.website == null ||
+                                              widget.website == ""
                                           ? () {}
-                                          : () => launch(widget.website.toString()),
+                                          : () =>
+                                              launch(widget.website.toString()),
                                       child: SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(33),
                                         width: ScreenUtil.instance.setWidth(33),
                                         child: Image.asset(
-                                          widget.website == null || widget.website == ""
+                                          widget.website == null ||
+                                                  widget.website == ""
                                               ? 'assets/icons/btn_web.png'
                                               : 'assets/icons/btn_web_active.png',
                                         ),
@@ -2599,68 +2610,79 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     height: ScreenUtil.instance.setWidth(
                         widget.detailData['additional'].length == 0 ? 0 : 29),
                   ),
-                  widget.detailData['additional'].length == 0 ? Container() : Container(
-                    height: 200,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: widget.detailData['additional'].length == 0
-                            ? 0
-                            : widget.detailData['additional'].length,
-                        itemBuilder: (context, i) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => widget
-                                                      .detailData['additional']
-                                                  [i]['extension'] ==
-                                              'image/jpeg' ||
-                                          widget.detailData['additional'][i]
-                                                  ['extension'] ==
-                                              'image/png'
-                                      ? PhotoView(
-                                          imageProvider: NetworkImage(
-                                              widget.detailData['additional'][i]
-                                                  ['posterPathFull']),
-                                        )
-                                      : MediaPlayer(
-                                          videoUri:
-                                              widget.detailData['additional'][i]
-                                                  ['posterPathFull']),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              margin: EdgeInsets.only(left: 10),
-                              height: ScreenUtil.instance.setHeight(double.parse(widget.detailData['additional'][i]['pictureHeight'])),
-                              width: ScreenUtil.instance.setWidth(double.parse(widget.detailData['additional'][i]['pictureWidth'])),
-                              decoration: BoxDecoration(
-                                  color: Color(0xff8a8a8b),
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          widget.detailData['additional'][i]
-                                              ['posterPathThumb']),
-                                      fit: BoxFit.cover),
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Center(
-                                  child: widget.detailData['additional'][i]
-                                                  ['extension'] ==
-                                              'image/jpeg' ||
-                                          widget.detailData['additional'][i]
-                                                  ['extension'] ==
-                                              'image/png'
-                                      ? Container()
-                                      : Icon(
-                                          Icons.play_circle_filled,
-                                          color: Colors.white,
-                                          size: 50,
-                                        )),
-                            ),
-                          );
-                        }),
-                  ),
+                  widget.detailData['additional'].length == 0
+                      ? Container()
+                      : Container(
+                          height: 200,
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount:
+                                  widget.detailData['additional'].length == 0
+                                      ? 0
+                                      : widget.detailData['additional'].length,
+                              itemBuilder: (context, i) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => widget.detailData[
+                                                            'additional'][i]
+                                                        ['extension'] ==
+                                                    'image/jpeg' ||
+                                                widget.detailData['additional']
+                                                        [i]['extension'] ==
+                                                    'image/png'
+                                            ? PhotoView(
+                                                imageProvider: NetworkImage(
+                                                    widget.detailData[
+                                                            'additional'][i]
+                                                        ['posterPathFull']),
+                                              )
+                                            : MediaPlayer(
+                                                videoUri: widget.detailData[
+                                                        'additional'][i]
+                                                    ['posterPathFull']),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(left: 10),
+                                    height: ScreenUtil.instance.setHeight(
+                                        double.parse(
+                                            widget.detailData['additional'][i]
+                                                ['pictureHeight'])),
+                                    width: ScreenUtil.instance.setWidth(
+                                        double.parse(
+                                            widget.detailData['additional'][i]
+                                                ['pictureWidth'])),
+                                    decoration: BoxDecoration(
+                                        color: Color(0xff8a8a8b),
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                                widget.detailData['additional']
+                                                    [i]['posterPathThumb']),
+                                            fit: BoxFit.cover),
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: Center(
+                                        child: widget.detailData['additional']
+                                                        [i]['extension'] ==
+                                                    'image/jpeg' ||
+                                                widget.detailData['additional']
+                                                        [i]['extension'] ==
+                                                    'image/png'
+                                            ? Container()
+                                            : Icon(
+                                                Icons.play_circle_filled,
+                                                color: Colors.white,
+                                                size: 50,
+                                              )),
+                                  ),
+                                );
+                              }),
+                        ),
                   SizedBox(
                     height: ScreenUtil.instance.setWidth(29),
                   ),
@@ -2787,10 +2809,18 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       child: Center(
           child: Column(
         children: <Widget>[
-          Text(
-              'Ticket sales start from ${widget.dDay.day} - ${widget.dDay.month} - ${widget.dDay.year}'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('Ticket sales start from '),
+              Text(
+                  '${widget.dDay.day} - ${widget.dDay.month} - ${widget.dDay.year}',
+                  style: TextStyle(color: eventajaGreenTeal))
+            ],
+          ),
           Text(countdownAsString,
               style: TextStyle(
+                  color: eventajaGreenTeal,
                   fontSize: ScreenUtil.instance.setSp(18),
                   fontWeight: FontWeight.bold)),
         ],

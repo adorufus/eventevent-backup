@@ -46,7 +46,6 @@ Future<Null> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarBrightness: Brightness.light,
       statusBarColor: Colors.white, statusBarIconBrightness: Brightness.dark));
   cameras = await availableCameras();
 

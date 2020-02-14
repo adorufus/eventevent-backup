@@ -29,6 +29,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
   Map<String, dynamic> ticketStat = Map<String, dynamic>();
   List goingData = [];
   DateTime _dDay;
+  DateTime eventStartDate;
   String dateTime = '-';
   String month = '-';
   Color itemColor = Colors.red;
@@ -184,9 +185,11 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
           print('type' + detailData['ticket_type'].toString());
 
           setState(() {
-            _dDay = DateTime.parse(detailData['dateStart']);
+            _dDay = DateTime.parse(detailData['ticket']['sales_start_date']);
+            eventStartDate = DateTime.parse(detailData['dateStart']);
 
-            switch (_dDay.month) {
+
+            switch (eventStartDate.month) {
               case 1:
                 month = 'January';
                 break;
@@ -225,11 +228,11 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                 break;
             }
 
-            dateTime = _dDay.day.toString() +
+            dateTime = eventStartDate.day.toString() +
                 ' ' +
                 month +
                 ' ' +
-                _dDay.year.toString();
+                eventStartDate.year.toString();
           });
 
           print('isGoing' + detailData['isGoing'].toString());
@@ -312,6 +315,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                       creatorName: creatorName,
                       dateTime: dateTime,
                       dDay: _dDay,
+                      eventStartDate: eventStartDate,
                       detailData: detailData,
                       email: email,
                       endTime: endTime,

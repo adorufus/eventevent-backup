@@ -149,7 +149,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                 ticketDesc: ticketDetailData[i]['event']
                                     ['name'],
                                 ticketID: ticketDetailData[i]['id'],
-                                usedStatus: ticketStatusText,
+                                usedStatus: ticketStatusText.toUpperCase(),
                               )));
                     },
                     child: new MyTicketItem(

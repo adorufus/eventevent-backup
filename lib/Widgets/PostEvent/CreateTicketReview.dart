@@ -122,6 +122,8 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
     });
   }
 
+  var thisScaffold = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
@@ -131,7 +133,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    var thisScaffold = new GlobalKey<ScaffoldState>();
+    
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(

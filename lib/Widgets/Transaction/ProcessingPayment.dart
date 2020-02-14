@@ -162,7 +162,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
     if (response.statusCode == 200) {
       print('mantab gan');
       print(response.body);
-      
+
       setState(() {
         isLoading = false;
         paymentData = extractedData['data'];
@@ -231,11 +231,10 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                   )),
         );
       }
+    } else {
+      print("error: " + extractedData['desc']);
+      Navigator.pop(context, extractedData['desc']);
     }
-    else{
-        print("error: " + extractedData['desc']);
-        Navigator.pop(context, extractedData['desc']);
-      }
   }
 
   Future postEvent(int index, BuildContext context) async {
@@ -243,9 +242,15 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
 
     Cookie cookie = Cookie.fromSetCookieValue(prefs.getString('Session'));
     List<File> additionalMediaFiles = [];
-    File additionalVideo = File(prefs.getString('POST_EVENT_ADDITIONAL_VIDEO'));
+    File additionalVideo;
 
-    print('additional video' + additionalVideo.path);
+    if (prefs.getString('POST_EVENT_ADDITIONAL_VIDEO') != null &&
+        prefs.getString('POST_EVENT_ADDITIONAL_VIDEO').isNotEmpty) {
+      setState(() {
+        additionalVideo = File(prefs.getString('POST_EVENT_ADDITIONAL_VIDEO'));
+        print('additional video' + additionalVideo.path);
+      });
+    }
 
     setState(() {
       for (var i = 0; i < widget.additionalMedia.length; i++) {
@@ -277,7 +282,11 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
         'website': prefs.getString('CREATE_EVENT_WEBSITE'),
         'isPrivate': prefs.getString('POST_EVENT_TYPE'),
         'modifiedById': prefs.getString('Last User ID'),
-        'additionalMedia': UploadFileInfo(additionalVideo, "eventevent-video-${DateTime.now().toString()}.mp4", contentType: ContentType('video', 'mp4')),
+        'additionalMedia': additionalVideo == null
+            ? ''
+            : UploadFileInfo(additionalVideo,
+                "eventevent-video-${DateTime.now().toString()}.mp4",
+                contentType: ContentType('video', 'mp4')),
         'photo': UploadFileInfo(
             widget.imageFile, "eventevent-${DateTime.now().toString()}.jpg",
             contentType: ContentType('image', 'jpeg')),
@@ -290,13 +299,15 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       }
 
       List categoryList = prefs.getStringList('POST_EVENT_CATEGORY_ID');
-      print(categoryList);
+      print(categoryList.length);
 
       for (int i = 0; i < categoryList.length; i++) {
         setState(() {
           body['category[$i]'] = categoryList[i];
         });
       }
+
+      print('processing.....');
 
       var data = FormData.from(body);
       Response response = await dio.post('/event/create',
@@ -307,15 +318,19 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
             cookie
           ], responseType: ResponseType.plain),
           data: data, onSendProgress: (sent, total) {
+        print('hit test');
         print(
             'data uploaded: ' + sent.toString() + ' from ' + total.toString());
         setState(() {
           progress = ((sent / total) * 100);
+          print('test');
           print(progress);
         });
       });
 
       var extractedData = json.decode(response.data);
+
+      print(response.data);
 
       if (response.statusCode == 400) {
         print(response.data);
@@ -374,6 +389,10 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       }
       if (e is FileSystemException) {
         print(e.message);
+      }
+      if (e is NoSuchMethodError) {
+        print(e.stackTrace);
+        print(e.toString());
       }
     }
   }

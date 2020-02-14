@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/Home/PeopleItem.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
@@ -180,16 +181,7 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
   Widget popularEvent() {
     return Container(
         child: popularPeopleList == null
-            ? Center(
-                child: Container(
-                  width: ScreenUtil.instance.setWidth(25),
-                  height: ScreenUtil.instance.setWidth(25),
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: CupertinoActivityIndicator(radius: 20),
-                  ),
-                ),
-              )
+            ? HomeLoadingScreen().followListLoading()
             : ListView.builder(
                 itemCount:
                     popularPeopleList == null ? 0 : popularPeopleList.length,
@@ -231,16 +223,7 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
   Widget discoverEvent() {
     return Container(
         child: discoverPeopleList == null
-            ? Center(
-                child: Container(
-                  width: ScreenUtil.instance.setWidth(25),
-                  height: ScreenUtil.instance.setWidth(25),
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: CupertinoActivityIndicator(radius: 20),
-                  ),
-                ),
-              )
+            ? HomeLoadingScreen().followListLoading()
             : ListView.builder(
                 itemCount:
                     discoverPeopleList == null ? 0 : discoverPeopleList.length,

@@ -80,9 +80,71 @@ class HomeLoadingScreen {
       })?.toList() ??
       [];
 
-  Widget myTicketLoading() {
+  Widget followListLoading() {
     return ListView.builder(
       shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: 10,
+      itemBuilder: (context, i) {
+        return Container(
+          margin: EdgeInsets.only(left: 13, right: 13, top: 13),
+          padding:
+              EdgeInsets.only(left: 8.87, right: 8.87, top: 8.87, bottom: 8.87),
+          height: ScreenUtil.instance.setWidth(59.21),
+          decoration: BoxDecoration(boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 2,
+                spreadRadius: 1.5)
+          ], color: Colors.white, borderRadius: BorderRadius.circular(30)),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Shimmer.fromColors(
+                baseColor: Colors.grey[300],
+                highlightColor: Colors.grey[100],
+                enabled: true,
+                child: CircleAvatar(
+                  backgroundColor: Color(0xFFB5B5B5),
+                  backgroundImage: AssetImage('assets/grey-fade.jpg'),
+                  radius: 20,
+                ),
+              ),
+              SizedBox(
+                width: ScreenUtil.instance.setWidth(8.87),
+              ),
+              Container(
+                  width: 200,
+                  child: PlaceholderLines(
+                    count: 2,
+                    color: Colors.grey,
+                    align: TextAlign.left,
+                    animate: true,
+                    lineHeight: 10,
+                  )),
+              Shimmer.fromColors(
+                baseColor: Colors.grey[300],
+                highlightColor: Colors.grey[100],
+                enabled: true,
+                child: Container(
+                  height: ScreenUtil.instance.setWidth(32.93),
+                  width: ScreenUtil.instance.setWidth(82.31),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.grey.withOpacity(.5)),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget myTicketLoading() {
+    return ListView.builder(
+        shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         itemCount: 10,
         itemBuilder: (context, i) {

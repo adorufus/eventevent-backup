@@ -376,8 +376,8 @@ class _WaitTransactionState extends State<WaitTransaction>
                           child: SizedBox(
                             height: ScreenUtil.instance.setWidth(60),
                             child: Image.asset(
-                                paymentData['payment']['vendor'] == 'bca'
-                                    ? 'assets/drawable/bca.png'
+                                bank_code.toLowerCase() == 'bni'
+                                    ? 'assets/drawable/bni.png'
                                     : 'assets/drawable/bri.png'),
                           ),
                         ),
