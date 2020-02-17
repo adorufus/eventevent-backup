@@ -185,7 +185,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
           print('type' + detailData['ticket_type'].toString());
 
           setState(() {
-            _dDay = DateTime.parse(detailData['ticket']['sales_start_date']);
+            _dDay = DateTime.parse(detailData['ticket']['sales_start_date'] == null ? detailData['dateStart'] : detailData['ticket']['sales_start_date']);
             eventStartDate = DateTime.parse(detailData['dateStart']);
 
 

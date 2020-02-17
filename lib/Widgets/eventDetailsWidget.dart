@@ -7,6 +7,7 @@ import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
 import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/timeline/EventDetailTimeline.dart';
+import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
 import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
@@ -441,7 +442,20 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                             context: context,
                             builder: (BuildContext context) {
                               return Container(
-                                child: Column(
+                                child: widget.detailData['createdByID'] != currentUserId ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    RaisedButton(
+                                      onPressed: (){
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPost(
+                                          postId: widget.id,
+                                          postType: 'event',
+                                        )));
+                                      },
+                                      child: Text("Report This Event"),
+                                    )
+                                  ],
+                                ) : Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     RaisedButton(

@@ -23,7 +23,7 @@ class SeeAllPeople extends StatefulWidget {
 
 class _SeeAllPeopleState extends State<SeeAllPeople> {
   List popularPeopleList;
-  List discoverPeopleList = [];
+  List discoverPeopleList;
 
   @override
   void initState() {
