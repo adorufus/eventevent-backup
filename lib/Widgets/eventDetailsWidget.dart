@@ -6,6 +6,7 @@ import 'package:eventevent/Widgets/EventDetailItems/FeedbackLogic.dart';
 import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
 import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
+import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
 import 'package:eventevent/Widgets/timeline/EventDetailTimeline.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
@@ -419,10 +420,18 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                 ),
                     ),
                     SizedBox(width: ScreenUtil.instance.setWidth(8)),
-                    Icon(
-                      Icons.person_add,
-                      color: eventajaGreenTeal,
-                      size: 30,
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostEventInvitePeople(
+                          calledFrom: "other event",
+                          eventId: widget.id,
+                        )));
+                      },
+                      child: Icon(
+                        Icons.person_add,
+                        color: eventajaGreenTeal,
+                        size: 30,
+                      ),
                     ),
                     SizedBox(width: ScreenUtil.instance.setWidth(8)),
                     GestureDetector(
@@ -1441,11 +1450,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   children: <Widget>[
                                     LoveItem(
                                       isComment: false,
+                                      eventId: widget.id,
                                       isAlreadyLoved:
                                           widget.detailData['isLoved'] == '1'
                                               ? true
                                               : false,
-                                      loveCount: widget.detailData['countLove'],
+                                      loveCount: int.parse(widget.detailData['countLove']),
                                     ),
                                     SizedBox(
                                       width: ScreenUtil.instance.setWidth(10),

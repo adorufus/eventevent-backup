@@ -378,7 +378,9 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                 prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
               });
               Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => PostEventInvitePeople()));
+                  builder: (context) => PostEventInvitePeople(
+                    calledFrom: "new event",
+                  )));
             }
           }
         }

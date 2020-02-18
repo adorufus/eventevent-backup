@@ -11,6 +11,11 @@ import 'FinishPostEvent.dart';
 
 
 class PostEventInvitePeople extends StatefulWidget{
+  final String calledFrom;
+  final eventId;
+
+  const PostEventInvitePeople({Key key, @required this.calledFrom, this.eventId}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     
@@ -100,9 +105,17 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
     String url = BaseApi().apiUrl + '/invite_event/post';
     Map<dynamic, dynamic> body = {
         'X-API-KEY': API_KEY,
-        'eventID': prefs.getInt('NEW_EVENT_ID').toString(),
-        'userID[]': invitedPeople.toString(),
+        'eventID': widget.calledFrom == "other event" ? widget.eventId : prefs.getInt('NEW_EVENT_ID').toString()
       };
+
+    for(int i = 0; i < invitedPeople.length; i++){
+      var people = invitedPeople;
+      body.addAll({
+        'userID[$i]': people[i]
+      });
+    }
+
+    print(body.toString());
 
     final response = await http.post(
       url,
@@ -117,7 +130,12 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
 
     if(response.statusCode == 201){
       print(response.body);
-      Navigator.push(context, CupertinoPageRoute(builder: (context) => FinishPostEvent()));
+      if(widget.calledFrom == "other event"){
+        Navigator.pop(context);
+      }
+      else {
+        Navigator.push(context, CupertinoPageRoute(builder: (context) => FinishPostEvent()));
+      }
     }
   }
 

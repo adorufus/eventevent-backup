@@ -550,7 +550,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                         LoveItem(
                           isComment: false,
                           isAlreadyLoved: false,
-                          loveCount: '',
+                          loveCount: 0,
                         ),
                         SizedBox(
                           width: ScreenUtil.instance.setWidth(10),

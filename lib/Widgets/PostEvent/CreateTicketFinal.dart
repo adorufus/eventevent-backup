@@ -607,7 +607,9 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
               builder: (BuildContext context) => FinishPostEvent()));
         } else {
           Navigator.of(context).push(CupertinoPageRoute(
-              builder: (BuildContext context) => PostEventInvitePeople()));
+              builder: (BuildContext context) => PostEventInvitePeople(
+                calledFrom: "new event",
+              )));
         }
       }
       else {
