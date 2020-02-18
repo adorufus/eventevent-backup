@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankOptions.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/SetupBankAccount.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawConfirmation.dart';
@@ -130,6 +131,7 @@ class WithdrawBankState extends State<WithdrawBank> {
           onTap: () async {
             showModalBottomSheet(
                 context: context,
+                isScrollControlled: true,
                 builder: (BuildContext context) {
                   return showBottomPopup();
                 });
@@ -211,131 +213,134 @@ class WithdrawBankState extends State<WithdrawBank> {
   }
 
   Widget showBottomPopup() {
-    return Container(
-      color: Color(0xFF737373),
+    return Padding(
+      padding: MediaQuery.of(context).viewInsets,
       child: Container(
-        padding: EdgeInsets.only(top: 13, left: 25, right: 25, bottom: 30),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15),
-            )),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                child: SizedBox(
-                    height: ScreenUtil.instance.setWidth(5),
-                    width: ScreenUtil.instance.setWidth(50),
-                    child: Image.asset(
-                      'assets/icons/icon_line.png',
-                      fit: BoxFit.fill,
-                    ))),
-            SizedBox(height: ScreenUtil.instance.setWidth(30)),
-            Align(
-                alignment: Alignment.topCenter,
-                child: Text(
-                    'Available Balance For Withdraw: ' +
-                        '\nRp. ${balanceData['amount']},-',
-                    style: TextStyle(color: eventajaGreenTeal),
-                    textAlign: TextAlign.center)),
-            SizedBox(height: ScreenUtil.instance.setWidth(26)),
-            Container(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Withdraw Ammount',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: ScreenUtil.instance.setSp(17)),
-                    ),
-                    SizedBox(height: ScreenUtil.instance.setWidth(20)),
-                    TextFormField(
-                      controller: amountController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 2, vertical: 12),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: 'Enter withdraw amount (e.g. 125000)',
-                          hintStyle: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(12))),
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        Navigator.pop(context);
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
+        color: Color(0xFF737373),
+        child: Container(
+          padding: EdgeInsets.only(top: 13, left: 25, right: 25, bottom: 30),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15),
+                topRight: Radius.circular(15),
+              )),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  child: SizedBox(
+                      height: ScreenUtil.instance.setWidth(5),
+                      width: ScreenUtil.instance.setWidth(50),
+                      child: Image.asset(
+                        'assets/icons/icon_line.png',
+                        fit: BoxFit.fill,
+                      ))),
+              SizedBox(height: ScreenUtil.instance.setWidth(30)),
+              Align(
+                  alignment: Alignment.topCenter,
+                  child: Text(
+                      'Available Balance For Withdraw: ' +
+                          '\nRp. ${balanceData['amount']},-',
+                      style: TextStyle(color: eventajaGreenTeal),
+                      textAlign: TextAlign.center)),
+              SizedBox(height: ScreenUtil.instance.setWidth(26)),
+              Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Withdraw Ammount',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: ScreenUtil.instance.setSp(17)),
+                      ),
+                      SizedBox(height: ScreenUtil.instance.setWidth(20)),
+                      TextFormField(
+                        controller: amountController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 2, vertical: 12),
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: 'Enter withdraw amount (e.g. 125000)',
+                            hintStyle: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(12))),
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          Navigator.pop(context);
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
 
-                        prefs.setString('WITHDRAW_USER_BANK_ID', user_bank_id);
-                        prefs.setString('WITHDRAW_ACCOUNT_NAME', account_name);
-                        prefs.setString('WITHDRAW_BANK_ID', bank_id);
-                        prefs.setString(
-                            'WITHDRAW_ACCOUNT_NUMBER', account_number);
-                        prefs.setString('WITHDRAW_BANK_NAME', user_bank_id);
-                        prefs.setString(
-                            'WITHDRAW_AMOUNT', amountController.text);
+                          prefs.setString('WITHDRAW_USER_BANK_ID', user_bank_id);
+                          prefs.setString('WITHDRAW_ACCOUNT_NAME', account_name);
+                          prefs.setString('WITHDRAW_BANK_ID', bank_id);
+                          prefs.setString(
+                              'WITHDRAW_ACCOUNT_NUMBER', account_number);
+                          prefs.setString('WITHDRAW_BANK_NAME', user_bank_id);
+                          prefs.setString(
+                              'WITHDRAW_AMOUNT', amountController.text);
 
-                        if (amountController.text == '') {
-                          Flushbar(
-                            flushbarPosition: FlushbarPosition.TOP,
-                            message: 'Input withdraw amount first!',
-                            backgroundColor: Colors.red,
-                            duration: Duration(seconds: 3),
-                            animationDuration: Duration(milliseconds: 500),
-                          )..show(context);
-                        } else if (int.parse(amountController.text) < 10000) {
-                          Flushbar(
-                            flushbarPosition: FlushbarPosition.TOP,
-                            message: 'Minimum withdraw amount is Rp. 10.000,-',
-                            backgroundColor: Colors.red,
-                            duration: Duration(seconds: 3),
-                            animationDuration: Duration(milliseconds: 500),
-                          )..show(context);
-                        } else if (int.parse(amountController.text) >
-                            int.parse(balanceData['amount'])) {
-                          Flushbar(
-                            flushbarPosition: FlushbarPosition.TOP,
-                            message: 'Withdraw amount is bigger than your balance! ',
-                            backgroundColor: Colors.red,
-                            duration: Duration(seconds: 3),
-                            animationDuration: Duration(milliseconds: 500),
-                          )..show(context);
-                        } else {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  WithdrawConfirmation()));
-                        }
-                      },
-                      child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.only(top: 31, bottom: 35),
-                          height: ScreenUtil.instance.setWidth(37),
-                          decoration: BoxDecoration(
-                              color: Color(0xFFFFAA00),
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    blurRadius: 2,
-                                    color: Color(0xFFFFAA00).withOpacity(0.5),
-                                    spreadRadius: 1.5)
-                              ]),
-                          child: Center(
-                              child: Text(
-                            'WITHDRAW',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ))),
-                    )
-                  ],
-                ))
-          ],
+                          if (amountController.text == '') {
+                            Flushbar(
+                              flushbarPosition: FlushbarPosition.TOP,
+                              message: 'Input withdraw amount first!',
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 3),
+                              animationDuration: Duration(milliseconds: 500),
+                            )..show(context);
+                          } else if (int.parse(amountController.text) < 10000) {
+                            Flushbar(
+                              flushbarPosition: FlushbarPosition.TOP,
+                              message: 'Minimum withdraw amount is Rp. 10.000,-',
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 3),
+                              animationDuration: Duration(milliseconds: 500),
+                            )..show(context);
+                          } else if (int.parse(amountController.text) >
+                              int.parse(balanceData['amount'])) {
+                            Flushbar(
+                              flushbarPosition: FlushbarPosition.TOP,
+                              message: 'Withdraw amount is bigger than your balance! ',
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 3),
+                              animationDuration: Duration(milliseconds: 500),
+                            )..show(context);
+                          } else {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    WithdrawConfirmation()));
+                          }
+                        },
+                        child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(top: 31, bottom: 35),
+                            height: ScreenUtil.instance.setWidth(37),
+                            decoration: BoxDecoration(
+                                color: Color(0xFFFFAA00),
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      blurRadius: 2,
+                                      color: Color(0xFFFFAA00).withOpacity(0.5),
+                                      spreadRadius: 1.5)
+                                ]),
+                            child: Center(
+                                child: Text(
+                              'WITHDRAW',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ))),
+                      )
+                    ],
+                  ))
+            ],
+          ),
         ),
       ),
     );
@@ -652,9 +657,8 @@ class WithdrawBankState extends State<WithdrawBank> {
     Color transactionColor;
     Color amountColor;
 
-    return historyList == null || bankJson == null
-        ? Container(
-            child: Center(child: CupertinoActivityIndicator(radius: 20)))
+    return historyList.isEmpty || bankJson == null
+        ? EmptyState(imagePath: 'assets/icons/empty_state/history.png', reasonText: 'You have no transaction yet',)
         : ListView.builder(
             shrinkWrap: true,
             itemCount: historyList == null ? 0 : historyList.length,

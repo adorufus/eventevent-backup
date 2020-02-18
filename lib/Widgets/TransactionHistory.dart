@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WaitTransaction.dart';
 import 'package:eventevent/Widgets/Transaction/Alfamart/WaitingTransactionAlfamart.dart';
@@ -29,6 +30,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
   List transactionList;
   Color paymentStatusColor;
   String paymentStatusText;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -90,9 +92,9 @@ class TransactionHistoryState extends State<TransactionHistory> {
                 ),
               ),
             )),
-        body: transactionList == null
+        body: isLoading == true
             ? HomeLoadingScreen().myTicketLoading()
-            : Container(
+            : transactionList == null ? EmptyState(imagePath: 'assets/icons/empty_state/history.png', reasonText: 'You have no transaction yet.',) : Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
@@ -220,6 +222,9 @@ class TransactionHistoryState extends State<TransactionHistory> {
 
   Future getTransactionHistory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isLoading = true;
+    });
     String url =
         BaseApi().apiUrl + '/ticket_transaction/list?X-API-KEY=$API_KEY&page=1';
 
@@ -233,10 +238,16 @@ class TransactionHistoryState extends State<TransactionHistory> {
 
     if (response.statusCode == 200) {
       setState(() {
+        isLoading = false;
         var extractedData = json.decode(response.body);
 
         transactionList = extractedData['data'];
         print(transactionList);
+      });
+    }
+    else {
+      setState(() {
+        isLoading = false;
       });
     }
   }

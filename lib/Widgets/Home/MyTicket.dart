@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/SeeAll/MyTicketItem.dart';
 import 'package:eventevent/Widgets/ProfileWidget/UseTicket.dart';
@@ -29,6 +30,7 @@ class _MyTicketState extends State<MyTicket> {
   String _searchText = "";
 
     bool notFound = false;
+    bool isLoading = false;
 
   @override
   void initState() {
@@ -173,7 +175,10 @@ class _MyTicketState extends State<MyTicket> {
             ),
           ),
         ),
-        body: myTicketList == null ? HomeLoadingScreen().myTicketLoading() : SmartRefresher(
+        body: isLoading == true ? HomeLoadingScreen().myTicketLoading() : myTicketList == null ? EmptyState(
+          imagePath: 'assets/drawable/my_ticket_empty_state.png',
+          reasonText: 'You have no ticket :(',
+        ) : SmartRefresher(
           enablePullDown: true,
           enablePullUp: true,
           footer: CustomFooter(
@@ -618,6 +623,7 @@ class _MyTicketState extends State<MyTicket> {
     int currentPage = 1;
 
     setState(() {
+      isLoading = true;
       if (newPage != null) {
         currentPage += newPage;
       }
@@ -636,18 +642,31 @@ class _MyTicketState extends State<MyTicket> {
 
     if (response.statusCode == 200) {
       setState(() {
+        isLoading = false;
         notFound = false;
       });
-      for (int i = 0; i < resultData.length; i++) {
-        tempList.add(resultData[i]);
-      }
 
-      setState(() {
-        tickets = tempList;
-        filteredTickets = tickets;
-      });
+      if(resultData == null){
+        print('empty');
+        setState(() {
+          notFound = true;
+        });
+      } else {
+        setState(() {
+          notFound = false;
+        });
+        for (int i = 0; i < resultData.length; i++) {
+          tempList.add(resultData[i]);
+        }
+
+        setState(() {
+          tickets = tempList;
+          filteredTickets = tickets;
+        });
+      }
     } else if (response.statusCode == 400) {
       setState(() {
+        isLoading = false;
         notFound = true;
       });
     }

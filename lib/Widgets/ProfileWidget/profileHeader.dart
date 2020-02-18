@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventList.dart';
 import 'package:eventevent/Widgets/ManageEvent/PublicEventList.dart';
@@ -98,6 +99,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
 
       if (response.statusCode == 200) {
         setState(() {
+          userTimelineIsLoading = false;
           userTimelineList = extractedData['data'];
         });
       } else {
@@ -745,9 +747,12 @@ class _ProfileHeaderState extends State<ProfileHeader>
             height: MediaQuery.of(context).size.height,
             child: TabBarView(
               children: <Widget>[
-                userTimelineList == null
+                userTimelineIsLoading == true
                     ? HomeLoadingScreen().timelineLoading()
-                    : timeline(),
+                    : userTimelineList == null ? EmptyState(
+              imagePath: 'assets/icons/empty_state/public_timeline.png',
+                  reasonText: 'Your timeline is empty :(',
+          ) : timeline(),
                 widget.currentUserId == userId
                     ? MyTicketWidget()
                     : PublicEventList(
@@ -777,6 +782,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
 
       if (response.statusCode == 200) {
         setState(() {
+          userTimelineIsLoading = false;
           List updatedData = extractedData['data'];
           if (updatedData == null) {
             refreshController.loadNoData();
@@ -791,6 +797,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
       }
     });
   }
+
+  bool userTimelineIsLoading = false;
 
   Widget timeline() {
     return SmartRefresher(
@@ -1138,6 +1146,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
 
                             if (response.statusCode == 200) {
                               setState(() {
+                                userTimelineIsLoading = false;
                                 userTimelineList = extractedData['data'];
                               });
                             }
@@ -1186,6 +1195,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
     int currentPage = 1;
 
     setState(() {
+      userTimelineIsLoading = true;
       if (newPage != null) {
         currentPage += newPage;
       }

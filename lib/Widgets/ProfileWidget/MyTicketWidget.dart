@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/SeeAll/MyTicketItem.dart';
 
@@ -28,6 +29,8 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
 
   List ticketDetailData;
 
+  bool isLoading = false;
+
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
@@ -46,6 +49,8 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
 
       if (response.statusCode == 200) {
         setState(() {
+          isLoading = false;
+          print(isLoading);
           List updatedData = extractedData['data'];
           if (updatedData == null) {
             refreshController.loadNoData();
@@ -67,6 +72,8 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
     getDataTicket().then((response) {
       if (response.statusCode == 200) {
         setState(() {
+          isLoading = false;
+          print(isLoading);
           var extractedData = json.decode(response.body);
           ticketDetailData = extractedData['data'];
         });
@@ -83,9 +90,12 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    return ticketDetailData == null
+    return isLoading == true
         ? HomeLoadingScreen().myTicketLoading()
-        : SmartRefresher(
+        : ticketDetailData == null ? EmptyState(
+      imagePath: 'assets/drawable/my_ticket_empty_state.png',
+      reasonText: 'You have no ticket :(',
+    ) : SmartRefresher(
             enablePullDown: false,
             enablePullUp: true,
             footer:
@@ -175,6 +185,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
     int currentPage = 1;
 
     setState(() {
+      isLoading = true;
       session = prefs.getString('Session');
       userId = prefs.getString('Last User ID');
       if (newPage != null) {

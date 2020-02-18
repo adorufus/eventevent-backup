@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/timeline/EditPost.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
@@ -37,6 +38,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
   List timelineList;
 
   bool isLoading = false;
+  bool isEmpty = false;
 
   Future<http.Response> getTimelineList({int newPage}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -44,6 +46,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
     String urlType = 'timeline';
 
     setState(() {
+      isLoading = true;
       if (newPage != null) {
         currentPage += newPage;
       }
@@ -110,7 +113,14 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
 
       if (response.statusCode == 200) {
         setState(() {
-          timelineList = extractedData['data'];
+          isLoading = false;
+          print(isLoading);
+
+          if(extractedData['desc'] == " Timeline not found"){
+            isEmpty = true;
+          } else {
+            timelineList = extractedData['data'];
+          }
         });
       }
     });
@@ -121,7 +131,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
-      child: timelineList == null ? HomeLoadingScreen().timelineLoading() : SmartRefresher(
+      child: isLoading == true ? HomeLoadingScreen().timelineLoading() : timelineList == null ? EmptyState(imagePath: 'assets/icons/empty_state/public_timeline.png', reasonText: 'Your timeline is empty :(',) : SmartRefresher(
         enablePullDown: true,
         enablePullUp: true,
         footer: CustomFooter(builder: (BuildContext context, LoadStatus mode) {
