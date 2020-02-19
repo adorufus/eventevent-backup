@@ -547,10 +547,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ManageCustomForm(
-                                                      eventId: widget
-                                                          .detailData['id'],
-                                                    )));
+                                                    CustomFormActivator(eventId: widget.id,)));
                                       },
                                     )
                                   ],
@@ -1472,6 +1469,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       },
                                       child: LoveItem(
                                           isComment: true,
+                                          eventId: widget.id,
                                           isAlreadyCommented: widget
                                                       .detailData['comment']
                                                       .length <

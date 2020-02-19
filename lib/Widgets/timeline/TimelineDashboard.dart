@@ -279,27 +279,32 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: ScreenUtil.instance.setWidth(75),
+                  padding: EdgeInsets.symmetric(horizontal: 13),
                   child: Container(
                     color: Colors.white,
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(23),
-                                width: ScreenUtil.instance.setWidth(93),
-                                child: Image.asset(
-                                  'assets/icons/aset_icon/emedia.png',
-                                  fit: BoxFit.fill,
+                    child: AppBar(
+                      automaticallyImplyLeading: false,
+                      elevation: 0,
+                      backgroundColor: Colors.white,
+                      titleSpacing: 0,
+                      title: Container(
+                        width: ScreenUtil.instance.setWidth(240),
+                        child: Row(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                SizedBox(
+                                  height: ScreenUtil.instance.setWidth(23),
+                                  width: ScreenUtil.instance.setWidth(93),
+                                  child: Image.asset(
+                                    'assets/icons/aset_icon/emedia.png',
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

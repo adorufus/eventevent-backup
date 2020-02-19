@@ -95,7 +95,7 @@ class _LoginWidgetState extends State<LoginWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(left: 40, right: 40, top: 45),
+                padding: EdgeInsets.only(left: 40, right: 30, top: 45),
                 child: Material(
                   color: Colors.white,
                   child: loginForm(),
@@ -141,7 +141,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         Row(
           children: <Widget>[
             Container(
-              width: ScreenUtil.instance.setWidth(250),
+              width: ScreenUtil.instance.setWidth(300),
               child: TextFormField(
                 controller: _passwordController,
                 keyboardType: TextInputType.text,

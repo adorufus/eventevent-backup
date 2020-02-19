@@ -221,7 +221,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                             null
                                         ? AssetImage('assets/grey-fade.jpg')
                                         : NetworkImage(ticketListData[i]
-                                            ['ticket_image']['secure_url']))),
+                                            ['ticket_image']['secure_url'],), fit: BoxFit.fill)),
                           ),
                           SizedBox(
                             width: ScreenUtil.instance.setWidth(15),

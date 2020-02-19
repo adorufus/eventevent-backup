@@ -39,6 +39,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
 
   bool isLoading = false;
   bool isEmpty = false;
+  bool isFromLoad = false;
 
   Future<http.Response> getTimelineList({int newPage}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -46,7 +47,9 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
     String urlType = 'timeline';
 
     setState(() {
-      isLoading = true;
+      if(isFromLoad == false){
+        isLoading = true;
+      }
       if (newPage != null) {
         currentPage += newPage;
       }
@@ -79,6 +82,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
   void _onLoading() async {
     await Future.delayed(Duration(milliseconds: 2000));
     setState(() {
+      isFromLoad = true;
       newPage += 1;
     });
 
