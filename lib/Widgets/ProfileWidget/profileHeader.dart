@@ -218,7 +218,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        widget.fullName == null ? 'loading' : widget.fullName,
+                        widget.fullName == null ? '' : widget.fullName,
                         style: TextStyle(
                             fontSize: ScreenUtil.instance.setSp(17),
                             fontWeight: FontWeight.bold),
