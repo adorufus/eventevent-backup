@@ -287,7 +287,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         scale: 4,
                       ),
                     ),
-                    SizedBox(height: ScreenUtil.instance.setWidth(30)),
+                    Expanded(child: SizedBox(),),
                     FractionallySizedBox(
                       widthFactor: ScreenUtil.instance.setWidth(.8),
                       child: Container(
