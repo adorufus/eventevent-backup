@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
@@ -159,7 +160,8 @@ class SearchState extends State<Search> {
           ),
         ),
         body: Container(
-          child: Column(
+          child: ListView(
+            shrinkWrap: true,
             children: <Widget>[
               DefaultTabController(
                 length: 2,
@@ -189,7 +191,7 @@ class SearchState extends State<Search> {
                           child: TabBarView(
                             children: <Widget>[
                               notFound == true
-                                  ? Center(child: Container(child: Text('Not Found')))
+                                  ? EmptyState(imagePath: 'assets/icons/empty_state/profile.png', reasonText: 'No result for: \n ${searchController.text}',)
                                   : _buildList(),
                               _buildListProfile()
                             ],
@@ -412,12 +414,8 @@ class SearchState extends State<Search> {
     }
 
     return isLoading == true
-        ? Container(
-            child: Center(
-              child: CupertinoActivityIndicator(radius: 20),
-            ),
-          )
-        : ListView.builder(
+        ? HomeLoadingScreen().followListLoading()
+        : filteredProfile.length < 1 ? EmptyState(imagePath: 'assets/icons/empty_state/profile.png', reasonText: 'No result for: \n ${searchController.text}',) : ListView.builder(
             itemCount: filteredProfile == null ? 0 : filteredProfile.length,
             itemBuilder: (BuildContext context, i) {
               return GestureDetector(

@@ -251,8 +251,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
           body: Stack(
             children: <Widget>[
               Container(
-                child: ListView(
-                  physics: NeverScrollableScrollPhysics(),
+                child: Column(
                   children: <Widget>[
                     SizedBox(height: ScreenUtil.instance.setWidth(10)),
                     Align(
@@ -299,10 +298,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                             fit: BoxFit.fill,
                           )),
                     ),
-                    Padding(
-                      padding:
-                          EdgeInsets.only(top: ScreenUtil.instance.setWidth(150)),
-                    ),
+                    Expanded(child: SizedBox(),),
                     Center(
                       child: Text('DAFTAR DAN MULAI',
                           style: TextStyle(

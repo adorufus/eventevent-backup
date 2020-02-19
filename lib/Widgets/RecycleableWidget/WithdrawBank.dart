@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/EmptyState.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankOptions.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/SetupBankAccount.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawConfirmation.dart';
@@ -60,7 +61,7 @@ class WithdrawBankState extends State<WithdrawBank> {
       } else {
         print('gagal');
       }
-    }).timeout(Duration(seconds: 8), onTimeout: () {
+    }).timeout(Duration(seconds: 10), onTimeout: () {
       Flushbar(
         flushbarPosition: FlushbarPosition.TOP,
         message: 'Request Time Out!',
@@ -259,6 +260,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                       ),
                       SizedBox(height: ScreenUtil.instance.setWidth(20)),
                       TextFormField(
+                        autofocus: true,
                         controller: amountController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -348,11 +350,7 @@ class WithdrawBankState extends State<WithdrawBank> {
 
   Widget Withdraw() {
     return balanceData == null
-        ? Container(
-            child: Center(
-              child: CupertinoActivityIndicator(radius: 20),
-            ),
-          )
+        ? HomeLoadingScreen().followListLoading()
         : ListView(
             shrinkWrap: true,
             children: <Widget>[

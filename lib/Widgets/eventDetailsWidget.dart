@@ -897,6 +897,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(12),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 10,
+                                                  color: Color(0xff8a8a8b).withOpacity(.5),
+                                                  spreadRadius: 1.5
+                                                )
+                                              ],
                                           image: DecorationImage(
                                               image: widget.detailData[
                                                           'photo_timeline'] ==

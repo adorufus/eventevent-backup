@@ -136,6 +136,7 @@ flutter:
   assets:
     - assets/flare/splashicon.flr
     - assets/flare/eventevent.flr
+    - assets/flare/Spalsh_Eventevent.flr
     - assets/docs.png
     - assets/qr-code.png
     - assets/eventevent.png
@@ -257,6 +258,7 @@ flutter:
     - assets/drawable/amex.png
     - assets/icons/empty_state/public_timeline.png
     - assets/icons/empty_state/history.png
+    - assets/icons/empty_state/profile.png
     - assets/drawable/cimbniaga.png
     - assets/drawable/bank.png
     - assets/drawable/discover.png

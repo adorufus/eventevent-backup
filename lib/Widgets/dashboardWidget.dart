@@ -212,7 +212,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
     _selectedPage = widget.selectedPage;
 
-    // registerNotification();
+    registerNotification();
     // configureNotification();
 
     if (widget.isRest == true) {
@@ -411,7 +411,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
   @override
   void didChangeDependencies() {
-    registerNotification();
+    // registerNotification();
     super.didChangeDependencies();
   }
 
@@ -489,7 +489,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
           print('onResume: $message');
           return;
         },
-        onBackgroundMessage: Theme.of(context).platform == TargetPlatform.iOS
+        onBackgroundMessage: Platform.isIOS
             ? null
             : myBackgroundMessageHandler);
 

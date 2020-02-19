@@ -13,8 +13,9 @@ class EmptyState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(imagePath, scale: 1.5,),
-            Text(reasonText, style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),)
+            Image.asset(imagePath, scale: 2,),
+            SizedBox(height: 20),
+            Text(reasonText, style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)
           ],
         ),
       ),

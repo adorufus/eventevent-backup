@@ -81,20 +81,34 @@ class _SplashScreenState extends State<SplashScreen> {
       allowFontScaling: true,
     )..init(context);
     return AnnotatedRegion(
-      value: SystemUiOverlayStyle(statusBarColor: eventajaGreenTeal, statusBarIconBrightness: Brightness.light),
+      value: SystemUiOverlayStyle(
+          statusBarColor: eventajaGreenTeal,
+          statusBarIconBrightness: Brightness.light),
       child: SafeArea(
         child: Scaffold(
           body: Container(
             color: eventajaGreenTeal,
             child: Center(
-                child: Container(
-              child: FlareActor(
-                'assets/flare/eventevent.flr',
-                animation: 'Splash',
-                sizeFromArtboard: true,
-                artboard: 'Artboard',
-              ),
-            )),
+              child: Container(
+                child: FlareActor(
+                  'assets/flare/Spalsh_Eventevent.flr',
+                  sizeFromArtboard: true,
+                  artboard: 'Artboard',
+                  animation: 'Splashanimation',
+                ),
+              )
+              //  Container(
+              //   height: 400,
+              //   width: 200,
+              //   child: FlareActor(
+              //     'assets/flare/eventevent.flr',
+              //     animation: 'Splash',
+              //     sizeFromArtboard: false,
+              //     fit: BoxFit.fill,
+              //     artboard: 'Artboard',
+              //   ),
+              // ),
+            ),
           ),
         ),
       ),
