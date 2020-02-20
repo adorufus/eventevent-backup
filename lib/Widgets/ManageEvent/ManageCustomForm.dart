@@ -234,6 +234,10 @@ class ManageCustomForm extends StatefulWidget {
 class _ManageCustomFormState extends State<ManageCustomForm> {
   List<Widget> customFormList = [];
   List customForms = [];
+  bool isRequired = false;
+  PageController pageViewController = PageController(initialPage: 0);
+  String nextText = '';
+  TextEditingController simpleQuestionController = TextEditingController();
 
   Dio dio = new Dio(BaseOptions(
       connectTimeout: 10000, baseUrl: BaseApi().apiUrl, receiveTimeout: 10000));
@@ -242,6 +246,53 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
   void initState() {
     getCustomForm();
     super.initState();
+  }
+
+  Future createCustomForm() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Map<String, dynamic> data = {
+      'X-API-KEY': API_KEY,
+      'eventID': widget.eventId
+    };
+
+    for (var i = 0; i < customForms.length; i++) {
+      var forms = customForms;
+      data['question[$i][name]'] = forms[i]['name'];
+      data['quesetion[$i][type]'] = forms[i]['type'];
+      data['question[$i][order]'] = forms[i]['order'];
+      data['question[$i][isRequired]'] = forms[i]['isRequired'];
+    }
+
+    print(data);
+
+    try {
+      Response response = await dio.post('/custom_form/create',
+          options: Options(headers: {
+            'Authorization': AUTHORIZATION_KEY,
+            'cookie': prefs.getString('Session')
+          }, cookies: [
+            Cookie.fromSetCookieValue(prefs.getString('Session'))
+          ], responseType: ResponseType.plain),
+          data: FormData.from(data));
+
+      print(response.statusCode);
+      print(response.data);
+    } catch (e) {
+      if (e is DioError) {
+        print(e.message);
+        print(e.response);
+        print(e.response.data.runtimeType);
+        var extractedData = json.decode(e.response.data);
+        Flushbar(
+          backgroundColor: Colors.red,
+          animationDuration: Duration(milliseconds: 500),
+          message: extractedData['desc'],
+          duration: Duration(seconds: 3),
+          flushbarPosition: FlushbarPosition.TOP,
+        ).show(context);
+      }
+    }
   }
 
   @override
@@ -265,6 +316,22 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
             Navigator.of(context).pop();
           },
         ),
+        actions: <Widget>[
+          Center(
+            child: GestureDetector(
+              onTap: () {
+                createCustomForm();
+              },
+              child: Text(
+                'Submit',
+                style: TextStyle(color: eventajaGreenTeal),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 13,
+          )
+        ],
       ),
       body: Container(
         child: ListView(
@@ -279,7 +346,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
             ),
             GestureDetector(
               onTap: () {
-                
+                showAddBottomSheet();
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 13),
@@ -300,6 +367,235 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
         ),
       ),
     );
+  }
+
+  void showAddBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
+            color: Color(0xFF737373),
+            child: Container(
+              padding: EdgeInsets.only(bottom: 0),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  )),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(13),
+                    decoration: BoxDecoration(
+                        color: eventajaGreenTeal,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        )),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Add Custom Form',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Expanded(
+                          child: SizedBox(),
+                        ),
+                        Text(
+                          nextText,
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 150,
+                    child: PageView(
+                      controller: pageViewController,
+                      physics: NeverScrollableScrollPhysics(),
+                      children: <Widget>[questionFormat(), simpleQuestion()],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget questionFormat() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  pageViewController
+                      .nextPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeOut)
+                      .then((res) {
+                    print(pageViewController.page);
+                  });
+                },
+                child: Row(
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('Simple Question',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 14)),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text('Question with single answers.')
+                      ],
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    Icon(Icons.arrow_forward_ios)
+                  ],
+                ),
+              ),
+              SizedBox(height: 20),
+              Row(
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('Multiple Choices',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 14)),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'For question that requires multiple\nchoices (Example: music\npreferences).',
+                        maxLines: 3,
+                        textAlign: TextAlign.left,
+                      )
+                    ],
+                  ),
+                  Expanded(
+                    child: SizedBox(),
+                  ),
+                  Icon(Icons.arrow_forward_ios)
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget simpleQuestion() {
+    return StatefulBuilder(builder: (context, updateState) {
+      return Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: SizedBox(),
+            ),
+            Container(
+              width: 200,
+              child: TextFormField(
+                controller: simpleQuestionController,
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  hintText: 'enter your question',
+                ),
+              ),
+            ),
+            Expanded(
+              child: SizedBox(),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 13),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    '*Required',
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold),
+                  ),
+                  Expanded(
+                    child: SizedBox(),
+                  ),
+                  Switch(
+                    value: isRequired,
+                    onChanged: (result) {
+                      updateState(() {
+                        isRequired = result;
+                      });
+
+                      print(isRequired);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Expanded(child: SizedBox()),
+            GestureDetector(
+              onTap: () {
+                int order;
+                updateState(() {
+                  if (customForms.length < 1) {
+                    order = 0;
+                  } else {
+                    for (int i = 0; i < customForms.length; i++) {
+                      order = i + 1;
+                      print('orders: ' + order.toString());
+                    }
+                  }
+                  if (simpleQuestionController.text != null) {
+                    customForms.add({
+                      'name': simpleQuestionController.text,
+                      'type': '1',
+                      'order': order.toString(),
+                      'isRequired': isRequired == true ? '1' : '0'
+                    });
+
+                    print(customForms);
+                  }
+                });
+
+                Navigator.pop(context, setState(() {}));
+              },
+              child: Container(
+                color: eventajaGreenTeal,
+                height: 50,
+                child: Center(
+                    child: Text(
+                  'Done',
+                  style: TextStyle(color: Colors.white),
+                )),
+              ),
+            )
+          ],
+        ),
+      );
+    });
   }
 
   Widget customForm(String formName, String formId, int index) {
