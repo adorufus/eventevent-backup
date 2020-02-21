@@ -238,6 +238,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
   PageController pageViewController = PageController(initialPage: 0);
   String nextText = '';
   TextEditingController simpleQuestionController = TextEditingController();
+  bool noForm;
 
   Dio dio = new Dio(BaseOptions(
       connectTimeout: 10000, baseUrl: BaseApi().apiUrl, receiveTimeout: 10000));
@@ -262,9 +263,15 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
       data['quesetion[$i][type]'] = forms[i]['type'];
       data['question[$i][order]'] = forms[i]['order'];
       data['question[$i][isRequired]'] = forms[i]['isRequired'];
+      if(data.containsKey("id").toString() == 'false'){
+
+      } else {
+        data['question[$i][id]'] = forms[i]['id'];
+      }
     }
 
     print(data);
+    print('creating');
 
     try {
       Response response = await dio.post('/custom_form/create',
@@ -284,13 +291,62 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
         print(e.response);
         print(e.response.data.runtimeType);
         var extractedData = json.decode(e.response.data);
+        if (extractedData['desc'] ==
+            'Question already created, you must use update\/delete instead') {
+//          updateCustomForm();
+        }
+      }
+    }
+  }
+
+  Future updateCustomForm() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Map<String, dynamic> data = {
+      'X-API-KEY': API_KEY,
+      'eventID': widget.eventId
+    };
+
+    for (var i = 0; i < customForms.length; i++) {
+      var forms = customForms;
+      data['question[$i][name]'] = forms[i]['name'];
+      data['quesetion[$i][type]'] = forms[i]['type'];
+      data['question[$i][order]'] = forms[i]['order'];
+      data['question[$i][isRequired]'] = forms[i]['isRequired'];
+
+      if(data.containsKey('id').toString() == 'false'){
+
+      } else {
+        data['question[$i][id]'] = forms[i]['id'];
+      }
+    }
+
+    print(data);
+
+    try {
+      Response response = await dio.post('/custom_form/update',
+          options: Options(headers: {
+            'Authorization': AUTHORIZATION_KEY,
+            'cookie': prefs.getString('Session')
+          }, cookies: [
+            Cookie.fromSetCookieValue(prefs.getString('Session'))
+          ], responseType: ResponseType.plain),
+          data: FormData.from(data));
+
+      print(response.statusCode);
+      print(response.data);
+    } catch (e) {
+      if (e is DioError) {
+        print(e.message);
+        print(e.response);
+        print(e.response.data.runtimeType);
+        var extractedData = json.decode(e.response.data);
         Flushbar(
-          backgroundColor: Colors.red,
           animationDuration: Duration(milliseconds: 500),
-          message: extractedData['desc'],
+          backgroundColor: Colors.red,
           duration: Duration(seconds: 3),
-          flushbarPosition: FlushbarPosition.TOP,
-        ).show(context);
+          message: extractedData['desc'],
+        );
       }
     }
   }
@@ -320,7 +376,11 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
           Center(
             child: GestureDetector(
               onTap: () {
-                createCustomForm();
+                if(noForm == true){
+                  createCustomForm();
+                } else {
+                  updateCustomForm();
+                }
               },
               child: Text(
                 'Submit',
@@ -422,7 +482,11 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                     child: PageView(
                       controller: pageViewController,
                       physics: NeverScrollableScrollPhysics(),
-                      children: <Widget>[questionFormat(), simpleQuestion()],
+                      children: <Widget>[
+                        questionFormat(),
+                        simpleQuestion(),
+                        currentType == "1" ? Container(child: Text('type 1'),) : Container(child: Text('type 2'))
+                      ],
                     ),
                   )
                 ],
@@ -434,76 +498,96 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
     );
   }
 
+  String currentType;
+
   Widget questionFormat() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  pageViewController
-                      .nextPage(
+    return StatefulBuilder(
+      builder: (context, updateState) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      pageViewController
+                          .nextPage(
                           duration: Duration(milliseconds: 300),
                           curve: Curves.easeOut)
-                      .then((res) {
-                    print(pageViewController.page);
-                  });
-                },
-                child: Row(
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                          .then((res) {
+                            updateState((){
+                              currentType = "1";
+                            });
+                        print(pageViewController.page);
+                      });
+                    },
+                    child: Row(
                       children: <Widget>[
-                        Text('Simple Question',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14)),
-                        SizedBox(
-                          height: 5,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text('Simple Question',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 14)),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text('Question with single answers.')
+                          ],
                         ),
-                        Text('Question with single answers.')
+                        Expanded(
+                          child: SizedBox(),
+                        ),
+                        Icon(Icons.arrow_forward_ios)
                       ],
                     ),
-                    Expanded(
-                      child: SizedBox(),
+                  ),
+                  SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      pageViewController.nextPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn).then((res) {
+                            updateState((){
+                              currentType = "2";
+                            });
+                      });
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text('Multiple Choices',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 14)),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              'For question that requires multiple\nchoices (Example: music\npreferences).',
+                              maxLines: 3,
+                              textAlign: TextAlign.left,
+                            )
+                          ],
+                        ),
+                        Expanded(
+                          child: SizedBox(),
+                        ),
+                        Icon(Icons.arrow_forward_ios)
+                      ],
                     ),
-                    Icon(Icons.arrow_forward_ios)
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('Multiple Choices',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 14)),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'For question that requires multiple\nchoices (Example: music\npreferences).',
-                        maxLines: 3,
-                        textAlign: TextAlign.left,
-                      )
-                    ],
                   ),
-                  Expanded(
-                    child: SizedBox(),
-                  ),
-                  Icon(Icons.arrow_forward_ios)
                 ],
               ),
-            ],
-          ),
-        ),
-      ],
+            ),
+          ],
+        );
+      }
     );
   }
 
@@ -596,6 +680,17 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
         ),
       );
     });
+  }
+  
+  Widget multipleFormat() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+
+        ],
+      )
+    );
   }
 
   Widget customForm(String formName, String formId, int index) {
@@ -705,25 +800,40 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
 
     Cookie cookie = Cookie.fromSetCookieValue(preferences.getString("Session"));
 
-    Response response = await dio.get(
-      '/custom_form/get?X-API-KEY=$API_KEY&id=${widget.eventId}',
-      options: Options(headers: {
-        'Authorization': AUTHORIZATION_KEY,
-        'cookie': preferences.getString('Session')
-      }, cookies: [
-        cookie
-      ], responseType: ResponseType.plain),
-    );
+    try{
+      Response response = await dio.get(
+        '/custom_form/get?X-API-KEY=$API_KEY&id=${widget.eventId}',
+        options: Options(headers: {
+          'Authorization': AUTHORIZATION_KEY,
+          'cookie': preferences.getString('Session')
+        }, cookies: [
+          cookie
+        ], responseType: ResponseType.plain),
+      );
 
-    var extractedData = json.decode(response.data);
+      var extractedData = json.decode(response.data);
 
-    if (response.statusCode == 200) {
-      print(extractedData);
-      setState(() {
-        customForms.addAll(extractedData['data']['question']);
-      });
+      if (response.statusCode == 200) {
+        print(extractedData);
+        setState(() {
+          noForm = false;
+          customForms.addAll(extractedData['data']['question']);
+        });
 
-      print(customForms);
+        print(customForms);
+      }
+    } catch (e) {
+      if(e is DioError){
+        print(e.response.data);
+        var extractedData = json.decode(e.response.data);
+
+        if(extractedData['desc'] == 'Question isn\'t exist'){
+          setState((){
+            noForm = true;
+            print('no form: ' + noForm.toString());
+          });
+        }
+      }
     }
   }
 
