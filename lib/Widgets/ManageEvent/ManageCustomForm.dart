@@ -657,7 +657,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                       'name': simpleQuestionController.text,
                       'type': '1',
                       'order': order.toString(),
-                      'isRequired': isRequired == true ? '1' : '0'
+                      'isRequired': isRequired == true ? '2' : '1'
                     });
 
                     print(customForms);
