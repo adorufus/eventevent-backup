@@ -156,7 +156,7 @@ class _RunAppState extends State<RunApp> {
             value: SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
                 statusBarIconBrightness: Brightness.dark),
-            child: CustomCamera(cameras))
+            child: CustomCamera(cameras)), 
       },
     );
   }

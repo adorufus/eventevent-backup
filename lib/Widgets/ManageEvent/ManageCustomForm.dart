@@ -260,14 +260,9 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
     for (var i = 0; i < customForms.length; i++) {
       var forms = customForms;
       data['question[$i][name]'] = forms[i]['name'];
-      data['quesetion[$i][type]'] = forms[i]['type'];
+      data['question[$i][type]'] = forms[i]['type'];
       data['question[$i][order]'] = forms[i]['order'];
       data['question[$i][isRequired]'] = forms[i]['isRequired'];
-      if(data.containsKey("id").toString() == 'false'){
-
-      } else {
-        data['question[$i][id]'] = forms[i]['id'];
-      }
     }
 
     print(data);
@@ -285,6 +280,11 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
 
       print(response.statusCode);
       print(response.data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
+      }
     } catch (e) {
       if (e is DioError) {
         print(e.message);
@@ -310,12 +310,11 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
     for (var i = 0; i < customForms.length; i++) {
       var forms = customForms;
       data['question[$i][name]'] = forms[i]['name'];
-      data['quesetion[$i][type]'] = forms[i]['type'];
+      data['question[$i][type]'] = forms[i]['type'];
       data['question[$i][order]'] = forms[i]['order'];
       data['question[$i][isRequired]'] = forms[i]['isRequired'];
 
-      if(data.containsKey('id').toString() == 'false'){
-
+      if (forms[i].containsKey('id').toString() == 'false') {
       } else {
         data['question[$i][id]'] = forms[i]['id'];
       }
@@ -335,6 +334,12 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
 
       print(response.statusCode);
       print(response.data);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
+      }
     } catch (e) {
       if (e is DioError) {
         print(e.message);
@@ -376,7 +381,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
           Center(
             child: GestureDetector(
               onTap: () {
-                if(noForm == true){
+                if (noForm == true) {
                   createCustomForm();
                 } else {
                   updateCustomForm();
@@ -485,7 +490,11 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                       children: <Widget>[
                         questionFormat(),
                         simpleQuestion(),
-                        currentType == "1" ? Container(child: Text('type 1'),) : Container(child: Text('type 2'))
+                        currentType == "1"
+                            ? Container(
+                                child: Text('type 1'),
+                              )
+                            : Container(child: Text('type 2'))
                       ],
                     ),
                   )
@@ -501,94 +510,94 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
   String currentType;
 
   Widget questionFormat() {
-    return StatefulBuilder(
-      builder: (context, updateState) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      pageViewController
-                          .nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeOut)
-                          .then((res) {
-                            updateState((){
-                              currentType = "1";
-                            });
-                        print(pageViewController.page);
+    return StatefulBuilder(builder: (context, updateState) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    pageViewController
+                        .nextPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeOut)
+                        .then((res) {
+                      updateState(() {
+                        currentType = "1";
                       });
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text('Simple Question',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 14)),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text('Question with single answers.')
-                          ],
-                        ),
-                        Expanded(
-                          child: SizedBox(),
-                        ),
-                        Icon(Icons.arrow_forward_ios)
-                      ],
-                    ),
+                      print(pageViewController.page);
+                    });
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text('Simple Question',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text('Question with single answers.')
+                        ],
+                      ),
+                      Expanded(
+                        child: SizedBox(),
+                      ),
+                      Icon(Icons.arrow_forward_ios)
+                    ],
                   ),
-                  SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () {
-                      pageViewController.nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeIn).then((res) {
-                            updateState((){
-                              currentType = "2";
-                            });
+                ),
+                SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () {
+                    pageViewController
+                        .nextPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeIn)
+                        .then((res) {
+                      updateState(() {
+                        currentType = "2";
                       });
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text('Multiple Choices',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 14)),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'For question that requires multiple\nchoices (Example: music\npreferences).',
-                              maxLines: 3,
-                              textAlign: TextAlign.left,
-                            )
-                          ],
-                        ),
-                        Expanded(
-                          child: SizedBox(),
-                        ),
-                        Icon(Icons.arrow_forward_ios)
-                      ],
-                    ),
+                    });
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text('Multiple Choices',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 14)),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            'For question that requires multiple\nchoices (Example: music\npreferences).',
+                            maxLines: 3,
+                            textAlign: TextAlign.left,
+                          )
+                        ],
+                      ),
+                      Expanded(
+                        child: SizedBox(),
+                      ),
+                      Icon(Icons.arrow_forward_ios)
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        );
-      }
-    );
+          ),
+        ],
+      );
+    });
   }
 
   Widget simpleQuestion() {
@@ -642,29 +651,39 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
             Expanded(child: SizedBox()),
             GestureDetector(
               onTap: () {
-                int order;
-                updateState(() {
-                  if (customForms.length < 1) {
-                    order = 0;
-                  } else {
-                    for (int i = 0; i < customForms.length; i++) {
-                      order = i + 1;
-                      print('orders: ' + order.toString());
+                if (currentType == '1') {
+                  int order;
+                  print(customForms.length);
+                  updateState(() {
+                    if (customForms.length < 1) {
+                      order = 1;
+                    } else {
+                      for (int i = 0; i < customForms.length; i++) {
+                        print(i);
+                        order = i;
+                        order += 1;
+                        print('orders: ' + order.toString());
+                      }
                     }
-                  }
-                  if (simpleQuestionController.text != null) {
-                    customForms.add({
-                      'name': simpleQuestionController.text,
-                      'type': '1',
-                      'order': order.toString(),
-                      'isRequired': isRequired == true ? '2' : '1'
-                    });
+                    if (simpleQuestionController.text != null) {
+                      customForms.add({
+                        'name': simpleQuestionController.text,
+                        'type': '1',
+                        'order': order.toString(),
+                        'isRequired': isRequired == true ? '2' : '1'
+                      });
 
-                    print(customForms);
-                  }
-                });
+                      print(customForms);
+                    }
+                  });
 
-                Navigator.pop(context, setState(() {}));
+                  Navigator.pop(context, setState(() {}));
+                } else {
+                  pageViewController
+                        .nextPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeIn);
+                }
               },
               child: Container(
                 color: eventajaGreenTeal,
@@ -681,16 +700,13 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
       );
     });
   }
-  
+
   Widget multipleFormat() {
     return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-
-        ],
-      )
-    );
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[],
+    ));
   }
 
   Widget customForm(String formName, String formId, int index) {
@@ -800,7 +816,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
 
     Cookie cookie = Cookie.fromSetCookieValue(preferences.getString("Session"));
 
-    try{
+    try {
       Response response = await dio.get(
         '/custom_form/get?X-API-KEY=$API_KEY&id=${widget.eventId}',
         options: Options(headers: {
@@ -823,12 +839,12 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
         print(customForms);
       }
     } catch (e) {
-      if(e is DioError){
+      if (e is DioError) {
         print(e.response.data);
         var extractedData = json.decode(e.response.data);
 
-        if(extractedData['desc'] == 'Question isn\'t exist'){
-          setState((){
+        if (extractedData['desc'] == 'Question isn\'t exist') {
+          setState(() {
             noForm = true;
             print('no form: ' + noForm.toString());
           });
