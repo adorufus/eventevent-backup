@@ -421,11 +421,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     ),
                     SizedBox(width: ScreenUtil.instance.setWidth(8)),
                     GestureDetector(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostEventInvitePeople(
-                          calledFrom: "other event",
-                          eventId: widget.id,
-                        )));
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => PostEventInvitePeople(
+                                  calledFrom: "other event",
+                                  eventId: widget.id,
+                                )));
                       },
                       child: Icon(
                         Icons.person_add,
@@ -447,113 +448,264 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     SizedBox(width: ScreenUtil.instance.setWidth(8)),
                     GestureDetector(
                       onTap: () {
-                        showDialog(
+                        showCupertinoModalPopup(
                             context: context,
-                            builder: (BuildContext context) {
-                              return Container(
-                                child: widget.detailData['createdByID'] != currentUserId ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    RaisedButton(
-                                      onPressed: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPost(
-                                          postId: widget.id,
-                                          postType: 'event',
-                                        )));
-                                      },
-                                      child: Text("Report This Event"),
+                            builder: (context) {
+                              return widget.detailData['createdByID'] !=
+                                      currentUserId
+                                  ? CupertinoActionSheet(
+                                      actions: <Widget>[
+                                        CupertinoActionSheetAction(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ReportPost(
+                                                            postId: widget.id,
+                                                            postType: 'event',
+                                                          )));
+                                            },
+                                            child: Text('Report This Event'))
+                                      ],
+                                      cancelButton: CupertinoActionSheetAction(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(
+                                            'Cancel',
+                                            style: TextStyle(color: Colors.red),
+                                          )),
                                     )
-                                  ],
-                                ) : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    RaisedButton(
-                                      onPressed: () async {
-                                        SharedPreferences prefs =
-                                            await SharedPreferences
-                                                .getInstance();
+                                  : CupertinoActionSheet(
+                                      actions: <Widget>[
+                                          CupertinoActionSheetAction(
+                                              onPressed: () async {
+                                                SharedPreferences prefs =
+                                                    await SharedPreferences
+                                                        .getInstance();
 
-                                        List<String> categoryList =
-                                            new List<String>();
-                                        List<String> categoryIdList =
-                                            new List<String>();
-                                        for (var i = 0;
-                                            i <
-                                                widget
-                                                    .detailData['category']
-                                                        ['data']
-                                                    .length;
-                                            i++) {
-                                          print(i.toString());
-                                          categoryList.add(
-                                              widget.detailData['category']
-                                                  ['data'][i]['name']);
-                                          categoryIdList.add(
-                                              widget.detailData['category']
-                                                  ['data'][i]['id']);
-                                        }
+                                                List<String> categoryList =
+                                                    new List<String>();
+                                                List<String> categoryIdList =
+                                                    new List<String>();
+                                                for (var i = 0;
+                                                    i <
+                                                        widget
+                                                            .detailData[
+                                                                'category']
+                                                                ['data']
+                                                            .length;
+                                                    i++) {
+                                                  print(i.toString());
+                                                  categoryList.add(
+                                                      widget.detailData[
+                                                              'category']
+                                                          ['data'][i]['name']);
+                                                  categoryIdList.add(
+                                                      widget.detailData[
+                                                              'category']
+                                                          ['data'][i]['id']);
+                                                }
 
-                                        prefs.setString('NEW_EVENT_ID',
-                                            widget.detailData['id']);
-                                        prefs.setString('EVENT_NAME',
-                                            widget.detailData['name']);
-                                        prefs.setString('EVENT_TYPE',
-                                            widget.detailData['isPrivate']);
-                                        prefs.setStringList(
-                                            'EVENT_CATEGORY', categoryList);
-                                        prefs.setStringList(
-                                            'EVENT_CATEGORY_ID_LIST',
-                                            categoryIdList);
-                                        prefs.setString('DATE_START',
-                                            widget.detailData['dateStart']);
-                                        prefs.setString('DATE_END',
-                                            widget.detailData['dateEnd']);
-                                        prefs.setString('TIME_START',
-                                            widget.detailData['timeStart']);
-                                        prefs.setString('TIME_END',
-                                            widget.detailData['timeEnd']);
-                                        prefs.setString('EVENT_DESCRIPTION',
-                                            widget.detailData['description']);
-                                        prefs.setString('EVENT_PHONE',
-                                            widget.detailData['phone']);
-                                        prefs.setString('EVENT_EMAIL',
-                                            widget.detailData['email']);
-                                        prefs.setString('EVENT_WEBSITE',
-                                            widget.detailData['website']);
-                                        prefs.setString('EVENT_LAT',
-                                            widget.detailData['latitude']);
-                                        prefs.setString('EVENT_LONG',
-                                            widget.detailData['longitude']);
-                                        prefs.setString('EVENT_ADDRESS',
-                                            widget.detailData['address']);
-                                        prefs.setString('EVENT_IMAGE',
-                                            widget.detailData['photoFull']);
+                                                prefs.setString('NEW_EVENT_ID',
+                                                    widget.detailData['id']);
+                                                prefs.setString('EVENT_NAME',
+                                                    widget.detailData['name']);
+                                                prefs.setString(
+                                                    'EVENT_TYPE',
+                                                    widget.detailData[
+                                                        'isPrivate']);
+                                                prefs.setStringList(
+                                                    'EVENT_CATEGORY',
+                                                    categoryList);
+                                                prefs.setStringList(
+                                                    'EVENT_CATEGORY_ID_LIST',
+                                                    categoryIdList);
+                                                prefs.setString(
+                                                    'DATE_START',
+                                                    widget.detailData[
+                                                        'dateStart']);
+                                                prefs.setString(
+                                                    'DATE_END',
+                                                    widget
+                                                        .detailData['dateEnd']);
+                                                prefs.setString(
+                                                    'TIME_START',
+                                                    widget.detailData[
+                                                        'timeStart']);
+                                                prefs.setString(
+                                                    'TIME_END',
+                                                    widget
+                                                        .detailData['timeEnd']);
+                                                prefs.setString(
+                                                    'EVENT_DESCRIPTION',
+                                                    widget.detailData[
+                                                        'description']);
+                                                prefs.setString('EVENT_PHONE',
+                                                    widget.detailData['phone']);
+                                                prefs.setString('EVENT_EMAIL',
+                                                    widget.detailData['email']);
+                                                prefs.setString(
+                                                    'EVENT_WEBSITE',
+                                                    widget
+                                                        .detailData['website']);
+                                                prefs.setString(
+                                                    'EVENT_LAT',
+                                                    widget.detailData[
+                                                        'latitude']);
+                                                prefs.setString(
+                                                    'EVENT_LONG',
+                                                    widget.detailData[
+                                                        'longitude']);
+                                                prefs.setString(
+                                                    'EVENT_ADDRESS',
+                                                    widget
+                                                        .detailData['address']);
+                                                prefs.setString(
+                                                    'EVENT_IMAGE',
+                                                    widget.detailData[
+                                                        'photoFull']);
 
-                                        print(prefs
-                                            .getStringList('EVENT_CATEGORY')
-                                            .toString());
+                                                print(prefs
+                                                    .getStringList(
+                                                        'EVENT_CATEGORY')
+                                                    .toString());
 
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        EditEvent()));
-                                      },
-                                      child: Text('Edit Event'),
-                                    ),
-                                    RaisedButton(
-                                      child: Text('Edit Custom Form'),
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    CustomFormActivator(eventId: widget.id,)));
-                                      },
-                                    )
-                                  ],
-                                ),
-                              );
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (BuildContext
+                                                                context) =>
+                                                            EditEvent()));
+                                              },
+                                              child: Text('Edit Event')),
+                                          CupertinoActionSheetAction(
+                                              onPressed: () {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            CustomFormActivator(
+                                                              eventId:
+                                                                  widget.id,
+                                                            )));
+                                              },
+                                              child: Text('Edit Custom Form')),
+                                        ],
+                                      cancelButton: CupertinoActionSheetAction(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text('Cancel',
+                                              style: TextStyle(
+                                                  color: Colors.red))));
                             });
+                        // showDialog(
+                        //     context: context,
+                        //     builder: (BuildContext context) {
+                        //       return Container(
+                        //         child: widget.detailData['createdByID'] != currentUserId ? Column(
+                        //           mainAxisAlignment: MainAxisAlignment.center,
+                        //           children: <Widget>[
+                        //             RaisedButton(
+                        //               onPressed: (){
+                        //                 Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPost(
+                        //                   postId: widget.id,
+                        //                   postType: 'event',
+                        //                 )));
+                        //               },
+                        //               child: Text("Report This Event"),
+                        //             )
+                        //           ],
+                        //         ) : Column(
+                        //           mainAxisAlignment: MainAxisAlignment.center,
+                        //           children: <Widget>[
+                        //             RaisedButton(
+                        //               onPressed: () async {
+                        //                 SharedPreferences prefs =
+                        //                     await SharedPreferences
+                        //                         .getInstance();
+
+                        //                 List<String> categoryList =
+                        //                     new List<String>();
+                        //                 List<String> categoryIdList =
+                        //                     new List<String>();
+                        //                 for (var i = 0;
+                        //                     i <
+                        //                         widget
+                        //                             .detailData['category']
+                        //                                 ['data']
+                        //                             .length;
+                        //                     i++) {
+                        //                   print(i.toString());
+                        //                   categoryList.add(
+                        //                       widget.detailData['category']
+                        //                           ['data'][i]['name']);
+                        //                   categoryIdList.add(
+                        //                       widget.detailData['category']
+                        //                           ['data'][i]['id']);
+                        //                 }
+
+                        //                 prefs.setString('NEW_EVENT_ID',
+                        //                     widget.detailData['id']);
+                        //                 prefs.setString('EVENT_NAME',
+                        //                     widget.detailData['name']);
+                        //                 prefs.setString('EVENT_TYPE',
+                        //                     widget.detailData['isPrivate']);
+                        //                 prefs.setStringList(
+                        //                     'EVENT_CATEGORY', categoryList);
+                        //                 prefs.setStringList(
+                        //                     'EVENT_CATEGORY_ID_LIST',
+                        //                     categoryIdList);
+                        //                 prefs.setString('DATE_START',
+                        //                     widget.detailData['dateStart']);
+                        //                 prefs.setString('DATE_END',
+                        //                     widget.detailData['dateEnd']);
+                        //                 prefs.setString('TIME_START',
+                        //                     widget.detailData['timeStart']);
+                        //                 prefs.setString('TIME_END',
+                        //                     widget.detailData['timeEnd']);
+                        //                 prefs.setString('EVENT_DESCRIPTION',
+                        //                     widget.detailData['description']);
+                        //                 prefs.setString('EVENT_PHONE',
+                        //                     widget.detailData['phone']);
+                        //                 prefs.setString('EVENT_EMAIL',
+                        //                     widget.detailData['email']);
+                        //                 prefs.setString('EVENT_WEBSITE',
+                        //                     widget.detailData['website']);
+                        //                 prefs.setString('EVENT_LAT',
+                        //                     widget.detailData['latitude']);
+                        //                 prefs.setString('EVENT_LONG',
+                        //                     widget.detailData['longitude']);
+                        //                 prefs.setString('EVENT_ADDRESS',
+                        //                     widget.detailData['address']);
+                        //                 prefs.setString('EVENT_IMAGE',
+                        //                     widget.detailData['photoFull']);
+
+                        //                 print(prefs
+                        //                     .getStringList('EVENT_CATEGORY')
+                        //                     .toString());
+
+                        //                 Navigator.of(context).push(
+                        //                     MaterialPageRoute(
+                        //                         builder:
+                        //                             (BuildContext context) =>
+                        //                                 EditEvent()));
+                        //               },
+                        //               child: Text('Edit Event'),
+                        //             ),
+                        //             RaisedButton(
+                        //               child: Text('Edit Custom Form'),
+                        //               onPressed: () {
+                        //                 Navigator.of(context).push(
+                        //                     MaterialPageRoute(
+                        //                         builder: (context) =>
+                        //                             CustomFormActivator(eventId: widget.id,)));
+                        //               },
+                        //             )
+                        //           ],
+                        //         ),
+                        //       );
+                        //     });
                       },
                       child: Icon(
                         Icons.more_vert,
@@ -897,13 +1049,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(12),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  blurRadius: 10,
-                                                  color: Color(0xff8a8a8b).withOpacity(.5),
-                                                  spreadRadius: 1.5
-                                                )
-                                              ],
+                                          boxShadow: [
+                                            BoxShadow(
+                                                blurRadius: 10,
+                                                color: Color(0xff8a8a8b)
+                                                    .withOpacity(.5),
+                                                spreadRadius: 1.5)
+                                          ],
                                           image: DecorationImage(
                                               image: widget.detailData[
                                                           'photo_timeline'] ==
@@ -1459,7 +1611,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           widget.detailData['isLoved'] == '1'
                                               ? true
                                               : false,
-                                      loveCount: int.parse(widget.detailData['countLove']),
+                                      loveCount: int.parse(
+                                          widget.detailData['countLove']),
                                     ),
                                     SizedBox(
                                       width: ScreenUtil.instance.setWidth(10),

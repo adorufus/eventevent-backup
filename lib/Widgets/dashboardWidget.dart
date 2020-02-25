@@ -54,8 +54,18 @@ var initializationSettingsAndroid;
 var initializationSettingsIOS;
 var initializationSettings;
 
-Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
-  return Future<void>.value();
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
+  if (message.containsKey('data')) {
+    // Handle data message
+    final dynamic data = message['data'];
+  }
+
+  if (message.containsKey('notification')) {
+    // Handle notification message
+    final dynamic notification = message['notification'];
+  }
+
+  // Or do other work.
 }
 
 class DashboardWidget extends StatefulWidget {
@@ -98,9 +108,12 @@ class _DashboardWidgetState extends State<DashboardWidget>
           data["+clicked_branch_link"] == true) {
         print(data);
         print(data['event_id']);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailLoadingScreen(
-          eventId: data['event_id'],
-        )));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EventDetailLoadingScreen(
+                      eventId: data['event_id'],
+                    )));
       }
       print(data);
       print(data['event_id']);
@@ -128,39 +141,9 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
   @override
   void initState() {
-    // rateMyApp.init().then((_) {
-    //     rateMyApp.showStarRateDialog(context,
-    //         title: 'Enjoying EventEvent?',
-    //         message: 'Please leave a rating!', onRatingChanged: (stars) {
-    //       return [
-    //         FlatButton(
-    //           child: Text('Ok'),
-    //           onPressed: () {
-    //             if (stars != null) {
-    //               DoNotOpenAgainCondition(rateMyApp).doNotOpenAgain = true;
-    //               rateMyApp.save().then((val) {
-    //                 Navigator.pop(context);
-    //               });
-    //             } else {
-    //               Navigator.pop(context);
-    //             }
-    //           },
-    //         )
-    //       ];
-    //     },
-    //         dialogStyle: DialogStyle(
-    //             titleAlign: TextAlign.center,
-    //             messageAlign: TextAlign.center,
-    //             messagePadding: EdgeInsets.only(bottom: 20)),
-    //         starRatingOptions: StarRatingOptions(
-    //           starsFillColor: eventajaGreenTeal,
-    //           allowHalfRating: true,
-    //           initialRating: 5,
-    //         ));
-    // });
 
     listenDynamicLink();
-    
+
     _saveCurrentRoute('/Dashboard');
     WidgetsBinding.instance.addObserver(this);
     super.initState();
@@ -168,7 +151,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
     initializationSettingsAndroid =
         new AndroidInitializationSettings('app_icon');
     initializationSettingsIOS =
-        new IOSInitializationSettings(defaultPresentBadge: true);
+        new IOSInitializationSettings(defaultPresentBadge: true, onDidReceiveLocalNotification: (int id, String title, String body, String payload) async =>  didRecieveLocalNotificationSubject.add(RecievedNotification(id, title, body, payload)));
     initializationSettings = new InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
@@ -179,24 +162,24 @@ class _DashboardWidgetState extends State<DashboardWidget>
       selectNotificationSubject.add(payload);
     });
 
-    _firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) async {
-          print('on message $message');
-          print(message['notification']);
-        },
-        onBackgroundMessage: myBackgroundMessageHandler,
-        onResume: (Map<String, dynamic> message) async {
-          List<Widget> navPages = [
-            EventDetailsConstructView(id: '15'),
-          ];
+    // _firebaseMessaging.configure(
+    //     onMessage: (Map<String, dynamic> message) async {
+    //       print('on message $message');
+    //       print(message['notification']);
+    //     },
+    //     onBackgroundMessage: myBackgroundMessageHandler,
+    //     onResume: (Map<String, dynamic> message) async {
+    //       List<Widget> navPages = [
+    //         EventDetailsConstructView(id: '15'),
+    //       ];
 
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => navPages[0]));
-          print('on resume $message');
-        },
-        onLaunch: (Map<String, dynamic> message) async {
-          print('on launch $message');
-        });
+    //       Navigator.push(
+    //           context, MaterialPageRoute(builder: (context) => navPages[0]));
+    //       print('on resume $message');
+    //     },
+    //     onLaunch: (Map<String, dynamic> message) async {
+    //       print('on launch $message');
+    //     });
 
     // didRecieveLocalNotificationSubject.stream.listen((RecievedNotification recievedNotification) async {
 
@@ -300,9 +283,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
           initialIndex: 0,
         ));
       } else if (payloadData['data']['type'] == 'live_stream_cancel') {
-        navigationHandler(EventDetailLoadingScreen(
-          eventId: payloadData['data']['id']
-        ));
+        navigationHandler(
+            EventDetailLoadingScreen(eventId: payloadData['data']['id']));
       } else if (payloadData['data']['type'] == 'photo_comment') {
         navigationHandler(UserMediaDetail(
           postID: payloadData['data']['id'],
@@ -375,17 +357,14 @@ class _DashboardWidgetState extends State<DashboardWidget>
           autoFocus: true,
         ));
       } else if (payloadData['data']['type'] == 'eventgoingstatus') {
-        navigationHandler(EventDetailLoadingScreen(
-          eventId: payloadData['data']['id']
-        ));
+        navigationHandler(
+            EventDetailLoadingScreen(eventId: payloadData['data']['id']));
       } else if (payloadData['data']['type'] == 'eventdetail_comment') {
-        navigationHandler(EventDetailLoadingScreen(
-          eventId: payloadData['data']['id']
-        ));
+        navigationHandler(
+            EventDetailLoadingScreen(eventId: payloadData['data']['id']));
       } else if (payloadData['data']['type'] == 'eventdetail_love') {
-        navigationHandler(EventDetailLoadingScreen(
-          eventId: payloadData['data']['id']
-        ));
+        navigationHandler(
+            EventDetailLoadingScreen(eventId: payloadData['data']['id']));
       } else if (payloadData['data']['type'] == 'photo_impression') {
         navigationHandler(UserMediaDetail(
           postID: payloadData['data']['id'],
@@ -393,14 +372,10 @@ class _DashboardWidgetState extends State<DashboardWidget>
         ));
       } else if (payloadData['data']['type'] == 'event') {
         navigationHandler(
-            EventDetailLoadingScreen(
-              eventId: payloadData['data']['id']
-            ));
+            EventDetailLoadingScreen(eventId: payloadData['data']['id']));
       } else if (payloadData['data']['type'] == 'eventinvite') {
         navigationHandler(
-            EventDetailLoadingScreen(
-              eventId: payloadData['data']['id']
-            ));
+            EventDetailLoadingScreen(eventId: payloadData['data']['id']));
       } else if (payloadData['data']['type'] == 'reminder_qr') {
         navigationHandler(ShowQr(
           qrUrl: payloadData['data']['id'],
@@ -411,7 +386,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
   @override
   void didChangeDependencies() {
-    // registerNotification();
     super.didChangeDependencies();
   }
 
@@ -427,13 +401,13 @@ class _DashboardWidgetState extends State<DashboardWidget>
         await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-        'com.eventeven2.android',
+        'com.eventevent.android',
         'EventEvent notification channel',
         'channel description',
         playSound: true,
         enableVibration: true,
         channelShowBadge: true,
-        importance: Importance.High,
+        importance: Importance.Max,
         priority: Priority.High);
 
     var iosPlatformChannelSpecifics =
@@ -489,9 +463,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
           print('onResume: $message');
           return;
         },
-        onBackgroundMessage: Platform.isIOS
-            ? null
-            : myBackgroundMessageHandler);
+        onBackgroundMessage:
+            Platform.isIOS ? null : myBackgroundMessageHandler);
 
     _firebaseMessaging.getToken().then((token) {
       print('firebase token: $token');
@@ -544,10 +517,9 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
-        statusBarIconBrightness: Brightness.dark
-      ),
-          child: SafeArea(
+          statusBarColor: Colors.white,
+          statusBarIconBrightness: Brightness.dark),
+      child: SafeArea(
         bottom: false,
         child: WillPopScope(
           onWillPop: _onWillPop,
@@ -583,19 +555,20 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 50),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 50),
                                         child: SizedBox(
                                             height:
                                                 ScreenUtil.instance.setWidth(5),
-                                            width:
-                                                ScreenUtil.instance.setWidth(50),
+                                            width: ScreenUtil.instance
+                                                .setWidth(50),
                                             child: Image.asset(
                                               'assets/icons/icon_line.png',
                                               fit: BoxFit.fill,
                                             ))),
                                     SizedBox(
-                                        height: ScreenUtil.instance.setWidth(35)),
+                                        height:
+                                            ScreenUtil.instance.setWidth(35)),
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.push(
@@ -603,8 +576,9 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                             MaterialPageRoute(
                                                 settings: RouteSettings(
                                                     name: 'PostEvent'),
-                                                builder: (BuildContext context) =>
-                                                    PostEvent()));
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        PostEvent()));
                                       },
                                       child: Container(
                                         color: Colors.white,
@@ -632,7 +606,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                                 Text(
                                                   'Create & sell your own event',
                                                   style: TextStyle(
-                                                    fontSize: ScreenUtil.instance
+                                                    fontSize: ScreenUtil
+                                                        .instance
                                                         .setSp(10),
                                                   ),
                                                 )
@@ -662,10 +637,12 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                       ),
                                     ),
                                     SizedBox(
-                                        height: ScreenUtil.instance.setWidth(19)),
+                                        height:
+                                            ScreenUtil.instance.setWidth(19)),
                                     Divider(),
                                     SizedBox(
-                                        height: ScreenUtil.instance.setWidth(16)),
+                                        height:
+                                            ScreenUtil.instance.setWidth(16)),
                                     GestureDetector(
                                       onTap: () {
                                         // imageCaputreCamera();
@@ -748,7 +725,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
                               color: Colors.black26,
                               fontSize: ScreenUtil.instance.setSp(10)),
                         ),
-                        icon: Image.asset("assets/icons/aset_icon/eventevent.png",
+                        icon: Image.asset(
+                            "assets/icons/aset_icon/eventevent.png",
                             height: ScreenUtil.instance.setWidth(25),
                             width: ScreenUtil.instance.setWidth(25)),
                         activeIcon: Image.asset(

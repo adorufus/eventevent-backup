@@ -52,20 +52,6 @@ Future<Null> main() async {
   runApp(new RunApp());
 }
 
-Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
-  if (message.containsKey('data')) {
-    // Handle data message
-    final dynamic data = message['data'];
-  }
-
-  if (message.containsKey('notification')) {
-    // Handle notification message
-    final dynamic notification = message['notification'];
-  }
-
-  // Or do other work.
-}
-
 class RunApp extends StatefulWidget {
   // This widget is the root of your application.
 
