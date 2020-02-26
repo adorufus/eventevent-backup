@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/SeeAll/MyTicketItem.dart';
 import 'package:eventevent/Widgets/ProfileWidget/UseTicket.dart';
+import 'package:eventevent/Widgets/RecycleableWidget/SearchWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +30,8 @@ class _MyTicketState extends State<MyTicket> {
   int newPage = 0;
   String _searchText = "";
 
-    bool notFound = false;
-    bool isLoading = false;
+  bool notFound = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -118,54 +119,8 @@ class _MyTicketState extends State<MyTicket> {
                   alignment: Alignment.centerLeft,
                 ),
               ),
-              title: Container(
-                width: ScreenUtil.instance.setWidth(280),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          blurRadius: 2,
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 1.5)
-                    ]),
-                height: ScreenUtil.instance.setWidth(32.95),
-                child: Material(
-                  borderRadius: BorderRadius.circular(40),
-                  child: TextFormField(
-                    controller: searchController,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.search,
-                    onFieldSubmitted: (value) {
-                      setState(() {
-                        searchController.text = value;
-                      });
-                    },
-                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
-                    autofocus: false,
-                    autocorrect: false,
-                    decoration: InputDecoration(
-                        prefixIcon: Image.asset(
-                          'assets/icons/icon_apps/search.png',
-                          scale: 4.5,
-                          color: Color(0xFF81818B),
-                        ),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 4, horizontal: 15),
-                        hintText: 'Search',
-                        hintStyle:
-                            TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(40),
-                            borderSide:
-                                BorderSide(color: Color.fromRGBO(0, 0, 0, 0))),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(40),
-                            borderSide:
-                                BorderSide(color: Color.fromRGBO(0, 0, 0, 0)))),
-                  ),
-                ),
-              ),
-              centerTitle: false,
+              title: Text('My Tickets', style: TextStyle(color: eventajaGreenTeal),),
+              centerTitle: true,
               textTheme: TextTheme(
                   title: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -175,132 +130,179 @@ class _MyTicketState extends State<MyTicket> {
             ),
           ),
         ),
-        body: isLoading == true ? HomeLoadingScreen().myTicketLoading() : myTicketList == null ? EmptyState(
-          imagePath: 'assets/drawable/my_ticket_empty_state.png',
-          reasonText: 'You have no ticket :(',
-        ) : SmartRefresher(
-          enablePullDown: true,
-          enablePullUp: true,
-          footer: CustomFooter(
-              builder: (BuildContext context, LoadStatus mode) {
-                Widget body;
-                if (mode == LoadStatus.idle) {
-                  body = Text("Load data");
-                } else if (mode == LoadStatus.loading) {
-                  body = CupertinoActivityIndicator(radius: 20);
-                } else if (mode == LoadStatus.failed) {
-                  body = Text("Load Failed!");
-                } else if (mode == LoadStatus.canLoading) {
-                  body = Text('More');
-                } else {
-                  body = Container();
-                }
+        body: isLoading == true
+            ? HomeLoadingScreen().myTicketLoading()
+            : myTicketList == null
+                ? EmptyState(
+                    imagePath: 'assets/drawable/my_ticket_empty_state.png',
+                    reasonText: 'You have no ticket :(',
+                  )
+                : SmartRefresher(
+                    enablePullDown: true,
+                    enablePullUp: true,
+                    footer: CustomFooter(
+                        builder: (BuildContext context, LoadStatus mode) {
+                      Widget body;
+                      if (mode == LoadStatus.idle) {
+                        body = Text("Load data");
+                      } else if (mode == LoadStatus.loading) {
+                        body = CupertinoActivityIndicator(radius: 20);
+                      } else if (mode == LoadStatus.failed) {
+                        body = Text("Load Failed!");
+                      } else if (mode == LoadStatus.canLoading) {
+                        body = Text('More');
+                      } else {
+                        body = Container();
+                      }
 
-                return Container(
-                    height: ScreenUtil.instance.setWidth(35),
-                    child: Center(child: body));
-              }),
-          controller: refreshController,
-          onRefresh: () {
-            setState(() {
-              newPage = 0;
-            });
-            getMyTicket(newPage: newPage).then((response) {
-              if (response.statusCode == 200) {
-                setState(() {
-                  var extractedData = json.decode(response.body);
-                  myTicketList = extractedData['data'];
-                });
-                if (mounted) setState(() {});
-                refreshController.refreshCompleted();
-              }
-            });
-          },
-          onLoading: _onLoading,
-          child: ListView.builder(
-            itemCount:
-            myTicketList == null ? 0 : myTicketList.length,
-            itemBuilder: (BuildContext context, i) {
-              Color ticketColor;
-              String ticketStatusText;
+                      return Container(
+                          height: ScreenUtil.instance.setWidth(35),
+                          child: Center(child: body));
+                    }),
+                    controller: refreshController,
+                    onRefresh: () {
+                      setState(() {
+                        newPage = 0;
+                      });
+                      getMyTicket(newPage: newPage).then((response) {
+                        if (response.statusCode == 200) {
+                          setState(() {
+                            var extractedData = json.decode(response.body);
+                            myTicketList = extractedData['data'];
+                          });
+                          if (mounted) setState(() {});
+                          refreshController.refreshCompleted();
+                        }
+                      });
+                    },
+                    onLoading: _onLoading,
+                    child: ListView(
+                      children: <Widget>[
+                        Padding(
+                            padding: EdgeInsets.only(
+                                top: 15, right: 25, left: 25, bottom: 15),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            Search()));
+                              },
+                              child: Material(
+                                  borderRadius: BorderRadius.circular(40),
+                                  elevation: 2.0,
+                                  shadowColor: Colors.black,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 15),
+                                    height: 45,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(Icons.search),
+                                        SizedBox(width: 10),
+                                        Text('Search ticket', style: TextStyle(color: Colors.grey),)
+                                      ],
+                                    ),
+                                  )),
+                            )),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount:
+                              myTicketList == null ? 0 : myTicketList.length,
+                          itemBuilder: (BuildContext context, i) {
+                            Color ticketColor;
+                            String ticketStatusText;
 
-              if (myTicketList[i]['usedStatus'] == 'available') {
-                ticketColor = eventajaGreenTeal;
-                ticketStatusText = 'Available';
-              } else if (myTicketList[i]['usedStatus'] ==
-                  'used') {
-                ticketColor = Color(0xFF652D90);
-                ticketStatusText = 'Used';
-              } else if (myTicketList[i]['usedStatus'] ==
-                  'expired') {
-                ticketColor = Color(0xFF8E1E2D);
-                ticketStatusText = 'Expired';
-              } else if(myTicketList[i]['usedStatus'] == 'refund'){
-                ticketColor = Colors.blue;
-                ticketStatusText = 'Refund';
-              }
+                            if (myTicketList[i]['usedStatus'] == 'available') {
+                              ticketColor = eventajaGreenTeal;
+                              ticketStatusText = 'Available';
+                            } else if (myTicketList[i]['usedStatus'] ==
+                                'used') {
+                              ticketColor = Color(0xFF652D90);
+                              ticketStatusText = 'Used';
+                            } else if (myTicketList[i]['usedStatus'] ==
+                                'expired') {
+                              ticketColor = Color(0xFF8E1E2D);
+                              ticketStatusText = 'Expired';
+                            } else if (myTicketList[i]['usedStatus'] ==
+                                'refund') {
+                              ticketColor = Colors.blue;
+                              ticketStatusText = 'Refund';
+                            }
 
-              print(myTicketList[i].containsKey('ticket_image').toString());
-              print(myTicketList[i]['ticket_image'].toString());
-              String ticketImage;
+                            print(myTicketList[i]
+                                .containsKey('ticket_image')
+                                .toString());
+                            print(myTicketList[i]['ticket_image'].toString());
+                            String ticketImage;
 
-              if(myTicketList[i]['ticket_image'] == false){
-                ticketImage = '';
-              }
-              else {
-                ticketImage = myTicketList[i]['ticket_image']['secure_url'];
-              }
+                            if (myTicketList[i]['ticket_image'] == false) {
+                              ticketImage = '';
+                            } else {
+                              ticketImage =
+                                  myTicketList[i]['ticket_image']['secure_url'];
+                            }
 
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              UseTicket(
-                                ticketTitle: myTicketList[i]
-                                ['ticket']['ticket_name'],
-                                ticketImage: myTicketList[i]
-                                ['ticket_image']['url'],
-                                ticketCode: myTicketList[i]
-                                ['ticket_code'],
-                                ticketDate: myTicketList[i]
-                                ['event']['dateStart'],
-                                ticketStartTime: myTicketList[i]
-                                ['event']['timeStart'],
-                                ticketEndTime: myTicketList[i]
-                                ['event']['timeEnd'],
-                                ticketDesc: myTicketList[i]
-                                ['event']['name'],
-                                ticketID: myTicketList[i]['id'],
-                                usedStatus: ticketStatusText
-                                    .toUpperCase(),
-                              )));
-                },
-                child: Container(
-                  child: new MyTicketItem(
-                    image: myTicketList[i].containsKey('ticket_image').toString() ==
-                        'true'
-                        ?
-                    ticketImage ?? '' : '',
-                    title: myTicketList[i]['event']['name'],
-                    ticketCode: myTicketList[i]['ticket_code'],
-                    ticketStatus: ticketStatusText,
-                    timeStart: myTicketList[i]['event']
-                    ['timeStart'],
-                    timeEnd: myTicketList[i]['event']['timeEnd'],
-                    date: DateTime.parse(
-                        myTicketList[i]['event']['dateStart']),
-                    ticketName: myTicketList[i]['ticket']
-                    ['ticket_name'],
-                    ticketColor: ticketColor,
-                    // topPadding: i == 0 ? 13.0 : 0.0,
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            UseTicket(
+                                              ticketTitle: myTicketList[i]
+                                                  ['ticket']['ticket_name'],
+                                              ticketImage: myTicketList[i]
+                                                  ['ticket_image']['url'],
+                                              ticketCode: myTicketList[i]
+                                                  ['ticket_code'],
+                                              ticketDate: myTicketList[i]
+                                                  ['event']['dateStart'],
+                                              ticketStartTime: myTicketList[i]
+                                                  ['event']['timeStart'],
+                                              ticketEndTime: myTicketList[i]
+                                                  ['event']['timeEnd'],
+                                              ticketDesc: myTicketList[i]
+                                                  ['event']['name'],
+                                              ticketID: myTicketList[i]['id'],
+                                              usedStatus: ticketStatusText
+                                                  .toUpperCase(),
+                                            )));
+                              },
+                              child: Container(
+                                child: new MyTicketItem(
+                                  image: myTicketList[i]
+                                              .containsKey('ticket_image')
+                                              .toString() ==
+                                          'true'
+                                      ? ticketImage ?? ''
+                                      : '',
+                                  title: myTicketList[i]['event']['name'],
+                                  ticketCode: myTicketList[i]['ticket_code'],
+                                  ticketStatus: ticketStatusText,
+                                  timeStart: myTicketList[i]['event']
+                                      ['timeStart'],
+                                  timeEnd: myTicketList[i]['event']['timeEnd'],
+                                  date: DateTime.parse(
+                                      myTicketList[i]['event']['dateStart']),
+                                  ticketName: myTicketList[i]['ticket']
+                                      ['ticket_name'],
+                                  ticketColor: ticketColor,
+                                  // topPadding: i == 0 ? 13.0 : 0.0,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-          ),
-        ),
 //        FutureBuilder(
 //            future: _getTickets(),
 //            builder: (context, snapshot) {
@@ -646,7 +648,7 @@ class _MyTicketState extends State<MyTicket> {
         notFound = false;
       });
 
-      if(resultData == null){
+      if (resultData == null) {
         print('empty');
         setState(() {
           notFound = true;

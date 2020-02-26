@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
@@ -200,7 +201,7 @@ class _CollectionPageState extends State<CollectionPage> {
                       image: NetworkImage(
                         widget.headerImage,
                       ),
-                      fit: BoxFit.fill)),
+                      fit: BoxFit.cover)),
             ),
             Container(
               color: Colors.white,
@@ -220,15 +221,7 @@ class _CollectionPageState extends State<CollectionPage> {
                       height: ScreenUtil.instance.setWidth(50),
                       color: Colors.white,
                       child: userByCollectionList == null
-                          ? Container(
-                              margin: EdgeInsets.symmetric(horizontal: 25),
-                              child: Text(
-                                'No Event Organizers Found',
-                                style: TextStyle(
-                                    color: Color(0xff8a8a8b),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
+                          ? HomeLoadingScreen().peopleLoading()
                           : ListView.builder(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
@@ -282,16 +275,7 @@ class _CollectionPageState extends State<CollectionPage> {
             ),
             Container(
               child: isLoading == true
-                  ? Center(
-                      child: Container(
-                        width: ScreenUtil.instance.setWidth(25),
-                        height: ScreenUtil.instance.setWidth(25),
-                        child: FittedBox(
-                          fit: BoxFit.fill,
-                          child: CupertinoActivityIndicator(radius: 20),
-                        ),
-                      ),
-                    )
+                  ? HomeLoadingScreen().myTicketLoading()
                   : eventByCategoryList == null
                       ? errReasonWidget
                       : ListView.builder(

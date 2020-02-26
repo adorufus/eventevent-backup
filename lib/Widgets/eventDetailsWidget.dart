@@ -999,7 +999,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                           widget.ticketPrice,
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: ScreenUtil.instance.setSp(13),
+                              fontSize: ScreenUtil.instance.setSp(14),
                               fontWeight: FontWeight.bold),
                         )),
                       ),
@@ -1082,24 +1082,41 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: <Widget>[
-                                                  SizedBox(
-                                                    height: ScreenUtil.instance
-                                                        .setWidth(30),
-                                                    width: ScreenUtil.instance
-                                                        .setWidth(30),
-                                                    child: Container(
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  ProfileWidget(
+                                                                    userId: widget
+                                                                            .detailData[
+                                                                        'createdByID'],
+                                                                    initialIndex:
+                                                                        0,
+                                                                  )));
+                                                    },
+                                                    child: SizedBox(
                                                       height: ScreenUtil
                                                           .instance
                                                           .setWidth(30),
                                                       width: ScreenUtil.instance
                                                           .setWidth(30),
-                                                      decoration: BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          image: DecorationImage(
-                                                              image: NetworkImage(widget
-                                                                  .creatorImageUri
-                                                                  .toString()))),
+                                                      child: Container(
+                                                        height: ScreenUtil
+                                                            .instance
+                                                            .setWidth(30),
+                                                        width: ScreenUtil
+                                                            .instance
+                                                            .setWidth(30),
+                                                        decoration: BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            image: DecorationImage(
+                                                                image: NetworkImage(widget
+                                                                    .creatorImageUri
+                                                                    .toString()))),
+                                                      ),
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -1111,27 +1128,44 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: <Widget>[
-                                                      Text(
-                                                        widget.creatorFullName ==
-                                                                null
-                                                            ? 'loading'
-                                                            : widget
-                                                                .creatorFullName
-                                                                .toString(),
-                                                        style: TextStyle(
-                                                            fontSize: ScreenUtil
-                                                                .instance
-                                                                .setSp(12),
-                                                            color:
-                                                                eventajaGreenTeal,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          ProfileWidget(
+                                                                            userId:
+                                                                                widget.detailData['createdByID'],
+                                                                            initialIndex:
+                                                                                0,
+                                                                          )));
+                                                        },
+                                                        child: Text(
+                                                          widget.creatorFullName ==
+                                                                  null
+                                                              ? 'loading'
+                                                              : widget
+                                                                  .creatorFullName
+                                                                  .toString(),
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  ScreenUtil
+                                                                      .instance
+                                                                      .setSp(
+                                                                          12),
+                                                              color:
+                                                                  eventajaGreenTeal,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
                                                       ),
                                                       Text(
                                                           widget.creatorName ==
                                                                   null
-                                                              ? 'loading'
+                                                              ? ''
                                                               : widget
                                                                   .creatorName
                                                                   .toString(),
@@ -1574,7 +1608,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         color: Colors.white,
                                                         fontSize: ScreenUtil
                                                             .instance
-                                                            .setSp(13),
+                                                            .setSp(14),
                                                         fontWeight:
                                                             FontWeight.bold),
                                                   )),
@@ -3013,7 +3047,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   Widget showMap() {
     StaticMapsProvider mapProvider = new StaticMapsProvider(
       GOOGLE_API_KEY: 'AIzaSyDjNpeyufzT81GAhQkCe85x83kxzfA7qbI',
-      height: 200,
+      height: 215,
       width: MediaQuery.of(context).size.width.round(),
       latitude: widget.lat,
       longitude: widget.long,

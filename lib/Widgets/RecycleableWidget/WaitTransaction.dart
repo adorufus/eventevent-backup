@@ -191,9 +191,7 @@ class _WaitTransactionState extends State<WaitTransaction>
           ? Container(
               child: Center(child: CupertinoActivityIndicator(radius: 20)),
             )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
+          : ListView(
               children: <Widget>[
                 Container(
                   height: ScreenUtil.instance.setWidth(380),
@@ -280,11 +278,13 @@ class _WaitTransactionState extends State<WaitTransaction>
                                 Text(
                                   'Complete payment before ',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white, fontSize: 14),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
                                 ),
                                 Text('${widget.expDate}',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 12,
+                                        color: Colors.white,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold))
                               ],
                             )
@@ -326,11 +326,13 @@ class _WaitTransactionState extends State<WaitTransaction>
                 SizedBox(
                   height: ScreenUtil.instance.setWidth(20),
                 ),
-                Text(
-                  'TRANSFER TO',
-                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
+                Center(
+                  child: Text(
+                    'TRANSFER TO',
+                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
+                  ),
                 ),
-                SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                // Expanded(child: SizedBox(),),
                 GestureDetector(
                   onTap: () {
                     if (paymentData['payment_method_id'] == '2') {
@@ -375,10 +377,9 @@ class _WaitTransactionState extends State<WaitTransaction>
                           alignment: Alignment.centerLeft,
                           child: SizedBox(
                             height: ScreenUtil.instance.setWidth(60),
-                            child: Image.asset(
-                                bank_code.toLowerCase() == 'bni'
-                                    ? 'assets/drawable/bni.png'
-                                    : 'assets/drawable/bri.png'),
+                            child: Image.asset(bank_code.toLowerCase() == 'bni'
+                                ? 'assets/drawable/bni.png'
+                                : 'assets/drawable/bri.png'),
                           ),
                         ),
                         SizedBox(

@@ -256,7 +256,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: CachedNetworkImageProvider(
-                                      bannerData["banner"],
+                                      bannerData["banner_timeline"],
                                     ),
                                   )),
                             ),

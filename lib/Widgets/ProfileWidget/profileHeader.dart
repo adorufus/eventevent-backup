@@ -251,7 +251,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                       Container(
                         width: ScreenUtil.instance.setWidth(180),
                         child: Text(
-                          widget.bio == null ? '-' : widget.bio,
+                          widget.bio == null ? '' : widget.bio,
                           style: TextStyle(
                               fontSize: ScreenUtil.instance.setSp(12)),
                           maxLines: 2,
@@ -270,7 +270,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                           }
                         },
                         child: Text(
-                          widget.website == null ? '-' : widget.website,
+                          widget.website == null ? '' : widget.website,
                           style: TextStyle(
                               color: eventajaGreenTeal,
                               fontSize: ScreenUtil.instance.setSp(12)),
@@ -695,6 +695,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
       length: 2,
       initialIndex: widget.initialIndex,
       child: Column(
+        // mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
             color: Colors.white,
@@ -853,6 +854,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
               pictureFull: userTimelineList[i]['pictureFull'],
               type: userTimelineList[i]['type'],
               userId: userTimelineList[i]['userID'],
+              location: userTimelineList[i]['locationName'],
               impressionId:
                   userTimelineList[i]['impression']['data'].length == 0
                       ? ''

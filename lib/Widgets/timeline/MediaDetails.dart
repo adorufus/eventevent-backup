@@ -152,7 +152,10 @@ class _MediaDetailsState extends State<MediaDetails> {
         child: widget.isRest == true
             ? GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LoginRegisterWidget()));
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -173,82 +176,94 @@ class _MediaDetailsState extends State<MediaDetails> {
                   children: <Widget>[
                     Container(
                         width: MediaQuery.of(context).size.width,
-                        child: TypeAheadFormField(
-                          textFieldConfiguration: TextFieldConfiguration(
-                            controller: textEditingController,
-                            autofocus: widget.autoFocus,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
+                        height: 50,
+                        child: Container(
+                          decoration:
+                              BoxDecoration(color: Colors.white, boxShadow: [
+                            BoxShadow(
+                                offset: Offset(0, -1),
+                                blurRadius: 2,
+                                color: Color(0xff8a8a8b).withOpacity(.2),
+                                spreadRadius: 1.5)
+                          ]),
+                          child: TypeAheadFormField(
+                            textFieldConfiguration: TextFieldConfiguration(
+                              controller: textEditingController,
+                              autofocus: widget.autoFocus,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(0)),
-                                    borderSide:
-                                        BorderSide(color: Colors.black)),
-                                hintText: 'Add a comment..',
-                                suffix: GestureDetector(
-                                  onTap: () {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                    postComment(widget.mediaId,
-                                            textEditingController.text)
-                                        .then((response) {
-                                      var extractedData =
-                                          json.decode(response.body);
+                                        borderSide: BorderSide.none
+                                  ),
+                                  contentPadding: EdgeInsets.only(left: 10),
+                                  hintText: 'Add a comment..',
+                                  suffix: GestureDetector(
+                                    onTap: () {
+                                      FocusScope.of(context)
+                                          .requestFocus(FocusNode());
+                                      postComment(widget.mediaId,
+                                              textEditingController.text)
+                                          .then((response) {
+                                        var extractedData =
+                                            json.decode(response.body);
 
-                                      if (response.statusCode == 200 ||
-                                          response.statusCode == 201) {
-                                        print(response.body);
+                                        if (response.statusCode == 200 ||
+                                            response.statusCode == 201) {
+                                          print(response.body);
+                                          isLoading = false;
+                                          print('****Comment Posted!*****');
+                                          textEditingController.text = '';
+                                          setState(() {});
+                                        } else {
+                                          isLoading = false;
+                                          print(response.body);
+                                          print('****Comment Failed****');
+                                          print(
+                                              'reason: ${extractedData['desc']}');
+                                        }
+                                      }).catchError((e) {
                                         isLoading = false;
-                                        print('****Comment Posted!*****');
-                                        textEditingController.text = '';
-                                        setState(() {});
-                                      } else {
-                                        isLoading = false;
-                                        print(response.body);
                                         print('****Comment Failed****');
-                                        print(
-                                            'reason: ${extractedData['desc']}');
-                                      }
-                                    }).catchError((e) {
-                                      isLoading = false;
-                                      print('****Comment Failed****');
-                                      print('reason: ' + e.toString());
-                                    });
-                                  },
-                                  child: Container(
-                                      child: Text(
-                                    'Send',
-                                    style: TextStyle(
-                                        color: eventajaGreenTeal,
-                                        fontWeight: FontWeight.bold),
+                                        print('reason: ' + e.toString());
+                                      });
+                                    },
+                                    child: Container(
+                                        child: Text(
+                                      'Send',
+                                      style: TextStyle(
+                                          color: eventajaGreenTeal,
+                                          fontWeight: FontWeight.bold),
+                                    )),
                                   )),
-                                )),
-                          ),
-                          suggestionsCallback: (text) async {
-                            for (var texts in text.split(' ')) {
-                              print(texts);
-                              if (texts.startsWith('@')) {
-                                return await searchUser(texts);
+                            ),
+                            suggestionsCallback: (text) async {
+                              for (var texts in text.split(' ')) {
+                                print(texts);
+                                if (texts.startsWith('@')) {
+                                  return await searchUser(texts);
+                                }
                               }
-                            }
-                            return null;
-                          },
-                          direction: AxisDirection.up,
-                          itemBuilder: (context, suggestion) {
-                            return ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(suggestion['photo']),
-                              ),
-                              title: Text(suggestion['username']),
-                            );
-                          },
-                          transitionBuilder:
-                              (context, suggestionBox, controller) {
-                            return suggestionBox;
-                          },
-                          onSuggestionSelected: (suggestion) {
-                            textEditingController.text += suggestion;
-                          },
+                              return null;
+                            },
+                            direction: AxisDirection.up,
+                            itemBuilder: (context, suggestion) {
+                              return ListTile(
+                                leading: CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(suggestion['photo']),
+                                ),
+                                title: Text(suggestion['username']),
+                              );
+                            },
+                            transitionBuilder:
+                                (context, suggestionBox, controller) {
+                              return suggestionBox;
+                            },
+                            onSuggestionSelected: (suggestion) {
+                              textEditingController.text += suggestion;
+                            },
+                          ),
                         )
                         //TextFormField(
                         //   controller: textEditingController,
@@ -343,15 +358,15 @@ class _MediaDetailsState extends State<MediaDetails> {
             margin: EdgeInsets.symmetric(horizontal: 13),
             child: mediaDetails['media_content'] == null
                 ? Container(
-                  width: 200,
-                  child: PlaceholderLines(
-                    count: 10,
-                    align: TextAlign.left,
-                    lineHeight: 10,
-                    color: Colors.grey,
-                    animate: true,
-                  ),
-                )
+                    width: 200,
+                    child: PlaceholderLines(
+                      count: 10,
+                      align: TextAlign.left,
+                      lineHeight: 10,
+                      color: Colors.grey,
+                      animate: true,
+                    ),
+                  )
                 : Html(
                     data: mediaDetails['media_content'][0]['content_text'],
                     onLinkTap: (url) {
@@ -363,7 +378,7 @@ class _MediaDetailsState extends State<MediaDetails> {
             height: ScreenUtil.instance.setWidth(10),
           ),
           Divider(
-            color: Colors.black,
+            color: Colors.grey,
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 13),

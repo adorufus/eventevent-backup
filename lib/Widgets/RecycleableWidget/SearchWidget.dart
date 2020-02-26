@@ -77,7 +77,7 @@ class SearchState extends State<Search> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      width: ScreenUtil.instance.setWidth(280),
+                      width: ScreenUtil.instance.setWidth(300),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(40),
                           boxShadow: <BoxShadow>[
@@ -86,7 +86,7 @@ class SearchState extends State<Search> {
                                 color: Colors.black.withOpacity(0.1),
                                 spreadRadius: 1.5)
                           ]),
-                      height: ScreenUtil.instance.setWidth(32.95),
+                      height: ScreenUtil.instance.setWidth(50),
                       child: Material(
                         borderRadius: BorderRadius.circular(40),
                         child: TextFormField(
@@ -144,14 +144,20 @@ class SearchState extends State<Search> {
                       ),
                     ),
                     GestureDetector(
+                      behavior: HitTestBehavior.opaque,
                         onTap: () {
                           Navigator.of(context).pop();
                         },
-                        child: Text(
-                          'Cancel',
-                          style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(12),
-                              color: eventajaGreenTeal),
+                        child: Container(
+                          height: 50,
+                          child: Center(
+                            child: Text(
+                              'Cancel',
+                              style: TextStyle(
+                                  fontSize: ScreenUtil.instance.setSp(12),
+                                  color: eventajaGreenTeal),
+                            ),
+                          ),
                         ))
                   ],
                 ),

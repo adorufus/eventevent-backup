@@ -122,7 +122,7 @@ class PopularEventWidget extends StatelessWidget {
                       price.toUpperCase(),
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: ScreenUtil.instance.setSp(10),
+                          fontSize: ScreenUtil.instance.setSp(14),
                           fontWeight: FontWeight.bold),
                     )),
                   ),

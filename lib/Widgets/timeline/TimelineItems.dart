@@ -65,7 +65,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
     });
     
 
-    String url = BaseApi().apiUrl + '/timeline/list?X-API-KEY=$API_KEY&page=$currentPage';
+    // String url = BaseApi().apiUrl + '/timeline/list?X-API-KEY=$API_KEY&page=$currentPage';
 
     print('url: ' + urlType);
 
@@ -238,6 +238,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
               pictureFull: timelineList[i]['pictureFull'],
               type: timelineList[i]['type'],
               userId: timelineList[i]['userID'],
+              location: timelineList[i]['locationName'],
               impressionId: timelineList[i]['impression']['data'].length == 0 ? '' : impressionData['id'],
               loveCount: timelineList[i]['impression']['data'].length,
               isLoved: timelineList[i]['impression']['data'].length == 0 ? false : impressionData.containsValue(widget.currentUserId) == true ? true : false,

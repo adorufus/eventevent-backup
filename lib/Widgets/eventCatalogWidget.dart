@@ -259,7 +259,7 @@ class _EventCatalogState extends State<EventCatalog>
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: CachedNetworkImage(
-                          imageUrl: bannerData["image"],
+                          imageUrl: bannerData["image_avatar"],
                           fit: BoxFit.cover,
                           placeholder: (context, url) => Container()),
                     ),
@@ -1291,7 +1291,7 @@ class _EventCatalogState extends State<EventCatalog>
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(5),
                             child: CachedNetworkImage(
-                              imageUrl: collectionData[i]['image'],
+                              imageUrl: collectionData[i]['image_small'],
                               placeholder: (context, url) => Container(
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(5),

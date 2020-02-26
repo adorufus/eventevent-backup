@@ -260,8 +260,8 @@ class PaymentMethodState extends State<PaymentMethod> {
                                         color: Colors.white,
                                         boxShadow: [
                                           BoxShadow(
-                                              blurRadius: 1.5,
-                                              spreadRadius: 2,
+                                              blurRadius: 5,
+                                              spreadRadius: 5,
                                               color: Color(0xff8a8a8b)
                                                   .withOpacity(.5))
                                         ],

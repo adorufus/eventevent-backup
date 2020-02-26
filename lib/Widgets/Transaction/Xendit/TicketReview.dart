@@ -123,7 +123,7 @@ class _TicketReviewState extends State<TicketReview> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.9),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1,

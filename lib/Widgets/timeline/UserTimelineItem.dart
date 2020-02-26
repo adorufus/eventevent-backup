@@ -29,6 +29,7 @@ class TimelineItem extends StatefulWidget {
   final bool isLoved;
   final commentTotalRows;
   final String impressionId;
+  final String location;
 
   const TimelineItem(
       {Key key,
@@ -47,7 +48,7 @@ class TimelineItem extends StatefulWidget {
       this.loveCount,
       this.isLoved,
       this.impressionId,
-      this.dateTime})
+      this.dateTime, this.location})
       : super(key: key);
 
   @override
@@ -110,7 +111,7 @@ class _TimelineItemState extends State<TimelineItem>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Row(
@@ -178,10 +179,12 @@ class _TimelineItemState extends State<TimelineItem>
                                 )),
                           ]),
                       Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Text(
                             dateUploaded,
                             style: TextStyle(
+                              color: Colors.grey,
                                 fontSize: ScreenUtil.instance.setSp(10)),
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(4)),
@@ -253,12 +256,15 @@ class _TimelineItemState extends State<TimelineItem>
                           ))
                       : Container(),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       widget.type == 'love'
                           ? Container(
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(3),
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(spreadRadius: 3, blurRadius: 5, color: Color(0xff8a8a8b).withOpacity(.5))
+                                  ],
                                   image: DecorationImage(
                                       image: NetworkImage(
                                         widget.type == 'video'
@@ -285,18 +291,21 @@ class _TimelineItemState extends State<TimelineItem>
                             )
                           : Container(),
                       Container(
-                          margin: EdgeInsets.only(top: 15),
+                          margin: EdgeInsets.only(top: 0),
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                    widget.type == 'love'
-                                        ? widget.name
-                                        : widget.fullName,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(15))),
+                                Container(
+                                  width: 200,
+                                  child: Text(
+                                      widget.type == 'love'
+                                          ? widget.name
+                                          : widget.fullName,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(15)), overflow: TextOverflow.ellipsis,),
+                                ),
                                 SizedBox(
                                     height: ScreenUtil.instance.setWidth(8)),
                                 Row(
@@ -320,9 +329,9 @@ class _TimelineItemState extends State<TimelineItem>
                                                     ? 150
                                                     : 250),
                                             child: Text(
-                                              widget.name == null
+                                              widget.location == null
                                                   ? ''
-                                                  : widget.name,
+                                                  : widget.location == null ? widget.name : widget.location,
                                               maxLines: 1,
                                               style: TextStyle(
                                                   color: Color(0xFF8A8A8B)),

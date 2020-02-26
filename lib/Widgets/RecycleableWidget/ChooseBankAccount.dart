@@ -114,8 +114,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
                             boxShadow: <BoxShadow>[
                               BoxShadow(
                                   color: Colors.grey,
-                                  blurRadius: 1,
-                                  offset: Offset(1, 1))
+                                  blurRadius: 1,)
                             ],
                             borderRadius: BorderRadius.circular(15)),
                         child: Row(
@@ -126,7 +125,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
                               alignment: Alignment.centerLeft,
                               child: SizedBox(
                                 height:
-                                    vaList[i]['bank_code'] == 'BNI' ? 40 : 30,
+                                    vaList[i]['bank_code'] == 'BNI' ? 50 : 50,
                                 child: Image.asset(
                                     vaList[i]['bank_code'] == 'BNI'
                                         ? 'assets/drawable/bni.png'

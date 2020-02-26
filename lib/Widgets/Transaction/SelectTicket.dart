@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Transaction/SelectedTicketQuantity.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
@@ -89,7 +90,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.90),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 1,
         backgroundColor: Colors.white,
@@ -109,7 +110,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
           },
         ),
       ),
-      body: ListView.builder(
+      body: ticketListData == null ? HomeLoadingScreen().myTicketLoading() : ListView.builder(
         itemCount: ticketListData == null ? 0 : ticketListData.length,
         itemBuilder: (BuildContext context, i) {
           if (ticketListData[i]['event']['ticket_type']['type'] == 'paid' ||
@@ -201,9 +202,12 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                 Container(
                     height: ScreenUtil.instance.setWidth(170),
                     width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(left: 20, right: 5, top: 10),
+                    margin: EdgeInsets.only(left: 14, right: 14, top: 10),
                     decoration: BoxDecoration(
                         color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(blurRadius: 2, spreadRadius: 5, color: Color(0xff8a8a8b).withOpacity(0.2))
+                        ],
                         borderRadius: BorderRadius.circular(10)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -290,7 +294,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                     //     : itemPrice.toUpperCase(),
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: ScreenUtil.instance.setSp(10),
+                                        fontSize: ScreenUtil.instance.setSp(14),
                                         fontWeight: FontWeight.bold),
                                   )),
                                 ),

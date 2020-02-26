@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/timeline/LatestMediaItem.dart';
 import 'package:eventevent/Widgets/timeline/MediaDetails.dart';
@@ -233,16 +234,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
   Widget popularEvent() {
     return Container(
         child: popularMedia == null
-            ? Center(
-                child: Container(
-                  width: ScreenUtil.instance.setWidth(25),
-                  height: ScreenUtil.instance.setWidth(25),
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: CupertinoActivityIndicator(radius: 20),
-                  ),
-                ),
-              )
+            ? HomeLoadingScreen().myTicketLoading()
             : SmartRefresher(
                 enablePullDown: true,
                 enablePullUp: true,
@@ -354,16 +346,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
   Widget discoverEvent() {
     return Container(
         child: popularMedia == null
-            ? Center(
-                child: Container(
-                  width: ScreenUtil.instance.setWidth(25),
-                  height: ScreenUtil.instance.setWidth(25),
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: CupertinoActivityIndicator(radius: 20),
-                  ),
-                ),
-              )
+            ? HomeLoadingScreen().myTicketLoading()
             : SmartRefresher(
                 enablePullDown: true,
                 enablePullUp: true,

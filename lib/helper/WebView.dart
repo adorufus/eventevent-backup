@@ -32,8 +32,8 @@ class WebViewTestState extends State<WebViewTest> {
     )..init(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: eventajaGreenTeal,
-        title: Text(headerText, style: TextStyle(color: Colors.white),),
+        backgroundColor: Colors.white,
+        title: Text(headerText, style: TextStyle(color: eventajaGreenTeal),),
         actions: <Widget>[
           Padding(
             padding: EdgeInsets.only(right: 13),
@@ -44,7 +44,7 @@ class WebViewTestState extends State<WebViewTest> {
           onTap: (){
             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false,)), ModalRoute.withName('/Dashboard'));
           },
-          child: Icon(Icons.close, color: Colors.white,),
+          child: Icon(Icons.close, color: eventajaGreenTeal,),
         ),
       ),
       body: Container(
