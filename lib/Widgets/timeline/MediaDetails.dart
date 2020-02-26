@@ -523,8 +523,18 @@ class _MediaDetailsState extends State<MediaDetails> {
   }
 
   Future<http.Response> getMediaDetails() async {
+    String baseUrl = '';
+
+    setState(() {
+      if (widget.isRest == true) {
+        baseUrl = BaseApi().restUrl;
+      } else if (widget.isRest == false) {
+        baseUrl = BaseApi().apiUrl;
+      }
+    });
+
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String url = BaseApi().restUrl +
+    String url = baseUrl +
         '/media/detail?X-API-KEY=$API_KEY&id=${widget.mediaId}';
 
     final response = await http.get(url, headers: {

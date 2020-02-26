@@ -249,7 +249,7 @@ class _SelectedTicketQuantityWidgetState
             height: ScreenUtil.instance.setWidth(250),
             width: ScreenUtil.instance.setWidth(110),
             child: Image(
-                image: NetworkImage(widget.eventImage.toString()),
+                image: widget.eventImage == 'assets/grey-fade.jpg' ? AssetImage('assets/grey-fade.jpg') : NetworkImage(widget.eventImage.toString()),
                 fit: BoxFit.fill),
           ),
           Container(

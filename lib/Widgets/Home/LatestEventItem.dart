@@ -68,7 +68,9 @@ class LatestEventItem extends StatelessWidget {
                 MiniDate(
                   date: date,
                 ),
-                SizedBox(height: ScreenUtil.instance.setWidth(7)),
+                Expanded(
+                  child: SizedBox(),
+                ),
                 Container(
                   width: MediaQuery.of(context).size.width - 146,
                   height: ScreenUtil.instance.setWidth(20),
@@ -82,7 +84,7 @@ class LatestEventItem extends StatelessWidget {
                     textWidthBasis: TextWidthBasis.parent,
                   ),
                 ),
-                SizedBox(height: ScreenUtil.instance.setWidth(5)),
+                
                 Container(
                   height: ScreenUtil.instance.setWidth(10),
                   child: Row(
@@ -107,7 +109,9 @@ class LatestEventItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: ScreenUtil.instance.setWidth(7)),
+                Expanded(
+                  child: SizedBox(),
+                ),
                 Row(
                   children: <Widget>[
                     type == 'paid' ||
@@ -122,7 +126,7 @@ class LatestEventItem extends StatelessWidget {
                               )
                             : Icon(
                                 CupertinoIcons.circle_filled,
-                                color: itemPrice == 'sales_ended'
+                                color: itemPrice == 'sales_ended' || itemPrice == 'COMING SOON'
                                     ? Colors.yellowAccent
                                     : Colors.red,
                                 size: 15,
@@ -146,7 +150,9 @@ class LatestEventItem extends StatelessWidget {
                         : Container(),
                   ],
                 ),
-                SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                Expanded(
+                  child: SizedBox(),
+                ),
                 Container(
                   height: ScreenUtil.instance.setWidth(28),
                   width: ScreenUtil.instance.setWidth(133),
@@ -169,6 +175,7 @@ class LatestEventItem extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   )),
                 ),
+                SizedBox(height: 20,)
               ],
             ),
           )

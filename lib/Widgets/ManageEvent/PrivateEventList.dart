@@ -49,6 +49,7 @@ class PrivateEventListState extends State<PrivateEventList> {
           setState(() {
             isEmpty = false;
             privateData = extractedData['data']['private']['data'];
+            print(privateData);
           });
         }
       } else {
@@ -298,6 +299,7 @@ class PrivateEventListState extends State<PrivateEventList> {
     String uri = BaseApi().apiUrl +
         '/user/${widget.type}?X-API-KEY=$API_KEY&page=$currentPage&userID=${widget.userId == prefs.getString('Last User ID') ? prefs.getString('Last User ID') : widget.userId}&isPrivate=1';
 
+    print(uri);
     final response = await http.get(
       uri,
       headers: {

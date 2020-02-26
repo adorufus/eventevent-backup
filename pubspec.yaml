@@ -114,8 +114,8 @@ dev_dependencies:
   flutter_launcher_icons: ^0.7.4
 
 flutter_icons:
-  image_path_android: "assets/eventevent_app_icon.jpg"
-  image_path_ios: "assets/eventevent_app_icon.jpg"
+  image_path_android: "assets/eventevent_icon_android.png"
+  image_path_ios: "assets/eventevent_icon_ios.png"
   android: true
   ios: true
 

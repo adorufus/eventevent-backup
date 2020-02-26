@@ -51,6 +51,7 @@ class PublicEventListState extends State<PublicEventList> {
           print(response.body);
           setState(() {
             publicData = extractedData['data']['public']['data'];
+            print(publicData);
           });
         }
       } else {
@@ -243,7 +244,7 @@ class PublicEventListState extends State<PublicEventList> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       EventDetailLoadingScreen(
-                                          eventId: publicData[i]['eventID'])));
+                                          eventId: publicData[i]['id'])));
                         },
                         child: new LatestEventItem(
                           image: publicData[i]['picture'],
@@ -366,7 +367,7 @@ class PublicEventListState extends State<PublicEventList> {
     print(prefs.getString('Last User ID'));
     String uri = BaseApi().apiUrl +
         '/user/${widget.type}?X-API-KEY=$API_KEY&page=$currentPage&userID=${widget.userId == prefs.getString('Last User ID') ? prefs.getString('Last User ID') : widget.userId}&isPrivate=0';
-
+        print(uri);
     print(uri);
     final response = await http.get(
       uri,

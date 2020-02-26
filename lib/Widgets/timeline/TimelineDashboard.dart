@@ -256,7 +256,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: CachedNetworkImageProvider(
-                                      bannerData["banner_timeline"],
+                                      bannerData["banner_avatar"],
                                     ),
                                   )),
                             ),
@@ -1137,11 +1137,22 @@ class TimelineDashboardState extends State<TimelineDashboard>
   }
 
   Future<http.Response> getLatestMediaPhoto() async {
-    String url = BaseApi().restUrl +
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String baseUrl = '';
+
+    setState(() {
+      if (widget.isRest == true) {
+        baseUrl = BaseApi().restUrl;
+      } else if (widget.isRest == false) {
+        baseUrl = BaseApi().apiUrl;
+      }
+    });
+
+    String url = baseUrl +
         '/media?X-API-KEY=$API_KEY&search=&page=1&limit=5&type=photo&status=latest';
 
     final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
+        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature, 'cookie': preferences.getString('Session')});
 
     print('*******GETTING RESPONSE*******');
     print('HTTP RESPONSE CODE: ' + response.statusCode.toString());
@@ -1151,11 +1162,22 @@ class TimelineDashboardState extends State<TimelineDashboard>
   }
 
   Future<http.Response> getLatestMediaVideo() async {
-    String url = BaseApi().restUrl +
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String baseUrl = '';
+
+    setState(() {
+      if (widget.isRest == true) {
+        baseUrl = BaseApi().restUrl;
+      } else if (widget.isRest == false) {
+        baseUrl = BaseApi().apiUrl;
+      }
+    });
+
+    String url = baseUrl +
         '/media?X-API-KEY=$API_KEY&search=&page=1&limit=5&type=video&status=latest';
 
     final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
+        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature, 'cookie': preferences.getString('Session')});
 
     print('*******GETTING RESPONSE*******');
     print('HTTP RESPONSE CODE: ' + response.statusCode.toString());
@@ -1190,21 +1212,43 @@ class TimelineDashboardState extends State<TimelineDashboard>
   }
 
   Future<http.Response> getPopularMediaPhoto() async {
-    String url = BaseApi().restUrl +
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String baseUrl = '';
+
+    setState(() {
+      if (widget.isRest == true) {
+        baseUrl = BaseApi().restUrl;
+      } else if (widget.isRest == false) {
+        baseUrl = BaseApi().apiUrl;
+      }
+    });
+
+    String url = baseUrl +
         '/media?X-API-KEY=$API_KEY&search=&page=1&limit=10&type=photo&status=popular';
 
     final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
+        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature, 'cookie': preferences.getString('Session')});
 
     return response;
   }
 
   Future<http.Response> getPopularMediaVideo() async {
-    String url = BaseApi().restUrl +
+    String baseUrl = '';
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    setState(() {
+      if (widget.isRest == true) {
+        baseUrl = BaseApi().restUrl;
+      } else if (widget.isRest == false) {
+        baseUrl = BaseApi().apiUrl;
+      }
+    });
+
+    String url = baseUrl +
         '/media?X-API-KEY=$API_KEY&search=&page=1&limit=10&type=video&status=popular';
 
     final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
+        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature, 'cookie': preferences.getString('Session')});
 
     print('*******GETTING RESPONSE*******');
     print('HTTP RESPONSE CODE: ' + response.statusCode.toString());
@@ -1215,12 +1259,21 @@ class TimelineDashboardState extends State<TimelineDashboard>
 
   Future<http.Response> getBanner() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String baseUrl = '';
 
-    String url = BaseApi().restUrl +
+    setState(() {
+      if (widget.isRest == true) {
+        baseUrl = BaseApi().restUrl;
+      } else if (widget.isRest == false) {
+        baseUrl = BaseApi().apiUrl;
+      }
+    });
+
+    String url = baseUrl +
         '/media/banner?X-API-KEY=$API_KEY&search=&page=1&limit=10';
 
     final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
+        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature, 'cookie': prefs.getString('Session')});
 
     return response;
   }

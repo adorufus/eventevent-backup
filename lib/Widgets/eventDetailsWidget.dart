@@ -1058,13 +1058,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           ],
                                           image: DecorationImage(
                                               image: widget.detailData[
-                                                          'photo_timeline'] ==
+                                                          'photo'] ==
                                                       null
                                                   ? AssetImage(
                                                       'assets/grey-fade.jpg')
                                                   : NetworkImage(
                                                       widget.detailData[
-                                                          'photo_timeline']),
+                                                          'photo']),
                                               fit: BoxFit.fill)),
                                     ),
                                     Container(
@@ -1956,7 +1956,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             userId: widget
                                                                         .detailData[
                                                                     'going'][
-                                                                'data'][i]['id'],
+                                                                'data'][i]['userID'],
                                                           )));
                                             },
                                             child: new Container(
