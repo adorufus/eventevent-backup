@@ -370,7 +370,6 @@ class _MediaDetailsState extends State<MediaDetails> {
                 : Html(
                     data: mediaDetails['media_content'][0]['content_text'],
                     onLinkTap: (url) {
-                      print('loading..');
                     },
                   ),
           ),
@@ -406,7 +405,7 @@ class _MediaDetailsState extends State<MediaDetails> {
                   isLoading = false;
                 }
                 if (snapshot.data == null) {
-                  print('loading');
+//                  print('loading');
                 } else {
                   // dataLength = snapshot.data['data'].length;
                   print(snapshot.data);
@@ -537,9 +536,10 @@ class _MediaDetailsState extends State<MediaDetails> {
     String url = baseUrl +
         '/media/detail?X-API-KEY=$API_KEY&id=${widget.mediaId}';
 
+    print(url);
+
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature,
       'cookie': preferences.getString('Session')
     });
 
@@ -557,10 +557,22 @@ class _MediaDetailsState extends State<MediaDetails> {
 
     String url = BaseApi().apiUrl + '/media/comment';
 
-    final response = await http.post(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
-    }, body: {
+    Map<String, dynamic> headers;
+    if(widget.isRest == true){
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': signature
+      };
+    } else {
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': prefs.getString('Session')
+      };
+    }
+
+    print(headers);
+
+    final response = await http.post(url, headers: headers, body: {
       'X-API-KEY': API_KEY,
       'media_id': mediaId,
       'comment': comment,

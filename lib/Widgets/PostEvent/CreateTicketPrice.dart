@@ -31,12 +31,12 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          // leading: GestureDetector(
-          //   onTap: (){
-          //     Navigator.popUntil(context, ModalRoute.withName('/Dashboard'));
-          //   },
-          //   child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal,),
-          // ),
+          leading: GestureDetector(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal,),
+          ),
           centerTitle: true,
           title: Text(
             'CREATE TICKET',

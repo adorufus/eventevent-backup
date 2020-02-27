@@ -26,7 +26,8 @@ class SeeAllMediaItem extends StatefulWidget {
       this.initialIndex,
       this.isVideo,
       this.likeCount,
-      this.commentCount, @required this.isRest})
+      this.commentCount,
+      @required this.isRest})
       : super(key: key);
 
   @override
@@ -55,27 +56,51 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
       newPage += 1;
     });
 
-    getPopularMedia(newPage: newPage).then((response) {
-      var extractedData = json.decode(response.body);
-      List updatedData = extractedData['data'];
+    if (currentTabIndex == 0) {
+      getPopularMedia(newPage: newPage).then((response) {
+        var extractedData = json.decode(response.body);
+        List updatedData = extractedData['data']['data'];
 
-      if (response.statusCode == 200) {
-        setState(() {
-          if (updatedData == null) {
-            refreshController.loadNoData();
-          }
-          print('data: ' + updatedData.toString());
-          popularMedia.addAll(updatedData);
-        });
-        if (mounted) setState(() {});
-        refreshController.loadComplete();
-      } else if (extractedData['desc'] == 'Media Posts list is not found' ||
-          updatedData == null) {
-        refreshController.loadNoData();
-      } else {
-        refreshController.loadFailed();
-      }
-    });
+        if (response.statusCode == 200) {
+          setState(() {
+            if (updatedData == null) {
+              refreshController.loadNoData();
+            }
+            print('data: ' + updatedData.toString());
+            popularMedia.addAll(updatedData);
+          });
+          if (mounted) setState(() {});
+          refreshController.loadComplete();
+        } else if (extractedData['desc'] == 'Media Posts list is not found' ||
+            updatedData == null) {
+          refreshController.loadNoData();
+        } else {
+          refreshController.loadFailed();
+        }
+      });
+    } else {
+      getLatestMedia(newPage: newPage).then((response) {
+        var extractedData = json.decode(response.body);
+        List updatedData = extractedData['data']['data'];
+
+        if (response.statusCode == 200) {
+          setState(() {
+            if (updatedData == null) {
+              refreshController.loadNoData();
+            }
+            print('data: ' + updatedData.toString());
+            latestMedia.addAll(updatedData);
+          });
+          if (mounted) setState(() {});
+          refreshController.loadComplete();
+        } else if (extractedData['desc'] == 'Media Posts list is not found' ||
+            updatedData == null) {
+          refreshController.loadNoData();
+        } else {
+          refreshController.loadFailed();
+        }
+      });
+    }
   }
 
   @override
@@ -291,7 +316,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                             MaterialPageRoute(
                                 builder: (context) => widget.isVideo == false
                                     ? MediaDetails(
-                                      isRest: widget.isRest,
+                                        isRest: widget.isRest,
                                         userPicture: popularMedia[i]['creator']
                                             ['photo'],
                                         articleDetail: popularMedia[i]
@@ -306,13 +331,12 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                                         isVideo: false,
                                       )
                                     : MediaDetails(
-                                      isRest: widget.isRest,
+                                        isRest: widget.isRest,
                                         isVideo: true,
                                         videoUrl: popularMedia[i]['video'],
-                                        youtubeUrl: popularMedia[i]
-                                            ['youtube'],
-                                        userPicture: popularMedia[i]
-                                            ['creator']['photo'],
+                                        youtubeUrl: popularMedia[i]['youtube'],
+                                        userPicture: popularMedia[i]['creator']
+                                            ['photo'],
                                         articleDetail: popularMedia[i]
                                             ['content'],
                                         imageCount: 'img' + i.toString(),
@@ -320,8 +344,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                                             ['username'],
                                         imageUri: popularMedia[i]
                                             ['thumbnail_timeline'],
-                                        mediaTitle: popularMedia[i]
-                                            ['title'],
+                                        mediaTitle: popularMedia[i]['title'],
                                         autoFocus: false,
                                         mediaId: popularMedia[i]['id'],
                                       )));
@@ -403,7 +426,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                             MaterialPageRoute(
                                 builder: (context) => widget.isVideo == false
                                     ? MediaDetails(
-                                      isRest: widget.isRest,
+                                        isRest: widget.isRest,
                                         userPicture: latestMedia[i]['creator']
                                             ['photo'],
                                         articleDetail: latestMedia[i]
@@ -418,13 +441,12 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                                         isVideo: false,
                                       )
                                     : MediaDetails(
-                                      isRest: widget.isRest,
+                                        isRest: widget.isRest,
                                         isVideo: true,
                                         videoUrl: latestMedia[i]['video'],
-                                        youtubeUrl: latestMedia[i]
-                                            ['youtube'],
-                                        userPicture: latestMedia[i]
-                                            ['creator']['photo'],
+                                        youtubeUrl: latestMedia[i]['youtube'],
+                                        userPicture: latestMedia[i]['creator']
+                                            ['photo'],
                                         articleDetail: latestMedia[i]
                                             ['content'],
                                         imageCount: 'img' + i.toString(),
@@ -432,8 +454,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                                             ['username'],
                                         imageUri: latestMedia[i]
                                             ['thumbnail_timeline'],
-                                        mediaTitle: latestMedia[i]
-                                            ['title'],
+                                        mediaTitle: latestMedia[i]['title'],
                                         autoFocus: false,
                                         mediaId: latestMedia[i]['id'],
                                       )));
@@ -459,12 +480,29 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
     int currentPage = 1;
     String type = 'photo';
     String status = 'popular';
+    Map<String, String> headers;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String baseApi;
 
     setState(() {
       if (newPage != null) {
         currentPage += newPage;
       }
       print(currentPage);
+
+      if (widget.isRest == true) {
+        baseApi = BaseApi().restUrl;
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'signature': signature,
+        };
+      } else {
+        baseApi = BaseApi().apiUrl;
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'cookie': prefs.getString('Session'),
+        };
+      }
     });
 
     if (widget.isVideo == true) {
@@ -477,25 +515,41 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
       });
     }
 
-    String url = BaseApi().restUrl +
+    String url = baseApi +
         '/media?X-API-KEY=$API_KEY&search=&page=$currentPage&limit=10&type=$type&status=popular';
 
-    final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
+    final response = await http.get(url, headers: headers);
 
     return response;
   }
 
   Future<http.Response> getLatestMedia({int newPage}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     int currentPage = 1;
     String type = 'photo';
     String status = 'popular';
+    Map<String, String> headers;
+    String baseApi;
 
     setState(() {
       if (newPage != null) {
         currentPage += newPage;
       }
       print(currentPage);
+
+      if (widget.isRest == true) {
+        baseApi = BaseApi().restUrl;
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'signature': signature,
+        };
+      } else {
+        baseApi = BaseApi().apiUrl;
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'cookie': prefs.getString('Session'),
+        };
+      }
     });
 
     if (widget.isVideo == true) {
@@ -508,11 +562,10 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
       });
     }
 
-    String url = BaseApi().restUrl +
+    String url = baseApi +
         '/media?X-API-KEY=$API_KEY&search=&page=$currentPage&limit=10&type=$type&status=latest';
 
-    final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
+    final response = await http.get(url, headers: headers);
 
     return response;
   }
