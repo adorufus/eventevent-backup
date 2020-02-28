@@ -266,7 +266,7 @@ class CreditCardInputState extends State<CreditCardInput> {
 
   Future checkMidtransCC() async {
     String baseApi = BaseApi.midtransUrlProd +
-        '/v2/token?client_key=$MIDTRANS_CLIENT_KEY&card_number=$cardNumber&card_exp_month=${expiryDate.split("/")[0]}&card_exp_year=${expiryDate.split("/")[1]}&card_cvv=$cvvCode';
+        '/v2/card/token?client_key=$MIDTRANS_CLIENT_KEY&card_number=${cardNumber.replaceAll(" ", "")}&card_exp_month=${expiryDate.split("/")[0]}&card_exp_year=20${expiryDate.split("/")[1]}&card_cvv=$cvvCode';
     print(baseApi);
     final response = await http.get(baseApi, headers: {
       'Accept': 'application/json',
@@ -290,7 +290,7 @@ class CreditCardInputState extends State<CreditCardInput> {
       'credit_card': {
         'token_id': token_id,
         'authentication': true,
-        'type': 'authorize'
+        'save_token_id': true
       },
       'transaction_details': {
         "order_id": paymentData['transaction_code'],

@@ -45,10 +45,10 @@ class FinishPostEventState extends State<FinishPostEvent>{
         width: MediaQuery.of(context).size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-              height: ScreenUtil.instance.setWidth(450),
+              height: ScreenUtil.instance.setWidth(200),
               width: MediaQuery.of(context).size.width,
               child: Image.asset('assets/icons/Icon_finish_create_event.png')
             ),

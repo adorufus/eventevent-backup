@@ -131,7 +131,7 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             image: DecorationImage(
-                                image: ExactAssetImage(posterFile.path),
+                                image: FileImage(posterFile),
                                 fit: BoxFit.fill)),
                       ),
               )
@@ -196,7 +196,8 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
           ratioY: 3.0,
         ),
         maxWidth: 512,
-        maxHeight: 512);
+        maxHeight: 512,
+      );
 
     print(croppedImage.path);
     setState(() {
