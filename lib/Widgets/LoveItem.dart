@@ -75,7 +75,7 @@ class _LoveItemState extends State<LoveItem> {
         }
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 13),
+        padding: EdgeInsets.symmetric(horizontal: widget.isComment == false ? _loveCount < 1 ? 7.5 : 13 : widget.commentCount == "0" ? 7.5 : 13),
         height: ScreenUtil.instance.setWidth(30),
         decoration: BoxDecoration(
             color: Colors.white,
@@ -99,11 +99,14 @@ class _LoveItemState extends State<LoveItem> {
                     : eventajaGreenTeal,
             scale: 3.5,
           ),
-          SizedBox(width: ScreenUtil.instance.setWidth(5)),
-          Text(widget.isComment == false ? _loveCount.toString() : widget.commentCount,
+          widget.isComment == false ? _loveCount < 1 ? Container() : SizedBox(width: ScreenUtil.instance.setWidth(5)) : widget.commentCount == "0" ? Container() : SizedBox(width: ScreenUtil.instance.setWidth(5)),
+          widget.isComment == false ? _loveCount < 1 ? Container() : Text(_loveCount.toString(),
               style: TextStyle(
                   color: Color(
-                      0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
+                      0xFF8A8A8B))) :  widget.commentCount == "0" ? Container() : Text(widget.commentCount,
+              style: TextStyle(
+                  color: Color(
+                      0xFF8A8A8B)))
         ]),
       ),
     );

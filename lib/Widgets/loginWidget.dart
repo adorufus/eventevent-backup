@@ -365,9 +365,9 @@ class _LoginWidgetState extends State<LoginWidget> {
     String url = BaseApi().apiUrl +
         '/signin/google?X-API-KEY=$API_KEY&access_token=$access_token';
 
-        setState((){
-          isLoading = true;
-        });
+    setState(() {
+      isLoading = true;
+    });
 
     final response = await http.get(
       url,
@@ -379,15 +379,28 @@ class _LoginWidgetState extends State<LoginWidget> {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      setState((){
+      setState(() {
         isLoading = false;
       });
-      
+
       var extractedData = json.decode(response.body);
 
       prefs.setString('Session', response.headers['set-cookie']);
       prefs.setString('Last User ID', extractedData['data']['id']);
       prefs.setBool('isUsingGoogle', true);
+      prefs.setString('UserPicture', extractedData['data']['pictureAvatarURL']);
+      prefs.setString('UserFirstname', extractedData['data']['fullName']);
+      prefs.setString('UserUsername', extractedData['data']['username']);
+
+      getProfileDetail(extractedData['data']['id']).then((response) {
+        var profileData = json.decode(response.body);
+        prefs.setString('UserLastname', profileData['data'][0]['lastName']);
+
+        print(prefs.getString('UserLastname'));
+        print(prefs.getString('UserPicture'));
+        print(prefs.getString('UserFirstname'));
+        print(prefs.getString('UserUsername'));
+      });
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -424,6 +437,22 @@ class _LoginWidgetState extends State<LoginWidget> {
 
       preferences.setString('Session', response.headers['set-cookie']);
       preferences.setString('Last User ID', extractedData['data']['id']);
+      preferences.setString(
+          'UserPicture', extractedData['data']['pictureAvatarURL']);
+      preferences.setString('UserFirstname', extractedData['data']['fullName']);
+      preferences.setString('UserUsername', extractedData['data']['username']);
+
+      getProfileDetail(extractedData['data']['id']).then((response) {
+        var profileData = json.decode(response.body);
+        preferences.setString(
+            'UserLastname', profileData['data'][0]['lastName']);
+
+        print(preferences.getString('UserLastname'));
+        print(preferences.getString('UserPicture'));
+        print(preferences.getString('UserFirstname'));
+        print(preferences.getString('UserUsername'));
+      });
+
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -458,6 +487,25 @@ class _LoginWidgetState extends State<LoginWidget> {
             builder: (BuildContext context) => RegisterFacebook()));
       }
     }
+  }
+
+  Future<http.Response> getProfileDetail(String userId) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    String url =
+        BaseApi().apiUrl + '/user/detail?X-API-KEY=$API_KEY&userID=$userId';
+
+    final response = await http.get(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': preferences.getString('Session')
+    });
+
+    print('*** GET PROFILE DETAIL ***');
+
+    print(response.statusCode);
+    print(response.body);
+
+    return response;
   }
 
   void initiateFacebookLogin() async {
@@ -529,6 +577,20 @@ class _LoginWidgetState extends State<LoginWidget> {
       ///simpan sesi saat ini
       setState(() {
         prefs.setString('Session', response.headers['set-cookie']);
+        prefs.setString(
+            'UserPicture', responseJson['data']['pictureAvatarURL']);
+        prefs.setString('UserFirstname', responseJson['data']['fullName']);
+        prefs.setString('UserUsername', responseJson['data']['username']);
+
+        getProfileDetail(responseJson['data']['id']).then((response) {
+          var profileData = json.decode(response.body);
+          prefs.setString('UserLastname', profileData['data'][0]['lastName']);
+
+          print(prefs.getString('UserLastname'));
+          print(prefs.getString('UserPicture'));
+          print(prefs.getString('UserFirstname'));
+          print(prefs.getString('UserUsername'));
+        });
       });
 
       var extractedData = json.decode(response.body);

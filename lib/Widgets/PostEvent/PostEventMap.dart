@@ -109,23 +109,26 @@ class PostEventMapState extends State<PostEventMap> {
     );
 
     return Container(
-      height: ScreenUtil.instance.setWidth(300),
+      height: ScreenUtil.instance.setWidth(200),
       width: MediaQuery.of(context).size.width,
-      child: Stack(alignment: Alignment.bottomCenter, children: <Widget>[
+      child: Stack(alignment: Alignment.topCenter, children: <Widget>[
         GestureDetector(
             onTap: () {
               showPlacePicker();
             },
-            child: placeName == '' ? Container(
-              height: 300,
-              width: 300,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/map_bw.jpg'),
-                  colorFilter: ColorFilter.mode(Colors.black.withOpacity(.2), BlendMode.dstATop)
-                )
-              ),
-            ) : mapProvider),
+            child: placeName == ''
+                ? Container(
+                    height: 200,
+                    width: 600,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/map_bw.jpg'),
+                            fit: BoxFit.cover,
+                            colorFilter: ColorFilter.mode(
+                                Colors.black.withOpacity(.2),
+                                BlendMode.dstATop))),
+                  )
+                : mapProvider),
         Center(
           child: SizedBox(
             height: ScreenUtil.instance.setWidth(50),
@@ -260,7 +263,9 @@ class PostEventMapState extends State<PostEventMap> {
                   Container(
                     height: MediaQuery.of(context).size.height / 1.32,
                     child: ListView(children: <Widget>[
-                      showMap(),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: showMap()),
                       SizedBox(
                         height: ScreenUtil.instance.setWidth(20),
                       ),
@@ -276,21 +281,25 @@ class PostEventMapState extends State<PostEventMap> {
                       SizedBox(
                         height: ScreenUtil.instance.setWidth(12),
                       ),
-                      placeName == '' ? Container(
-                        child: Text('Select event location from the map above', style: TextStyle(color: Colors.grey),)
-                      ) : Container(
-                        height: ScreenUtil.instance.setWidth(80),
-                        width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.only(right: 18),
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                            color: eventajaGreenTeal,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Text(
-                          placeName,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
+                      placeName == ''
+                          ? Container(
+                              child: Text(
+                              'Select event location from the map above',
+                              style: TextStyle(color: Colors.grey),
+                            ))
+                          : Container(
+                              height: ScreenUtil.instance.setWidth(80),
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.only(right: 18),
+                              padding: EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                  color: eventajaGreenTeal,
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Text(
+                                placeName,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
                       SizedBox(
                         height: ScreenUtil.instance.setWidth(20),
                       ),

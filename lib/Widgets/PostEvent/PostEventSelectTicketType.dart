@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Transaction/ProcessingPayment.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -30,7 +31,7 @@ class SelectTicketType extends StatefulWidget {
 
 class SelectTicketTypeState extends State<SelectTicketType> {
   GlobalKey<ScaffoldState> thisState = new GlobalKey<ScaffoldState>();
-  List<dynamic> ticketType = new List<dynamic>();
+  List<dynamic> ticketType;
   String imageUri;
   String isPrivate;
   String base64Image;
@@ -96,7 +97,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
             style: TextStyle(color: eventajaGreenTeal),
           ),
         ),
-        body: Container(
+        body: ticketType == null ? HomeLoadingScreen().myTicketLoading() : Container(
           color: Colors.white,
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,

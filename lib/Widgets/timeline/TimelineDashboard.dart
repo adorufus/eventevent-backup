@@ -256,7 +256,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: CachedNetworkImageProvider(
-                                      bannerData["banner_timeline"],
+                                      bannerData["banner_avatar"],
                                     ),
                                   )),
                             ),
@@ -640,12 +640,14 @@ class TimelineDashboardState extends State<TimelineDashboard>
                     context,
                     MaterialPageRoute(
                         builder: (context) => MediaDetails(
+                              videoUrl: null,
+                              youtubeUrl: null,
                               isRest: widget.isRest,
                               userPicture: mediaData[i]['creator']['photo'],
                               articleDetail: mediaData[i]['content'],
                               imageCount: 'img' + i.toString(),
                               username: mediaData[i]['creator']['username'],
-                              imageUri: mediaData[i]['banner_timeline'],
+                              imageUri: mediaData[i]['banner_avatar'],
                               mediaTitle: mediaData[i]['title'],
                               autoFocus: false,
                               mediaId: mediaData[i]['id'],
@@ -655,7 +657,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
               child: MediaItem(
                 isRest: widget.isRest,
                 isVideo: false,
-                image: mediaData[i]['banner_timeline'],
+                image: mediaData[i]['banner_avatar'],
                 title: mediaData[i]['title'],
                 // youtube: latestMediaVideo[i]['youtube'] ?? '/',
                 // videoUrl: latestMediaVideo[i]['video'] ?? '/',
@@ -867,7 +869,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                 username: latestMediaPhoto[i]['creator']
                                     ['username'],
                                 imageUri: latestMediaPhoto[i]
-                                    ['banner_timeline'],
+                                    ['banner_avatar'],
                                 mediaTitle: latestMediaPhoto[i]['title'],
                                 autoFocus: false,
                                 mediaId: latestMediaPhoto[i]['id'],
@@ -973,7 +975,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                     videoUrl: popularMediaVideo[i]['video'],
                     youtube: popularMediaVideo[i]['youtube'],
                     isVideo: true,
-                    image: popularMediaVideo[i]['thumbnail_timeline'],
+                    image: popularMediaVideo[i]['thumbnail_avatar'],
                     title: popularMediaVideo[i]['title'],
                     username: popularMediaVideo[i]['creator']['username'],
                     userPicture: popularMediaVideo[i]['creator']['photo'],
@@ -1137,11 +1139,30 @@ class TimelineDashboardState extends State<TimelineDashboard>
   }
 
   Future<http.Response> getLatestMediaPhoto() async {
-    String url = BaseApi().restUrl +
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    setState(() {
+      if (widget.isRest == true) {
+        baseUrl = BaseApi().restUrl;
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'signature': signature,
+        };
+      } else if (widget.isRest == false) {
+        baseUrl = BaseApi().apiUrl;
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'cookie': preferences.getString('Session'),
+        };
+      }
+    });
+
+    String url = baseUrl +
         '/media?X-API-KEY=$API_KEY&search=&page=1&limit=5&type=photo&status=latest';
 
-    final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
+    final response = await http.get(url, headers: headers);
 
     print('*******GETTING RESPONSE*******');
     print('HTTP RESPONSE CODE: ' + response.statusCode.toString());
@@ -1151,11 +1172,30 @@ class TimelineDashboardState extends State<TimelineDashboard>
   }
 
   Future<http.Response> getLatestMediaVideo() async {
-    String url = BaseApi().restUrl +
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    setState(() {
+      if (widget.isRest == true) {
+        baseUrl = BaseApi().restUrl;
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'signature': signature,
+        };
+      } else if (widget.isRest == false) {
+        baseUrl = BaseApi().apiUrl;
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'cookie': preferences.getString('Session'),
+        };
+      }
+    });
+
+    String url = baseUrl +
         '/media?X-API-KEY=$API_KEY&search=&page=1&limit=5&type=video&status=latest';
 
-    final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
+    final response = await http.get(url, headers: headers);
 
     print('*******GETTING RESPONSE*******');
     print('HTTP RESPONSE CODE: ' + response.statusCode.toString());
@@ -1190,21 +1230,59 @@ class TimelineDashboardState extends State<TimelineDashboard>
   }
 
   Future<http.Response> getPopularMediaPhoto() async {
-    String url = BaseApi().restUrl +
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    setState(() {
+      if (widget.isRest == true) {
+        baseUrl = BaseApi().restUrl;
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'signature': signature,
+        };
+      } else if (widget.isRest == false) {
+        baseUrl = BaseApi().apiUrl;
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'cookie': preferences.getString('Session'),
+        };
+      }
+    });
+
+    String url = baseUrl +
         '/media?X-API-KEY=$API_KEY&search=&page=1&limit=10&type=photo&status=popular';
 
-    final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
+    final response = await http.get(url, headers: headers);
 
     return response;
   }
 
   Future<http.Response> getPopularMediaVideo() async {
-    String url = BaseApi().restUrl +
+    String baseUrl = '';
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    Map<String, String> headers;
+
+    setState(() {
+      if (widget.isRest == true) {
+        baseUrl = BaseApi().restUrl;
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'signature': signature,
+        };
+      } else if (widget.isRest == false) {
+        baseUrl = BaseApi().apiUrl;
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'cookie': preferences.getString('Session'),
+        };
+      }
+    });
+
+    String url = baseUrl +
         '/media?X-API-KEY=$API_KEY&search=&page=1&limit=10&type=video&status=popular';
 
-    final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
+    final response = await http.get(url, headers: headers);
 
     print('*******GETTING RESPONSE*******');
     print('HTTP RESPONSE CODE: ' + response.statusCode.toString());
@@ -1215,12 +1293,29 @@ class TimelineDashboardState extends State<TimelineDashboard>
 
   Future<http.Response> getBanner() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String baseUrl = '';
+    Map<String, String> headers;
 
-    String url = BaseApi().restUrl +
-        '/media/banner?X-API-KEY=$API_KEY&search=&page=1&limit=10';
+    setState(() {
+      if (widget.isRest == true) {
+        baseUrl = BaseApi().restUrl;
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'signature': signature,
+        };
+      } else if (widget.isRest == false) {
+        baseUrl = BaseApi().apiUrl;
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'cookie': prefs.getString('Session'),
+        };
+      }
+    });
 
-    final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'signature': signature});
+    String url =
+        baseUrl + '/media/banner?X-API-KEY=$API_KEY&search=&page=1&limit=10';
+
+    final response = await http.get(url, headers: headers);
 
     return response;
   }

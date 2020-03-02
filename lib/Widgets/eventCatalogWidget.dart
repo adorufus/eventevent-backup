@@ -660,7 +660,7 @@ class _EventCatalogState extends State<EventCatalog>
                                                   eventId: data[i]['id'])));
                                 },
                                 child: PopularEventWidget(
-                                  imageUrl: data[i]['picture_timeline'],
+                                  imageUrl: data[i]['picture'],
                                   title: data[i]["name"],
                                   location: data[i]["address"],
                                   color: itemColor,
@@ -851,7 +851,7 @@ class _EventCatalogState extends State<EventCatalog>
                                             eventId: discoverData[i]['id'])));
                           },
                           child: PopularEventWidget(
-                            imageUrl: discoverData[i]['picture_timeline'],
+                            imageUrl: discoverData[i]['picture'],
                             title: discoverData[i]["name"],
                             location: discoverData[i]["address"],
                             price: itemPriceText,
@@ -996,7 +996,7 @@ class _EventCatalogState extends State<EventCatalog>
                                     ],
                                     image: DecorationImage(
                                         image: NetworkImage(
-                                            data[i]['picture_timeline'])),
+                                            data[i]['picture'])),
                                     borderRadius: BorderRadius.circular(15)),
                               ),
                             ),

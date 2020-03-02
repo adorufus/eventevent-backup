@@ -93,12 +93,15 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    'Event Poster',
-                    style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 13),
+                    child: Text(
+                      'Event Poster',
+                      style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ],
               ),
@@ -141,6 +144,16 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                       child: additionalMediaPhoto.length < 1
                           ? Container()
                           : Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    spreadRadius: 1.5,
+                                    color: Color(0xff8a8a8b).withOpacity(.2),
+                                    blurRadius: 2
+                                  )
+                                ]
+                              ),
                               child: Image.file(
                                 File(additionalMediaPhoto[0]),
                                 fit: BoxFit.fill,
@@ -152,6 +165,16 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                       child: additionalMediaPhoto.length < 2
                           ? Container()
                           : Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    spreadRadius: 1.5,
+                                    color: Color(0xff8a8a8b).withOpacity(.2),
+                                    blurRadius: 2
+                                  )
+                                ]
+                              ),
                               child: Image.file(
                                 File(additionalMediaPhoto[1]),
                                 fit: BoxFit.fill,
@@ -163,6 +186,16 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                       child: additionalMediaPhoto.length < 3
                           ? Container()
                           : Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    spreadRadius: 1.5,
+                                    color: Color(0xff8a8a8b).withOpacity(.2),
+                                    blurRadius: 2
+                                  )
+                                ]
+                              ),
                               child: Image.file(
                                 File(additionalMediaPhoto[2]),
                                 fit: BoxFit.fill,
@@ -174,6 +207,16 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                       child: additionalMediaPhoto.length < 4
                           ? Container()
                           : Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    spreadRadius: 1.5,
+                                    color: Color(0xff8a8a8b).withOpacity(.2),
+                                    blurRadius: 2
+                                  )
+                                ]
+                              ),
                               child: Image.file(
                                 File(additionalMediaPhoto[3]),
                                 fit: BoxFit.fill,
@@ -185,6 +228,16 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                       child: additionalMediaPhoto.length < 5
                           ? Container()
                           : Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    spreadRadius: 1.5,
+                                    color: Color(0xff8a8a8b).withOpacity(.2),
+                                    blurRadius: 2
+                                  )
+                                ]
+                              ),
                               child: Image.file(
                                 File(additionalMediaPhoto[4]),
                                 fit: BoxFit.fill,
@@ -197,7 +250,20 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                               _showDialog();
                             },
                             child: Container(
-                              color: Colors.grey,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/grey-fade.jpg'),
+                                  fit: BoxFit.fill
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    spreadRadius: 1.5,
+                                    color: Color(0xff8a8a8b).withOpacity(.2),
+                                    blurRadius: 2
+                                  )
+                                ]
+                              ),
                               height: ScreenUtil.instance.setWidth(200),
                               width: ScreenUtil.instance.setWidth(150),
                               child: Center(

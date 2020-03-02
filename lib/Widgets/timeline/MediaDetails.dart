@@ -39,7 +39,7 @@ class MediaDetails extends StatefulWidget {
       this.userPicture,
       this.autoFocus,
       this.isVideo,
-      this.youtubeUrl: 'https://test.com/',
+      this.youtubeUrl = 'https://test.com/',
       this.videoUrl,
       this.mediaId,
       this.isRest})
@@ -62,7 +62,7 @@ class _MediaDetailsState extends State<MediaDetails> {
 
   bool isLoading = false;
 
-  List commentList;
+  List commentList = [];
   Map mediaDetails = {};
 
   @override
@@ -72,36 +72,41 @@ class _MediaDetailsState extends State<MediaDetails> {
       if (response.statusCode == 200) {
         setState(() {
           mediaDetails = extractedData['data'];
+          commentList = mediaDetails['comment'];
+
+          print(commentList);
         });
       }
     });
 
-    setState(() {
-      if (widget.videoUrl == null) {
-        videoId = YoutubePlayer.convertUrlToId(widget.youtubeUrl == null
-            ? 'https://www.youtube.com/watch?v=6XNN6KFzLnE'
-            : widget.youtubeUrl);
+    if (widget.isVideo == true) {
+      setState(() {
+        if (widget.videoUrl == null) {
+          videoId = YoutubePlayer.convertUrlToId(widget.youtubeUrl == null
+              ? 'https://www.youtube.com/watch?v=6XNN6KFzLnE'
+              : widget.youtubeUrl);
 
-        ytController = YoutubePlayerController(
-            initialVideoId: videoId == null ? '' : videoId,
-            flags: YoutubePlayerFlags(
-              autoPlay: true,
-            ));
-      }
-    });
-
-    videoPlayerController = VideoPlayerController.network(
-        widget.videoUrl == null ? '' : widget.videoUrl)
-      ..initialize().then((_) {
-        setState(() {});
+          ytController = YoutubePlayerController(
+              initialVideoId: videoId == null ? '' : videoId,
+              flags: YoutubePlayerFlags(
+                autoPlay: true,
+              ));
+        }
       });
 
-    chewieController = ChewieController(
-        videoPlayerController: videoPlayerController,
-        aspectRatio: 3 / 2,
-        autoPlay: true,
-        looping: false,
-        fullScreenByDefault: false);
+      videoPlayerController = VideoPlayerController.network(
+          widget.videoUrl == null ? '' : widget.videoUrl)
+        ..initialize().then((_) {
+          setState(() {});
+        });
+
+      chewieController = ChewieController(
+          videoPlayerController: videoPlayerController,
+          aspectRatio: 3 / 2,
+          autoPlay: true,
+          looping: false,
+          fullScreenByDefault: false);
+    }
     super.initState();
   }
 
@@ -115,6 +120,7 @@ class _MediaDetailsState extends State<MediaDetails> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
@@ -192,49 +198,70 @@ class _MediaDetailsState extends State<MediaDetails> {
                               autofocus: widget.autoFocus,
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(0)),
-                                        borderSide: BorderSide.none
-                                  ),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(0)),
+                                      borderSide: BorderSide.none),
                                   contentPadding: EdgeInsets.only(left: 10),
                                   hintText: 'Add a comment..',
-                                  suffix: GestureDetector(
-                                    onTap: () {
-                                      FocusScope.of(context)
-                                          .requestFocus(FocusNode());
-                                      postComment(widget.mediaId,
-                                              textEditingController.text)
-                                          .then((response) {
-                                        var extractedData =
-                                            json.decode(response.body);
+                                  suffix: Padding(
+                                    padding: EdgeInsets.only(right: 13),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        FocusScope.of(context)
+                                            .requestFocus(FocusNode());
+                                        postComment(widget.mediaId,
+                                                textEditingController.text)
+                                            .then((response) async {
+                                          SharedPreferences preferences =
+                                              await SharedPreferences
+                                                  .getInstance();
+                                          var extractedData =
+                                              json.decode(response.body);
 
-                                        if (response.statusCode == 200 ||
-                                            response.statusCode == 201) {
-                                          print(response.body);
+                                          if (response.statusCode == 200 ||
+                                              response.statusCode == 201) {
+                                            print(response.body);
+                                            isLoading = false;
+                                            print('****Comment Posted!*****');
+                                            setState(() {
+                                              commentList.add({
+                                                'comment':
+                                                    textEditingController.text,
+                                                'username': preferences
+                                                    .getString('UserUsername'),
+                                                'fullName': preferences
+                                                    .getString('UserFirstname'),
+                                                'lastName': preferences
+                                                    .getString('UserLastname'),
+                                                'photo': preferences
+                                                    .getString('UserPicture')
+                                              });
+
+                                              print(commentList);
+                                            });
+                                            textEditingController.text = '';
+                                          } else {
+                                            isLoading = false;
+                                            print(response.body);
+                                            print('****Comment Failed****');
+                                            print(
+                                                'reason: ${extractedData['desc']}');
+                                          }
+                                        }).catchError((e) {
                                           isLoading = false;
-                                          print('****Comment Posted!*****');
-                                          textEditingController.text = '';
-                                          setState(() {});
-                                        } else {
-                                          isLoading = false;
-                                          print(response.body);
                                           print('****Comment Failed****');
-                                          print(
-                                              'reason: ${extractedData['desc']}');
-                                        }
-                                      }).catchError((e) {
-                                        isLoading = false;
-                                        print('****Comment Failed****');
-                                        print('reason: ' + e.toString());
-                                      });
-                                    },
-                                    child: Container(
-                                        child: Text(
-                                      'Send',
-                                      style: TextStyle(
-                                          color: eventajaGreenTeal,
-                                          fontWeight: FontWeight.bold),
-                                    )),
+                                          print('reason: ' + e.toString());
+                                        });
+                                      },
+                                      child: Container(
+                                          margin: EdgeInsets.only(right: 13),
+                                          child: Text(
+                                            'Send',
+                                            style: TextStyle(
+                                                color: eventajaGreenTeal,
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                    ),
                                   )),
                             ),
                             suggestionsCallback: (text) async {
@@ -358,20 +385,19 @@ class _MediaDetailsState extends State<MediaDetails> {
             margin: EdgeInsets.symmetric(horizontal: 13),
             child: mediaDetails['media_content'] == null
                 ? Container(
-                    width: 200,
-                    child: PlaceholderLines(
-                      count: 10,
-                      align: TextAlign.left,
-                      lineHeight: 10,
-                      color: Colors.grey,
-                      animate: true,
-                    ),
-                  )
+                    // width: 200,
+                    // child: PlaceholderLines(
+                    //   count: 10,
+                    //   align: TextAlign.left,
+                    //   lineHeight: 10,
+                    //   color: Colors.grey,
+                    //   animate: true,
+                    // ),
+                    )
                 : Html(
+                    defaultTextStyle: TextStyle(fontSize: 18, height: 1.5),
                     data: mediaDetails['media_content'][0]['content_text'],
-                    onLinkTap: (url) {
-                      print('loading..');
-                    },
+                    onLinkTap: (url) {},
                   ),
           ),
           SizedBox(
@@ -392,56 +418,28 @@ class _MediaDetailsState extends State<MediaDetails> {
           ),
           SizedBox(height: ScreenUtil.instance.setWidth(12)),
           Container(
-            child: FutureBuilder(
-              future: getCommentList(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.none &&
-                    snapshot.hasData == null) {
-                  //print('project snapshot data is: ${projectSnap.data}');
-                  return Container();
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  isLoading = true;
-                } else {
-                  isLoading = false;
-                }
-                if (snapshot.data == null) {
-                  print('loading');
-                } else {
-                  // dataLength = snapshot.data['data'].length;
-                  print(snapshot.data);
-                  commentList = snapshot.data['data']['comment'];
-                }
-
-                if (snapshot.hasError) {
-                  print(snapshot.error.toString());
-                }
-
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: commentList == null ? 0 : commentList.length,
-                  itemBuilder: (context, i) {
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(commentList[i]['photo']),
-                      ),
-                      title: Text(
-                        commentList[i]['fullName'] +
-                            ' ' +
-                            commentList[i]['lastName'] +
-                            ': ',
-                        style: TextStyle(
-                            fontSize: ScreenUtil.instance.setSp(12),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(commentList[i]['comment']),
-                    );
-                  },
-                );
-              },
-            ),
-          )
+              child: ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: commentList == null ? 0 : commentList.length,
+            itemBuilder: (context, i) {
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(commentList[i]['photo']),
+                ),
+                title: Text(
+                  commentList[i]['fullName'] +
+                      ' ' +
+                      commentList[i]['lastName'] +
+                      ': ',
+                  style: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(12),
+                      fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(commentList[i]['comment']),
+              );
+            },
+          ))
         ],
       ),
     );
@@ -496,42 +494,39 @@ class _MediaDetailsState extends State<MediaDetails> {
     return dataMatch;
   }
 
-  Future getCommentList() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    var baseUrl = BaseApi().apiUrl;
+  Future<http.Response> getMediaDetails() async {
+    String baseUrl = '';
+    Map<String, String> headers;
+    SharedPreferences preferences = await SharedPreferences.getInstance();
 
     setState(() {
       if (widget.isRest == true) {
         baseUrl = BaseApi().restUrl;
-      } else {
+        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': signature};
+      } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
+        headers = {
+          'Accept': 'application/json',
+          'Authorization': AUTHORIZATION_KEY,
+          'cookie': preferences.getString('Session')
+        };
       }
     });
 
     String url =
         baseUrl + '/media/detail?X-API-KEY=$API_KEY&id=${widget.mediaId}';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
-    });
+    print(url);
 
-    var extractedData = json.decode(response.body);
+    final response = await http.get(url, headers: headers);
 
-    return extractedData;
-  }
+    // String url = BaseApi().apiUrl +
+    //     '/media/detail?X-API-KEY=$API_KEY&id=${widget.mediaId}';
 
-  Future<http.Response> getMediaDetails() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    String url = BaseApi().restUrl +
-        '/media/detail?X-API-KEY=$API_KEY&id=${widget.mediaId}';
-
-    final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'signature': signature,
-      'cookie': preferences.getString('Session')
-    });
+    // final response = await http.get(url, headers: {
+    //   'Authorization': AUTHORIZATION_KEY,
+    //   'cookie': preferences.getString('Session')
+    // });
 
     print(response.body);
 
@@ -547,10 +542,19 @@ class _MediaDetailsState extends State<MediaDetails> {
 
     String url = BaseApi().apiUrl + '/media/comment';
 
-    final response = await http.post(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
-    }, body: {
+    Map<String, String> headers;
+    if (widget.isRest == true) {
+      headers = {'Authorization': AUTHORIZATION_KEY, 'signature': signature};
+    } else {
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': prefs.getString('Session')
+      };
+    }
+
+    print(headers);
+
+    final response = await http.post(url, headers: headers, body: {
       'X-API-KEY': API_KEY,
       'media_id': mediaId,
       'comment': comment,

@@ -103,6 +103,8 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
 
     final detailsInfoUrl = BaseApi().apiUrl +
         '/event/detail?X-API-KEY=$API_KEY&eventID=${widget.eventId}';
+
+        print(detailsInfoUrl);
     final response = await http.get(detailsInfoUrl, headers: {
       'Authorization': "Basic YWRtaW46MTIzNA==",
       'cookie': session

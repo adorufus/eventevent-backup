@@ -66,7 +66,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
   String expDate;
 
   Dio dio = new Dio(BaseOptions(
-      connectTimeout: 10000, baseUrl: BaseApi().apiUrl, receiveTimeout: 10000));
+      connectTimeout: 30000, baseUrl: BaseApi().apiUrl, receiveTimeout: 30000));
   FormData formData = new FormData();
 
   double progress = 0;
@@ -388,6 +388,8 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
     } catch (e) {
       if (e is DioError) {
         print(e.message);
+        // var extractedError = json.decode(e.response.data);
+        // print(extractedError);
       }
       if (e is FileSystemException) {
         print(e.message);

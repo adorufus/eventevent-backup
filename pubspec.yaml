@@ -97,6 +97,7 @@ dependencies:
   supernova_flutter_ui_toolkit: ^0.0.2
   sqflite: any
   rive: any
+  flutter_credit_card:
   share:
     git:
      url: https://github.com/d-silveira/flutter-share.git
@@ -114,8 +115,8 @@ dev_dependencies:
   flutter_launcher_icons: ^0.7.4
 
 flutter_icons:
-  image_path_android: "assets/eventevent_app_icon.jpg"
-  image_path_ios: "assets/eventevent_app_icon.jpg"
+  image_path_android: "assets/eventevent_icon_android.png"
+  image_path_ios: "assets/eventevent_icon_ios.png"
   android: true
   ios: true
 
@@ -145,6 +146,7 @@ flutter:
     - assets/flare/eventevent.flr
     - assets/flare/Spalsh_Eventevent.flr
     - assets/docs.png
+    - assets/icon_eventevent_kecil.png
     - assets/qr-code.png
     - assets/eventevent.png
     - assets/bottom-bar/home-white.png

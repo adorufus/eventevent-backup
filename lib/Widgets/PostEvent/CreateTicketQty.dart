@@ -28,6 +28,7 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         key: thisScaffold,
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -129,7 +130,7 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
       prefs.setString('SETUP_TICKET_QTY', textController.text);
       print(prefs.getString('SETUP_TICKET_QTY'));
       Navigator.push(context,
-          CupertinoPageRoute(builder: (BuildContext context) => prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '7' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '4' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ? CreateTicketStartDate() : CreateTicketPrice()));
+          CupertinoPageRoute(builder: (BuildContext context) => prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10' ? CreateTicketStartDate() : CreateTicketPrice()));
     }
   }
 }

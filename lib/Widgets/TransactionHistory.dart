@@ -166,7 +166,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
                           'Credit Card') {
                         page = CreditCardInput(
                           transactionID: transactionList[i]['id'],
-                          expDate: transactionList[i]['expired_date'],
+                          expDate: transactionList[i]['expired_time'],
                         );
                       }
                     }
