@@ -189,7 +189,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        SuccessPage()));
+                                        SuccessPage(invoiceNumber: transactionList[i]['transaction_code'],)));
                           } else if (transactionList[i]['status_transaksi'] ==
                               'expired') {
                             Navigator.push(

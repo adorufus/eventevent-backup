@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -13,8 +14,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomFormActivator extends StatefulWidget {
   final eventId;
+  final from;
 
-  const CustomFormActivator({Key key, this.eventId}) : super(key: key);
+  const CustomFormActivator({Key key, this.eventId, this.from})
+      : super(key: key);
   @override
   _CustomFormActivatorState createState() => _CustomFormActivatorState();
 }
@@ -52,6 +55,7 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
             context,
             MaterialPageRoute(
                 builder: (context) => ManageCustomForm(
+                      from: "createEvent",
                       eventId: widget.eventId,
                     )));
       }
@@ -96,9 +100,14 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ManageCustomForm(
-                      eventId: widget.eventId,
-                    )));
+                builder: (context) => widget.from == 'createEvent'
+                    ? PostEventInvitePeople(
+                        calledFrom: "new event",
+                      )
+                    : ManageCustomForm(
+                        from: widget.from,
+                        eventId: widget.eventId,
+                      )));
       }
     } catch (e, stacktrace) {
       print(stacktrace);
@@ -224,8 +233,9 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
 
 class ManageCustomForm extends StatefulWidget {
   final eventId;
+  final from;
 
-  const ManageCustomForm({Key key, this.eventId}) : super(key: key);
+  const ManageCustomForm({Key key, this.eventId, this.from}) : super(key: key);
 
   @override
   _ManageCustomFormState createState() => _ManageCustomFormState();
@@ -281,6 +291,14 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
       print(response.statusCode);
       print(response.data);
       if (response.statusCode == 200 || response.statusCode == 201) {
+        if (widget.from == "createEvent") {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PostEventInvitePeople(
+                        calledFrom: "new event",
+                      )));
+        }
         Navigator.pop(context);
         Navigator.pop(context);
         Navigator.pop(context);
@@ -336,6 +354,14 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
       print(response.data);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        if (widget.from == "createEvent") {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PostEventInvitePeople(
+                        calledFrom: "new event",
+                      )));
+        }
         Navigator.pop(context);
         Navigator.pop(context);
         Navigator.pop(context);
@@ -679,10 +705,9 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
 
                   Navigator.pop(context, setState(() {}));
                 } else {
-                  pageViewController
-                        .nextPage(
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeIn);
+                  pageViewController.nextPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeIn);
                 }
               },
               child: Container(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:async/async.dart';
@@ -15,6 +16,9 @@ import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateTicketFinal extends StatefulWidget {
+  final from;
+
+  const CreateTicketFinal({Key key, this.from}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return CreateTicketFinalState();
@@ -829,9 +833,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
               builder: (BuildContext context) => FinishPostEvent()));
         } else {
           Navigator.of(context).push(CupertinoPageRoute(
-              builder: (BuildContext context) => PostEventInvitePeople(
-                    calledFrom: "new event",
-                  )));
+              builder: (BuildContext context) => CustomFormActivator(eventId: prefs.getInt("NEW_EVENT_ID").toString(), from: "createEvent",)));
         }
       } else {
         print(response.data + response.statusCode);

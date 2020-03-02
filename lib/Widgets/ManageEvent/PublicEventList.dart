@@ -244,7 +244,7 @@ class PublicEventListState extends State<PublicEventList> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       EventDetailLoadingScreen(
-                                          eventId: publicData[i]['id'])));
+                                          eventId: widget.type == 'going' ? publicData[i]['eventID'] : publicData[i]['id'])));
                         },
                         child: new LatestEventItem(
                           image: publicData[i]['picture'],
