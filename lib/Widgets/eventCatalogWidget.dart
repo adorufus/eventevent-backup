@@ -213,6 +213,7 @@ class _EventCatalogState extends State<EventCatalog>
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return EventDetailLoadingScreen(
+                          isRest: widget.isRest,
                             eventId: bannerData['eventID']);
                         // EventDetailsConstructView(
                         //     id: bannerData['eventID'],
@@ -227,6 +228,7 @@ class _EventCatalogState extends State<EventCatalog>
                         MaterialPageRoute(
                           builder: (context) {
                             return EventDetailLoadingScreen(
+                              isRest: widget.isRest,
                                 eventId: bannerData['categoryID']);
                             //  EventDetailsConstructView(
                             //     id: bannerData['categoryID'],
@@ -657,6 +659,7 @@ class _EventCatalogState extends State<EventCatalog>
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
                                               EventDetailLoadingScreen(
+                                                isRest: widget.isRest,
                                                   eventId: data[i]['id'])));
                                 },
                                 child: PopularEventWidget(
@@ -848,6 +851,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         EventDetailLoadingScreen(
+                                          isRest: widget.isRest,
                                             eventId: discoverData[i]['id'])));
                           },
                           child: PopularEventWidget(
@@ -978,6 +982,7 @@ class _EventCatalogState extends State<EventCatalog>
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         EventDetailLoadingScreen(
+                                          isRest: widget.isRest,
                                           eventId: data[i]['id'],
                                         ),
                                   ),

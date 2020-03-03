@@ -57,7 +57,11 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
 
       if(response.statusCode == 200){
         setState((){
-          peopleList = extractedData['data'][widget.peopleType]['data'];
+          if(widget.peopleType == 'invited'){
+            peopleList = extractedData['data'][widget.peopleType];
+          } else {
+            peopleList = extractedData['data'][widget.peopleType]['data'];
+          }
         });
       }
     });
@@ -209,15 +213,22 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     int currentPage = 1;
+    String eventIdType = 'eventID';
 
     setState(() {
       if (page != null) {
         currentPage += page;
       }
+
+      if(widget.peopleType == "invited") {
+        eventIdType = 'event_id';
+      } else {
+        eventIdType = 'eventID';
+      }
     });
 
     String url = BaseApi().apiUrl +
-        '/event/${widget.peopleType}?X-API-KEY=$API_KEY&page=$currentPage&eventID=${widget.eventId}';
+        '/event/${widget.peopleType}?X-API-KEY=$API_KEY&page=$currentPage&$eventIdType=${widget.eventId}';
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,

@@ -1,19 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:eventevent/Widgets/EventDetailComment.dart';
 import 'package:eventevent/Widgets/EventDetailItems/FeedbackLogic.dart';
 import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
 import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
-import 'package:eventevent/Widgets/timeline/EventDetailTimeline.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
-import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:flutter/material.dart' as prefix0;
-import 'package:flutter/services.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -27,26 +23,17 @@ import 'package:eventevent/Widgets/Transaction/SelectTicket.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:googleapis/people/v1.dart';
 import 'dart:ui';
-import 'package:marquee/marquee.dart';
-//import 'package:eventevent/helper/MarqueeWidget.dart';
 import 'package:marquee_flutter/marquee_flutter.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:share/share.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
@@ -80,6 +67,7 @@ class EventDetailsConstructView extends StatefulWidget {
   final long;
   final dDay;
   final eventStartDate;
+  final isRest;
 
   EventDetailsConstructView(
       {Key key,
@@ -110,7 +98,7 @@ class EventDetailsConstructView extends StatefulWidget {
       this.lat,
       this.long,
       this.dDay,
-      this.eventStartDate})
+      this.eventStartDate, this.isRest})
       : super(key: key);
 
   @override
@@ -215,42 +203,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   }
 
   void setUpBranch() {
-    // FlutterBranchIoPlugin.setupBranchIO();
-
-    // FlutterBranchIoPlugin.listenToDeepLinkStream().listen((string) {
-    //   print("DEEPLINK $string");
-    //   setState(() {
-    //     this._data = string;
-    //   });
-    // });
-
-    // FlutterAndroidLifecycle.listenToOnStartStream().listen((string) {
-    //   print("ONSTART");
-    //   FlutterBranchIoPlugin.setupBranchIO();
-    // });
-
-    // FlutterBranchIoPlugin.listenToGeneratedLinkStream().listen((link) {
-    //   print('GET LINK IN FLUTTER');
-    //   print('thelink' + link);
-    //   setState(() {
-    //     this.generatedLink = link;
-
-    //     print('thisgeneratedlink: ' + generatedLink);
-    //   });
-    // });
-
-    // FlutterBranchIoPlugin.generateLink(
-    //     FlutterBranchUniversalObject()
-    //         .setCanonicalIdentifier('event_' + widget.id)
-    //         .setTitle(widget.name)
-    //         .setContentDescription('')
-    //         .setContentImageUrl(widget.image)
-    //         .setContentIndexingMode(BUO_CONTENT_INDEX_MODE.PUBLIC)
-    //         .setLocalIndexMode(BUO_CONTENT_INDEX_MODE.LOCAL),
-    //     lpFeature: 'sharing',
-    //     lpControlParams: {
-    //       '\$desktop_url': 'http://eventevent.com/event/${widget.id}'
-    //     });
+    
   }
 
   void generateLink() async {
@@ -413,9 +366,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                         print(prefs.getString('EVENT_LOVED'));
                         print(prefs.getString('EVENT_NAME'));
 
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                EventStatistic()));
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => EventStatistic(),
+                          ),
+                        );
                       },
                       child: widget.detailData['createdByID'] == null
                           ? Container(
@@ -611,113 +566,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               style: TextStyle(
                                                   color: Colors.red))));
                             });
-                        // showDialog(
-                        //     context: context,
-                        //     builder: (BuildContext context) {
-                        //       return Container(
-                        //         child: widget.detailData['createdByID'] != currentUserId ? Column(
-                        //           mainAxisAlignment: MainAxisAlignment.center,
-                        //           children: <Widget>[
-                        //             RaisedButton(
-                        //               onPressed: (){
-                        //                 Navigator.push(context, MaterialPageRoute(builder: (context) => ReportPost(
-                        //                   postId: widget.id,
-                        //                   postType: 'event',
-                        //                 )));
-                        //               },
-                        //               child: Text("Report This Event"),
-                        //             )
-                        //           ],
-                        //         ) : Column(
-                        //           mainAxisAlignment: MainAxisAlignment.center,
-                        //           children: <Widget>[
-                        //             RaisedButton(
-                        //               onPressed: () async {
-                        //                 SharedPreferences prefs =
-                        //                     await SharedPreferences
-                        //                         .getInstance();
-
-                        //                 List<String> categoryList =
-                        //                     new List<String>();
-                        //                 List<String> categoryIdList =
-                        //                     new List<String>();
-                        //                 for (var i = 0;
-                        //                     i <
-                        //                         widget
-                        //                             .detailData['category']
-                        //                                 ['data']
-                        //                             .length;
-                        //                     i++) {
-                        //                   print(i.toString());
-                        //                   categoryList.add(
-                        //                       widget.detailData['category']
-                        //                           ['data'][i]['name']);
-                        //                   categoryIdList.add(
-                        //                       widget.detailData['category']
-                        //                           ['data'][i]['id']);
-                        //                 }
-
-                        //                 prefs.setString('NEW_EVENT_ID',
-                        //                     widget.detailData['id']);
-                        //                 prefs.setString('EVENT_NAME',
-                        //                     widget.detailData['name']);
-                        //                 prefs.setString('EVENT_TYPE',
-                        //                     widget.detailData['isPrivate']);
-                        //                 prefs.setStringList(
-                        //                     'EVENT_CATEGORY', categoryList);
-                        //                 prefs.setStringList(
-                        //                     'EVENT_CATEGORY_ID_LIST',
-                        //                     categoryIdList);
-                        //                 prefs.setString('DATE_START',
-                        //                     widget.detailData['dateStart']);
-                        //                 prefs.setString('DATE_END',
-                        //                     widget.detailData['dateEnd']);
-                        //                 prefs.setString('TIME_START',
-                        //                     widget.detailData['timeStart']);
-                        //                 prefs.setString('TIME_END',
-                        //                     widget.detailData['timeEnd']);
-                        //                 prefs.setString('EVENT_DESCRIPTION',
-                        //                     widget.detailData['description']);
-                        //                 prefs.setString('EVENT_PHONE',
-                        //                     widget.detailData['phone']);
-                        //                 prefs.setString('EVENT_EMAIL',
-                        //                     widget.detailData['email']);
-                        //                 prefs.setString('EVENT_WEBSITE',
-                        //                     widget.detailData['website']);
-                        //                 prefs.setString('EVENT_LAT',
-                        //                     widget.detailData['latitude']);
-                        //                 prefs.setString('EVENT_LONG',
-                        //                     widget.detailData['longitude']);
-                        //                 prefs.setString('EVENT_ADDRESS',
-                        //                     widget.detailData['address']);
-                        //                 prefs.setString('EVENT_IMAGE',
-                        //                     widget.detailData['photoFull']);
-
-                        //                 print(prefs
-                        //                     .getStringList('EVENT_CATEGORY')
-                        //                     .toString());
-
-                        //                 Navigator.of(context).push(
-                        //                     MaterialPageRoute(
-                        //                         builder:
-                        //                             (BuildContext context) =>
-                        //                                 EditEvent()));
-                        //               },
-                        //               child: Text('Edit Event'),
-                        //             ),
-                        //             RaisedButton(
-                        //               child: Text('Edit Custom Form'),
-                        //               onPressed: () {
-                        //                 Navigator.of(context).push(
-                        //                     MaterialPageRoute(
-                        //                         builder: (context) =>
-                        //                             CustomFormActivator(eventId: widget.id,)));
-                        //               },
-                        //             )
-                        //           ],
-                        //         ),
-                        //       );
-                        //     });
                       },
                       child: Icon(
                         Icons.more_vert,
@@ -771,16 +619,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     ),
                                   ),
                                 ),
-                                // Padding(
-                                //     padding:
-                                //         EdgeInsets.symmetric(horizontal: 50),
-                                //     child: SizedBox(
-                                //         height: ScreenUtil.instance.setWidth(5),
-                                //         width: ScreenUtil.instance.setWidth(50),
-                                //         child: Image.asset(
-                                //           'assets/icons/icon_line.png',
-                                //           fit: BoxFit.fill,
-                                //         ))),
                                 Container(
                                   margin: EdgeInsets.symmetric(
                                       horizontal: 13, vertical: 13),
@@ -1425,16 +1263,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                      // Padding(
-                                                                      //     padding:
-                                                                      //         EdgeInsets.symmetric(horizontal: 50),
-                                                                      //     child: SizedBox(
-                                                                      //         height: ScreenUtil.instance.setWidth(5),
-                                                                      //         width: ScreenUtil.instance.setWidth(50),
-                                                                      //         child: Image.asset(
-                                                                      //           'assets/icons/icon_line.png',
-                                                                      //           fit: BoxFit.fill,
-                                                                      //         ))),
                                                                       Container(
                                                                         margin: EdgeInsets.symmetric(
                                                                             horizontal:
@@ -1824,61 +1652,76 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   return Padding(
                                                     padding: EdgeInsets.only(
                                                         left: 13),
-                                                    child: Container(
-                                                      constraints:
-                                                          BoxConstraints(
-                                                              maxHeight:
-                                                                  ScreenUtil
-                                                                      .instance
-                                                                      .setWidth(
-                                                                          30),
-                                                              maxWidth:
-                                                                  ScreenUtil
-                                                                      .instance
-                                                                      .setWidth(
-                                                                          30),
-                                                              minHeight:
-                                                                  ScreenUtil
-                                                                      .instance
-                                                                      .setWidth(
-                                                                          30),
-                                                              minWidth:
-                                                                  ScreenUtil
-                                                                      .instance
-                                                                      .setWidth(
-                                                                          30)),
-                                                      height: ScreenUtil
-                                                          .instance
-                                                          .setWidth(30),
-                                                      width: ScreenUtil.instance
-                                                          .setWidth(30),
-                                                      decoration: BoxDecoration(
-                                                          boxShadow: <
-                                                              BoxShadow>[
-                                                            BoxShadow(
-                                                                color: Colors
-                                                                    .black26,
-                                                                offset: Offset(
-                                                                    1.0, 1.0),
-                                                                blurRadius: 3)
-                                                          ],
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          image: DecorationImage(
-                                                              image: invitedUserList[
-                                                                              i]
-                                                                          [
-                                                                          'photo'] ==
-                                                                      null
-                                                                  ? AssetImage(
-                                                                      'assets/grey-fade.jpg')
-                                                                  : NetworkImage(
-                                                                      invitedUserList[
-                                                                              i]
-                                                                          [
-                                                                          'photo']),
-                                                              fit:
-                                                                  BoxFit.fill)),
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.of(context)
+                                                            .push(
+                                                          MaterialPageRoute(
+                                                            builder: (BuildContext
+                                                                    context) =>
+                                                                ProfileWidget(
+                                                              initialIndex: 0,
+                                                              userId: widget
+                                                                          .detailData[
+                                                                      'invited']
+                                                                  [
+                                                                  'data'][i]['id'],
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        constraints: BoxConstraints(
+                                                            maxHeight:
+                                                                ScreenUtil
+                                                                    .instance
+                                                                    .setWidth(
+                                                                        30),
+                                                            maxWidth: ScreenUtil
+                                                                .instance
+                                                                .setWidth(30),
+                                                            minHeight:
+                                                                ScreenUtil
+                                                                    .instance
+                                                                    .setWidth(
+                                                                        30),
+                                                            minWidth: ScreenUtil
+                                                                .instance
+                                                                .setWidth(30)),
+                                                        height: ScreenUtil
+                                                            .instance
+                                                            .setWidth(30),
+                                                        width: ScreenUtil
+                                                            .instance
+                                                            .setWidth(30),
+                                                        decoration: BoxDecoration(
+                                                            boxShadow: <
+                                                                BoxShadow>[
+                                                              BoxShadow(
+                                                                  color: Colors
+                                                                      .black26,
+                                                                  offset:
+                                                                      Offset(
+                                                                          1.0,
+                                                                          1.0),
+                                                                  blurRadius: 3)
+                                                            ],
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            image: DecorationImage(
+                                                                image: invitedUserList[i]
+                                                                            [
+                                                                            'photo'] ==
+                                                                        null
+                                                                    ? AssetImage(
+                                                                        'assets/grey-fade.jpg')
+                                                                    : NetworkImage(
+                                                                        invitedUserList[i]
+                                                                            [
+                                                                            'photo']),
+                                                                fit: BoxFit
+                                                                    .fill)),
+                                                      ),
                                                     ),
                                                   );
                                                 },
@@ -2754,13 +2597,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: <Widget>[
-                                              // Row(
-                                              //   children: <Widget>[
-                                              //     CircleAvatar(
-                                              //       backgroundImage: ,
-                                              //     )
-                                              //   ],
-                                              // )
                                               Text(
                                                 'Comments',
                                                 style: TextStyle(
@@ -3076,13 +2912,28 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
   Future getInvitedUser() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
+    String baseUrl = BaseApi().apiUrl;
+    Map<String, String> headers;
 
-    final invitedDataUrl = BaseApi().apiUrl +
-        '/event/invited?X-API-KEY=$API_KEY&event_id=${widget.id}&page=all';
-    final response = await http.get(invitedDataUrl, headers: {
-      'Authorization': 'Basic YWRtaW46MTIzNA==',
-      'cookie': preferences.getString('Session')
+    setState(() {
+      if(widget.isRest == false){
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'cookie': preferences.getString('Session')
+        };
+        baseUrl = BaseApi().apiUrl;
+      } else {
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'signature': signature
+        };
+        baseUrl = BaseApi().restUrl;
+      }
     });
+
+    final invitedDataUrl = baseUrl +
+        '/event/invited?X-API-KEY=$API_KEY&event_id=${widget.id}&page=all';
+    final response = await http.get(invitedDataUrl, headers: headers);
 
     print(response.statusCode);
     print('invited: ' + response.body);
@@ -3101,22 +2952,35 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   Future<http.Response> getTimelineList({int newPage}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int currentPage = 1;
+    String baseUrl = BaseApi().apiUrl;
+    Map<String, String> headers;
 
     setState(() {
       if (newPage != null) {
         currentPage += newPage;
       }
 
+      if(widget.isRest == false){
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'cookie': prefs.getString('Session')
+        };
+        baseUrl = BaseApi().apiUrl;
+      } else {
+        headers = {
+          'Authorization': AUTHORIZATION_KEY,
+          'signature': signature
+        };
+        baseUrl = BaseApi().restUrl;
+      }
+
       print(currentPage);
     });
 
-    String url = BaseApi().apiUrl +
+    String url = baseUrl +
         '/timeline/user?X-API-KEY=$API_KEY&page=1&userID=$currentUserId';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
-    });
+    final response = await http.get(url, headers: headers);
 
     print('body: ' + response.body);
 

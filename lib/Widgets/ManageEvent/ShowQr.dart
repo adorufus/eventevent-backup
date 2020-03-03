@@ -76,8 +76,9 @@ class ShowQrState extends State<ShowQr>{
         title: Text('SCAN THIS QR CODE FOR ENTRY', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(14)),),
         actions: <Widget>[
           Icon(Icons.help_outline, color: eventajaGreenTeal, size: 25,),
-          SizedBox(height: ScreenUtil.instance.setWidth(10),),
-          Icon(CupertinoIcons.share, color: eventajaGreenTeal, size: 25,)
+          SizedBox(width: ScreenUtil.instance.setWidth(13),),
+          Icon(CupertinoIcons.share, color: eventajaGreenTeal, size: 25,),
+          SizedBox(width: ScreenUtil.instance.setWidth(13),),
         ],
       ),
       body: Container(

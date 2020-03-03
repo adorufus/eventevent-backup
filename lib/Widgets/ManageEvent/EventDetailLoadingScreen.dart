@@ -14,8 +14,10 @@ import 'package:shimmer/shimmer.dart';
 
 class EventDetailLoadingScreen extends StatefulWidget {
   final eventId;
+  final isRest;
 
-  const EventDetailLoadingScreen({Key key, this.eventId}) : super(key: key);
+  const EventDetailLoadingScreen({Key key, this.eventId, this.isRest = false})
+      : super(key: key);
 
   @override
   _EventDetailLoadingScreenState createState() =>
@@ -96,19 +98,25 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
   Future<http.Response> getEventDetailsSpecificInfo() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String session = '';
+    Map<String, String> headers;
+    String baseUrl = BaseApi().apiUrl;
 
     setState(() {
       session = preferences.getString('Session');
+      if (widget.isRest == true) {
+        baseUrl = BaseApi().restUrl;
+        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': signature};
+      } else if (widget.isRest == false) {
+        baseUrl = BaseApi().apiUrl;
+        headers = {'Authorization': AUTHORIZATION_KEY, 'cookie': session};
+      }
     });
 
-    final detailsInfoUrl = BaseApi().apiUrl +
-        '/event/detail?X-API-KEY=$API_KEY&eventID=${widget.eventId}';
+    final detailsInfoUrl =
+        baseUrl + '/event/detail?X-API-KEY=$API_KEY&eventID=${widget.eventId}';
 
-        print(detailsInfoUrl);
-    final response = await http.get(detailsInfoUrl, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': session
-    });
+    print(detailsInfoUrl);
+    final response = await http.get(detailsInfoUrl, headers: headers);
 
     print('event detail page -> ' + response.statusCode.toString());
     print('event detail page -> ' + response.body);
@@ -187,9 +195,11 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
           print('type' + detailData['ticket_type'].toString());
 
           setState(() {
-            _dDay = DateTime.parse(detailData['ticket']['sales_start_date'] == null ? detailData['dateStart'] : detailData['ticket']['sales_start_date']);
+            _dDay = DateTime.parse(
+                detailData['ticket']['sales_start_date'] == null
+                    ? detailData['dateStart']
+                    : detailData['ticket']['sales_start_date']);
             eventStartDate = DateTime.parse(detailData['dateStart']);
-
 
             switch (eventStartDate.month) {
               case 1:
@@ -310,6 +320,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
             MaterialPageRoute(
                 settings: RouteSettings(isInitialRoute: true),
                 builder: (context) => EventDetailsConstructView(
+                      isRest: widget.isRest,
                       buo: buo,
                       commentData: commentData,
                       creatorFullName: creatorFullName,

@@ -42,6 +42,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
   String ticketPaidBy = 'owner';
   int _curValue = 0;
 
+  bool isLoading = false;
+
   File imageFile;
 
   Dio dio = new Dio(BaseOptions(
@@ -136,120 +138,151 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
             ),
           ),
         ),
-        body: Container(
-            color: Colors.white,
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
+        body: Stack(
+          children: <Widget>[
+            Container(
+              color: Colors.white,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: SingleChildScrollView(
                 child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(
-                          height: ScreenUtil.instance.setWidth(15),
-                        ),
-                        Container(
-                          height: ScreenUtil.instance.setWidth(250),
-                          width: MediaQuery.of(context).size.width,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                height: ScreenUtil.instance.setWidth(225),
-                                width: ScreenUtil.instance.setWidth(150),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.file(File(imageUri),
-                                      fit: BoxFit.fill),
-                                ),
-                              ),
-                              SizedBox(
-                                width: ScreenUtil.instance.setWidth(20),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Ticket Quantity',
-                                    style: TextStyle(
-                                        fontSize: ScreenUtil.instance.setSp(18),
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(10)),
-                                  Container(
-                                      width: ScreenUtil.instance.setWidth(170),
-                                      height: ScreenUtil.instance.setWidth(40),
-                                      child: Text(ticketQuantity)),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(7)),
-                                  Text(
-                                    'Ticket Sales Starts',
-                                    style: TextStyle(
-                                        fontSize: ScreenUtil.instance.setSp(18),
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(10)),
-                                  Container(
-                                      width: ScreenUtil.instance.setWidth(170),
-                                      height: ScreenUtil.instance.setWidth(40),
-                                      child: Text(startDate + ' ' + startTime)),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(7)),
-                                  Text(
-                                    'Ticket Sales Ends',
-                                    style: TextStyle(
-                                        fontSize: ScreenUtil.instance.setSp(18),
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(10)),
-                                  Container(
-                                      width: ScreenUtil.instance.setWidth(170),
-                                      height: ScreenUtil.instance.setWidth(40),
-                                      child: Text(endDate + ' ' + endTime)),
-                                ],
-                              )
-                            ],
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(
+                            height: ScreenUtil.instance.setWidth(15),
                           ),
-                        ),
-                        Divider(color: Colors.black),
-                        SizedBox(
-                          height: ScreenUtil.instance.setWidth(15),
-                        ),
-                        Text(
-                          'Description',
-                          style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(18),
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(desc),
-                        SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                        Divider(),
-                        SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                        ticketTypeId == '5' || ticketTypeId == '10'
-                            ? Container()
-                            : serviceFee(context),
-                        SizedBox(
-                          height: ScreenUtil.instance.setWidth(15),
-                        ),
-                      ],
+                          Container(
+                            height: ScreenUtil.instance.setWidth(250),
+                            width: MediaQuery.of(context).size.width,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  height: ScreenUtil.instance.setWidth(225),
+                                  width: ScreenUtil.instance.setWidth(150),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.file(File(imageUri),
+                                        fit: BoxFit.fill),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: ScreenUtil.instance.setWidth(20),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      'Ticket Quantity',
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(18),
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            ScreenUtil.instance.setWidth(10)),
+                                    Container(
+                                        width:
+                                            ScreenUtil.instance.setWidth(170),
+                                        height:
+                                            ScreenUtil.instance.setWidth(40),
+                                        child: Text(ticketQuantity)),
+                                    SizedBox(
+                                        height:
+                                            ScreenUtil.instance.setWidth(7)),
+                                    Text(
+                                      'Ticket Sales Starts',
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(18),
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            ScreenUtil.instance.setWidth(10)),
+                                    Container(
+                                        width:
+                                            ScreenUtil.instance.setWidth(170),
+                                        height:
+                                            ScreenUtil.instance.setWidth(40),
+                                        child:
+                                            Text(startDate + ' ' + startTime)),
+                                    SizedBox(
+                                        height:
+                                            ScreenUtil.instance.setWidth(7)),
+                                    Text(
+                                      'Ticket Sales Ends',
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(18),
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            ScreenUtil.instance.setWidth(10)),
+                                    Container(
+                                        width:
+                                            ScreenUtil.instance.setWidth(170),
+                                        height:
+                                            ScreenUtil.instance.setWidth(40),
+                                        child: Text(endDate + ' ' + endTime)),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                          Divider(color: Colors.black),
+                          SizedBox(
+                            height: ScreenUtil.instance.setWidth(15),
+                          ),
+                          Text(
+                            'Description',
+                            style: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(18),
+                                color: Colors.black54,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(desc),
+                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                          Divider(),
+                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                          ticketTypeId == '5' || ticketTypeId == '10'
+                              ? Container()
+                              : serviceFee(context),
+                          SizedBox(
+                            height: ScreenUtil.instance.setWidth(15),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ]))));
+                  ],
+                ),
+              ),
+            ),
+            isLoading == false ? Container() : Container(
+              color: Colors.black45,
+              child: Center(
+                child: CupertinoActivityIndicator(
+                  animating: true,
+                ),
+              ),
+            )
+          ],
+        ));
   }
 
   Widget serviceFee(BuildContext context) {
@@ -729,6 +762,9 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
   }
 
   Future saveFinalData(BuildContext context) async {
+    setState(() {
+      isLoading = true;
+    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (_curValue == 0) {
@@ -826,6 +862,9 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
       print(response.data);
 
       if (response.statusCode == 201 || response.statusCode == 200) {
+        setState(() {
+          isLoading = false;
+        });
         print(response.data);
         print('proccessing.....');
         if (prefs.getString('POST_EVENT_TYPE') == '0') {
@@ -833,19 +872,33 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
               builder: (BuildContext context) => FinishPostEvent()));
         } else {
           Navigator.of(context).push(CupertinoPageRoute(
-              builder: (BuildContext context) => CustomFormActivator(eventId: prefs.getInt("NEW_EVENT_ID").toString(), from: "createEvent",)));
+              builder: (BuildContext context) => CustomFormActivator(
+                    eventId: prefs.getInt("NEW_EVENT_ID").toString(),
+                    from: "createEvent",
+                  )));
         }
       } else {
         print(response.data + response.statusCode);
       }
     } catch (e) {
       if (e is DioError) {
+        setState(() {
+          isLoading = false;
+        });
+        var extractedError = json.decode(e.response.data);
         print(e.message);
+        print(extractedError);
       }
       if (e is FileSystemException) {
+        setState(() {
+          isLoading = false;
+        });
         print(e.message);
       }
       if (e is NoSuchMethodError) {
+        setState(() {
+          isLoading = false;
+        });
         print(e.stackTrace);
       }
     }

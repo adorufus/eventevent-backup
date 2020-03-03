@@ -149,6 +149,7 @@ flutter:
     - assets/icon_eventevent_kecil.png
     - assets/qr-code.png
     - assets/eventevent.png
+    - assets/failed-transaction.png
     - assets/bottom-bar/home-white.png
     - assets/bottom-bar/home-green.png
     - assets/bottom-bar/notification-white.png

@@ -34,10 +34,11 @@ class ExpiredPageState extends State<ExpiredPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            Expanded(child: SizedBox(),),
             Container(
               height: ScreenUtil.instance.setWidth(250),
               width: ScreenUtil.instance.setWidth(250),
-              child: Image.asset('assets/drawable/success.png'),
+              child: Image.asset('assets/failed-transaction.png'),
             ),
             SizedBox(
               height: ScreenUtil.instance.setWidth(20),
@@ -46,6 +47,7 @@ class ExpiredPageState extends State<ExpiredPage> {
             SizedBox(
               height: ScreenUtil.instance.setWidth(20),
             ),
+            Expanded(child: SizedBox(),),
           ],
         ),
       ),

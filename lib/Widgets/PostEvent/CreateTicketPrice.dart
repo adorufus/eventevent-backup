@@ -103,6 +103,7 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
                   autocorrect: false,
                   autofocus: false,
                   textAlign: TextAlign.center,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     hintText: 'enter your ticket price',
                   ),
