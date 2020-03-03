@@ -154,6 +154,7 @@ class LatestEventItem extends StatelessWidget {
                   child: SizedBox(),
                 ),
                 Container(
+                  padding: EdgeInsets.symmetric(vertical: 5),
                   height: ScreenUtil.instance.setWidth(28),
                   width: ScreenUtil.instance.setWidth(133),
                   decoration: BoxDecoration(boxShadow: <BoxShadow>[
@@ -169,6 +170,7 @@ class LatestEventItem extends StatelessWidget {
                             ? 'Rp. ' + itemPrice.toUpperCase() + ',-'
                             : itemPrice.toUpperCase()
                         : itemPrice.toUpperCase(),
+                        textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil.instance.setSp(14),
