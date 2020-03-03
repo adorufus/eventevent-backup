@@ -177,7 +177,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                           itemPriceText =
                               latestEventData[i]['ticket_type']['name'];
                         } else if (latestEventData[i]['ticket_type']['type'] ==
-                            'free_limited') {
+                            'free_limited' || latestEventData[i]['ticket_type']['type'] == 'free_limited_seating') {
                           if (latestEventData[i]['ticket']
                                   ['availableTicketStatus'] ==
                               '1') {
