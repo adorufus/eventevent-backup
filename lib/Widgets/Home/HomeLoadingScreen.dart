@@ -375,7 +375,7 @@ class HomeLoadingScreen {
                                   offset: Offset(1, 1))
                             ],
                             image: DecorationImage(
-                                image: AssetImage('assets/grey-fade.png'),
+                                image: AssetImage('assets/grey-fade.jpg'),
                                 fit: BoxFit.cover)),
                       ),
                     ),

@@ -829,6 +829,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
             contentType: ContentType('image', 'jpeg'))
       };
 
+      print(body);
+
       print(prefs.getString('SETUP_TICKET_NAME'));
       print(prefs.getString('SETUP_TICKET_DESCRIPTION'));
       print(prefs.getString('SETUP_TICKET_QTY'));

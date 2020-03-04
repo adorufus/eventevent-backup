@@ -129,6 +129,9 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
     getEventDetailsSpecificInfo().then((response) async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       if (response.statusCode == 200) {
+        if(!mounted)
+          return;
+        
         setState(() {
           var extractedData = json.decode(response.body);
           detailData = extractedData['data'];

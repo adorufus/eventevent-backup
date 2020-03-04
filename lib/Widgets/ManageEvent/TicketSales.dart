@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/ManageEvent/BalanceOnHoldDetails.dart';
 import 'package:eventevent/Widgets/ManageEvent/Buyers.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -131,6 +132,9 @@ class TicketSalesState extends State<TicketSales> {
                           height: ScreenUtil.instance.setWidth(15),
                         ),
                         GestureDetector(
+                          onTap: (){
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => BalanceOnHoldDetails(ticketSales: ticketSalesData, eventId: widget.eventID,)));
+                          },
                           child: Text(
                             'SEE DETAILS >',
                             style: TextStyle(color: Colors.orange),

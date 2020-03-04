@@ -52,6 +52,7 @@ class _ListenPageState extends State<ListenPage> {
           setState(() {
             var extractedData = json.decode(response.body);
             nearbyEventData = extractedData['data'];
+            nearbyEventData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
           });
         }
       });
@@ -82,6 +83,7 @@ class _ListenPageState extends State<ListenPage> {
           List updatedData = extractedData['data'];
           print('data: ' + updatedData.toString());
           nearbyEventData.addAll(updatedData);
+          nearbyEventData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
         });
         if (mounted) setState(() {});
         refreshController.loadComplete();
@@ -152,6 +154,7 @@ class _ListenPageState extends State<ListenPage> {
                         setState(() {
                           var extractedData = json.decode(response.body);
                           nearbyEventData = extractedData['data'];
+                          nearbyEventData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
                         });
                         if (mounted) setState(() {});
                         refreshController.refreshCompleted();

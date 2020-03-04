@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/ManageEvent/exportCounter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -35,18 +36,32 @@ class BuyersState extends State<Buyers> {
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   List buyerList = new List();
   List buyerListExport = new List();
+  bool isEmpty;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
+    print(widget.ticketID);
     // print('counter list' + Counter().counter.length.toString());
     getBuyerList().then((response) {
       var extractedData = json.decode(response.body);
       if (response.statusCode == 200) {
         setState(() {
-          buyerList = extractedData['data'];
+          isLoading = false;
+        });
+        setState(() {
+          if (extractedData['desc'] == 'User not found') {
+            isEmpty = true;
+          } else {
+            isEmpty = false;
+            buyerList = extractedData['data'];
+          }
         });
       } else {
+        setState(() {
+          isLoading = false;
+        });
         print(response.body);
         print('gagal');
       }
@@ -56,10 +71,21 @@ class BuyersState extends State<Buyers> {
       var extractedData = json.decode(response.body);
       if (response.statusCode == 200) {
         setState(() {
-          buyerListExport = extractedData['data'];
+          isLoading = false;
+        });
+        setState(() {
+          if (extractedData['desc'] == 'User not found') {
+            isEmpty = true;
+          } else {
+            isEmpty = false;
+            buyerListExport = extractedData['data'];
+          }
         });
         print('Buyer List Export: ' + buyerListExport.length.toString());
       } else {
+        setState(() {
+          isLoading = false;
+        });
         print(response.body);
         print('gagal');
       }
@@ -96,7 +122,7 @@ class BuyersState extends State<Buyers> {
           style: TextStyle(color: eventajaGreenTeal),
         ),
         actions: <Widget>[
-          Padding(
+          isEmpty == true ? Container() : Padding(
             padding: EdgeInsets.only(right: 13),
             child: GestureDetector(
               onTap: () {
@@ -110,56 +136,62 @@ class BuyersState extends State<Buyers> {
           )
         ],
       ),
-      body: buyerList.length == 0 || buyerListExport.length == 0
+      body: isLoading == true
           ? Container(
               child: Center(
                 child: CupertinoActivityIndicator(radius: 20),
               ),
             )
-          : ListView.builder(
-              padding: EdgeInsets.only(bottom: 15),
-              itemCount: buyerList == null ? 0 : buyerList.length,
-              itemBuilder: (BuildContext context, i) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => Invoice(
-                              transactionID: buyerList[i]['id'],
-                            )));
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 15),
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    color: Colors.white,
-                    child: Row(
-                      children: <Widget>[
-                        Center(
-                            child: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              buyerList[i]['user']['pictureAvatarURL']),
-                        )),
-                        SizedBox(width: ScreenUtil.instance.setWidth(50)),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+          : isEmpty == true
+              ? EmptyState(
+                imagePath: 'assets/icons/empty_state/my_ticket.png',
+                reasonText: 'There is no buyers :(',
+              )
+              : ListView.builder(
+                  padding: EdgeInsets.only(bottom: 15),
+                  itemCount: buyerList == null ? 0 : buyerList.length,
+                  itemBuilder: (BuildContext context, i) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => Invoice(
+                                  transactionID: buyerList[i]['id'],
+                                )));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 15),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        color: Colors.white,
+                        child: Row(
                           children: <Widget>[
-                            Text(buyerList[i]['user']['fullName']),
-                            Text('@' + buyerList[i]['user']['username']),
-                            Text(
-                                'Ticket quantity: ' + buyerList[i]['quantity']),
+                            Center(
+                                child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  buyerList[i]['user']['pictureAvatarURL']),
+                            )),
+                            SizedBox(width: ScreenUtil.instance.setWidth(50)),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(buyerList[i]['user']['fullName']),
+                                Text('@' + buyerList[i]['user']['username']),
+                                Text('Ticket quantity: ' +
+                                    buyerList[i]['quantity']),
+                              ],
+                            ),
+                            SizedBox(
+                              width: ScreenUtil.instance.setWidth(45),
+                            ),
+                            Center(
+                              child: Text('See Invoice >'),
+                            ),
                           ],
                         ),
-                        SizedBox(
-                          width: ScreenUtil.instance.setWidth(45),
-                        ),
-                        Center(
-                          child: Text('See Invoice >'),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+                      ),
+                    );
+                  },
+                ),
     );
   }
 
@@ -256,6 +288,9 @@ class BuyersState extends State<Buyers> {
 
   Future<http.Response> getBuyerExport() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isLoading = true;
+    });
 
     String url = BaseApi().apiUrl +
         '/tickets/user?X-API-KEY=$API_KEY&ticketID=${widget.ticketID}&page=all';
@@ -276,6 +311,10 @@ class BuyersState extends State<Buyers> {
 
   Future<http.Response> getBuyerList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      isLoading = true;
+    });
 
     String url = BaseApi().apiUrl +
         '/tickets/user?X-API-KEY=$API_KEY&ticketID=${widget.ticketID}&page=1';

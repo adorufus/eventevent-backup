@@ -152,8 +152,8 @@ class AddNewTicketState extends State<AddNewTicket>{
 
   proccess(String ticketTypeId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('NEW_EVENT_TICKET_TYPE_ID', ticketTypeId);
-    print(prefs.getString('NEW_EVENT_TICKET_TYPE_ID'));
+    prefs.setString('SETUP_TICKET_PAID_TICKET_TYPE', ticketTypeId);
+    print(prefs.getString('SETUP_TICKET_PAID_TICKET_TYPE'));
     Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => CreateTicketName()));
   }
 

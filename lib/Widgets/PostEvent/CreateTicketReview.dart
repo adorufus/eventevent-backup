@@ -119,6 +119,8 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
     getData();
     locationSubcription =
         location.onLocationChanged().listen((LocationData result) {
+          if(!mounted)
+            return;
       setState(() {
         currentLocation = result;
       });

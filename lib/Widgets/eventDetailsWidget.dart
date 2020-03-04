@@ -98,7 +98,8 @@ class EventDetailsConstructView extends StatefulWidget {
       this.lat,
       this.long,
       this.dDay,
-      this.eventStartDate, this.isRest})
+      this.eventStartDate,
+      this.isRest})
       : super(key: key);
 
   @override
@@ -115,6 +116,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
   StreamController<String> controllerData = StreamController<String>();
   StreamController<String> controllerUrl = StreamController<String>();
+  var detailData;
 
   int loveClickedCount = 0;
   int currentTab = 0;
@@ -159,7 +161,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     // FlutterBranchSdk.validateSDKIntegration();
     generateLink();
 
-    if (widget.detailData["isGoing"] == '1') {
+    setState(() {
+      detailData = widget.detailData;
+    });
+
+    if (detailData["isGoing"] == '1') {
       setState(() {
         isGoing = true;
       });
@@ -202,9 +208,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     _timer = Timer.periodic(Duration(seconds: 1), _onTimeChange);
   }
 
-  void setUpBranch() {
-    
-  }
+  void setUpBranch() {}
 
   void generateLink() async {
     BranchResponse response = await FlutterBranchSdk.getShortUrl(
@@ -325,7 +329,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    return widget.detailData == null
+    return detailData == null
         ? Container(
             color: Colors.white,
             child: Center(child: CupertinoActivityIndicator(radius: 20)))
@@ -356,11 +360,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                         SharedPreferences prefs =
                             await SharedPreferences.getInstance();
                         prefs.setString(
-                            'EVENT_VIEWED', widget.detailData['countView']);
-                        prefs.setString(
-                            'EVENT_LOVED', widget.detailData['countLove']);
-                        prefs.setString(
-                            'EVENT_NAME', widget.detailData['name']);
+                            'EVENT_VIEWED', detailData['countView']);
+                        prefs.setString('EVENT_LOVED', detailData['countLove']);
+                        prefs.setString('EVENT_NAME', detailData['name']);
 
                         print(prefs.getString('EVENT_VIEWED'));
                         print(prefs.getString('EVENT_LOVED'));
@@ -372,13 +374,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                           ),
                         );
                       },
-                      child: widget.detailData['createdByID'] == null
+                      child: detailData['createdByID'] == null
                           ? Container(
                               child: Center(
                                   child:
                                       CupertinoActivityIndicator(radius: 20)),
                             )
-                          : widget.detailData['createdByID'] != currentUserId
+                          : detailData['createdByID'] != currentUserId
                               ? Container()
                               : Icon(
                                   Icons.insert_chart,
@@ -418,8 +420,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                         showCupertinoModalPopup(
                             context: context,
                             builder: (context) {
-                              return widget.detailData['createdByID'] !=
-                                      currentUserId
+                              return detailData['createdByID'] != currentUserId
                                   ? CupertinoActionSheet(
                                       actions: <Widget>[
                                         CupertinoActionSheetAction(
@@ -466,73 +467,58 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     i++) {
                                                   print(i.toString());
                                                   categoryList.add(
-                                                      widget.detailData[
-                                                              'category']
+                                                      detailData['category']
                                                           ['data'][i]['name']);
                                                   categoryIdList.add(
-                                                      widget.detailData[
-                                                              'category']
+                                                      detailData['category']
                                                           ['data'][i]['id']);
                                                 }
 
                                                 prefs.setString('NEW_EVENT_ID',
-                                                    widget.detailData['id']);
+                                                    detailData['id']);
                                                 prefs.setString('EVENT_NAME',
-                                                    widget.detailData['name']);
-                                                prefs.setString(
-                                                    'EVENT_TYPE',
-                                                    widget.detailData[
-                                                        'isPrivate']);
+                                                    detailData['name']);
+                                                prefs.setString('EVENT_TYPE',
+                                                    detailData['isPrivate']);
                                                 prefs.setStringList(
                                                     'EVENT_CATEGORY',
                                                     categoryList);
                                                 prefs.setStringList(
                                                     'EVENT_CATEGORY_ID_LIST',
                                                     categoryIdList);
-                                                prefs.setString(
-                                                    'DATE_START',
-                                                    widget.detailData[
-                                                        'dateStart']);
+                                                prefs.setString('DATE_START',
+                                                    detailData['dateStart']);
                                                 prefs.setString(
                                                     'DATE_END',
                                                     widget
                                                         .detailData['dateEnd']);
-                                                prefs.setString(
-                                                    'TIME_START',
-                                                    widget.detailData[
-                                                        'timeStart']);
+                                                prefs.setString('TIME_START',
+                                                    detailData['timeStart']);
                                                 prefs.setString(
                                                     'TIME_END',
                                                     widget
                                                         .detailData['timeEnd']);
                                                 prefs.setString(
                                                     'EVENT_DESCRIPTION',
-                                                    widget.detailData[
-                                                        'description']);
+                                                    detailData['description']);
                                                 prefs.setString('EVENT_PHONE',
-                                                    widget.detailData['phone']);
+                                                    detailData['phone']);
                                                 prefs.setString('EVENT_EMAIL',
-                                                    widget.detailData['email']);
+                                                    detailData['email']);
                                                 prefs.setString(
                                                     'EVENT_WEBSITE',
                                                     widget
                                                         .detailData['website']);
-                                                prefs.setString(
-                                                    'EVENT_LAT',
-                                                    widget.detailData[
-                                                        'latitude']);
-                                                prefs.setString(
-                                                    'EVENT_LONG',
-                                                    widget.detailData[
-                                                        'longitude']);
+                                                prefs.setString('EVENT_LAT',
+                                                    detailData['latitude']);
+                                                prefs.setString('EVENT_LONG',
+                                                    detailData['longitude']);
                                                 prefs.setString(
                                                     'EVENT_ADDRESS',
                                                     widget
                                                         .detailData['address']);
-                                                prefs.setString(
-                                                    'EVENT_IMAGE',
-                                                    widget.detailData[
-                                                        'photoFull']);
+                                                prefs.setString('EVENT_IMAGE',
+                                                    detailData['photoFull']);
 
                                                 print(prefs
                                                     .getStringList(
@@ -581,180 +567,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               onTap: () {
                 if (widget.ticketStat['salesStatus'] == null ||
                     widget.ticketStat['salesStatus'] == 'null') {
-                  if (widget.detailData['ticket_type']['type'] == 'free' ||
-                      widget.detailData['ticket_type']['type'] == 'no_ticket') {
+                  if (detailData['ticket_type']['type'] == 'free' ||
+                      detailData['ticket_type']['type'] == 'no_ticket') {
                     print('show modal');
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (context) {
-                        return Container(
-                          color: Color(0xFF737373),
-                          child: Container(
-                            padding: EdgeInsets.only(bottom: 30),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  topRight: Radius.circular(15),
-                                )),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Container(
-                                  padding: EdgeInsets.all(13),
-                                  decoration: BoxDecoration(
-                                      color: eventajaGreenTeal,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(15),
-                                        topRight: Radius.circular(15),
-                                      )),
-                                  child: Center(
-                                    child: Text(
-                                      'Going to this event?',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 13, vertical: 13),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        width: ScreenUtil.instance
-                                            .setWidth(122.86),
-                                        height: ScreenUtil.instance
-                                            .setWidth(184.06),
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            color: Colors.grey,
-                                            image: DecorationImage(
-                                                image: NetworkImage(widget
-                                                    .detailData['photo']))),
-                                      ),
-                                      SizedBox(
-                                        width: 12,
-                                      ),
-                                      Flexible(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Container(
-                                              width: ScreenUtil.instance
-                                                  .setWidth(200),
-                                              child: Text(
-                                                widget.detailData['name'],
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                                maxLines: 2,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 15,
-                                            ),
-                                            Container(
-                                                width: 210,
-                                                child: Text(
-                                                  widget.detailData[
-                                                      'description'],
-                                                  maxLines: 8,
-                                                ))
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                    height: ScreenUtil.instance.setWidth(12)),
-                                Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 13),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: <Widget>[
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Container(
-                                          height:
-                                              ScreenUtil.instance.setWidth(30),
-                                          width:
-                                              ScreenUtil.instance.setWidth(100),
-                                          decoration: BoxDecoration(
-                                              color: Colors.red,
-                                              borderRadius:
-                                                  BorderRadius.circular(30)),
-                                          child: Center(
-                                            child: Text(
-                                              'Cancel',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                          width:
-                                              ScreenUtil.instance.setWidth(8)),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.pop(context);
-
-                                          isLoading = true;
-                                          goingToEvent().then((response) {
-                                            print(response.statusCode);
-                                            print(response.body);
-
-                                            if (response.statusCode == 201) {
-                                              widget
-                                                  .getEventDetailSpecificInfo();
-                                              isLoading = false;
-                                            } else {
-                                              isLoading = false;
-                                            }
-                                          });
-                                        },
-                                        child: Container(
-                                          height:
-                                              ScreenUtil.instance.setWidth(30),
-                                          width:
-                                              ScreenUtil.instance.setWidth(100),
-                                          decoration: BoxDecoration(
-                                              color: eventajaGreenTeal,
-                                              borderRadius:
-                                                  BorderRadius.circular(30)),
-                                          child: Center(
-                                            child: Text(
-                                              'Yes',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
+                    showGoingOption();
                   }
                 } else {
                   if (widget.ticketStat['salesStatus'] == 'endSales' ||
@@ -764,8 +580,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                   } else {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => SelectTicketWidget(
-                              eventID: widget.detailData['id'],
-                              eventDate: widget.detailData['dateStart'],
+                              eventID: detailData['id'],
+                              eventDate: detailData['dateStart'],
                             )));
                   }
                 }
@@ -826,27 +642,31 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     SelectTicketWidget(
-                                      eventID: widget.detailData['id'],
-                                      eventDate: widget.detailData['dateStart'],
+                                      eventID: detailData['id'],
+                                      eventDate: detailData['dateStart'],
                                     )));
                           }
                         }
                       },
                       child: Container(
-                        height: ScreenUtil.instance.setWidth(29.6),
-                        width: ScreenUtil.instance.setWidth(143.7),
+                        height: ScreenUtil.instance.setWidth(28 * 1.1),
+                        width: ScreenUtil.instance.setWidth(133 * 1.1),
                         decoration: BoxDecoration(
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: widget.itemColor.withOpacity(0.4),
+                                  color: isGoing == true
+                                      ? Colors.blue.withOpacity(0.4)
+                                      : widget.itemColor.withOpacity(0.4),
                                   blurRadius: 2,
                                   spreadRadius: 1.5)
                             ],
-                            color: widget.itemColor,
+                            color: isGoing == true
+                                ? Colors.blue
+                                : widget.itemColor,
                             borderRadius: BorderRadius.circular(15)),
                         child: Center(
                             child: Text(
-                          widget.ticketPrice,
+                          isGoing == true ? 'Going!' : widget.ticketPrice,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: ScreenUtil.instance.setSp(14),
@@ -860,7 +680,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             ),
             body: Stack(
               children: <Widget>[
-                widget.detailData == null
+                detailData == null
                     ? Container(
                         child: Center(
                             child: CupertinoActivityIndicator(radius: 20)))
@@ -873,7 +693,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                           enablePullUp: false,
                           onRefresh: () {
                             setState(() {
-                              widget.getEventDetailSpecificInfo();
+                              getEventDetailsSpecificInfo();
                               getInvitedUser();
                               getData();
                               _currentTime = DateTime.now();
@@ -907,9 +727,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 spreadRadius: 1.5)
                                           ],
                                           image: DecorationImage(
-                                              image: widget.detailData[
-                                                          'photo'] ==
-                                                      null
+                                              image: detailData['photo'] == null
                                                   ? AssetImage(
                                                       'assets/grey-fade.jpg')
                                                   : NetworkImage(widget
@@ -986,7 +804,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                       (context) =>
                                                                           ProfileWidget(
                                                                             userId:
-                                                                                widget.detailData['createdByID'],
+                                                                                detailData['createdByID'],
                                                                             initialIndex:
                                                                                 0,
                                                                           )));
@@ -1059,8 +877,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   width: ScreenUtil.instance
                                                       .setWidth(180),
                                                   child: Text(
-                                                    widget.detailData['name'] ==
-                                                            null
+                                                    detailData['name'] == null
                                                         ? '-'
                                                         : widget
                                                             .detailData['name']
@@ -1091,13 +908,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   SizedBox(
                                                       width: ScreenUtil.instance
                                                           .setWidth(5)),
-                                                  widget.detailData['address']
+                                                  detailData['address']
                                                               .toString()
                                                               .length <
                                                           30
                                                       ? Text(
-                                                          widget.detailData[
-                                                              'address'],
+                                                          detailData['address'],
                                                           style: TextStyle(
                                                               fontSize:
                                                                   ScreenUtil
@@ -1114,11 +930,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                               .instance
                                                               .setWidth(170),
                                                           child: MarqueeWidget(
-                                                            text: widget.detailData[
+                                                            text: detailData[
                                                                         'address'] ==
                                                                     null
                                                                 ? '-'
-                                                                : widget.detailData[
+                                                                : detailData[
                                                                     'address'],
                                                             scrollAxis:
                                                                 Axis.horizontal,
@@ -1178,18 +994,14 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         widget.ticketStat[
                                                                 'salesStatus'] ==
                                                             'null') {
-                                                      if (widget.detailData[
-                                                                      'ticket_type']
+                                                      if (detailData['ticket_type']
                                                                   ['type'] ==
                                                               'free' ||
-                                                          widget.detailData[
-                                                                      'ticket_type']
+                                                          detailData['ticket_type']
                                                                   ['type'] ==
                                                               'no_ticket') {
                                                         print('show modal');
-                                                        if (widget.detailData[
-                                                                'isGoing'] ==
-                                                            '1') {
+                                                        if (isGoing == true) {
                                                           ungoing()
                                                               .then((response) {
                                                             isLoading = true;
@@ -1211,183 +1023,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             }
                                                           });
                                                         } else {
-                                                          showModalBottomSheet(
-                                                            context: context,
-                                                            isScrollControlled:
-                                                                true,
-                                                            builder: (context) {
-                                                              return Container(
-                                                                color: Color(
-                                                                    0xFF737373),
-                                                                child:
-                                                                    Container(
-                                                                  padding: EdgeInsets
-                                                                      .only(
-                                                                          bottom:
-                                                                              30),
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                          color: Colors
-                                                                              .white,
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                          )),
-                                                                  child: Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    children: <
-                                                                        Widget>[
-                                                                      Container(
-                                                                        padding:
-                                                                            EdgeInsets.all(13),
-                                                                        decoration: BoxDecoration(
-                                                                            color: eventajaGreenTeal,
-                                                                            borderRadius: BorderRadius.only(
-                                                                              topLeft: Radius.circular(15),
-                                                                              topRight: Radius.circular(15),
-                                                                            )),
-                                                                        child:
-                                                                            Center(
-                                                                          child:
-                                                                              Text(
-                                                                            'Going to this event?',
-                                                                            style: TextStyle(
-                                                                                color: Colors.white,
-                                                                                fontSize: 12,
-                                                                                fontWeight: FontWeight.bold),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      Container(
-                                                                        margin: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                13,
-                                                                            vertical:
-                                                                                13),
-                                                                        child:
-                                                                            Row(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.start,
-                                                                          children: <
-                                                                              Widget>[
-                                                                            Container(
-                                                                              width: ScreenUtil.instance.setWidth(146.67),
-                                                                              height: ScreenUtil.instance.setWidth(220),
-                                                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.grey, image: DecorationImage(image: NetworkImage(widget.detailData['photo']))),
-                                                                            ),
-                                                                            SizedBox(
-                                                                              width: 12,
-                                                                            ),
-                                                                            Flexible(
-                                                                              child: Column(
-                                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                children: <Widget>[
-                                                                                  Container(
-                                                                                    width: ScreenUtil.instance.setWidth(200),
-                                                                                    child: Text(
-                                                                                      widget.detailData['name'],
-                                                                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                                                                      maxLines: 2,
-                                                                                    ),
-                                                                                  ),
-                                                                                  SizedBox(
-                                                                                    height: 15,
-                                                                                  ),
-                                                                                  Container(
-                                                                                      width: 210,
-                                                                                      child: Text(
-                                                                                        widget.detailData['description'],
-                                                                                        maxLines: 8,
-                                                                                      ))
-                                                                                ],
-                                                                              ),
-                                                                            )
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(
-                                                                          height: ScreenUtil
-                                                                              .instance
-                                                                              .setWidth(12)),
-                                                                      Container(
-                                                                        margin: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                13),
-                                                                        child:
-                                                                            Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.end,
-                                                                          children: <
-                                                                              Widget>[
-                                                                            GestureDetector(
-                                                                              onTap: () {
-                                                                                Navigator.pop(context);
-                                                                              },
-                                                                              child: Container(
-                                                                                height: ScreenUtil.instance.setWidth(30),
-                                                                                width: ScreenUtil.instance.setWidth(100),
-                                                                                decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(30)),
-                                                                                child: Center(
-                                                                                  child: Text(
-                                                                                    'Cancel',
-                                                                                    style: TextStyle(
-                                                                                      color: Colors.white,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            SizedBox(width: ScreenUtil.instance.setWidth(8)),
-                                                                            StatefulBuilder(
-                                                                              builder: (context, setState) => GestureDetector(
-                                                                                onTap: () {
-                                                                                  Navigator.pop(context);
-
-                                                                                  isLoading = true;
-
-                                                                                  goingToEvent().then((response) {
-                                                                                    print(response.statusCode);
-                                                                                    print(response.body);
-
-                                                                                    if (response.statusCode == 201) {
-                                                                                      isGoing = true;
-                                                                                      print(isGoing);
-                                                                                      isLoading = false;
-                                                                                    } else {
-                                                                                      isLoading = false;
-                                                                                    }
-                                                                                  });
-                                                                                },
-                                                                                child: Container(
-                                                                                  height: ScreenUtil.instance.setWidth(30),
-                                                                                  width: ScreenUtil.instance.setWidth(100),
-                                                                                  decoration: BoxDecoration(color: eventajaGreenTeal, borderRadius: BorderRadius.circular(30)),
-                                                                                  child: Center(
-                                                                                    child: Text(
-                                                                                      'Yes',
-                                                                                      style: TextStyle(
-                                                                                        color: Colors.white,
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            )
-                                                                          ],
-                                                                        ),
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                          );
+                                                          showGoingOption();
                                                         }
                                                       }
                                                     } else {
@@ -1422,20 +1058,29 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     decoration: BoxDecoration(
                                                         boxShadow: <BoxShadow>[
                                                           BoxShadow(
-                                                              color: widget
-                                                                  .itemColor
-                                                                  .withOpacity(
-                                                                      0.4),
+                                                              color: isGoing ==
+                                                                      true
+                                                                  ? Colors.blue
+                                                                      .withOpacity(
+                                                                          0.4)
+                                                                  : widget
+                                                                      .itemColor
+                                                                      .withOpacity(
+                                                                          0.4),
                                                               blurRadius: 2,
                                                               spreadRadius: 1.5)
                                                         ],
-                                                        color: widget.itemColor,
+                                                        color: isGoing == true
+                                                            ? Colors.blue
+                                                            : widget.itemColor,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(15)),
                                                     child: Center(
                                                         child: Text(
-                                                      widget.ticketPrice,
+                                                      isGoing == true
+                                                          ? 'Going!'
+                                                          : widget.ticketPrice,
                                                       style: TextStyle(
                                                           color: Colors.white,
                                                           fontSize: ScreenUtil
@@ -1475,11 +1120,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       isComment: false,
                                       eventId: widget.id,
                                       isAlreadyLoved:
-                                          widget.detailData['isLoved'] == '1'
+                                          detailData['isLoved'] == '1'
                                               ? true
                                               : false,
-                                      loveCount: int.parse(
-                                          widget.detailData['countLove']),
+                                      loveCount:
+                                          int.parse(detailData['countLove']),
                                     ),
                                     SizedBox(
                                       width: ScreenUtil.instance.setWidth(10),
@@ -1731,7 +1376,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                         ),
                                       ),
                                     ),
-                              widget.detailData['ticket']['salesStatus'] ==
+                              detailData['ticket']['salesStatus'] ==
                                       'comingSoon'
                                   ? countdownTimer()
                                   : Container(),
@@ -1801,7 +1446,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                               context) =>
                                                           ProfileWidget(
                                                             initialIndex: 0,
-                                                            userId: widget.detailData[
+                                                            userId: detailData[
                                                                         'going']
                                                                     ['data'][i]
                                                                 ['userID'],
@@ -1832,8 +1477,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         shape: BoxShape.circle,
                                                         image: DecorationImage(
                                                           image: CachedNetworkImageProvider(
-                                                              widget.detailData[
-                                                                          'going']
+                                                              detailData['going']
                                                                       ['data']
                                                                   [i]['photo']),
                                                           fit: BoxFit.fill,
@@ -1849,12 +1493,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   ],
                                 ),
                               ),
-                              widget.detailData['status'] == 'ended'
+                              detailData['status'] == 'ended'
                                   ? SizedBox(
                                       height: ScreenUtil.instance.setWidth(20),
                                     )
                                   : Container(),
-                              widget.detailData['status'] == 'ended'
+                              detailData['status'] == 'ended'
                                   ? Container(
                                       // height: ScreenUtil.instance.setWidth(150),
                                       margin:
@@ -1933,8 +1577,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 width: ScreenUtil.instance
                                                     .setWidth(40),
                                                 child: Text(
-                                                  (widget.detailData[
-                                                                  'event_review']
+                                                  (detailData['event_review']
                                                               ['percent_review']
                                                           ['good'] +
                                                       '%'),
@@ -1974,8 +1617,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 width: ScreenUtil.instance
                                                     .setWidth(40),
                                                 child: Text(
-                                                  widget.detailData[
-                                                                  'event_review']
+                                                  detailData['event_review']
                                                               ['percent_review']
                                                           ['bad'] +
                                                       '%',
@@ -1989,22 +1631,17 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             ],
                                           ),
                                           SizedBox(
-                                            height: widget.detailData[
-                                                                'event_review']
+                                            height: detailData['event_review']
                                                             ['user_review'] ==
                                                         '1' ||
-                                                    widget.detailData[
-                                                            'isGoing'] ==
-                                                        '0'
+                                                    detailData['isGoing'] == '0'
                                                 ? 0
                                                 : 15,
                                           ),
-                                          widget.detailData['event_review']
+                                          detailData['event_review']
                                                           ['user_review'] ==
                                                       '1' ||
-                                                  widget.detailData[
-                                                          'isGoing'] ==
-                                                      '0'
+                                                  detailData['isGoing'] == '0'
                                               ? Container()
                                               : GestureDetector(
                                                   onTap: () {
@@ -2203,11 +1840,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                           isLoading =
                                                                               true;
 
-                                                                          FeedbackLogic.postFeedback(widget.detailData['id'], typeId, feedbackInputController.text).then(
+                                                                          FeedbackLogic.postFeedback(detailData['id'], typeId, feedbackInputController.text).then(
                                                                               (response) {
                                                                             if (response.statusCode == 201 ||
                                                                                 response.statusCode == 200) {
-                                                                              widget.getEventDetailSpecificInfo();
+                                                                              getEventDetailsSpecificInfo();
                                                                               isLoading = false;
                                                                             } else {
                                                                               isLoading = false;
@@ -2311,7 +1948,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                               SizedBox(
                                 height: ScreenUtil.instance.setWidth(20),
                               ),
-                              widget.detailData['createdByID'] != currentUserId
+                              detailData['createdByID'] != currentUserId
                                   ? Container()
                                   : Container(
                                       width:
@@ -2341,15 +1978,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                         children: <Widget>[
                                           GestureDetector(
                                             onTap: () {
-                                              saveId(widget.detailData['id']);
+                                              saveId(detailData['id']);
                                               Navigator.of(context).push(
                                                   MaterialPageRoute(
                                                       builder: (BuildContext
                                                               context) =>
                                                           ManageTicket(
-                                                            eventID: widget
-                                                                    .detailData[
-                                                                'id'],
+                                                            eventID: widget.id,
                                                           )));
                                             },
                                             child: SizedBox(
@@ -2393,13 +2028,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   await SharedPreferences
                                                       .getInstance();
                                               prefs.setString('NEW_EVENT_ID',
-                                                  widget.detailData['id']);
+                                                  detailData['id']);
                                               prefs.setString(
                                                   'QR_URI',
-                                                  widget.detailData['qrcode']
+                                                  detailData['qrcode']
                                                       ['secure_url']);
                                               prefs.setString('EVENT_NAME',
-                                                  widget.detailData['name']);
+                                                  detailData['name']);
                                               print(prefs
                                                   .getString('NEW_EVENT_ID'));
                                               print(prefs.getString('QR_URI'));
@@ -2658,77 +2293,75 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    widget.detailData['name'],
+                    detailData['name'],
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                   SizedBox(
                     height: ScreenUtil.instance.setWidth(
-                        widget.detailData['additional'].length == 0 ? 0 : 29),
+                        detailData['additional'].length == 0 ? 0 : 29),
                   ),
-                  widget.detailData['additional'].length == 0
+                  detailData['additional'].length == 0
                       ? Container()
                       : Container(
                           height: 200,
                           child: ListView.builder(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
-                              itemCount:
-                                  widget.detailData['additional'].length == 0
-                                      ? 0
-                                      : widget.detailData['additional'].length,
+                              itemCount: detailData['additional'].length == 0
+                                  ? 0
+                                  : detailData['additional'].length,
                               itemBuilder: (context, i) {
                                 return GestureDetector(
                                   onTap: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => widget.detailData[
-                                                            'additional'][i]
-                                                        ['extension'] ==
-                                                    'image/jpeg' ||
-                                                widget.detailData['additional']
-                                                        [i]['extension'] ==
-                                                    'image/png'
-                                            ? PhotoView(
-                                                imageProvider: NetworkImage(
-                                                    widget.detailData[
-                                                            'additional'][i]
-                                                        ['posterPathFull']),
-                                              )
-                                            : MediaPlayer(
-                                                videoUri: widget.detailData[
-                                                        'additional'][i]
-                                                    ['posterPathFull']),
+                                        builder: (context) =>
+                                            detailData['additional'][i]
+                                                            ['extension'] ==
+                                                        'image/jpeg' ||
+                                                    detailData['additional'][i]
+                                                            ['extension'] ==
+                                                        'image/png'
+                                                ? PhotoView(
+                                                    imageProvider: NetworkImage(
+                                                        detailData['additional']
+                                                                [i]
+                                                            ['posterPathFull']),
+                                                  )
+                                                : MediaPlayer(
+                                                    videoUri:
+                                                        detailData['additional']
+                                                                [i]
+                                                            ['posterPathFull']),
                                       ),
                                     );
                                   },
                                   child: Container(
                                     margin: EdgeInsets.only(left: 10),
                                     height: ScreenUtil.instance.setHeight(
-                                        double.parse(
-                                            widget.detailData['additional'][i]
-                                                ['pictureHeight'])),
+                                        double.parse(detailData['additional'][i]
+                                            ['pictureHeight'])),
                                     width: ScreenUtil.instance.setWidth(
-                                        double.parse(
-                                            widget.detailData['additional'][i]
-                                                ['pictureWidth'])),
+                                        double.parse(detailData['additional'][i]
+                                            ['pictureWidth'])),
                                     decoration: BoxDecoration(
                                         color: Color(0xff8a8a8b),
                                         image: DecorationImage(
                                             image: NetworkImage(
-                                                widget.detailData['additional']
-                                                    [i]['posterPathThumb']),
+                                                detailData['additional'][i]
+                                                    ['posterPathThumb']),
                                             fit: BoxFit.cover),
                                         borderRadius:
                                             BorderRadius.circular(15)),
                                     child: Center(
-                                        child: widget.detailData['additional']
-                                                        [i]['extension'] ==
+                                        child: detailData['additional'][i]
+                                                        ['extension'] ==
                                                     'image/jpeg' ||
-                                                widget.detailData['additional']
-                                                        [i]['extension'] ==
+                                                detailData['additional'][i]
+                                                        ['extension'] ==
                                                     'image/png'
                                             ? Container()
                                             : Icon(
@@ -2743,7 +2376,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                   SizedBox(
                     height: ScreenUtil.instance.setWidth(29),
                   ),
-                  Text(widget.detailData['description'])
+                  Text(detailData['description'])
                 ],
               ),
             ),
@@ -2771,7 +2404,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     } else if (currentTab == 1) {
       return UserTimelineItem(
         currentUserId: currentUserId,
-        eventId: widget.detailData['id'],
+        eventId: detailData['id'],
         timelineType: 'eventDetail',
       );
     } else if (currentTab == 2) {
@@ -2783,7 +2416,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => EventDetailComment(
-                        eventID: widget.detailData['id'],
+                        eventID: detailData['id'],
                       )));
             },
             child: Container(
@@ -2806,30 +2439,29 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               ),
             ),
           ),
-          widget.detailData['comment'].length == 0
+          detailData['comment'].length == 0
               ? Container(
                   height: 15,
                 )
               : ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: widget.detailData['comment'] == null
+                  itemCount: detailData['comment'] == null
                       ? 0
-                      : widget.detailData['comment'].length,
+                      : detailData['comment'].length,
                   itemBuilder: (context, i) {
                     return ListTile(
                       leading: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            widget.detailData['comment'][i]['photo']),
+                        backgroundImage:
+                            NetworkImage(detailData['comment'][i]['photo']),
                       ),
                       title: Text(
-                        widget.detailData['comment'][i]['fullName'] + '' + ': ',
+                        detailData['comment'][i]['fullName'] + '' + ': ',
                         style: TextStyle(
                             fontSize: ScreenUtil.instance.setSp(12),
                             fontWeight: FontWeight.bold),
                       ),
-                      subtitle:
-                          Text(widget.detailData['comment'][i]['response']),
+                      subtitle: Text(detailData['comment'][i]['response']),
                     );
                   },
                 )
@@ -2907,7 +2539,172 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   }
 
   testGetData() {
-    print(widget.detailData['name']);
+    print(detailData['name']);
+  }
+
+  showGoingOption() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          color: Color(0xFF737373),
+          child: Container(
+            padding: EdgeInsets.only(bottom: 30),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                )),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(13),
+                  decoration: BoxDecoration(
+                      color: eventajaGreenTeal,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                      )),
+                  child: Center(
+                    child: Text(
+                      'Going to this event?',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        width: ScreenUtil.instance.setWidth(122.86),
+                        height: ScreenUtil.instance.setWidth(184.06),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.grey,
+                            image: DecorationImage(
+                                image:
+                                    NetworkImage(widget.detailData['photo']))),
+                      ),
+                      SizedBox(
+                        width: 12,
+                      ),
+                      Flexible(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              width: ScreenUtil.instance.setWidth(200),
+                              child: Text(
+                                detailData['name'],
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                maxLines: 2,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Container(
+                                width: 210,
+                                child: Text(
+                                  detailData['description'],
+                                  maxLines: 8,
+                                ))
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: ScreenUtil.instance.setWidth(12)),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 13),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          height: ScreenUtil.instance.setWidth(30),
+                          width: ScreenUtil.instance.setWidth(100),
+                          decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Center(
+                            child: Text(
+                              'Cancel',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: ScreenUtil.instance.setWidth(8)),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                          setState(() {
+                            isLoading = true;
+                          });
+                          goingToEvent().then((response) {
+                            print(response.statusCode);
+                            print(response.body);
+
+                            if (response.statusCode == 201) {
+                              getEventDetailsSpecificInfo().then((response) {
+                                print(response.statusCode);
+                                var extractedData = json.decode(response.body);
+                                if (response.statusCode == 200) {
+                                  setState(() {
+                                    detailData = extractedData['data'];
+                                    isLoading = false;
+                                    isGoing = true;
+                                  });
+                                }
+                              });
+                              isLoading = false;
+                            } else {
+                              isLoading = false;
+                              setState(() {});
+                            }
+                          });
+                        },
+                        child: Container(
+                          height: ScreenUtil.instance.setWidth(30),
+                          width: ScreenUtil.instance.setWidth(100),
+                          decoration: BoxDecoration(
+                              color: eventajaGreenTeal,
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Center(
+                            child: Text(
+                              'Yes',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Future getInvitedUser() async {
@@ -2916,17 +2713,14 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     Map<String, String> headers;
 
     setState(() {
-      if(widget.isRest == false){
+      if (widget.isRest == false) {
         headers = {
           'Authorization': AUTHORIZATION_KEY,
           'cookie': preferences.getString('Session')
         };
         baseUrl = BaseApi().apiUrl;
       } else {
-        headers = {
-          'Authorization': AUTHORIZATION_KEY,
-          'signature': signature
-        };
+        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': signature};
         baseUrl = BaseApi().restUrl;
       }
     });
@@ -2960,17 +2754,14 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         currentPage += newPage;
       }
 
-      if(widget.isRest == false){
+      if (widget.isRest == false) {
         headers = {
           'Authorization': AUTHORIZATION_KEY,
           'cookie': prefs.getString('Session')
         };
         baseUrl = BaseApi().apiUrl;
       } else {
-        headers = {
-          'Authorization': AUTHORIZATION_KEY,
-          'signature': signature
-        };
+        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': signature};
         baseUrl = BaseApi().restUrl;
       }
 
@@ -2983,6 +2774,35 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     final response = await http.get(url, headers: headers);
 
     print('body: ' + response.body);
+
+    return response;
+  }
+
+  Future<http.Response> getEventDetailsSpecificInfo() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String session = '';
+    Map<String, String> headers;
+    String baseUrl = BaseApi().apiUrl;
+
+    setState(() {
+      session = preferences.getString('Session');
+      if (widget.isRest == true) {
+        baseUrl = BaseApi().restUrl;
+        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': signature};
+      } else if (widget.isRest == false) {
+        baseUrl = BaseApi().apiUrl;
+        headers = {'Authorization': AUTHORIZATION_KEY, 'cookie': session};
+      }
+    });
+
+    final detailsInfoUrl =
+        baseUrl + '/event/detail?X-API-KEY=$API_KEY&eventID=${widget.id}';
+
+    print(detailsInfoUrl);
+    final response = await http.get(detailsInfoUrl, headers: headers);
+
+    print('event detail page -> ' + response.statusCode.toString());
+    print('event detail page -> ' + response.body);
 
     return response;
   }

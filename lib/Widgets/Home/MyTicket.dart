@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
+import 'package:eventevent/Widgets/Home/MyTicketSearch.dart';
 import 'package:eventevent/Widgets/Home/SeeAll/MyTicketItem.dart';
 import 'package:eventevent/Widgets/ProfileWidget/UseTicket.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/SearchWidget.dart';
@@ -187,7 +188,7 @@ class _MyTicketState extends State<MyTicket> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            Search()));
+                                            MyTicketSearch()));
                               },
                               child: Material(
                                   borderRadius: BorderRadius.circular(40),

@@ -49,6 +49,7 @@ class PrivateEventListState extends State<PrivateEventList> {
           setState(() {
             isEmpty = false;
             privateData = extractedData['data']['private']['data'];
+            privateData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
             print(privateData);
           });
         }
@@ -71,6 +72,7 @@ class PrivateEventListState extends State<PrivateEventList> {
           List updatedData = extractedData['data']['private']['data'];
           print('data: ' + updatedData.toString());
           privateData.addAll(updatedData);
+          privateData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
         });
         if (mounted) setState(() {});
         refreshController.loadComplete();
@@ -114,6 +116,7 @@ class PrivateEventListState extends State<PrivateEventList> {
                             var extractedData = json.decode(response.body);
                             privateData =
                                 extractedData['data']['private']['data'];
+                                privateData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
                             assert(privateData != null);
 
                             print(privateData);

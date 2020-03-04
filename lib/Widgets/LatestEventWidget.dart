@@ -45,6 +45,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
           }
           print('data: ' + updatedData.toString());
           latestEventData.addAll(updatedData);
+          latestEventData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
         });
         if (mounted) setState(() {});
         refreshController.loadComplete();
@@ -60,6 +61,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
         setState(() {
           var extractedData = json.decode(response.body);
           latestEventData = extractedData['data'];
+          latestEventData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
         });
       }
     });
@@ -110,6 +112,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                         setState(() {
                           var extractedData = json.decode(response.body);
                           latestEventData = extractedData['data'];
+                          latestEventData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
                         });
                         if (mounted) setState(() {});
                         refreshController.refreshCompleted();
@@ -125,6 +128,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                     itemBuilder: (BuildContext context, i) {
                       Color itemColor;
                       String itemPriceText;
+                      latestEventData.removeWhere((item) => item['type'] == 'free_limited_seating');
                       if (latestEventData[i]['isGoing'] == '1') {
                         itemColor = Colors.blue;
                         itemPriceText = 'Going!';

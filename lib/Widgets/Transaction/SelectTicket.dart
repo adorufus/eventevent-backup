@@ -205,8 +205,13 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                             eventAddress: ticketListData[i]['event']['address'],
                             eventDate: ticketListData[i]['event']['dateStart'],
                             ticketName: ticketListData[i]['ticket_name'],
-                            eventImage: ticketListData[i].containsKey('ticket_image').toString() == 'false' ? 'assets/grey-fade.jpg' : ticketListData[i]['ticket_image']
-                                ['secure_url'],
+                            eventImage: ticketListData[i]
+                                        .containsKey('ticket_image')
+                                        .toString() ==
+                                    'false'
+                                ? 'assets/grey-fade.jpg'
+                                : ticketListData[i]['ticket_image']
+                                    ['secure_url'],
                             isSingleTicket:
                                 ticketListData[i]['is_single_ticket'] == '1'
                                     ? true
@@ -251,7 +256,11 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                   width: ScreenUtil.instance.setWidth(100),
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
-                                          image: ticketListData[i].containsKey('ticket_image').toString() == 'false'
+                                          image: ticketListData[i]
+                                                      .containsKey(
+                                                          'ticket_image')
+                                                      .toString() ==
+                                                  'false'
                                               ? AssetImage(
                                                   'assets/grey-fade.jpg')
                                               : NetworkImage(
@@ -291,7 +300,9 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                                 ? Colors.green
                                                 : Colors.yellow,
                                           ),
-                                          SizedBox(width: 5,),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
                                           Text(ticketStatus,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold,
@@ -319,7 +330,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                       ),
                                       SizedBox(
                                         height:
-                                            ScreenUtil.instance.setWidth(20),
+                                            ScreenUtil.instance.setWidth(12),
                                       ),
                                       Container(
                                         height:
@@ -355,6 +366,8 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                               fontWeight: FontWeight.bold),
                                         )),
                                       ),
+                                      ticketListData[i]['show_remaining_ticket'] == '0' ? Container() : Text(
+                                          'Ticket(s) left: ${(int.parse(ticketListData[i]['quantity']) - int.parse(ticketListData[i]['sold']))} / ${ticketListData[i]['quantity']}'),
                                       Text(ticketListData[i]
                                                   ['is_single_ticket'] ==
                                               '0'
@@ -387,7 +400,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                 ),
                               ),
                             )
-                          : Container()
+                          : Container(),
                     ],
                   ),
                 );
@@ -431,6 +444,10 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
       setState(() {
         var extractedData = json.decode(response.body);
         ticketListData = extractedData['data'];
+        ticketListData.removeWhere((item) =>
+            item['event']['ticket_type']['type'] == 'free_limited_seating' ||
+            item['event']['ticket_type']['type'] == 'paid_seating' ||
+            item['event']['ticket_type']['type'] == 'paid_seating');
 
         for (var ticketData in ticketListData) {
           print(ticketData);

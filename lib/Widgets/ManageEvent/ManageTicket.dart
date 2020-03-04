@@ -46,7 +46,11 @@ class ManageTicketState extends State<ManageTicket> {
     
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal, size: 15),
+        leading: GestureDetector(
+          onTap: (){
+            Navigator.pop(context);
+          },
+          child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal, size: 15)),
         backgroundColor: Colors.white,
         centerTitle: true,
         title:
@@ -158,6 +162,7 @@ class ManageTicketState extends State<ManageTicket> {
                       SharedPreferences prefs = await SharedPreferences.getInstance();
 
                       prefs.setInt('NEW_EVENT_ID', int.parse(widget.eventID));
+                      print(prefs.getInt('NEW_EVENT_ID'));
                       Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => AddNewTicket()));
                     },
                     child: Container(
