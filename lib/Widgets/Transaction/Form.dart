@@ -463,7 +463,7 @@ class _TransactionFormState extends State<TransactionForm> {
                   value: int.parse(customFormList[index]['option'][i]['order']),
                   groupValue: _radioValue,
                   onChanged: (int i) {
-                    setState(() {
+                    setState( () {
                       _radioValue = i;
                       answer.add(i.toString());
                       print(answer);

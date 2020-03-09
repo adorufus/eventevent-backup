@@ -249,6 +249,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
   String nextText = '';
   TextEditingController simpleQuestionController = TextEditingController();
   bool noForm;
+  List<TextEditingController> textEditingControllers = [];
 
   Dio dio = new Dio(BaseOptions(
       connectTimeout: 10000, baseUrl: BaseApi().apiUrl, receiveTimeout: 10000));
@@ -269,10 +270,25 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
 
     for (var i = 0; i < customForms.length; i++) {
       var forms = customForms;
-      data['question[$i][name]'] = forms[i]['name'];
-      data['question[$i][type]'] = forms[i]['type'];
-      data['question[$i][order]'] = forms[i]['order'];
-      data['question[$i][isRequired]'] = forms[i]['isRequired'];
+      if (forms[i]['type'] == '1') {
+        data['question[$i][name]'] = forms[i]['name'];
+        data['question[$i][type]'] = forms[i]['type'];
+        data['question[$i][order]'] = forms[i]['order'];
+        data['question[$i][isRequired]'] = forms[i]['isRequired'];
+      } else if (forms[i]['type'] == '2') {
+        data['question[$i][name]'] = forms[i]['name'];
+        data['question[$i][type]'] = forms[i]['type'];
+        data['question[$i][order]'] = forms[i]['order'];
+        data['question[$i][isRequired]'] = forms[i]['isRequired'];
+        for(var j = 0; j < forms[i]['option'].length; j++){
+          data['question[$i][option][$j][name]'] = forms[i]['option'][j];
+          if(forms[i]['option'][j].containsKey('id').toString() == 'false'){
+            
+          }else {
+            data['question[$i][option][$j][id]'] = forms[i]['option'][j]['id'];
+          }
+        }
+      }
     }
 
     print(data);
@@ -327,10 +343,25 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
 
     for (var i = 0; i < customForms.length; i++) {
       var forms = customForms;
-      data['question[$i][name]'] = forms[i]['name'];
-      data['question[$i][type]'] = forms[i]['type'];
-      data['question[$i][order]'] = forms[i]['order'];
-      data['question[$i][isRequired]'] = forms[i]['isRequired'];
+      if (forms[i]['type'] == '1') {
+        data['question[$i][name]'] = forms[i]['name'];
+        data['question[$i][type]'] = forms[i]['type'];
+        data['question[$i][order]'] = forms[i]['order'];
+        data['question[$i][isRequired]'] = forms[i]['isRequired'];
+      } else if (forms[i]['type'] == '2') {
+        data['question[$i][name]'] = forms[i]['name'];
+        data['question[$i][type]'] = forms[i]['type'];
+        data['question[$i][order]'] = forms[i]['order'];
+        data['question[$i][isRequired]'] = forms[i]['isRequired'];
+        for(var j = 0; j < forms[i]['option'].length; j++){
+          data['question[$i][option][$j][name]'] = forms[i]['option'][j];
+          if(forms[i]['option'].contains('id').toString() == 'false'){
+            
+          }else {
+            data['question[$i][option][$j][id]'] = forms[i]['option'][j]['id'];
+          }
+        }
+      }
 
       if (forms[i].containsKey('id').toString() == 'false') {
       } else {
@@ -509,7 +540,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                     ),
                   ),
                   Container(
-                    height: 150,
+                    height: 200,
                     child: PageView(
                       controller: pageViewController,
                       physics: NeverScrollableScrollPhysics(),
@@ -520,7 +551,8 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                             ? Container(
                                 child: Text('type 1'),
                               )
-                            : Container(child: Text('type 2'))
+                            : multipleFormat(),
+                        multipleForm()
                       ],
                     ),
                   )
@@ -726,12 +758,146 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
     });
   }
 
+  int multipleFormCount = 0;
+
   Widget multipleFormat() {
-    return Container(
+    return StatefulBuilder(
+      builder: (context, setState) => Container(
         child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[],
-    ));
+          children: <Widget>[
+            Expanded(
+              child: Center(
+                child: CupertinoPicker(
+                  backgroundColor: Colors.white,
+                  itemExtent: 50,
+                  children: [2, 3, 4, 5].map((val) {
+                    return Container(
+                      child: Center(
+                          child: Text(
+                        val.toString(),
+                        style: TextStyle(fontSize: 20),
+                      )),
+                    );
+                  }).toList(),
+                  onSelectedItemChanged: (int value) {
+                    print((value + 1).toString());
+                    setState(() {
+                      if (value == 0) {
+                        multipleFormCount = 2;
+                      } else if (value == 1) {
+                        multipleFormCount = 3;
+                      } else if (value == 2) {
+                        multipleFormCount = 4;
+                      } else if (value == 3) {
+                        multipleFormCount = 5;
+                      }
+                    });
+                  },
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                print(multipleFormCount);
+                for (int i = 0; i < multipleFormCount; i++) {
+                  textEditingControllers.add(TextEditingController());
+                }
+
+                pageViewController.nextPage(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeIn);
+              },
+              child: Container(
+                color: eventajaGreenTeal,
+                height: 50,
+                child: Center(
+                    child: Text(
+                  'Next',
+                  style: TextStyle(color: Colors.white),
+                )),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget multipleForm() {
+    return StatefulBuilder(
+      builder: (context, updateState) => Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+                child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 13.0),
+              child: ListView.builder(
+                itemCount: multipleFormCount,
+                itemBuilder: (context, i) {
+                  return TextFormField(
+                    controller: textEditingControllers[i],
+                    decoration: InputDecoration(
+                        hintText: '${(i + 1).toString()}. Qustion'),
+                    onChanged: ((val) {
+                      print(textEditingControllers[i].text);
+                    }),
+                  );
+                },
+              ),
+            )),
+            GestureDetector(
+              onTap: () {
+                if (currentType == '2') {
+                  int order;
+                  print(customForms.length);
+                  updateState(() {
+                    if (customForms.length < 1) {
+                      order = 1;
+                    } else {
+                      for (int i = 0; i < customForms.length; i++) {
+                        print(i);
+                        order = i;
+                        order += 1;
+                        print('orders: ' + order.toString());
+                      }
+                    }
+                    if (simpleQuestionController.text != null) {
+                      List<String> questions = [];
+                      for (int i = 0; i < textEditingControllers.length; i++) {
+                        questions.add(textEditingControllers[i].text);
+                      }
+
+                      customForms.add({
+                        'name': simpleQuestionController.text,
+                        'type': '2',
+                        'order': order.toString(),
+                        'isRequired': isRequired == true ? '2' : '1',
+                        'option': questions
+                      });
+
+                      print(customForms);
+                    }
+                  });
+
+                  Navigator.pop(context, setState(() {}));
+                }
+              },
+              child: Container(
+                color: eventajaGreenTeal,
+                height: 50,
+                child: Center(
+                    child: Text(
+                  'Done',
+                  style: TextStyle(color: Colors.white),
+                )),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget customForm(String formName, String formId, int index) {
