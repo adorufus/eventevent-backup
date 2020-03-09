@@ -244,7 +244,10 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
     List<File> additionalMediaFiles = [];
     File additionalVideo;
 
-    if (prefs.getString('POST_EVENT_ADDITIONAL_VIDEO') != null &&
+    
+
+    try {
+      if (prefs.getString('POST_EVENT_ADDITIONAL_VIDEO') != null &&
         prefs.getString('POST_EVENT_ADDITIONAL_VIDEO').isNotEmpty) {
       setState(() {
         additionalVideo = File(prefs.getString('POST_EVENT_ADDITIONAL_VIDEO'));
@@ -262,7 +265,6 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
 
     print(lookupMimeType(widget.imageFile.path));
 
-    try {
       Map<String, dynamic> body = {
         'X-API-KEY': API_KEY,
         'eventTypeID':
@@ -392,7 +394,8 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
         // print(extractedError);
       }
       if (e is FileSystemException) {
-        print(e.message);
+        // print(e.message);
+        Navigator.pop(context);
       }
       if (e is NoSuchMethodError) {
         print(e.stackTrace);

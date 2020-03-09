@@ -319,6 +319,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     print(prefs.getString('NEW_EVENT_ID'));
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     double defaultScreenWidth = 400.0;

@@ -67,6 +67,12 @@ class _CountDownTimerState extends State<CountDownTimer>
   }
 
   @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    
+  }
+
+  @override
   void didUpdateWidget(CountDownTimer oldWidget) {
     if (widget.secondsRemaining != oldWidget.secondsRemaining) {
       setState(() {

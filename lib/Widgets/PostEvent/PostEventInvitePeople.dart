@@ -93,7 +93,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
                   leading: CircleAvatar(backgroundImage: NetworkImage(data[i]['photo']),),
                   title: Text(data[i]['fullName'], style: TextStyle(fontWeight: FontWeight.bold),),
                   subtitle: Text('@' + data[i]['username']),
-                  trailing: Icon(Icons.check, color: Colors.grey,),
+                  trailing: Icon(Icons.check, color: invitedPeople.contains(data[i]['id']) ? eventajaGreenTeal : Colors.grey,),
                 );
               },
             ),

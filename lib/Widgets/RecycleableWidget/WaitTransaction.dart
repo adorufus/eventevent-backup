@@ -150,6 +150,12 @@ class _WaitTransactionState extends State<WaitTransaction>
 
     print(timertick);
   }
+  
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
