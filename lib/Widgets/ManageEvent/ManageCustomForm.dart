@@ -280,11 +280,10 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
         data['question[$i][type]'] = forms[i]['type'];
         data['question[$i][order]'] = forms[i]['order'];
         data['question[$i][isRequired]'] = forms[i]['isRequired'];
-        for(var j = 0; j < forms[i]['option'].length; j++){
+        for (var j = 0; j < forms[i]['option'].length; j++) {
           data['question[$i][option][$j][name]'] = forms[i]['option'][j];
-          if(forms[i]['option'][j].containsKey('id').toString() == 'false'){
-            
-          }else {
+          if (forms[i]['option'][j].containsKey('id').toString() == 'false') {
+          } else {
             data['question[$i][option][$j][id]'] = forms[i]['option'][j]['id'];
           }
         }
@@ -353,11 +352,10 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
         data['question[$i][type]'] = forms[i]['type'];
         data['question[$i][order]'] = forms[i]['order'];
         data['question[$i][isRequired]'] = forms[i]['isRequired'];
-        for(var j = 0; j < forms[i]['option'].length; j++){
+        for (var j = 0; j < forms[i]['option'].length; j++) {
           data['question[$i][option][$j][name]'] = forms[i]['option'][j];
-          if(forms[i]['option'].contains('id').toString() == 'false'){
-            
-          }else {
+          if (forms[i]['option'].contains('id').toString() == 'false') {
+          } else {
             data['question[$i][option][$j][id]'] = forms[i]['option'][j]['id'];
           }
         }
@@ -874,7 +872,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                         'type': '2',
                         'order': order.toString(),
                         'isRequired': isRequired == true ? '2' : '1',
-                        'option': questions
+                        'option': {'name': questions}
                       });
 
                       print(customForms);

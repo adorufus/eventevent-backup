@@ -14,6 +14,7 @@ import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/PushNotification.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -86,6 +87,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
   String currentUserId;
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   String urlPrefix = '';
+  Utils utility = Utils();
 
   // RateMyApp rateMyApp = RateMyApp(
   //   preferencesPrefix: 'rateMyApp_',

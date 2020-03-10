@@ -390,8 +390,10 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
     } catch (e) {
       if (e is DioError) {
         print(e.message);
-        // var extractedError = json.decode(e.response.data);
-        // print(extractedError);
+        var extractedError = json.decode(e.response.data);
+        print(extractedError);
+
+        Navigator.pop(context, extractedError['desc']);
       }
       if (e is FileSystemException) {
         // print(e.message);

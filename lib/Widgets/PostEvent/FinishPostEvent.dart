@@ -1,5 +1,9 @@
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventList.dart';
+import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
+import 'package:eventevent/Widgets/profileWidget.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,6 +17,7 @@ class FinishPostEvent extends StatefulWidget{
 
 class FinishPostEventState extends State<FinishPostEvent>{
   String newEventId;
+  Utils utility = Utils();
 
   @override
   void initState() {
@@ -62,7 +67,8 @@ class FinishPostEventState extends State<FinishPostEvent>{
             ),
             GestureDetector(
               onTap: (){
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => EventDetailLoadingScreen(eventId: newEventId)), ModalRoute.withName('/PostEvent'));
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false, selectedPage: 4,)), ModalRoute.withName('/Dashboard'));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailLoadingScreen(eventId: newEventId)));
               },
               child: SizedBox(
                 height: ScreenUtil.instance.setWidth(50), 

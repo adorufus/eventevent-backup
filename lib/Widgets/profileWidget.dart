@@ -54,6 +54,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     if (!mounted) {
       return;
     } else {
+      print(widget.userId);
       getUserProfileData();
     }
   }
@@ -104,8 +105,10 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     var extractedData = json.decode(response.body);
 
     print(response.statusCode);
+    print(response.body);
 
     if (response.statusCode == 200) {
+      print(response.body);
       setState(() {
         userData = extractedData['data'];
         username = userData[0]['username'];

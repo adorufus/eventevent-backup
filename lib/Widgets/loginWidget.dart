@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -24,6 +26,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class LoginWidget extends StatefulWidget {
+  final previousWidget;
+
+  const LoginWidget({Key key, this.previousWidget}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _LoginWidgetState();
@@ -48,6 +53,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   String _userID;
   String googleTokenID;
   bool hidePassword = true;
+  Utils utility = Utils();
 
   @override
   void dispose() {
@@ -385,6 +391,9 @@ class _LoginWidgetState extends State<LoginWidget> {
 
       var extractedData = json.decode(response.body);
 
+      utility.setCurrentUserId(extractedData['data']['id']);
+      print('Current user id: ' + utility.getCurrentUserId);
+
       prefs.setString('Session', response.headers['set-cookie']);
       prefs.setString('Last User ID', extractedData['data']['id']);
       prefs.setBool('isUsingGoogle', true);
@@ -404,9 +413,12 @@ class _LoginWidgetState extends State<LoginWidget> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget(
-                    isRest: false,
-                  )));
+              builder: (BuildContext context) =>
+                  widget.previousWidget == 'EventDetailsWidgetRest'
+                      ? EventDetailLoadingScreen()
+                      : DashboardWidget(
+                          isRest: false,
+                        )));
     } else {
       var extractedData = json.decode(response.body);
       if (extractedData['desc'] == 'User is not register') {
@@ -434,6 +446,9 @@ class _LoginWidgetState extends State<LoginWidget> {
 
       SharedPreferences preferences = await SharedPreferences.getInstance();
       var extractedData = json.decode(response.body);
+
+      utility.setCurrentUserId(extractedData['data']['id']);
+      print('Current user id: ' + utility.getCurrentUserId);
 
       preferences.setString('Session', response.headers['set-cookie']);
       preferences.setString('Last User ID', extractedData['data']['id']);
@@ -581,6 +596,9 @@ class _LoginWidgetState extends State<LoginWidget> {
             'UserPicture', responseJson['data']['pictureAvatarURL']);
         prefs.setString('UserFirstname', responseJson['data']['fullName']);
         prefs.setString('UserUsername', responseJson['data']['username']);
+
+        utility.setCurrentUserId(responseJson['data']['id']);
+        print('Current user id: ' + utility.getCurrentUserId);
 
         getProfileDetail(responseJson['data']['id']).then((response) {
           var profileData = json.decode(response.body);

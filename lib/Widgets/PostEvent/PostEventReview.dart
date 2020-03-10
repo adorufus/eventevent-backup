@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io'; import 'package:eventevent/helper/utils.dart';
+import 'dart:io';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:googleapis/firestore/v1.dart' as prefix0;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -102,10 +104,12 @@ class PostEventReviewState extends State<PostEventReview> {
       prefs.setString('CREATE_EVENT_TELEPHONE', telephoneController.text);
       prefs.setString('CREATE_EVENT_EMAIL', emailController.text);
       prefs.setString('CREATE_EVENT_WEBSITE', websiteController.text);
-      prefs.setString('CREATE_EVENT_ADDITIONAL_INFO', additionalInfoMapController.text);
+      prefs.setString(
+          'CREATE_EVENT_ADDITIONAL_INFO', additionalInfoMapController.text);
     });
 
-    Navigator.push(context, CupertinoPageRoute(builder: (context) => SelectTicketType()));
+    Navigator.push(
+        context, CupertinoPageRoute(builder: (context) => SelectTicketType()));
   }
 
   @override
@@ -116,6 +120,7 @@ class PostEventReviewState extends State<PostEventReview> {
     initPlatformState();
     locationSubcription =
         location.onLocationChanged().listen((LocationData result) {
+      if (!mounted) return;
       setState(() {
         currentLocation = result;
       });
@@ -125,7 +130,8 @@ class PostEventReviewState extends State<PostEventReview> {
   var thisScaffold = new GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -163,7 +169,9 @@ class PostEventReviewState extends State<PostEventReview> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -220,7 +228,8 @@ class PostEventReviewState extends State<PostEventReview> {
                             width: ScreenUtil.instance.setWidth(150),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: Image.file(File(imageUri), fit: BoxFit.fill),
+                              child:
+                                  Image.file(File(imageUri), fit: BoxFit.fill),
                             ),
                           ),
                           SizedBox(
@@ -237,7 +246,8 @@ class PostEventReviewState extends State<PostEventReview> {
                                     color: Colors.black54,
                                     fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10)),
                               Container(
                                   width: ScreenUtil.instance.setWidth(170),
                                   height: ScreenUtil.instance.setWidth(50),
@@ -249,9 +259,12 @@ class PostEventReviewState extends State<PostEventReview> {
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         eventType == '0' ? 'PUBLIC' : 'PRIVATE',
-                                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
+                                        style: TextStyle(
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(15)),
                                       ))),
-                              SizedBox(height: ScreenUtil.instance.setWidth(20)),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(20)),
                               Text(
                                 'Category',
                                 style: TextStyle(
@@ -259,7 +272,8 @@ class PostEventReviewState extends State<PostEventReview> {
                                     color: Colors.black54,
                                     fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10)),
                               Container(
                                   width: ScreenUtil.instance.setWidth(170),
                                   height: ScreenUtil.instance.setWidth(50),
@@ -271,7 +285,9 @@ class PostEventReviewState extends State<PostEventReview> {
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         categoryList.toString(),
-                                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
+                                        style: TextStyle(
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(15)),
                                       )))
                             ],
                           )
@@ -284,7 +300,9 @@ class PostEventReviewState extends State<PostEventReview> {
                       children: <Widget>[
                         Text(
                           'Date',
-                          style: TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18)),
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: ScreenUtil.instance.setSp(18)),
                         ),
                         SizedBox(
                           height: ScreenUtil.instance.setWidth(15),
@@ -303,7 +321,9 @@ class PostEventReviewState extends State<PostEventReview> {
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       startDate,
-                                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(20)),
                                     ))),
                             SizedBox(
                               width: ScreenUtil.instance.setWidth(25),
@@ -319,7 +339,9 @@ class PostEventReviewState extends State<PostEventReview> {
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       endDate,
-                                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(20)),
                                     ))),
                           ],
                         ),
@@ -328,7 +350,9 @@ class PostEventReviewState extends State<PostEventReview> {
                         ),
                         Text(
                           'Time',
-                          style: TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18)),
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: ScreenUtil.instance.setSp(18)),
                         ),
                         SizedBox(
                           height: ScreenUtil.instance.setWidth(15),
@@ -347,7 +371,9 @@ class PostEventReviewState extends State<PostEventReview> {
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       startTime,
-                                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(20)),
                                     ))),
                             SizedBox(
                               width: ScreenUtil.instance.setWidth(25),
@@ -363,7 +389,9 @@ class PostEventReviewState extends State<PostEventReview> {
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       endTime,
-                                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(20)),
                                     ))),
                           ],
                         )
@@ -603,7 +631,7 @@ class PostEventReviewState extends State<PostEventReview> {
       child: ListView(
         padding: EdgeInsets.only(left: 10),
         scrollDirection: Axis.horizontal,
-        children: mapIndexed(additionalMedia, (index, item){
+        children: mapIndexed(additionalMedia, (index, item) {
           return Padding(
             padding: EdgeInsets.only(right: 10),
             child: additionalMedia[index] == null
@@ -762,8 +790,11 @@ class PostEventReviewState extends State<PostEventReview> {
   showPlacePicker() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     LocationResult place = await Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => PlacePicker('AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI', displayLocation: LatLng(double.parse(currentLocation.latitude.toString()), double.parse(currentLocation.latitude.toString())
-    ))));
+        builder: (context) => PlacePicker(
+            'AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI',
+            displayLocation: LatLng(
+                double.parse(currentLocation.latitude.toString()),
+                double.parse(currentLocation.latitude.toString())))));
 
     if (!mounted) {
       return;
@@ -774,8 +805,10 @@ class PostEventReviewState extends State<PostEventReview> {
       lat = place.latLng.latitude.toString();
       long = place.latLng.longitude.toString();
       prefs.setString('CREATE_EVENT_LOCATION_ADDRESS', place.name);
-      prefs.setString('CREATE_EVENT_LOCATION_LAT', place.latLng.latitude.toString());
-      prefs.setString('CREATE_EVENT_LOCATION_LONG', place.latLng.longitude.toString());
+      prefs.setString(
+          'CREATE_EVENT_LOCATION_LAT', place.latLng.latitude.toString());
+      prefs.setString(
+          'CREATE_EVENT_LOCATION_LONG', place.latLng.longitude.toString());
     });
 
     print(prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'));

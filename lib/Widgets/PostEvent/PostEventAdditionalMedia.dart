@@ -346,7 +346,14 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
 
     print(galleryFile.path);
 
-    var appDocDir = await getApplicationDocumentsDirectory();
+    var appDocDir;
+
+    if(Platform.isAndroid){
+      appDocDir = await getExternalStorageDirectories(type: StorageDirectory.dcim);
+      print(appDocDir.path);
+    } else {
+      appDocDir = await getLibraryDirectory();
+    }
 
     String fileFolder = appDocDir.path;
 

@@ -24,6 +24,10 @@ import 'RegisterFacebook.dart';
 import 'dashboardWidget.dart';
 
 class LoginRegisterWidget extends StatefulWidget {
+  final previousWidget;
+
+  const LoginRegisterWidget({Key key, this.previousWidget}) : super(key: key);
+  
   @override
   State<StatefulWidget> createState() {
     return _LoginRegisterWidget();

@@ -6,6 +6,7 @@ import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
 import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
+import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
@@ -318,8 +319,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     prefs.setString('NEW_EVENT_ID', eventId);
     print(prefs.getString('NEW_EVENT_ID'));
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -990,65 +989,72 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 builder: (context, setState) =>
                                                     GestureDetector(
                                                   onTap: () {
-                                                    if (widget.ticketStat[
-                                                                'salesStatus'] ==
-                                                            null ||
-                                                        widget.ticketStat[
-                                                                'salesStatus'] ==
-                                                            'null') {
-                                                      if (detailData['ticket_type']
-                                                                  ['type'] ==
-                                                              'free' ||
-                                                          detailData['ticket_type']
-                                                                  ['type'] ==
-                                                              'no_ticket') {
-                                                        print('show modal');
-                                                        if (isGoing == true) {
-                                                          ungoing()
-                                                              .then((response) {
-                                                            isLoading = true;
-                                                            print(response
-                                                                .statusCode);
-                                                            print(
-                                                                response.body);
-
-                                                            if (response.statusCode ==
-                                                                    200 ||
-                                                                response.statusCode ==
-                                                                    201) {
-                                                              setState(() {
-                                                                isGoing = false;
-                                                              });
-                                                              isLoading = false;
-                                                            } else {
-                                                              isLoading = false;
-                                                            }
-                                                          });
-                                                        } else {
-                                                          showGoingOption();
-                                                        }
-                                                      }
+                                                    if (widget.isRest == true) {
+                                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginRegisterWidget(
+                                                        previousWidget: 'EventDetailsWidgetRest',
+                                                      )));
                                                     } else {
                                                       if (widget.ticketStat[
                                                                   'salesStatus'] ==
-                                                              'endSales' ||
+                                                              null ||
                                                           widget.ticketStat[
-                                                                  'availablewidget.ticketStatus'] ==
-                                                              '0') {
-                                                        return;
+                                                                  'salesStatus'] ==
+                                                              'null') {
+                                                        if (detailData['ticket_type']
+                                                                    ['type'] ==
+                                                                'free' ||
+                                                            detailData['ticket_type']
+                                                                    ['type'] ==
+                                                                'no_ticket') {
+                                                          print('show modal');
+                                                          if (isGoing == true) {
+                                                            ungoing().then(
+                                                                (response) {
+                                                              isLoading = true;
+                                                              print(response
+                                                                  .statusCode);
+                                                              print(response
+                                                                  .body);
+
+                                                              if (response.statusCode ==
+                                                                      200 ||
+                                                                  response.statusCode ==
+                                                                      201) {
+                                                                setState(() {
+                                                                  isGoing =
+                                                                      false;
+                                                                });
+                                                                isLoading =
+                                                                    false;
+                                                              } else {
+                                                                isLoading =
+                                                                    false;
+                                                              }
+                                                            });
+                                                          } else {
+                                                            showGoingOption();
+                                                          }
+                                                        }
                                                       } else {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder: (BuildContext
-                                                                        context) =>
-                                                                    SelectTicketWidget(
-                                                                      eventID: widget
-                                                                              .detailData[
-                                                                          'id'],
-                                                                      eventDate:
-                                                                          widget
-                                                                              .detailData['dateStart'],
-                                                                    )));
+                                                        if (widget.ticketStat[
+                                                                    'salesStatus'] ==
+                                                                'endSales' ||
+                                                            widget.ticketStat[
+                                                                    'availablewidget.ticketStatus'] ==
+                                                                '0') {
+                                                          return;
+                                                        } else {
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder: (BuildContext
+                                                                          context) =>
+                                                                      SelectTicketWidget(
+                                                                        eventID:
+                                                                            widget.detailData['id'],
+                                                                        eventDate:
+                                                                            widget.detailData['dateStart'],
+                                                                      )));
+                                                        }
                                                       }
                                                     }
                                                   },

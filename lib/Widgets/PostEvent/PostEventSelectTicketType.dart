@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Transaction/ProcessingPayment.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:async/async.dart';
@@ -139,7 +140,20 @@ class SelectTicketTypeState extends State<SelectTicketType> {
                         context: context
                       );
                     }
-                  ));
+                  )).then((val){
+                    print('value $val');
+                    if(val == null){
+
+                    } else {
+                      Flushbar(
+                        animationDuration: Duration(milliseconds: 500),
+                        duration: Duration(seconds: 3),
+                        backgroundColor: Colors.red,
+                        flushbarPosition: FlushbarPosition.TOP,
+                        message: val,
+                      )..show(context);
+                    }
+                  });
                   //postEvent(i);
                 },
                 contentPadding:
