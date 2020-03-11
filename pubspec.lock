@@ -91,7 +91,7 @@ packages:
       name: chewie
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.8+1"
+    version: "0.9.10"
   clevertap_flutter:
     dependency: "direct main"
     description:
@@ -327,7 +327,14 @@ packages:
       name: flutter_local_notifications
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.4+3"
+    version: "1.2.2"
+  flutter_local_notifications_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   flutter_money_formatter:
     dependency: "direct main"
     description:
@@ -646,22 +653,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.23.0"
-  screen:
-    dependency: transitive
-    description:
-      name: screen
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.5"
   share:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "1f8b139ca0bd35b643ef4f5ccce3a1b09931f16a"
-      url: "https://github.com/d-silveira/flutter-share.git"
-    source: git
-    version: "0.6.0"
+      name: share
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.3+6"
   share_extend:
     dependency: "direct main"
     description:
@@ -877,6 +875,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
+  wakelock:
+    dependency: transitive
+    description:
+      name: wakelock
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.3+4"
   webview_flutter:
     dependency: "direct main"
     description:
@@ -907,4 +912,4 @@ packages:
     version: "6.0.3+2"
 sdks:
   dart: ">=2.6.0 <3.0.0"
-  flutter: ">=1.12.13+hotfix.4 <2.0.0"
+  flutter: ">=1.12.13+hotfix.5 <2.0.0"
