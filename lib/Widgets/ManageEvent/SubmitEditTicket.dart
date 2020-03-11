@@ -17,17 +17,19 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CreateTicketFinal extends StatefulWidget {
+class SubmitEditTicket extends StatefulWidget {
   final from;
+  final Map ticketDetail;
 
-  const CreateTicketFinal({Key key, this.from}) : super(key: key);
+  const SubmitEditTicket({Key key, this.from, this.ticketDetail})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return CreateTicketFinalState();
+    return SubmitEditTicketState();
   }
 }
 
-class CreateTicketFinalState extends State<CreateTicketFinal> {
+class SubmitEditTicketState extends State<SubmitEditTicket> {
   GlobalKey<ScaffoldState> thisScaffold = new GlobalKey<ScaffoldState>();
 
   String imageUri;
@@ -55,16 +57,15 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     setState(() {
-      imageUri = prefs.getString('SETUP_TICKET_POSTER');
-      ticketQuantity = prefs.getString('SETUP_TICKET_QTY');
-      price = prefs.getString('SETUP_TICKET_PRICE');
-      startDate = prefs.getString('SETUP_TICKET_START_DATE');
-      endDate = prefs.getString('SETUP_TICKET_END_DATE');
-      startTime = prefs.getString('SETUP_TICKET_START_TIME');
-      endTime = prefs.getString('SETUP_TICKET_END_TIME');
-      desc = prefs.getString('SETUP_TICKET_DESCRIPTION');
-      ticketTypeId = prefs.getString('NEW_EVENT_TICKET_TYPE_ID');
-      imageFile = new File(imageUri);
+      imageUri = widget.ticketDetail['image_url'];
+      ticketQuantity = widget.ticketDetail['quantity'];
+      price = widget.ticketDetail['price'];
+      startDate = widget.ticketDetail['start_date'];
+      endDate = widget.ticketDetail['end_date'];
+      startTime = widget.ticketDetail['start_time'];
+      endTime = widget.ticketDetail['end_time'];
+      desc = widget.ticketDetail['description'];
+      ticketTypeId = widget.ticketDetail['ticket_type_id'];
     });
   }
 
@@ -173,8 +174,10 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                   width: ScreenUtil.instance.setWidth(150),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8),
-                                    child: Image.file(File(imageUri),
-                                        fit: BoxFit.fill),
+                                    child: imageUri.contains('http')
+                                        ? Image.network(imageUri)
+                                        : Image.file(File(imageUri),
+                                            fit: BoxFit.fill),
                                   ),
                                 ),
                                 SizedBox(
@@ -797,76 +800,35 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
     try {
       Map<String, dynamic> body = {
         'X-API-KEY': API_KEY,
-        'eventID': prefs.getInt('NEW_EVENT_ID').toString(),
-        'ticket_name': prefs.getString('SETUP_TICKET_NAME'),
-        'quantity': prefs.getString('SETUP_TICKET_QTY'),
-        'price': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '7' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
-            ? '0'
-            : price,
-        'min_ticket': prefs.getString('SETUP_TICKET_MIN_BOUGHT'),
-        'max_ticket': prefs.getString('SETUP_TICKET_MAX_BOUGHT'),
-        'sales_start_date': prefs.getString('SETUP_TICKET_START_DATE') +
-            ' ' +
-            prefs.getString('SETUP_TICKET_START_TIME') +
-            ':00',
-        'sales_end_date': prefs.getString('SETUP_TICKET_END_DATE') +
-            ' ' +
-            prefs.getString('SETUP_TICKET_END_TIME') +
-            ':00',
-        'descriptions': prefs.getString('SETUP_TICKET_DESCRIPTION'),
-        'show_remaining_ticket':
-            prefs.getString('SETUP_TICKET_SHOW_REMAINING_TICKET'),
-        'fee_paid_by': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '7' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
+        'id': widget.ticketDetail['id'],
+        'ticket_name': widget.ticketDetail['ticket_name'],
+        'quantity': ticketQuantity,
+        'price': price,
+        'min_ticket': widget.ticketDetail['min_ticket'],
+        'max_ticket': widget.ticketDetail['max_ticket'],
+        'sales_start_date': startDate + startTime,
+        'sales_end_date': endDate + endTime,
+        'descriptions': desc,
+        'show_remaining_ticket': widget.ticketDetail['show_remaining_ticket'],
+        'fee_paid_by': ticketPaidBy,
+        'final_price': finalPrice,
+        'paid_ticket_type_id': widget.ticketDetail['ticket_type_id'],
+        'merchant_price': merchantPrice,
+        'is_single_ticket': widget.ticketDetail['single_ticket'],
+        'ticket_image': imageFile == null
             ? ''
-            : ticketPaidBy,
-        'final_price': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '7' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
-            ? '0'
-            : finalPrice,
-        'paid_ticket_type_id': prefs.getString('SETUP_TICKET_PAID_TICKET_TYPE'),
-        'merchant_price': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '7' ||
-                prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
-            ? '0'
-            : merchantPrice,
-        'is_single_ticket': prefs.getString('SETUP_TICKET_IS_ONE_PURCHASE'),
-        'ticket_image': UploadFileInfo(
-            imageFile, "eventeventticket-${DateTime.now().toString()}.jpg",
-            contentType: ContentType('image', 'jpeg'))
+            : UploadFileInfo(
+                imageFile, "eventeventticket-${DateTime.now().toString()}.jpg",
+                contentType: ContentType('image', 'jpeg'))
       };
 
       print(body);
-
-      print(prefs.getString('SETUP_TICKET_NAME'));
-      print(prefs.getString('SETUP_TICKET_DESCRIPTION'));
-      print(prefs.getString('SETUP_TICKET_QTY'));
-      print(prefs.getString('SETUP_TICKET_PRICE'));
-      print(prefs.getString('SETUP_TICKET_MIN_BOUGHT'));
-      print(prefs.getString('SETUP_TICKET_MAX_BOUGHT'));
-      print(prefs.getString('SETUP_TICKET_START_DATE'));
-      print(prefs.getString('SETUP_TICKET_START_TIME'));
-      print(prefs.getString('SETUP_TICKET_END_DATE'));
-      print(prefs.getString('SETUP_TICKET_END_TIME'));
-      print(prefs.getString('SETUP_TICKET_SHOW_REMAINING_TICKET'));
       print(ticketPaidBy);
       print(finalPrice);
 
       var data = FormData.from(body);
       Response response = await dio.post(
-        '/ticket_setup/post',
+        '/ticket_setup/update',
         options: Options(
           headers: {
             'Authorization': AUTHORIZATION_KEY,
@@ -888,32 +850,22 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
         });
         print(response.data);
         print('proccessing.....');
-        if (prefs.getString('POST_EVENT_TYPE') == '0') {
-          Navigator.of(context).push(CupertinoPageRoute(
-              builder: (BuildContext context) => FinishPostEvent()));
-        } else {
-          if (prefs.getString('Previous Widget') == 'AddNewTicket') {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DashboardWidget(
-                          isRest: false,
-                          selectedPage: 4,
-                          userId: prefs.getString('Last User ID'),
-                        )),
-                ModalRoute.withName('/Dashboard'));
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => EventDetailLoadingScreen(
-                        eventId: prefs.getInt('NEW_EVENT_ID').toString())));
-          } else {
-            Navigator.of(context).push(CupertinoPageRoute(
-                builder: (BuildContext context) => CustomFormActivator(
-                      eventId: prefs.getInt("NEW_EVENT_ID").toString(),
-                      from: "createEvent",
-                    )));
-          }
+
+        if (prefs.getString('Previous Widget') == 'AddNewTicket') {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => DashboardWidget(
+                        isRest: false,
+                        selectedPage: 4,
+                        userId: prefs.getString('Last User ID'),
+                      )),
+              ModalRoute.withName('/Dashboard'));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EventDetailLoadingScreen(
+                      eventId: prefs.getInt('NEW_EVENT_ID').toString())));
         }
       } else {
         print(response.data + response.statusCode);

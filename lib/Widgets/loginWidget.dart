@@ -27,8 +27,10 @@ import 'package:http/http.dart' as http;
 
 class LoginWidget extends StatefulWidget {
   final previousWidget;
+  final eventId;
 
-  const LoginWidget({Key key, this.previousWidget}) : super(key: key);
+  const LoginWidget({Key key, this.previousWidget, this.eventId})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _LoginWidgetState();
@@ -410,15 +412,35 @@ class _LoginWidgetState extends State<LoginWidget> {
         print(prefs.getString('UserFirstname'));
         print(prefs.getString('UserUsername'));
       });
-      Navigator.pushReplacement(
+      if (widget.previousWidget == 'EventDetailsWidgetRest') {
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  widget.previousWidget == 'EventDetailsWidgetRest'
-                      ? EventDetailLoadingScreen()
-                      : DashboardWidget(
-                          isRest: false,
-                        )));
+            builder: (context) => DashboardWidget(
+              selectedPage: 0,
+              isRest: false,
+            ),
+          ),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EventDetailLoadingScreen(
+              eventId: widget.eventId,
+              isRest: false,
+            ),
+          ),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DashboardWidget(
+              isRest: false,
+            ),
+          ),
+        );
+      }
     } else {
       var extractedData = json.decode(response.body);
       if (extractedData['desc'] == 'User is not register') {
@@ -468,12 +490,35 @@ class _LoginWidgetState extends State<LoginWidget> {
         print(preferences.getString('UserUsername'));
       });
 
-      Navigator.push(
+      if (widget.previousWidget == 'EventDetailsWidgetRest') {
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget(
-                    isRest: false,
-                  )));
+            builder: (context) => DashboardWidget(
+              selectedPage: 0,
+              isRest: false,
+            ),
+          ),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EventDetailLoadingScreen(
+              eventId: widget.eventId,
+              isRest: false,
+            ),
+          ),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DashboardWidget(
+              isRest: false,
+            ),
+          ),
+        );
+      }
     } else {
       var extractedData = json.decode(response.body);
       String message = extractedData['desc'];
@@ -624,12 +669,36 @@ class _LoginWidgetState extends State<LoginWidget> {
           extractedData['data']['phone']);
 
       SharedPrefs().saveCurrentSession(response, responseJson);
-      Navigator.push(
+
+      if (widget.previousWidget == 'EventDetailsWidgetRest') {
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => DashboardWidget(
-                    isRest: false,
-                  )));
+            builder: (context) => DashboardWidget(
+              selectedPage: 0,
+              isRest: false,
+            ),
+          ),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EventDetailLoadingScreen(
+              eventId: widget.eventId,
+              isRest: false,
+            ),
+          ),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DashboardWidget(
+              isRest: false,
+            ),
+          ),
+        );
+      }
       return LoginModel.fromJson(responseJson);
     }
 

@@ -92,6 +92,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   }
 
   Future getUserProfileData() async {
+    print('get profile data....');
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var session = preferences.getString('Session');
 

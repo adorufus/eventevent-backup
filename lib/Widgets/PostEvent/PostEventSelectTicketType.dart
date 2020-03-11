@@ -294,7 +294,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
             prefs.setString('SETUP_TICKET_PAID_TICKET_TYPE',
                 ticketType[index]['paid_ticket_type']['id']);
             prefs.setString(
-                'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
+                'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['paid_ticket_type_id'] == null ? ticketType[index]['id'] : ticketType[index]['paid_ticket_type_id']);
             prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
           });
           Navigator.of(context).push(

@@ -25,8 +25,9 @@ import 'dashboardWidget.dart';
 
 class LoginRegisterWidget extends StatefulWidget {
   final previousWidget;
+  final eventId;
 
-  const LoginRegisterWidget({Key key, this.previousWidget}) : super(key: key);
+  const LoginRegisterWidget({Key key, this.previousWidget, this.eventId}) : super(key: key);
   
   @override
   State<StatefulWidget> createState() {
@@ -323,7 +324,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          LoginWidget()));
+                                          LoginWidget(previousWidget: widget.previousWidget, eventId: widget.eventId,)));
                             },
                             child: Container(
                               width: ScreenUtil.instance.setWidth(160.41),

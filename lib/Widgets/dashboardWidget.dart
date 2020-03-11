@@ -72,8 +72,9 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
 class DashboardWidget extends StatefulWidget {
   final isRest;
   final selectedPage;
+  final userId;
 
-  const DashboardWidget({Key key, this.isRest, this.selectedPage = 0})
+  const DashboardWidget({Key key, this.isRest, this.selectedPage = 0, this.userId})
       : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -513,7 +514,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
           ? LoginRegisterWidget()
           : ProfileWidget(
               initialIndex: 0,
-              userId: currentUserId,
+              userId: currentUserId ?? widget.userId,
             ),
     ];
 

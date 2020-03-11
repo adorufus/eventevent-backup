@@ -189,7 +189,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                   saveFinalData();
                 },
                 child: Text(
-                  'CREATE EVENT',
+                  'CREATE TICKET',
                   style:
                       TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                 ),

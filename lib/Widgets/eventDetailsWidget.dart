@@ -992,6 +992,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     if (widget.isRest == true) {
                                                       Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginRegisterWidget(
                                                         previousWidget: 'EventDetailsWidgetRest',
+                                                        eventId: widget.id
                                                       )));
                                                     } else {
                                                       if (widget.ticketStat[

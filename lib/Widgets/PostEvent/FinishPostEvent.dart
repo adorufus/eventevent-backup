@@ -66,8 +66,9 @@ class FinishPostEventState extends State<FinishPostEvent>{
               height: ScreenUtil.instance.setWidth(20)
             ),
             GestureDetector(
-              onTap: (){
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false, selectedPage: 4,)), ModalRoute.withName('/Dashboard'));
+              onTap: () async {
+                SharedPreferences preferences = await SharedPreferences.getInstance();
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false, selectedPage: 4, userId: preferences.getString('Last User ID'),)), ModalRoute.withName('/Dashboard'));
                 Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailLoadingScreen(eventId: newEventId)));
               },
               child: SizedBox(
