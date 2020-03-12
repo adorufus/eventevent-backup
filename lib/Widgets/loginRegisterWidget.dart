@@ -271,7 +271,6 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         },
                         child: Container(
                           margin: EdgeInsets.only(right: 25),
-                          width: 30,
                           child: Text(
                             'SKIP',
                             style: TextStyle(

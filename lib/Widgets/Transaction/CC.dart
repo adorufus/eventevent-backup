@@ -2,12 +2,16 @@ import 'dart:convert';
 
 import 'package:eventevent/Widgets/Transaction/AddCreditCard.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/WebView.dart';
+import 'package:eventevent/helper/WebView3DS.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
+import 'package:flutrans/flutrans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mid_flutter/mid_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -49,8 +53,12 @@ class CreditCardInputState extends State<CreditCardInput> {
   String cardHolderName = '';
   String cvvCode = '';
   bool isShowBackView = false;
+  String _error = "";
+  String _result = "";
+  Flutrans flutrans = Flutrans();
 
   int seconds;
+  bool isMakePayment = false;
 
   DateTime dateTime;
 
@@ -60,6 +68,9 @@ class CreditCardInputState extends State<CreditCardInput> {
   void initState() {
     super.initState();
     getTransactionDetail();
+
+    flutrans.init(MIDTRANS_CLIENT_KEY, BaseApi.midtransUrlProd);
+    flutrans.setFinishCallback(_callback);
 
     listOfPattern.add(visa);
     listOfPattern.add(mastercard);
@@ -75,6 +86,42 @@ class CreditCardInputState extends State<CreditCardInput> {
     seconds = remaining.inSeconds;
   }
 
+  _makePayment() {
+    setState(() {
+      isMakePayment = true;
+    });
+
+    flutrans.makePayment(
+      MidtransTransaction(
+        int.parse(paymentData['amount']),
+        MidtransCustomer(paymentData['firstname'], paymentData['lastname'],
+            paymentData['email'], paymentData['phone']),
+        [
+          MidtransItem(
+            paymentData['paid_ticket_id'],
+            int.parse(paymentData['ticket']['final_price']),
+            int.parse(paymentData['quantity']),
+            paymentData['ticket']['ticket_name'],
+          ),
+          MidtransItem(
+            "eventevent_fee",
+            int.parse(paymentData['amount_detail']['final_fee']),
+            1,
+            "Fee",
+          ),
+        ],
+        skipCustomer: true
+      ),
+    );
+  }
+
+  Future<void> _callback(TransactionFinished finished) async {
+    setState(() {
+      isMakePayment = false;
+    });
+    return Future.value(null);
+  }
+
   @override
   Widget build(BuildContext context) {
     double defaultScreenWidth = 400.0;
@@ -87,8 +134,9 @@ class CreditCardInputState extends State<CreditCardInput> {
     )..init(context);
     return Scaffold(
       bottomNavigationBar: GestureDetector(
-        onTap: () {
-          checkMidtransCC();
+        onTap: () async {
+          // checkMidtransCC();
+          Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewTest(url: paymentData['payment']['data_vendor']['payment_url'])));
         },
         child: Container(
             height: ScreenUtil.instance.setWidth(50),
@@ -266,7 +314,7 @@ class CreditCardInputState extends State<CreditCardInput> {
 
   Future checkMidtransCC() async {
     String baseApi = BaseApi.midtransUrlProd +
-        '/v2/card/token?client_key=$MIDTRANS_CLIENT_KEY&card_number=${cardNumber.replaceAll(" ", "")}&card_exp_month=${expiryDate.split("/")[0]}&card_exp_year=20${expiryDate.split("/")[1]}&card_cvv=$cvvCode';
+        '/v2/token?client_key=$MIDTRANS_CLIENT_KEY&card_number=$cardNumber&card_exp_month=${expiryDate.split("/")[0]}&card_exp_year=20${expiryDate.split("/")[1]}&card_cvv=$cvvCode';
     print(baseApi);
     final response = await http.get(baseApi, headers: {
       'Accept': 'application/json',
@@ -285,23 +333,19 @@ class CreditCardInputState extends State<CreditCardInput> {
 
   Future midtransCC3DS(String token_id) async {
     String baseApi = BaseApi.midtransUrlProd + '/v2/charge';
-    var encodedBody = json.encode({
-      'payment_type': "credit_card",
-      'credit_card': {
-        'token_id': token_id,
-        'authentication': true,
-        'save_token_id': true
-      },
-      'transaction_details': {
+    var encodingBody = json.encode({
+      "payment_type": "credit_card",
+      "transaction_details": {
         "order_id": paymentData['transaction_code'],
-        "gross_amount": int.parse(paymentData['amount']),
+        "gross_amount": int.parse(paymentData['amount'])
       },
-      'item_details': [
+      "credit_card": {"token_id": token_id, "authentication": true},
+      "item_details": [
         {
-          'id': paymentData['paid_ticket_id'],
-          'name': paymentData['ticket']['ticket_name'],
-          'price': int.parse(paymentData['ticket']['final_price']),
-          'quantity': int.parse(paymentData['quantity'])
+          "id": paymentData['paid_ticket_id'],
+          "price": int.parse(paymentData['ticket']['final_price']),
+          "quantity": int.parse(paymentData['quantity']),
+          "name": paymentData['ticket']['ticket_name'],
         },
         {
           'id': "eventevent_fee",
@@ -310,25 +354,67 @@ class CreditCardInputState extends State<CreditCardInput> {
           'quantity': 1
         }
       ],
-      'customer_details': {
+      "customer_details": {
         "first_name": paymentData['firstname'],
         "last_name": paymentData['lastname'],
         "email": paymentData['email'],
         "phone": paymentData['phone'],
-      },
-      'signature': paymentData['webhook_signature']
+      }
     });
-    print(encodedBody);
+
+    // var encodedBody = json.encode({
+    //   'payment_type': "credit_card",
+    //   'credit_card': {
+    //     'token_id': token_id,
+    //     'authentication': true,
+    //   },
+    //   'transaction_details': {
+    //     "order_id": paymentData['transaction_code'],
+    //     "gross_amount": int.parse(paymentData['amount']),
+    //   },
+    //   'item_details': [
+    //     {
+    //       'id': paymentData['paid_ticket_id'],
+    //       'name': paymentData['ticket']['ticket_name'],
+    //       'price': int.parse(paymentData['ticket']['final_price']),
+    //       'quantity': int.parse(paymentData['quantity'])
+    //     },
+    //     {
+    //       'id': "eventevent_fee",
+    //       'name': "Fee",
+    //       'price': int.parse(paymentData['amount_detail']['final_fee']),
+    //       'quantity': 1
+    //     }
+    //   ],
+    //   'customer_details': {
+    //     "first_name": paymentData['firstname'],
+    //     "last_name": paymentData['lastname'],
+    //     "email": paymentData['email'],
+    //     "phone": paymentData['phone'],
+    //   },
+    // });
+    print(encodingBody);
     print(baseApi);
-    final response = await http.post(baseApi, body: encodedBody, headers: {
+    final response = await http.post(baseApi, body: encodingBody, headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization':
           'Basic ${base64.encode(utf8.encode(MIDTRANS_SERVER_KEY + ':'))}'
     });
 
+    var extractedData = json.decode(response.body);
+    print(response.statusCode);
+
     if (response.statusCode == 201 || response.statusCode == 200) {
       print(response.body);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WebViewTest(
+            url: extractedData['redirect_url'],
+          ),
+        ),
+      );
     } else {
       print(response.body);
     }

@@ -28,7 +28,7 @@ class PaymentMethod extends StatefulWidget {
 }
 
 class PaymentMethodState extends State<PaymentMethod> {
-  List paymentMethodList;
+  List paymentMethodList = [];
 
   String paymentAmount = '0';
 
@@ -329,7 +329,8 @@ class PaymentMethodState extends State<PaymentMethod> {
     if (response.statusCode == 200) {
       setState(() {
         var extractedData = json.decode(response.body);
-        paymentMethodList = extractedData['data'];
+        extractedData['data'].forEach((k, v) => paymentMethodList.add(v));
+        print(paymentMethodList);
       });
     }
   }

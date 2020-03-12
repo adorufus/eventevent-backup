@@ -22,7 +22,7 @@ const GOPAY_HEADER_EN = "How to pay using GO-PAY";
 class BaseApi{
   final apiUrl = "https://home.eventeventapp.com/api";
   final restUrl = "https://home.eventeventapp.com/rest";
-  static final midtransUrlProd = "https://api.midtrans.com";
+  static final midtransUrlProd = "https://api.midtrans.com/";
 
 //   final apiUrl = "http://staging.eventeventapp.com/api";
 //   final restUrl = "http://staging.eventeventapp.com/rest";
