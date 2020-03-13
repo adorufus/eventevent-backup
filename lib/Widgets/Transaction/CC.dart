@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/Transaction/AddCreditCard.dart';
+import 'package:eventevent/Widgets/TransactionHistory.dart';
+import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/WebView3DS.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutrans/flutrans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
@@ -93,25 +96,24 @@ class CreditCardInputState extends State<CreditCardInput> {
 
     flutrans.makePayment(
       MidtransTransaction(
-        int.parse(paymentData['amount']),
-        MidtransCustomer(paymentData['firstname'], paymentData['lastname'],
-            paymentData['email'], paymentData['phone']),
-        [
-          MidtransItem(
-            paymentData['paid_ticket_id'],
-            int.parse(paymentData['ticket']['final_price']),
-            int.parse(paymentData['quantity']),
-            paymentData['ticket']['ticket_name'],
-          ),
-          MidtransItem(
-            "eventevent_fee",
-            int.parse(paymentData['amount_detail']['final_fee']),
-            1,
-            "Fee",
-          ),
-        ],
-        skipCustomer: true
-      ),
+          int.parse(paymentData['amount']),
+          MidtransCustomer(paymentData['firstname'], paymentData['lastname'],
+              paymentData['email'], paymentData['phone']),
+          [
+            MidtransItem(
+              paymentData['paid_ticket_id'],
+              int.parse(paymentData['ticket']['final_price']),
+              int.parse(paymentData['quantity']),
+              paymentData['ticket']['ticket_name'],
+            ),
+            MidtransItem(
+              "eventevent_fee",
+              int.parse(paymentData['amount_detail']['final_fee']),
+              1,
+              "Fee",
+            ),
+          ],
+          skipCustomer: true),
     );
   }
 
@@ -135,8 +137,8 @@ class CreditCardInputState extends State<CreditCardInput> {
     return Scaffold(
       bottomNavigationBar: GestureDetector(
         onTap: () async {
-          // checkMidtransCC();
-          Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewTest(url: paymentData['payment']['data_vendor']['payment_url'])));
+          checkMidtransCC();
+          // Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewTest(url: paymentData['payment']['data_vendor']['payment_url'])));
         },
         child: Container(
             height: ScreenUtil.instance.setWidth(50),
@@ -155,7 +157,16 @@ class CreditCardInputState extends State<CreditCardInput> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DashboardWidget(
+                          isRest: false,
+                          selectedPage: 3,
+                        )),
+                ModalRoute.withName('/EventDetails'));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => TransactionHistory()));
           },
           child: Icon(
             Icons.close,
@@ -314,7 +325,7 @@ class CreditCardInputState extends State<CreditCardInput> {
 
   Future checkMidtransCC() async {
     String baseApi = BaseApi.midtransUrlProd +
-        '/v2/token?client_key=$MIDTRANS_CLIENT_KEY&card_number=$cardNumber&card_exp_month=${expiryDate.split("/")[0]}&card_exp_year=20${expiryDate.split("/")[1]}&card_cvv=$cvvCode';
+        'v2/token?client_key=$MIDTRANS_CLIENT_KEY&card_number=$cardNumber&card_exp_month=${expiryDate.split("/")[0]}&card_exp_year=20${expiryDate.split("/")[1]}&card_cvv=$cvvCode';
     print(baseApi);
     final response = await http.get(baseApi, headers: {
       'Accept': 'application/json',
@@ -332,7 +343,7 @@ class CreditCardInputState extends State<CreditCardInput> {
   }
 
   Future midtransCC3DS(String token_id) async {
-    String baseApi = BaseApi.midtransUrlProd + '/v2/charge';
+    String baseApi = BaseApi.midtransUrlProd + 'v2/charge';
     var encodingBody = json.encode({
       "payment_type": "credit_card",
       "transaction_details": {
@@ -407,14 +418,25 @@ class CreditCardInputState extends State<CreditCardInput> {
 
     if (response.statusCode == 201 || response.statusCode == 200) {
       print(response.body);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => WebViewTest(
-            url: extractedData['redirect_url'],
+      if (extractedData['status_code'] == "201") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WebView3DS(
+              transaction_id: extractedData['transaction_id'],
+              url: extractedData['redirect_url'],
+            ),
           ),
-        ),
-      );
+        ).then((result) {
+          Flushbar(
+            backgroundColor: Colors.red,
+            animationDuration: Duration(milliseconds: 500),
+            duration: Duration(seconds: 4),
+            flushbarPosition: FlushbarPosition.TOP,
+            message: result,
+          ).show(context);
+        });
+      }
     } else {
       print(response.body);
     }

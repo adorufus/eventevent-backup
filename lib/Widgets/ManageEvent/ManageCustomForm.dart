@@ -281,7 +281,8 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
         data['question[$i][order]'] = forms[i]['order'];
         data['question[$i][isRequired]'] = forms[i]['isRequired'];
         for (var j = 0; j < forms[i]['option'].length; j++) {
-          data['question[$i][option][$j][name]'] = forms[i]['option'][j];
+          data['question[$i][option][$j][name]'] =
+              forms[i]['option'][j]['name'];
           if (forms[i]['option'][j].containsKey('id').toString() == 'false') {
           } else {
             data['question[$i][option][$j][id]'] = forms[i]['option'][j]['id'];
@@ -353,7 +354,8 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
         data['question[$i][order]'] = forms[i]['order'];
         data['question[$i][isRequired]'] = forms[i]['isRequired'];
         for (var j = 0; j < forms[i]['option'].length; j++) {
-          data['question[$i][option][$j][name]'] = forms[i]['option'][j];
+          data['question[$i][option][$j][name]'] =
+              forms[i]['option'][j]['name'];
           if (forms[i]['option'].contains('id').toString() == 'false') {
           } else {
             data['question[$i][option][$j][id]'] = forms[i]['option'][j]['id'];
@@ -466,6 +468,9 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
             ),
             GestureDetector(
               onTap: () {
+                setState(() {
+                  isEditForm = false;
+                });
                 showAddBottomSheet();
               },
               child: Container(
@@ -544,6 +549,79 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                       physics: NeverScrollableScrollPhysics(),
                       children: <Widget>[
                         questionFormat(),
+                        simpleQuestion(),
+                        currentType == "1"
+                            ? Container(
+                                child: Text('type 1'),
+                              )
+                            : multipleFormat(),
+                        multipleForm()
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showEditBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
+            color: Color(0xFF737373),
+            child: Container(
+              padding: EdgeInsets.only(bottom: 0),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  )),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(13),
+                    decoration: BoxDecoration(
+                        color: eventajaGreenTeal,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        )),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Add Custom Form',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Expanded(
+                          child: SizedBox(),
+                        ),
+                        Text(
+                          nextText,
+                          style: TextStyle(color: Colors.white),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 200,
+                    child: PageView(
+                      controller: pageViewController,
+                      physics: NeverScrollableScrollPhysics(),
+                      children: <Widget>[
                         simpleQuestion(),
                         currentType == "1"
                             ? Container(
@@ -722,12 +800,19 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                       }
                     }
                     if (simpleQuestionController.text != null) {
-                      customForms.add({
-                        'name': simpleQuestionController.text,
-                        'type': '1',
-                        'order': order.toString(),
-                        'isRequired': isRequired == true ? '2' : '1'
-                      });
+                      if (isEditForm == true) {
+                        customForms[currentFormIndex]['name'] =
+                            simpleQuestionController.text;
+                        customForms[currentFormIndex]['isRequired'] =
+                            isRequired == true ? '2' : '1';
+                      } else {
+                        customForms.add({
+                          'name': simpleQuestionController.text,
+                          'type': '1',
+                          'order': order.toString(),
+                          'isRequired': isRequired == true ? '2' : '1'
+                        });
+                      }
 
                       print(customForms);
                     }
@@ -790,15 +875,41 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                         multipleFormCount = 5;
                       }
                     });
+                    print(multipleFormCount);
                   },
                 ),
               ),
             ),
             GestureDetector(
               onTap: () {
-                print(multipleFormCount);
+                print(multipleFormCount > textEditingControllers.length);
+                if(multipleFormCount < textEditingControllers.length){
+                  textEditingControllers.length = 0;
+                }
+                print('multiple form count' + multipleFormCount.toString());
                 for (int i = 0; i < multipleFormCount; i++) {
-                  textEditingControllers.add(TextEditingController());
+                  setState(() {
+                    textEditingControllers.add(TextEditingController());
+                  });
+                }
+
+                if (isEditForm = true) {
+                  print('editing');
+                  for (int i = 0; i < textEditingControllers.length; i++) {
+                    if (textEditingControllers.length >
+                        currentQuestionList.length) {
+                      for (int j = 0; j < currentQuestionList.length; j++) {
+                        textEditingControllers[j].text =
+                            currentQuestionList[j]['name'] == null
+                                ? ''
+                                : currentQuestionList[j]['name'];
+                      }
+                    } else {
+                      textEditingControllers[i].text =
+                          currentQuestionList[i]['name'];
+                    }
+                    print(textEditingControllers[i].text);
+                  }
                 }
 
                 pageViewController.nextPage(
@@ -837,7 +948,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                   return TextFormField(
                     controller: textEditingControllers[i],
                     decoration: InputDecoration(
-                        hintText: '${(i + 1).toString()}. Qustion'),
+                        hintText: '${(i + 1).toString()}. Type Question Here'),
                     onChanged: ((val) {
                       print(textEditingControllers[i].text);
                     }),
@@ -862,21 +973,58 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                       }
                     }
                     if (simpleQuestionController.text != null) {
-                      List<String> questions = [];
+                      List questions = [];
+                      if (isEditForm == true) {
+                        setState(() {
+                          questions.addAll(currentQuestionList);
+                          print(textEditingControllers.length.toString() +
+                              ' ' +
+                              questions.length.toString());
+                          if (textEditingControllers.length >
+                              questions.length) {
+                            questions.add(
+                                {'name': textEditingControllers.last.text});
+                          } else {}
+                          print(questions);
+                        });
+                      }
                       for (int i = 0; i < textEditingControllers.length; i++) {
-                        questions.add(textEditingControllers[i].text);
+                        if (isEditForm == true) {
+                          if (textEditingControllers.length >=
+                              questions.length) {
+                            for (int j = 0; j < questions.length; j++) {
+                              questions[j]['name'] =
+                                  textEditingControllers[j].text;
+                            }
+                          } else {
+                            questions.length = textEditingControllers.length;
+                            questions[i]['name'] =
+                                textEditingControllers[i].text;
+                          }
+                        } else {
+                          questions
+                              .add({'name': textEditingControllers[i].text});
+                        }
                       }
 
-                      customForms.add({
-                        'name': simpleQuestionController.text,
-                        'type': '2',
-                        'order': order.toString(),
-                        'isRequired': isRequired == true ? '2' : '1',
-                        'option': {'name': questions}
-                      });
-
-                      print(customForms);
+                      if (isEditForm == true) {
+                        customForms[currentFormIndex]['name'] =
+                            simpleQuestionController.text;
+                        customForms[currentFormIndex]['isRequired'] =
+                            isRequired == true ? '2' : '1';
+                        customForms[currentFormIndex]['option'] = questions;
+                      } else {
+                        customForms.add({
+                          'name': simpleQuestionController.text,
+                          'type': '2',
+                          'order': order.toString(),
+                          'isRequired': isRequired == true ? '2' : '1',
+                          'option': questions
+                        });
+                      }
                     }
+
+                    print(customForms);
                   });
 
                   Navigator.pop(context, setState(() {}));
@@ -897,6 +1045,11 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
       ),
     );
   }
+
+  String thisFormId;
+  bool isEditForm = false;
+  int currentFormIndex;
+  List currentQuestionList = [];
 
   Widget customForm(String formName, String formId, int index) {
     return Container(
@@ -926,11 +1079,43 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
           Divider(),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 13),
-            child: Text(formName),
+            child: Row(
+              children: <Widget>[
+                customForms[index]['isRequired'] == '1' ? Container() : Text('*', style: TextStyle(color: Colors.red,)),
+                Text(formName),
+              ],
+            ),
           ),
+          customForms[index]['type'] == '1'
+              ? Container()
+              : ColumnBuilder(
+                  itemCount: customForms[index]['option'].length,
+                  itemBuilder: (context, i) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Radio(
+                          groupValue: null,
+                          onChanged: (int i) {},
+                          value: 1,
+                        ),
+                        Text(customForms[index]['option'][i]['name']),
+                      ],
+                    );
+                  }),
           Divider(),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              setState(() {
+                simpleQuestionController.text = formName;
+                currentType = customForms[index]['type'];
+                thisFormId = formId;
+                isEditForm = true;
+                currentFormIndex = index;
+                currentQuestionList = customForms[index]['option'];
+              });
+              showEditBottomSheet();
+            },
             child: Container(
               width: MediaQuery.of(context).size.width,
               child: Center(

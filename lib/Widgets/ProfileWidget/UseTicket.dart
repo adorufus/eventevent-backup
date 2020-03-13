@@ -226,7 +226,7 @@ class UseTicketState extends State<UseTicket> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          "#ff6666", "Cancel", true, ScanMode.QR);
+          "#00DE91", "Cancel", false, ScanMode.QR);
     } catch (e) {
       print(e.toString());
     }

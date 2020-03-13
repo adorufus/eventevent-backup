@@ -198,7 +198,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
     _selectedPage = widget.selectedPage;
 
-    registerNotification();
+    
     // configureNotification();
 
     if (widget.isRest == true) {
@@ -390,6 +390,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    registerNotification();
   }
 
   @override

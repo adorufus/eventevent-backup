@@ -6,4 +6,14 @@ class MidtransNew3ds {
       'staging': "https://api.stg.veritrans.co.id"
     };
   }
+
+  var n = {};
+  var e = {};
+  var a = {};
+  var r = "";
+  var i = "";
+
+  s(){
+    
+  }
 }
