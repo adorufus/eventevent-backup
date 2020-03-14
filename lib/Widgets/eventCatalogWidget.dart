@@ -107,16 +107,6 @@ class _EventCatalogState extends State<EventCatalog>
     WidgetsBinding.instance.addObserver(this);
     super.initState();
 
-    // tabController = TabController(length: pages.length, vsync: this)
-    // ..addListener((){
-    //   int selectedIndex = tabController.index;
-    //   if(currentTabIndex != selectedIndex){
-    //     if(!hasInit[selectedIndex]){
-    //       pages[selectedIndex] = realPage;
-    //     }
-    //   }
-    // });
-
     if (!mounted) {
       return;
     } else {
@@ -159,20 +149,6 @@ class _EventCatalogState extends State<EventCatalog>
         urlType = BaseApi().apiUrl;
       }
     });
-
-    // timelineState.getMedia().then((response){
-    //   var extractedData = json.decode(response.body);
-
-    //   print(response.statusCode);
-    //   print(response.body);
-
-    //   if (response.statusCode == 200) {
-    //     setState(() {
-    //       mediaData = extractedData['data']['data'];
-    //     });
-    //   }
-    // });
-    //WidgetsBinding.instance.addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
   }
 
   bool isOnlyContainer = false;

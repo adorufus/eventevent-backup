@@ -6,6 +6,7 @@ import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
+import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -245,25 +246,33 @@ class _CollectionPageState extends State<CollectionPage> {
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      Container(
-                                        height:
-                                            ScreenUtil.instance.setWidth(40.50),
-                                        width:
-                                            ScreenUtil.instance.setWidth(41.50),
-                                        decoration: BoxDecoration(
-                                            boxShadow: <BoxShadow>[
-                                              BoxShadow(
-                                                  color: Colors.black26,
-                                                  offset: Offset(1.0, 1.0),
-                                                  blurRadius: 3)
-                                            ],
-                                            shape: BoxShape.circle,
-                                            image: DecorationImage(
-                                              image: CachedNetworkImageProvider(
-                                                  userByCollectionList[i]
-                                                      ["photo"]),
-                                              fit: BoxFit.fill,
-                                            )),
+                                      GestureDetector(
+                                        onTap: (){
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileWidget(
+                                            initialIndex: 0,
+                                            userId: userByCollectionList[i]['id'],
+                                          )));
+                                        },
+                                        child: Container(
+                                          height:
+                                              ScreenUtil.instance.setWidth(40.50),
+                                          width:
+                                              ScreenUtil.instance.setWidth(41.50),
+                                          decoration: BoxDecoration(
+                                              boxShadow: <BoxShadow>[
+                                                BoxShadow(
+                                                    color: Colors.black26,
+                                                    offset: Offset(1.0, 1.0),
+                                                    blurRadius: 3)
+                                              ],
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                image: CachedNetworkImageProvider(
+                                                    userByCollectionList[i]
+                                                        ["photo"]),
+                                                fit: BoxFit.fill,
+                                              )),
+                                        ),
                                       ),
                                     ],
                                   ),

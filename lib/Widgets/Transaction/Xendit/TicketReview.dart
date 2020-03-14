@@ -192,12 +192,16 @@ class _TicketReviewState extends State<TicketReview> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Center(
-                      child: Text(
-                        thisEventName == null ? '' : thisEventName,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: ScreenUtil.instance.setSp(22)),
-                        textAlign: TextAlign.center,
+                      child: Container(
+                          width: 300,
+                        child: Text(
+                          thisEventName == null ? '' : thisEventName,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: ScreenUtil.instance.setSp(22)),
+                          textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                     SizedBox(height: ScreenUtil.instance.setWidth(20)),

@@ -165,11 +165,7 @@ class LatestEventItem extends StatelessWidget {
                   ], color: itemColor, borderRadius: BorderRadius.circular(15)),
                   child: Center(
                       child: Text(
-                    type == 'paid' || type == 'paid_seating'
-                        ? isAvailable == '1'
-                            ? 'Rp. ' + itemPrice.toUpperCase() + ',-'
-                            : itemPrice.toUpperCase()
-                        : itemPrice.toUpperCase(),
+                    itemPrice.toUpperCase(),
                         textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,

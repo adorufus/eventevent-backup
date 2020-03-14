@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Transaction/PaymentMethod.dart';
 import 'package:eventevent/Widgets/Transaction/Xendit/TicketReview.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -74,7 +75,7 @@ class _TransactionFormState extends State<TransactionForm> {
         lastnameController.text = lastname;
         emailController.text = email;
         phoneController.text = phone;
-        print(firstname + lastname + email + phone);
+//        print(firstname + lastname + email + phone);
       });
     }
   }
@@ -161,11 +162,7 @@ class _TransactionFormState extends State<TransactionForm> {
 
           // print(formIds);
         },
-        child: formData == null
-            ? Container(
-                child: Center(child: CupertinoActivityIndicator(radius: 20)),
-              )
-            : Container(
+        child: Container(
                 height: ScreenUtil.instance.setWidth(50),
                 color: Colors.orange,
                 child: Center(
@@ -196,7 +193,9 @@ class _TransactionFormState extends State<TransactionForm> {
           style: TextStyle(color: eventajaGreenTeal),
         ),
       ),
-      body: Container(
+      body: formData == null
+	      ? HomeLoadingScreen().myTicketLoading()
+	      :  Container(
         color: Colors.black.withOpacity(0.05),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,

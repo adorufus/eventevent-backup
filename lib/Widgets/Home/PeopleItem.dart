@@ -138,6 +138,7 @@ class _PeopleItemState extends State<PeopleItem> {
               ],
             ),
           ),
+          Expanded(child: SizedBox(),),
           GestureDetector(
             onTap: () {
 

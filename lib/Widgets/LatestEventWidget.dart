@@ -142,7 +142,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                               '1') {
                             itemColor = Color(0xFF34B323);
                             itemPriceText =
-                                latestEventData[i]['ticket']['cheapestTicket'];
+                                'Rp. ' + latestEventData[i]['ticket']['cheapestTicket'] + ',-';
                           } else {
                             if (latestEventData[i]['ticket']['salesStatus'] ==
                                 'comingSoon') {

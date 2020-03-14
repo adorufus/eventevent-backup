@@ -317,7 +317,7 @@ class PaymentMethodState extends State<PaymentMethod> {
     });
 
     String paymentMethodURI = BaseApi().apiUrl +
-        '/payment_method/list?X-API-KEY=${API_KEY}&indomaret=true';
+        '/payment_method/list?X-API-KEY=$API_KEY&indomaret=true';
 
     final response = await http.get(paymentMethodURI, headers: {
       'Authorization': AUTHORIZATION_KEY,
@@ -329,8 +329,15 @@ class PaymentMethodState extends State<PaymentMethod> {
     if (response.statusCode == 200) {
       setState(() {
         var extractedData = json.decode(response.body);
-        extractedData['data'].forEach((k, v) => paymentMethodList.add(v));
-        print(paymentMethodList);
+        print(extractedData['data'].runtimeType);
+
+        if(extractedData['data'].runtimeType.toString() == '_InternalLinkedHashMap<String, dynamic>'){
+          extractedData['data'].forEach((k, v) => paymentMethodList.add(v));
+          print(paymentMethodList);
+        } else {
+          paymentMethodList = extractedData['data'];
+        }
+
       });
     }
   }

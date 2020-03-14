@@ -15,12 +15,10 @@ import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -625,6 +623,8 @@ class _LoginWidgetState extends State<LoginWidget> {
     print('status code: ' + response.statusCode.toString());
     print(response.body);
 
+    var extractedData = json.decode(response.body);
+
     ///Jika statusCode == 200 maka lanjutkan proses dan alihkan ke halaman berikutnya
 
     if (response.statusCode == 200) {
@@ -656,7 +656,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         });
       });
 
-      var extractedData = json.decode(response.body);
+
 
       ClevertapHandler.pushUserProfile(
           extractedData['data']['fullName'],
@@ -706,7 +706,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     else if (response.statusCode == 400) {
       Flushbar(
         flushbarPosition: FlushbarPosition.TOP,
-        message: 'You\'re not registered!',
+        message: extractedData['desc'],
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),

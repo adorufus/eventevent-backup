@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
@@ -77,7 +78,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
             )
           ],
         ),
-        body: data == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20)),) : Container(
+        body: data == null ? HomeLoadingScreen().followListLoading() : Container(
           color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
@@ -153,7 +154,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
 
   Future fetchData() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String url = BaseApi().apiUrl + '/user/follower?X-API-KEY=${API_KEY}&userID=${prefs.getString('Last User ID')}&page=1';
+    String url = BaseApi().apiUrl + '/user/follower?X-API-KEY=$API_KEY&userID=${prefs.getString('Last User ID')}&page=1';
     var extractedData;
 
     final response = await http.get(
@@ -161,7 +162,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
       headers: ({'Authorization': AUTHORIZATION_KEY, 'cookie': prefs.getString('Session')})
     );
 
-    print(prefs.getInt('NEW_EVENT_ID'));
+    print(prefs.getInt('NEW_EVENT_ID').toString());
     print(response.statusCode);
     print(response.body);
     setState(() {

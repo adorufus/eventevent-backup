@@ -309,7 +309,10 @@ class _AfterRegisterState extends State<AfterRegister> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget()));
+              builder: (BuildContext context) => DashboardWidget(
+                isRest: true,
+                selectedPage: 0,
+              )));
       return Register.fromJson(responseJson);
     } else if (response.statusCode == 400) {
       final responseJson = json.decode(response.body);

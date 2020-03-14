@@ -32,10 +32,10 @@
               "client_type": 3
             },
             {
-              "client_id": "192954205664-bijm2c7k7kmueemlsdk3j5qksdoggsl2.apps.googleusercontent.com",
+              "client_id": "192954205664-fgf044g528sou85l0qmu8j5nng75k3be.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.testing.eventaja"
+                "bundle_id": "com.eventevent2.ios"
               }
             }
           ]
@@ -50,6 +50,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "192954205664-er5omap88le8ifal6i5idtvbud2aetq0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eventevent.android",
+            "certificate_hash": "e23773a99eabc757364a067e295f92ccc6938ddb"
+          }
+        },
+        {
+          "client_id": "192954205664-bf3m8eigofvu7mt2htrunjgvp4si8au1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eventevent.android",
+            "certificate_hash": "ce087990542c0964a85d7fb68c9f45b507e2bd9b"
+          }
+        },
         {
           "client_id": "192954205664-l7ka0pdqj6755j1mqr1e3ch4ke8fn1ne.apps.googleusercontent.com",
           "client_type": 1,
@@ -100,10 +116,10 @@
               "client_type": 3
             },
             {
-              "client_id": "192954205664-bijm2c7k7kmueemlsdk3j5qksdoggsl2.apps.googleusercontent.com",
+              "client_id": "192954205664-fgf044g528sou85l0qmu8j5nng75k3be.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.testing.eventaja"
+                "bundle_id": "com.eventevent2.ios"
               }
             }
           ]
@@ -118,6 +134,30 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "192954205664-s6dl3m0gknckp633rg6rrahtr7v1agu6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eventevent2.android",
+            "certificate_hash": "bd9481f5219212df9d1789eb861ea61af30816cb"
+          }
+        },
+        {
+          "client_id": "192954205664-tqn9nei0outcd78jsjpnrfrf1v5468pq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eventevent2.android",
+            "certificate_hash": "ce087990542c0964a85d7fb68c9f45b507e2bd9b"
+          }
+        },
+        {
+          "client_id": "192954205664-u0mvtv43av8g2dbj8ncl8pq7b1iq5bi9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eventevent2.android",
+            "certificate_hash": "176a7217c2225ed13a5abd193d8e0510716a37ea"
+          }
+        },
         {
           "client_id": "192954205664-3m8ncvg67b8lkqcecgrr4vgd1jo27fjo.apps.googleusercontent.com",
           "client_type": 1,
@@ -144,10 +184,10 @@
               "client_type": 3
             },
             {
-              "client_id": "192954205664-bijm2c7k7kmueemlsdk3j5qksdoggsl2.apps.googleusercontent.com",
+              "client_id": "192954205664-fgf044g528sou85l0qmu8j5nng75k3be.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.testing.eventaja"
+                "bundle_id": "com.eventevent2.ios"
               }
             }
           ]

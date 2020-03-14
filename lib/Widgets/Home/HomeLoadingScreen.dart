@@ -115,7 +115,7 @@ class HomeLoadingScreen {
                 width: ScreenUtil.instance.setWidth(8.87),
               ),
               Container(
-                  width: 200,
+                  width: 150,
                   child: PlaceholderLines(
                     count: 2,
                     color: Colors.grey,
@@ -123,6 +123,7 @@ class HomeLoadingScreen {
                     animate: true,
                     lineHeight: 10,
                   )),
+              Expanded(child: SizedBox(),),
               Shimmer.fromColors(
                 baseColor: Colors.grey[300],
                 highlightColor: Colors.grey[100],

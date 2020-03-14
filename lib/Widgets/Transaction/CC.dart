@@ -338,7 +338,22 @@ class CreditCardInputState extends State<CreditCardInput> {
 
     if (response.statusCode == 200) {
       print(response.body);
-      midtransCC3DS(extractedData['token_id']);
+      if(extractedData['status_code'] == '200'){
+        midtransCC3DS(extractedData['token_id']);
+      } else {
+        for(int i = 0; i < extractedData['validation_messages'].length; i++){
+          var error = extractedData['validation_messages'].toString();
+          print(error);
+          Flushbar(
+            animationDuration: Duration(milliseconds: 500),
+            duration: Duration(seconds: 5),
+            backgroundColor: Colors.red,
+            flushbarPosition: FlushbarPosition.TOP,
+            message: error,
+          ).show(context);
+        }
+      }
+
     }
   }
 
