@@ -793,7 +793,7 @@ class _EventCatalogState extends State<EventCatalog>
                             itemPriceText =
                                 discoverData[i]['ticket_type']['name'];
                           } else if (discoverData[i]['ticket_type']['type'] ==
-                              'free_limited') {
+                              'free_limited' || discoverData[i]['ticket_type']['type'] == 'free_limited_seating') {
                             if (discoverData[i]['ticket']
                                     ['availableTicketStatus'] ==
                                 '1') {
@@ -902,6 +902,7 @@ class _EventCatalogState extends State<EventCatalog>
                 horizontal: MediaQuery.of(context).size.width / 4.5,
               )),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -910,11 +911,16 @@ class _EventCatalogState extends State<EventCatalog>
                                 initialIndex: 0,
                               )));
                 },
-                child: Text(
-                  'See All',
-                  style: TextStyle(
-                      color: eventajaGreenTeal,
-                      fontSize: ScreenUtil.instance.setSp(12)),
+                child: Container(
+                  height: 50,
+                  child: Center(
+                    child: Text(
+                      'See All',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(12)),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -1029,6 +1035,7 @@ class _EventCatalogState extends State<EventCatalog>
                 horizontal: MediaQuery.of(context).size.width / 4.5,
               )),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -1037,11 +1044,16 @@ class _EventCatalogState extends State<EventCatalog>
                                 initialIndex: 1,
                               )));
                 },
-                child: Text(
-                  'See All',
-                  style: TextStyle(
-                      color: eventajaGreenTeal,
-                      fontSize: ScreenUtil.instance.setSp(12)),
+                child: Container(
+                  height: 50,
+                  child: Center(
+                    child: Text(
+                      'See All',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(12)),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -1125,6 +1137,7 @@ class _EventCatalogState extends State<EventCatalog>
                 horizontal: MediaQuery.of(context).size.width / 4.5,
               )),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -1133,11 +1146,16 @@ class _EventCatalogState extends State<EventCatalog>
                                 initialIndex: 0,
                               )));
                 },
-                child: Text(
-                  'See All',
-                  style: TextStyle(
-                      color: eventajaGreenTeal,
-                      fontSize: ScreenUtil.instance.setSp(12)),
+                child: Container(
+                  height: 50,
+                  child: Center(
+                    child: Text(
+                      'See All',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(12)),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -1316,6 +1334,7 @@ class _EventCatalogState extends State<EventCatalog>
                 horizontal: MediaQuery.of(context).size.width / 4.5 - 5,
               )),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -1324,11 +1343,16 @@ class _EventCatalogState extends State<EventCatalog>
                                 initialIndex: 1,
                               )));
                 },
-                child: Text(
-                  'See All',
-                  style: TextStyle(
-                      color: eventajaGreenTeal,
-                      fontSize: ScreenUtil.instance.setSp(12)),
+                child: Container(
+                  height: 50,
+                  child: Center(
+                    child: Text(
+                      'See All',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(12)),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -1463,6 +1487,7 @@ class _EventCatalogState extends State<EventCatalog>
                 horizontal: MediaQuery.of(context).size.width / 4.5,
               )),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) =>
@@ -1470,11 +1495,16 @@ class _EventCatalogState extends State<EventCatalog>
                             isRest: widget.isRest,
                             initialIndex: 0, isVideo: true)));
                 },
-                child: Text(
-                  'See All',
-                  style: TextStyle(
-                      color: eventajaGreenTeal,
-                      fontSize: ScreenUtil.instance.setSp(12)),
+                child: Container(
+                  height: 50,
+                  child: Center(
+                    child: Text(
+                      'See All',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(12)),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -1890,6 +1920,7 @@ class _EventCatalogState extends State<EventCatalog>
                 horizontal: MediaQuery.of(context).size.width / 4.5,
               )),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -1900,11 +1931,16 @@ class _EventCatalogState extends State<EventCatalog>
                                 isVideo: true,
                               )));
                 },
-                child: Text(
-                  'See All',
-                  style: TextStyle(
-                      color: eventajaGreenTeal,
-                      fontSize: ScreenUtil.instance.setSp(12)),
+                child: Container(
+                  height: 50,
+                  child: Center(
+                    child: Text(
+                      'See All',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(12)),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -2139,6 +2175,7 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         var extractedData = json.decode(response.body);
         discoverData = extractedData['data'];
+        discoverData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
 
         isLoading = false;
       });
@@ -2205,6 +2242,7 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         var extractedData = json.decode(response.body);
         data = extractedData['data'];
+        data.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
 
         isLoading = false;
       });

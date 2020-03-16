@@ -273,7 +273,8 @@ class GoogleRegisterState extends State<GoogleRegisterStart> {
 
     if (response.statusCode == 201) {
       final responseJson = json.decode(response.body);
-      SharedPrefs().saveCurrentSession(response, responseJson);
+      preferences.setString('Session', response.headers['set-cookie']);
+      SharedPrefs().saveCurrentSession(responseJson);
       Navigator.push(
           context,
           MaterialPageRoute(

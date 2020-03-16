@@ -601,6 +601,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       String password, GlobalKey<ScaffoldState> _scaffoldKey) async {
     final loginApiUrl = BaseApi().apiUrl + '/signin/login?=';
     final String apiKey = '47d32cb10889cbde94e5f5f28ab461e52890034b';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     Map<String, String> body = {
       'username': username,
@@ -628,7 +629,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     ///Jika statusCode == 200 maka lanjutkan proses dan alihkan ke halaman berikutnya
 
     if (response.statusCode == 200) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+      
       print('apiHelper-line41:' + cookies);
       print('username: ' + prefs.getString('Last Username').toString());
       print('id: ' + prefs.getString('Last User ID').toString());
@@ -641,6 +642,7 @@ class _LoginWidgetState extends State<LoginWidget> {
             'UserPicture', responseJson['data']['pictureAvatarURL']);
         prefs.setString('UserFirstname', responseJson['data']['fullName']);
         prefs.setString('UserUsername', responseJson['data']['username']);
+        prefs.setString('Session', response.headers['set-cookie']);
 
         utility.setCurrentUserId(responseJson['data']['id']);
         print('Current user id: ' + utility.getCurrentUserId);
@@ -668,7 +670,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           extractedData['data']['gender'],
           extractedData['data']['phone']);
 
-      SharedPrefs().saveCurrentSession(response, responseJson);
+      SharedPrefs().saveCurrentSession(responseJson);
 
       if (widget.previousWidget == 'EventDetailsWidgetRest') {
         Navigator.pushReplacement(
@@ -727,7 +729,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     ///Else, simpan sessi gagal
     else {
       final responseJson = json.decode(response.body);
-      SharedPrefs().saveCurrentSession(response, responseJson);
+      SharedPrefs().saveCurrentSession(responseJson);
     }
     print(LoginModel().description);
   }

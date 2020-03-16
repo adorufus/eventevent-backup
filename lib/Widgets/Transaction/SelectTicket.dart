@@ -127,9 +127,9 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                   ticketStatus =
                       'Ends on ${endTime.day} - ${endTime.month} - ${endTime.year}';
                 } else if (DateTime.parse(ticketListData[i]['sales_start_date'])
-                    .isBefore(DateTime.now())) {
+                    .isAfter(DateTime.now())) {
                   ticketStatus =
-                      'Ends on ${endTime.day} - ${endTime.month} - ${endTime.year}';
+                      'Starts on ${endTime.day} - ${endTime.month} - ${endTime.year}';
                 } else if (ticketListData[i]['availableTicketStatus'] == '0') {
                   ticketStatus = 'Sold Out';
                   if (int.parse(ticketListData[i]['booked']) > 0) {

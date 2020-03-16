@@ -140,7 +140,7 @@ class EditEventState extends State<EditEvent>{
     });
 
     request.fields.addAll({
-      'X-API-CODE': API_KEY,
+      'X-API-KEY': API_KEY,
       'id': eventId,
       'name': eventNameController.text,
       'eventTypeID': (int.parse(isPrivate) + 1).toString(),

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:async';
 
 import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -10,11 +12,15 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:async/async.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
 
 import 'dashboardWidget.dart';
 
@@ -37,6 +43,9 @@ const String INIT_DATETIME = '2019-05-17';
 class _AfterRegisterState extends State<AfterRegister> {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   File _image;
+  Dio dio = new Dio(BaseOptions(
+      baseUrl: BaseApi().apiUrl, connectTimeout: 15000, receiveTimeout: 15000));
+  bool isLoading = false;
 
   var usernameController = new TextEditingController();
   var phoneController = new TextEditingController();
@@ -46,6 +55,7 @@ class _AfterRegisterState extends State<AfterRegister> {
   var lastNameController = new TextEditingController();
 
   File profilePictureFile = File('aofkafoa');
+  File croppedProfilePicture;
   String profilePictureURI = 'fa';
   int currentValue = 0;
   String birthDate;
@@ -65,7 +75,22 @@ class _AfterRegisterState extends State<AfterRegister> {
 
     setState(() {
       profilePictureFile = image;
+
+      cropImage(profilePictureFile);
     });
+  }
+
+  Future cropImage(File image) async {
+    File croppedImage = await ImageCropper.cropImage(
+      sourcePath: image.path,
+      aspectRatio: CropAspectRatio(ratioX: 2.0, ratioY: 3.0),
+      maxHeight: 512,
+      maxWidth: 512,
+    );
+
+    croppedProfilePicture = croppedImage;
+
+    setState(() {});
   }
 
   @override
@@ -97,11 +122,21 @@ class _AfterRegisterState extends State<AfterRegister> {
           centerTitle: true,
           title: Text('COMPLETE YOUR PROFILE',
               style: TextStyle(color: eventajaGreenTeal))),
-      body: ListView(
+      body: Stack(
         children: <Widget>[
+          ListView(
+            children: <Widget>[
+              Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: registerGoogleWidget())
+            ],
+          ),
           Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: registerGoogleWidget())
+            color: Colors.black.withOpacity(0.5),
+            child: Center(
+              child: CupertinoActivityIndicator(animating: true,),
+            ),
+          )
         ],
       ),
     );
@@ -123,7 +158,9 @@ class _AfterRegisterState extends State<AfterRegister> {
               CircleAvatar(
                 radius: 80,
                 backgroundColor: eventajaGreenTeal,
-                backgroundImage: FileImage(profilePictureFile),
+                backgroundImage: croppedProfilePicture == null
+                    ? AssetImage('assets/grey-fade.jpg')
+                    : FileImage(croppedProfilePicture),
               ),
               SizedBox(
                 height: ScreenUtil.instance.setWidth(10),
@@ -264,75 +301,108 @@ class _AfterRegisterState extends State<AfterRegister> {
       String phoneNumber,
       String genderSpec,
       GlobalKey<ScaffoldState> _scaffoldKey) async {
+    setState(() {
+      isLoading = true;
+    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final registerApiUrl = BaseApi().apiUrl + '/signup/register';
+    final registerApiUrl = '/signup/register';
 
-    print(username);
-    print(email);
-    print(password);
-    print(fullName);
-    print(lastName);
-    print(birthDay);
-    print(phoneNumber);
-    print(genderSpec);
+    try {
+      Response response = await dio.post(
+        registerApiUrl,
+        options: Options(
+          headers: {'Authorization': AUTHORIZATION_KEY},
+          responseType: ResponseType.plain,
+        ),
+        data: FormData.from(
+          {
+            'X-API-KEY': API_KEY,
+            'username': username,
+            'email': email,
+            'password': password,
+            'fullName': fullName,
+            'lastName': lastName,
+            'birthDay': birthDay,
+            'phone': phoneNumber,
+            'gender': gender,
+            'photo': UploadFileInfo(croppedProfilePicture,
+                "eventevent-profilepicture-${DateTime.now().toString()}.jpg",
+                contentType: ContentType('image', 'jpg'))
+          },
+        ),
+      );
 
-    Map<String, String> body = {
-      'username': username,
-      'email': email,
-      'password': password,
-      'gender': genderSpec,
-      'fullName': fullName,
-      'lastName': lastName,
-      'birthDay': birthDay,
-      'phone': phoneNumber,
-      'X-API-KEY': apiKey,
-      'pictureAvatarURL': "male.jpg"
-    };
+      print(username);
+      print(email);
+      print(password);
+      print(fullName);
+      print(lastName);
+      print(birthDay);
+      print(phoneNumber);
+      print(genderSpec);
 
-    final response = await http.post(registerApiUrl,
-        body: body, headers: {'Authorization': "Basic YWRtaW46MTIzNA=="});
-
-    print(response.statusCode);
-    final myResponse = json.decode(response.body);
-
-    if (response.statusCode == 201) {
-      setState(() {
-        prefs.setString('Session', response.headers['set-cookie']);
-      });
       Map responseJson;
 
       setState(() {
-        responseJson = jsonDecode(response.body);
+        responseJson = jsonDecode(response.data);
       });
 
-      SharedPrefs().saveCurrentSession(response, responseJson);
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget(
-                isRest: true,
-                selectedPage: 0,
-              )));
-      return Register.fromJson(responseJson);
-    } else if (response.statusCode == 400) {
-      final responseJson = json.decode(response.body);
-      //Register registerModel = new Register.fromJson(responseJson);
-      Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: responseJson['desc'].toString(),
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context);
-    } else if (myResponse.containsKey('username')) {
-      Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: 'Username already taken',
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context);
+      if (response.statusCode == 201) {
+        setState(() {
+          isLoading = false;
+        });
+        setState(() {
+          prefs.setString('Session', response.headers['set-cookie'].first);
+        });
+
+        SharedPrefs().saveCurrentSession(responseJson);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => DashboardWidget(
+                      isRest: false,
+                      selectedPage: 0,
+                    )));
+        return Register.fromJson(responseJson);
+      } else if (response.statusCode == 400) {
+        setState(() {
+          isLoading = false;
+        });
+        //Register registerModel = new Register.fromJson(responseJson);
+        Flushbar(
+          flushbarPosition: FlushbarPosition.TOP,
+          message: responseJson['desc'].toString(),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+          animationDuration: Duration(milliseconds: 500),
+        )..show(context);
+      } else if (responseJson.containsKey('username')) {
+        setState(() {
+          isLoading = false;
+        });
+        Flushbar(
+          flushbarPosition: FlushbarPosition.TOP,
+          message: 'Username already taken',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+          animationDuration: Duration(milliseconds: 500),
+        )..show(context);
+      }
+    } on DioError catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      if (e.response != null) {
+        print(e.response.data);
+        print(e.response.statusCode);
+        print(e.response.request);
+      } else {
+        print(e.message);
+        print(e.error);
+      }
     }
+
+    return null;
   }
 
   void showDatePicker() {

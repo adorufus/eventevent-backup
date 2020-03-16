@@ -271,6 +271,7 @@ flutter:
     - assets/icons/empty_state/history.png
     - assets/icons/empty_state/profile.png
     - assets/icons/empty_state/my_ticket.png
+    - assets/icons/empty_state/notification.png
     - assets/drawable/cimbniaga.png
     - assets/drawable/bank.png
     - assets/drawable/discover.png

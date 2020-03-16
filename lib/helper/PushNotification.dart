@@ -1,5 +1,6 @@
 import 'dart:convert' show json, utf8;
 
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
@@ -41,6 +42,8 @@ class PushNotificationState extends State<PushNotification> {
   StreamController _notificationStreamController;
   int count = 1;
   int newPage = 0;
+  bool isEmpty = false;
+  bool isLoading = false;
 
   String pushToken;
 
@@ -61,18 +64,33 @@ class PushNotificationState extends State<PushNotification> {
       if (response.statusCode == 200) {
         setState(() {
           var extractedData = json.decode(response.body);
-          notificationData = extractedData['data'];
-          assert(notificationData != null);
+          print(extractedData);
 
-          print(notificationData);
+          if (extractedData['desc'] == 'User notification is empty') {
+            setState(() {
+              isLoading = false;
+              isEmpty = true;
+            });
+          } else {
+            setState(() {
+              isLoading = false;
+              isEmpty = false;
+            });
+
+            notificationData = extractedData['data'];
+
+            assert(notificationData != null);
+
+            print(notificationData);
 
 //          _showNotification(
 //              notificationData[0]['fullName'], notificationData[0]['caption'],
 //              payload: 'test');
 
-          // for(int i =   0; i <= notificationData.length; i +r= notificationData.length){
-          //   _showNotification(notificationData[i]['fullName'], notificationData[i]['caption']);
-          // }
+            // for(int i =   0; i <= notificationData.length; i +r= notificationData.length){
+            //   _showNotification(notificationData[i]['fullName'], notificationData[i]['caption']);
+            // }
+          }
 
           return extractedData;
         });
@@ -184,7 +202,7 @@ class PushNotificationState extends State<PushNotification> {
                 CustomFooter(builder: (BuildContext context, LoadStatus mode) {
               Widget body;
               if (mode == LoadStatus.idle) {
-                body = Text("Load data");
+                body = Text("");
               } else if (mode == LoadStatus.loading) {
                 body = CupertinoActivityIndicator(radius: 20);
               } else if (mode == LoadStatus.failed) {
@@ -304,9 +322,15 @@ class PushNotificationState extends State<PushNotification> {
                       color: eventajaGreenTeal,
                     )),
               ),
-              notificationData == null
+              isLoading == true
                   ? HomeLoadingScreen().myTicketLoading()
-                  : ColumnBuilder(
+                  : isEmpty == true ? Padding(
+                    padding: const EdgeInsets.only(top: 48),
+                    child: EmptyState(
+                      imagePath: 'assets/icons/empty_state/notification.png',
+                      reasonText: 'You have 0 notification',
+                    ),
+                  ): ColumnBuilder(
                       itemCount: notificationData.length == 0
                           ? 0
                           : notificationData.length,
@@ -858,6 +882,7 @@ class PushNotificationState extends State<PushNotification> {
     int currentPage = 1;
 
     setState(() {
+      isLoading = true;
       if (page != null) {
         currentPage += page;
       }

@@ -306,55 +306,34 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 onTap: () {
                   showCupertinoDialog(
                       context: context,
-                      builder: (context) {
-                        return CupertinoAlertDialog(
-                          title: Text('Oops'),
-                          content: Text('Do you want to log out?'),
-                          actions: <Widget>[
-                            CupertinoDialogAction(
-                              child: Text('No'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            CupertinoDialogAction(
-                              child: Text('Yes'),
-                              onPressed: () {
-                                setState(() {
-                                  isLoading = true;
-                                });
-                                setSharedPreferencesToEmpty();
+                      builder: (BuildContext thisContext) {
+                        return StatefulBuilder(
+                          builder: (thisContext, setState) => CupertinoAlertDialog(
+                            title: Text('Oops'),
+                            content: Text('Do you want to log out?'),
+                            actions: <Widget>[
+                              CupertinoDialogAction(
+                                child: Text('No'),
+                                onPressed: () {
+                                  Navigator.pop(thisContext);
+                                },
+                              ),
+                              CupertinoDialogAction(
+                                child: Text('Yes'),
+                                onPressed: () {
+                                  Navigator.pop(thisContext);
 
-                                requestLogout(context).then((response) async {
-                                  SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
+                                  setState(() {
+                                    isLoading = true;
+                                  });
 
-                                  if (prefs.getBool('isUsingGoogle') == true) {
-                                    googleSignIn.signOut();
-                                  }
+                                  requestLogout(context);
 
-                                  if (response.statusCode == 200) {
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                    Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                LoginRegisterWidget()),
-                                        (Route<dynamic> route) => false);
-                                    prefs.clear();
-                                    print(prefs.getKeys());
-                                  } else {
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                    print(response.body);
-                                  }
-                                });
-                              },
-                            )
-                          ],
+                                  setSharedPreferencesToEmpty();
+                                },
+                              )
+                            ],
+                          ),
                         );
                       });
                 },
@@ -446,9 +425,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    WebViewTest(
-                                      url: 'https://eventevent.com/opensourcelibrary',
+                                builder: (BuildContext context) => WebViewTest(
+                                      url:
+                                          'https://eventevent.com/opensourcelibrary',
                                     )));
                       },
                       child: Container(
@@ -465,7 +444,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     ),
                   ],
                 ),
-              ),  
+              ),
               SizedBox(
                 height: ScreenUtil.instance.setWidth(25),
               ),
@@ -485,20 +464,20 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               ),
             ],
           ),
-          isLoading == false
-              ? Container()
-              : Center(
+          isLoading == true
+              ? Center(
                   child: CupertinoActivityIndicator(
                     animating: true,
                     radius: 15,
                   ),
                 )
+              : Container()
         ],
       ),
     );
   }
 
-  Future<http.Response> requestLogout(BuildContext context) async {
+  Future requestLogout(BuildContext context) async {
     final logoutApiUrl = BaseApi().apiUrl + '/signout';
 
     Map<String, String> body = {'X-API-KEY': apiKey};
@@ -509,7 +488,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       isLoading = true;
     });
 
-    Future.delayed(Duration(seconds: 3));
+    print(isLoading);
+
+    // Future.delayed(Duration(seconds: 3));
 
     final response = await http.post(logoutApiUrl, body: body, headers: {
       'Authorization': "Basic YWRtaW46MTIzNA==",
@@ -518,6 +499,25 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
     print(response.statusCode);
 
-    return response;
+    if (prefs.getBool('isUsingGoogle') == true) {
+      googleSignIn.signOut();
+    }
+
+    if (response.statusCode == 200) {
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LoginRegisterWidget()),
+          (Route<dynamic> route) => false);
+      prefs.clear();
+      print(prefs.getKeys());
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      print(response.body);
+    }
   }
 }

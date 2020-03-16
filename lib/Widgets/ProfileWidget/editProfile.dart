@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -63,6 +67,10 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
   String following;
   String lastName;
   String bio;
+  File profilePictureFile;
+  File croppedProfilePicture;
+  Dio dio = new Dio(BaseOptions(
+      baseUrl: BaseApi().apiUrl, connectTimeout: 15000, receiveTimeout: 15000));
 
   bool isLoading = false;
 
@@ -179,6 +187,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
 
   Widget profilePicture() {
     return GestureDetector(
+      onTap: () {
+        getImage();
+      },
       child: Column(
         children: <Widget>[
           Container(
@@ -189,8 +200,10 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                 image: DecorationImage(
                     image: pictureUri == null
                         ? AssetImage('assets/white.png')
-                        : NetworkImage(pictureUri),
-                    fit: BoxFit.contain)),
+                        : croppedProfilePicture == null
+                            ? NetworkImage(pictureUri)
+                            : FileImage(croppedProfilePicture),
+                    fit: BoxFit.cover)),
           ),
           SizedBox(
             height: ScreenUtil.instance.setWidth(30),
@@ -213,6 +226,29 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
         ],
       ),
     );
+  }
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      profilePictureFile = image;
+
+      cropImage(profilePictureFile);
+    });
+  }
+
+  Future cropImage(File image) async {
+    File croppedImage = await ImageCropper.cropImage(
+      sourcePath: image.path,
+      aspectRatio: CropAspectRatio(ratioX: 2.0, ratioY: 3.0),
+      maxHeight: 512,
+      maxWidth: 512,
+    );
+
+    croppedProfilePicture = croppedImage;
+
+    setState(() {});
   }
 
   Widget basicSettings() {
@@ -601,39 +637,69 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
 
     print(userId);
 
-    final userProfileAPI = BaseApi().apiUrl + '/user/update_profile';
+    final userProfileAPI = '/user/update_profile';
     print(userProfileAPI);
-    final response = await http.post(userProfileAPI, headers: {
-      'Authorization': 'Basic YWRtaW46MTIzNA==',
-      'cookie': session
-    }, body: {
-      'X-API-KEY': API_KEY,
-      'fullName': firstNameController.text,
-      'lastName': lastNameController.text,
-      'phone': phoneController.text,
-      'shortBio': shortBioController.text,
-      'birthDay': birthDateController.text,
-      'website': websiteController.text,
-      'username': usernameController.text,
-    });
 
-    print(response.statusCode);
+    try {
+      Response response = await dio.post(
+        userProfileAPI,
+        options: Options(
+          headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session},
+          cookies: [Cookie.fromSetCookieValue(session)],
+          responseType: ResponseType.plain,
+        ),
+        data: FormData.from(
+          {
+            'X-API-KEY': API_KEY,
+            'fullName': firstNameController.text,
+            'lastName': lastNameController.text,
+            'phone': phoneController.text,
+            'shortBio': shortBioController.text,
+            'birthDay': birthDateController.text,
+            'website': websiteController.text,
+            'username': usernameController.text,
+            'photo': croppedProfilePicture == null
+                ? ''
+                : UploadFileInfo(croppedProfilePicture,
+                    "eventevent-profilepicture-${DateTime.now().toString()}.jpg",
+                    contentType: ContentType('image', 'jpg'))
+          },
+        ),
+      );
 
-    if (response.statusCode == null) {
-      setState(() {
-        isLoading = true;
-      });
-      print('loading');
-    }
-    if (response.statusCode == 200 || response.statusCode == 201) {
+      print(response.statusCode);
+
+      if (response.statusCode == null) {
+        setState(() {
+          isLoading = true;
+        });
+        print('loading');
+      }
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        setState(() {
+          isLoading = false;
+          print('edit berhasil');
+          Navigator.pop(context);
+          Navigator.pop(context);
+        });
+      } else {
+        setState((){
+          isLoading = false;
+        });
+        print(response.data);
+      }
+    } on DioError catch (e) {
       setState(() {
         isLoading = false;
-        print('edit berhasil');
-        Navigator.pop(context);
-        Navigator.pop(context);
       });
-    } else {
-      print(response.body);
+      if (e.response != null) {
+        print(e.response.data);
+        print(e.response.statusCode);
+        print(e.response.request);
+      } else {
+        print(e.message);
+        print(e.error);
+      }
     }
   }
 }

@@ -8,6 +8,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/utils.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -131,48 +132,65 @@ class _TransactionFormState extends State<TransactionForm> {
 
           print(questionId);
 
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (BuildContext context) {
-                return widget.ticketType == 'free_limited'
-                    ? customFormList == null
-                        ? TicketReview(
-                            ticketType: widget.ticketType,
-                            isCustomForm: false,
-                          )
-                        : TicketReview(
-                            ticketType: widget.ticketType,
-                            customFormList: answer,
-                            customFormId: questionId,
-                            isCustomForm: true,
-                          )
-                    : customFormList == null
-                        ? PaymentMethod(isCustomForm: false)
-                        : PaymentMethod(
-                            isCustomForm: true,
-                            answerList: answer,
-                            customFormId: questionId,
-                          );
-              },
-            ),
-          ).then((val) {
-            answer.clear();
-            questionId.clear();
-          });
+          if (firstnameController.text == null ||
+              firstnameController.text == '' ||
+              lastnameController.text == null ||
+              lastnameController.text == '' ||
+              emailController.text == null ||
+              emailController.text == '' ||
+              phoneController.text == null ||
+              phoneController.text == '') {
+                Flushbar(
+                  animationDuration: Duration(milliseconds: 500),
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 4),
+                  message: 'Please check again your input',
+                  flushbarPosition: FlushbarPosition.TOP,
+                ).show(context);
+          } else {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return widget.ticketType == 'free_limited'
+                      ? customFormList == null
+                          ? TicketReview(
+                              ticketType: widget.ticketType,
+                              isCustomForm: false,
+                            )
+                          : TicketReview(
+                              ticketType: widget.ticketType,
+                              customFormList: answer,
+                              customFormId: questionId,
+                              isCustomForm: true,
+                            )
+                      : customFormList == null
+                          ? PaymentMethod(isCustomForm: false)
+                          : PaymentMethod(
+                              isCustomForm: true,
+                              answerList: answer,
+                              customFormId: questionId,
+                            );
+                },
+              ),
+            ).then((val) {
+              answer.clear();
+              questionId.clear();
+            });
+          }
 
           // print(formIds);
         },
         child: Container(
-                height: ScreenUtil.instance.setWidth(50),
-                color: Colors.orange,
-                child: Center(
-                  child: Text(
-                    'OK',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: ScreenUtil.instance.setSp(20)),
-                  ),
-                )),
+            height: ScreenUtil.instance.setWidth(50),
+            color: Colors.orange,
+            child: Center(
+              child: Text(
+                'OK',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ScreenUtil.instance.setSp(20)),
+              ),
+            )),
       ),
       appBar: AppBar(
         elevation: 1,
@@ -194,159 +212,157 @@ class _TransactionFormState extends State<TransactionForm> {
         ),
       ),
       body: formData == null
-	      ? HomeLoadingScreen().myTicketLoading()
-	      :  Container(
-        color: Colors.black.withOpacity(0.05),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: ListView(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.all(15),
-              child: Text(
-                'Tell us about yourself, these information will be useful for connecting event organisers and attendees.',
-                textAlign: TextAlign.start,
-                style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
+          ? HomeLoadingScreen().myTicketLoading()
+          : Container(
+              color: Colors.black.withOpacity(0.05),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: ListView(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.all(15),
+                    child: Text(
+                      'Tell us about yourself, these information will be useful for connecting event organisers and attendees.',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
+                    ),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'First Name',
+                            style: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(16),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          TextFormField(
+                            controller: firstnameController,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Put your first name...'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil.instance.setWidth(30),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Last Name',
+                            style: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(16),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          TextFormField(
+                            controller: lastnameController,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Put your last name...'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil.instance.setWidth(30),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'E-mail',
+                            style: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(16),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          TextFormField(
+                            controller: emailController,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Put your e-mail'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil.instance.setWidth(30),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Phone Number',
+                            style: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(16),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          TextFormField(
+                            controller: phoneController,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: '(e.g. 0818123456)'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil.instance.setWidth(30),
+                  ),
+                  Container(
+                    color: Colors.white,
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Aditional Notes',
+                            style: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(16),
+                                fontWeight: FontWeight.bold),
+                          ),
+                          TextFormField(
+                            controller: aditionalNotesController,
+                            keyboardType: TextInputType.multiline,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintMaxLines: 100,
+                                hintText:
+                                    'Additional notes for event organizer... Example: Please find the best seat for me.'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: ScreenUtil.instance.setWidth(30)),
+                  customFormList == null ? Container() : customForm()
+                ],
               ),
             ),
-            Container(
-              color: Colors.white,
-              child: Container(
-                margin: EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'First Name',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(16),
-                          fontWeight: FontWeight.bold),
-                    ),
-                    TextFormField(
-                      controller: firstnameController,
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Put your first name...'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: ScreenUtil.instance.setWidth(30),
-            ),
-            Container(
-              color: Colors.white,
-              child: Container(
-                margin: EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Last Name',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(16),
-                          fontWeight: FontWeight.bold),
-                    ),
-                    TextFormField(
-                      controller: lastnameController,
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Put your last name...'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: ScreenUtil.instance.setWidth(30),
-            ),
-            Container(
-              color: Colors.white,
-              child: Container(
-                margin: EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'E-mail',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(16),
-                          fontWeight: FontWeight.bold),
-                    ),
-                    TextFormField(
-                      controller: emailController,
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Put your e-mail'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: ScreenUtil.instance.setWidth(30),
-            ),
-            Container(
-              color: Colors.white,
-              child: Container(
-                margin: EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Phone Number',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(16),
-                          fontWeight: FontWeight.bold),
-                    ),
-                    TextFormField(
-                      controller: phoneController,
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: '(e.g. 0818123456)'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: ScreenUtil.instance.setWidth(30),
-            ),
-            Container(
-              color: Colors.white,
-              child: Container(
-                margin: EdgeInsets.all(15),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Aditional Notes',
-                      style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(16),
-                          fontWeight: FontWeight.bold),
-                    ),
-                    TextFormField(
-                      controller: aditionalNotesController,
-                      keyboardType: TextInputType.multiline,
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintMaxLines: 100,
-                          hintText:
-                              'Additional notes for event organizer... Example: Please find the best seat for me.'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: ScreenUtil.instance.setWidth(30)),
-            customFormList == null
-                ? Container()
-                : customForm()
-          ],
-        ),
-      ),
     );
   }
 
@@ -462,7 +478,7 @@ class _TransactionFormState extends State<TransactionForm> {
                   value: int.parse(customFormList[index]['option'][i]['order']),
                   groupValue: _radioValue,
                   onChanged: (int i) {
-                    setState( () {
+                    setState(() {
                       _radioValue = i;
                       answer.add(i.toString());
                       print(answer);
@@ -492,10 +508,20 @@ class _TransactionFormState extends State<TransactionForm> {
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    preferences.setString('ticket_about_firstname', firstnameController.text);
-    preferences.setString('ticket_about_lastname', lastnameController.text);
-    preferences.setString('ticket_about_email', emailController.text);
-    preferences.setString('ticket_about_phone', phoneController.text);
+    if (firstnameController.text == null ||
+        firstnameController.text == '' ||
+        lastnameController.text == null ||
+        lastnameController.text == '' ||
+        emailController.text == null ||
+        emailController.text == '' ||
+        phoneController.text == null ||
+        phoneController.text == '') {
+    } else {
+      preferences.setString('ticket_about_firstname', firstnameController.text);
+      preferences.setString('ticket_about_lastname', lastnameController.text);
+      preferences.setString('ticket_about_email', emailController.text);
+      preferences.setString('ticket_about_phone', phoneController.text);
+    }
     preferences.setString(
         'ticket_about_aditional', aditionalNotesController.text);
     // preferences.setStringList('ticket_custom_form_list', answer);

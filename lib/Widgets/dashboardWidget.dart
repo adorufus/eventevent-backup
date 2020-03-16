@@ -845,8 +845,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
         ratioX: 2.0,
         ratioY: 3.0,
       ),
-      maxHeight: ScreenUtil.instance.setWidth(512),
-      maxWidth: ScreenUtil.instance.setWidth(512),
+      maxHeight: 512,
+      maxWidth: 512,
     );
 
     print(croppedImage.path);
