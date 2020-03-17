@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:chewie/chewie.dart';
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -65,8 +67,10 @@ class _MediaDetailsState extends State<MediaDetails> {
   List commentList = [];
   Map mediaDetails = {};
 
-  @override
-  void initState() {
+  bool isError = false;
+  String errorReason = '';
+
+  void getData() {
     getMediaDetails().then((response) {
       var extractedData = json.decode(response.body);
       if (response.statusCode == 200) {
@@ -76,8 +80,21 @@ class _MediaDetailsState extends State<MediaDetails> {
 
           print(commentList);
         });
+      } else if (response.statusCode.toString().startsWith('4')) {
+        errorReason = 'Sorry, something\'s went wrong :(';
+        isError = true;
+        setState(() {}); 
+      } else if (response.statusCode.toString().startsWith('5')) {
+        errorReason = 'An error occured with our server, will be fixed ASAP';
+        isError = true;
+        setState(() {});
       }
-    });
+    }).timeout(Duration(seconds: 5), onTimeout: () {
+      setState(() {
+        isError = true;
+        errorReason = 'Connection Timeout';
+      });
+    }).catchError((e) {});
 
     if (widget.isVideo == true) {
       setState(() {
@@ -107,6 +124,11 @@ class _MediaDetailsState extends State<MediaDetails> {
           looping: false,
           fullScreenByDefault: false);
     }
+  }
+
+  @override
+  void initState() {
+    getData();
     super.initState();
   }
 
@@ -341,107 +363,121 @@ class _MediaDetailsState extends State<MediaDetails> {
                 ),
               ),
       ),
-      body: ListView(
-        children: <Widget>[
-          widget.isVideo == true
-              ? videoType()
-              : Container(
-                  height: ScreenUtil.instance.setWidth(200),
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      color: Color(0xff8a8a8b),
-                      image: DecorationImage(
-                          image: NetworkImage(widget.imageUri),
-                          fit: BoxFit.cover)),
-                ),
-          SizedBox(
-            height: ScreenUtil.instance.setWidth(15),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 13),
-            child: Row(
+      body: isError == true
+          ? EmptyState(
+              imagePath: 'assets/icons/empty_state/error.png',
+              isTimeout: true,
+              reasonText: errorReason,
+              refreshButtonCallback: () {
+                setState(() {
+                  isError = false;
+                  getData();
+                });
+              },
+            )
+          : ListView(
               children: <Widget>[
-                CircleAvatar(
-                    backgroundImage: NetworkImage(widget.userPicture),
-                    radius: 15),
+                widget.isVideo == true
+                    ? videoType()
+                    : Container(
+                        height: ScreenUtil.instance.setWidth(200),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            color: Color(0xff8a8a8b),
+                            image: DecorationImage(
+                                image: NetworkImage(widget.imageUri),
+                                fit: BoxFit.cover)),
+                      ),
                 SizedBox(
-                  width: ScreenUtil.instance.setWidth(5),
+                  height: ScreenUtil.instance.setWidth(15),
                 ),
                 Container(
-                    width: MediaQuery.of(context).size.width - 217.7,
-                    child: Text(
-                      '@' + widget.username.toString(),
-                      style: TextStyle(
-                          color: Color(0xFF8A8A8B),
-                          fontSize: ScreenUtil.instance.setSp(14)),
-                    )),
+                  margin: EdgeInsets.symmetric(horizontal: 13),
+                  child: Row(
+                    children: <Widget>[
+                      CircleAvatar(
+                          backgroundImage: NetworkImage(widget.userPicture),
+                          radius: 15),
+                      SizedBox(
+                        width: ScreenUtil.instance.setWidth(5),
+                      ),
+                      Container(
+                          width: MediaQuery.of(context).size.width - 217.7,
+                          child: Text(
+                            '@' + widget.username.toString(),
+                            style: TextStyle(
+                                color: Color(0xFF8A8A8B),
+                                fontSize: ScreenUtil.instance.setSp(14)),
+                          )),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(15),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 13),
+                  child: mediaDetails['media_content'] == null
+                      ? Container(
+                          // width: 200,
+                          // child: PlaceholderLines(
+                          //   count: 10,
+                          //   align: TextAlign.left,
+                          //   lineHeight: 10,
+                          //   color: Colors.grey,
+                          //   animate: true,
+                          // ),
+                          )
+                      : Html(
+                          defaultTextStyle:
+                              TextStyle(fontSize: 18, height: 1.5),
+                          data: mediaDetails['media_content'][0]
+                              ['content_text'],
+                          onLinkTap: (url) {},
+                        ),
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(10),
+                ),
+                Divider(
+                  color: Colors.grey,
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 13),
+                  child: Text(
+                    'Comments',
+                    style: TextStyle(
+                        color: Color(0xff8a8a8b),
+                        fontSize: ScreenUtil.instance.setSp(12),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: ScreenUtil.instance.setWidth(12)),
+                Container(
+                    child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: commentList == null ? 0 : commentList.length,
+                  itemBuilder: (context, i) {
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(commentList[i]['photo']),
+                      ),
+                      title: Text(
+                        commentList[i]['fullName'] +
+                            ' ' +
+                            commentList[i]['lastName'] +
+                            ': ',
+                        style: TextStyle(
+                            fontSize: ScreenUtil.instance.setSp(12),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(commentList[i]['comment']),
+                    );
+                  },
+                ))
               ],
             ),
-          ),
-          SizedBox(
-            height: ScreenUtil.instance.setWidth(15),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 13),
-            child: mediaDetails['media_content'] == null
-                ? Container(
-                    // width: 200,
-                    // child: PlaceholderLines(
-                    //   count: 10,
-                    //   align: TextAlign.left,
-                    //   lineHeight: 10,
-                    //   color: Colors.grey,
-                    //   animate: true,
-                    // ),
-                    )
-                : Html(
-                    defaultTextStyle: TextStyle(fontSize: 18, height: 1.5),
-                    data: mediaDetails['media_content'][0]['content_text'],
-                    onLinkTap: (url) {},
-                  ),
-          ),
-          SizedBox(
-            height: ScreenUtil.instance.setWidth(10),
-          ),
-          Divider(
-            color: Colors.grey,
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 13),
-            child: Text(
-              'Comments',
-              style: TextStyle(
-                  color: Color(0xff8a8a8b),
-                  fontSize: ScreenUtil.instance.setSp(12),
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(height: ScreenUtil.instance.setWidth(12)),
-          Container(
-              child: ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: commentList == null ? 0 : commentList.length,
-            itemBuilder: (context, i) {
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: NetworkImage(commentList[i]['photo']),
-                ),
-                title: Text(
-                  commentList[i]['fullName'] +
-                      ' ' +
-                      commentList[i]['lastName'] +
-                      ': ',
-                  style: TextStyle(
-                      fontSize: ScreenUtil.instance.setSp(12),
-                      fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(commentList[i]['comment']),
-              );
-            },
-          ))
-        ],
-      ),
     );
   }
 
@@ -518,19 +554,30 @@ class _MediaDetailsState extends State<MediaDetails> {
 
     print(url);
 
-    final response = await http.get(url, headers: headers);
+    try {
+      final response = await http.get(url, headers: headers);
 
-    // String url = BaseApi().apiUrl +
-    //     '/media/detail?X-API-KEY=$API_KEY&id=${widget.mediaId}';
+      print(response.body);
 
-    // final response = await http.get(url, headers: {
-    //   'Authorization': AUTHORIZATION_KEY,
-    //   'cookie': preferences.getString('Session')
-    // });
-
-    print(response.body);
-
-    return response;
+      return response;
+    } on SocketException catch (e) {
+      print(e.message);
+      errorReason = 'Sorry, looks like we lost the connection :(';
+      isError = true;
+      setState(() {});
+      return null;
+    } on HttpException catch (e) {
+      print(e.message);
+      errorReason = e.message;
+      isError = true;
+      setState(() {});
+      return null;
+    } on SignalException catch (e) {
+      errorReason = e.message;
+      isError = true;
+      setState(() {});
+      return null;
+    }
   }
 
   Future<http.Response> postComment(String mediaId, String comment) async {

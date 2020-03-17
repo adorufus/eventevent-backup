@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
@@ -45,16 +46,18 @@ class TimelineDashboardState extends State<TimelineDashboard>
   String currentUserId;
   bool isLoved;
   bool isLoading = false;
+  bool isTimeoutPopularMediaPhoto = false;
+  bool isTimeoutPopularMediaVideo = false; 
+  bool isTimeoutLatestMediaVideo = false; 
+  bool isTimeoutLatestMediaPhoto = false;
+  bool isTimeoutBanner = false;
+  String errorReason;
 
   int likeCount = 0;
 
   GlobalKey modalBottomSheetKey = new GlobalKey();
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    getUserData();
+  void getDetail() {
     getPopularMediaPhoto().then((response) {
       var extractedData = json.decode(response.body);
 
@@ -66,6 +69,11 @@ class TimelineDashboardState extends State<TimelineDashboard>
           mediaData = extractedData['data']['data'];
         });
       }
+    }).timeout(Duration(seconds: 5), onTimeout: () {
+      isLoading = false;
+      isTimeoutPopularMediaPhoto = true;
+      errorReason = 'Connection Timeout';
+      setState(() {});
     });
 
     getPopularMediaVideo().then((response) {
@@ -92,22 +100,12 @@ class TimelineDashboardState extends State<TimelineDashboard>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
-    }).timeout(Duration(seconds: 10), onTimeout: () {
-      Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: 'Request Timeout!',
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context);
+    }).timeout(Duration(seconds: 5), onTimeout: () {
+      isLoading = false;
+      isTimeoutPopularMediaVideo = true;
+      errorReason = 'Connection Timeout';
+      setState(() {});
     });
-
-    @override
-    void didChangeAppLifecycleState(AppLifecycleState state) {
-      if (state == AppLifecycleState.resumed) {
-        setState(() {});
-      }
-    }
 
     getLatestMediaPhoto().then((response) {
       var extractedData = json.decode(response.body);
@@ -133,14 +131,11 @@ class TimelineDashboardState extends State<TimelineDashboard>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
-    }).timeout(Duration(seconds: 10), onTimeout: () {
-      Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: 'Request Timeout!',
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context);
+    }).timeout(Duration(seconds: 5), onTimeout: () {
+      isLoading = false;
+      isTimeoutLatestMediaPhoto = true;
+      errorReason = 'Connection Timeout';
+      setState(() {});
     });
 
     getLatestMediaVideo().then((response) {
@@ -167,14 +162,11 @@ class TimelineDashboardState extends State<TimelineDashboard>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
-    }).timeout(Duration(seconds: 10), onTimeout: () {
-      Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: 'Request Timeout!',
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context);
+    }).timeout(Duration(seconds: 5), onTimeout: () {
+      isLoading = false;
+      isTimeoutLatestMediaVideo = true;
+      errorReason = 'Connection Timeout';
+      setState(() {});
     });
 
     getBanner().then((response) {
@@ -188,7 +180,27 @@ class TimelineDashboardState extends State<TimelineDashboard>
           bannerData = extractedData['data']['data'];
         });
       }
+    }).timeout(Duration(seconds: 5), onTimeout: () {
+      isLoading = false;
+      isTimeoutBanner = true;
+      errorReason = 'Connection Timeout';
+      setState(() {});
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    getUserData();
+    getDetail();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      setState(() {});
+    }
   }
 
   RefreshController refreshController =
@@ -311,88 +323,106 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 ),
               ),
               backgroundColor: Colors.white.withOpacity(0.5),
-              body: DefaultTabController(
-                initialIndex: 0,
-                length: 2,
-                child: ListView(
-                  children: <Widget>[
-                    Container(
-                      color: Colors.white,
-                      child: TabBar(
-                        tabs: <Widget>[
-                          Tab(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Image.asset(
-                                  'assets/icons/icon_apps/home.png',
-                                  scale: 4.5,
+              body: isTimeoutPopularMediaPhoto == true && isTimeoutBanner == true && isTimeoutLatestMediaPhoto == true && isTimeoutLatestMediaVideo == true && isTimeoutPopularMediaVideo 
+                  ? EmptyState(
+                      imagePath: 'assets/icons/empty_state/error.png',
+                      isTimeout: true,
+                      reasonText: errorReason,
+                      refreshButtonCallback: () {
+                        setState(() {
+                          isTimeoutPopularMediaPhoto = false;
+                          getDetail();
+                        });
+                      },
+                    )
+                  : DefaultTabController(
+                      initialIndex: 0,
+                      length: 2,
+                      child: ListView(
+                        children: <Widget>[
+                          Container(
+                            color: Colors.white,
+                            child: TabBar(
+                              tabs: <Widget>[
+                                Tab(
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Image.asset(
+                                        'assets/icons/icon_apps/home.png',
+                                        scale: 4.5,
+                                      ),
+                                      SizedBox(
+                                          width:
+                                              ScreenUtil.instance.setWidth(8)),
+                                      Text('Home',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: ScreenUtil.instance
+                                                  .setSp(12.5))),
+                                    ],
+                                  ),
                                 ),
-                                SizedBox(
-                                    width: ScreenUtil.instance.setWidth(8)),
-                                Text('Home',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(12.5))),
+                                Tab(
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Image.asset(
+                                        'assets/icons/icon_apps/public_timeline.png',
+                                        scale: 4.5,
+                                      ),
+                                      SizedBox(
+                                          width:
+                                              ScreenUtil.instance.setWidth(8)),
+                                      Text('Public Timeline',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: ScreenUtil.instance
+                                                  .setSp(12.5))),
+                                    ],
+                                  ),
+                                )
                               ],
+                              unselectedLabelColor: Colors.grey,
                             ),
                           ),
-                          Tab(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
+                          Container(
+                            height: ScreenUtil.instance.setHeight(
+                                MediaQuery.of(context).size.height - 50),
+                            child: Stack(
                               children: <Widget>[
-                                Image.asset(
-                                  'assets/icons/icon_apps/public_timeline.png',
-                                  scale: 4.5,
+                                TabBarView(
+                                  children: <Widget>[
+                                    emedia(),
+                                    widget.isRest == true
+                                        ? LoginRegisterWidget()
+                                        : UserTimelineItem(
+                                            currentUserId: currentUserId,
+                                            timelineType: 'timeline',
+                                          )
+                                  ],
                                 ),
-                                SizedBox(
-                                    width: ScreenUtil.instance.setWidth(8)),
-                                Text('Public Timeline',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(12.5))),
+                                Positioned(
+                                    child: isLoading == true
+                                        ? Container(
+                                            child: Center(
+                                                child:
+                                                    CupertinoActivityIndicator(
+                                                        radius: 20)),
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                          )
+                                        : Container())
                               ],
                             ),
                           )
                         ],
-                        unselectedLabelColor: Colors.grey,
                       ),
-                    ),
-                    Container(
-                      height: ScreenUtil.instance
-                          .setHeight(MediaQuery.of(context).size.height - 50),
-                      child: Stack(
-                        children: <Widget>[
-                          TabBarView(
-                            children: <Widget>[
-                              emedia(),
-                              widget.isRest == true
-                                  ? LoginRegisterWidget()
-                                  : UserTimelineItem(
-                                      currentUserId: currentUserId,
-                                      timelineType: 'timeline',
-                                    )
-                            ],
-                          ),
-                          Positioned(
-                              child: isLoading == true
-                                  ? Container(
-                                      child: Center(
-                                          child: CupertinoActivityIndicator(
-                                              radius: 20)),
-                                      color: Colors.black.withOpacity(0.5),
-                                    )
-                                  : Container())
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              )),
+                    )),
     );
   }
 
@@ -433,15 +463,11 @@ class TimelineDashboardState extends State<TimelineDashboard>
             duration: Duration(seconds: 3),
             animationDuration: Duration(milliseconds: 500),
           )..show(context);
-        }).timeout(Duration(seconds: 10), onTimeout: () {
+        }).timeout(Duration(seconds: 5), onTimeout: () {
           isLoading = false;
-          Flushbar(
-            flushbarPosition: FlushbarPosition.TOP,
-            message: 'Request Timeout',
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
-            animationDuration: Duration(milliseconds: 500),
-          )..show(context);
+          isTimeoutPopularMediaPhoto = true;
+          errorReason = 'Connection Timeout';
+          setState(() {});
         });
 
         getLatestMediaPhoto().then((response) {
@@ -471,15 +497,11 @@ class TimelineDashboardState extends State<TimelineDashboard>
             duration: Duration(seconds: 3),
             animationDuration: Duration(milliseconds: 500),
           )..show(context);
-        }).timeout(Duration(seconds: 10), onTimeout: () {
+        }).timeout(Duration(seconds: 5), onTimeout: () {
           isLoading = false;
-          Flushbar(
-            flushbarPosition: FlushbarPosition.TOP,
-            message: 'Request Timeout',
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
-            animationDuration: Duration(milliseconds: 500),
-          )..show(context);
+          isTimeoutPopularMediaPhoto = true;
+          errorReason = 'Connection Timeout';
+          setState(() {});
         });
 
         getLatestMediaVideo().then((response) {
@@ -509,15 +531,11 @@ class TimelineDashboardState extends State<TimelineDashboard>
             duration: Duration(seconds: 3),
             animationDuration: Duration(milliseconds: 500),
           )..show(context);
-        }).timeout(Duration(seconds: 10), onTimeout: () {
+        }).timeout(Duration(seconds: 5), onTimeout: () {
           isLoading = false;
-          Flushbar(
-            flushbarPosition: FlushbarPosition.TOP,
-            message: 'Request Timeout',
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
-            animationDuration: Duration(milliseconds: 500),
-          )..show(context);
+          isTimeoutPopularMediaPhoto = true;
+          errorReason = 'Connection Timeout';
+          setState(() {});
         });
         isLoading = false;
         getUserData();
@@ -868,8 +886,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                 imageCount: 'img' + i.toString(),
                                 username: latestMediaPhoto[i]['creator']
                                     ['username'],
-                                imageUri: latestMediaPhoto[i]
-                                    ['banner_avatar'],
+                                imageUri: latestMediaPhoto[i]['banner_avatar'],
                                 mediaTitle: latestMediaPhoto[i]['title'],
                                 autoFocus: false,
                                 mediaId: latestMediaPhoto[i]['id'],
