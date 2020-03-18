@@ -98,6 +98,7 @@ dependencies:
   mid_flutter: ^0.0.1
   sqflite: any
   rive: any
+  screenshot: ^0.1.1
   flutter_credit_card:
   share: ^0.6.3+5
   camera: ^0.5.4

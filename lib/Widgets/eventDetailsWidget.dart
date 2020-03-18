@@ -2316,7 +2316,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                       : Container(
                           height: 200,
                           child: ListView.builder(
-                              shrinkWrap: true,
+                              shrinkWrap: false,
                               scrollDirection: Axis.horizontal,
                               itemCount: detailData['additional'].length == 0
                                   ? 0
@@ -2353,7 +2353,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     height: ScreenUtil.instance.setHeight(
                                         double.parse(detailData['additional'][i]
                                             ['pictureHeight'])),
-                                    width: ScreenUtil.instance.setWidth(
+                                    width: ScreenUtil.instance.setHeight(
                                         double.parse(detailData['additional'][i]
                                             ['pictureWidth'])),
                                     decoration: BoxDecoration(
