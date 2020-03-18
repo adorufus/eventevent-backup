@@ -2314,36 +2314,30 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                   detailData['additional'].length == 0
                       ? Container()
                       : Container(
-                          height: 200,
-                          child: ListView.builder(
-                              shrinkWrap: false,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: detailData['additional'].length == 0
-                                  ? 0
-                                  : detailData['additional'].length,
-                              itemBuilder: (context, i) {
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: detailData['additional'].map<Widget>((additional){
                                 return GestureDetector(
                                   onTap: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            detailData['additional'][i]
+                                            additional
                                                             ['extension'] ==
                                                         'image/jpeg' ||
-                                                    detailData['additional'][i]
+                                                      additional
                                                             ['extension'] ==
                                                         'image/png'
                                                 ? PhotoView(
                                                     imageProvider: NetworkImage(
-                                                        detailData['additional']
-                                                                [i]
+                                                        additional
                                                             ['posterPathFull']),
                                                   )
                                                 : MediaPlayer(
                                                     videoUri:
-                                                        detailData['additional']
-                                                                [i]
+                                                        additional
                                                             ['posterPathFull']),
                                       ),
                                     );
@@ -2351,26 +2345,23 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   child: Container(
                                     margin: EdgeInsets.only(left: 10),
                                     height: ScreenUtil.instance.setHeight(
-                                        double.parse(detailData['additional'][i]
-                                            ['pictureHeight'])),
-                                    width: ScreenUtil.instance.setHeight(
-                                        double.parse(detailData['additional'][i]
-                                            ['pictureWidth'])),
+                                        double.parse(additional
+                                            ['pictureHeight']) / 1.5),
+                                    width: ScreenUtil.instance.setWidth(
+                                        double.parse(additional
+                                            ['pictureWidth']) / 2),
                                     decoration: BoxDecoration(
                                         color: Color(0xff8a8a8b),
                                         image: DecorationImage(
                                             image: NetworkImage(
-                                                detailData['additional'][i]
-                                                    ['posterPathThumb']),
+                                                additional['posterPathThumb']),
                                             fit: BoxFit.cover),
                                         borderRadius:
                                             BorderRadius.circular(15)),
                                     child: Center(
-                                        child: detailData['additional'][i]
-                                                        ['extension'] ==
+                                        child: additional['extension'] ==
                                                     'image/jpeg' ||
-                                                detailData['additional'][i]
-                                                        ['extension'] ==
+                                                additional['extension'] ==
                                                     'image/png'
                                             ? Container()
                                             : Icon(
@@ -2380,7 +2371,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               )),
                                   ),
                                 );
-                              }),
+                              }).toList(),
+                            ),
+                          )
                         ),
                   SizedBox(
                     height: ScreenUtil.instance.setWidth(29),

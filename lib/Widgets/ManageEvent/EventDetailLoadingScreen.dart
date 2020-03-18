@@ -408,7 +408,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
         print(ticketType['isSetupTicket']);
         print(ticketStat);
       }
-    }).timeout(Duration(seconds: 5), onTimeout: () {
+    }).timeout(Duration(seconds: 15), onTimeout: () {
       setState(() {
         isTimeout = true;
         errorReason = 'Connection Timeout';
