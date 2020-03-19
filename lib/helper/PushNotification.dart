@@ -39,7 +39,7 @@ class PushNotificationState extends State<PushNotification> {
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   RefreshController refreshController =
       new RefreshController(initialRefresh: false);
-  List notificationData;
+  List notificationData = [];
   StreamController _notificationStreamController;
   int count = 1;
   int newPage = 0;
@@ -248,7 +248,7 @@ class PushNotificationState extends State<PushNotification> {
               if (mounted) setState(() {});
               refreshController.refreshCompleted();
             },
-            onLoading: _onLoading,
+            onLoading: isEmpty == true ? null : _onLoading,
             child: ListView(children: <Widget>[
               Container(
                 margin: EdgeInsets.only(left: 13, right: 13, top: 13),

@@ -48,16 +48,44 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
 
   int currentTabIndex = 0;
 
-  int newPage = 0;
+  int newPagePopular = 0;
+  int newPageLatest = 0;
 
-  void _onLoading() async {
+  void onLoadingLatest() async {
     await Future.delayed(Duration(milliseconds: 2000));
     setState(() {
-      newPage += 1;
+      newPageLatest += 1;
     });
 
-    if (currentTabIndex == 0) {
-      getPopularMedia(newPage: newPage).then((response) {
+    getLatestMedia(newPage: newPageLatest).then((response) {
+      var extractedData = json.decode(response.body);
+      List updatedData = extractedData['data']['data'];
+
+      if (response.statusCode == 200) {
+        setState(() {
+          if (updatedData == null) {
+            refreshController.loadNoData();
+          }
+          print('data: ' + updatedData.toString());
+          latestMedia.addAll(updatedData);
+        });
+        if (mounted) setState(() {});
+        refreshController.loadComplete();
+      } else if (extractedData['desc'] == 'Media Posts list is not found' ||
+          updatedData == null) {
+        refreshController.loadNoData();
+      } else {
+        refreshController.loadFailed();
+      }
+    });
+  }
+
+  void _onLoadingPopular() async {
+    await Future.delayed(Duration(milliseconds: 2000));
+    setState(() {
+      newPagePopular += 1;
+    });
+      getPopularMedia(newPage: newPagePopular).then((response) {
         var extractedData = json.decode(response.body);
         List updatedData = extractedData['data']['data'];
 
@@ -78,29 +106,6 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
           refreshController.loadFailed();
         }
       });
-    } else {
-      getLatestMedia(newPage: newPage).then((response) {
-        var extractedData = json.decode(response.body);
-        List updatedData = extractedData['data']['data'];
-
-        if (response.statusCode == 200) {
-          setState(() {
-            if (updatedData == null) {
-              refreshController.loadNoData();
-            }
-            print('data: ' + updatedData.toString());
-            latestMedia.addAll(updatedData);
-          });
-          if (mounted) setState(() {});
-          refreshController.loadComplete();
-        } else if (extractedData['desc'] == 'Media Posts list is not found' ||
-            updatedData == null) {
-          refreshController.loadNoData();
-        } else {
-          refreshController.loadFailed();
-        }
-      });
-    }
   }
 
   @override
@@ -285,9 +290,9 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                 controller: refreshController,
                 onRefresh: () {
                   setState(() {
-                    newPage = 0;
+                    newPagePopular = 0;
                   });
-                  getPopularMedia(newPage: newPage).then((response) {
+                  getPopularMedia(newPage: newPagePopular).then((response) {
                     var extractedData = json.decode(response.body);
 
                     print(response.statusCode);
@@ -305,7 +310,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                     }
                   });
                 },
-                onLoading: _onLoading,
+                onLoading: _onLoadingPopular,
                 child: ListView.builder(
                   itemCount: popularMedia == null ? 0 : popularMedia.length,
                   itemBuilder: (BuildContext context, i) {
@@ -395,9 +400,9 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                 controller: refreshController,
                 onRefresh: () {
                   setState(() {
-                    newPage = 0;
+                    newPagePopular = 0;
                   });
-                  getLatestMedia(newPage: newPage).then((response) {
+                  getLatestMedia(newPage: newPagePopular).then((response) {
                     var extractedData = json.decode(response.body);
 
                     print(response.statusCode);
@@ -415,7 +420,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                     }
                   });
                 },
-                onLoading: _onLoading,
+                onLoading: onLoadingLatest,
                 child: ListView.builder(
                   itemCount: latestMedia == null ? 0 : latestMedia.length,
                   itemBuilder: (BuildContext context, i) {

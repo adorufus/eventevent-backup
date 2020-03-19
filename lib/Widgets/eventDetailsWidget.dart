@@ -2346,16 +2346,20 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     margin: EdgeInsets.only(left: 10),
                                     height: ScreenUtil.instance.setHeight(
                                         double.parse(additional
-                                            ['pictureHeight']) / 1.5),
+                                            ['pictureHeight']) > double.parse(additional
+                                        ['pictureWidth']) ? 300 : double.parse(additional
+                                        ['pictureHeight']) / 1.5 ),
                                     width: ScreenUtil.instance.setWidth(
                                         double.parse(additional
-                                            ['pictureWidth']) / 2),
+                                            ['pictureWidth']) < double.parse(additional
+                                        ['pictureHeight']) ? 150 : double.parse(additional
+                                        ['pictureWidth']) / 2),
                                     decoration: BoxDecoration(
                                         color: Color(0xff8a8a8b),
                                         image: DecorationImage(
                                             image: NetworkImage(
                                                 additional['posterPathThumb']),
-                                            fit: BoxFit.cover),
+                                            fit: BoxFit.fill),
                                         borderRadius:
                                             BorderRadius.circular(15)),
                                     child: Center(

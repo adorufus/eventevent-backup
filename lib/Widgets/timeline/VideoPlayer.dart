@@ -27,7 +27,7 @@ class _MediaPlayerState extends State<MediaPlayer> {
 
       chewieController = ChewieController(
         videoPlayerController: _controller,
-        aspectRatio: 16 / 9,
+        aspectRatio: 4 / 3,
         autoPlay: false,
         looping: false,
         placeholder: Container(color: Colors.white,),

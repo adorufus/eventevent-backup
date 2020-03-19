@@ -102,6 +102,7 @@ dependencies:
   flutter_credit_card:
   share: ^0.6.3+5
   camera: ^0.5.7+4
+  page_indicator:
   flutrans: ^0.0.4
   interactive_webview: ^0.1.2
   # apple_maps_flutter:
@@ -293,6 +294,9 @@ flutter:
     - assets/drawable/username-invalid.png
     - assets/drawable/username-valid.png
     - assets/drawable/cake.png
+    - assets/drawable/ic_tutorial_1.png
+    - assets/drawable/ic_tutorial_2.png
+    - assets/drawable/ic_tutorial_3.png
     - assets/logo_eventevent.png
     - assets/map_bw.jpg
 

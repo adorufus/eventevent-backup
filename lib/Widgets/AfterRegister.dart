@@ -131,7 +131,7 @@ class _AfterRegisterState extends State<AfterRegister> {
                   child: registerGoogleWidget())
             ],
           ),
-          Container(
+          isLoading == false ? Container() : Container(
             color: Colors.black.withOpacity(0.5),
             child: Center(
               child: CupertinoActivityIndicator(animating: true,),
@@ -325,7 +325,7 @@ class _AfterRegisterState extends State<AfterRegister> {
             'birthDay': birthDay,
             'phone': phoneNumber,
             'gender': gender,
-            'photo': UploadFileInfo(croppedProfilePicture,
+            'photo': croppedProfilePicture == null ? '$gender.jpg' : UploadFileInfo(croppedProfilePicture,
                 "eventevent-profilepicture-${DateTime.now().toString()}.jpg",
                 contentType: ContentType('image', 'jpg'))
           },

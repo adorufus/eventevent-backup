@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:eventevent/Widgets/ManageEvent/ScanQrTutorial.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +17,7 @@ class ShowQr extends StatefulWidget {
   final eventName;
 
   const ShowQr({Key key, this.qrUrl, this.eventName}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return ShowQrState();
@@ -70,9 +72,15 @@ class ShowQrState extends State<ShowQr> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        leading: Icon(
-          Icons.arrow_back_ios,
-          color: eventajaGreenTeal,
+        leading: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: eventajaGreenTeal,
+          ),
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
@@ -83,10 +91,17 @@ class ShowQrState extends State<ShowQr> {
               fontSize: ScreenUtil.instance.setSp(14)),
         ),
         actions: <Widget>[
-          Icon(
-            Icons.help_outline,
-            color: eventajaGreenTeal,
-            size: 25,
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ScanQrTutorial()));
+            },
+            child: Icon(
+              Icons.help_outline,
+              color: eventajaGreenTeal,
+              size: 25,
+            ),
           ),
           SizedBox(
             width: ScreenUtil.instance.setWidth(13),
