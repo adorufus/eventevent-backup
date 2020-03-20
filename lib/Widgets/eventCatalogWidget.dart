@@ -266,6 +266,7 @@ class _EventCatalogState extends State<EventCatalog>
                 elevation: 0,
                 backgroundColor: Colors.white,
                 titleSpacing: 0,
+                centerTitle: false,
                 title: Container(
                   width: ScreenUtil.instance.setWidth(240),
                   child: Row(

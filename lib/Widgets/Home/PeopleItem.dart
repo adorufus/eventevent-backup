@@ -90,7 +90,6 @@ class _PeopleItemState extends State<PeopleItem> {
             width: ScreenUtil.instance.setWidth(8.87),
           ),
           Container(
-            width: MediaQuery.of(context).size.width - 175,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,

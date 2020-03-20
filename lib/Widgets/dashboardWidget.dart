@@ -152,7 +152,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
     super.initState();
 
     initializationSettingsAndroid =
-        new AndroidInitializationSettings('app_icon');
+        new AndroidInitializationSettings('mipmap/ic_launcher');
     initializationSettingsIOS =
         new IOSInitializationSettings(defaultPresentBadge: true, onDidReceiveLocalNotification: (int id, String title, String body, String payload) async =>  didRecieveLocalNotificationSubject.add(RecievedNotification(id, title, body, payload)));
     initializationSettings = new InitializationSettings(
@@ -187,6 +187,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
     // didRecieveLocalNotificationSubject.stream.listen((RecievedNotification recievedNotification) async {
 
     // });
+
+    registerNotification();
 
     selectNotificationSubject.stream.listen((String payload) async {
       await onSelectNotification(payload);
@@ -390,7 +392,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    registerNotification();
+
   }
 
   @override

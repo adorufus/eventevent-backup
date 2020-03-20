@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Transaction/Xendit/TicketReview.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -22,6 +23,7 @@ class ChooseBankAccount extends StatefulWidget {
 class _ChooseBankAccountState extends State<ChooseBankAccount> {
   List vaList;
   String vaPictureURI;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -39,6 +41,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -73,7 +76,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
                   style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
                 )),
               ),
-              Container(
+              isLoading == true ? HomeLoadingScreen().myTicketLoading() : Container(
                 height: ScreenUtil.instance.setWidth(340),
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
@@ -195,6 +198,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
 
     setState(() {
       session = preferences.getString('Session');
+      isLoading = true;
     });
 
     String virtualAccURI = BaseApi().apiUrl + '/va/list?X-API-KEY=' + API_KEY;
@@ -205,6 +209,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
 
     if (response.statusCode == 200) {
       setState(() {
+        isLoading = false;
         var extractedData = json.decode(response.body);
         vaList = extractedData['data'];
       });
