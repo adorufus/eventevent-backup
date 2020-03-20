@@ -9,7 +9,6 @@ import 'package:eventevent/helper/WebView3DS.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
 import 'package:flushbar/flushbar.dart';
-import 'package:flutrans/flutrans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
@@ -58,7 +57,6 @@ class CreditCardInputState extends State<CreditCardInput> {
   bool isShowBackView = false;
   String _error = "";
   String _result = "";
-  Flutrans flutrans = Flutrans();
 
   int seconds;
   bool isMakePayment = false;
@@ -71,9 +69,6 @@ class CreditCardInputState extends State<CreditCardInput> {
   void initState() {
     super.initState();
     getTransactionDetail();
-
-    flutrans.init(MIDTRANS_CLIENT_KEY, BaseApi.midtransUrlProd);
-    flutrans.setFinishCallback(_callback);
 
     listOfPattern.add(visa);
     listOfPattern.add(mastercard);
@@ -94,35 +89,10 @@ class CreditCardInputState extends State<CreditCardInput> {
       isMakePayment = true;
     });
 
-    flutrans.makePayment(
-      MidtransTransaction(
-          int.parse(paymentData['amount']),
-          MidtransCustomer(paymentData['firstname'], paymentData['lastname'],
-              paymentData['email'], paymentData['phone']),
-          [
-            MidtransItem(
-              paymentData['paid_ticket_id'],
-              int.parse(paymentData['ticket']['final_price']),
-              int.parse(paymentData['quantity']),
-              paymentData['ticket']['ticket_name'],
-            ),
-            MidtransItem(
-              "eventevent_fee",
-              int.parse(paymentData['amount_detail']['final_fee']),
-              1,
-              "Fee",
-            ),
-          ],
-          skipCustomer: true),
-    );
+    
   }
 
-  Future<void> _callback(TransactionFinished finished) async {
-    setState(() {
-      isMakePayment = false;
-    });
-    return Future.value(null);
-  }
+  
 
   @override
   Widget build(BuildContext context) {
