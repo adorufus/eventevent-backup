@@ -69,7 +69,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
           mediaData = extractedData['data']['data'];
         });
       }
-    }).timeout(Duration(seconds: 5), onTimeout: () {
+    }).timeout(Duration(seconds: 15), onTimeout: () {
       isLoading = false;
       isTimeoutPopularMediaPhoto = true;
       errorReason = 'Connection Timeout';
@@ -100,7 +100,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
-    }).timeout(Duration(seconds: 5), onTimeout: () {
+    }).timeout(Duration(seconds: 15), onTimeout: () {
       isLoading = false;
       isTimeoutPopularMediaVideo = true;
       errorReason = 'Connection Timeout';
@@ -131,7 +131,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
-    }).timeout(Duration(seconds: 5), onTimeout: () {
+    }).timeout(Duration(seconds: 15), onTimeout: () {
       isLoading = false;
       isTimeoutLatestMediaPhoto = true;
       errorReason = 'Connection Timeout';
@@ -162,7 +162,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
-    }).timeout(Duration(seconds: 5), onTimeout: () {
+    }).timeout(Duration(seconds: 15), onTimeout: () {
       isLoading = false;
       isTimeoutLatestMediaVideo = true;
       errorReason = 'Connection Timeout';
@@ -180,7 +180,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
           bannerData = extractedData['data']['data'];
         });
       }
-    }).timeout(Duration(seconds: 5), onTimeout: () {
+    }).timeout(Duration(seconds: 15), onTimeout: () {
       isLoading = false;
       isTimeoutBanner = true;
       errorReason = 'Connection Timeout';
@@ -464,7 +464,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
             duration: Duration(seconds: 3),
             animationDuration: Duration(milliseconds: 500),
           )..show(context);
-        }).timeout(Duration(seconds: 5), onTimeout: () {
+        }).timeout(Duration(seconds: 15), onTimeout: () {
           isLoading = false;
           isTimeoutPopularMediaPhoto = true;
           errorReason = 'Connection Timeout';
@@ -498,7 +498,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
             duration: Duration(seconds: 3),
             animationDuration: Duration(milliseconds: 500),
           )..show(context);
-        }).timeout(Duration(seconds: 5), onTimeout: () {
+        }).timeout(Duration(seconds: 15), onTimeout: () {
           isLoading = false;
           isTimeoutPopularMediaPhoto = true;
           errorReason = 'Connection Timeout';
@@ -532,7 +532,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
             duration: Duration(seconds: 3),
             animationDuration: Duration(milliseconds: 500),
           )..show(context);
-        }).timeout(Duration(seconds: 5), onTimeout: () {
+        }).timeout(Duration(seconds: 15), onTimeout: () {
           isLoading = false;
           isTimeoutPopularMediaPhoto = true;
           errorReason = 'Connection Timeout';

@@ -67,7 +67,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
               child: Center(
                 child: GestureDetector(
                   onTap: () {
-                    finish();
+                    data == null ? Navigator.push(context, CupertinoPageRoute(builder: (context) => FinishPostEvent())) : finish();
                   },
                   child: Text(
                     'Next',

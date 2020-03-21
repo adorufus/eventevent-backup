@@ -67,11 +67,14 @@ class PostEventMapState extends State<PostEventMap> {
       currentLocation = await location.getLocation();
       err = "";
     } on PlatformException catch (e) {
+      print(e.message + ' ' + e.code);
       if (e.code == "PERMISSION_DENIED") {
         err = 'Permission Denied';
+        print(e.message + ' ' + e.code);
       } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
+        print(e.message + ' ' + e.code);
         err =
-            'Permission denied - please ask the user to enable location service';
+            'Permission denied - please ask the user to enable   service';
       }
       currentLocation = null;
     }

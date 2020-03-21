@@ -413,7 +413,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
         playSound: true,
         enableVibration: true,
         channelShowBadge: true,
-        importance: Importance.Max,
+        importance: Importance.High,
         priority: Priority.High);
 
     var iosPlatformChannelSpecifics =
@@ -421,6 +421,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
     var platformChannelSpecifics = new NotificationDetails(
         androidPlatformChannelSpecifics, iosPlatformChannelSpecifics);
 
+    print('showing notificaiton to your device');
     print('message: ' + message.toString());
     print('message: ' + message['notification'].toString());
 
@@ -455,23 +456,27 @@ class _DashboardWidgetState extends State<DashboardWidget>
   void registerNotification() {
     _firebaseMessaging.requestNotificationPermissions();
 
-    _firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) {
-          print('onMessage: $message');
-          showNotification(message);
-          return;
-        },
-        onResume: (Map<String, dynamic> message) {
-          print('onResume: $message');
-          return;
-        },
-        onLaunch: (Map<String, dynamic> message) {
-          print('onResume: $message');
-          return;
-        },
-        onBackgroundMessage:
-            Platform.isIOS ? null : myBackgroundMessageHandler);
+    try {
+      _firebaseMessaging.configure(
+          onMessage: (Map<String, dynamic> message) {
+            print('onMessage: $message');
+            showNotification(message);
+            return;
+          },
+          onResume: (Map<String, dynamic> message) {
+            print('onResume: $message');
+            return;
+          },
+          onLaunch: (Map<String, dynamic> message) {
+            print('onResume: $message');
+            return;
+          },
+          onBackgroundMessage:
+          Platform.isIOS ? null : myBackgroundMessageHandler);
 
+    } on PlatformException catch (e){
+      print(e.message + ' ' + e.code);
+    }
     _firebaseMessaging.getToken().then((token) {
       print('firebase token: $token');
       setState(() {
