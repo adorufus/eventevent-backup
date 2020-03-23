@@ -76,7 +76,9 @@ class ManageTicketState extends State<ManageTicket> {
                     itemBuilder: (BuildContext context, i) {
                       print(ticketID);
                       return GestureDetector(
-                        onTap: (){
+                        onTap: () async {
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          prefs.setString('Previous Widget', 'AddNewTicket');
                           Navigator.push(context, MaterialPageRoute(builder: (context) => EditTicketDetail(
                             ticketTitle: ticketList[i]['ticket_name'],
                             ticketImage: ticketList[i]['ticket_image']['secure_url'],

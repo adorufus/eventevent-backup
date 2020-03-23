@@ -103,7 +103,7 @@ class PostEventMapState extends State<PostEventMap> {
 
   Widget showMap() {
     StaticMapsProvider mapProvider = new StaticMapsProvider(
-      GOOGLE_API_KEY: 'AIzaSyDjNpeyufzT81GAhQkCe85x83kxzfA7qbI',
+      GOOGLE_API_KEY: 'AIzaSyA2s9iDKooQ9Cwgr6HiDVQkG9p3fvsVmEI',
       height: 1024,
       width: 1024,
       latitude: lat,

@@ -420,7 +420,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                       onTap: () {
                         showCupertinoModalPopup(
                             context: context,
-                            builder: (context) {
+                            builder: (thisContext) {
                               return detailData['createdByID'] != currentUserId
                                   ? CupertinoActionSheet(
                                       actions: <Widget>[
@@ -439,7 +439,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       ],
                                       cancelButton: CupertinoActionSheetAction(
                                           onPressed: () {
-                                            Navigator.pop(context);
+                                            Navigator.pop(thisContext);
                                           },
                                           child: Text(
                                             'Cancel',
@@ -520,17 +520,41 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         .detailData['address']);
                                                 prefs.setString('EVENT_IMAGE',
                                                     detailData['photoFull']);
+                                                    print('additional: ' + detailData['additional'].toString());
 
                                                 print(prefs
                                                     .getStringList(
                                                         'EVENT_CATEGORY')
                                                     .toString());
+                                                    Navigator.of(thisContext).pop();
 
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
+                                                Navigator.of(context)
+                                                    .push(MaterialPageRoute(
                                                         builder: (BuildContext
                                                                 context) =>
-                                                            EditEvent()));
+                                                            EditEvent(additional: detailData['additional'])))
+                                                    .then((value) {
+                                                  if (value == true) {
+                                                    getEventDetailsSpecificInfo()
+                                                        .then((response) {
+                                                      print(
+                                                          response.statusCode);
+                                                      var extractedData =
+                                                          json.decode(
+                                                              response.body);
+                                                      if (response.statusCode ==
+                                                          200) {
+                                                        setState(() {
+                                                          detailData =
+                                                              extractedData[
+                                                                  'data'];
+                                                          isLoading = false;
+                                                        });
+                                                      }
+                                                    });
+                                                    isLoading = false;
+                                                  }
+                                                });
                                               },
                                               child: Text('Edit Event')),
                                           CupertinoActionSheetAction(
@@ -565,6 +589,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               ),
             ),
             bottomNavigationBar: GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 if (widget.ticketStat['salesStatus'] == null ||
                     widget.ticketStat['salesStatus'] == 'null') {
@@ -990,10 +1015,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     GestureDetector(
                                                   onTap: () {
                                                     if (widget.isRest == true) {
-                                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginRegisterWidget(
-                                                        previousWidget: 'EventDetailsWidgetRest',
-                                                        eventId: widget.id
-                                                      )));
+                                                      Navigator.of(context).push(MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              LoginRegisterWidget(
+                                                                  previousWidget:
+                                                                      'EventDetailsWidgetRest',
+                                                                  eventId: widget
+                                                                      .id)));
                                                     } else {
                                                       if (widget.ticketStat[
                                                                   'salesStatus'] ==
@@ -2315,70 +2343,72 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                       ? Container()
                       : Container(
                           child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: detailData['additional'].map<Widget>((additional){
-                                return GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            additional
-                                                            ['extension'] ==
-                                                        'image/jpeg' ||
-                                                      additional
-                                                            ['extension'] ==
-                                                        'image/png'
-                                                ? PhotoView(
-                                                    imageProvider: NetworkImage(
-                                                        additional
-                                                            ['posterPathFull']),
-                                                  )
-                                                : MediaPlayer(
-                                                    videoUri:
-                                                        additional
-                                                            ['posterPathFull']),
-                                      ),
-                                    );
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.only(left: 10),
-                                    height: ScreenUtil.instance.setWidth(
-                                        double.parse(additional
-                                            ['pictureHeight']) > double.parse(additional
-                                        ['pictureWidth']) ? 184.06 * 1.3 : double.parse(additional
-                                        ['pictureHeight']) / 1.5),
-                                    width: ScreenUtil.instance.setWidth(
-                                        double.parse(additional
-                                            ['pictureWidth']) < double.parse(additional
-                                        ['pictureHeight']) ? 122.86 * 1.3 : double.parse(additional
-                                        ['pictureWidth']) / 1.5),
-                                    decoration: BoxDecoration(
-                                        color: Color(0xff8a8a8b),
-                                        image: DecorationImage(
-                                            image: NetworkImage(
-                                                additional['posterPathThumb']),
-                                            fit: BoxFit.fill),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    child: Center(
-                                        child: additional['extension'] ==
-                                                    'image/jpeg' ||
-                                                additional['extension'] ==
-                                                    'image/png'
-                                            ? Container()
-                                            : Icon(
-                                                Icons.play_circle_filled,
-                                                color: Colors.white,
-                                                size: 50,
-                                              )),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          )
-                        ),
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: detailData['additional']
+                                .map<Widget>((additional) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => additional[
+                                                      'extension'] ==
+                                                  'image/jpeg' ||
+                                              additional['extension'] ==
+                                                  'image/png'
+                                          ? PhotoView(
+                                              imageProvider: NetworkImage(
+                                                  additional['posterPathFull']),
+                                            )
+                                          : MediaPlayer(
+                                              videoUri:
+                                                  additional['posterPathFull']),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(left: 10),
+                                  height: ScreenUtil.instance.setWidth(
+                                      double.parse(
+                                                  additional['pictureHeight']) >
+                                              double.parse(
+                                                  additional['pictureWidth'])
+                                          ? 184.06 * 1.3
+                                          : double.parse(
+                                                  additional['pictureHeight']) /
+                                              1.5),
+                                  width: ScreenUtil.instance.setWidth(
+                                      double.parse(additional['pictureWidth']) <
+                                              double.parse(
+                                                  additional['pictureHeight'])
+                                          ? 122.86 * 1.3
+                                          : double.parse(
+                                                  additional['pictureWidth']) /
+                                              1.5),
+                                  decoration: BoxDecoration(
+                                      color: Color(0xff8a8a8b),
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                              additional['posterPathThumb']),
+                                          fit: BoxFit.fill),
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Center(
+                                      child: additional['extension'] ==
+                                                  'image/jpeg' ||
+                                              additional['extension'] ==
+                                                  'image/png'
+                                          ? Container()
+                                          : Icon(
+                                              Icons.play_circle_filled,
+                                              color: Colors.white,
+                                              size: 50,
+                                            )),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        )),
                   SizedBox(
                     height: ScreenUtil.instance.setWidth(29),
                   ),
@@ -2525,7 +2555,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
   Widget showMap() {
     StaticMapsProvider mapProvider = new StaticMapsProvider(
-      GOOGLE_API_KEY: 'AIzaSyDjNpeyufzT81GAhQkCe85x83kxzfA7qbI',
+      GOOGLE_API_KEY: 'AIzaSyA2s9iDKooQ9Cwgr6HiDVQkG9p3fvsVmEI',
       height: 215,
       width: MediaQuery.of(context).size.width.round(),
       latitude: widget.lat,

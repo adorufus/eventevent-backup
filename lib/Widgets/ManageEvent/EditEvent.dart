@@ -6,6 +6,7 @@ import 'package:eventevent/Widgets/timeline/EditEventItem/EditCategoryList.dart'
 import 'package:eventevent/Widgets/timeline/EditEventItem/EditEventDate.dart';
 import 'package:eventevent/Widgets/timeline/EditEventItem/EditEventTime.dart';
 import 'package:eventevent/Widgets/timeline/EditEventItem/EditEventType.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -16,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/services.dart';
 import 'package:place_picker/place_picker.dart';
@@ -24,6 +27,9 @@ import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class EditEvent extends StatefulWidget {
+  final additional;
+
+  const EditEvent({Key key, this.additional}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return EditEventState();
@@ -62,7 +68,8 @@ class EditEventState extends State<EditEvent> {
   List<String> categoryList = new List<String>();
   List<String> categoryId = new List<String>();
   List categoryEventData;
-  List<String> additionalMedia = new List<String>();
+  List currentAdditionalMedia = [];
+  List<String> additionalMedia = [];
 
   bool isLoading = false;
 
@@ -86,11 +93,16 @@ class EditEventState extends State<EditEvent> {
       address = prefs.getString('EVENT_ADDRESS');
       lat = prefs.getString('EVENT_LAT');
       long = prefs.getString('EVENT_LONG');
-      imageUri = File.fromUri(Uri.https('https:' + imageUriNetwork, ""));
+      currentAdditionalMedia = widget.additional;
+
+      for (int i = 0; i < currentAdditionalMedia.length; i++) {
+        additionalMedia.add(currentAdditionalMedia[i]['posterPathThumb']);
+      }
     });
 
     print(imageUriNetwork);
     print(imageUri);
+    print('current additional media: ' + currentAdditionalMedia.toString());
 
     print(categoryList.toString());
   }
@@ -102,7 +114,7 @@ class EditEventState extends State<EditEvent> {
     initPlatformState();
     locationSubcription =
         location.onLocationChanged().listen((LocationData result) {
-          if(!mounted) return;
+      if (!mounted) return;
       setState(() {
         currentLocation = result;
       });
@@ -126,7 +138,9 @@ class EditEventState extends State<EditEvent> {
     }
     setState(() {
       if (currentLocation.latitude != null &&
-          currentLocation.longitude != null) {
+          currentLocation.longitude != null &&
+          lat == null &&
+          long == null) {
         prefs.setString('latitude', currentLocation.latitude.toString());
         prefs.setString('longitude', currentLocation.longitude.toString());
         lat = currentLocation.latitude.toString();
@@ -137,6 +151,9 @@ class EditEventState extends State<EditEvent> {
 
   Future postEditEvent() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    isLoading = true;
+    setState(() {});
 
     var data = {
       'X-API-KEY': API_KEY,
@@ -163,6 +180,14 @@ class EditEventState extends State<EditEvent> {
               contentType: ContentType('image', 'jpeg'))
     };
 
+    for(int i = 0; i < additionalMedia.length; i++){
+      if(additionalMedia[i].startsWith('http')){
+
+      } else {
+        data['addPhoto[$i]'] = additionalMedia[i];
+      }
+    }
+
     for (int i = 0; i < categoryId.length; i++) {
       setState(() {
         data['category[$i]'] = categoryId[i];
@@ -178,18 +203,19 @@ class EditEventState extends State<EditEvent> {
             Cookie.fromSetCookieValue(prefs.getString('Session'))
           ], responseType: ResponseType.plain),
           data: FormData.from(data));
-      if (response.statusCode == null) {
-        isLoading = true;
-      }
       if (response.statusCode == 201 || response.statusCode == 200) {
         isLoading = false;
-        Navigator.of(context).pop();
+        setState(() {});
+        Navigator.of(context).pop(true);
       }
     } on DioError catch (e) {
+      isLoading = false;
+      setState(() {});
       if (e.response != null) {
-        print(e);
+        print(e.response.data);
       } else if (e.message != null) {
         print(e.message);
+        print(e.response.data);
       }
     }
   }
@@ -207,144 +233,372 @@ class EditEventState extends State<EditEvent> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-        key: thisScaffold,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 1,
-          leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Center(
-                  child: Text(
-                'Cancel',
-                style: TextStyle(color: eventajaGreenTeal),
-              ))),
-          centerTitle: true,
-          title: Text(
-            'EDIT EVENT',
-            style: TextStyle(color: eventajaGreenTeal),
-          ),
-          actions: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(right: 10),
-              child: Center(
-                child: GestureDetector(
-                  onTap: () {
-                    postEditEvent();
-                  },
-                  child: Text(
-                    'Update',
-                    style: TextStyle(
-                        color: eventajaGreenTeal,
-                        fontSize: ScreenUtil.instance.setSp(18)),
-                  ),
+      key: thisScaffold,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 1,
+        leading: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              Navigator.pop(context, false);
+            },
+            child: Icon(
+              Icons.close,
+              color: eventajaGreenTeal,
+              size: 30,
+            )),
+        centerTitle: true,
+        title: Text(
+          'EDIT EVENT',
+          style: TextStyle(color: eventajaGreenTeal),
+        ),
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: Center(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  postEditEvent();
+                },
+                child: Text(
+                  'Update',
+                  style: TextStyle(
+                      color: eventajaGreenTeal,
+                      fontSize: ScreenUtil.instance.setSp(18)),
                 ),
               ),
             ),
-          ],
-        ),
-        body: categoryList.length == null || isLoading == true
-            ? Container(
-                child: Center(child: CupertinoActivityIndicator(radius: 20)))
-            : Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: ListView(
-                  children: <Widget>[
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Event Name',
-                            style: TextStyle(
-                                color: eventajaGreenTeal,
-                                fontSize: ScreenUtil.instance.setSp(18),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(5),
-                          ),
-                          TextFormField(
-                            controller: eventNameController,
-                            decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(8),
-                                )),
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(15),
-                          ),
-                          Container(
-                            height: ScreenUtil.instance.setWidth(250),
-                            width: MediaQuery.of(context).size.width,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Container(
-                                  height: ScreenUtil.instance.setWidth(225),
-                                  width: ScreenUtil.instance.setWidth(150),
-                                  child: ClipRRect(
+          ),
+        ],
+      ),
+      body: categoryList.length == null
+          ? Container(
+              child: Center(child: CupertinoActivityIndicator(radius: 20)))
+          : Stack(
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView(
+                    children: <Widget>[
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Event Name',
+                              style: TextStyle(
+                                  color: eventajaGreenTeal,
+                                  fontSize: ScreenUtil.instance.setSp(18),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(5),
+                            ),
+                            TextFormField(
+                              controller: eventNameController,
+                              decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
                                     borderRadius: BorderRadius.circular(8),
-                                    child: imageUri == null
-                                        ? imageUriNetwork == null
-                                            ? Image.asset(
-                                                'assets/grey-fade.jpg')
-                                            : Image.network(
-                                                imageUriNetwork,
-                                                fit: BoxFit.fill,
-                                              )
-                                        : Image.file(File(imageUri.path),
-                                            fit: BoxFit.fill),
                                   ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(8),
+                                  )),
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(15),
+                            ),
+                            Container(
+                              height: ScreenUtil.instance.setWidth(250),
+                              width: MediaQuery.of(context).size.width,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  GestureDetector(
+                                    onTap: () {
+                                      getImage();
+                                    },
+                                    child: Container(
+                                      height: ScreenUtil.instance.setWidth(225),
+                                      width: ScreenUtil.instance.setWidth(150),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: imageUri == null
+                                            ? imageUriNetwork == null
+                                                ? Image.asset(
+                                                    'assets/grey-fade.jpg')
+                                                : Image.network(
+                                                    imageUriNetwork,
+                                                    fit: BoxFit.fill,
+                                                  )
+                                            : Image.file(File(imageUri.path),
+                                                fit: BoxFit.fill),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: ScreenUtil.instance.setWidth(20),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        'Event Type',
+                                        style: TextStyle(
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(18),
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              ScreenUtil.instance.setWidth(10)),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          EditEventType()))
+                                              .then((value) {
+                                            if (value != null) {
+                                              isPrivate = value;
+                                            }
+                                            setState(() {});
+                                          });
+                                        },
+                                        child: Container(
+                                            width: ScreenUtil.instance
+                                                .setWidth(170),
+                                            height: ScreenUtil.instance
+                                                .setWidth(50),
+                                            padding: EdgeInsets.only(left: 10),
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(8)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  isPrivate == '0'
+                                                      ? 'PUBLIC'
+                                                      : 'PRIVATE',
+                                                  style: TextStyle(
+                                                      fontSize: ScreenUtil
+                                                          .instance
+                                                          .setSp(15)),
+                                                ))),
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              ScreenUtil.instance.setWidth(20)),
+                                      Text(
+                                        'Category',
+                                        style: TextStyle(
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(18),
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              ScreenUtil.instance.setWidth(10)),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          EditCategoryList()))
+                                              .then((values) {
+                                            if (values == null) {
+                                            } else {
+                                              print(values['myListName']);
+                                              categoryList =
+                                                  values['myListName'];
+                                              categoryId = values['myList'];
+                                            }
+                                            setState(() {});
+                                          });
+                                        },
+                                        child: Container(
+                                            width: ScreenUtil.instance
+                                                .setWidth(170),
+                                            height: ScreenUtil.instance
+                                                .setWidth(50),
+                                            padding: EdgeInsets.only(left: 10),
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(8)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  categoryList.length == 1
+                                                      ? categoryList[0]
+                                                      : categoryList.length == 2
+                                                          ? categoryList[0] +
+                                                              ', ' +
+                                                              categoryList[1]
+                                                          : categoryList
+                                                                      .length ==
+                                                                  3
+                                                              ? categoryList[
+                                                                      0] +
+                                                                  ', ' +
+                                                                  categoryList[
+                                                                      1] +
+                                                                  ', ' +
+                                                                  categoryList[
+                                                                      2]
+                                                              : '',
+                                                  style: TextStyle(
+                                                      fontSize: ScreenUtil
+                                                          .instance
+                                                          .setSp(15)),
+                                                ))),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Date',
+                                  style: TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: ScreenUtil.instance.setSp(18)),
                                 ),
                                 SizedBox(
-                                  width: ScreenUtil.instance.setWidth(20),
+                                  height: ScreenUtil.instance.setWidth(15),
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(
-                                      'Event Type',
-                                      style: TextStyle(
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditEventDate()),
+                                        ).then((value) {
+                                          if (value != null) {
+                                            print(value);
+                                            dateStart = value;
+                                          }
+                                          setState(() {});
+                                        });
+                                      },
+                                      child: Container(
+                                        width:
+                                            ScreenUtil.instance.setWidth(150),
+                                        height:
+                                            ScreenUtil.instance.setWidth(50),
+                                        padding: EdgeInsets.only(left: 10),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            dateStart == null ? '' : dateStart,
+                                            style: TextStyle(
+                                                fontSize: ScreenUtil.instance
+                                                    .setSp(20)),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                     SizedBox(
+                                      width: ScreenUtil.instance.setWidth(25),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditEventDate()),
+                                        ).then((value) {
+                                          if (value != null) {
+                                            print(value);
+                                            dateEnd = value;
+                                          }
+                                          setState(() {});
+                                        });
+                                      },
+                                      child: Container(
+                                        width:
+                                            ScreenUtil.instance.setWidth(150),
                                         height:
-                                            ScreenUtil.instance.setWidth(10)),
+                                            ScreenUtil.instance.setWidth(50),
+                                        padding: EdgeInsets.only(left: 10),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            dateEnd == null ? '' : dateEnd,
+                                            style: TextStyle(
+                                                fontSize: ScreenUtil.instance
+                                                    .setSp(20)),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil.instance.setWidth(20),
+                                ),
+                                Text(
+                                  'Time',
+                                  style: TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: ScreenUtil.instance.setSp(18)),
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil.instance.setWidth(15),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        EditEventType()))
+                                                        EditEventTime()))
                                             .then((value) {
                                           if (value != null) {
-                                            isPrivate = value;
+                                            timeStart = value;
+                                            setState(() {});
                                           }
-                                          setState(() {});
                                         });
                                       },
                                       child: Container(
                                           width:
-                                              ScreenUtil.instance.setWidth(170),
+                                              ScreenUtil.instance.setWidth(150),
                                           height:
                                               ScreenUtil.instance.setWidth(50),
                                           padding: EdgeInsets.only(left: 10),
@@ -355,49 +609,35 @@ class EditEventState extends State<EditEvent> {
                                           child: Align(
                                               alignment: Alignment.centerLeft,
                                               child: Text(
-                                                isPrivate == '0'
-                                                    ? 'PUBLIC'
-                                                    : 'PRIVATE',
+                                                timeStart == null
+                                                    ? ''
+                                                    : timeStart,
                                                 style: TextStyle(
                                                     fontSize: ScreenUtil
                                                         .instance
-                                                        .setSp(15)),
+                                                        .setSp(20)),
                                               ))),
                                     ),
                                     SizedBox(
-                                        height:
-                                            ScreenUtil.instance.setWidth(20)),
-                                    Text(
-                                      'Category',
-                                      style: TextStyle(
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold),
+                                      width: ScreenUtil.instance.setWidth(25),
                                     ),
-                                    SizedBox(
-                                        height:
-                                            ScreenUtil.instance.setWidth(10)),
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        EditCategoryList()))
-                                            .then((values) {
-                                          if (values == null) {
-                                          } else {
-                                            print(values['myListName']);
-                                            categoryList = values['myListName'];
-                                            categoryId = values['myList'];
+                                                        EditEventTime()))
+                                            .then((value) {
+                                          if (value != null) {
+                                            timeEnd = value;
+                                            setState(() {});
                                           }
-                                          setState(() {});
                                         });
                                       },
                                       child: Container(
                                           width:
-                                              ScreenUtil.instance.setWidth(170),
+                                              ScreenUtil.instance.setWidth(150),
                                           height:
                                               ScreenUtil.instance.setWidth(50),
                                           padding: EdgeInsets.only(left: 10),
@@ -408,438 +648,281 @@ class EditEventState extends State<EditEvent> {
                                           child: Align(
                                               alignment: Alignment.centerLeft,
                                               child: Text(
-                                                categoryList.length == 1
-                                                    ? categoryList[0]
-                                                    : categoryList.length == 2
-                                                        ? categoryList[0] +
-                                                            ', ' +
-                                                            categoryList[1]
-                                                        : categoryList.length ==
-                                                                3
-                                                            ? categoryList[0] +
-                                                                ', ' +
-                                                                categoryList[
-                                                                    1] +
-                                                                ', ' +
-                                                                categoryList[2]
-                                                            : '',
+                                                timeEnd == null ? '' : timeEnd,
                                                 style: TextStyle(
                                                     fontSize: ScreenUtil
                                                         .instance
-                                                        .setSp(15)),
+                                                        .setSp(20)),
                                               ))),
-                                    )
+                                    ),
                                   ],
                                 )
                               ],
                             ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Date',
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: ScreenUtil.instance.setSp(18)),
-                              ),
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(15),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                EditEventDate()),
-                                      ).then((value) {
-                                        if (value != null) {
-                                          print(value);
-                                          dateStart = value;
-                                        }
-                                        setState(() {});
-                                      });
-                                    },
-                                    child: Container(
-                                      width: ScreenUtil.instance.setWidth(150),
-                                      height: ScreenUtil.instance.setWidth(50),
-                                      padding: EdgeInsets.only(left: 10),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          dateStart,
-                                          style: TextStyle(
-                                              fontSize: ScreenUtil.instance
-                                                  .setSp(20)),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: ScreenUtil.instance.setWidth(25),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                EditEventDate()),
-                                      ).then((value) {
-                                        if (value != null) {
-                                          print(value);
-                                          dateEnd = value;
-                                        }
-                                        setState(() {});
-                                      });
-                                    },
-                                    child: Container(
-                                      width: ScreenUtil.instance.setWidth(150),
-                                      height: ScreenUtil.instance.setWidth(50),
-                                      padding: EdgeInsets.only(left: 10),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          dateEnd,
-                                          style: TextStyle(
-                                              fontSize: ScreenUtil.instance
-                                                  .setSp(20)),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(20),
-                              ),
-                              Text(
-                                'Time',
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: ScreenUtil.instance.setSp(18)),
-                              ),
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(15),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditEventTime()))
-                                          .then((value) {
-                                        if (value != null) {
-                                          timeStart = value;
-                                          setState(() {});
-                                        }
-                                      });
-                                    },
-                                    child: Container(
-                                        width:
-                                            ScreenUtil.instance.setWidth(150),
-                                        height:
-                                            ScreenUtil.instance.setWidth(50),
-                                        padding: EdgeInsets.only(left: 10),
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              timeStart,
-                                              style: TextStyle(
-                                                  fontSize: ScreenUtil.instance
-                                                      .setSp(20)),
-                                            ))),
-                                  ),
-                                  SizedBox(
-                                    width: ScreenUtil.instance.setWidth(25),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditEventTime()))
-                                          .then((value) {
-                                        if (value != null) {
-                                          timeEnd = value;
-                                          setState(() {});
-                                        }
-                                      });
-                                    },
-                                    child: Container(
-                                        width:
-                                            ScreenUtil.instance.setWidth(150),
-                                        height:
-                                            ScreenUtil.instance.setWidth(50),
-                                        padding: EdgeInsets.only(left: 10),
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              timeEnd,
-                                              style: TextStyle(
-                                                  fontSize: ScreenUtil.instance
-                                                      .setSp(20)),
-                                            ))),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          SizedBox(height: ScreenUtil.instance.setWidth(20)),
-                          Divider(
-                            color: Colors.black54,
-                          )
-                        ],
+                            SizedBox(height: ScreenUtil.instance.setWidth(20)),
+                            Divider(
+                              color: Colors.black54,
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: ScreenUtil.instance.setWidth(15),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Video & Picture',
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: ScreenUtil.instance.setSp(18),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            'Add your event\'s video and picture',
-                            style: TextStyle(color: Colors.black26),
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(15),
-                          )
-                        ],
+                      SizedBox(
+                        height: ScreenUtil.instance.setWidth(15),
                       ),
-                    ),
-                    //addMed(context),
-                    SizedBox(
-                      height: ScreenUtil.instance.setWidth(20),
-                    ),
-                    Divider(
-                      color: Colors.black54,
-                    ),
-                    SizedBox(
-                      height: ScreenUtil.instance.setWidth(15),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Description',
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: ScreenUtil.instance.setSp(18),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(10),
-                          ),
-                          TextFormField(
-                            controller: descController,
-                            maxLines: 10,
-                            decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide.none),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide.none)),
-                          ),
-                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                          Text(
-                            'Contact',
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: ScreenUtil.instance.setSp(18),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(40),
-                                width: ScreenUtil.instance.setWidth(40),
-                                child: Image.asset(
-                                    'assets/icons/btn_phone_active.png'),
-                              ),
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(10),
-                              ),
-                              Container(
-                                width: ScreenUtil.instance.setWidth(280),
-                                height: ScreenUtil.instance.setWidth(35),
-                                child: TextFormField(
-                                  keyboardType: TextInputType.phone,
-                                  controller: telephoneController,
-                                  decoration: InputDecoration(
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius:
-                                              BorderRadius.circular(7)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius:
-                                              BorderRadius.circular(7))),
-                                ),
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(10),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(40),
-                                width: ScreenUtil.instance.setWidth(40),
-                                child: Image.asset(
-                                    'assets/icons/btn_mail_active.png'),
-                              ),
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(10),
-                              ),
-                              Container(
-                                width: ScreenUtil.instance.setWidth(280),
-                                height: ScreenUtil.instance.setWidth(35),
-                                child: TextFormField(
-                                  controller: emailController,
-                                  decoration: InputDecoration(
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius:
-                                              BorderRadius.circular(7)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius:
-                                              BorderRadius.circular(7))),
-                                ),
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(10),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(40),
-                                width: ScreenUtil.instance.setWidth(40),
-                                child: Image.asset(
-                                    'assets/icons/btn_web_active.png'),
-                              ),
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(10),
-                              ),
-                              Container(
-                                width: ScreenUtil.instance.setWidth(280),
-                                height: ScreenUtil.instance.setWidth(35),
-                                child: TextFormField(
-                                  controller: websiteController,
-                                  decoration: InputDecoration(
-                                    fillColor: Colors.white,
-                                    filled: true,
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: BorderRadius.circular(7)),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.circular(7),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                          Text(
-                            'Location Address',
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: ScreenUtil.instance.setSp(18),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                          Container(
-                            height: ScreenUtil.instance.setWidth(80),
-                            width: MediaQuery.of(context).size.width,
-                            margin: EdgeInsets.only(right: 18),
-                            padding: EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                                color: eventajaGreenTeal,
-                                borderRadius: BorderRadius.circular(8)),
-                            child: Text(
-                              address,
-                              style: TextStyle(color: Colors.white),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Video & Picture',
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: ScreenUtil.instance.setSp(18),
+                                  fontWeight: FontWeight.bold),
                             ),
-                          ),
-                          SizedBox(height: ScreenUtil.instance.setWidth(12)),
-                          TextFormField(
-                            controller: additionalInfoMapController,
-                            maxLines: 5,
-                            decoration: InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide:
-                                        BorderSide(color: Colors.transparent)),
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide:
-                                        BorderSide(color: Colors.transparent))),
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(15),
-                          ),
-                          showMap(context)
-                        ],
+                            Text(
+                              'Add your event\'s video and picture',
+                              style: TextStyle(color: Colors.black26),
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(15),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      addMed(),
+                      SizedBox(
+                        height: ScreenUtil.instance.setWidth(20),
+                      ),
+                      Divider(
+                        color: Colors.black54,
+                      ),
+                      SizedBox(
+                        height: ScreenUtil.instance.setWidth(15),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Description',
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: ScreenUtil.instance.setSp(18),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(10),
+                            ),
+                            TextFormField(
+                              controller: descController,
+                              maxLines: 10,
+                              decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide.none),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide.none)),
+                            ),
+                            SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                            Text(
+                              'Contact',
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: ScreenUtil.instance.setSp(18),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: ScreenUtil.instance.setWidth(40),
+                                  width: ScreenUtil.instance.setWidth(40),
+                                  child: Image.asset(
+                                      'assets/icons/btn_phone_active.png'),
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10),
+                                ),
+                                Container(
+                                  width: ScreenUtil.instance.setWidth(280),
+                                  height: ScreenUtil.instance.setWidth(35),
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.phone,
+                                    controller: telephoneController,
+                                    decoration: InputDecoration(
+                                        fillColor: Colors.white,
+                                        filled: true,
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                            borderRadius:
+                                                BorderRadius.circular(7)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                            borderRadius:
+                                                BorderRadius.circular(7))),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(10),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: ScreenUtil.instance.setWidth(40),
+                                  width: ScreenUtil.instance.setWidth(40),
+                                  child: Image.asset(
+                                      'assets/icons/btn_mail_active.png'),
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10),
+                                ),
+                                Container(
+                                  width: ScreenUtil.instance.setWidth(280),
+                                  height: ScreenUtil.instance.setWidth(35),
+                                  child: TextFormField(
+                                    controller: emailController,
+                                    decoration: InputDecoration(
+                                        fillColor: Colors.white,
+                                        filled: true,
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                            borderRadius:
+                                                BorderRadius.circular(7)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                            borderRadius:
+                                                BorderRadius.circular(7))),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(10),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: ScreenUtil.instance.setWidth(40),
+                                  width: ScreenUtil.instance.setWidth(40),
+                                  child: Image.asset(
+                                      'assets/icons/btn_web_active.png'),
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10),
+                                ),
+                                Container(
+                                  width: ScreenUtil.instance.setWidth(280),
+                                  height: ScreenUtil.instance.setWidth(35),
+                                  child: TextFormField(
+                                    controller: websiteController,
+                                    decoration: InputDecoration(
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius:
+                                              BorderRadius.circular(7)),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius: BorderRadius.circular(7),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                            Text(
+                              'Location Address',
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: ScreenUtil.instance.setSp(18),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                            Container(
+                              height: ScreenUtil.instance.setWidth(80),
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.only(right: 18),
+                              padding: EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                  color: eventajaGreenTeal,
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Text(
+                                address == null ? '' : address,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            SizedBox(height: ScreenUtil.instance.setWidth(12)),
+                            TextFormField(
+                              controller: additionalInfoMapController,
+                              maxLines: 5,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                          color: Colors.transparent)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                          color: Colors.transparent))),
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(15),
+                            ),
+                            showMap(context)
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ));
+                isLoading == true
+                    ? Container(
+                        color: Colors.black54,
+                        child: Center(
+                          child: CupertinoActivityIndicator(),
+                        ),
+                      )
+                    : Container()
+              ],
+            ),
+    );
+  }
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      imageUri = image;
+
+      cropImage(imageUri);
+    });
+  }
+
+  Future cropImage(File image) async {
+    File croppedImage = await ImageCropper.cropImage(
+      sourcePath: image.path,
+      aspectRatio: CropAspectRatio(ratioX: 2.0, ratioY: 3.0),
+      maxHeight: 512,
+      maxWidth: 512,
+    );
+
+    imageUri = croppedImage;
+
+    setState(() {});
   }
 
   showPlacePicker(BuildContext context) async {
@@ -871,7 +954,7 @@ class EditEventState extends State<EditEvent> {
 
   Widget showMap(BuildContext context) {
     StaticMapsProvider mapProvider = new StaticMapsProvider(
-      GOOGLE_API_KEY: 'AIzaSyDjNpeyufzT81GAhQkCe85x83kxzfA7qbI',
+      GOOGLE_API_KEY: 'AIzaSyA2s9iDKooQ9Cwgr6HiDVQkG9p3fvsVmEI',
       height: 1024,
       width: 1024,
       latitude: lat,
@@ -902,92 +985,79 @@ class EditEventState extends State<EditEvent> {
     );
   }
 
-  Widget addMed(BuildContext context) {
+  Widget addMed() {
     return Container(
       height: ScreenUtil.instance.setWidth(200),
       width: MediaQuery.of(context).size.width,
       child: ListView(
         padding: EdgeInsets.only(left: 10),
         scrollDirection: Axis.horizontal,
-        children: <Widget>[
-          Padding(
+        children: mapIndexed(additionalMedia, (index, item) {
+          print('index: ' + additionalMedia[index]);
+          return Padding(
             padding: EdgeInsets.only(right: 10),
-            child: additionalMedia[0] == ''
-                ? Container()
-                : Container(
-                    child: Image.file(
-                      File(additionalMedia[0]),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia[1] == ''
-                ? Container()
-                : Container(
-                    child: Image.file(
-                      File(additionalMedia[1]),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia[2] == ''
-                ? Container()
-                : Container(
-                    child: Image.file(
-                      File(additionalMedia[2]),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia[3] == ''
-                ? Container()
-                : Container(
-                    child: Image.file(
-                      File(additionalMedia[3]),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia[4] == ''
-                ? Container()
-                : Container(
-                    child: Image.file(
-                      File(additionalMedia[4]),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-          ),
-          additionalMedia[4] == ''
-              ? GestureDetector(
-                  onTap: () {
-                    //_showDialog();
-                  },
-                  child: Container(
-                    color: Colors.grey,
-                    height: ScreenUtil.instance.setWidth(200),
-                    width: ScreenUtil.instance.setWidth(150),
-                    child: Center(
-                      child: SizedBox(
-                        height: ScreenUtil.instance.setWidth(50),
-                        width: ScreenUtil.instance.setWidth(50),
-                        child: Image.asset(
-                            'assets/bottom-bar/new-something-white.png'),
+            child: additionalMedia.isEmpty
+                ? GestureDetector(
+                    onTap: () {
+                      //_showDialog();
+                    },
+                    child: Container(
+                      color: Colors.grey,
+                      height: ScreenUtil.instance.setWidth(200),
+                      width: ScreenUtil.instance.setWidth(150),
+                      child: Center(
+                        child: SizedBox(
+                          height: ScreenUtil.instance.setWidth(50),
+                          width: ScreenUtil.instance.setWidth(50),
+                          child: Image.asset(
+                              'assets/bottom-bar/new-something-white.png'),
+                        ),
                       ),
                     ),
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      getAdditionalImage(index);
+                    },
+                    child: Container(
+                      child: additionalMedia[index].startsWith('http')
+                          ? Image.network(
+                              additionalMedia[index],
+                              fit: BoxFit.fill,
+                            )
+                          : Image.file(
+                              File(additionalMedia[index]),
+                              fit: BoxFit.fill,
+                            ),
+                    ),
                   ),
-                )
-              : Container(),
-        ],
+          );
+        }).toList(),
       ),
     );
+  }
+
+  Future getAdditionalImage(int index) async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      additionalMedia[index] = image.path;
+
+      cropAdditionalImage(additionalMedia[index], index);
+    });
+  }
+
+  Future cropAdditionalImage(String image, int index) async {
+    File croppedImage = await ImageCropper.cropImage(
+      sourcePath: image,
+      aspectRatio: CropAspectRatio(ratioX: 2.0, ratioY: 3.0),
+      maxHeight: 512,
+      maxWidth: 512,
+    );
+
+    additionalMedia[index] = croppedImage.path;
+
+    setState(() {});
   }
 
   Future fetchCategoryEvent() async {
@@ -1004,7 +1074,7 @@ class EditEventState extends State<EditEvent> {
 
     if (response.statusCode == 200) {
       var extractedData = json.decode(response.body);
-      if(!mounted) return;
+      if (!mounted) return;
       setState(() {
         categoryEventData = extractedData['data'];
         assert(categoryEventData != null);

@@ -26,6 +26,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
   List ticketSalesData;
   bool isEmpty;
   bool isLoading = false;
+  String price = '0';
 
   @override
   void initState() {
@@ -72,7 +73,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
                 ),
                 Text(
                   'Rp. ' +
-                      widget.ticketSales['onhold_balance'].toString() +
+                      price +
                       ',-',
                   style: TextStyle(
                       fontSize: 40,
@@ -101,6 +102,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
                           ticketSalesData == null ? 0 : ticketSalesData.length,
                       // itemCount: 5,
                       itemBuilder: (context, i) {
+                        print(price);
                         return GestureDetector(
                           onTap: (){
                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => Invoice(
@@ -160,6 +162,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
         setState(() {
           isEmpty = false;
           ticketSalesData = extractedData['data']['history'];
+          price = ticketSalesData.fold<int>(0, (sum, goods) => sum + int.parse(goods['amount'])).toString();
         });
       }
     } else {
