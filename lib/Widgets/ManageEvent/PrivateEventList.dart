@@ -49,7 +49,10 @@ class PrivateEventListState extends State<PrivateEventList> {
           setState(() {
             isEmpty = false;
             privateData = extractedData['data']['private']['data'];
-            privateData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
+            privateData.removeWhere((item) =>
+                item['ticket_type']['type'] == 'free_limited_seating' ||
+                item['ticket_type']['type'] == 'paid_seating' ||
+                item['ticket_type']['type'] == 'paid_seating');
             print(privateData);
           });
         }
@@ -72,7 +75,10 @@ class PrivateEventListState extends State<PrivateEventList> {
           List updatedData = extractedData['data']['private']['data'];
           print('data: ' + updatedData.toString());
           privateData.addAll(updatedData);
-          privateData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
+          privateData.removeWhere((item) =>
+              item['ticket_type']['type'] == 'free_limited_seating' ||
+              item['ticket_type']['type'] == 'paid_seating' ||
+              item['ticket_type']['type'] == 'paid_seating');
         });
         if (mounted) setState(() {});
         refreshController.loadComplete();
@@ -92,177 +98,180 @@ class PrivateEventListState extends State<PrivateEventList> {
     )..init(context);
 
     return Container(
-        width: MediaQuery.of(context).size.width,
-        child: isEmpty == true
-            ? EmptyState(
-                emptyImage: 'assets/drawable/event_empty_state.png',
-                reasonText: 'You Have No Event Created Yet',
-              )
-            : privateData == null
-                ? HomeLoadingScreen().myTicketLoading()
-                : SmartRefresher(
-                    controller: refreshController,
-                    enablePullDown: true,
-                    enablePullUp: true,
-                    onLoading: _onLoading,
-                    onRefresh: () {
-                      setState(() {
-                        newPage = 0;
-                      });
+      width: MediaQuery.of(context).size.width,
+      child: isEmpty == true
+          ? EmptyState(
+              emptyImage: 'assets/drawable/event_empty_state.png',
+              reasonText: 'You Have No Event Created Yet',
+            )
+          : privateData == null
+              ? HomeLoadingScreen().myTicketLoading()
+              : SmartRefresher(
+                  controller: refreshController,
+                  enablePullDown: true,
+                  enablePullUp: true,
+                  onLoading: _onLoading,
+                  onRefresh: () {
+                    setState(() {
+                      newPage = 0;
+                    });
 
-                      fetchMyEvent().then((response) {
-                        if (response.statusCode == 200) {
-                          setState(() {
-                            var extractedData = json.decode(response.body);
-                            privateData =
-                                extractedData['data']['private']['data'];
-                                privateData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
-                            assert(privateData != null);
+                    fetchMyEvent().then((response) {
+                      if (response.statusCode == 200) {
+                        setState(() {
+                          var extractedData = json.decode(response.body);
+                          privateData =
+                              extractedData['data']['private']['data'];
+                          privateData.removeWhere((item) =>
+                              item['ticket_type']['type'] ==
+                                  'free_limited_seating' ||
+                              item['ticket_type']['type'] == 'paid_seating' ||
+                              item['ticket_type']['type'] == 'paid_seating');
+                          assert(privateData != null);
 
-                            print(privateData);
+                          print(privateData);
 
-                            return extractedData;
-                          });
-                        }
-                      });
-
-                      if (mounted) setState(() {});
-                      refreshController.refreshCompleted();
-                    },
-                    footer: CustomFooter(
-                        builder: (BuildContext context, LoadStatus mode) {
-                      Widget body;
-                      if (mode == LoadStatus.idle) {
-                        body = Text("Load data");
-                      } else if (mode == LoadStatus.loading) {
-                        body = CupertinoActivityIndicator(radius: 20);
-                      } else if (mode == LoadStatus.failed) {
-                        body = Text("Load Failed!");
-                      } else if (mode == LoadStatus.canLoading) {
-                        body = Text('More');
-                      } else {
-                        body = Container();
+                          return extractedData;
+                        });
                       }
+                    });
 
-                      return Container(
-                          height: ScreenUtil.instance.setWidth(35),
-                          child: Center(child: body));
-                    }),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount:
-                          privateData.length == null ? '0' : privateData.length,
-                      itemBuilder: (BuildContext context, i) {
-                        if (privateData.length == null) {
-                          return Container(
-                            child: Center(
-                              child: Text('No Data'),
-                            ),
-                          );
-                        }
-                        Color itemColor;
-                        String itemPriceText;
+                    if (mounted) setState(() {});
+                    refreshController.refreshCompleted();
+                  },
+                  footer: CustomFooter(
+                      builder: (BuildContext context, LoadStatus mode) {
+                    Widget body;
+                    if (mode == LoadStatus.idle) {
+                      body = Text("Load data");
+                    } else if (mode == LoadStatus.loading) {
+                      body = CupertinoActivityIndicator(radius: 20);
+                    } else if (mode == LoadStatus.failed) {
+                      body = Text("Load Failed!");
+                    } else if (mode == LoadStatus.canLoading) {
+                      body = Text('More');
+                    } else {
+                      body = Container();
+                    }
 
-                        if (privateData[i]['ticket_type']['type'] == 'paid' ||
-                            privateData[i]['ticket_type']['type'] ==
-                                'paid_seating' ||
-                          privateData[i]['ticket_type']['type'] ==
-                              'paid_live_stream') {
-                          if (privateData[i]['ticket']
-                                  ['availableTicketStatus'] ==
-                              '1') {
-                            itemColor = Color(0xFF34B323);
-                            itemPriceText =
-                                privateData[i]['ticket']['cheapestTicket'];
-                          } else {
-                            if (privateData[i]['ticket']['salesStatus'] ==
-                                'comingSoon') {
-                              itemColor = Color(0xFF34B323).withOpacity(0.3);
-                              itemPriceText = 'COMING SOON';
-                            } else if (privateData[i]['ticket']
-                                    ['salesStatus'] ==
-                                'endSales') {
-                              itemColor = Color(0xFF8E1E2D);
-                              if (privateData[i]['status'] == 'ended') {
-                                itemPriceText = 'EVENT HAS ENDED';
-                              }
-                              itemPriceText = 'SALES ENDED';
-                            } else {
-                              itemColor = Color(0xFF8E1E2D);
-                              itemPriceText = 'SOLD OUT';
-                            }
-                          }
-                        } else if (privateData[i]['ticket_type']['type'] ==
-                            'no_ticket') {
-                          itemColor = Color(0xFF652D90);
-                          itemPriceText = 'NO TICKET';
-                        } else if (privateData[i]['ticket_type']['type'] ==
-                            'on_the_spot') {
-                          itemColor = Color(0xFF652D90);
-                          itemPriceText = privateData[i]['ticket_type']['name'];
-                        } else if (privateData[i]['ticket_type']['type'] ==
-                            'free') {
-                          itemColor = Color(0xFFFFAA00);
-                          itemPriceText = privateData[i]['ticket_type']['name'];
-                        } else if (privateData[i]['ticket_type']['type'] ==
-                            'free') {
-                          itemColor = Color(0xFFFFAA00);
-                          itemPriceText = privateData[i]['ticket_type']['name'];
-                        } else if (privateData[i]['ticket_type']['type'] ==
-                                'free_limited' ||
-                            privateData[i]['ticket_type']['type'] ==
-                                'free_limited_seating') {
-                          if (privateData[i]['ticket']
-                                  ['availableTicketStatus'] ==
-                              '1') {
-                            itemColor = Color(0xFFFFAA00);
-                            itemPriceText =
-                                privateData[i]['ticket_type']['name'];
-                          } else {
-                            if (privateData[i]['ticket']['salesStatus'] ==
-                                'comingSoon') {
-                              itemColor = Color(0xFFFFAA00).withOpacity(0.3);
-                              itemPriceText = 'COMING SOON';
-                            } else if (privateData[i]['ticket']
-                                    ['salesStatus'] ==
-                                'endSales') {
-                              itemColor = Color(0xFF8E1E2D);
-                              if (privateData[i]['status'] == 'ended') {
-                                itemPriceText = 'EVENT HAS ENDED';
-                              }
-                              itemPriceText = 'SALES ENDED';
-                            } else {
-                              itemColor = Color(0xFF8E1E2D);
-                              itemPriceText = 'SOLD OUT';
-                            }
-                          }
-                        }
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    EventDetailLoadingScreen(
-                                        eventId: privateData[i]['id']),
-                              ),
-                            );
-                          },
-                          child: new LatestEventItem(
-                            image: privateData[i]['picture'],
-                            title: privateData[i]['name'],
-                            location: privateData[i]['address'],
-                            itemColor: itemColor,
-                            itemPrice: itemPriceText,
-                            type: privateData[i]['ticket_type']['type'],
-                            date: DateTime.parse(privateData[i]['dateStart']),
-                            isAvailable: privateData[i]['ticket']
-                                ['availableTicketStatus'],
+                    return Container(
+                        height: ScreenUtil.instance.setWidth(35),
+                        child: Center(child: body));
+                  }),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount:
+                        privateData.length == null ? '0' : privateData.length,
+                    itemBuilder: (BuildContext context, i) {
+                      if (privateData[i].length == null) {
+                        return Container(
+                          child: Center(
+                            child: Text('No Data'),
                           ),
                         );
-                      },
-                    ),
-                  ));
+                      }
+                      Color itemColor;
+                      String itemPriceText;
+
+                      if (privateData[i]['ticket_type']['type'] == 'paid' ||
+                          privateData[i]['ticket_type']['type'] ==
+                              'paid_seating') {
+                        if (privateData[i]['ticket']['availableTicketStatus'] ==
+                            '1') {
+                          if (privateData[i]['ticket']['cheapestTicket'] ==
+                              '0') {
+                            itemColor = Color(0xFFFFAA00);
+                            itemPriceText = 'Free Limited';
+                          } else {
+                            itemColor = Color(0xFF34B323);
+                            itemPriceText = 'Rp. ' +
+                                privateData[i]['ticket']['cheapestTicket'] +
+                                ' ,-';
+                          }
+                        } else {
+                          if (privateData[i]['ticket']['salesStatus'] ==
+                              'comingSoon') {
+                            itemColor = Color(0xFF34B323).withOpacity(0.3);
+                            itemPriceText = 'COMING SOON';
+                          } else if (privateData[i]['ticket']['salesStatus'] ==
+                              'endSales') {
+                            itemColor = Color(0xFF8E1E2D);
+                            if (privateData[i]['status'] == 'ended') {
+                              itemPriceText = 'EVENT HAS ENDED';
+                            }
+                            itemPriceText = 'SALES ENDED';
+                          } else {
+                            itemColor = Color(0xFF8E1E2D);
+                            itemPriceText = 'SOLD OUT';
+                          }
+                        }
+                      } else if (privateData[i]['ticket_type']['type'] ==
+                          'no_ticket') {
+                        itemColor = Color(0xFF652D90);
+                        itemPriceText = 'NO TICKET';
+                      } else if (privateData[i]['ticket_type']['type'] ==
+                          'on_the_spot') {
+                        itemColor = Color(0xFF652D90);
+                        itemPriceText = privateData[i]['ticket_type']['name'];
+                      } else if (privateData[i]['ticket_type']['type'] ==
+                          'free') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText = privateData[i]['ticket_type']['name'];
+                      } else if (privateData[i]['ticket_type']['type'] ==
+                          'free') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText = privateData[i]['ticket_type']['name'];
+                      } else if (privateData[i]['ticket_type']['type'] ==
+                          'free_limited') {
+                        if (privateData[i]['ticket']['availableTicketStatus'] ==
+                            '1') {
+                          itemColor = Color(0xFFFFAA00);
+                          itemPriceText = 'Free Limited';
+                        } else {
+                          if (privateData[i]['ticket']['salesStatus'] ==
+                              'comingSoon') {
+                            itemColor = Color(0xFF34B323).withOpacity(0.3);
+                            itemPriceText = 'COMING SOON';
+                          } else if (privateData[i]['ticket']['salesStatus'] ==
+                              'endSales') {
+                            itemColor = Color(0xFF8E1E2D);
+                            if (privateData[i]['status'] == 'ended') {
+                              itemPriceText = 'EVENT HAS ENDED';
+                            }
+                            itemPriceText = 'SALES ENDED';
+                          } else {
+                            itemColor = Color(0xFFFFAA00);
+                            itemPriceText = 'SOLD OUT';
+                          }
+                        }
+                      }
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  EventDetailLoadingScreen(
+                                      eventId: privateData[i]['id']),
+                            ),
+                          );
+                        },
+                        child: new LatestEventItem(
+                          image: privateData[i]['picture'],
+                          title: privateData[i]['name'],
+                          location: privateData[i]['address'],
+                          itemColor: itemColor,
+                          itemPrice: itemPriceText,
+                          type: privateData[i]['ticket_type']['type'],
+                          date: DateTime.parse(privateData[i]['dateStart']),
+                          isAvailable: privateData[i]['ticket']
+                              ['availableTicketStatus'],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+    );
   }
 
   Widget buttonType(int index) {

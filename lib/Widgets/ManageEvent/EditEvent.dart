@@ -180,9 +180,8 @@ class EditEventState extends State<EditEvent> {
               contentType: ContentType('image', 'jpeg'))
     };
 
-    for(int i = 0; i < additionalMedia.length; i++){
-      if(additionalMedia[i].startsWith('http')){
-
+    for (int i = 0; i < additionalMedia.length; i++) {
+      if (additionalMedia[i].startsWith('http')) {
       } else {
         data['addPhoto[$i]'] = additionalMedia[i];
       }
@@ -992,47 +991,182 @@ class EditEventState extends State<EditEvent> {
       child: ListView(
         padding: EdgeInsets.only(left: 10),
         scrollDirection: Axis.horizontal,
-        children: mapIndexed(additionalMedia, (index, item) {
-          print('index: ' + additionalMedia[index]);
-          return Padding(
+        children: <Widget>[
+          Padding(
             padding: EdgeInsets.only(right: 10),
-            child: additionalMedia.isEmpty
-                ? GestureDetector(
-                    onTap: () {
-                      //_showDialog();
-                    },
-                    child: Container(
-                      color: Colors.grey,
-                      height: ScreenUtil.instance.setWidth(200),
-                      width: ScreenUtil.instance.setWidth(150),
-                      child: Center(
-                        child: SizedBox(
-                          height: ScreenUtil.instance.setWidth(50),
-                          width: ScreenUtil.instance.setWidth(50),
-                          child: Image.asset(
-                              'assets/bottom-bar/new-something-white.png'),
-                        ),
-                      ),
-                    ),
-                  )
-                : GestureDetector(
-                    onTap: () {
-                      getAdditionalImage(index);
-                    },
-                    child: Container(
-                      child: additionalMedia[index].startsWith('http')
+            child: additionalMedia.length < 1
+                ? Container()
+                : Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                              spreadRadius: 1.5,
+                              color: Color(0xff8a8a8b).withOpacity(.2),
+                              blurRadius: 2)
+                        ]),
+                    child: additionalMedia[0].startsWith('http')
                           ? Image.network(
-                              additionalMedia[index],
+                              additionalMedia[0],
                               fit: BoxFit.fill,
                             )
                           : Image.file(
-                              File(additionalMedia[index]),
-                              fit: BoxFit.fill,
-                            ),
+                      File(additionalMedia[0]),
+                      fit: BoxFit.fill,
                     ),
                   ),
-          );
-        }).toList(),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: additionalMedia.length < 2
+                ? Container()
+                : Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                              spreadRadius: 1.5,
+                              color: Color(0xff8a8a8b).withOpacity(.2),
+                              blurRadius: 2)
+                        ]),
+                    child: additionalMedia[1].startsWith('http')
+                          ? Image.network(
+                              additionalMedia[1],
+                              fit: BoxFit.fill,
+                            )
+                          : Image.file(
+                      File(additionalMedia[1]),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: additionalMedia.length < 3
+                ? Container()
+                : Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                              spreadRadius: 1.5,
+                              color: Color(0xff8a8a8b).withOpacity(.2),
+                              blurRadius: 2)
+                        ]),
+                    child: additionalMedia[2].startsWith('http')
+                          ? Image.network(
+                              additionalMedia[2],
+                              fit: BoxFit.fill,
+                            )
+                          : Image.file(
+                      File(additionalMedia[2]),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: additionalMedia.length < 4
+                ? Container()
+                : Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                              spreadRadius: 1.5,
+                              color: Color(0xff8a8a8b).withOpacity(.2),
+                              blurRadius: 2)
+                        ]),
+                    child: additionalMedia[3].startsWith('http')
+                          ? Image.network(
+                              additionalMedia[3],
+                              fit: BoxFit.fill,
+                            )
+                          : Image.file(
+                      File(additionalMedia[3]),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: additionalMedia.length < 5
+                ? Container()
+                : Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                              spreadRadius: 1.5,
+                              color: Color(0xff8a8a8b).withOpacity(.2),
+                              blurRadius: 2)
+                        ]),
+                    child: additionalMedia[4].startsWith('http')
+                          ? Image.network(
+                              additionalMedia[4],
+                              fit: BoxFit.fill,
+                            )
+                          : Image.file(
+                      File(additionalMedia[4]),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+          ),
+          additionalMedia.length < 5
+              ? GestureDetector(
+                  onTap: () {
+                    // _showDialog();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/grey-fade.jpg'),
+                            fit: BoxFit.fill),
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                              spreadRadius: 1.5,
+                              color: Color(0xff8a8a8b).withOpacity(.2),
+                              blurRadius: 2)
+                        ]),
+                    height: ScreenUtil.instance.setWidth(200),
+                    width: ScreenUtil.instance.setWidth(150),
+                    child: Center(
+                      child: SizedBox(
+                        height: ScreenUtil.instance.setWidth(50),
+                        width: ScreenUtil.instance.setWidth(50),
+                        child: Image.asset(
+                            'assets/bottom-bar/new-something-white.png'),
+                      ),
+                    ),
+                  ),
+                )
+              : Container(),
+        ],
+        // mapIndexed(additionalMedia, (index, item) {
+        //   print('item: ' + item);
+        //   print('lenght: ' + additionalMedia.length.toString());
+        //   print('index: ' + additionalMedia[index]);
+        //   return Padding(
+        //     padding: EdgeInsets.only(right: 10),
+        //     child: GestureDetector(
+        //             onTap: () {
+        //               getAdditionalImage(index);
+        //             },
+        //             child: Container(
+        //               child: additionalMedia[index].startsWith('http')
+        //                   ? Image.network(
+        //                       additionalMedia[index],
+        //                       fit: BoxFit.fill,
+        //                     )
+        //                   : Image.file(
+        //                       File(additionalMedia[index]),
+        //                       fit: BoxFit.fill,
+        //                     ),
+        //             ),
+        //           ),
+        //   );
+        // }).toList(),
       ),
     );
   }
