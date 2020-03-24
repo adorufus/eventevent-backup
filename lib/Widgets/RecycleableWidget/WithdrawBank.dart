@@ -17,6 +17,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class WithdrawBank extends StatefulWidget {
+  final currentTab;
+
+  const WithdrawBank({Key key, this.currentTab = 0}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return WithdrawBankState();
@@ -35,7 +38,7 @@ class WithdrawBankState extends State<WithdrawBank> {
 
   MoneyFormatterOutput fo;
 
-  int _currentValue = 0;
+  int _currentValue;
   String user_bank_id;
   String bank_id;
   String account_name;
@@ -46,6 +49,8 @@ class WithdrawBankState extends State<WithdrawBank> {
   @override
   void initState() {
     super.initState();
+    _currentValue = widget.currentTab;
+    setState((){});
     getBalance();
     getBank();
     getHistory().then((response) {

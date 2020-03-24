@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
+import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flushbar/flushbar.dart';
@@ -239,6 +241,8 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation>{
 
     if(response.statusCode == 200 || response.statusCode == 201){
       Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false, selectedPage: 3,)), ModalRoute.withName('/DashboardWidget'));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => WithdrawBank(currentTab: 1)));
 
     }
 

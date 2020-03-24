@@ -73,7 +73,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
                 ),
                 Text(
                   'Rp. ' +
-                      price +
+                      widget.ticketSales['onhold_balance'] +
                       ',-',
                   style: TextStyle(
                       fontSize: 40,
@@ -111,7 +111,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
                           },
                           child: BalanceOnHoldItem(
                               username: ticketSalesData[i]['username'],
-                              totalPrice: ticketSalesData[i]['amount'],
+                              totalPrice: i == 0 ? ticketSalesData[i]['amount'] : (int.parse(ticketSalesData[i]['amount']) + int.parse(ticketSalesData[i - 1]['amount'])).toString(),
                               price: int.parse(ticketSalesData[i]['quantity']) <
                                       2
                                   ? ticketSalesData[i]['amount']
@@ -162,6 +162,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
         setState(() {
           isEmpty = false;
           ticketSalesData = extractedData['data']['history'];
+          print(ticketSalesData);
           price = ticketSalesData.fold<int>(0, (sum, goods) => sum + int.parse(goods['amount'])).toString();
         });
       }
