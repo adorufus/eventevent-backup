@@ -101,5 +101,7 @@
 	<true/>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>Allow to acces media library</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 </dict>
 </plist>

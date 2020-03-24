@@ -12,6 +12,9 @@ import Firebase
     // FirebaseApp.Configure()
     GeneratedPluginRegistrant.register(with: self)
     GMSServices.provideAPIKey("AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI")
+    if #available(iOS 10.0, *) {
+      UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+    }
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
