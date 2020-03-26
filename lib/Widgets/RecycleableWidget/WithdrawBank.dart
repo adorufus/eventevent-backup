@@ -44,13 +44,14 @@ class WithdrawBankState extends State<WithdrawBank> {
   String account_name;
   String account_number;
   String bank_name;
+  String bank_code;
   Map bankJson;
 
   @override
   void initState() {
     super.initState();
     _currentValue = widget.currentTab;
-    setState((){});
+    setState(() {});
     getBalance();
     getBank();
     getHistory().then((response) {
@@ -269,8 +270,8 @@ class WithdrawBankState extends State<WithdrawBank> {
                         controller: amountController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 2, vertical: 12),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 2, vertical: 12),
                             filled: true,
                             fillColor: Colors.white,
                             hintText: 'Enter withdraw amount (e.g. 125000)',
@@ -283,12 +284,14 @@ class WithdrawBankState extends State<WithdrawBank> {
                           SharedPreferences prefs =
                               await SharedPreferences.getInstance();
 
-                          prefs.setString('WITHDRAW_USER_BANK_ID', user_bank_id);
-                          prefs.setString('WITHDRAW_ACCOUNT_NAME', account_name);
+                          prefs.setString(
+                              'WITHDRAW_USER_BANK_ID', user_bank_id);
+                          prefs.setString(
+                              'WITHDRAW_ACCOUNT_NAME', account_name);
                           prefs.setString('WITHDRAW_BANK_ID', bank_id);
                           prefs.setString(
                               'WITHDRAW_ACCOUNT_NUMBER', account_number);
-                          prefs.setString('WITHDRAW_BANK_NAME', user_bank_id);
+                          prefs.setString('WITHDRAW_BANK_NAME', bank_name);
                           prefs.setString(
                               'WITHDRAW_AMOUNT', amountController.text);
 
@@ -303,7 +306,8 @@ class WithdrawBankState extends State<WithdrawBank> {
                           } else if (int.parse(amountController.text) < 10000) {
                             Flushbar(
                               flushbarPosition: FlushbarPosition.TOP,
-                              message: 'Minimum withdraw amount is Rp. 10.000,-',
+                              message:
+                                  'Minimum withdraw amount is Rp. 10.000,-',
                               backgroundColor: Colors.red,
                               duration: Duration(seconds: 3),
                               animationDuration: Duration(milliseconds: 500),
@@ -312,7 +316,8 @@ class WithdrawBankState extends State<WithdrawBank> {
                               int.parse(balanceData['amount'])) {
                             Flushbar(
                               flushbarPosition: FlushbarPosition.TOP,
-                              message: 'Withdraw amount is bigger than your balance! ',
+                              message:
+                                  'Withdraw amount is bigger than your balance! ',
                               backgroundColor: Colors.red,
                               duration: Duration(seconds: 3),
                               animationDuration: Duration(milliseconds: 500),
@@ -320,7 +325,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                           } else {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    WithdrawConfirmation()));
+                                    WithdrawConfirmation(bankCode: bank_code)));
                           }
                         },
                         child: Container(
@@ -495,15 +500,14 @@ class WithdrawBankState extends State<WithdrawBank> {
                         context,
                         MaterialPageRoute(
                           builder: (BuildContext context) => BankOptions(
-                            accountName: bankList[i]['account_name'],
-                            accountNumber: bankList[i]['account_number'],
-                            bankName: bankList[i]['bank_name'],
-                            userBankId: bankList[i]['id'],
-                            bankIndex: i
-                          ),
+                              accountName: bankList[i]['account_name'],
+                              accountNumber: bankList[i]['account_number'],
+                              bankName: bankList[i]['bank_name'],
+                              userBankId: bankList[i]['id'],
+                              bankIndex: i),
                         ),
-                      ).then((val){
-                        if(val != null){
+                      ).then((val) {
+                        if (val != null) {
                           bankList.removeAt(val);
                         }
                       });
@@ -587,12 +591,14 @@ class WithdrawBankState extends State<WithdrawBank> {
                                     account_number =
                                         bankList[index]['account_number'];
                                     bank_name = bankList[index]['bank_name'];
+                                    bank_code = bankList[index]['bank_code'];
 
                                     print(user_bank_id);
                                     print(bank_id);
                                     print(account_name);
                                     print(account_number);
                                     print(bank_name);
+                                    print(bank_code);
                                   });
                                 },
                               ),
@@ -651,6 +657,18 @@ class WithdrawBankState extends State<WithdrawBank> {
         bankJson = extractedData;
         bankList = extractedData['data'];
         print('bankJson: ' + bankJson.toString());
+        user_bank_id = bankList[0]['id'];
+        account_name = bankList[0]['account_name'];
+        bank_id = bankList[0]['bank_id'];
+        account_number = bankList[0]['account_number'];
+        bank_name = bankList[0]['bank_name'];
+        bank_code = bankList[0]['bank_code'];
+
+        print(user_bank_id);
+        print(bank_id);
+        print(account_name);
+        print(account_number);
+        print(bank_name);
       });
     }
   }
@@ -661,7 +679,10 @@ class WithdrawBankState extends State<WithdrawBank> {
     Color amountColor;
 
     return historyList.isEmpty || bankJson == null
-        ? EmptyState(imagePath: 'assets/icons/empty_state/history.png', reasonText: 'You have no transaction yet',)
+        ? EmptyState(
+            imagePath: 'assets/icons/empty_state/history.png',
+            reasonText: 'You have no transaction yet',
+          )
         : ListView.builder(
             shrinkWrap: true,
             itemCount: historyList == null ? 0 : historyList.length,

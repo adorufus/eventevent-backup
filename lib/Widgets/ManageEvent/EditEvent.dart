@@ -21,10 +21,12 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:thumbnails/thumbnails.dart';
 
 class EditEvent extends StatefulWidget {
   final additional;
@@ -70,6 +72,7 @@ class EditEventState extends State<EditEvent> {
   List categoryEventData;
   List currentAdditionalMedia = [];
   List<String> additionalMedia = [];
+  List<String> additionalMediaPhoto = [];
 
   bool isLoading = false;
 
@@ -97,6 +100,7 @@ class EditEventState extends State<EditEvent> {
 
       for (int i = 0; i < currentAdditionalMedia.length; i++) {
         additionalMedia.add(currentAdditionalMedia[i]['posterPathThumb']);
+        additionalMediaPhoto.add(currentAdditionalMedia[i]['posterPathThumb']);
       }
     });
 
@@ -994,7 +998,7 @@ class EditEventState extends State<EditEvent> {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.only(right: 10),
-            child: additionalMedia.length < 1
+            child: additionalMediaPhoto.length < 1
                 ? Container()
                 : Container(
                     decoration: BoxDecoration(
@@ -1005,20 +1009,20 @@ class EditEventState extends State<EditEvent> {
                               color: Color(0xff8a8a8b).withOpacity(.2),
                               blurRadius: 2)
                         ]),
-                    child: additionalMedia[0].startsWith('http')
-                          ? Image.network(
-                              additionalMedia[0],
-                              fit: BoxFit.fill,
-                            )
-                          : Image.file(
-                      File(additionalMedia[0]),
-                      fit: BoxFit.fill,
-                    ),
+                    child: additionalMediaPhoto[0].startsWith('http')
+                        ? Image.network(
+                            additionalMediaPhoto[0],
+                            fit: BoxFit.fill,
+                          )
+                        : Image.file(
+                            File(additionalMediaPhoto[0]),
+                            fit: BoxFit.fill,
+                          ),
                   ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia.length < 2
+            child: additionalMediaPhoto.length < 2
                 ? Container()
                 : Container(
                     decoration: BoxDecoration(
@@ -1029,20 +1033,20 @@ class EditEventState extends State<EditEvent> {
                               color: Color(0xff8a8a8b).withOpacity(.2),
                               blurRadius: 2)
                         ]),
-                    child: additionalMedia[1].startsWith('http')
-                          ? Image.network(
-                              additionalMedia[1],
-                              fit: BoxFit.fill,
-                            )
-                          : Image.file(
-                      File(additionalMedia[1]),
-                      fit: BoxFit.fill,
-                    ),
+                    child: additionalMediaPhoto[1].startsWith('http')
+                        ? Image.network(
+                            additionalMediaPhoto[1],
+                            fit: BoxFit.fill,
+                          )
+                        : Image.file(
+                                File(additionalMediaPhoto[1]),
+                                fit: BoxFit.fill,
+                              ),
                   ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia.length < 3
+            child: additionalMediaPhoto.length < 3
                 ? Container()
                 : Container(
                     decoration: BoxDecoration(
@@ -1053,20 +1057,20 @@ class EditEventState extends State<EditEvent> {
                               color: Color(0xff8a8a8b).withOpacity(.2),
                               blurRadius: 2)
                         ]),
-                    child: additionalMedia[2].startsWith('http')
-                          ? Image.network(
-                              additionalMedia[2],
-                              fit: BoxFit.fill,
-                            )
-                          : Image.file(
-                      File(additionalMedia[2]),
-                      fit: BoxFit.fill,
-                    ),
+                    child: additionalMediaPhoto[2].startsWith('http')
+                        ? Image.network(
+                            additionalMediaPhoto[2],
+                            fit: BoxFit.fill,
+                          )
+                        : Image.file(
+                                File(additionalMediaPhoto[2]),
+                                fit: BoxFit.fill,
+                              ),
                   ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia.length < 4
+            child: additionalMediaPhoto.length < 4
                 ? Container()
                 : Container(
                     decoration: BoxDecoration(
@@ -1077,15 +1081,15 @@ class EditEventState extends State<EditEvent> {
                               color: Color(0xff8a8a8b).withOpacity(.2),
                               blurRadius: 2)
                         ]),
-                    child: additionalMedia[3].startsWith('http')
-                          ? Image.network(
-                              additionalMedia[3],
-                              fit: BoxFit.fill,
-                            )
-                          : Image.file(
-                      File(additionalMedia[3]),
-                      fit: BoxFit.fill,
-                    ),
+                    child: additionalMediaPhoto[3].startsWith('http')
+                        ? Image.network(
+                            additionalMediaPhoto[3],
+                            fit: BoxFit.fill,
+                          )
+                        : Image.file(
+                                File(additionalMediaPhoto[3]),
+                                fit: BoxFit.fill,
+                              ),
                   ),
           ),
           Padding(
@@ -1102,20 +1106,20 @@ class EditEventState extends State<EditEvent> {
                               blurRadius: 2)
                         ]),
                     child: additionalMedia[4].startsWith('http')
-                          ? Image.network(
-                              additionalMedia[4],
-                              fit: BoxFit.fill,
-                            )
-                          : Image.file(
-                      File(additionalMedia[4]),
-                      fit: BoxFit.fill,
-                    ),
+                        ? Image.network(
+                            additionalMedia[4],
+                            fit: BoxFit.fill,
+                          )
+                        : Image.file(
+                            File(additionalMedia[4]),
+                            fit: BoxFit.fill,
+                          ),
                   ),
           ),
           additionalMedia.length < 5
               ? GestureDetector(
                   onTap: () {
-                    // _showDialog();
+                    _showDialog();
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -1169,6 +1173,126 @@ class EditEventState extends State<EditEvent> {
         // }).toList(),
       ),
     );
+  }
+
+  void _showDialog() {
+    showModalBottomSheet<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              additionalMedia.length == 4
+                  ? Container()
+                  : ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Choose Photo from Library'),
+                      onTap: () {
+                        imageSelectorGalery();
+                        Navigator.pop(context);
+                      },
+                    ),
+              additionalMedia.length != 4
+                  ? Container()
+                  : ListTile(
+                      leading: new Icon(Icons.videocam),
+                      title: new Text('Choose Video from Library'),
+                      onTap: () {
+                        videoSelectorGalery();
+                        Navigator.pop(context);
+                      },
+                    ),
+              additionalMedia.length == 4
+                  ? Container()
+                  : ListTile(
+                      leading: new Icon(Icons.camera_alt),
+                      title: new Text('Take Photo from Camera'),
+                      onTap: () {
+                        imageCaptureCamera();
+                      }),
+              new ListTile(
+                leading: new Icon(Icons.close),
+                title: new Text('Cancel'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  imageSelectorGalery() async {
+    var galleryFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    print(galleryFile.path);
+
+    thisCropImage(galleryFile);
+  }
+
+  videoSelectorGalery() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var galleryFile = await ImagePicker.pickVideo(source: ImageSource.gallery);
+
+    print(galleryFile.path);
+
+    var appDocDir;
+
+    if (Platform.isAndroid) {
+      appDocDir =
+          await getExternalStorageDirectories(type: StorageDirectory.dcim);
+      print(appDocDir.path);
+    } else {
+      appDocDir = await getLibraryDirectory();
+    }
+
+    String fileFolder = appDocDir.path;
+
+    String thumbnail = await Thumbnails.getThumbnail(
+      thumbnailFolder: fileFolder,
+      videoFile: galleryFile.path,
+      imageType: ThumbFormat.JPEG,
+      quality: 50,
+    );
+
+    print(thumbnail);
+
+    setState(() {
+      preferences.setString('POST_EVENT_ADDITIONAL_VIDEO', galleryFile.path);
+      print(preferences.getString('POST_EVENT_ADDITIONAL_VIDEO'));
+    });
+
+    thisCropImage(File(thumbnail));
+  }
+
+  void imageCaptureCamera() async {
+    var galleryFile = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+    );
+
+    if (!mounted) return;
+
+    thisCropImage(galleryFile);
+  }
+
+  thisCropImage(File galleryFile) async {
+    File croppedImage = await ImageCropper.cropImage(
+        sourcePath: galleryFile.path,
+        aspectRatio: CropAspectRatio(
+          ratioX: 2.0,
+          ratioY: 3.0,
+        ),
+        maxWidth: 512,
+        maxHeight: 512);
+
+    print(croppedImage.path);
+    setState(() {
+      additionalMediaPhoto.add(croppedImage.path.toString());
+      additionalMedia.add(croppedImage.path.toString());
+    });
+
+    print(additionalMedia);
+    print(additionalMediaPhoto);
   }
 
   Future getAdditionalImage(int index) async {

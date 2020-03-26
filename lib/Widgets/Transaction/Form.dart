@@ -39,6 +39,7 @@ class _TransactionFormState extends State<TransactionForm> {
   String phone;
 
   bool isRequired;
+  bool isRequiredEmpty = false;
 
   TextEditingController firstnameController;
   TextEditingController lastnameController;
@@ -132,6 +133,19 @@ class _TransactionFormState extends State<TransactionForm> {
 
           print(questionId);
 
+          for (int i = 0; i < customFormList.length; i++) {
+            if (customFormList[i]['isRequired'] == '1' &&
+                customFormControllers[i].text.isEmpty) {
+              isRequiredEmpty = true;
+              setState(() {});
+            } else {
+              isRequiredEmpty = false;
+              setState(() {});
+            }
+          }
+
+          print(isRequiredEmpty);
+
           if (firstnameController.text == null ||
               firstnameController.text == '' ||
               lastnameController.text == null ||
@@ -139,14 +153,15 @@ class _TransactionFormState extends State<TransactionForm> {
               emailController.text == null ||
               emailController.text == '' ||
               phoneController.text == null ||
-              phoneController.text == '') {
-                Flushbar(
-                  animationDuration: Duration(milliseconds: 500),
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 4),
-                  message: 'Please check again your input',
-                  flushbarPosition: FlushbarPosition.TOP,
-                ).show(context);
+              phoneController.text == '' ||
+              isRequiredEmpty == true) {
+            Flushbar(
+              animationDuration: Duration(milliseconds: 500),
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 4),
+              message: 'Please check again your input',
+              flushbarPosition: FlushbarPosition.TOP,
+            ).show(context);
           } else {
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -374,9 +389,9 @@ class _TransactionFormState extends State<TransactionForm> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: mapIndexed(customFormList, (index, item) {
           if (item['isRequired'] == "1") {
-            isRequired = false;
-          } else {
             isRequired = true;
+          } else {
+            isRequired = false;
           }
 
           return Container(
@@ -498,6 +513,8 @@ class _TransactionFormState extends State<TransactionForm> {
             hintText: 'Put your answers....'),
       );
     }
+
+    setState(() {});
   }
 
   Future saveInput() async {
