@@ -72,9 +72,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
                   height: ScreenUtil.instance.setWidth(15),
                 ),
                 Text(
-                  'Rp. ' +
-                      widget.ticketSales['onhold_balance'] +
-                      ',-',
+                  'Rp. ' + widget.ticketSales['onhold_balance'] + ',-',
                   style: TextStyle(
                       fontSize: 40,
                       fontWeight: FontWeight.bold,
@@ -103,15 +101,43 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
                       // itemCount: 5,
                       itemBuilder: (context, i) {
                         print(price);
+                        int accumulatedPrice = 0;
+                        var reversedList = ticketSalesData.reversed.toList();
+
+                        for(int i = 0; i < reversedList.length; i++){
+                          var item = reversedList[i];
+                          var amount = item['amount'];
+                          var amountInt = int.parse(amount);
+
+                        }
+
+
+                        accumulatedPrice = int.parse(widget.ticketSales['onhold_balance']) - int.parse(ticketSalesData[i]['amount']);
+
+                        print(accumulatedPrice);
+
                         return GestureDetector(
-                          onTap: (){
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Invoice(
-                              transactionID: ticketSalesData[i]['transaction_id'],
-                            )));
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => Invoice(
+                                      transactionID: ticketSalesData[i]
+                                          ['transaction_id'],
+                                    )));
                           },
                           child: BalanceOnHoldItem(
                               username: ticketSalesData[i]['username'],
-                              totalPrice: i == 0 ? ticketSalesData[i]['amount'] : (int.parse(ticketSalesData[i]['amount']) + int.parse(ticketSalesData[i - 1]['amount'])).toString(),
+                              totalPrice: i == 0
+                                  ? widget.ticketSales['onhold_balance']
+                                  : i == 1
+                                      ? accumulatedPrice
+                                      : accumulatedPrice -
+                                          int.parse(ticketSalesData[i - 1]
+                                              ['amount']) 
+                              // (int.parse(widget
+                              //             .ticketSales['onhold_balance']) - int.parse(ticketSalesData[i]['amount'])
+                              //         )
+                              //     .toString()
+                              ,
                               price: int.parse(ticketSalesData[i]['quantity']) <
                                       2
                                   ? ticketSalesData[i]['amount']
@@ -162,8 +188,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
         setState(() {
           isEmpty = false;
           ticketSalesData = extractedData['data']['history'];
-          print(ticketSalesData);
-          price = ticketSalesData.fold<int>(0, (sum, goods) => sum + int.parse(goods['amount'])).toString();
+          print('ticketSalesData: ' + ticketSalesData.toString());
         });
       }
     } else {

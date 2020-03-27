@@ -295,10 +295,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                   ),
                   Text(
                     'Rp. ' +
-                        (withdrawAmount -
-                                int.parse(
-                                    widget.bankCode == 'BCA' ? '0' : '5000'))
-                            .toString() +
+                        (withdrawAmount - int.parse('5000')).toString() +
                         ',-',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,

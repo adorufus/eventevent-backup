@@ -185,10 +185,7 @@ class EditEventState extends State<EditEvent> {
     };
 
     for (int i = 0; i < additionalMedia.length; i++) {
-      if (additionalMedia[i].startsWith('http')) {
-      } else {
-        data['addPhoto[$i]'] = additionalMedia[i];
-      }
+      data['addPhoto[$i]'] = additionalMedia[i].startsWith('http') ? '' : UploadFileInfo(File(additionalMedia[i]), "additional-media-${DateTime.now().toString()}.jpg", contentType: ContentType('image', 'jpeg'));
     }
 
     for (int i = 0; i < categoryId.length; i++) {
@@ -196,6 +193,8 @@ class EditEventState extends State<EditEvent> {
         data['category[$i]'] = categoryId[i];
       });
     }
+
+    print('data: $data');
 
     try {
       Response response = await dio.post('/event/update',
@@ -1000,120 +999,145 @@ class EditEventState extends State<EditEvent> {
             padding: EdgeInsets.only(right: 10),
             child: additionalMediaPhoto.length < 1
                 ? Container()
-                : Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 1.5,
-                              color: Color(0xff8a8a8b).withOpacity(.2),
-                              blurRadius: 2)
-                        ]),
-                    child: additionalMediaPhoto[0].startsWith('http')
-                        ? Image.network(
-                            additionalMediaPhoto[0],
-                            fit: BoxFit.fill,
-                          )
-                        : Image.file(
-                            File(additionalMediaPhoto[0]),
-                            fit: BoxFit.fill,
-                          ),
+                : GestureDetector(
+                    onTap: () {
+                      // getAdditionalImage(0);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                                spreadRadius: 1.5,
+                                color: Color(0xff8a8a8b).withOpacity(.2),
+                                blurRadius: 2)
+                          ]),
+                      child: additionalMediaPhoto[0].startsWith('http')
+                          ? Image.network(
+                              additionalMediaPhoto[0],
+                              fit: BoxFit.fill,
+                            )
+                          : Image.file(
+                              File(additionalMediaPhoto[0]),
+                              fit: BoxFit.fill,
+                            ),
+                    ),
                   ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: additionalMediaPhoto.length < 2
                 ? Container()
-                : Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 1.5,
-                              color: Color(0xff8a8a8b).withOpacity(.2),
-                              blurRadius: 2)
-                        ]),
-                    child: additionalMediaPhoto[1].startsWith('http')
-                        ? Image.network(
-                            additionalMediaPhoto[1],
-                            fit: BoxFit.fill,
-                          )
-                        : Image.file(
-                                File(additionalMediaPhoto[1]),
-                                fit: BoxFit.fill,
-                              ),
+                : GestureDetector(
+                    onTap: () {
+                      // getAdditionalImage(1);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                                spreadRadius: 1.5,
+                                color: Color(0xff8a8a8b).withOpacity(.2),
+                                blurRadius: 2)
+                          ]),
+                      child: additionalMediaPhoto[1].startsWith('http')
+                          ? Image.network(
+                              additionalMediaPhoto[1],
+                              fit: BoxFit.fill,
+                            )
+                          : Image.file(
+                              File(additionalMediaPhoto[1]),
+                              fit: BoxFit.fill,
+                            ),
+                    ),
                   ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: additionalMediaPhoto.length < 3
                 ? Container()
-                : Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 1.5,
-                              color: Color(0xff8a8a8b).withOpacity(.2),
-                              blurRadius: 2)
-                        ]),
-                    child: additionalMediaPhoto[2].startsWith('http')
-                        ? Image.network(
-                            additionalMediaPhoto[2],
-                            fit: BoxFit.fill,
-                          )
-                        : Image.file(
-                                File(additionalMediaPhoto[2]),
-                                fit: BoxFit.fill,
-                              ),
+                : GestureDetector(
+                    onTap: () {
+                      // getAdditionalImage(2);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                                spreadRadius: 1.5,
+                                color: Color(0xff8a8a8b).withOpacity(.2),
+                                blurRadius: 2)
+                          ]),
+                      child: additionalMediaPhoto[2].startsWith('http')
+                          ? Image.network(
+                              additionalMediaPhoto[2],
+                              fit: BoxFit.fill,
+                            )
+                          : Image.file(
+                              File(additionalMediaPhoto[2]),
+                              fit: BoxFit.fill,
+                            ),
+                    ),
                   ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: additionalMediaPhoto.length < 4
                 ? Container()
-                : Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 1.5,
-                              color: Color(0xff8a8a8b).withOpacity(.2),
-                              blurRadius: 2)
-                        ]),
-                    child: additionalMediaPhoto[3].startsWith('http')
-                        ? Image.network(
-                            additionalMediaPhoto[3],
-                            fit: BoxFit.fill,
-                          )
-                        : Image.file(
-                                File(additionalMediaPhoto[3]),
-                                fit: BoxFit.fill,
-                              ),
+                : GestureDetector(
+                    onTap: () {
+                      // getAdditionalImage(3);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                                spreadRadius: 1.5,
+                                color: Color(0xff8a8a8b).withOpacity(.2),
+                                blurRadius: 2)
+                          ]),
+                      child: additionalMediaPhoto[3].startsWith('http')
+                          ? Image.network(
+                              additionalMediaPhoto[3],
+                              fit: BoxFit.fill,
+                            )
+                          : Image.file(
+                              File(additionalMediaPhoto[3]),
+                              fit: BoxFit.fill,
+                            ),
+                    ),
                   ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: additionalMedia.length < 5
                 ? Container()
-                : Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 1.5,
-                              color: Color(0xff8a8a8b).withOpacity(.2),
-                              blurRadius: 2)
-                        ]),
-                    child: additionalMedia[4].startsWith('http')
-                        ? Image.network(
-                            additionalMedia[4],
-                            fit: BoxFit.fill,
-                          )
-                        : Image.file(
-                            File(additionalMedia[4]),
-                            fit: BoxFit.fill,
-                          ),
+                : GestureDetector(
+                    onTap: () {
+                      // getAdditionalImage(4);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                                spreadRadius: 1.5,
+                                color: Color(0xff8a8a8b).withOpacity(.2),
+                                blurRadius: 2)
+                          ]),
+                      child: additionalMedia[4].startsWith('http')
+                          ? Image.network(
+                              additionalMedia[4],
+                              fit: BoxFit.fill,
+                            )
+                          : Image.file(
+                              File(additionalMediaPhoto[4]),
+                              fit: BoxFit.fill,
+                            ),
+                    ),
                   ),
           ),
           additionalMedia.length < 5
@@ -1291,8 +1315,8 @@ class EditEventState extends State<EditEvent> {
       additionalMedia.add(croppedImage.path.toString());
     });
 
-    print(additionalMedia);
-    print(additionalMediaPhoto);
+    print('additionalMedia: ' + additionalMedia.toString());
+    print('additionalMedia: ' + additionalMediaPhoto.toString());
   }
 
   Future getAdditionalImage(int index) async {
@@ -1314,6 +1338,7 @@ class EditEventState extends State<EditEvent> {
     );
 
     additionalMedia[index] = croppedImage.path;
+    additionalMediaPhoto[index] = croppedImage.path;
 
     setState(() {});
   }
