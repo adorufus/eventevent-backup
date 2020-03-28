@@ -43,10 +43,8 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
         options: Options(headers: {
           'Authorization': AUTHORIZATION_KEY,
           'cookie': preferences.getString('Session')
-        }, cookies: [
-          Cookie.fromSetCookieValue(preferences.getString('Session'))
-        ], responseType: ResponseType.plain),
-        data: FormData.from(data),
+        },  responseType: ResponseType.plain),
+        data: FormData.fromMap(data),
       );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
@@ -88,10 +86,8 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
         options: Options(headers: {
           'Authorization': AUTHORIZATION_KEY,
           'cookie': preferences.getString('Session')
-        }, cookies: [
-          Cookie.fromSetCookieValue(preferences.getString('Session'))
-        ], responseType: ResponseType.plain),
-        data: FormData.from(data),
+        }, responseType: ResponseType.plain),
+        data: FormData.fromMap(data),
       );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
@@ -299,10 +295,8 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
           options: Options(headers: {
             'Authorization': AUTHORIZATION_KEY,
             'cookie': prefs.getString('Session')
-          }, cookies: [
-            Cookie.fromSetCookieValue(prefs.getString('Session'))
-          ], responseType: ResponseType.plain),
-          data: FormData.from(data));
+          }, responseType: ResponseType.plain),
+          data: FormData.fromMap(data));
 
       print(response.statusCode);
       print(response.data);
@@ -376,10 +370,8 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
           options: Options(headers: {
             'Authorization': AUTHORIZATION_KEY,
             'cookie': prefs.getString('Session')
-          }, cookies: [
-            Cookie.fromSetCookieValue(prefs.getString('Session'))
-          ], responseType: ResponseType.plain),
-          data: FormData.from(data));
+          }, responseType: ResponseType.plain),
+          data: FormData.fromMap(data));
 
       print(response.statusCode);
       print(response.data);
@@ -1196,9 +1188,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
         options: Options(headers: {
           'Authorization': AUTHORIZATION_KEY,
           'cookie': preferences.getString('Session')
-        }, cookies: [
-          cookie
-        ], responseType: ResponseType.plain),
+        }, responseType: ResponseType.plain),
       );
 
       var extractedData = json.decode(response.data);
@@ -1238,9 +1228,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
           'Authorization': AUTHORIZATION_KEY,
           'cookie': preferences.getString('Session'),
           'id': formId
-        }, cookies: [
-          cookie
-        ], responseType: ResponseType.plain));
+        }, responseType: ResponseType.plain));
 
     var extractedData = json.decode(response.data);
 

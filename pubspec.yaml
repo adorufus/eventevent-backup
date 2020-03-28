@@ -25,7 +25,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   http: ^0.12.0+2
   shared_preferences:
-  dio: ^2.1.13
+  dio: ^3.0.9
   flutter_placeholder_textlines:
   shimmer: ^1.0.1
   flutter_statusbarcolor: ^0.2.3

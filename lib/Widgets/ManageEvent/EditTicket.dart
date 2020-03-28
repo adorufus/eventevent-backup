@@ -623,14 +623,13 @@ class _EditTicketState extends State<EditTicket> {
           'is_single_ticket': __curValue2.toString(),
           'ticket_image': imageFile == null
               ? ''
-              : UploadFileInfo(imageFile,
-                  "eventeventticket-${DateTime.now().toString()}.jpg",
-                  contentType: ContentType('image', 'jpeg'))
+              : await MultipartFile.fromFile(imageFile.path,
+                  filename: "eventeventticket-${DateTime.now().toString()}.jpg",)
         };
 
         print(body);
 
-        var data = FormData.from(body);
+        var data = FormData.fromMap(body);
         Response response = await dio.post(
           '/ticket_setup/update',
           options: Options(
@@ -638,7 +637,6 @@ class _EditTicketState extends State<EditTicket> {
               'Authorization': AUTHORIZATION_KEY,
               'cookie': prefs.getString('Session')
             },
-            cookies: [Cookie.fromSetCookieValue(prefs.getString('Session'))],
             responseType: ResponseType.plain,
           ),
           data: data,

@@ -7,6 +7,7 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -645,10 +646,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
         userProfileAPI,
         options: Options(
           headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session},
-          cookies: [Cookie.fromSetCookieValue(session)],
           responseType: ResponseType.plain,
         ),
-        data: FormData.from(
+        data: FormData.fromMap(
           {
             'X-API-KEY': API_KEY,
             'fullName': firstNameController.text,
@@ -660,9 +660,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
             'username': usernameController.text,
             'photo': croppedProfilePicture == null
                 ? ''
-                : UploadFileInfo(croppedProfilePicture,
-                    "eventevent-profilepicture-${DateTime.now().toString()}.jpg",
-                    contentType: ContentType('image', 'jpg'))
+                : await MultipartFile.fromFile(croppedProfilePicture.path,
+                    filename: "eventevent-profilepicture-${DateTime.now().toString()}.jpg",
+                    contentType: MediaType('image', 'jpg'))
           },
         ),
       );

@@ -37,7 +37,6 @@ class EventListProviders {
         _endpoints + '/event/popular?X-API-KEY=$API_KEY&page=1&total=20',
         options: Options(
           headers: headerType,
-          cookies: [cookie],
           responseType: ResponseType.json,
         ),
       );

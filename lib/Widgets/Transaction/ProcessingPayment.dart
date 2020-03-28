@@ -17,6 +17,7 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -286,18 +287,18 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
         'modifiedById': prefs.getString('Last User ID'),
         'additionalMedia': additionalVideo == null
             ? ''
-            : UploadFileInfo(additionalVideo,
-                "eventevent-video-${DateTime.now().toString()}.mp4",
-                contentType: ContentType('video', 'mp4')),
-        'photo': UploadFileInfo(
-            widget.imageFile, "eventevent-${DateTime.now().toString()}.jpg",
-            contentType: ContentType('image', 'jpeg')),
+            : await MultipartFile.fromFile(additionalVideo.path,
+                filename: "eventevent-video-${DateTime.now().toString()}.mp4",
+                contentType: MediaType("video", "mp4")),
+        'photo': await MultipartFile.fromFile(
+            widget.imageFile.path, filename: "eventevent-${DateTime.now().toString()}.jpg",
+            contentType: MediaType("image", "jpg")),
       };
 
       for (int i = 0; i < additionalMediaFiles.length; i++) {
-        body['additionalPhoto[$i]'] = UploadFileInfo(additionalMediaFiles[i],
-            "eventevent-additionalFile[$i]-${DateTime.now()}.jpg",
-            contentType: ContentType('image', 'jpeg'));
+        body['additionalPhoto[$i]'] = await MultipartFile.fromFile(additionalMediaFiles[i].path,
+            filename: "eventevent-additionalFile[$i]-${DateTime.now()}.jpg",
+            contentType: MediaType("image", "jpg"));
       }
 
       List categoryList = prefs.getStringList('POST_EVENT_CATEGORY_ID');
@@ -311,14 +312,12 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
 
       print('processing.....');
 
-      var data = FormData.from(body);
+      var data = FormData.fromMap(body);
       Response response = await dio.post('/event/create',
           options: Options(headers: {
             'Authorization': AUTHORIZATION_KEY,
             'cookie': prefs.getString('Session')
-          }, cookies: [
-            cookie
-          ], responseType: ResponseType.plain),
+          }, responseType: ResponseType.plain),
           data: data, onSendProgress: (sent, total) {
         print('hit test');
         print(

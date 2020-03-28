@@ -128,10 +128,9 @@ class _LoveItemState extends State<LoveItem> {
               'Authorization': AUTHORIZATION_KEY,
               'cookie': prefs.getString('Session')
             },
-            contentType: ContentType.text,
-          cookies: [Cookie.fromSetCookieValue(prefs.getString('Session'))]
+            contentType: 'text',
         ),
-        data: FormData.from(data)
+        data: FormData.fromMap(data)
       );
 
       if(response.statusCode == 200 || response.statusCode == 201){
@@ -149,7 +148,6 @@ class _LoveItemState extends State<LoveItem> {
           print(e.response);
           print(e.message);
           print(e.error);
-          print(e.stackTrace);
           setState(() {
             _isLoved = false;
             _loveCount -= 1;
@@ -174,8 +172,7 @@ class _LoveItemState extends State<LoveItem> {
                 'X-API-KEY': API_KEY,
                 'id': widget.eventId
               },
-              contentType: ContentType.text,
-              cookies: [Cookie.fromSetCookieValue(prefs.getString('Session'))]
+              contentType: 'text',
           ),
       );
 
@@ -194,7 +191,6 @@ class _LoveItemState extends State<LoveItem> {
         print(e.response);
         print(e.message);
         print(e.error);
-        print(e.stackTrace);
         setState(() {
           _isLoved = true;
           _loveCount += 1;

@@ -7,7 +7,10 @@ import 'package:eventevent/Widgets/timeline/EditEventItem/EditEventDate.dart';
 import 'package:eventevent/Widgets/timeline/EditEventItem/EditEventTime.dart';
 import 'package:eventevent/Widgets/timeline/EditEventItem/EditEventType.dart';
 import 'package:eventevent/helper/utils.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -27,6 +30,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:thumbnails/thumbnails.dart';
+import 'package:http_parser/src/media_type.dart';
 
 class EditEvent extends StatefulWidget {
   final additional;
@@ -65,6 +69,7 @@ class EditEventState extends State<EditEvent> {
   String long;
   String imageUriNetwork;
   File imageUri;
+  double progres = 0;
   String err = '';
 
   List<String> categoryList = new List<String>();
@@ -179,13 +184,32 @@ class EditEventState extends State<EditEvent> {
       'website': websiteController.text,
       'photo': imageUri == null
           ? ''
-          : UploadFileInfo(imageUri,
-              "eventevent_event_photo-${DateTime.now().toString()}.jpg",
-              contentType: ContentType('image', 'jpeg'))
+          : await MultipartFile.fromFile(imageUri.path,
+              filename:
+                  "eventevent_event_photo-${DateTime.now().toString()}.jpg"),
+      'addVideo': await MultipartFile.fromFile(
+          prefs.getString('POST_EVENT_ADDITIONAL_VIDEO'),
+          filename: 'eventevent_video-${DateTime.now()}.mp4',
+          contentType: MediaType('video', 'quicktime')),
     };
 
     for (int i = 0; i < additionalMedia.length; i++) {
-      data['addPhoto[$i]'] = additionalMedia[i].startsWith('http') ? '' : UploadFileInfo(File(additionalMedia[i]), "additional-media-${DateTime.now().toString()}.jpg", contentType: ContentType('image', 'jpeg'));
+      print(lookupMimeType(additionalMedia[i]));
+      print(path.basename(additionalMedia[i]));
+      data['addPhoto[$i]'] = additionalMedia[i].startsWith('http') ||
+              additionalMedia[i].contains('.mp4') ||
+              additionalMedia[i].contains('.mov')
+          ? ''
+          : await MultipartFile.fromFile(additionalMedia[i],
+              filename: path.basename(additionalMedia[i]));
+      // additionalMedia[i].startsWith('http')
+      //     ? ''
+      //     : UploadFileInfo(
+      //         File(additionalMedia[i]),
+      //         additionalMedia[i].contains('.mp4')
+      //             ? 'eventeventVideo-${DateTime.now()}.mp4'
+      //             : 'eventeventImage-${DateTime.now()}.jpg',
+      //         contentType: ContentType('image', 'jpg'));
     }
 
     for (int i = 0; i < categoryId.length; i++) {
@@ -201,18 +225,34 @@ class EditEventState extends State<EditEvent> {
           options: Options(headers: {
             'Authorization': AUTHORIZATION_KEY,
             'cookie': prefs.getString('Session')
-          }, cookies: [
-            Cookie.fromSetCookieValue(prefs.getString('Session'))
-          ], responseType: ResponseType.plain),
-          data: FormData.from(data));
+          }, responseType: ResponseType.plain), onSendProgress: (sent, total) {
+        print('hit test');
+        print(
+            'data uploaded: ' + sent.toString() + ' from ' + total.toString());
+        setState(() {
+          progres = ((sent / total) * 100);
+          print('test');
+          print(progres);
+        });
+      }, data: FormData.fromMap(data));
       if (response.statusCode == 201 || response.statusCode == 200) {
+        prefs.remove('POST_EVENT_ADDITIONAL_VIDEO');
         isLoading = false;
         setState(() {});
         Navigator.of(context).pop(true);
       }
     } on DioError catch (e) {
+      prefs.remove('POST_EVENT_ADDITIONAL_VIDEO');
       isLoading = false;
       setState(() {});
+      var extractedError = json.decode(e.response.data);
+      Flushbar(
+        message: extractedError['desc'],
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+        flushbarPosition: FlushbarPosition.TOP,
+        animationDuration: Duration(milliseconds: 500),
+      ).show(context);
       if (e.response != null) {
         print(e.response.data);
       } else if (e.message != null) {
@@ -895,7 +935,18 @@ class EditEventState extends State<EditEvent> {
                     ? Container(
                         color: Colors.black54,
                         child: Center(
-                          child: CupertinoActivityIndicator(),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              CupertinoActivityIndicator(),
+                              Text('Uploading: ${progres.toStringAsFixed(0)}%',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold))
+                            ],
+                          ),
                         ),
                       )
                     : Container()
@@ -1120,6 +1171,8 @@ class EditEventState extends State<EditEvent> {
                       // getAdditionalImage(4);
                     },
                     child: Container(
+                      height: ScreenUtil.instance.setWidth(200),
+                      width: ScreenUtil.instance.setWidth(150),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
@@ -1263,9 +1316,8 @@ class EditEventState extends State<EditEvent> {
     var appDocDir;
 
     if (Platform.isAndroid) {
-      appDocDir =
-          await getExternalStorageDirectories(type: StorageDirectory.dcim);
-      print(appDocDir.path);
+      appDocDir = await getExternalStorageDirectory();
+      print(appDocDir.runtimeType);
     } else {
       appDocDir = await getLibraryDirectory();
     }
@@ -1300,19 +1352,25 @@ class EditEventState extends State<EditEvent> {
   }
 
   thisCropImage(File galleryFile) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     File croppedImage = await ImageCropper.cropImage(
-        sourcePath: galleryFile.path,
-        aspectRatio: CropAspectRatio(
-          ratioX: 2.0,
-          ratioY: 3.0,
-        ),
-        maxWidth: 512,
-        maxHeight: 512);
+      sourcePath: galleryFile.path,
+      aspectRatio: CropAspectRatio(
+        ratioX: 2.0,
+        ratioY: 3.0,
+      ),
+      maxWidth: 512,
+      maxHeight: 512,
+    );
 
     print(croppedImage.path);
     setState(() {
       additionalMediaPhoto.add(croppedImage.path.toString());
-      additionalMedia.add(croppedImage.path.toString());
+      additionalMedia.add(
+          preferences.getString('POST_EVENT_ADDITIONAL_VIDEO') == null ||
+                  preferences.getString('POST_EVENT_ADDITIONAL_VIDEO') == ''
+              ? croppedImage.path.toString()
+              : preferences.getString('POST_EVENT_ADDITIONAL_VIDEO'));
     });
 
     print('additionalMedia: ' + additionalMedia.toString());

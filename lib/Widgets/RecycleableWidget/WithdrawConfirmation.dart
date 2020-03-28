@@ -270,7 +270,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                             color: Colors.black26),
                       ),
                       Text(
-                        widget.bankCode == 'BCA' ? '-Rp. 0' : '-Rp. 5.000',
+                        '-Rp. 5.000',
                         style: TextStyle(
                             fontSize: ScreenUtil.instance.setSp(18),
                             color: Colors.red),

@@ -14,6 +14,7 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -817,16 +818,16 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
         'is_single_ticket': widget.ticketDetail['single_ticket'],
         'ticket_image': imageFile == null
             ? ''
-            : UploadFileInfo(
-                imageFile, "eventeventticket-${DateTime.now().toString()}.jpg",
-                contentType: ContentType('image', 'jpeg'))
+            : await MultipartFile.fromFile(
+                imageFile.path, filename: "eventeventticket-${DateTime.now().toString()}.jpg",
+                contentType: MediaType('image', 'jpeg'))
       };
 
       print(body);
       print(ticketPaidBy);
       print(finalPrice);
 
-      var data = FormData.from(body);
+      var data = FormData.fromMap(body);
       Response response = await dio.post(
         '/ticket_setup/update',
         options: Options(
@@ -834,7 +835,6 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
             'Authorization': AUTHORIZATION_KEY,
             'cookie': prefs.getString('Session')
           },
-          cookies: [Cookie.fromSetCookieValue(prefs.getString('Session'))],
           responseType: ResponseType.plain,
         ),
         data: data,

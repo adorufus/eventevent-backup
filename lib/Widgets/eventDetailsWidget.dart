@@ -520,19 +520,24 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         .detailData['address']);
                                                 prefs.setString('EVENT_IMAGE',
                                                     detailData['photoFull']);
-                                                    print('additional: ' + detailData['additional'].toString());
+                                                print('additional: ' +
+                                                    detailData['additional']
+                                                        .toString());
 
                                                 print(prefs
                                                     .getStringList(
                                                         'EVENT_CATEGORY')
                                                     .toString());
-                                                    Navigator.of(thisContext).pop();
+                                                Navigator.of(thisContext).pop();
 
                                                 Navigator.of(context)
                                                     .push(MaterialPageRoute(
                                                         builder: (BuildContext
                                                                 context) =>
-                                                            EditEvent(additional: detailData['additional'])))
+                                                            EditEvent(
+                                                                additional:
+                                                                    detailData[
+                                                                        'additional'])))
                                                     .then((value) {
                                                   if (value == true) {
                                                     getEventDetailsSpecificInfo()
@@ -2370,22 +2375,27 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                 child: Container(
                                   margin: EdgeInsets.only(left: 10),
                                   height: ScreenUtil.instance.setWidth(
-                                      double.parse(
-                                                  additional['pictureHeight']) >
-                                              double.parse(
-                                                  additional['pictureWidth'])
+                                      additional['pictureHeight'] == ""
                                           ? 184.06 * 1.3
-                                          : double.parse(
-                                                  additional['pictureHeight']) /
-                                              1.5),
+                                          : double.parse(additional[
+                                                      'pictureHeight']) >
+                                                  double.parse(additional[
+                                                      'pictureWidth'])
+                                              ? 184.06 * 1.3
+                                              : double.parse(additional[
+                                                      'pictureHeight']) /
+                                                  1.5),
                                   width: ScreenUtil.instance.setWidth(
-                                      double.parse(additional['pictureWidth']) <
-                                              double.parse(
-                                                  additional['pictureHeight'])
+                                      additional['pictureWidth'] == ""
                                           ? 122.86 * 1.3
-                                          : double.parse(
-                                                  additional['pictureWidth']) /
-                                              1.5),
+                                          : double.parse(additional[
+                                                      'pictureWidth']) <
+                                                  double.parse(additional[
+                                                      'pictureHeight'])
+                                              ? 122.86 * 1.3
+                                              : double.parse(additional[
+                                                      'pictureWidth']) /
+                                                  1.5),
                                   decoration: BoxDecoration(
                                       color: Color(0xff8a8a8b),
                                       image: DecorationImage(
