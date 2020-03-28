@@ -78,6 +78,8 @@ class EditEventState extends State<EditEvent> {
   List currentAdditionalMedia = [];
   List<String> additionalMedia = [];
   List<String> additionalMediaPhoto = [];
+  List<String> additionalMediaID = [];
+  List<String> removedAdditionalMedia = [];
 
   bool isLoading = false;
 
@@ -106,6 +108,10 @@ class EditEventState extends State<EditEvent> {
       for (int i = 0; i < currentAdditionalMedia.length; i++) {
         additionalMedia.add(currentAdditionalMedia[i]['posterPathThumb']);
         additionalMediaPhoto.add(currentAdditionalMedia[i]['posterPathThumb']);
+        additionalMediaID.add(currentAdditionalMedia[i]['id']);
+
+        print('add med photo: ' + additionalMediaPhoto.toString());
+        print('additional id: ' + additionalMediaID.toString());
       }
     });
 
@@ -187,11 +193,15 @@ class EditEventState extends State<EditEvent> {
           : await MultipartFile.fromFile(imageUri.path,
               filename:
                   "eventevent_event_photo-${DateTime.now().toString()}.jpg"),
-      'addVideo': await MultipartFile.fromFile(
+      'addVideo': prefs.getString('POST_EVENT_ADDITIONAL_VIDEO') == null ? '' : await MultipartFile.fromFile(
           prefs.getString('POST_EVENT_ADDITIONAL_VIDEO'),
           filename: 'eventevent_video-${DateTime.now()}.mp4',
           contentType: MediaType('video', 'quicktime')),
     };
+
+    for(int i = 0; i < removedAdditionalMedia.length; i++){
+      data['removeContent[$i]'] = removedAdditionalMedia[i];
+    }
 
     for (int i = 0; i < additionalMedia.length; i++) {
       print(lookupMimeType(additionalMedia[i]));
@@ -1039,6 +1049,7 @@ class EditEventState extends State<EditEvent> {
   }
 
   Widget addMed() {
+    print('length: ' + additionalMediaPhoto.length.toString());
     return Container(
       height: ScreenUtil.instance.setWidth(200),
       width: MediaQuery.of(context).size.width,
@@ -1050,150 +1061,271 @@ class EditEventState extends State<EditEvent> {
             padding: EdgeInsets.only(right: 10),
             child: additionalMediaPhoto.length < 1
                 ? Container()
-                : GestureDetector(
-                    onTap: () {
-                      // getAdditionalImage(0);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 1.5,
-                                color: Color(0xff8a8a8b).withOpacity(.2),
-                                blurRadius: 2)
-                          ]),
-                      child: additionalMediaPhoto[0].startsWith('http')
-                          ? Image.network(
-                              additionalMediaPhoto[0],
-                              fit: BoxFit.fill,
+                : Stack(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          // getAdditionalImage(0);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                    spreadRadius: 1.5,
+                                    color: Color(0xff8a8a8b).withOpacity(.2),
+                                    blurRadius: 2)
+                              ]),
+                          child: additionalMediaPhoto[0].startsWith('http')
+                              ? Image.network(
+                                  additionalMediaPhoto[0],
+                                  fit: BoxFit.fill,
+                                )
+                              : Image.file(
+                                  File(additionalMediaPhoto[0]),
+                                  fit: BoxFit.fill,
+                                ),
+                        ),
+                      ),
+                      additionalMediaPhoto.length > 1
+                          ? Container()
+                          : Positioned(
+                              top: 0,
+                              left: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  removedAdditionalMedia.add(additionalMediaID[0]);
+                                  additionalMediaPhoto.removeAt(0);
+                                  setState(() {});
+                                },
+                                child: CircleAvatar(
+                                    radius: 13,
+                                    backgroundColor: Colors.red,
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                    )),
+                              ),
                             )
-                          : Image.file(
-                              File(additionalMediaPhoto[0]),
-                              fit: BoxFit.fill,
-                            ),
-                    ),
+                    ],
                   ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: additionalMediaPhoto.length < 2
                 ? Container()
-                : GestureDetector(
-                    onTap: () {
-                      // getAdditionalImage(1);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 1.5,
-                                color: Color(0xff8a8a8b).withOpacity(.2),
-                                blurRadius: 2)
-                          ]),
-                      child: additionalMediaPhoto[1].startsWith('http')
-                          ? Image.network(
-                              additionalMediaPhoto[1],
-                              fit: BoxFit.fill,
+                : Stack(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          // getAdditionalImage(1);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                    spreadRadius: 1.5,
+                                    color: Color(0xff8a8a8b).withOpacity(.2),
+                                    blurRadius: 2)
+                              ]),
+                          child: additionalMediaPhoto[1].startsWith('http')
+                              ? Image.network(
+                                  additionalMediaPhoto[1],
+                                  fit: BoxFit.fill,
+                                )
+                              : Image.file(
+                                  File(additionalMediaPhoto[1]),
+                                  fit: BoxFit.fill,
+                                ),
+                        ),
+                      ),
+                      additionalMediaPhoto.length > 2
+                          ? Container()
+                          : Positioned(
+                              top: 0,
+                              left: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  removedAdditionalMedia.add(additionalMediaID[1]);
+                                  additionalMediaPhoto.removeAt(1);
+                                  setState(() {});
+                                },
+                                child: CircleAvatar(
+                                    radius: 13,
+                                    backgroundColor: Colors.red,
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                    )),
+                              ),
                             )
-                          : Image.file(
-                              File(additionalMediaPhoto[1]),
-                              fit: BoxFit.fill,
-                            ),
-                    ),
+                    ],
                   ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: additionalMediaPhoto.length < 3
                 ? Container()
-                : GestureDetector(
-                    onTap: () {
-                      // getAdditionalImage(2);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 1.5,
-                                color: Color(0xff8a8a8b).withOpacity(.2),
-                                blurRadius: 2)
-                          ]),
-                      child: additionalMediaPhoto[2].startsWith('http')
-                          ? Image.network(
-                              additionalMediaPhoto[2],
-                              fit: BoxFit.fill,
+                : Stack(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          // getAdditionalImage(2);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                    spreadRadius: 1.5,
+                                    color: Color(0xff8a8a8b).withOpacity(.2),
+                                    blurRadius: 2)
+                              ]),
+                          child: additionalMediaPhoto[2].startsWith('http')
+                              ? Image.network(
+                                  additionalMediaPhoto[2],
+                                  fit: BoxFit.fill,
+                                )
+                              : Image.file(
+                                  File(additionalMediaPhoto[2]),
+                                  fit: BoxFit.fill,
+                                ),
+                        ),
+                      ),
+                      additionalMediaPhoto.length > 3
+                          ? Container()
+                          : Positioned(
+                              top: 0,
+                              left: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  removedAdditionalMedia.add(additionalMediaID[2]);
+                                  additionalMediaPhoto.removeAt(2);
+                                  setState(() {});
+                                },
+                                child: CircleAvatar(
+                                    radius: 13,
+                                    backgroundColor: Colors.red,
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                    )),
+                              ),
                             )
-                          : Image.file(
-                              File(additionalMediaPhoto[2]),
-                              fit: BoxFit.fill,
-                            ),
-                    ),
+                    ],
                   ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: additionalMediaPhoto.length < 4
                 ? Container()
-                : GestureDetector(
-                    onTap: () {
-                      // getAdditionalImage(3);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 1.5,
-                                color: Color(0xff8a8a8b).withOpacity(.2),
-                                blurRadius: 2)
-                          ]),
-                      child: additionalMediaPhoto[3].startsWith('http')
-                          ? Image.network(
-                              additionalMediaPhoto[3],
-                              fit: BoxFit.fill,
+                : Stack(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          // getAdditionalImage(3);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                    spreadRadius: 1.5,
+                                    color: Color(0xff8a8a8b).withOpacity(.2),
+                                    blurRadius: 2)
+                              ]),
+                          child: additionalMediaPhoto[3].startsWith('http')
+                              ? Image.network(
+                                  additionalMediaPhoto[3],
+                                  fit: BoxFit.fill,
+                                )
+                              : Image.file(
+                                  File(additionalMediaPhoto[3]),
+                                  fit: BoxFit.fill,
+                                ),
+                        ),
+                      ),
+                      additionalMediaPhoto.length > 4
+                          ? Container()
+                          : Positioned(
+                              top: 0,
+                              left: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  removedAdditionalMedia.add(additionalMediaID[3]);
+                                  additionalMediaPhoto.removeAt(3);
+                                  print(additionalMediaPhoto.length);
+                                  setState(() {});
+                                },
+                                child: CircleAvatar(
+                                    radius: 13,
+                                    backgroundColor: Colors.red,
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                    )),
+                              ),
                             )
-                          : Image.file(
-                              File(additionalMediaPhoto[3]),
-                              fit: BoxFit.fill,
-                            ),
-                    ),
+                    ],
                   ),
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia.length < 5
+            padding: EdgeInsets.only(right: 10),
+            child: additionalMediaPhoto.length < 5
                 ? Container()
-                : GestureDetector(
-                    onTap: () {
-                      // getAdditionalImage(4);
-                    },
-                    child: Container(
-                      height: ScreenUtil.instance.setWidth(200),
-                      width: ScreenUtil.instance.setWidth(150),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                                spreadRadius: 1.5,
-                                color: Color(0xff8a8a8b).withOpacity(.2),
-                                blurRadius: 2)
-                          ]),
-                      child: additionalMedia[4].startsWith('http')
-                          ? Image.network(
-                              additionalMedia[4],
-                              fit: BoxFit.fill,
+                : Stack(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          // getAdditionalImage(0);
+                        },
+                        child: Container(
+                          height: ScreenUtil.instance.setWidth(200),
+                          width: ScreenUtil.instance.setWidth(150),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                    spreadRadius: 1.5,
+                                    color: Color(0xff8a8a8b).withOpacity(.2),
+                                    blurRadius: 2)
+                              ]),
+                          child: additionalMediaPhoto[4].startsWith('http')
+                              ? Image.network(
+                                  additionalMediaPhoto[4],
+                                  fit: BoxFit.fill,
+                                )
+                              : Image.file(
+                                  File(additionalMediaPhoto[4]),
+                                  fit: BoxFit.fill,
+                                ),
+                        ),
+                      ),
+                      additionalMediaPhoto.length > 5
+                          ? Container()
+                          : Positioned(
+                              top: 0,
+                              left: 0,
+                              child: GestureDetector(
+                                onTap: () {
+                                  removedAdditionalMedia.add(additionalMediaID[4]);
+                                  additionalMediaPhoto.removeAt(4);
+                                  setState(() {});
+                                },
+                                child: CircleAvatar(
+                                    radius: 13,
+                                    backgroundColor: Colors.red,
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                    )),
+                              ),
                             )
-                          : Image.file(
-                              File(additionalMediaPhoto[4]),
-                              fit: BoxFit.fill,
-                            ),
-                    ),
+                    ],
                   ),
           ),
-          additionalMedia.length < 5
+          additionalMediaPhoto.length < 5
               ? GestureDetector(
                   onTap: () {
                     _showDialog();
