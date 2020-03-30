@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,6 +34,10 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
 
   int withdrawAmount;
   String finalAmount;
+  String withdrawFee;
+  bool isConfirmLoading = false;
+
+  List paymentMethodList = [];
 
   getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -43,7 +49,6 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
       accNumber = prefs.getString('WITHDRAW_ACCOUNT_NUMBER');
       bankName = prefs.getString('WITHDRAW_BANK_NAME');
       withdrawAmount = int.parse(prefs.getString('WITHDRAW_AMOUNT'));
-      finalAmount = (withdrawAmount - 5000).toString();
     });
 
     print(userBankId);
@@ -52,7 +57,6 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
     print(accNumber);
     print(bankName);
     print(withdrawAmount.toString());
-    print(finalAmount);
   }
 
   String getBankImageUri() {
@@ -80,6 +84,28 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
   @override
   void initState() {
     getData();
+    getWithdrawFee().then((response) {
+      var extractedData = json.decode(response.body);
+
+      print('payment method list: ' + extractedData.toString());
+
+      if (response.statusCode == 200) {
+        if (extractedData['data'].runtimeType.toString() ==
+            '_InternalLinkedHashMap<String, dynamic>') {
+          extractedData['data'].forEach((k, v) => paymentMethodList.add(v));
+          print(paymentMethodList);
+        } else {
+          paymentMethodList = extractedData['data'];
+        }
+
+        for (int i = 0; i < paymentMethodList.length; i++) {
+          withdrawFee = paymentMethodList[1]['withdraw_fee'];
+        }
+        setState(() {});
+      }
+
+      print(withdrawFee);
+    });
     super.initState();
   }
 
@@ -117,10 +143,10 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
         onTap: () {
           showDialog(
               context: context,
-              builder: (context) {
+              builder: (thisContext) {
                 return GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                   },
                   child: Material(
                     color: Colors.transparent,
@@ -156,16 +182,22 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                               obscureText: true,
                               controller: passwordController,
                               decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.black,
-                                        width: ScreenUtil.instance.setWidth(1)),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.black,
-                                        width: ScreenUtil.instance.setWidth(1)),
-                                  )),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.black,
+                                      width: ScreenUtil.instance.setWidth(1)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.black,
+                                      width: ScreenUtil.instance.setWidth(1)),
+                                ),
+                              ),
+                              textInputAction: TextInputAction.go,
+                              onFieldSubmitted: (password) {
+                                Navigator.pop(thisContext);
+                                postWithdraw(password);
+                              },
                             ),
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
@@ -189,7 +221,8 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    postWithdraw();
+                                    Navigator.pop(thisContext);
+                                    postWithdraw(passwordController.text);
                                   },
                                   child: Text('Ok',
                                       style: TextStyle(
@@ -217,137 +250,161 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
           ),
         ),
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        child: ListView(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-              color: Colors.white,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Center(
-                    child: Text(
-                      'WITHDRAW AMOUNT',
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.bold,
-                        fontSize: ScreenUtil.instance.setSp(18),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: ScreenUtil.instance.setWidth(25),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.max,
+      body: withdrawAmount == null || withdrawFee == null
+          ? HomeLoadingScreen().withdrawLoading(context)
+          : Stack(
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: ListView(
                     children: <Widget>[
-                      Text(
-                        'Requested Amount',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: ScreenUtil.instance.setSp(18),
-                            color: Colors.black26),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                        color: Colors.white,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Center(
+                              child: Text(
+                                'WITHDRAW AMOUNT',
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil.instance.setSp(18),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(25),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                Text(
+                                  'Requested Amount',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: ScreenUtil.instance.setSp(18),
+                                      color: Colors.black26),
+                                ),
+                                Text(
+                                  'Rp. ' + withdrawAmount.toString() + ',-',
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil.instance.setSp(18)),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                Text(
+                                  'Processing Fee',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: ScreenUtil.instance.setSp(18),
+                                      color: Colors.black26),
+                                ),
+                                Text(
+                                  '-Rp. ${withdrawFee == null ? '0' : withdrawFee}',
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil.instance.setSp(18),
+                                      color: Colors.red),
+                                ),
+                              ],
+                            ),
+                            Divider(
+                              color: Colors.grey,
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(15),
+                            ),
+                            Text(
+                              'Amount will be transfered to your account',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil.instance.setSp(16),
+                                  color: Colors.grey),
+                            ),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(20),
+                            ),
+                            Text(
+                              'Rp. ' +
+                                  (withdrawAmount == null || withdrawFee == null
+                                          ? 0
+                                          : withdrawAmount -
+                                              int.parse(withdrawFee))
+                                      .toString() +
+                                  ',-',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil.instance.setSp(25),
+                                  color: eventajaGreenTeal),
+                            ),
+                          ],
+                        ),
                       ),
-                      Text(
-                        'Rp. ' + withdrawAmount.toString() + ',-',
-                        style:
-                            TextStyle(fontSize: ScreenUtil.instance.setSp(18)),
+                      SizedBox(height: ScreenUtil.instance.setWidth(20)),
+                      Center(
+                        child: Text(
+                          'TRANSFER TO',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              fontSize: ScreenUtil.instance.setSp(18)),
+                        ),
                       ),
+                      SizedBox(height: ScreenUtil.instance.setWidth(20)),
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        color: Colors.white,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Image.asset(
+                              getBankImageUri(),
+                              scale: 2,
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text(accName, style: TextStyle(color: Colors.grey)),
+                            Text(bankName,
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            Text(accNumber, style: TextStyle(fontSize: 20))
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      Text(
-                        'Processing Fee',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: ScreenUtil.instance.setSp(18),
-                            color: Colors.black26),
-                      ),
-                      Text(
-                        '-Rp. 5.000',
-                        style: TextStyle(
-                            fontSize: ScreenUtil.instance.setSp(18),
-                            color: Colors.red),
-                      ),
-                    ],
-                  ),
-                  Divider(
-                    color: Colors.grey,
-                  ),
-                  SizedBox(
-                    height: ScreenUtil.instance.setWidth(15),
-                  ),
-                  Text(
-                    'Amount will be transfered to your account',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: ScreenUtil.instance.setSp(16),
-                        color: Colors.grey),
-                  ),
-                  SizedBox(
-                    height: ScreenUtil.instance.setWidth(20),
-                  ),
-                  Text(
-                    'Rp. ' +
-                        (withdrawAmount - int.parse('5000')).toString() +
-                        ',-',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: ScreenUtil.instance.setSp(25),
-                        color: eventajaGreenTeal),
-                  ),
-                ],
-              ),
+                ),
+                isConfirmLoading == false
+                    ? Container()
+                    : Container(
+                        color: Colors.black.withOpacity(0.5),
+                        child: Center(
+                          child: CupertinoActivityIndicator(
+                            animating: true,
+                          ),
+                        ),
+                      )
+              ],
             ),
-            SizedBox(height: ScreenUtil.instance.setWidth(20)),
-            Center(
-              child: Text(
-                'TRANSFER TO',
-                style: TextStyle(
-                    color: Colors.black54,
-                    fontWeight: FontWeight.bold,
-                    fontSize: ScreenUtil.instance.setSp(18)),
-              ),
-            ),
-            SizedBox(height: ScreenUtil.instance.setWidth(20)),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 12),
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset(
-                    getBankImageUri(),
-                    scale: 2,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text(accName, style: TextStyle(color: Colors.grey)),
-                  Text(bankName, style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(accNumber, style: TextStyle(fontSize: 20))
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
     );
   }
 
-  Future postWithdraw() async {
+  Future postWithdraw(String password) async {
+    isConfirmLoading = true;
+    setState(() {});
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String url = BaseApi().apiUrl + '/withdraw/post';
 
     var body = {
       'X-API-KEY': API_KEY,
-      'password': passwordController.text,
+      'password': password,
       'amount': withdrawAmount.toString(),
       'user_bank_id': userBankId,
       'desc': 'Withdraw from EventEvent'
@@ -364,23 +421,42 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
 
     var extractedData = json.decode(response.body);
     print(response.statusCode);
-    print(response.body);
+    print('xendit: ' + extractedData.toString());
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      Navigator.pop(context);
-      Navigator.pushAndRemoveUntil(
+      isConfirmLoading = false;
+      setState(() {});
+      if (extractedData['data']['isVendorPushSuccess'] == '0') {
+        Navigator.pop(context);
+        Flushbar(
+          animationDuration: Duration(milliseconds: 500),
+          backgroundColor: Colors.red,
+          flushbarPosition: FlushbarPosition.TOP,
+          duration: Duration(seconds: 3),
+          message: extractedData['data']['errors']['message'],
+        ).show(context);
+      } else {
+        Navigator.pop(context);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DashboardWidget(
+                      isRest: false,
+                      selectedPage: 3,
+                    )),
+            ModalRoute.withName('/DashboardWidget'));
+        Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => DashboardWidget(
-                    isRest: false,
-                    selectedPage: 3,
-                  )),
-          ModalRoute.withName('/DashboardWidget'));
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => WithdrawBank(currentTab: 1)));
+            builder: (context) => WithdrawBank(currentTab: 1),
+          ),
+        );
+      }
     }
 
     if (response.statusCode == 400) {
+      isConfirmLoading = false;
+      setState(() {});
       Navigator.pop(context);
       Flushbar(
         flushbarPosition: FlushbarPosition.TOP,
@@ -390,5 +466,20 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
     }
+  }
+
+  Future<http.Response> getWithdrawFee() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String baseUrl = BaseApi().apiUrl +
+        '/payment_method/list?X-API-KEY=$API_KEY&indomaret=true';
+
+    final response = await http.get(baseUrl, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': preferences.getString('Session')
+    });
+
+    print(response.statusCode);
+
+    return response;
   }
 }

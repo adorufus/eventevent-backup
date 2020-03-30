@@ -123,7 +123,9 @@ class HomeLoadingScreen {
                     animate: true,
                     lineHeight: 10,
                   )),
-              Expanded(child: SizedBox(),),
+              Expanded(
+                child: SizedBox(),
+              ),
               Shimmer.fromColors(
                 baseColor: Colors.grey[300],
                 highlightColor: Colors.grey[100],
@@ -140,6 +142,182 @@ class HomeLoadingScreen {
           ),
         );
       },
+    );
+  }
+
+  Widget withdrawLoading(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: ListView(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+            color: Colors.white,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Center(
+                  child: Text(
+                    'WITHDRAW AMOUNT',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                      fontSize: ScreenUtil.instance.setSp(18),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(25),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Text(
+                      'Requested Amount',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: ScreenUtil.instance.setSp(18),
+                          color: Colors.black26),
+                    ),
+                    Container(
+                      width: 80,
+                      child: PlaceholderLines(
+                        count: 1,
+                        align: TextAlign.left,
+                        lineHeight: 10,
+                        color: Colors.grey,
+                        animate: true,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Text(
+                      'Processing Fee',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: ScreenUtil.instance.setSp(18),
+                          color: Colors.black26),
+                    ),
+                    Container(
+                      width: 80,
+                      child: PlaceholderLines(
+                        count: 1,
+                        align: TextAlign.left,
+                        lineHeight: 10,
+                        color: Colors.grey,
+                        animate: true,
+                      ),
+                    ),
+                  ],
+                ),
+                Divider(
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(15),
+                ),
+                Text(
+                  'Amount will be transfered to your account',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: ScreenUtil.instance.setSp(16),
+                      color: Colors.grey),
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(20),
+                ),
+                Container(
+                  width: 100,
+                  child: PlaceholderLines(
+                    count: 1,
+                    align: TextAlign.left,
+                    lineHeight: 10,
+                    color: Colors.grey,
+                    animate: true,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: ScreenUtil.instance.setWidth(20)),
+          Center(
+            child: Text(
+              'TRANSFER TO',
+              style: TextStyle(
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold,
+                  fontSize: ScreenUtil.instance.setSp(18)),
+            ),
+          ),
+          SizedBox(height: ScreenUtil.instance.setWidth(20)),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 12),
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Shimmer.fromColors(
+                  baseColor: Colors.grey[300],
+                  highlightColor: Colors.grey[100],
+                  enabled: true,
+                    child: Container(
+                      height: ScreenUtil.instance.setWidth(50),
+                            width: ScreenUtil.instance.setWidth(50),
+                      child: Image.asset(
+                        'assets/grey-fade.jpg',
+                        scale: 2,
+                      ),
+                    ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  width: 100,
+                  child: PlaceholderLines(
+                    count: 1,
+                    align: TextAlign.center,
+                    lineHeight: 10,
+                    color: Colors.grey,
+                    animate: true,
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  width: 200,
+                  child: PlaceholderLines(
+                    count: 1,
+                    align: TextAlign.center,
+                    lineHeight: 10,
+                    color: Colors.grey,
+                    animate: true,
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  width: 150,
+                  child: PlaceholderLines(
+                    count: 1,
+                    align: TextAlign.center,
+                    lineHeight: 10,
+                    color: Colors.grey,
+                    animate: true,
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
