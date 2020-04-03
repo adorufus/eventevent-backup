@@ -1,6 +1,5 @@
 import 'dart:convert' show json, utf8;
 
-
 import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
@@ -250,161 +249,192 @@ class PushNotificationState extends State<PushNotification> {
             },
             onLoading: isEmpty == true ? null : _onLoading,
             child: ListView(children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(left: 13, right: 13, top: 13),
-                height: ScreenUtil.instance.setWidth(60),
-                decoration: BoxDecoration(
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 2,
-                          spreadRadius: 1.5)
-                    ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15)),
-                child: ListTile(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  WithdrawBank()));
-                    },
-                    leading: Container(
-                      height: ScreenUtil.instance.setWidth(25),
-                      width: ScreenUtil.instance.setWidth(25),
-                      child: Image.asset(
-                          'assets/icons/icon_apps/my_balance.png',
-                          scale: 3),
-                    ),
-                    title: Text('My Balance',
-                        style: TextStyle(
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => WithdrawBank()));
+                },
+                child: Container(
+                    margin: EdgeInsets.only(left: 13, right: 13, top: 13),
+                    padding: EdgeInsets.all(13),
+                    height: ScreenUtil.instance.setWidth(60),
+                    decoration: BoxDecoration(
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 2,
+                              spreadRadius: 1.5)
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          height: ScreenUtil.instance.setWidth(25),
+                          width: ScreenUtil.instance.setWidth(25),
+                          child: Image.asset(
+                              'assets/icons/icon_apps/my_balance.png',
+                              scale: 3),
+                        ),
+                        SizedBox(
+                          width: 25,
+                        ),
+                        Text(
+                          'My Balance',
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: ScreenUtil.instance.setSp(13))),
-                    trailing: Icon(
-                      Icons.navigate_next,
-                      size: 25,
-                      color: eventajaGreenTeal,
+                            fontSize: ScreenUtil.instance.setSp(13),
+                          ),
+                        ),
+                        Expanded(
+                          child: SizedBox(),
+                        ),
+                        Icon(
+                          Icons.navigate_next,
+                          size: 25,
+                          color: eventajaGreenTeal,
+                        ),
+                      ],
                     )),
               ),
               SizedBox(height: ScreenUtil.instance.setWidth(9)),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 13),
-                height: ScreenUtil.instance.setWidth(60),
-                decoration: BoxDecoration(
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 2,
-                          spreadRadius: 1.5)
-                    ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15)),
-                child: ListTile(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  TransactionHistory()));
-                    },
-                    leading: Container(
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              TransactionHistory()));
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 13),
+                  padding: EdgeInsets.all(13),
+                  height: ScreenUtil.instance.setWidth(60),
+                  decoration: BoxDecoration(
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 2,
+                            spreadRadius: 1.5)
+                      ],
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
                         width: ScreenUtil.instance.setWidth(25),
                         height: ScreenUtil.instance.setWidth(25),
                         child: Image.asset(
-                            'assets/icons/icon_apps/paymentstatus.png')),
-                    title: Text('Payment Status',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: ScreenUtil.instance.setSp(13))),
-                    trailing: Icon(
-                      Icons.navigate_next,
-                      size: 25,
-                      color: eventajaGreenTeal,
-                    )),
+                            'assets/icons/icon_apps/paymentstatus.png'),
+                      ),
+                      SizedBox(
+                        width: 25,
+                      ),
+                      Text('Payment Status',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: ScreenUtil.instance.setSp(13))),
+                      Expanded(
+                        child: SizedBox(),
+                      ),
+                      Icon(
+                        Icons.navigate_next,
+                        size: 25,
+                        color: eventajaGreenTeal,
+                      )
+                    ],
+                  ),
+                ),
               ),
               isLoading == true
                   ? HomeLoadingScreen().myTicketLoading()
-                  : isEmpty == true ? Padding(
-                    padding: const EdgeInsets.only(top: 48),
-                    child: EmptyState(
-                      imagePath: 'assets/icons/empty_state/notification.png',
-                      reasonText: 'You have 0 notification',
-                    ),
-                  ): ColumnBuilder(
-                      itemCount: notificationData.length == 0
-                          ? 0
-                          : notificationData.length,
-                      itemBuilder: (context, i) {
-                        return GestureDetector(
-                          onTap: () {
-                            doNavigateOnPressedNotification(i);
-                          },
-                          child: Container(
-                              color: Colors.white,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 13, vertical: 10),
-                              margin: EdgeInsets.only(
-                                top: 5,
-                              ),
-                              child: notificationUi(i)
-                              // Container(
-                              //     child: Row(
-                              //   crossAxisAlignment: CrossAxisAlignment.center,
-                              //   mainAxisAlignment: MainAxisAlignment.start,
-                              //   children: <Widget>[
-                              //     Image.asset('assets/icons/icon_apps/nearby.png',
-                              //         scale: 3),
-                              //     SizedBox(
-                              //         width: ScreenUtil.instance.setWidth(13)),
-                              //     Column(
-                              //       crossAxisAlignment: CrossAxisAlignment.start,
-                              //       mainAxisAlignment: MainAxisAlignment.center,
-                              //       children: <Widget>[
-                              //         Text(
-                              //           notificationData[i]['fullName'] + ':',
-                              //           style: TextStyle(
-                              //               fontSize:
-                              //                   ScreenUtil.instance.setSp(13),
-                              //               fontWeight: FontWeight.bold),
-                              //         ),
-                              //         Container(
-                              //           height: ScreenUtil.instance.setWidth(40),
-                              //           child: Text(
-                              //             notificationData[i]['caption'],
-                              //             maxLines: 5,
-                              //             softWrap: true,
-                              //           ),
-                              //         ),
-                              //       ],
-                              //     )
-                              //   ],
-                              // ))
+                  : isEmpty == true
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 48),
+                          child: EmptyState(
+                            imagePath:
+                                'assets/icons/empty_state/notification.png',
+                            reasonText: 'You have 0 notification',
+                          ),
+                        )
+                      : ColumnBuilder(
+                          itemCount: notificationData.length == 0
+                              ? 0
+                              : notificationData.length,
+                          itemBuilder: (context, i) {
+                            return GestureDetector(
+                              onTap: () {
+                                doNavigateOnPressedNotification(i);
+                              },
+                              child: Container(
+                                  color: Colors.white,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 13, vertical: 10),
+                                  margin: EdgeInsets.only(
+                                    top: 5,
+                                  ),
+                                  child: notificationUi(i)
+                                  // Container(
+                                  //     child: Row(
+                                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                                  //   mainAxisAlignment: MainAxisAlignment.start,
+                                  //   children: <Widget>[
+                                  //     Image.asset('assets/icons/icon_apps/nearby.png',
+                                  //         scale: 3),
+                                  //     SizedBox(
+                                  //         width: ScreenUtil.instance.setWidth(13)),
+                                  //     Column(
+                                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                                  //       mainAxisAlignment: MainAxisAlignment.center,
+                                  //       children: <Widget>[
+                                  //         Text(
+                                  //           notificationData[i]['fullName'] + ':',
+                                  //           style: TextStyle(
+                                  //               fontSize:
+                                  //                   ScreenUtil.instance.setSp(13),
+                                  //               fontWeight: FontWeight.bold),
+                                  //         ),
+                                  //         Container(
+                                  //           height: ScreenUtil.instance.setWidth(40),
+                                  //           child: Text(
+                                  //             notificationData[i]['caption'],
+                                  //             maxLines: 5,
+                                  //             softWrap: true,
+                                  //           ),
+                                  //         ),
+                                  //       ],
+                                  //     )
+                                  //   ],
+                                  // ))
 
-                              //     ListTile(
-                              //   onTap: () {
-                              //     doNavigateOnPressedNotification(i);
-                              //   },
-                              //   contentPadding: EdgeInsets.only(bottom: 15),
-                              //   leading: Container(
-                              //     height: ScreenUtil.instance.setWidth(25),
-                              //     width: ScreenUtil.instance.setWidth(25),
-                              //     child: Image.asset(
-                              //       'assets/icons/icon_apps/announcement.png',
-                              //     ),
-                              //   ),
-                              //   title: Text(
-                              //     notificationData[i]['fullName'] + ':',
-                              //     style: TextStyle(
-                              //         fontSize: ScreenUtil.instance.setSp(13),
-                              //         fontWeight: FontWeight.bold),
-                              //   ),
-                              //   subtitle: Text(notificationData[i]['caption']),
-                              // ),
-                              ),
-                        );
-                      },
-                    ),
+                                  //     ListTile(
+                                  //   onTap: () {
+                                  //     doNavigateOnPressedNotification(i);
+                                  //   },
+                                  //   contentPadding: EdgeInsets.only(bottom: 15),
+                                  //   leading: Container(
+                                  //     height: ScreenUtil.instance.setWidth(25),
+                                  //     width: ScreenUtil.instance.setWidth(25),
+                                  //     child: Image.asset(
+                                  //       'assets/icons/icon_apps/announcement.png',
+                                  //     ),
+                                  //   ),
+                                  //   title: Text(
+                                  //     notificationData[i]['fullName'] + ':',
+                                  //     style: TextStyle(
+                                  //         fontSize: ScreenUtil.instance.setSp(13),
+                                  //         fontWeight: FontWeight.bold),
+                                  //   ),
+                                  //   subtitle: Text(notificationData[i]['caption']),
+                                  // ),
+                                  ),
+                            );
+                          },
+                        ),
             ]),
           ),
         ));

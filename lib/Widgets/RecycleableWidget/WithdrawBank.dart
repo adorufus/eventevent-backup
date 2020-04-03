@@ -39,6 +39,7 @@ class WithdrawBankState extends State<WithdrawBank> {
   MoneyFormatterOutput fo;
 
   int _currentValue;
+  int _initialTabIndex = 0;
   String user_bank_id;
   String bank_id;
   String account_name;
@@ -50,7 +51,7 @@ class WithdrawBankState extends State<WithdrawBank> {
   @override
   void initState() {
     super.initState();
-    _currentValue = widget.currentTab;
+    _initialTabIndex = widget.currentTab;
     setState(() {});
     getBalance();
     getBank();
@@ -157,7 +158,7 @@ class WithdrawBankState extends State<WithdrawBank> {
           children: <Widget>[
             DefaultTabController(
               length: 2,
-              initialIndex: 0,
+              initialIndex: _initialTabIndex,
               child: Column(
                 children: <Widget>[
                   Container(
@@ -706,6 +707,10 @@ class WithdrawBankState extends State<WithdrawBank> {
                 transactionStatus = 'ADDED BALANCE';
                 transactionColor = Colors.lightGreen;
                 amountColor = eventajaGreenTeal;
+              } else if(historyList[i]['status'] == 'declined'){
+                transactionStatus = 'DECLINED';
+                transactionColor = Colors.red;
+                amountColor = Colors.red;
               }
 
               return Container(

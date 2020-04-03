@@ -310,8 +310,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                         ],
                                       ),
                                       SizedBox(
-                                        height:
-                                            ScreenUtil.instance.setWidth(25),
+                                        height: ScreenUtil.instance.setWidth(9),
                                       ),
                                       Container(
                                         width:
@@ -329,8 +328,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                         ),
                                       ),
                                       SizedBox(
-                                        height:
-                                            ScreenUtil.instance.setWidth(12),
+                                        height: ScreenUtil.instance.setWidth(9),
                                       ),
                                       Container(
                                         height:
@@ -351,14 +349,6 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                         child: Center(
                                             child: Text(
                                           ticketPrice,
-                                          // type == 'paid' ||
-                                          //         type == 'paid_seating'
-                                          //     ? isAvailable == '1'
-                                          //         ? 'Rp. ' +
-                                          //             itemPrice.toUpperCase() +
-                                          //             ',-'
-                                          //         : itemPrice.toUpperCase()
-                                          //     : itemPrice.toUpperCase(),
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize:
@@ -366,8 +356,39 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                               fontWeight: FontWeight.bold),
                                         )),
                                       ),
-                                      ticketListData[i]['show_remaining_ticket'] == '0' ? Container() : Text(
-                                          'Ticket(s) left: ${(int.parse(ticketListData[i]['quantity']) - int.parse(ticketListData[i]['sold']))} / ${ticketListData[i]['quantity']}'),
+                                      SizedBox(
+                                        height: ScreenUtil.instance.setWidth(6),
+                                      ),
+                                      ticketListData[i]
+                                                  ['show_remaining_ticket'] ==
+                                              '0'
+                                          ? Container()
+                                          : Flexible(
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width -
+                                                    180,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Center(
+                                                      child: Text(
+                                                          'Ticket(s) left: ${(int.parse(ticketListData[i]['quantity']) - int.parse(ticketListData[i]['sold']))} / ${ticketListData[i]['quantity']}',
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  ScreenUtil
+                                                                      .instance
+                                                                      .setSp(
+                                                                          15),
+                                                              color:
+                                                                  Colors.grey), textAlign: TextAlign.center),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
                                       Text(ticketListData[i]
                                                   ['is_single_ticket'] ==
                                               '0'

@@ -913,7 +913,7 @@ class _EventCatalogState extends State<EventCatalog>
                               )));
                 },
                 child: Container(
-                  height: 50,
+                  height: 20,
                   child: Center(
                     child: Text(
                       'See All',
@@ -1046,7 +1046,7 @@ class _EventCatalogState extends State<EventCatalog>
                               )));
                 },
                 child: Container(
-                  height: 50,
+                  height: 20,
                   child: Center(
                     child: Text(
                       'See All',
@@ -1148,7 +1148,7 @@ class _EventCatalogState extends State<EventCatalog>
                               )));
                 },
                 child: Container(
-                  height: 50,
+                  height: 20,
                   child: Center(
                     child: Text(
                       'See All',
@@ -1345,7 +1345,7 @@ class _EventCatalogState extends State<EventCatalog>
                               )));
                 },
                 child: Container(
-                  height: 50,
+                  height: 20,
                   child: Center(
                     child: Text(
                       'See All',
@@ -1497,7 +1497,7 @@ class _EventCatalogState extends State<EventCatalog>
                             initialIndex: 0, isVideo: true)));
                 },
                 child: Container(
-                  height: 50,
+                  height: 20,
                   child: Center(
                     child: Text(
                       'See All',
@@ -1933,7 +1933,7 @@ class _EventCatalogState extends State<EventCatalog>
                               )));
                 },
                 child: Container(
-                  height: 50,
+                  height: 20,
                   child: Center(
                     child: Text(
                       'See All',

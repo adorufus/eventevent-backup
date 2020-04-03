@@ -278,7 +278,7 @@ class GoogleRegisterState extends State<GoogleRegisterStart> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget()));
+              builder: (BuildContext context) => DashboardWidget(isRest: false,)));
       return Register.fromJson(responseJson);
     } else if (response.statusCode == 400) {
       final responseJson = json.decode(response.body);

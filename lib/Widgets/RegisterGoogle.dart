@@ -242,7 +242,7 @@ class GoogleRegisterState extends State<GoogleRegister> {
       'username': usernameController.text,
       'phone': phoneController.text,
       'photo': profilePictureURI,
-      'lastName': 'test',
+      'lastName': '',
       'register_device': Platform.isIOS ? 'IOS' : 'android'
     };
 
@@ -259,7 +259,7 @@ class GoogleRegisterState extends State<GoogleRegister> {
       preferences.setString('Session', response.headers['set-cookie']);
       SharedPrefs().saveCurrentSession(responseJson);
       preferences.setString('Session', response.headers['set-cookie']);
-      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => DashboardWidget()));
+      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => DashboardWidget(isRest: false, selectedPage: 0,)));
       return Register.fromJson(responseJson);
     }
     else if(response.statusCode == 400){

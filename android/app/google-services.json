@@ -44,12 +44,64 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:192954205664:android:5f44758941424f40139785",
+        "android_client_info": {
+          "package_name": "com.digidaw.oktacloud"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192954205664-poefur3p1ssaevrl859r980vd48cjje0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDiAXxJg_gijrCw4bhcrEiINHYMh0VDdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192954205664-poefur3p1ssaevrl859r980vd48cjje0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "192954205664-fgf044g528sou85l0qmu8j5nng75k3be.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.eventevent2.ios"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:192954205664:android:534f1b5abb1807d9",
         "android_client_info": {
           "package_name": "com.eventevent.android"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "192954205664-hapudek29qnj4a5n0v9irp826s9q4hue.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eventevent.android",
+            "certificate_hash": "dcea88d37904df495e5f7d47843d0a7c160682ab"
+          }
+        },
+        {
+          "client_id": "192954205664-8m34tclq8gni138chuko19306pen1mto.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eventevent.android",
+            "certificate_hash": "bd9481f5219212df9d1789eb861ea61af30816cb"
+          }
+        },
         {
           "client_id": "192954205664-er5omap88le8ifal6i5idtvbud2aetq0.apps.googleusercontent.com",
           "client_type": 1,

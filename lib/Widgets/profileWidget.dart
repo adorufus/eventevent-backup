@@ -119,7 +119,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         website = userData[0]['website'];
         fullName = userData[0]['fullName'];
         lastName = userData[0]['lastName'];
-        pictureUri = userData[0]['pictureAvatarURL'];
+        pictureUri = userData[0]['pictureFullURL'];
         eventCreated = userData[0]['countEventCreated'];
         eventGoing = userData[0]['countEventGoing'];
         following = userData[0]['countFollowing'];
