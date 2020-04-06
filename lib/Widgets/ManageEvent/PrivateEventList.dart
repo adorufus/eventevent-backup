@@ -221,6 +221,10 @@ class PrivateEventListState extends State<PrivateEventList> {
                           'free') {
                         itemColor = Color(0xFFFFAA00);
                         itemPriceText = privateData[i]['ticket_type']['name'];
+                      }else if (privateData[i]['ticket_type']['type'] ==
+                          'free_live_stream') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText = privateData[i]['ticket_type']['name'];
                       } else if (privateData[i]['ticket_type']['type'] ==
                           'free_limited') {
                         if (privateData[i]['ticket']['availableTicketStatus'] ==

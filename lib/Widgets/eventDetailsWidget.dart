@@ -2066,34 +2066,41 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           ),
                                           GestureDetector(
                                             onTap: () async {
-                                              SharedPreferences prefs =
-                                                  await SharedPreferences
-                                                      .getInstance();
-                                              prefs.setString('NEW_EVENT_ID',
-                                                  detailData['id']);
-                                              prefs.setString(
-                                                  'QR_URI',
-                                                  detailData['qrcode']
-                                                      ['secure_url']);
-                                              prefs.setString('EVENT_NAME',
-                                                  detailData['name']);
-                                              print(prefs
-                                                  .getString('NEW_EVENT_ID'));
-                                              print(prefs.getString('QR_URI'));
-                                              Navigator.push(
+                                              if (widget.detailData[
+                                                      'ticket_type']['type'] ==
+                                                  'free_live_stream') {
+                                                    print('isLivestream');
+                                              } else {
+                                                SharedPreferences prefs =
+                                                    await SharedPreferences
+                                                        .getInstance();
+                                                prefs.setString('NEW_EVENT_ID',
+                                                    detailData['id']);
+                                                prefs.setString(
+                                                    'QR_URI',
+                                                    detailData['qrcode']
+                                                        ['secure_url']);
+                                                prefs.setString('EVENT_NAME',
+                                                    detailData['name']);
+                                                print(prefs
+                                                    .getString('NEW_EVENT_ID'));
+                                                print(
+                                                    prefs.getString('QR_URI'));
+                                                Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          ShowQr(
-                                                            qrUrl: widget
-                                                                        .detailData[
-                                                                    'qrcode']
-                                                                ['secure_url'],
-                                                            eventName: widget
-                                                                    .detailData[
-                                                                'name'],
-                                                          )));
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        ShowQr(
+                                                      qrUrl: widget.detailData[
+                                                              'qrcode']
+                                                          ['secure_url'],
+                                                      eventName: widget
+                                                          .detailData['name'],
+                                                    ),
+                                                  ),
+                                                );
+                                              }
                                             },
                                             child: SizedBox(
                                               height: ScreenUtil.instance
@@ -2106,16 +2113,33 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 children: <Widget>[
                                                   SizedBox(
                                                       width: ScreenUtil.instance
-                                                          .setWidth(20.9),
+                                                          .setWidth(widget.detailData[
+                                                                          'ticket_type']
+                                                                      [
+                                                                      'type'] ==
+                                                                  'free_live_stream'
+                                                              ? 50
+                                                              : 20.9),
                                                       child: Image.asset(
-                                                        'assets/icons/icon_apps/qr.png',
+                                                        widget.detailData[
+                                                                        'ticket_type']
+                                                                    ['type'] ==
+                                                                'free_live_stream'
+                                                            ? 'assets/btn_ticket/live.png'
+                                                            : 'assets/icons/icon_apps/qr.png',
                                                         fit: BoxFit.fill,
                                                       )),
                                                   SizedBox(
                                                     height: ScreenUtil.instance
                                                         .setWidth(15),
                                                   ),
-                                                  Text('SHOW QR CODE',
+                                                  Text(
+                                                      widget.detailData[
+                                                                      'ticket_type']
+                                                                  ['type'] ==
+                                                              'free_live_stream'
+                                                          ? 'NOW !'
+                                                          : 'SHOW QR CODE',
                                                       style: TextStyle(
                                                           color:
                                                               Color(0xff404041),
