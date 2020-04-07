@@ -300,6 +300,9 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
           if (detailData['isGoing'] == '1') {
             itemColor = Colors.blue;
             ticketPrice = 'Going!';
+          } else if(detailData['status'] == 'canceled'){
+            itemColor = Colors.red;
+            ticketPrice = 'Canceled';
           } else {
             if (detailData['ticket_type']['type'] == 'paid' ||
                 detailData['ticket_type']['type'] == 'paid_seating') {
