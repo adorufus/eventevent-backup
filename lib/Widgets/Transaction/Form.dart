@@ -129,20 +129,20 @@ class _TransactionFormState extends State<TransactionForm> {
             for (var customForm in customFormList) {
               questionId.add(customForm['id']);
             }
+
+            for (int i = 0; i < customFormList.length; i++) {
+              if (customFormList[i]['isRequired'] == '1' &&
+                  customFormControllers[i].text.isEmpty) {
+                isRequiredEmpty = true;
+                setState(() {});
+              } else {
+                isRequiredEmpty = false;
+                setState(() {});
+              }
+            }
           }
 
           print(questionId);
-
-          for (int i = 0; i < customFormList.length; i++) {
-            if (customFormList[i]['isRequired'] == '1' &&
-                customFormControllers[i].text.isEmpty) {
-              isRequiredEmpty = true;
-              setState(() {});
-            } else {
-              isRequiredEmpty = false;
-              setState(() {});
-            }
-          }
 
           print(isRequiredEmpty);
 

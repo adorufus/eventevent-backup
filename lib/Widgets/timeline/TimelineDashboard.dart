@@ -47,8 +47,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
   bool isLoved;
   bool isLoading = false;
   bool isTimeoutPopularMediaPhoto = false;
-  bool isTimeoutPopularMediaVideo = false; 
-  bool isTimeoutLatestMediaVideo = false; 
+  bool isTimeoutPopularMediaVideo = false;
+  bool isTimeoutLatestMediaVideo = false;
   bool isTimeoutLatestMediaPhoto = false;
   bool isTimeoutBanner = false;
   String errorReason;
@@ -323,8 +323,12 @@ class TimelineDashboardState extends State<TimelineDashboard>
                   ),
                 ),
               ),
-              backgroundColor: Colors.white.withOpacity(0.5),
-              body: isTimeoutPopularMediaPhoto == true && isTimeoutBanner == true && isTimeoutLatestMediaPhoto == true && isTimeoutLatestMediaVideo == true && isTimeoutPopularMediaVideo 
+              backgroundColor: Colors.white,
+              body: isTimeoutPopularMediaPhoto == true &&
+                      isTimeoutBanner == true &&
+                      isTimeoutLatestMediaPhoto == true &&
+                      isTimeoutLatestMediaVideo == true &&
+                      isTimeoutPopularMediaVideo
                   ? EmptyState(
                       imagePath: 'assets/icons/empty_state/error.png',
                       isTimeout: true,

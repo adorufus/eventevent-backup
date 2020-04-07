@@ -265,14 +265,14 @@ class HomeLoadingScreen {
                   baseColor: Colors.grey[300],
                   highlightColor: Colors.grey[100],
                   enabled: true,
-                    child: Container(
-                      height: ScreenUtil.instance.setWidth(50),
-                            width: ScreenUtil.instance.setWidth(50),
-                      child: Image.asset(
-                        'assets/grey-fade.jpg',
-                        scale: 2,
-                      ),
+                  child: Container(
+                    height: ScreenUtil.instance.setWidth(50),
+                    width: ScreenUtil.instance.setWidth(50),
+                    child: Image.asset(
+                      'assets/grey-fade.jpg',
+                      scale: 2,
                     ),
+                  ),
                 ),
                 SizedBox(
                   height: 15,
@@ -690,18 +690,19 @@ class HomeLoadingScreen {
 
   Widget categoryLoading() {
     return ListView.builder(
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemCount: 25,
-        itemBuilder: (context, i) {
-          return Container(
-            width: ScreenUtil.instance.setWidth(800),
-            height: ScreenUtil.instance.setWidth(220),
-            child: Wrap(
-              children: mappedCategoryData,
-            ),
-          );
-        });
+      shrinkWrap: true,
+      scrollDirection: Axis.horizontal,
+      itemCount: 25,
+      itemBuilder: (context, i) {
+        return Container(
+          width: ScreenUtil.instance.setWidth(800),
+          height: ScreenUtil.instance.setWidth(220),
+          child: Wrap(
+            children: mappedCategoryData,
+          ),
+        );
+      },
+    );
   }
 
   Widget eventLoading() {

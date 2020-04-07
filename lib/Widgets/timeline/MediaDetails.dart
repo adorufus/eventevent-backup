@@ -83,7 +83,7 @@ class _MediaDetailsState extends State<MediaDetails> {
       } else if (response.statusCode.toString().startsWith('4')) {
         errorReason = 'Sorry, something\'s went wrong :(';
         isError = true;
-        setState(() {}); 
+        setState(() {});
       } else if (response.statusCode.toString().startsWith('5')) {
         errorReason = 'An error occured with our server, will be fixed ASAP';
         isError = true;
@@ -411,6 +411,18 @@ class _MediaDetailsState extends State<MediaDetails> {
                           )),
                     ],
                   ),
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(15),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 13.0),
+                  child: Container(
+                      child: Text(
+                    widget.mediaTitle,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    maxLines: 2,
+                  )),
                 ),
                 SizedBox(
                   height: ScreenUtil.instance.setWidth(15),

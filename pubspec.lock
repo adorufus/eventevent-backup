@@ -373,6 +373,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_wowza:
+    dependency: "direct main"
+    description:
+      name: flutter_wowza
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.10"
   geocoder:
     dependency: "direct main"
     description:

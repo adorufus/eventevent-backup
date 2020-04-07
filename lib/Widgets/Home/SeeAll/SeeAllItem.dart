@@ -300,7 +300,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                           '1') {
                         itemColor = Color(0xFF34B323);
                         itemPriceText =
-                            popularEventList[i]['ticket']['cheapestTicket'];
+                            'Rp. ' + popularEventList[i]['ticket']['cheapestTicket'];
                       } else {
                         if (popularEventList[i]['ticket']['salesStatus'] ==
                             'comingSoon') {
@@ -457,7 +457,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                           '1') {
                         itemColor = Color(0xFF34B323);
                         itemPriceText =
-                            discoverEventList[i]['ticket']['cheapestTicket'];
+                           'Rp. ' + discoverEventList[i]['ticket']['cheapestTicket'];
                       } else {
                         if (discoverEventList[i]['ticket']['salesStatus'] ==
                             'comingSoon') {

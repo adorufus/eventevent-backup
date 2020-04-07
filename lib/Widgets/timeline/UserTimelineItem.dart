@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/timeline/EditPost.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
@@ -13,6 +14,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TimelineItem extends StatefulWidget {
+  final eventId;
   final id;
   final String userId;
   final String photo;
@@ -48,7 +50,8 @@ class TimelineItem extends StatefulWidget {
       this.loveCount,
       this.isLoved,
       this.impressionId,
-      this.dateTime, this.location})
+      this.dateTime,
+      this.location, this.eventId})
       : super(key: key);
 
   @override
@@ -184,7 +187,7 @@ class _TimelineItemState extends State<TimelineItem>
                           Text(
                             dateUploaded,
                             style: TextStyle(
-                              color: Colors.grey,
+                                color: Colors.grey,
                                 fontSize: ScreenUtil.instance.setSp(10)),
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(4)),
@@ -204,12 +207,13 @@ class _TimelineItemState extends State<TimelineItem>
                           widget.type == 'photo' ||
                           widget.type == 'event' ||
                           widget.type == 'eventgoing' ||
-                          widget.id != null && widget.type != 'love' && widget.type != 'relationship' && widget.type != 'combined_relationship'
+                          widget.id != null &&
+                              widget.type != 'love' &&
+                              widget.type != 'relationship' &&
+                              widget.type != 'combined_relationship'
                       ? GestureDetector(
                           onTap: () {
-                            if (widget.type == 'photo' ||
-                                widget.type == 'event' ||
-                                widget.type == 'eventgoing') {
+                            if (widget.type == 'photo') {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -224,6 +228,9 @@ class _TimelineItemState extends State<TimelineItem>
                                             userPicture: widget.photo,
                                             imageCount: 1,
                                           )));
+                            } else if (widget.type == 'event' ||
+                                widget.type == 'eventgoing') {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailLoadingScreen(eventId: widget.eventId,)));
                             } else {
                               Navigator.push(
                                   context,
@@ -263,7 +270,11 @@ class _TimelineItemState extends State<TimelineItem>
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   boxShadow: [
-                                    BoxShadow(spreadRadius: 3, blurRadius: 5, color: Color(0xff8a8a8b).withOpacity(.5))
+                                    BoxShadow(
+                                        spreadRadius: 3,
+                                        blurRadius: 5,
+                                        color:
+                                            Color(0xff8a8a8b).withOpacity(.5))
                                   ],
                                   image: DecorationImage(
                                       image: NetworkImage(
@@ -298,13 +309,15 @@ class _TimelineItemState extends State<TimelineItem>
                                 Container(
                                   width: 200,
                                   child: Text(
-                                      widget.type == 'love'
-                                          ? widget.name
-                                          : widget.fullName,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(15)), overflow: TextOverflow.ellipsis,),
+                                    widget.type == 'love'
+                                        ? widget.name
+                                        : widget.fullName,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(15)),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                                 SizedBox(
                                     height: ScreenUtil.instance.setWidth(8)),
@@ -331,7 +344,9 @@ class _TimelineItemState extends State<TimelineItem>
                                             child: Text(
                                               widget.location == null
                                                   ? ''
-                                                  : widget.location == null ? widget.name : widget.location,
+                                                  : widget.location == null
+                                                      ? widget.name
+                                                      : widget.location,
                                               maxLines: 1,
                                               style: TextStyle(
                                                   color: Color(0xFF8A8A8B)),
@@ -395,7 +410,8 @@ class _TimelineItemState extends State<TimelineItem>
                     });
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: _loveCount < 1 ? 7 : 10),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: _loveCount < 1 ? 7 : 10),
                     height: ScreenUtil.instance.setWidth(30),
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -426,11 +442,11 @@ class _TimelineItemState extends State<TimelineItem>
                 ),
                 SizedBox(width: ScreenUtil.instance.setWidth(10)),
                 GestureDetector(
-                  onTap: (){
-
-                  },
+                  onTap: () {},
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: int.parse(widget.commentTotalRows) < 1 ? 8 : 10),
+                    padding: EdgeInsets.symmetric(
+                        horizontal:
+                            int.parse(widget.commentTotalRows) < 1 ? 8 : 10),
                     height: ScreenUtil.instance.setWidth(30),
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -447,10 +463,19 @@ class _TimelineItemState extends State<TimelineItem>
                           Image.asset(
                             'assets/icons/icon_apps/comment.png',
                             scale: 3.5,
-                            color: int.parse(widget.commentTotalRows) < 1 ? Colors.grey : eventajaGreenTeal,
+                            color: int.parse(widget.commentTotalRows) < 1
+                                ? Colors.grey
+                                : eventajaGreenTeal,
                           ),
-                          SizedBox(width: ScreenUtil.instance.setWidth(int.parse(widget.commentTotalRows) < 1 ? 0 : 5)),
-                          Text(int.parse(widget.commentTotalRows) < 1 ? '' : widget.commentTotalRows,
+                          SizedBox(
+                              width: ScreenUtil.instance.setWidth(
+                                  int.parse(widget.commentTotalRows) < 1
+                                      ? 0
+                                      : 5)),
+                          Text(
+                              int.parse(widget.commentTotalRows) < 1
+                                  ? ''
+                                  : widget.commentTotalRows,
                               style: TextStyle(
                                   color: Color(
                                       0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']

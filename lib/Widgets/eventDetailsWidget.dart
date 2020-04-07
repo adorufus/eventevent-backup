@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/EventDetailComment.dart';
 import 'package:eventevent/Widgets/EventDetailItems/FeedbackLogic.dart';
 import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
+import 'package:eventevent/Widgets/ManageEvent/LivestreamBroadcastWidget.dart';
 import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
@@ -605,6 +606,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                   }
                 } else {
                   if (widget.ticketStat['salesStatus'] == 'endSales' ||
+                      widget.ticketPrice.toLowerCase() == 'canceled' ||
                       widget.ticketStat['availablewidget.ticketStatus'] ==
                           '0') {
                     return;
@@ -665,6 +667,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                               ));
                         } else {
                           if (widget.ticketStat['salesStatus'] == 'endSales' ||
+                              widget.ticketPrice.toLowerCase() == 'canceled' ||
                               widget.ticketStat[
                                       'availablewidget.ticketStatus'] ==
                                   '0') {
@@ -1073,6 +1076,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         if (widget.ticketStat[
                                                                     'salesStatus'] ==
                                                                 'endSales' ||
+                                                            widget.ticketPrice
+                                                                    .toLowerCase() ==
+                                                                'canceled' ||
                                                             widget.ticketStat[
                                                                     'availablewidget.ticketStatus'] ==
                                                                 '0') {
@@ -1257,12 +1263,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   ],
                                 ),
                               ),
-                              widget.isPrivate == "0"
+                              widget.isPrivate == "0" || invitedUserList == null
                                   ? Container()
                                   : SizedBox(
                                       height: ScreenUtil.instance.setWidth(20),
                                     ),
-                              widget.isPrivate == "0"
+                              widget.isPrivate == "0" || invitedUserList == null
                                   ? Container()
                                   : Padding(
                                       padding: EdgeInsets.only(left: 0),
@@ -1422,119 +1428,147 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       'comingSoon'
                                   ? countdownTimer()
                                   : Container(),
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 13),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 13),
-                                      child: Row(
+                              widget.goingData == null || widget.goingData.length < 1
+                                  ? Container()
+                                  : Container(
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 0, vertical: 13),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Text(
-                                            'Who\'s Going',
-                                            style: TextStyle(
-                                                color: Color(0xff8a8a8b),
-                                                fontSize: ScreenUtil.instance
-                                                    .setSp(11)),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 13),
+                                            child: Row(
+                                              children: <Widget>[
+                                                Text(
+                                                  'Who\'s Going',
+                                                  style: TextStyle(
+                                                      color: Color(0xff8a8a8b),
+                                                      fontSize: ScreenUtil
+                                                          .instance
+                                                          .setSp(11)),
+                                                ),
+                                                Expanded(
+                                                  child: SizedBox(),
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                SeeWhosGoingInvitedWidget(
+                                                                  eventId: widget
+                                                                          .detailData[
+                                                                      'id'],
+                                                                  peopleType:
+                                                                      'going',
+                                                                )));
+                                                  },
+                                                  child: Container(
+                                                    height: 30,
+                                                    child: Text(
+                                                      'See All >',
+                                                      style: TextStyle(
+                                                          color:
+                                                              eventajaGreenTeal),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
-                                          Expanded(
-                                            child: SizedBox(),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          SeeWhosGoingInvitedWidget(
-                                                            eventId: widget
-                                                                    .detailData[
-                                                                'id'],
-                                                            peopleType: 'going',
-                                                          )));
-                                            },
-                                            child: Container(
-                                              height: 30,
-                                              child: Text(
-                                                'See All >',
-                                                style: TextStyle(
-                                                    color: eventajaGreenTeal),
-                                              ),
+                                          SizedBox(
+                                              height: ScreenUtil.instance
+                                                  .setWidth(10)),
+                                          Container(
+                                            height: ScreenUtil.instance
+                                                .setWidth(50),
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount:
+                                                  widget.goingData == null
+                                                      ? 0
+                                                      : widget.goingData.length,
+                                              itemBuilder:
+                                                  (BuildContext context, i) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (BuildContext
+                                                                    context) =>
+                                                                ProfileWidget(
+                                                                  initialIndex:
+                                                                      0,
+                                                                  userId: detailData[
+                                                                              'going']
+                                                                          [
+                                                                          'data'][i]
+                                                                      [
+                                                                      'userID'],
+                                                                )));
+                                                  },
+                                                  child: new Container(
+                                                    margin: EdgeInsets.only(
+                                                        left: 10),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        Container(
+                                                          height: ScreenUtil
+                                                              .instance
+                                                              .setWidth(30),
+                                                          width: ScreenUtil
+                                                              .instance
+                                                              .setWidth(30),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  boxShadow: <
+                                                                      BoxShadow>[
+                                                                BoxShadow(
+                                                                    color: Colors
+                                                                        .black26,
+                                                                    offset:
+                                                                        Offset(
+                                                                            1.0,
+                                                                            1.0),
+                                                                    blurRadius:
+                                                                        3)
+                                                              ],
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  image:
+                                                                      DecorationImage(
+                                                                    image: CachedNetworkImageProvider(detailData['going']
+                                                                            [
+                                                                            'data'][i]
+                                                                        [
+                                                                        'photo']),
+                                                                    fit: BoxFit
+                                                                        .fill,
+                                                                  )),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                           )
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
-                                        height:
-                                            ScreenUtil.instance.setWidth(10)),
-                                    Container(
-                                      height: ScreenUtil.instance.setWidth(50),
-                                      width: MediaQuery.of(context).size.width,
-                                      child: ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: widget.goingData == null
-                                            ? 0
-                                            : widget.goingData.length,
-                                        itemBuilder: (BuildContext context, i) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          ProfileWidget(
-                                                            initialIndex: 0,
-                                                            userId: detailData[
-                                                                        'going']
-                                                                    ['data'][i]
-                                                                ['userID'],
-                                                          )));
-                                            },
-                                            child: new Container(
-                                              margin: EdgeInsets.only(left: 10),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Container(
-                                                    height: ScreenUtil.instance
-                                                        .setWidth(30),
-                                                    width: ScreenUtil.instance
-                                                        .setWidth(30),
-                                                    decoration: BoxDecoration(
-                                                        boxShadow: <BoxShadow>[
-                                                          BoxShadow(
-                                                              color: Colors
-                                                                  .black26,
-                                                              offset: Offset(
-                                                                  1.0, 1.0),
-                                                              blurRadius: 3)
-                                                        ],
-                                                        shape: BoxShape.circle,
-                                                        image: DecorationImage(
-                                                          image: CachedNetworkImageProvider(
-                                                              detailData['going']
-                                                                      ['data']
-                                                                  [i]['photo']),
-                                                          fit: BoxFit.fill,
-                                                        )),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
                               detailData['status'] == 'ended'
                                   ? SizedBox(
                                       height: ScreenUtil.instance.setWidth(20),
@@ -2069,7 +2103,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               if (widget.detailData[
                                                       'ticket_type']['type'] ==
                                                   'free_live_stream') {
-                                                    print('isLivestream');
+                                                print('isLivestream');
+
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            LivestreamBroadcast()));
                                               } else {
                                                 SharedPreferences prefs =
                                                     await SharedPreferences
@@ -2214,6 +2254,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   children: <Widget>[
                                     Flexible(
                                       child: GestureDetector(
+                                        behavior: prefix0.HitTestBehavior.opaque,
                                         onTap: () {
                                           currentTab = 0;
                                         },
@@ -2251,6 +2292,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     ),
                                     Flexible(
                                       child: GestureDetector(
+                                        behavior: prefix0.HitTestBehavior.opaque,
                                         onTap: () {
                                           currentTab = 1;
                                         },
@@ -2288,6 +2330,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     ),
                                     Flexible(
                                       child: GestureDetector(
+                                        behavior: prefix0.HitTestBehavior.opaque,
                                         onTap: () {
                                           currentTab = 2;
                                         },

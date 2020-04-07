@@ -65,7 +65,7 @@ class EventStatisticState extends State<EventStatistic>{
     
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
+      appBar: sharedData == null || ticketData == null || checkinData == null || dataMap == null ? PreferredSize(child: Container(), preferredSize: Size(0, 0),) : AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
         leading: GestureDetector(
