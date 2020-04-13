@@ -357,6 +357,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                       child: new LatestMediaItem(
                         isRest: widget.isRest,
                         isVideo: widget.isVideo,
+                        isLiked: popularMedia[i]['is_loved'],
                         image: widget.isVideo == true
                             ? popularMedia[i]['thumbnail_timeline']
                             : popularMedia[i]['banner_timeline'],
@@ -470,6 +471,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
                         image: widget.isVideo == true
                             ? latestMedia[i]['thumbnail_timeline']
                             : latestMedia[i]['banner_timeline'],
+                        isLiked: latestMedia[i]['is_loved'],
                         title: latestMedia[i]['title'],
                         username: latestMedia[i]['creator']['username'],
                         userImage: latestMedia[i]['creator']['photo'],

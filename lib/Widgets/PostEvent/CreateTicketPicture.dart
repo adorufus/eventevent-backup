@@ -33,6 +33,7 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
+
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
@@ -185,7 +186,7 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
       source: ImageSource.camera,
     );
 
-    //cropImage(galleryFile);
+    cropImage(galleryFile);
   }
 
   Future cropImage(File image) async {

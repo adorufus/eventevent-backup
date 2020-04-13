@@ -571,7 +571,7 @@ class PushNotificationState extends State<PushNotification> {
                 Text(
                   notificationData[index]['type'] == 'balance'
                       ? notificationData[index]['caption']
-                      : 'Withdraw Complete',
+                      : notificationData[index]['detail'][0]['status'] == 'declined' ? 'Withdraw Declined' : 'Withdraw Complete',
                   style: TextStyle(
                       fontSize: ScreenUtil.instance.setSp(13),
                       fontWeight: FontWeight.bold),

@@ -229,7 +229,12 @@ class _CategoryPageState extends State<CategoryPage> {
                           itemColor = Color(0xFFFFAA00);
                           itemPriceText =
                               eventByCategoryList[i]['ticket_type']['name'];
-                        } else if (eventByCategoryList[i]['ticket_type']
+                        } else if (eventByCategoryList[i]['ticket_type']['type'] ==
+                          'free_live_stream') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText = eventByCategoryList[i]['ticket_type']['name'];
+                      }
+                         else if (eventByCategoryList[i]['ticket_type']
                                 ['type'] ==
                             'free_limited') {
                           if (eventByCategoryList[i]['ticket']

@@ -247,17 +247,23 @@ class _CollectionPageState extends State<CollectionPage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       GestureDetector(
-                                        onTap: (){
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileWidget(
-                                            initialIndex: 0,
-                                            userId: userByCollectionList[i]['id'],
-                                          )));
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProfileWidget(
+                                                        initialIndex: 0,
+                                                        userId:
+                                                            userByCollectionList[
+                                                                i]['id'],
+                                                      )));
                                         },
                                         child: Container(
-                                          height:
-                                              ScreenUtil.instance.setWidth(40.50),
-                                          width:
-                                              ScreenUtil.instance.setWidth(41.50),
+                                          height: ScreenUtil.instance
+                                              .setWidth(40.50),
+                                          width: ScreenUtil.instance
+                                              .setWidth(41.50),
                                           decoration: BoxDecoration(
                                               boxShadow: <BoxShadow>[
                                                 BoxShadow(
@@ -267,9 +273,10 @@ class _CollectionPageState extends State<CollectionPage> {
                                               ],
                                               shape: BoxShape.circle,
                                               image: DecorationImage(
-                                                image: CachedNetworkImageProvider(
-                                                    userByCollectionList[i]
-                                                        ["photo"]),
+                                                image:
+                                                    CachedNetworkImageProvider(
+                                                        userByCollectionList[i]
+                                                            ["photo"]),
                                                 fit: BoxFit.fill,
                                               )),
                                         ),
@@ -353,6 +360,12 @@ class _CollectionPageState extends State<CollectionPage> {
                                   eventByCategoryList[i]['ticket_type']['name'];
                             } else if (eventByCategoryList[i]['ticket_type']
                                     ['type'] ==
+                                'free_live_stream') {
+                              itemColor = Color(0xFFFFAA00);
+                              itemPriceText =
+                                  eventByCategoryList[i]['ticket_type']['name'];
+                            } else if (eventByCategoryList[i]['ticket_type']
+                                    ['type'] ==
                                 'free_limited') {
                               if (eventByCategoryList[i]['ticket']
                                       ['availableTicketStatus'] ==
@@ -383,8 +396,8 @@ class _CollectionPageState extends State<CollectionPage> {
                                             RouteSettings(name: 'EventDetails'),
                                         builder: (BuildContext context) =>
                                             EventDetailLoadingScreen(
-                                              eventId: eventByCategoryList[i]['id']
-                                            )));
+                                                eventId: eventByCategoryList[i]
+                                                    ['id'])));
                               },
                               child: new LatestEventItem(
                                 image: eventByCategoryList[i]['picture'],

@@ -185,11 +185,12 @@ class _EventCatalogState extends State<EventCatalog>
             builder: (BuildContext context) {
               return GestureDetector(
                   onTap: () {
-                    if (bannerData['type'] == 'event' && bannerData['eventID'] != "") {
+                    if (bannerData['type'] == 'event' &&
+                        bannerData['eventID'] != "") {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return EventDetailLoadingScreen(
-                          isRest: widget.isRest,
+                            isRest: widget.isRest,
                             eventId: bannerData['eventID']);
                         // EventDetailsConstructView(
                         //     id: bannerData['eventID'],
@@ -204,7 +205,7 @@ class _EventCatalogState extends State<EventCatalog>
                         MaterialPageRoute(
                           builder: (context) {
                             return EventDetailLoadingScreen(
-                              isRest: widget.isRest,
+                                isRest: widget.isRest,
                                 eventId: bannerData['categoryID']);
                             //  EventDetailsConstructView(
                             //     id: bannerData['categoryID'],
@@ -221,9 +222,8 @@ class _EventCatalogState extends State<EventCatalog>
                         left: 13, right: 13, bottom: 15, top: 13),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/grey-fade.jpg'),
-                        fit: BoxFit.cover
-                      ),
+                          image: AssetImage('assets/grey-fade.jpg'),
+                          fit: BoxFit.cover),
                       shape: BoxShape.rectangle,
                       boxShadow: <BoxShadow>[
                         BoxShadow(
@@ -600,6 +600,11 @@ class _EventCatalogState extends State<EventCatalog>
                                   itemPriceText =
                                       data[i]['ticket_type']['name'];
                                 } else if (data[i]['ticket_type']['type'] ==
+                                    'free_live_stream') {
+                                  itemColor = Color(0xFFFFAA00);
+                                  itemPriceText =
+                                      data[i]['ticket_type']['name'];
+                                } else if (data[i]['ticket_type']['type'] ==
                                     'free_limited') {
                                   if (data[i]['ticket']
                                           ['availableTicketStatus'] ==
@@ -636,7 +641,7 @@ class _EventCatalogState extends State<EventCatalog>
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
                                               EventDetailLoadingScreen(
-                                                isRest: widget.isRest,
+                                                  isRest: widget.isRest,
                                                   eventId: data[i]['id'])));
                                 },
                                 child: PopularEventWidget(
@@ -668,7 +673,7 @@ class _EventCatalogState extends State<EventCatalog>
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => MediaDetails(
-                                          isRest: widget.isRest,
+                                              isRest: widget.isRest,
                                               videoUrl: mediaData[i]['video'],
                                               youtubeUrl: mediaData[i]
                                                   ['youtube'],
@@ -679,7 +684,8 @@ class _EventCatalogState extends State<EventCatalog>
                                               imageCount: 'img' + i.toString(),
                                               username: mediaData[i]['creator']
                                                   ['username'],
-                                              imageUri: mediaData[i]['banner_timeline'],
+                                              imageUri: mediaData[i]
+                                                  ['banner_timeline'],
                                               mediaTitle: mediaData[i]['title'],
                                               isVideo: true,
                                               mediaId: mediaData[i]['id'],
@@ -689,6 +695,7 @@ class _EventCatalogState extends State<EventCatalog>
                               child: MediaItem(
                                 isRest: widget.isRest,
                                 isVideo: true,
+                                isLiked: mediaData[i]['is_loved'],
                                 image: mediaData[i]['thumbnail_timeline'],
                                 title: mediaData[i]['title'],
                                 username: mediaData[i]['creator']['username'],
@@ -794,7 +801,13 @@ class _EventCatalogState extends State<EventCatalog>
                             itemPriceText =
                                 discoverData[i]['ticket_type']['name'];
                           } else if (discoverData[i]['ticket_type']['type'] ==
-                              'free_limited' || discoverData[i]['ticket_type']['type'] == 'free_limited_seating') {
+                              'free_live_stream') {
+                            itemColor = Color(0xFFFFAA00);
+                            itemPriceText = discoverData[i]['ticket_type']['name'];
+                          } else if (discoverData[i]['ticket_type']['type'] ==
+                                  'free_limited' ||
+                              discoverData[i]['ticket_type']['type'] ==
+                                  'free_limited_seating') {
                             if (discoverData[i]['ticket']
                                     ['availableTicketStatus'] ==
                                 '1') {
@@ -828,7 +841,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         EventDetailLoadingScreen(
-                                          isRest: widget.isRest,
+                                            isRest: widget.isRest,
                                             eventId: discoverData[i]['id'])));
                           },
                           child: PopularEventWidget(
@@ -965,9 +978,9 @@ class _EventCatalogState extends State<EventCatalog>
                                   MaterialPageRoute(
                                     builder: (context) =>
                                         EventDetailLoadingScreen(
-                                          isRest: widget.isRest,
-                                          eventId: data[i]['id'],
-                                        ),
+                                      isRest: widget.isRest,
+                                      eventId: data[i]['id'],
+                                    ),
                                   ),
                                 );
                               },
@@ -983,8 +996,8 @@ class _EventCatalogState extends State<EventCatalog>
                                           spreadRadius: 1.5)
                                     ],
                                     image: DecorationImage(
-                                        image: NetworkImage(
-                                            data[i]['picture'])),
+                                        image:
+                                            NetworkImage(data[i]['picture'])),
                                     borderRadius: BorderRadius.circular(15)),
                               ),
                             ),
@@ -1398,7 +1411,7 @@ class _EventCatalogState extends State<EventCatalog>
                           height: ScreenUtil.instance.setWidth(40.50),
                           width: ScreenUtil.instance.setWidth(41.50),
                           decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.5),
+                              color: Colors.grey.withOpacity(0.5),
                               boxShadow: <BoxShadow>[
                                 BoxShadow(
                                     color: Colors.black26,
@@ -1426,24 +1439,24 @@ class _EventCatalogState extends State<EventCatalog>
   Widget banner() {
     return bannerData == null
         ? HomeLoadingScreen().bannerLoading(context)
-        : bannerData.length < 1 ? HomeLoadingScreen().bannerLoading(context) : CarouselSlider(
-            height: ScreenUtil.instance.setWidth(200),
-            items: bannerData.length < 1
-                ? [
-                    HomeLoadingScreen().bannerLoading(context)
-                  ]
-                : mappedDataBanner,
-            enlargeCenterPage: false,
-            initialPage: 0,
-            autoPlay: true,
-            aspectRatio: 2.0,
-            viewportFraction: 1.0,
-            onPageChanged: (index) {
-              setState(() {
-                _current = index;
-              });
-            },
-          );
+        : bannerData.length < 1
+            ? HomeLoadingScreen().bannerLoading(context)
+            : CarouselSlider(
+                height: ScreenUtil.instance.setWidth(200),
+                items: bannerData.length < 1
+                    ? [HomeLoadingScreen().bannerLoading(context)]
+                    : mappedDataBanner,
+                enlargeCenterPage: false,
+                initialPage: 0,
+                autoPlay: true,
+                aspectRatio: 2.0,
+                viewportFraction: 1.0,
+                onPageChanged: (index) {
+                  setState(() {
+                    _current = index;
+                  });
+                },
+              );
   }
 
   Widget bannerCarousel() {
@@ -1491,10 +1504,10 @@ class _EventCatalogState extends State<EventCatalog>
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          SeeAllMediaItem(
-                            isRest: widget.isRest,
-                            initialIndex: 0, isVideo: true)));
+                      builder: (BuildContext context) => SeeAllMediaItem(
+                          isRest: widget.isRest,
+                          initialIndex: 0,
+                          isVideo: true)));
                 },
                 child: Container(
                   height: 20,
@@ -1888,10 +1901,10 @@ class _EventCatalogState extends State<EventCatalog>
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
-      )..show(context).then((val){
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
-      });
+      )..show(context).then((val) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+        });
     } else if (extractedData['desc'] == 'Event Not Found') {
       setState(() {
         isLoading = false;
@@ -1927,7 +1940,7 @@ class _EventCatalogState extends State<EventCatalog>
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => SeeAllMediaItem(
-                            isRest: widget.isRest,
+                                isRest: widget.isRest,
                                 initialIndex: 1,
                                 isVideo: true,
                               )));
@@ -1963,7 +1976,7 @@ class _EventCatalogState extends State<EventCatalog>
                       context,
                       MaterialPageRoute(
                           builder: (context) => MediaDetails(
-                            isRest: widget.isRest,
+                                isRest: widget.isRest,
                                 isVideo: true,
                                 videoUrl: latestMediaVideo[i]['video'],
                                 youtubeUrl: latestMediaVideo[i]['youtube'],
@@ -1983,6 +1996,7 @@ class _EventCatalogState extends State<EventCatalog>
                 child: LatestMediaItem(
                   isRest: widget.isRest,
                   isVideo: true,
+                  isLiked: latestMediaVideo[i]['is_loved'],
                   image: latestMediaVideo[i]['thumbnail_timeline'],
                   title: latestMediaVideo[i]['title'],
                   username: latestMediaVideo[i]['creator']['username'],
@@ -2056,10 +2070,10 @@ class _EventCatalogState extends State<EventCatalog>
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
-      )..show(context).then((val){
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
-      });
+      )..show(context).then((val) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+        });
     }
   }
 
@@ -2123,10 +2137,10 @@ class _EventCatalogState extends State<EventCatalog>
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
-      )..show(context).then((val){
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
-      });
+      )..show(context).then((val) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+        });
     }
   }
 
@@ -2176,7 +2190,10 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         var extractedData = json.decode(response.body);
         discoverData = extractedData['data'];
-        discoverData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
+        discoverData.removeWhere((item) =>
+            item['ticket_type']['type'] == 'free_limited_seating' ||
+            item['ticket_type']['type'] == 'paid_seating' ||
+            item['ticket_type']['type'] == 'paid_seating');
 
         isLoading = false;
       });
@@ -2190,10 +2207,10 @@ class _EventCatalogState extends State<EventCatalog>
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
-      )..show(context).then((val){
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
-      });
+      )..show(context).then((val) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+        });
     }
   }
 
@@ -2243,7 +2260,10 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         var extractedData = json.decode(response.body);
         data = extractedData['data'];
-        data.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
+        data.removeWhere((item) =>
+            item['ticket_type']['type'] == 'free_limited_seating' ||
+            item['ticket_type']['type'] == 'paid_seating' ||
+            item['ticket_type']['type'] == 'paid_seating');
 
         isLoading = false;
       });
@@ -2257,10 +2277,10 @@ class _EventCatalogState extends State<EventCatalog>
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
         animationDuration: Duration(milliseconds: 500),
-      )..show(context).then((val){
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
-      });
+      )..show(context).then((val) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+        });
     }
   }
 }

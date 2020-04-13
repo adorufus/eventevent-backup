@@ -164,12 +164,12 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       var extractedData = json.decode(response.body);
       if (response.statusCode.toString().startsWith('4') &&
-          extractedData['desc'] == null && extractedData['error'] == Null) {
+          extractedData['desc'] == null &&
+          extractedData['error'] == Null) {
         errorReason = 'Something is missing';
         isTimeout = true;
         setState(() {});
-      } 
-      else {
+      } else {
         errorReason = 'Something went wrong with our server';
         isTimeout = true;
         setState(() {});
@@ -300,7 +300,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
           if (detailData['isGoing'] == '1') {
             itemColor = Colors.blue;
             ticketPrice = 'Going!';
-          } else if(detailData['status'] == 'canceled'){
+          } else if (detailData['status'] == 'canceled') {
             itemColor = Colors.red;
             ticketPrice = 'Canceled';
           } else {
@@ -340,6 +340,10 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
               itemColor = Color(0xFFFFAA00);
               ticketPrice = detailData['ticket_type']['name'];
             } else if (detailData['ticket_type']['type'] == 'free') {
+              itemColor = Color(0xFFFFAA00);
+              ticketPrice = detailData['ticket_type']['name'];
+            } else if (detailData['ticket_type']['type'] ==
+                'free_live_stream') {
               itemColor = Color(0xFFFFAA00);
               ticketPrice = detailData['ticket_type']['name'];
             } else if (detailData['ticket_type']['type'] == 'free_limited') {

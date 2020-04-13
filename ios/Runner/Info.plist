@@ -103,5 +103,11 @@
 	<string>Allow to acces media library</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+   	<string>armv7</string>
+	</array>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 </dict>
 </plist>

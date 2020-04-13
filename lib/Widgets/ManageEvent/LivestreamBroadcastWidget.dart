@@ -57,9 +57,14 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
                       flushbarPosition: FlushbarPosition.TOP,
                       message: status.message,
                     ).show(context);
+                  } else if (status.state == BroadcastState.BROADCASTING) {
+                    isStarting = true;
                   }
+
+                  setState(() {});
                 },
                 statusCallback: (status) {
+                  print("test");
                   print(status.mState.toString());
                   print(status.isStarting().toString());
                   print(status.isReady().toString());
@@ -92,7 +97,12 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
                 alignment: Alignment.bottomCenter,
                 child: GestureDetector(
                   onTap: () {
-                    wowzCameraController.startBroadcast();
+                    isStarting == true
+                        ? wowzCameraController.endBroadcast()
+                        : wowzCameraController.startBroadcast();
+
+                    isStarting = !isStarting;
+                    setState(() {});
                   },
                   child: Container(
                     height: 50,

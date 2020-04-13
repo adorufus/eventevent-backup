@@ -299,8 +299,8 @@ class _SeeAllItemState extends State<SeeAllItem> {
                               ['availableTicketStatus'] ==
                           '1') {
                         itemColor = Color(0xFF34B323);
-                        itemPriceText =
-                            'Rp. ' + popularEventList[i]['ticket']['cheapestTicket'];
+                        itemPriceText = 'Rp. ' +
+                            popularEventList[i]['ticket']['cheapestTicket'];
                       } else {
                         if (popularEventList[i]['ticket']['salesStatus'] ==
                             'comingSoon') {
@@ -339,6 +339,11 @@ class _SeeAllItemState extends State<SeeAllItem> {
                       itemPriceText =
                           popularEventList[i]['ticket_type']['name'];
                     } else if (popularEventList[i]['ticket_type']['type'] ==
+                        'free_live_stream') {
+                      itemColor = Color(0xFFFFAA00);
+                      itemPriceText =
+                          popularEventList[i]['ticket_type']['name'];
+                    } else if (popularEventList[i]['ticket_type']['type'] ==
                         'free_limited') {
                       if (popularEventList[i]['ticket']
                               ['availableTicketStatus'] ==
@@ -372,8 +377,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     EventDetailLoadingScreen(
-                                      eventId: popularEventList[i]['id']
-                                    )));
+                                        eventId: popularEventList[i]['id'])));
                       },
                       child: new LatestEventItem(
                           image: popularEventList[i]['picture_timeline'],
@@ -456,8 +460,8 @@ class _SeeAllItemState extends State<SeeAllItem> {
                               ['availableTicketStatus'] ==
                           '1') {
                         itemColor = Color(0xFF34B323);
-                        itemPriceText =
-                           'Rp. ' + discoverEventList[i]['ticket']['cheapestTicket'];
+                        itemPriceText = 'Rp. ' +
+                            discoverEventList[i]['ticket']['cheapestTicket'];
                       } else {
                         if (discoverEventList[i]['ticket']['salesStatus'] ==
                             'comingSoon') {
@@ -496,6 +500,10 @@ class _SeeAllItemState extends State<SeeAllItem> {
                       itemPriceText =
                           discoverEventList[i]['ticket_type']['name'];
                     } else if (discoverEventList[i]['ticket_type']['type'] ==
+                          'free_live_stream') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText = discoverEventList[i]['ticket_type']['name'];
+                      } else if (discoverEventList[i]['ticket_type']['type'] ==
                         'free_limited') {
                       if (discoverEventList[i]['ticket']
                               ['availableTicketStatus'] ==
@@ -524,14 +532,13 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     }
 
                     return GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                         EventDetailLoadingScreen(
-                                           eventId: discoverEventList[i]['id']
-                                         )));
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    EventDetailLoadingScreen(
+                                        eventId: discoverEventList[i]['id'])));
                       },
                       child: new LatestEventItem(
                           image: discoverEventList[i]['picture_timeline'],

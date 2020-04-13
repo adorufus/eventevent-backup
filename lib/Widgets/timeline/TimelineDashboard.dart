@@ -680,6 +680,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
               child: MediaItem(
                 isRest: widget.isRest,
                 isVideo: false,
+                isLiked: mediaData[i]['is_loved'],
                 image: mediaData[i]['banner_avatar'],
                 title: mediaData[i]['title'],
                 // youtube: latestMediaVideo[i]['youtube'] ?? '/',
@@ -901,6 +902,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 child: LatestMediaItem(
                   isRest: widget.isRest,
                   isVideo: false,
+                  isLiked: latestMediaPhoto[i]['is_loved'],
                   image: latestMediaPhoto[i]['banner_timeline'],
                   mediaId: latestMediaPhoto[i]['id'],
                   title: latestMediaPhoto[i]['title'],
@@ -994,6 +996,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                   },
                   child: MediaItem(
                     isRest: widget.isRest,
+                    isLiked: popularMediaVideo[i]['is_loved'],
                     videoUrl: popularMediaVideo[i]['video'],
                     youtube: popularMediaVideo[i]['youtube'],
                     isVideo: true,
@@ -1088,6 +1091,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 child: LatestMediaItem(
                   isRest: widget.isRest,
                   isVideo: true,
+                  isLiked: latestMediaVideo[i]['is_loved'],
                   youtube: latestMediaVideo[i]['youtube'] ?? '/',
                   videoUrl: latestMediaVideo[i]['video'] ?? '/',
                   mediaId: latestMediaVideo[i]['id'],

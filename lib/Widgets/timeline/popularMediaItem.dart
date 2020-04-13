@@ -21,6 +21,7 @@ class MediaItem extends StatefulWidget {
   final youtube;
   final videoUrl;
   final isRest;
+  final isLiked;
 
   const MediaItem(
       {Key key,
@@ -33,7 +34,7 @@ class MediaItem extends StatefulWidget {
       this.articleDetail,
       this.mediaId,
       this.likeCount,
-      this.commentCount, this.youtube, this.videoUrl, @required this.isRest})
+      this.commentCount, this.youtube, this.videoUrl, @required this.isRest, this.isLiked})
       : super(key: key);
 
   @override
@@ -52,7 +53,7 @@ class _MediaItemState extends State<MediaItem> {
     setState(() {
       commentCount = widget.commentCount;
       likeCount = widget.likeCount;
-      isLiked = false;
+      isLiked = widget.isLiked;
     });
   }
 

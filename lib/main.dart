@@ -86,6 +86,7 @@ class _RunAppState extends State<RunApp> {
       theme: ThemeData(
           fontFamily: 'Proxima',
           primarySwatch: eventajaGreen,
+          brightness: Brightness.light,
           backgroundColor: Colors.white),
       // home: CrashlyticsTester(),
       home: AnnotatedRegion<SystemUiOverlayStyle>(

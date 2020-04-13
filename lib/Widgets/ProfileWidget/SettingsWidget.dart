@@ -13,6 +13,7 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:http/http.dart' as http;
@@ -79,6 +80,100 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       ),
       body: Stack(
         children: <Widget>[
+          // SettingsList(
+          //   sections: [
+          //     SettingsSection(
+          //       title: 'REVIEW',
+          //       tiles: [
+          //         SettingsTile(
+          //           title: 'Rate Eventevent on App Store / Google Play',
+          //           onTap: () {
+          //             LaunchReview.launch(
+          //                 androidAppId: 'com.eventevent.android');
+          //           },
+          //         )
+          //       ],
+          //     ),
+          //     SettingsSection(
+          //       title: 'BANK ACCOUNT & WITHDRAW',
+          //       tiles: [
+          //         SettingsTile(
+          //           title: 'Bank Account',
+          //           onTap: (){
+
+          //           },
+          //         ),
+          //         SettingsTile(
+          //           title: 'Withdraw',
+          //           onTap: (){
+
+          //           },
+          //         ),
+          //       ],
+          //     ),
+          //     SettingsSection(
+          //       title: 'ACCOUNT SETTINGS',
+          //       tiles: [
+          //         SettingsTile(
+          //           title: 'Edit Profile',
+          //           onTap: (){
+
+          //           },
+          //         ),
+          //         SettingsTile(
+          //           title: 'Change Password',
+          //           onTap: (){
+
+          //           },
+          //         ),
+          //       ],
+          //     ),
+          //     SettingsSection(
+          //       title: 'FEEDBACK',
+          //       tiles: [
+          //         SettingsTile(
+          //           title: 'Give Us Feedback',
+          //           onTap: (){
+
+          //           },
+          //         ),
+          //       ],
+          //     ),
+          //     SettingsSection(
+          //       tiles: [
+          //         SettingsTile(
+          //           title: 'Log Out',
+          //           onTap: (){
+
+          //           },
+          //         ),
+          //       ],
+          //     ),
+          //     SettingsSection(
+          //       title: 'TERMS AND CONDITION',
+          //       tiles: [
+          //         SettingsTile(
+          //           title: 'Terms',
+          //           onTap: (){
+
+          //           },
+          //         ),
+          //         SettingsTile(
+          //           title: 'Privacy Policy',
+          //           onTap: (){
+
+          //           },
+          //         ),
+          //         SettingsTile(
+          //           title: 'Open Source Library',
+          //           onTap: (){
+                      
+          //           },
+          //         )
+          //       ],
+          //     ),
+          //   ],
+          // ),
           ListView(
             children: <Widget>[
               Container(
@@ -106,7 +201,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
+                        padding: EdgeInsets.only(left: 30, bottom: 10, top: 10),
                         child: Text(
                           'Rate EventEvent on App Store / Google Play',
                           style: TextStyle(
@@ -175,7 +270,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
+                        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Withdraw',
                           style: TextStyle(
@@ -244,7 +339,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
+                        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Change Password',
                           style: TextStyle(
@@ -287,7 +382,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
+                        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Give us feedback',
                           style: TextStyle(
@@ -405,7 +500,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
+                        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Privacy Policy',
                           style: TextStyle(
@@ -433,7 +528,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, top: 5, bottom: 10),
+                        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Open Source Library',
                           style: TextStyle(
