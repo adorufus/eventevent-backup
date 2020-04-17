@@ -93,7 +93,7 @@ class _TicketReviewState extends State<TicketReview> {
       thisEventEndTime = eventEndTime;
       thisTicketAmount = ticketAmount;
       thisTicketPrice = ticketPrice;
-      if (widget.ticketType == 'free_limited') {
+      if (widget.ticketType == 'free_limited' || widget.ticketType == 'free_live_stream') {
         thisTicketFee = '0';
         pajak = 0;
         total = 0;

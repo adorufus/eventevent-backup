@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
@@ -33,6 +34,8 @@ class PostEventMapState extends State<PostEventMap> {
   String err;
   Location location = new Location();
   LocationData currentLocation;
+  bool _serviceEnabled;
+  PermissionStatus _permissionGranted;
   StreamSubscription<LocationData> locationSubcription;
 
   showPlacePicker() async {
@@ -40,8 +43,13 @@ class PostEventMapState extends State<PostEventMap> {
     LocationResult place = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => PlacePicker(
             'AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI',
-            displayLocation:
-                LatLng(currentLocation.latitude == null ? -6.1753924 : currentLocation.latitude, currentLocation.longitude == null ? 106.8249641 : currentLocation.longitude))));
+            displayLocation: LatLng(
+                currentLocation.latitude == null
+                    ? -6.1753924
+                    : currentLocation.latitude,
+                currentLocation.longitude == null
+                    ? 106.8249641
+                    : currentLocation.longitude))));
 
     if (!mounted) {
       return;
@@ -66,6 +74,7 @@ class PostEventMapState extends State<PostEventMap> {
     try {
       currentLocation = await location.getLocation();
       err = "";
+      setState((){});
     } on PlatformException catch (e) {
       print(e.message + ' ' + e.code);
       if (e.code == "PERMISSION_DENIED") {
@@ -73,8 +82,7 @@ class PostEventMapState extends State<PostEventMap> {
         print(e.message + ' ' + e.code);
       } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
         print(e.message + ' ' + e.code);
-        err =
-            'Permission denied - please ask the user to enable   service';
+        err = 'Permission denied - please ask the user to enable   service';
       }
       currentLocation = null;
     }
@@ -159,9 +167,23 @@ class PostEventMapState extends State<PostEventMap> {
     }
   }
 
+  // void checkLocationService() async {
+  //   _serviceEnabled = await location.serviceEnabled();
+  //   if (!_serviceEnabled) {
+  //     _serviceEnabled = await location.requestService();
+  //     if (!_serviceEnabled) {
+  //       return;
+  //     }
+  //   }
+
+  //   _permissionGranted = await location.hasPermission();
+
+  // }
+
   @override
   void initState() {
     super.initState();
+
     initPlatformState();
     locationSubcription =
         location.onLocationChanged().listen((LocationData result) {
@@ -268,8 +290,8 @@ class PostEventMapState extends State<PostEventMap> {
                     height: MediaQuery.of(context).size.height / 1.32,
                     child: ListView(children: <Widget>[
                       Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: showMap()),
+                          width: MediaQuery.of(context).size.width,
+                          child: showMap()),
                       SizedBox(
                         height: ScreenUtil.instance.setWidth(20),
                       ),

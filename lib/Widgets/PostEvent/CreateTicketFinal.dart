@@ -50,7 +50,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
   File imageFile;
 
   Dio dio = new Dio(BaseOptions(
-      connectTimeout: 5000, baseUrl: BaseApi().apiUrl, receiveTimeout: 5000));
+      connectTimeout: 15000, baseUrl: BaseApi().apiUrl, receiveTimeout: 15000));
 
   getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -923,9 +923,9 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
         setState(() {
           isLoading = false;
         });
-        var extractedError = json.decode(e.response.data);
+        // var extractedError = json.decode(e.response.data);
         print(e.message);
-        print(extractedError);
+        // print(extractedError);
       }
       if (e is FileSystemException) {
         setState(() {

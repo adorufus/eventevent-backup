@@ -2109,7 +2109,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            LivestreamBroadcast()));
+                                                            LivestreamBroadcast(
+                                                              eventDetail: widget.detailData
+                                                            )));
                                               } else {
                                                 SharedPreferences prefs =
                                                     await SharedPreferences
@@ -2833,7 +2835,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         };
         baseUrl = BaseApi().apiUrl;
       } else {
-        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': signature};
+        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': SIGNATURE};
         baseUrl = BaseApi().restUrl;
       }
     });
@@ -2874,7 +2876,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         };
         baseUrl = BaseApi().apiUrl;
       } else {
-        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': signature};
+        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': SIGNATURE};
         baseUrl = BaseApi().restUrl;
       }
 
@@ -2901,7 +2903,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       session = preferences.getString('Session');
       if (widget.isRest == true) {
         baseUrl = BaseApi().restUrl;
-        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': signature};
+        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': SIGNATURE};
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
         headers = {'Authorization': AUTHORIZATION_KEY, 'cookie': session};

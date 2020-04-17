@@ -1706,7 +1706,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -1740,7 +1740,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -1795,7 +1795,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -1867,7 +1867,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -2034,7 +2034,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -2102,7 +2102,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -2170,7 +2170,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -2240,7 +2240,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {

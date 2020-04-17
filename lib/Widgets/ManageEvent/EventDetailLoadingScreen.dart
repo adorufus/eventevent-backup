@@ -112,7 +112,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
       session = preferences.getString('Session');
       if (widget.isRest == true) {
         baseUrl = BaseApi().restUrl;
-        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': signature};
+        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': SIGNATURE};
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
         headers = {'Authorization': AUTHORIZATION_KEY, 'cookie': session};

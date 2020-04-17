@@ -163,10 +163,10 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                     itemColor = Color(0xFF34B323).withOpacity(.2);
                     ticketPrice = 'Rp. ' + ticketListData[i]['final_price'];
                   }
-                } else if (ticketListData[i]['ticket_type']['type'] ==
+                } else if (ticketListData[i]['event']['ticket_type']['type'] ==
                     'free_live_stream') {
                   itemColor = Color(0xFFFFAA00);
-                  ticketPrice = ticketListData[i]['ticket_type']['name'];
+                  ticketPrice = ticketListData[i]['paid_ticket_type']['name'];
                 } else if (ticketListData[i]['event']['ticket_type']['type'] ==
                         'free_limited' ||
                     ticketListData[i]['event']['ticket_type']['type'] ==

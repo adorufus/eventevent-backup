@@ -22,7 +22,7 @@ class EventListProviders {
     if(isRest == true){
       headerType = {
         'Authorization': AUTHORIZATION_KEY,
-        'signature': signature
+        'signature': SIGNATURE
       };
     }
     else if(isRest == false){

@@ -550,7 +550,7 @@ class _MediaDetailsState extends State<MediaDetails> {
     setState(() {
       if (widget.isRest == true) {
         baseUrl = BaseApi().restUrl;
-        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': signature};
+        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': SIGNATURE};
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
         headers = {
@@ -603,7 +603,7 @@ class _MediaDetailsState extends State<MediaDetails> {
 
     Map<String, String> headers;
     if (widget.isRest == true) {
-      headers = {'Authorization': AUTHORIZATION_KEY, 'signature': signature};
+      headers = {'Authorization': AUTHORIZATION_KEY, 'signature': SIGNATURE};
     } else {
       headers = {
         'Authorization': AUTHORIZATION_KEY,

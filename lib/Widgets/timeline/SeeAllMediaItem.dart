@@ -501,7 +501,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
         baseApi = BaseApi().restUrl;
         headers = {
           'Authorization': AUTHORIZATION_KEY,
-          'signature': signature,
+          'signature': SIGNATURE,
         };
       } else {
         baseApi = BaseApi().apiUrl;
@@ -548,7 +548,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
         baseApi = BaseApi().restUrl;
         headers = {
           'Authorization': AUTHORIZATION_KEY,
-          'signature': signature,
+          'signature': SIGNATURE,
         };
       } else {
         baseApi = BaseApi().apiUrl;

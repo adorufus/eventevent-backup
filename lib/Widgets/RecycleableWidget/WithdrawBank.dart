@@ -260,7 +260,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Withdraw Ammount',
+                        'Withdraw Amount',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: ScreenUtil.instance.setSp(17)),

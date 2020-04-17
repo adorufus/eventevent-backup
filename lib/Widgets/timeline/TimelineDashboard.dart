@@ -1174,7 +1174,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
         baseUrl = BaseApi().restUrl;
         headers = {
           'Authorization': AUTHORIZATION_KEY,
-          'signature': signature,
+          'signature': SIGNATURE,
         };
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
@@ -1207,7 +1207,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
         baseUrl = BaseApi().restUrl;
         headers = {
           'Authorization': AUTHORIZATION_KEY,
-          'signature': signature,
+          'signature': SIGNATURE,
         };
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
@@ -1265,7 +1265,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
         baseUrl = BaseApi().restUrl;
         headers = {
           'Authorization': AUTHORIZATION_KEY,
-          'signature': signature,
+          'signature': SIGNATURE,
         };
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
@@ -1294,7 +1294,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
         baseUrl = BaseApi().restUrl;
         headers = {
           'Authorization': AUTHORIZATION_KEY,
-          'signature': signature,
+          'signature': SIGNATURE,
         };
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
@@ -1327,7 +1327,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
         baseUrl = BaseApi().restUrl;
         headers = {
           'Authorization': AUTHORIZATION_KEY,
-          'signature': signature,
+          'signature': SIGNATURE,
         };
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;

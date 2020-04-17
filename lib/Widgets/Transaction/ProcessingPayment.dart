@@ -148,7 +148,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
 
     final response = await http.post(purchaseUri,
         headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session},
-        body: widget.ticketType == 'free_limited' ? bodyFreeLimit : body);
+        body: widget.ticketType == 'free_limited' || widget.ticketType == 'free_live_stream' ? bodyFreeLimit : body);
 
     var length = response.contentLength;
     var recieved = 0;
@@ -170,11 +170,11 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
         print(paymentData['expired_time']);
         getPaymentData(paymentData['expired_time']);
       });
-      if (widget.ticketType == 'free_limited') {
+      if (widget.ticketType == 'free_limited' || widget.ticketType == 'free_live_stream') {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (BuildContext context) => SuccessPage()));
+                builder: (BuildContext context) => SuccessPage(invoiceNumber: paymentData['transaction_code'])));
       } else if (paymentData['payment_method_id'] == '1') {
         Navigator.push(
             context,

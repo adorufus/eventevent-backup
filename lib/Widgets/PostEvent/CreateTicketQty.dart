@@ -110,7 +110,7 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
                     hintText: 'enter your ticket quantity',
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ));
@@ -131,7 +131,7 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
       print(prefs.getString('SETUP_TICKET_QTY'));
       print(prefs.getString('NEW_EVENT_TICKET_TYPE_ID'));
       Navigator.push(context,
-          CupertinoPageRoute(builder: (BuildContext context) => prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ? CreateTicketStartDate() : CreateTicketPrice()));
+          CupertinoPageRoute(builder: (BuildContext context) => prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '7' ? CreateTicketStartDate() : CreateTicketPrice()));
     }
   }
 }

@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/ProfileWidget/ScanBarcode.dart';
+import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/LivestreamPlayer.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsWidget.dart';
 import 'package:eventevent/Widgets/ProfileWidget/UseTicketSuccess.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
+import 'package:eventevent/Widgets/openMedia.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:webview_flutter/webview_flutter.dart';
 
 class UseTicket extends StatefulWidget {
   final ticketTitle;
@@ -24,7 +28,8 @@ class UseTicket extends StatefulWidget {
   final ticketDesc;
   final ticketID;
   final usedStatus;
-
+  final livestreamUrl;
+  
   const UseTicket(
       {Key key,
       this.ticketTitle,
@@ -35,7 +40,7 @@ class UseTicket extends StatefulWidget {
       this.ticketEndTime,
       this.ticketDesc,
       this.ticketID,
-      this.usedStatus})
+      this.usedStatus, this.livestreamUrl})
       : super(key: key);
 
   @override
@@ -81,9 +86,15 @@ class UseTicketState extends State<UseTicket> {
         ),
       ),
       bottomNavigationBar: GestureDetector(
-        onTap: widget.usedStatus == 'USED' || widget.usedStatus == 'EXPIRED'
+        onTap: widget.usedStatus == 'Used' || widget.usedStatus == 'Expired'
             ? () {}
-            : () {
+            : widget.usedStatus == 'Streaming' || widget.usedStatus == 'Watch Playback' ? (){
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => WebViewTest(
+                  url: widget.livestreamUrl
+                )
+              ));
+            } : () {
                 scan().then((_) async {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
@@ -125,16 +136,16 @@ class UseTicketState extends State<UseTicket> {
               },
         child: Container(
           height: ScreenUtil.instance.setWidth(50),
-          color: widget.usedStatus == 'USED'
+          color: widget.usedStatus == 'Used'
               ? Colors.grey
-              : widget.usedStatus == 'EXPIRED'
+              : widget.usedStatus == 'Expired'
                   ? Colors.red
                   : Colors.orange,
           child: Center(
             child: Text(
-              widget.usedStatus == 'USED'
+              widget.usedStatus == 'Used'
                   ? 'USED'
-                  : widget.usedStatus == 'EXPIRED' ? 'EXPIRED' : 'USE TICKET',
+                  : widget.usedStatus == 'Expired' ? 'EXPIRED' : widget.usedStatus == 'Streaming' ? 'Watch Livestream' : widget.usedStatus == 'Watch Playback' ? 'Watch Playback' : 'USE TICKET',
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -149,10 +160,10 @@ class UseTicketState extends State<UseTicket> {
         child: Center(
           child: Container(
             foregroundDecoration: BoxDecoration(
-                backgroundBlendMode: widget.usedStatus == 'AVAILABLE'
+                backgroundBlendMode: widget.usedStatus == 'Available' || widget.usedStatus == 'Streaming'
                     ? null
                     : BlendMode.saturation,
-                color: widget.usedStatus == 'AVAILABLE' ? null : Colors.grey),
+                color: widget.usedStatus == 'Available' || widget.usedStatus == 'Streaming' ? null : Colors.grey),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             margin: EdgeInsets.symmetric(horizontal: 25, vertical: 25),

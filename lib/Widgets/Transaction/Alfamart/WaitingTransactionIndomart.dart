@@ -76,7 +76,7 @@ class _WaitingTransactionAlfamartState
       backgroundColor: Colors.white.withOpacity(0.9),
       bottomNavigationBar: GestureDetector(
         onTap: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SuccessPage()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SuccessPage(invoiceNumber: paymentData['transaction_code'])));
         },
         child: Container(
           height: ScreenUtil.instance.setWidth(50),

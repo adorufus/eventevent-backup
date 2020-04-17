@@ -166,7 +166,7 @@ class _TransactionFormState extends State<TransactionForm> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return widget.ticketType == 'free_limited'
+                  return widget.ticketType == 'free_limited' || widget.ticketType == 'free_live_stream'
                       ? customFormList == null
                           ? TicketReview(
                               ticketType: widget.ticketType,
