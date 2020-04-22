@@ -278,69 +278,69 @@ class TimelineDashboardState extends State<TimelineDashboard>
         })?.toList() ??
         [];
 
-    return SafeArea(
-      child: mediaData == null
-          ? Container(
-              child: Center(
-                child: CupertinoActivityIndicator(radius: 20),
-              ),
-            )
-          : Scaffold(
-              appBar: PreferredSize(
-                preferredSize: Size(null, 100),
+    return mediaData == null
+        ? Container(
+            child: Center(
+              child: CupertinoActivityIndicator(radius: 20),
+            ),
+          )
+        : Scaffold(
+            appBar: PreferredSize(
+              preferredSize: Size(null, 100),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: ScreenUtil.instance.setWidth(75),
+                padding: EdgeInsets.symmetric(horizontal: 13),
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: ScreenUtil.instance.setWidth(75),
-                  padding: EdgeInsets.symmetric(horizontal: 13),
-                  child: Container(
-                    color: Colors.white,
-                    child: AppBar(
-                      automaticallyImplyLeading: false,
-                      elevation: 0,
-                      backgroundColor: Colors.white,
-                      titleSpacing: 0,
-                      centerTitle: false,
-                      title: Container(
-                        width: ScreenUtil.instance.setWidth(240),
-                        child: Row(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(23),
-                                  width: ScreenUtil.instance.setWidth(93),
-                                  child: Image.asset(
-                                    'assets/icons/aset_icon/emedia.png',
-                                    fit: BoxFit.fill,
-                                  ),
+                  color: Colors.white,
+                  child: AppBar(
+                    automaticallyImplyLeading: false,
+                    elevation: 0,
+                    backgroundColor: Colors.white,
+                    titleSpacing: 0,
+                    centerTitle: false,
+                    title: Container(
+                      width: ScreenUtil.instance.setWidth(240),
+                      child: Row(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(23),
+                                width: ScreenUtil.instance.setWidth(93),
+                                child: Image.asset(
+                                  'assets/icons/aset_icon/emedia.png',
+                                  fit: BoxFit.fill,
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
               ),
-              backgroundColor: Colors.white,
-              body: isTimeoutPopularMediaPhoto == true &&
-                      isTimeoutBanner == true &&
-                      isTimeoutLatestMediaPhoto == true &&
-                      isTimeoutLatestMediaVideo == true &&
-                      isTimeoutPopularMediaVideo
-                  ? EmptyState(
-                      imagePath: 'assets/icons/empty_state/error.png',
-                      isTimeout: true,
-                      reasonText: errorReason,
-                      refreshButtonCallback: () {
-                        setState(() {
-                          isTimeoutPopularMediaPhoto = false;
-                          getDetail();
-                        });
-                      },
-                    )
-                  : DefaultTabController(
+            ),
+            backgroundColor: Colors.white,
+            body: isTimeoutPopularMediaPhoto == true &&
+                    isTimeoutBanner == true &&
+                    isTimeoutLatestMediaPhoto == true &&
+                    isTimeoutLatestMediaVideo == true &&
+                    isTimeoutPopularMediaVideo
+                ? EmptyState(
+                    imagePath: 'assets/icons/empty_state/error.png',
+                    isTimeout: true,
+                    reasonText: errorReason,
+                    refreshButtonCallback: () {
+                      setState(() {
+                        isTimeoutPopularMediaPhoto = false;
+                        getDetail();
+                      });
+                    },
+                  )
+                : SafeArea(
+                    child: DefaultTabController(
                       initialIndex: 0,
                       length: 2,
                       child: Column(
@@ -429,8 +429,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                           )
                         ],
                       ),
-                    )),
-    );
+                    ),
+                  ),
+          );
   }
 
   getSize() {}
