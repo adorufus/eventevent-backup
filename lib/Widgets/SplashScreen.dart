@@ -84,8 +84,8 @@ class _SplashScreenState extends State<SplashScreen> {
       value: SystemUiOverlayStyle(
           statusBarColor: eventajaGreenTeal,
           statusBarIconBrightness: Brightness.light),
-      child: SafeArea(
-        child: Scaffold(
+      child: Scaffold(
+        backgroundColor: eventajaGreenTeal,
           body: Container(
             color: eventajaGreenTeal,
             child: Center(
@@ -110,7 +110,6 @@ class _SplashScreenState extends State<SplashScreen> {
               // ),
             ),
           ),
-        ),
       ),
     );
   }
