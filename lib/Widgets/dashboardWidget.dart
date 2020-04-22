@@ -540,7 +540,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
             //   leading: ,
             // ),
             key: scaffoldKey,
-            backgroundColor: Colors.grey[100],
+            backgroundColor: Colors.white,
             bottomNavigationBar: SafeArea(
               bottom: true,
               child: CupertinoTabBar(
