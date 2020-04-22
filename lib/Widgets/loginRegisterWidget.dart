@@ -27,8 +27,9 @@ class LoginRegisterWidget extends StatefulWidget {
   final previousWidget;
   final eventId;
 
-  const LoginRegisterWidget({Key key, this.previousWidget, this.eventId}) : super(key: key);
-  
+  const LoginRegisterWidget({Key key, this.previousWidget, this.eventId})
+      : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _LoginRegisterWidget();
@@ -118,7 +119,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      setState((){
+      setState(() {
         isLoading = false;
       });
 
@@ -247,13 +248,12 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
 
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
-        statusBarIconBrightness: Brightness.dark
-      ),
-          child: SafeArea(
-        bottom: false,
-        child: Scaffold(
-          body: Stack(
+          statusBarColor: Colors.white,
+          statusBarIconBrightness: Brightness.dark),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Stack(
             children: <Widget>[
               Container(
                 child: Column(
@@ -281,8 +281,8 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                       ),
                     ),
                     Padding(
-                      padding:
-                          EdgeInsets.only(top: ScreenUtil.instance.setWidth(50)),
+                      padding: EdgeInsets.only(
+                          top: ScreenUtil.instance.setWidth(50)),
                     ),
                     Hero(
                       tag: 'eventeventlogo',
@@ -291,7 +291,9 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         scale: 4,
                       ),
                     ),
-                    Expanded(child: SizedBox(),),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
                     FractionallySizedBox(
                       widthFactor: ScreenUtil.instance.setWidth(.8),
                       child: Container(
@@ -302,7 +304,9 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                             fit: BoxFit.fill,
                           )),
                     ),
-                    Expanded(child: SizedBox(),),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
                     Center(
                       child: Text('DAFTAR DAN MULAI',
                           style: TextStyle(
@@ -323,7 +327,11 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          LoginWidget(previousWidget: widget.previousWidget, eventId: widget.eventId,)));
+                                          LoginWidget(
+                                            previousWidget:
+                                                widget.previousWidget,
+                                            eventId: widget.eventId,
+                                          )));
                             },
                             child: Container(
                               width: ScreenUtil.instance.setWidth(160.41),
@@ -335,7 +343,8 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(
                                         blurRadius: 2,
-                                        color: eventajaGreenTeal.withOpacity(0.3),
+                                        color:
+                                            eventajaGreenTeal.withOpacity(0.3),
                                         spreadRadius: 1.5)
                                   ]),
                               child: Center(
@@ -368,7 +377,8 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(
                                         blurRadius: 2,
-                                        color: eventajaGreenTeal.withOpacity(0.3),
+                                        color:
+                                            eventajaGreenTeal.withOpacity(0.3),
                                         spreadRadius: 1.5)
                                   ]),
                               child: Center(
@@ -534,14 +544,16 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                   ],
                 ),
               ),
-              isLoading == true ? Container(
-                child: Center(
-                  child: CupertinoActivityIndicator(
-                    animating: true,
-                    radius: 15,
-                  ),
-                ),
-              ) : Container()
+              isLoading == true
+                  ? Container(
+                      child: Center(
+                        child: CupertinoActivityIndicator(
+                          animating: true,
+                          radius: 15,
+                        ),
+                      ),
+                    )
+                  : Container()
             ],
           ),
         ),
