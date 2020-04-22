@@ -844,10 +844,15 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
             ? '0'
             : merchantPrice,
         'is_single_ticket': prefs.getString('SETUP_TICKET_IS_ONE_PURCHASE'),
-        'ticket_image': await MultipartFile.fromFile(
-            imageFile.path, filename: "eventeventticket-${DateTime.now().toString()}.jpg",
+        'ticket_image': await MultipartFile.fromFile(imageFile.path,
+            filename: "eventeventticket-${DateTime.now().toString()}.jpg",
             contentType: MediaType('image', 'jpeg'))
       };
+
+      if (prefs.getString('zoom_id') != '') {
+        body['zoom_id'] = prefs.getString('zoom_id');
+        body['zoom_description'] = prefs.getString('zoom_desc');
+      }
 
       print(body);
 
@@ -883,6 +888,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
       print(response.data);
 
       if (response.statusCode == 201 || response.statusCode == 200) {
+        prefs.remove('zoom_id');
+        prefs.remove('zoom_desc');
         setState(() {
           isLoading = false;
         });

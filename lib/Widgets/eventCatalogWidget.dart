@@ -346,114 +346,106 @@ class _EventCatalogState extends State<EventCatalog>
               ),
             ),
           ),
-          body: ListView(
-            children: <Widget>[
-              DefaultTabController(
-                length: 3,
-                initialIndex: 0,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      color: Colors.white,
-                      child: TabBar(
-                        onTap: (val) {
-                          setState(() {
-                            if (val == 2 || val == 0) {
-                              isOnlyContainer = true;
-                            } else {
-                              isOnlyContainer = false;
-                            }
-                          });
+          body: DefaultTabController(
+            length: 3,
+            initialIndex: 0,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  color: Colors.white,
+                  child: TabBar(
+                    onTap: (val) {
+                      setState(() {
+                        if (val == 2 || val == 0) {
+                          isOnlyContainer = true;
+                        } else {
+                          isOnlyContainer = false;
+                        }
+                      });
 
-                          print(isOnlyContainer);
-                        },
-                        labelColor: Colors.black,
-                        labelStyle: TextStyle(fontFamily: 'Proxima'),
-                        tabs: [
-                          Tab(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Image.asset(
-                                  'assets/icons/icon_apps/home.png',
-                                  scale: 4.5,
-                                ),
-                                SizedBox(
-                                    width: ScreenUtil.instance.setWidth(10)),
-                                Text('Home',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(12.5))),
-                              ],
+                      print(isOnlyContainer);
+                    },
+                    labelColor: Colors.black,
+                    labelStyle: TextStyle(fontFamily: 'Proxima'),
+                    tabs: [
+                      Tab(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Image.asset(
+                              'assets/icons/icon_apps/home.png',
+                              scale: 4.5,
                             ),
-                          ),
-                          Tab(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Image.asset(
-                                  'assets/icons/icon_apps/nearby.png',
-                                  scale: 4.5,
-                                ),
-                                SizedBox(
-                                    width: ScreenUtil.instance.setWidth(10)),
-                                Text('Nearby',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(12.5))),
-                              ],
-                            ),
-                          ),
-                          Tab(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Image.asset(
-                                  'assets/icons/icon_apps/latest.png',
-                                  scale: 4.5,
-                                ),
-                                SizedBox(
-                                    width: ScreenUtil.instance.setWidth(10)),
-                                Text('Latest',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(12.5))),
-                              ],
-                            ),
-                          ),
-                        ],
-                        unselectedLabelColor: Colors.grey,
+                            SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                            Text('Home',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: ScreenUtil.instance.setSp(12.5))),
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      alignment: Alignment.topCenter,
-                      height: MediaQuery.of(context).size.height - 191,
-                      child: TabBarView(
-                        physics: NeverScrollableScrollPhysics(),
-                        children: [
-                          home(),
-                          isOnlyContainer == true
-                              ? Container()
-                              : Container(
-                                  child: Center(
-                                    child: ListenPage(),
-                                  ),
-                                ),
-                          LatestEventWidget(),
-                        ],
+                      Tab(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Image.asset(
+                              'assets/icons/icon_apps/nearby.png',
+                              scale: 4.5,
+                            ),
+                            SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                            Text('Nearby',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: ScreenUtil.instance.setSp(12.5))),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      Tab(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Image.asset(
+                              'assets/icons/icon_apps/latest.png',
+                              scale: 4.5,
+                            ),
+                            SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                            Text('Latest',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: ScreenUtil.instance.setSp(12.5))),
+                          ],
+                        ),
+                      ),
+                    ],
+                    unselectedLabelColor: Colors.grey,
+                  ),
                 ),
-              ),
-            ],
+                Flexible(
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    height: MediaQuery.of(context).size.height - 191,
+                    child: TabBarView(
+                      physics: NeverScrollableScrollPhysics(),
+                      children: [
+                        home(),
+                        isOnlyContainer == true
+                            ? Container()
+                            : Container(
+                                child: Center(
+                                  child: ListenPage(),
+                                ),
+                              ),
+                        LatestEventWidget(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -803,7 +795,8 @@ class _EventCatalogState extends State<EventCatalog>
                           } else if (discoverData[i]['ticket_type']['type'] ==
                               'free_live_stream') {
                             itemColor = Color(0xFFFFAA00);
-                            itemPriceText = discoverData[i]['ticket_type']['name'];
+                            itemPriceText =
+                                discoverData[i]['ticket_type']['name'];
                           } else if (discoverData[i]['ticket_type']['type'] ==
                                   'free_limited' ||
                               discoverData[i]['ticket_type']['type'] ==

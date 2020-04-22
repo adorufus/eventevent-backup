@@ -1428,7 +1428,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       'comingSoon'
                                   ? countdownTimer()
                                   : Container(),
-                              widget.goingData == null || widget.goingData.length < 1
+                              widget.goingData == null ||
+                                      widget.goingData.length < 1
                                   ? Container()
                                   : Container(
                                       margin: EdgeInsets.symmetric(
@@ -2105,13 +2106,42 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   'free_live_stream') {
                                                 print('isLivestream');
 
-                                                Navigator.push(
+                                                if (widget.detailData[
+                                                            'livestream'][0]
+                                                        ['zoom_id'] !=
+                                                    null) {
+                                                  showCupertinoDialog(
+                                                      context: context,
+                                                      builder: (thisContext) {
+                                                        return CupertinoAlertDialog(
+                                                          title: Text('Notice'),
+                                                          content: Text(
+                                                            'please start broadcast using zoom link you provide to your attandees',
+                                                          ),
+                                                          actions: <Widget>[
+                                                            CupertinoDialogAction(
+                                                              child:
+                                                                  Text('Close'),
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        thisContext)
+                                                                    .pop();
+                                                              },
+                                                            )
+                                                          ],
+                                                        );
+                                                      });
+                                                } else {
+                                                  Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            LivestreamBroadcast(
-                                                              eventDetail: widget.detailData
-                                                            )));
+                                                      builder: (context) =>
+                                                          LivestreamBroadcast(
+                                                              eventDetail: widget
+                                                                  .detailData),
+                                                    ),
+                                                  );
+                                                }
                                               } else {
                                                 SharedPreferences prefs =
                                                     await SharedPreferences
@@ -2256,7 +2286,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   children: <Widget>[
                                     Flexible(
                                       child: GestureDetector(
-                                        behavior: prefix0.HitTestBehavior.opaque,
+                                        behavior:
+                                            prefix0.HitTestBehavior.opaque,
                                         onTap: () {
                                           currentTab = 0;
                                         },
@@ -2294,7 +2325,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     ),
                                     Flexible(
                                       child: GestureDetector(
-                                        behavior: prefix0.HitTestBehavior.opaque,
+                                        behavior:
+                                            prefix0.HitTestBehavior.opaque,
                                         onTap: () {
                                           currentTab = 1;
                                         },
@@ -2332,7 +2364,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     ),
                                     Flexible(
                                       child: GestureDetector(
-                                        behavior: prefix0.HitTestBehavior.opaque,
+                                        behavior:
+                                            prefix0.HitTestBehavior.opaque,
                                         onTap: () {
                                           currentTab = 2;
                                         },

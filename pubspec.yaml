@@ -197,6 +197,8 @@ flutter:
     - assets/icons/aset_icon/media.png
     - assets/icons/aset_icon/comment.png
     - assets/icons/aset_icon/popular.png
+    - assets/icons/aset_icon/wowza_livestream.png
+    - assets/icons/aset_icon/zoom_livestream.png
     - assets/icons/icon_apps/popular.png
     - assets/icons/icon_apps/home.png
     - assets/icons/icon_apps/wallet.png
@@ -255,6 +257,7 @@ flutter:
     - assets/icons/Icon_finish_create_event.png
     - assets/icons/page_post_event.png
     - assets/icons/page_post_media.png
+    - assets/icons/post_livestream.png
     - assets/icons/icon_line.png
     - assets/icons/Icon_finish_create_event.png
     - assets/drawable/bca.png

@@ -107,24 +107,28 @@ class SelectTicketTypeState extends State<SelectTicketType> {
               if (ticketType[i]['id'] == '4') {
                 imageUri = 'assets/btn_ticket/paid.png';
               }
-              if (ticketType[i]['id'] == '9') {
+              else if (ticketType[i]['id'] == '9') {
                 imageUri = 'assets/btn_ticket/paid.png';
               }
-              if (ticketType[i]['id'] == '5') {
+              else if (ticketType[i]['id'] == '5') {
                 imageUri = 'assets/btn_ticket/free-limited.png';
               }
-              if (ticketType[i]['id'] == '10') {
+              else if (ticketType[i]['id'] == '10') {
                 imageUri = 'assets/btn_ticket/free-limited.png';
               }
-              if (ticketType[i]['id'] == '1') {
+              else if (ticketType[i]['id'] == '1') {
                 imageUri = 'assets/btn_ticket/free.png';
               }
-              if (ticketType[i]['id'] == '2') {
+              else if (ticketType[i]['id'] == '2') {
                 imageUri = 'assets/btn_ticket/no-ticket.png';
               }
-              if (ticketType[i]['id'] == '3') {
+              else if (ticketType[i]['id'] == '3') {
                 imageUri = 'assets/btn_ticket/ots-800px.png';
               }
+              else if (ticketType[i]['id'] == '7'){
+                imageUri = 'assets/btn_ticket/free_live_limited.png';
+              }
+
               return ListTile(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(
