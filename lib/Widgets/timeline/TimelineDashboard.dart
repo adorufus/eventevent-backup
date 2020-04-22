@@ -343,7 +343,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                   : DefaultTabController(
                       initialIndex: 0,
                       length: 2,
-                      child: ListView(
+                      child: Column(
                         children: <Widget>[
                           Container(
                             color: Colors.white,
@@ -395,34 +395,36 @@ class TimelineDashboardState extends State<TimelineDashboard>
                               unselectedLabelColor: Colors.grey,
                             ),
                           ),
-                          Container(
-                            height: ScreenUtil.instance.setHeight(
-                                MediaQuery.of(context).size.height - 50),
-                            child: Stack(
-                              children: <Widget>[
-                                TabBarView(
-                                  children: <Widget>[
-                                    emedia(),
-                                    widget.isRest == true
-                                        ? LoginRegisterWidget()
-                                        : UserTimelineItem(
-                                            currentUserId: currentUserId,
-                                            timelineType: 'timeline',
-                                          )
-                                  ],
-                                ),
-                                Positioned(
-                                    child: isLoading == true
-                                        ? Container(
-                                            child: Center(
-                                                child:
-                                                    CupertinoActivityIndicator(
-                                                        radius: 20)),
-                                            color:
-                                                Colors.black.withOpacity(0.5),
-                                          )
-                                        : Container())
-                              ],
+                          Flexible(
+                            child: Container(
+                              height: ScreenUtil.instance.setHeight(
+                                  MediaQuery.of(context).size.height - 50),
+                              child: Stack(
+                                children: <Widget>[
+                                  TabBarView(
+                                    children: <Widget>[
+                                      emedia(),
+                                      widget.isRest == true
+                                          ? LoginRegisterWidget()
+                                          : UserTimelineItem(
+                                              currentUserId: currentUserId,
+                                              timelineType: 'timeline',
+                                            )
+                                    ],
+                                  ),
+                                  Positioned(
+                                      child: isLoading == true
+                                          ? Container(
+                                              child: Center(
+                                                  child:
+                                                      CupertinoActivityIndicator(
+                                                          radius: 20)),
+                                              color:
+                                                  Colors.black.withOpacity(0.5),
+                                            )
+                                          : Container())
+                                ],
+                              ),
                             ),
                           )
                         ],
