@@ -532,9 +532,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
       value: SystemUiOverlayStyle(
           statusBarColor: Colors.white,
           statusBarIconBrightness: Brightness.dark),
-      child: SafeArea(
-        bottom: false,
-        child: WillPopScope(
+      child: WillPopScope(
           onWillPop: _onWillPop,
           child: Scaffold(
             resizeToAvoidBottomPadding: false,
@@ -895,7 +893,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
             body: _pageOptions[_selectedPage],
           ),
         ),
-      ),
     );
   }
 
