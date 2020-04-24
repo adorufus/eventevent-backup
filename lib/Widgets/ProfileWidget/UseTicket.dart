@@ -17,6 +17,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/ZoomTicketPage.dart';
 
 class UseTicket extends StatefulWidget {
   final ticketTitle;
@@ -29,6 +30,8 @@ class UseTicket extends StatefulWidget {
   final ticketID;
   final usedStatus;
   final livestreamUrl;
+  final zoomId;
+  final zoomDesc;
   
   const UseTicket(
       {Key key,
@@ -40,7 +43,7 @@ class UseTicket extends StatefulWidget {
       this.ticketEndTime,
       this.ticketDesc,
       this.ticketID,
-      this.usedStatus, this.livestreamUrl})
+      this.usedStatus, this.livestreamUrl, this.zoomId, this.zoomDesc})
       : super(key: key);
 
   @override
@@ -88,10 +91,15 @@ class UseTicketState extends State<UseTicket> {
       bottomNavigationBar: GestureDetector(
         onTap: widget.usedStatus == 'Used' || widget.usedStatus == 'Expired'
             ? () {}
-            : widget.usedStatus == 'Streaming' || widget.usedStatus == 'Watch Playback' ? (){
+            : widget.usedStatus == 'Streaming' || widget.usedStatus == 'Watch Playback' ? widget.zoomId != null || widget.zoomDesc != null ? (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ZoomTicketPage(
+                zoomLink: widget.zoomId,
+                zoomDesc: widget.zoomDesc
+              )));
+            } : (){
               Navigator.push(context, MaterialPageRoute(
-                builder: (context) => WebViewTest(
-                  url: widget.livestreamUrl
+                builder: (context) => LivestreamPlayer(
+                  wowzaLiveUrl: widget.livestreamUrl
                 )
               ));
             } : () {
@@ -145,7 +153,7 @@ class UseTicketState extends State<UseTicket> {
             child: Text(
               widget.usedStatus == 'Used'
                   ? 'USED'
-                  : widget.usedStatus == 'Expired' ? 'EXPIRED' : widget.usedStatus == 'Streaming' ? 'Watch Livestream' : widget.usedStatus == 'Watch Playback' ? 'Watch Playback' : 'USE TICKET',
+                  : widget.usedStatus == 'Expired' ? 'EXPIRED' : widget.usedStatus == 'Streaming' ?  widget.zoomId != null || widget.zoomDesc != null ? 'Get Zoom Link Here' : 'Watch Livestream' : widget.usedStatus == 'Watch Playback' ? 'Watch Playback' : 'USE TICKET',
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

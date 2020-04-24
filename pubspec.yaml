@@ -105,6 +105,7 @@ dependencies:
   share: ^0.6.3+5
   camera: ^0.5.7+4
   page_indicator:
+  flutter_playout: ^1.0.35
   
   interactive_webview: ^0.1.2
   # apple_maps_flutter:

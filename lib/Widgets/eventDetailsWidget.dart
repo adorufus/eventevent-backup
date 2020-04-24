@@ -11,6 +11,7 @@ import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
+import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -144,6 +145,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   String generatedLink = '-';
   String error = '-';
   String defaultTab = '0';
+  String streamingState = '';
 
   bool isGoing = false;
 
@@ -162,6 +164,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   void initState() {
     // FlutterBranchSdk.validateSDKIntegration();
     generateLink();
+    getWowzaLivestreamState(widget.detailData['livestream'][0]['streaming_id']).then((response){
+      var extractedResponse = json.decode(response.body);
+
+      streamingState = extractedResponse['state'];
+    });
 
     setState(() {
       detailData = widget.detailData;

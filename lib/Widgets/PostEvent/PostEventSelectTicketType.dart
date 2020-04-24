@@ -126,7 +126,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
                 imageUri = 'assets/btn_ticket/ots-800px.png';
               }
               else if (ticketType[i]['id'] == '7'){
-                imageUri = 'assets/btn_ticket/free_live_limited.png';
+                imageUri = 'assets/btn_ticket/free-live-limited.png';
               }
 
               return ListTile(
@@ -176,9 +176,10 @@ class SelectTicketTypeState extends State<SelectTicketType> {
                       fontWeight: FontWeight.bold),
                 ),
                 subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(ticketType[i]['description'] == null
-                        ? ''
+                        ? ticketType[i]['id'] == '7' ? 'Create livestream ticket' : ''
                         : ticketType[i]['description']),
                   ],
                 ),
@@ -202,6 +203,11 @@ class SelectTicketTypeState extends State<SelectTicketType> {
       setState(() {
         var extractedData = json.decode(response.body);
         ticketType = extractedData['data'];
+        if(prefs.getBool('isLivestream') == true){
+          ticketType.removeWhere((data) => data['id'] != '7');
+        } else {
+          ticketType.removeWhere((data) => data['id'] == '7');
+        }
       });
     }
   }

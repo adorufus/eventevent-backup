@@ -19,5 +19,21 @@ String cookies = '';
 
 GoogleSignIn googleSignIn = new GoogleSignIn();
 
+Future<http.Response> getWowzaLivestreamState(String streamingId) async {
+    final response = await http.get(
+      BaseApi.wowzaUrl +
+          'live_streams/$streamingId/state',
+      headers: {
+        'wsc-api-key': WOWZA_API_KEY,
+        'wsc-access-key': WOWZA_ACCESS_KEY,
+        'Content-Type': 'application/json'
+      },
+    );
 
+    print("FETCHING CURRENT LIVESTREAM STATE, PLEASE WAIT.....");
+    print(
+        "WOWZA RESPONSE: ${response.body} WITH STATUS CODE: ${response.statusCode}");
+
+    return response;
+  }
 

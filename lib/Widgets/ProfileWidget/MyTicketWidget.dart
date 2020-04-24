@@ -179,11 +179,15 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                         ['name'],
                                     ticketID: ticketDetailData[i]['id'],
                                     usedStatus: ticketStatusText,
+                                    zoomId: ticketDetailData[i]['livestream']
+                                        ['zoom_id'],
+                                    zoomDesc: ticketDetailData[i]['livestream']
+                                        ['zoom_description'],
                                     livestreamUrl: ticketStatusText ==
                                                 "Streaming" ||
                                             ticketStatusText == 'Watch Playback'
                                         ? ticketDetailData[i]['livestream']
-                                            ['link_streaming']
+                                            ['playback']
                                         : '',
                                   )));
                         },

@@ -120,7 +120,10 @@ class _MyTicketState extends State<MyTicket> {
                   alignment: Alignment.centerLeft,
                 ),
               ),
-              title: Text('My Tickets', style: TextStyle(color: eventajaGreenTeal),),
+              title: Text(
+                'My Tickets',
+                style: TextStyle(color: eventajaGreenTeal),
+              ),
               centerTitle: true,
               textTheme: TextTheme(
                   title: TextStyle(
@@ -206,7 +209,10 @@ class _MyTicketState extends State<MyTicket> {
                                       children: <Widget>[
                                         Icon(Icons.search),
                                         SizedBox(width: 10),
-                                        Text('Search ticket', style: TextStyle(color: Colors.grey),)
+                                        Text(
+                                          'Search ticket',
+                                          style: TextStyle(color: Colors.grey),
+                                        )
                                       ],
                                     ),
                                   )),
@@ -227,15 +233,15 @@ class _MyTicketState extends State<MyTicket> {
                                 'used') {
                               ticketColor = Color(0xFF652D90);
                               ticketStatusText = 'Used';
-                            }else if (myTicketList[i]['usedStatus'] ==
-                          'streaming') {
-                        ticketColor = eventajaGreenTeal;
-                        ticketStatusText = 'Streaming';
-                      } else if (myTicketList[i]['usedStatus'] ==
-                          'playback') {
-                        ticketColor = eventajaGreenTeal;
-                        ticketStatusText = 'Watch Playback';
-                      } else if (myTicketList[i]['usedStatus'] ==
+                            } else if (myTicketList[i]['usedStatus'] ==
+                                'streaming') {
+                              ticketColor = eventajaGreenTeal;
+                              ticketStatusText = 'Streaming';
+                            } else if (myTicketList[i]['usedStatus'] ==
+                                'playback') {
+                              ticketColor = eventajaGreenTeal;
+                              ticketStatusText = 'Watch Playback';
+                            } else if (myTicketList[i]['usedStatus'] ==
                                 'expired') {
                               ticketColor = Color(0xFF8E1E2D);
                               ticketStatusText = 'Expired';
@@ -277,15 +283,22 @@ class _MyTicketState extends State<MyTicket> {
                                                   ['event']['timeStart'],
                                               ticketEndTime: myTicketList[i]
                                                   ['event']['timeEnd'],
-                                              ticketDesc: myTicketList[i]['livestream']['zoom_id'] != null ? 'Zoom ID: ${myTicketList[i]['livestream']['zoom_id']}' : myTicketList[i]
+                                              ticketDesc: myTicketList[i]
                                                   ['event']['name'],
                                               ticketID: myTicketList[i]['id'],
+                                              zoomId: myTicketList[i]
+                                                  ['livestream']['zoom_id'],
+                                              zoomDesc: myTicketList[i]
+                                                      ['livestream']
+                                                  ['zoom_description'],
                                               livestreamUrl: ticketStatusText ==
-                                                "Streaming" ||
-                                            ticketStatusText == 'Watch Playback'
-                                        ? myTicketList[i]['livestream']
-                                            ['link_streaming']
-                                        : '',
+                                                          "Streaming" ||
+                                                      ticketStatusText ==
+                                                          'Watch Playback'
+                                                  ? myTicketList[i]
+                                                          ['livestream']
+                                                      ['link_streaming']
+                                                  : '',
                                               usedStatus: ticketStatusText,
                                             )));
                               },
