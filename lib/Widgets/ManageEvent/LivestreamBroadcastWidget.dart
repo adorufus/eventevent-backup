@@ -206,6 +206,8 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
                                           response.statusCode == 201) {
                                         print(
                                             'Stopping livestream succes: ${response.body} With Status Code: ${response.statusCode}');
+                                            Navigator.pop(thisContext);
+                                            Navigator.pop(context);
                                       }
                                     });
                                   },

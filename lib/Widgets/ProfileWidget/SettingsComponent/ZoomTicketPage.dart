@@ -54,16 +54,16 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Image.asset('assets/icons/aset_icon/zoom_livestream.png', scale: 2.5,),
+              Image.asset('assets/icons/aset_icon/zoom_livestream.png',),
               SizedBox(
                 height: 15,
               ),
               Row(
                 children: <Widget>[
-                  Text('Zoom Link: ', style: TextStyle(fontSize: 15),),
+                  Text('Zoom ID: ', style: TextStyle(fontSize: 15),),
                   GestureDetector(
                     onTap: () {
-                      launch(widget.zoomLink);
+                      launch('https://zoom.us/j/' + widget.zoomLink, enableJavaScript: true);
                     },
                     child: Text(
                       '${widget.zoomLink}',

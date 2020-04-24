@@ -22,8 +22,9 @@ class _LivestreamPlayerState extends State<LivestreamPlayer>
 
   @override
   void initState() {
+    print('wowza url' + widget.wowzaLiveUrl);
     videoPlayerController = VideoPlayerController.network(
-        'https://cdn3.wowza.com/1/bjdDc3Q4MGhYMERF/ZmhySDNS/hls/live/playlist.m3u8');
+        widget.wowzaLiveUrl);
     setState(() {});
     chewieController = ChewieController(
       videoPlayerController: videoPlayerController,

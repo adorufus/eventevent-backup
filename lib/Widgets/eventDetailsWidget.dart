@@ -2215,7 +2215,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             : 'assets/icons/icon_apps/qr.png',
                                                         fit: BoxFit.fill,
                                                         colorBlendMode: BlendMode.srcATop,
-                                                        color: widget.detailData['ticket_type']['type'] == 'free_live_stream' ? streamingState == 'stopped' ? Colors.grey.withOpacity(.8) : Colors.transparent : Colors.transparent,
+                                                        color: widget.detailData['ticket_type']['type'] == 'free_live_stream' ? streamingState == 'stopped' ? Colors.grey.withOpacity(.9) : Colors.transparent : Colors.transparent,
                                                       )),
                                                   SizedBox(
                                                     height: ScreenUtil.instance

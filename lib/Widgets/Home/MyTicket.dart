@@ -297,7 +297,7 @@ class _MyTicketState extends State<MyTicket> {
                                                           'Watch Playback'
                                                   ? myTicketList[i]
                                                           ['livestream']
-                                                      ['link_streaming']
+                                                      ['playback']
                                                   : '',
                                               usedStatus: ticketStatusText,
                                             )));

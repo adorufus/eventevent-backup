@@ -59,17 +59,21 @@ class _ZoomDetailFormState extends State<ZoomDetailForm> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
             ),
             SizedBox(height: 15),
+            Text('Zoom ID'),
+            SizedBox(height: 3),
             TextFormField(
               controller: zoomIdController,
               decoration: InputDecoration(
-                hintText: 'Zoom Link',
+                hintText: '660 550 440',
               ),
             ),
             SizedBox(height: 15),
+            Text('Description'),
+            SizedBox(height: 3),
             TextFormField(
               controller: descriptionController,
               decoration: InputDecoration(
-                hintText: 'Description',
+                hintText: 'Awasome zoom livestream',
               ),
             ),
             SizedBox(height: 20),
