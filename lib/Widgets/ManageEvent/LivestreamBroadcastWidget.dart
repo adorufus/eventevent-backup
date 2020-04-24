@@ -104,9 +104,9 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
   @override
   void initState() {
     getWowzaConfigData();
-    initializeWowzaLivestream().then((response) {
-      if (response.statusCode == 200 || response.statusCode == 201) {}
-    });
+    // initializeWowzaLivestream().then((response) {
+    //   if (response.statusCode == 200 || response.statusCode == 201) {}
+    // });
     super.initState();
   }
 

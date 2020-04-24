@@ -164,10 +164,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   void initState() {
     // FlutterBranchSdk.validateSDKIntegration();
     generateLink();
-    getWowzaLivestreamState(widget.detailData['livestream'][0]['streaming_id']).then((response){
+    getWowzaLivestreamState(widget.detailData['livestream'][0]['streaming_id'])
+        .then((response) {
       var extractedResponse = json.decode(response.body);
 
-      streamingState = extractedResponse['state'];
+      streamingState = extractedResponse['live_stream']['state'];
+      if (!mounted) return;
+      setState(() {});
     });
 
     setState(() {
@@ -2139,15 +2142,19 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         );
                                                       });
                                                 } else {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          LivestreamBroadcast(
-                                                              eventDetail: widget
-                                                                  .detailData),
-                                                    ),
-                                                  );
+                                                  if (streamingState ==
+                                                      'stopped') {
+                                                  } else {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            LivestreamBroadcast(
+                                                                eventDetail: widget
+                                                                    .detailData),
+                                                      ),
+                                                    );
+                                                  }
                                                 }
                                               } else {
                                                 SharedPreferences prefs =
@@ -2207,6 +2214,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             ? 'assets/btn_ticket/live.png'
                                                             : 'assets/icons/icon_apps/qr.png',
                                                         fit: BoxFit.fill,
+                                                        colorBlendMode: BlendMode.srcATop,
+                                                        color: widget.detailData['ticket_type']['type'] == 'free_live_stream' ? streamingState == 'stopped' ? Colors.grey.withOpacity(.8) : Colors.transparent : Colors.transparent,
                                                       )),
                                                   SizedBox(
                                                     height: ScreenUtil.instance
