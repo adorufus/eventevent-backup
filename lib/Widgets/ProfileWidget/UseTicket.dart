@@ -9,6 +9,7 @@ import 'package:eventevent/Widgets/openMedia.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/countdownCounter.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,19 +33,22 @@ class UseTicket extends StatefulWidget {
   final livestreamUrl;
   final zoomId;
   final zoomDesc;
-  
-  const UseTicket(
-      {Key key,
-      this.ticketTitle,
-      this.ticketImage,
-      this.ticketDate,
-      this.ticketCode,
-      this.ticketStartTime,
-      this.ticketEndTime,
-      this.ticketDesc,
-      this.ticketID,
-      this.usedStatus, this.livestreamUrl, this.zoomId, this.zoomDesc})
-      : super(key: key);
+
+  const UseTicket({
+    Key key,
+    this.ticketTitle,
+    this.ticketImage,
+    this.ticketDate,
+    this.ticketCode,
+    this.ticketStartTime,
+    this.ticketEndTime,
+    this.ticketDesc,
+    this.ticketID,
+    this.usedStatus,
+    this.livestreamUrl,
+    this.zoomId,
+    this.zoomDesc,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -57,6 +61,19 @@ class UseTicketState extends State<UseTicket> {
 
   String _scanBarcode = '';
   Future<String> _barcodeString;
+
+  DateTime startDate;
+  int seconds;
+
+  @override
+  void initState() {
+    startDate =
+        DateTime.parse('${widget.ticketDate} ${widget.ticketStartTime}');
+    final remaining = startDate.difference(DateTime.now());
+    seconds = remaining.inSeconds;
+    setState(() {});
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,74 +108,104 @@ class UseTicketState extends State<UseTicket> {
       bottomNavigationBar: GestureDetector(
         onTap: widget.usedStatus == 'Used' || widget.usedStatus == 'Expired'
             ? () {}
-            : widget.usedStatus == 'Streaming' || widget.usedStatus == 'Watch Playback' ? widget.zoomId != null || widget.zoomDesc != null ? (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ZoomTicketPage(
-                zoomLink: widget.zoomId,
-                zoomDesc: widget.zoomDesc
-              )));
-            } : (){
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) => LivestreamPlayer(
-                  wowzaLiveUrl: widget.livestreamUrl
-                )
-              ));
-            } : () {
-                scan().then((_) async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  String url = BaseApi().apiUrl + '/tickets/verify';
+            : startDate.isAfter(DateTime.now())
+                ? () {}
+                : widget.usedStatus == 'Streaming' ||
+                        widget.usedStatus == 'Watch Playback'
+                    ? widget.zoomId != null || widget.zoomDesc != null
+                        ? () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ZoomTicketPage(
+                                    zoomLink: widget.zoomId,
+                                    zoomDesc: widget.zoomDesc),
+                              ),
+                            );
+                          }
+                        : () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LivestreamPlayer(
+                                        wowzaLiveUrl: widget.livestreamUrl)));
+                          }
+                    : () {
+                        scan().then((_) async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          String url = BaseApi().apiUrl + '/tickets/verify';
 
-                  final response = await http.post(url, headers: {
-                    'Authorization': AUTHORIZATION_KEY,
-                    'cookie': prefs.getString('Session')
-                  }, body: {
-                    'X-API-KEY': API_KEY,
-                    'qrData': _scanBarcode,
-                    'ticketID': widget.ticketID
-                  });
+                          final response = await http.post(url, headers: {
+                            'Authorization': AUTHORIZATION_KEY,
+                            'cookie': prefs.getString('Session')
+                          }, body: {
+                            'X-API-KEY': API_KEY,
+                            'qrData': _scanBarcode,
+                            'ticketID': widget.ticketID
+                          });
 
-                  var extractedData = json.decode(response.body);
+                          var extractedData = json.decode(response.body);
 
-                  if (response.statusCode == 200 ||
-                      response.statusCode == 201) {
-                    print(extractedData['desc']);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => UseTicketSuccess(
-                                  eventName: 'test',
-                                )));
-                  } else {
-                    Flushbar(
-                      flushbarPosition: FlushbarPosition.TOP,
-                      message: extractedData['desc'] ?? extractedData['error'],
-                      backgroundColor: Colors.red,
-                      duration: Duration(seconds: 3),
-                      animationDuration: Duration(milliseconds: 500),
-                    )..show(context);
-                  }
+                          if (response.statusCode == 200 ||
+                              response.statusCode == 201) {
+                            print(extractedData['desc']);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        UseTicketSuccess(
+                                          eventName: 'test',
+                                        )));
+                          } else {
+                            Flushbar(
+                              flushbarPosition: FlushbarPosition.TOP,
+                              message: extractedData['desc'] ??
+                                  extractedData['error'],
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 3),
+                              animationDuration: Duration(milliseconds: 500),
+                            )..show(context);
+                          }
 
-                  //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsWidget()));
-                });
+                          //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsWidget()));
+                        });
 //          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ScanBarcode()));
-              },
+                      },
         child: Container(
           height: ScreenUtil.instance.setWidth(50),
           color: widget.usedStatus == 'Used'
               ? Colors.grey
-              : widget.usedStatus == 'Expired'
-                  ? Colors.red
-                  : Colors.orange,
+              : widget.usedStatus == 'Expired' ? Colors.red : Colors.orange,
           child: Center(
-            child: Text(
-              widget.usedStatus == 'Used'
-                  ? 'USED'
-                  : widget.usedStatus == 'Expired' ? 'EXPIRED' : widget.usedStatus == 'Streaming' ?  widget.zoomId != null || widget.zoomDesc != null ? 'Get Zoom Link Here' : 'Watch Livestream' : widget.usedStatus == 'Watch Playback' ? 'Watch Playback' : 'USE TICKET',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: ScreenUtil.instance.setSp(20)),
-            ),
+            child: startDate.isAfter(DateTime.now())
+                ? CountDownTimer(
+                    secondsRemaining: seconds,
+                    whenTimeExpires: () {},
+                    countDownTimerStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: ScreenUtil.instance.setSp(20),
+                        fontWeight: FontWeight.bold),
+                        isDay: true,
+                  )
+                : Text(
+                    widget.usedStatus == 'Used'
+                        ? 'USED'
+                        : widget.usedStatus == 'Expired'
+                            ? 'EXPIRED'
+                            : widget.usedStatus == 'Streaming'
+                                ? widget.zoomId != null ||
+                                        widget.zoomDesc != null
+                                    ? 'Get Zoom Link Here'
+                                    : 'Watch Livestream'
+                                : widget.usedStatus == 'Watch Playback'
+                                    ? 'Watch Playback'
+                                    : 'USE TICKET',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: ScreenUtil.instance.setSp(20)),
+                  ),
           ),
         ),
       ),
@@ -168,10 +215,14 @@ class UseTicketState extends State<UseTicket> {
         child: Center(
           child: Container(
             foregroundDecoration: BoxDecoration(
-                backgroundBlendMode: widget.usedStatus == 'Available' || widget.usedStatus == 'Streaming'
+                backgroundBlendMode: widget.usedStatus == 'Available' ||
+                        widget.usedStatus == 'Streaming'
                     ? null
                     : BlendMode.saturation,
-                color: widget.usedStatus == 'Available' || widget.usedStatus == 'Streaming' ? null : Colors.grey),
+                color: widget.usedStatus == 'Available' ||
+                        widget.usedStatus == 'Streaming'
+                    ? null
+                    : Colors.grey),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             margin: EdgeInsets.symmetric(horizontal: 25, vertical: 25),

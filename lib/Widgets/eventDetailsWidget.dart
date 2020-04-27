@@ -2144,6 +2144,27 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 } else {
                                                   if (streamingState ==
                                                       'stopped') {
+                                                        showCupertinoDialog(
+                                                      context: context,
+                                                      builder: (thisContext) {
+                                                        return CupertinoAlertDialog(
+                                                          title: Text('Notice'),
+                                                          content: Text(
+                                                            'Please broadcast 5 minutes before the event start',
+                                                          ),
+                                                          actions: <Widget>[
+                                                            CupertinoDialogAction(
+                                                              child:
+                                                                  Text('Close'),
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        thisContext)
+                                                                    .pop();
+                                                              },
+                                                            )
+                                                          ],
+                                                        );
+                                                      });
                                                   } else {
                                                     Navigator.push(
                                                       context,

@@ -38,7 +38,7 @@ class _CountDownTimerState extends State<CountDownTimer>
     seconds = (seconds % 3600).truncate();
     int minutes = (seconds / 60).truncate();
 
-    String daysStr = (hours).toString().padLeft(2, '0');
+    String daysStr = (days).toString().padLeft(2, '0');
     String hoursStr = (hours).toString().padLeft(2, '0');
     String minutesStr = (minutes).toString().padLeft(2, '0');
     String secondsStr = (seconds % 60).toString().padLeft(2, '0');
