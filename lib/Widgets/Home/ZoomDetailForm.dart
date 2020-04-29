@@ -63,8 +63,10 @@ class _ZoomDetailFormState extends State<ZoomDetailForm> {
             SizedBox(height: 3),
             TextFormField(
               controller: zoomIdController,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                hintText: '660 550 440',
+                hintText: 'Example: 660 550 440',
+                hintStyle: TextStyle(color: Colors.grey.withOpacity(.3))
               ),
             ),
             SizedBox(height: 15),
@@ -73,7 +75,8 @@ class _ZoomDetailFormState extends State<ZoomDetailForm> {
             TextFormField(
               controller: descriptionController,
               decoration: InputDecoration(
-                hintText: 'Awasome zoom livestream',
+                hintText: 'Example: Awasome zoom livestream',
+                hintStyle: TextStyle(color: Colors.grey.withOpacity(.3))
               ),
             ),
             SizedBox(height: 20),

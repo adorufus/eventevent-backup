@@ -130,51 +130,51 @@ class _SeeAllItemState extends State<SeeAllItem> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    return SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(null, 100),
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size(null, 100),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: ScreenUtil.instance.setWidth(75),
           child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: ScreenUtil.instance.setWidth(75),
+            color: Colors.white,
             child: Container(
-              color: Colors.white,
-              child: Container(
-                margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
-                child: Row(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(15.49),
-                            width: ScreenUtil.instance.setWidth(9.73),
-                            child: Image.asset(
-                              'assets/icons/icon_apps/arrow.png',
-                              fit: BoxFit.fill,
-                            ),
+              margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
+              child: Row(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        SizedBox(
+                          height: ScreenUtil.instance.setWidth(15.49),
+                          width: ScreenUtil.instance.setWidth(9.73),
+                          child: Image.asset(
+                            'assets/icons/icon_apps/arrow.png',
+                            fit: BoxFit.fill,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: MediaQuery.of(context).size.width / 2.8),
-                    Text(
-                      'All Event',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: ScreenUtil.instance.setSp(14)),
-                    )
-                  ],
-                ),
+                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width / 2.8),
+                  Text(
+                    'All Event',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: ScreenUtil.instance.setSp(14)),
+                  )
+                ],
               ),
             ),
           ),
         ),
-        body: DefaultTabController(
+      ),
+      body: SafeArea(
+        child: DefaultTabController(
           initialIndex: widget.initialIndex,
           length: 2,
           child: ListView(
@@ -500,10 +500,11 @@ class _SeeAllItemState extends State<SeeAllItem> {
                       itemPriceText =
                           discoverEventList[i]['ticket_type']['name'];
                     } else if (discoverEventList[i]['ticket_type']['type'] ==
-                          'free_live_stream') {
-                        itemColor = Color(0xFFFFAA00);
-                        itemPriceText = discoverEventList[i]['ticket_type']['name'];
-                      } else if (discoverEventList[i]['ticket_type']['type'] ==
+                        'free_live_stream') {
+                      itemColor = Color(0xFFFFAA00);
+                      itemPriceText =
+                          discoverEventList[i]['ticket_type']['name'];
+                    } else if (discoverEventList[i]['ticket_type']['type'] ==
                         'free_limited') {
                       if (discoverEventList[i]['ticket']
                               ['availableTicketStatus'] ==

@@ -85,27 +85,27 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
     setState(() {
       newPagePopular += 1;
     });
-      getPopularMedia(newPage: newPagePopular).then((response) {
-        var extractedData = json.decode(response.body);
-        List updatedData = extractedData['data']['data'];
+    getPopularMedia(newPage: newPagePopular).then((response) {
+      var extractedData = json.decode(response.body);
+      List updatedData = extractedData['data']['data'];
 
-        if (response.statusCode == 200) {
-          setState(() {
-            if (updatedData == null) {
-              refreshController.loadNoData();
-            }
-            print('data: ' + updatedData.toString());
-            popularMedia.addAll(updatedData);
-          });
-          if (mounted) setState(() {});
-          refreshController.loadComplete();
-        } else if (extractedData['desc'] == 'Media Posts list is not found' ||
-            updatedData == null) {
-          refreshController.loadNoData();
-        } else {
-          refreshController.loadFailed();
-        }
-      });
+      if (response.statusCode == 200) {
+        setState(() {
+          if (updatedData == null) {
+            refreshController.loadNoData();
+          }
+          print('data: ' + updatedData.toString());
+          popularMedia.addAll(updatedData);
+        });
+        if (mounted) setState(() {});
+        refreshController.loadComplete();
+      } else if (extractedData['desc'] == 'Media Posts list is not found' ||
+          updatedData == null) {
+        refreshController.loadNoData();
+      } else {
+        refreshController.loadFailed();
+      }
+    });
   }
 
   @override
@@ -152,110 +152,108 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    return SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(null, 100),
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size(null, 100),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: ScreenUtil.instance.setWidth(75),
           child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: ScreenUtil.instance.setWidth(75),
+            color: Colors.white,
             child: Container(
-              color: Colors.white,
-              child: Container(
-                margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
-                child: Row(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(15.49),
-                            width: ScreenUtil.instance.setWidth(9.73),
-                            child: Image.asset(
-                              'assets/icons/icon_apps/arrow.png',
-                              fit: BoxFit.fill,
-                            ),
+              margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
+              child: Row(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        SizedBox(
+                          height: ScreenUtil.instance.setWidth(15.49),
+                          width: ScreenUtil.instance.setWidth(9.73),
+                          child: Image.asset(
+                            'assets/icons/icon_apps/arrow.png',
+                            fit: BoxFit.fill,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: MediaQuery.of(context).size.width / 2.8),
-                    Text(
-                      'All Media',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: ScreenUtil.instance.setSp(14)),
-                    )
-                  ],
-                ),
+                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width / 2.8),
+                  Text(
+                    'All Media',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: ScreenUtil.instance.setSp(14)),
+                  )
+                ],
               ),
             ),
           ),
         ),
-        body: DefaultTabController(
-          initialIndex: widget.initialIndex,
-          length: 2,
-          child: ListView(
-            children: <Widget>[
-              Container(
-                color: Colors.white,
-                child: TabBar(
-                  onTap: (index) {
-                    setState(() {
-                      currentTabIndex = index;
-                    });
-                  },
-                  tabs: <Widget>[
-                    Tab(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Image.asset(
-                            'assets/icons/icon_apps/popular.png',
-                            scale: 4.5,
-                          ),
-                          SizedBox(width: ScreenUtil.instance.setWidth(8)),
-                          Text('Popular',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: ScreenUtil.instance.setSp(12.5))),
-                        ],
-                      ),
+      ),
+      body: DefaultTabController(
+        initialIndex: widget.initialIndex,
+        length: 2,
+        child: ListView(
+          children: <Widget>[
+            Container(
+              color: Colors.white,
+              child: TabBar(
+                onTap: (index) {
+                  setState(() {
+                    currentTabIndex = index;
+                  });
+                },
+                tabs: <Widget>[
+                  Tab(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset(
+                          'assets/icons/icon_apps/popular.png',
+                          scale: 4.5,
+                        ),
+                        SizedBox(width: ScreenUtil.instance.setWidth(8)),
+                        Text('Popular',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: ScreenUtil.instance.setSp(12.5))),
+                      ],
                     ),
-                    Tab(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Image.asset(
-                            'assets/icons/icon_apps/latest.png',
-                            scale: 4.5,
-                          ),
-                          SizedBox(width: ScreenUtil.instance.setWidth(8)),
-                          Text('Latest',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: ScreenUtil.instance.setSp(12.5))),
-                        ],
-                      ),
-                    )
-                  ],
-                  unselectedLabelColor: Colors.grey,
-                ),
+                  ),
+                  Tab(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset(
+                          'assets/icons/icon_apps/latest.png',
+                          scale: 4.5,
+                        ),
+                        SizedBox(width: ScreenUtil.instance.setWidth(8)),
+                        Text('Latest',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: ScreenUtil.instance.setSp(12.5))),
+                      ],
+                    ),
+                  )
+                ],
+                unselectedLabelColor: Colors.grey,
               ),
-              Container(
-                height: MediaQuery.of(context).size.height - 123,
-                child: TabBarView(
-                  children: <Widget>[popularEvent(), discoverEvent()],
-                ),
-              )
-            ],
-          ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height - 123,
+              child: TabBarView(
+                children: <Widget>[popularEvent(), discoverEvent()],
+              ),
+            )
+          ],
         ),
       ),
     );

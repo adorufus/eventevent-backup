@@ -59,115 +59,115 @@ class SearchState extends State<Search> {
       }
     });
 
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        resizeToAvoidBottomPadding: false,
-        appBar: PreferredSize(
-          preferredSize: Size(null, 100),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
+      appBar: PreferredSize(
+        preferredSize: Size(null, 100),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: ScreenUtil.instance.setWidth(75),
           child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: ScreenUtil.instance.setWidth(75),
+            color: Colors.white,
             child: Container(
-              color: Colors.white,
-              child: Container(
-                margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: ScreenUtil.instance.setWidth(300),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                blurRadius: 2,
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 1.5)
-                          ]),
-                      height: ScreenUtil.instance.setWidth(50),
-                      child: Material(
+              margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: ScreenUtil.instance.setWidth(300),
+                    decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(40),
-                        child: TextFormField(
-                          controller: searchController,
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.search,
-                          onFieldSubmitted: (value) {
-                            if (value != null) {
-                              _getEvents();
-                              _getProfile().then((response) {
-                                var extractedData = json.decode(response.body);
-                                List resultData = extractedData['data'];
-                                List tempList = new List();
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              blurRadius: 2,
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 1.5)
+                        ]),
+                    height: ScreenUtil.instance.setWidth(50),
+                    child: Material(
+                      borderRadius: BorderRadius.circular(40),
+                      child: TextFormField(
+                        controller: searchController,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.search,
+                        onFieldSubmitted: (value) {
+                          if (value != null) {
+                            _getEvents();
+                            _getProfile().then((response) {
+                              var extractedData = json.decode(response.body);
+                              List resultData = extractedData['data'];
+                              List tempList = new List();
 
-                                if (response.statusCode == 200) {
-                                  isLoading = false;
-                                  notFound = false;
-                                  for (int i = 0; i < resultData.length; i++) {
-                                    tempList.add(resultData[i]);
-                                  }
-
-                                  profile = tempList;
-                                  filteredProfile = profile;
-                                } else if (response.statusCode == 400) {
-                                  isLoading = false;
-                                  notFound = true;
+                              if (response.statusCode == 200) {
+                                isLoading = false;
+                                notFound = false;
+                                for (int i = 0; i < resultData.length; i++) {
+                                  tempList.add(resultData[i]);
                                 }
-                              });
-                            }
-                          },
+
+                                profile = tempList;
+                                filteredProfile = profile;
+                              } else if (response.statusCode == 400) {
+                                isLoading = false;
+                                notFound = true;
+                              }
+                            });
+                          }
+                        },
+                        style:
+                            TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
+                        autofocus: true,
+                        autocorrect: false,
+                        decoration: InputDecoration(
+                            prefixIcon: Image.asset(
+                              'assets/icons/icon_apps/search.png',
+                              scale: 3.5,
+                              color: Color(0xFF81818B),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 15),
+                            hintText: 'Search',
+                            hintStyle: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(18)),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(40),
+                                borderSide: BorderSide(
+                                    color: Color.fromRGBO(0, 0, 0, 0))),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(40),
+                                borderSide: BorderSide(
+                                    color: Color.fromRGBO(0, 0, 0, 0)))),
+                      ),
+                    ),
+                  ),
+                  Expanded(child: SizedBox()),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      height: 50,
+                      child: Center(
+                        child: Text(
+                          'Cancel',
                           style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(12)),
-                          autofocus: true,
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                              prefixIcon: Image.asset(
-                                'assets/icons/icon_apps/search.png',
-                                scale: 3.5,
-                                color: Color(0xFF81818B),
-                              ),
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 15),
-                              hintText: 'Search',
-                              hintStyle: TextStyle(
-                                  fontSize: ScreenUtil.instance.setSp(18)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                  borderSide: BorderSide(
-                                      color: Color.fromRGBO(0, 0, 0, 0))),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                  borderSide: BorderSide(
-                                      color: Color.fromRGBO(0, 0, 0, 0)))),
+                              fontSize: ScreenUtil.instance.setSp(15),
+                              color: eventajaGreenTeal),
                         ),
                       ),
                     ),
-                    Expanded(child: SizedBox()),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        height: 50,
-                        child: Center(
-                          child: Text(
-                            'Cancel',
-                            style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(15),
-                                color: eventajaGreenTeal),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10)
-                  ],
-                ),
+                  ),
+                  SizedBox(width: 10)
+                ],
               ),
             ),
           ),
         ),
-        body: Container(
+      ),
+      body: SafeArea(
+        child: Container(
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[
