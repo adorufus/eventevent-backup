@@ -64,7 +64,7 @@ class _PeopleItemState extends State<PeopleItem> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    print(MediaQuery.of(context).size.width);
+    // print(MediaQuery.of(context).size.width);
     return Container(
       margin: EdgeInsets.only(
           left: 13, right: 13, top: widget.topPadding, bottom: 13),
@@ -90,7 +90,6 @@ class _PeopleItemState extends State<PeopleItem> {
             width: ScreenUtil.instance.setWidth(8.87),
           ),
           Container(
-            width: MediaQuery.of(context).size.width - 175,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -138,6 +137,7 @@ class _PeopleItemState extends State<PeopleItem> {
               ],
             ),
           ),
+          Expanded(child: SizedBox(),),
           GestureDetector(
             onTap: () {
 

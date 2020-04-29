@@ -1,7 +1,10 @@
 import 'package:eventevent/Widgets/timeline/MediaDetails.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class LatestMediaItem extends StatefulWidget {
   final bool isVideo;
@@ -15,6 +18,8 @@ class LatestMediaItem extends StatefulWidget {
   final youtube;
   final videoUrl;
   final mediaId;
+  final isRest;
+  final isLiked;
 
   const LatestMediaItem(
       {Key key,
@@ -27,7 +32,9 @@ class LatestMediaItem extends StatefulWidget {
       this.commentCount,
       this.youtube,
       this.videoUrl,
-      this.article, this.mediaId})
+      this.article,
+      this.mediaId,
+      @required this.isRest, this.isLiked})
       : super(key: key);
 
   @override
@@ -37,10 +44,12 @@ class LatestMediaItem extends StatefulWidget {
 class _LatestMediaItemState extends State<LatestMediaItem> {
   int likeCount;
   List commentCount;
+  bool isLiked;
 
   @override
   void initState() {
     setState(() {
+      isLiked = widget.isLiked;
       commentCount = widget.commentCount;
       likeCount = widget.likeCount;
     });
@@ -57,7 +66,7 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    print(MediaQuery.of(context).size.width);
+    // print(MediaQuery.of(context).size.width);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 13, vertical: 6),
       height: ScreenUtil.instance.setWidth(110),
@@ -119,34 +128,57 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
                   Container(
                     child: Row(
                       children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: likeCount < 1 ? 8 : 13),
-                          height: ScreenUtil.instance.setWidth(30),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 2,
-                                    spreadRadius: 1.5)
-                              ]),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Image.asset(
-                                  'assets/icons/icon_apps/love.png',
-                                  color:
-                                      likeCount < 1 ? Colors.grey : Colors.red,
-                                  scale: 3.5,
-                                ),
-                                SizedBox(width: likeCount < 1 ? 0 : 5),
-                                Text(likeCount < 1 ? '' : likeCount.toString(),
-                                    style: TextStyle(
-                                        color: Color(
-                                            0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
-                              ]),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                                    if (isLiked == false) {
+                                      likeCount += 1;
+                                      isLiked = true;
+                                      doLove().then((response) {
+                                        print(response.statusCode);
+                                        print(response.body);
+                                        if (response.statusCode == 200) {}
+                                      });
+                                    } else {
+                                      likeCount -= 1;
+                                      isLiked = false;
+                                      doLove().then((response) {
+                                        if (response.statusCode == 200) {}
+                                      });
+                                    }
+                                  });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: likeCount < 1 ? 8 : 13),
+                            height: ScreenUtil.instance.setWidth(30),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 2,
+                                      spreadRadius: 1.5)
+                                ]),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Image.asset(
+                                    'assets/icons/icon_apps/love.png',
+                                    color: likeCount < 1
+                                        ? Colors.grey
+                                        : Colors.red,
+                                    scale: 3.5,
+                                  ),
+                                  SizedBox(width: likeCount < 1 ? 0 : 5),
+                                  Text(
+                                      likeCount < 1 ? '' : likeCount.toString(),
+                                      style: TextStyle(
+                                          color: Color(
+                                              0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
+                                ]),
+                          ),
                         ),
                         SizedBox(width: ScreenUtil.instance.setWidth(12)),
                         GestureDetector(
@@ -155,6 +187,7 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MediaDetails(
+                                        isRest: widget.isRest,
                                         username: widget.username,
                                         mediaTitle: widget.title,
                                         userPicture: widget.userImage,
@@ -210,5 +243,21 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
         ],
       ),
     );
+  }
+
+  Future<http.Response> doLove() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String url = BaseApi().apiUrl + '/media/love';
+
+    final response = await http.post(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': prefs.getString('Session')
+    }, body: {
+      'X-API-KEY': API_KEY,
+      'id': widget.mediaId
+    });
+
+    return response;
   }
 }

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventList.dart';
 import 'package:eventevent/Widgets/ManageEvent/PublicEventList.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsWidget.dart';
@@ -97,6 +99,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
 
       if (response.statusCode == 200) {
         setState(() {
+          userTimelineIsLoading = false;
           userTimelineList = extractedData['data'];
         });
       } else {
@@ -215,7 +218,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        widget.fullName == null ? 'loading' : widget.fullName,
+                        '${widget.fullName ?? ''} ${widget.lastName ?? ''}',
                         style: TextStyle(
                             fontSize: ScreenUtil.instance.setSp(17),
                             fontWeight: FontWeight.bold),
@@ -248,7 +251,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                       Container(
                         width: ScreenUtil.instance.setWidth(180),
                         child: Text(
-                          widget.bio == null ? '-' : widget.bio,
+                          widget.bio == null ? '' : widget.bio,
                           style: TextStyle(
                               fontSize: ScreenUtil.instance.setSp(12)),
                           maxLines: 2,
@@ -267,7 +270,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                           }
                         },
                         child: Text(
-                          widget.website == null ? '-' : widget.website,
+                          widget.website == null ? '' : widget.website,
                           style: TextStyle(
                               color: eventajaGreenTeal,
                               fontSize: ScreenUtil.instance.setSp(12)),
@@ -364,7 +367,6 @@ class _ProfileHeaderState extends State<ProfileHeader>
               Container(
                 height: ScreenUtil.instance.setWidth(60.63),
                 margin: EdgeInsets.symmetric(horizontal: 13, vertical: 28),
-                padding: EdgeInsets.symmetric(horizontal: 13),
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -381,79 +383,30 @@ class _ProfileHeaderState extends State<ProfileHeader>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       GestureDetector(
+                        behavior: HitTestBehavior.translucent,
                         onTap: widget.eventCreatedCount == '0'
                             ? () {}
                             : () {
-                                Navigator.of(context).push(MaterialPageRoute(
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         EventList(
-                                          userId: widget.currentUserId,
-                                          type: 'created',
-                                        )));
+                                      userId: widget.currentUserId,
+                                      type: 'created',
+                                    ),
+                                  ),
+                                );
                               },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              widget.eventCreatedCount == null
-                                  ? '0'
-                                  : widget.eventCreatedCount,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                      int.parse(widget.eventCreatedCount) > 999
-                                          ? 14
-                                          : 17,
-                                  color: widget.eventCreatedCount == "0" ||
-                                          widget.eventCreatedCount == null
-                                      ? Colors.grey
-                                      : Colors.black),
-                            ),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(9),
-                            ),
-                            Text('EVENT CREATED',
-                                style: TextStyle(
-                                    fontSize: 7,
-                                    color: widget.eventCreatedCount == "0" ||
-                                            widget.eventCreatedCount == null
-                                        ? Colors.grey
-                                        : Colors.black))
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(16),
-                      ),
-                      Container(
-                        width: 0,
-                        height: ScreenUtil.instance.setWidth(48),
-                        decoration: BoxDecoration(
-                            border: Border(
-                                right: createBorderSide(context,
-                                    color: Color(0xFF8A8A8B)))),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(18),
-                      ),
-                      GestureDetector(
-                        onTap: widget.eventGoingCount == '0'
-                            ? () {}
-                            : () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        EventList(type: 'going', userId: widget.currentUserId,)));
-                              },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                                widget.eventGoingCount ==
-                                        null
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 18),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                widget.eventCreatedCount == null
                                     ? '0'
-                                    : widget.eventGoingCount,
+                                    : widget.eventCreatedCount,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize:
@@ -461,25 +414,24 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                                 999
                                             ? 14
                                             : 17,
-                                    color: widget.eventGoingCount == "0" ||
-                                            widget.eventGoingCount == null
+                                    color: widget.eventCreatedCount == "0" ||
+                                            widget.eventCreatedCount == null
                                         ? Colors.grey
-                                        : Colors.black)),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(9),
-                            ),
-                            Text('EVENT GOING',
-                                style: TextStyle(
-                                    fontSize: 7,
-                                    color: widget.eventGoingCount == "0" ||
-                                            widget.eventGoingCount == null
-                                        ? Colors.grey
-                                        : Colors.black))
-                          ],
+                                        : Colors.black),
+                              ),
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(9),
+                              ),
+                              Text('EVENT CREATED',
+                                  style: TextStyle(
+                                      fontSize: 7,
+                                      color: widget.eventCreatedCount == "0" ||
+                                              widget.eventCreatedCount == null
+                                          ? Colors.grey
+                                          : Colors.black))
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(18),
                       ),
                       Container(
                         width: 0,
@@ -489,10 +441,63 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                 right: createBorderSide(context,
                                     color: Color(0xFF8A8A8B)))),
                       ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(23),
+                      GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: widget.eventGoingCount == '0'
+                            ? () {}
+                            : () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        EventList(
+                                          type: 'going',
+                                          userId: widget.currentUserId,
+                                        )));
+                              },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 18, right: 18),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                  widget.eventGoingCount == null
+                                      ? '0'
+                                      : widget.eventGoingCount,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          int.parse(widget.eventCreatedCount) >
+                                                  999
+                                              ? 14
+                                              : 17,
+                                      color: widget.eventGoingCount == "0" ||
+                                              widget.eventGoingCount == null
+                                          ? Colors.grey
+                                          : Colors.black)),
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(9),
+                              ),
+                              Text('EVENT GOING',
+                                  style: TextStyle(
+                                      fontSize: 7,
+                                      color: widget.eventGoingCount == "0" ||
+                                              widget.eventGoingCount == null
+                                          ? Colors.grey
+                                          : Colors.black))
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 0,
+                        height: ScreenUtil.instance.setWidth(48),
+                        decoration: BoxDecoration(
+                            border: Border(
+                                right: createBorderSide(context,
+                                    color: Color(0xFF8A8A8B)))),
                       ),
                       GestureDetector(
+                        behavior: HitTestBehavior.translucent,
                         onTap: widget.follower == '0'
                             ? () {}
                             : () {
@@ -504,38 +509,41 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                               '/user/follower?X-API-KEY=$API_KEY&userID=${widget.currentUserId}&page=1',
                                         )));
                               },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                                widget.follower == null ? '0' : widget.follower,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize:
-                                        int.parse(widget.eventCreatedCount) >
-                                                999
-                                            ? 14
-                                            : 17,
-                                    color: widget.follower == "0" ||
-                                            widget.follower == null
-                                        ? Colors.grey
-                                        : Colors.black)),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(9),
-                            ),
-                            Text('FOLLOWER',
-                                style: TextStyle(
-                                    fontSize: 7,
-                                    color: widget.follower == "0" ||
-                                            widget.follower == null
-                                        ? Colors.grey
-                                        : Colors.black))
-                          ],
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 23, right: 23),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                  widget.follower == null
+                                      ? '0'
+                                      : widget.follower,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          int.parse(widget.eventCreatedCount) >
+                                                  999
+                                              ? 14
+                                              : 17,
+                                      color: widget.follower == "0" ||
+                                              widget.follower == null
+                                          ? Colors.grey
+                                          : Colors.black)),
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(9),
+                              ),
+                              Text('FOLLOWER',
+                                  style: TextStyle(
+                                      fontSize: 7,
+                                      color: widget.follower == "0" ||
+                                              widget.follower == null
+                                          ? Colors.grey
+                                          : Colors.black))
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(23),
                       ),
                       Container(
                         width: 0,
@@ -545,10 +553,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                 right: createBorderSide(context,
                                     color: Color(0xFF8A8A8B)))),
                       ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(23),
-                      ),
                       GestureDetector(
+                        behavior: HitTestBehavior.translucent,
                         onTap: widget.following == '0'
                             ? () {}
                             : () {
@@ -560,35 +566,38 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                               '/user/following?X-API-KEY=${API_KEY}&userID=${widget.currentUserId}&page=1',
                                         )));
                               },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                                widget.following == null
-                                    ? '0'
-                                    : widget.following,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize:
-                                        int.parse(widget.eventCreatedCount) >
-                                                999
-                                            ? 14
-                                            : 17,
-                                    color: widget.following == "0" ||
-                                            widget.following == null
-                                        ? Colors.grey
-                                        : Colors.black)),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(9),
-                            ),
-                            Text('FOLLOWING',
-                                style: TextStyle(
-                                    fontSize: 7,
-                                    color: widget.following == "0"
-                                        ? Colors.grey
-                                        : Colors.black))
-                          ],
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 23, right: 9),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                  widget.following == null
+                                      ? '0'
+                                      : widget.following,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          int.parse(widget.eventCreatedCount) >
+                                                  999
+                                              ? 14
+                                              : 17,
+                                      color: widget.following == "0" ||
+                                              widget.following == null
+                                          ? Colors.grey
+                                          : Colors.black)),
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(9),
+                              ),
+                              Text('FOLLOWING',
+                                  style: TextStyle(
+                                      fontSize: 7,
+                                      color: widget.following == "0"
+                                          ? Colors.grey
+                                          : Colors.black))
+                            ],
+                          ),
                         ),
                       )
                     ],
@@ -686,6 +695,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
       length: 2,
       initialIndex: widget.initialIndex,
       child: Column(
+        // mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
             color: Colors.white,
@@ -738,13 +748,12 @@ class _ProfileHeaderState extends State<ProfileHeader>
             height: MediaQuery.of(context).size.height,
             child: TabBarView(
               children: <Widget>[
-                userTimelineList == null
-                    ? Container(
-                        padding: EdgeInsets.only(top: 80),
-                        alignment: Alignment.topCenter,
-                        child: CupertinoActivityIndicator(radius: 20),
-                      )
-                    : timeline(),
+                userTimelineIsLoading == true
+                    ? HomeLoadingScreen().timelineLoading()
+                    : userTimelineList == null ? EmptyState(
+              imagePath: 'assets/icons/empty_state/public_timeline.png',
+                  reasonText: 'Your timeline is empty :(',
+          ) : timeline(),
                 widget.currentUserId == userId
                     ? MyTicketWidget()
                     : PublicEventList(
@@ -774,6 +783,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
 
       if (response.statusCode == 200) {
         setState(() {
+          userTimelineIsLoading = false;
           List updatedData = extractedData['data'];
           if (updatedData == null) {
             refreshController.loadNoData();
@@ -788,6 +798,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
       }
     });
   }
+
+  bool userTimelineIsLoading = false;
 
   Widget timeline() {
     return SmartRefresher(
@@ -820,10 +832,10 @@ class _ProfileHeaderState extends State<ProfileHeader>
           itemBuilder: (context, i) {
             List _loveCount = userTimelineList[i]['impression']['data'];
             List commentList = userTimelineList[i]['comment']['data'];
-            
+
             Map impressionData;
 
-            for(var impres in userTimelineList[i]['impression']['data']){
+            for (var impres in userTimelineList[i]['impression']['data']) {
               impressionData = impres;
               print(impressionData.toString());
             }
@@ -842,369 +854,18 @@ class _ProfileHeaderState extends State<ProfileHeader>
               pictureFull: userTimelineList[i]['pictureFull'],
               type: userTimelineList[i]['type'],
               userId: userTimelineList[i]['userID'],
-              impressionId: userTimelineList[i]['impression']['data'].length == 0 ? '' : impressionData['id'],
+              location: userTimelineList[i]['locationName'],
+              impressionId:
+                  userTimelineList[i]['impression']['data'].length == 0
+                      ? ''
+                      : impressionData['id'],
               loveCount: userTimelineList[i]['impression']['data'].length,
-              isLoved: userTimelineList[i]['impression']['data'].length == 0 ? false : impressionData.containsValue(widget.currentUserId) == true ? true : false,
-            ); 
-            // Container(
-            //     margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
-            //     decoration: BoxDecoration(
-            //         boxShadow: <BoxShadow>[
-            //           BoxShadow(
-            //               color: Colors.black.withOpacity(0.1),
-            //               blurRadius: 2,
-            //               spreadRadius: 1.5)
-            //         ],
-            //         color: Color(0xFFF9F9F9),
-            //         borderRadius: BorderRadius.circular(15)),
-            //     child: Column(
-            //       children: <Widget>[
-            //         Container(
-            //           decoration: BoxDecoration(
-            //               color: Colors.white,
-            //               borderRadius: BorderRadius.circular(15)),
-            //           padding:
-            //               EdgeInsets.symmetric(horizontal: 13, vertical: 13),
-            //           child: Column(
-            //             crossAxisAlignment: CrossAxisAlignment.start,
-            //             children: <Widget>[
-            //               Row(
-            //                 crossAxisAlignment: CrossAxisAlignment.end,
-            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //                 children: <Widget>[
-            //                   Row(
-            //                       crossAxisAlignment: CrossAxisAlignment.center,
-            //                       mainAxisAlignment:
-            //                           MainAxisAlignment.spaceBetween,
-            //                       mainAxisSize: MainAxisSize.max,
-            //                       children: <Widget>[
-            //                         CircleAvatar(
-            //                           backgroundImage: NetworkImage(
-            //                               userTimelineList[i]['photo']),
-            //                         ),
-            //                         SizedBox(
-            //                           width: ScreenUtil.instance.setWidth(8),
-            //                         ),
-            //                         Container(
-            //                             width:
-            //                                 ScreenUtil.instance.setWidth(200.0),
-            //                             child: Column(
-            //                               crossAxisAlignment:
-            //                                   CrossAxisAlignment.start,
-            //                               children: <Widget>[
-            //                                 Row(
-            //                                   children: <Widget>[
-            //                                     userTimelineList[i]
-            //                                                 ['isVerified'] ==
-            //                                             '1'
-            //                                         ? Container(
-            //                                             height: ScreenUtil
-            //                                                 .instance
-            //                                                 .setWidth(18),
-            //                                             width: ScreenUtil
-            //                                                 .instance
-            //                                                 .setWidth(18),
-            //                                             child: Image.asset(
-            //                                                 'assets/icons/icon_apps/verif.png'))
-            //                                         : Container(),
-            //                                     SizedBox(
-            //                                         width: ScreenUtil.instance
-            //                                             .setWidth(5)),
-            //                                     Text(
-            //                                         userTimelineList[i]
-            //                                             ['fullName'],
-            //                                         style: TextStyle(
-            //                                             fontWeight:
-            //                                                 FontWeight.bold)),
-            //                                   ],
-            //                                 ),
-            //                                 SizedBox(
-            //                                   height: ScreenUtil.instance
-            //                                       .setWidth(5),
-            //                                 ),
-            //                                 Row(
-            //                                   children: <Widget>[
-            //                                     userTimelineList[i]['type'] ==
-            //                                             'love'
-            //                                         ? Image.asset(
-            //                                             'assets/icons/icon_apps/love.png',
-            //                                             scale: 3,
-            //                                           )
-            //                                         : Container(),
-            //                                     SizedBox(
-            //                                         width: ScreenUtil.instance
-            //                                             .setWidth(5)),
-            //                                     Text(
-            //                                         userTimelineList[i]
-            //                                                     ['type'] ==
-            //                                                 'love'
-            //                                             ? 'Loved'
-            //                                             : userTimelineList[i]
-            //                                                         ['type'] ==
-            //                                                     'relationship'
-            //                                                 ? userTimelineList[
-            //                                                     i]['name']
-            //                                                 : 'Post a ' +
-            //                                                     userTimelineList[
-            //                                                         i]['type'],
-            //                                         style: TextStyle(
-            //                                             color: Colors.grey,
-            //                                             fontSize: ScreenUtil
-            //                                                 .instance
-            //                                                 .setSp(10))),
-            //                                   ],
-            //                                 ),
-            //                               ],
-            //                             )),
-            //                       ]),
-            //                   Column(
-            //                     children: <Widget>[
-            //                       Text(
-            //                         'a minute ago',
-            //                         style: TextStyle(
-            //                             fontSize:
-            //                                 ScreenUtil.instance.setSp(10)),
-            //                       ),
-            //                       SizedBox(
-            //                           height: ScreenUtil.instance.setWidth(4)),
-            //                     ],
-            //                   )
-            //                 ],
-            //               ),
-            //               SizedBox(
-            //                   height: userTimelineList[i]['type'] == 'video' ||
-            //                           userTimelineList[i]['type'] == 'photo' ||
-            //                           userTimelineList[i]['type'] == 'event' ||
-            //                           userTimelineList[i]['type'] ==
-            //                               'eventgoing'
-            //                       ? 15
-            //                       : 0),
-            //               userTimelineList[i]['type'] == 'video' ||
-            //                       userTimelineList[i]['type'] == 'photo' ||
-            //                       userTimelineList[i]['type'] == 'event' ||
-            //                       userTimelineList[i]['type'] == 'eventgoing'
-            //                   ? Container(
-            //                       decoration: BoxDecoration(
-            //                           borderRadius: BorderRadius.circular(15),
-            //                           image: DecorationImage(
-            //                               image: NetworkImage(
-            //                                 userTimelineList[i]['type'] ==
-            //                                         'video'
-            //                                     ? userTimelineList[i]['picture']
-            //                                     : userTimelineList[i]
-            //                                         ['pictureFull'],
-            //                               ),
-            //                               fit: BoxFit.cover)),
-            //                       height: ScreenUtil.instance.setWidth(400),
-            //                       width: MediaQuery.of(context).size.width,
-            //                       child: Center(
-            //                         child:
-            //                             userTimelineList[i]['type'] == 'video'
-            //                                 ? Icon(
-            //                                     Icons.play_circle_filled,
-            //                                     size: 80,
-            //                                     color: Colors.white,
-            //                                   )
-            //                                 : Container(),
-            //                       ),
-            //                     )
-            //                   : Container(),
-            //               Row(
-            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //                 crossAxisAlignment: CrossAxisAlignment.center,
-            //                 children: <Widget>[
-            //                   Container(
-            //                       margin: EdgeInsets.only(top: 15),
-            //                       child: Column(
-            //                           crossAxisAlignment:
-            //                               CrossAxisAlignment.start,
-            //                           children: <Widget>[
-            //                             Text(userTimelineList[i]['fullName'],
-            //                                 style: TextStyle(
-            //                                     fontWeight: FontWeight.bold,
-            //                                     fontSize: ScreenUtil.instance
-            //                                         .setSp(15))),
-            //                             SizedBox(
-            //                                 height: ScreenUtil.instance
-            //                                     .setWidth(8)),
-            //                             Row(
-            //                               children: <Widget>[
-            //                                 userTimelineList[i]['type'] ==
-            //                                         'love'
-            //                                     ? Image.asset(
-            //                                         'assets/icons/aset_icon/like.png',
-            //                                         scale: 3,
-            //                                       )
-            //                                     : Container(),
-            //                                 SizedBox(
-            //                                     width: userTimelineList[i]
-            //                                                 ['type'] ==
-            //                                             'love'
-            //                                         ? 8
-            //                                         : 0),
-            //                                 userTimelineList[i]['type'] ==
-            //                                         'love'
-            //                                     ? Text('Loved')
-            //                                     : Container(),
-            //                                 SizedBox(
-            //                                     width: userTimelineList[i]
-            //                                                 ['type'] ==
-            //                                             'love'
-            //                                         ? 8
-            //                                         : 0),
-            //                                 userTimelineList[i]['type'] ==
-            //                                             'video' ||
-            //                                         userTimelineList[i]
-            //                                                 ['type'] ==
-            //                                             'photo'
-            //                                     ? Container(
-            //                                         width: ScreenUtil.instance
-            //                                             .setWidth(360 - 70.0),
-            //                                         child: Text(
-            //                                             userTimelineList[i]
-            //                                                         ['name'] ==
-            //                                                     null
-            //                                                 ? ''
-            //                                                 : userTimelineList[
-            //                                                     i]['name'],
-            //                                             maxLines: 10,
-            //                                             style: TextStyle(
-            //                                                 color: Color(
-            //                                                     0xFF8A8A8B))),
-            //                                       )
-            //                                     : Text(
-            //                                         userTimelineList[i]
-            //                                                     ['name'] ==
-            //                                                 null
-            //                                             ? ''
-            //                                             : userTimelineList[i]
-            //                                                 ['name'],
-            //                                         maxLines: 10,
-            //                                         style: TextStyle(
-            //                                             color:
-            //                                                 Color(0xFF8A8A8B))),
-            //                               ],
-            //                             )
-            //                           ])),
-            //                   // Container(
-            //                   //   child: Image.asset('assets/btn_ticket/free-limited.png', scale: 7,),)
-            //                   userTimelineList[i]['type'] == 'event'
-            //                       ? Container(
-            //                           child: Image.asset(
-            //                             'assets/btn_ticket/free-limited.png',
-            //                             scale: 7,
-            //                           ),
-            //                         )
-            //                       : userTimelineList[i]['type'] == 'eventgoing'
-            //                           ? Container(
-            //                               child: Image.asset(
-            //                                 'assets/btn_ticket/going.png',
-            //                                 scale: 7,
-            //                               ),
-            //                             )
-            //                           : Container()
-            //                 ],
-            //               )
-            //             ],
-            //           ),
-            //         ),
-            //         Container(
-            //           margin: EdgeInsets.only(left: 13, top: 13, bottom: 13),
-            //           child: Row(
-            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //               children: <Widget>[
-            //                 Container(
-            //                   padding: EdgeInsets.symmetric(horizontal: 10),
-            //                   height: ScreenUtil.instance.setWidth(30),
-            //                   decoration: BoxDecoration(
-            //                       color: Colors.white,
-            //                       borderRadius: BorderRadius.circular(15),
-            //                       boxShadow: <BoxShadow>[
-            //                         BoxShadow(
-            //                             color: Colors.black.withOpacity(0.1),
-            //                             blurRadius: 2,
-            //                             spreadRadius: 1.5)
-            //                       ]),
-            //                   child: Row(
-            //                       mainAxisAlignment: MainAxisAlignment.center,
-            //                       children: <Widget>[
-            //                         Image.asset(
-            //                           'assets/icons/icon_apps/love.png',
-            //                           color: _loveCount.length > 0
-            //                               ? Colors.red
-            //                               : Colors.grey,
-            //                           scale: 3.5,
-            //                         ),
-            //                         SizedBox(
-            //                             width: ScreenUtil.instance.setWidth(5)),
-            //                         Text(_loveCount.length.toString(),
-            //                             style: TextStyle(
-            //                                 color: Color(
-            //                                     0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
-            //                       ]),
-            //                 ),
-            //                 Container(
-            //                   padding: EdgeInsets.symmetric(horizontal: 10),
-            //                   height: ScreenUtil.instance.setWidth(30),
-            //                   decoration: BoxDecoration(
-            //                       color: Colors.white,
-            //                       borderRadius: BorderRadius.circular(15),
-            //                       boxShadow: <BoxShadow>[
-            //                         BoxShadow(
-            //                             color: Colors.black.withOpacity(0.1),
-            //                             blurRadius: 2,
-            //                             spreadRadius: 1.5)
-            //                       ]),
-            //                   child: Row(
-            //                       mainAxisAlignment: MainAxisAlignment.center,
-            //                       children: <Widget>[
-            //                         Image.asset(
-            //                           'assets/icons/icon_apps/comment.png',
-            //                           scale: 3.5,
-            //                         ),
-            //                         SizedBox(
-            //                             width: ScreenUtil.instance.setWidth(5)),
-            //                         Text(commentList.length.toString(),
-            //                             style: TextStyle(
-            //                                 color: Color(
-            //                                     0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
-            //                       ]),
-            //                 ),
-            //                 SizedBox(
-            //                     width: _loveCount.length > 99 ? 100 : 150),
-            //                 GestureDetector(
-            //                   onTap: () async {
-            //                     SharedPreferences prefs =
-            //                         await SharedPreferences.getInstance();
-            //                     if (userTimelineList[i]['userID'] ==
-            //                         prefs.getString('Last User ID')) {
-            //                       showModalBottomSheet(
-            //                           context: context,
-            //                           builder: (BuildContext context) {
-            //                             return showMoreOption(
-            //                                 userTimelineList[i]['id'],
-            //                                 userTimelineList[i]['type']);
-            //                           });
-            //                     } else {
-            //                       showModalBottomSheet(
-            //                           context: context,
-            //                           builder: (BuildContext context) {
-            //                             return showMoreOptionReport(
-            //                                 userTimelineList[i]['id'],
-            //                                 userTimelineList[i]['type']);
-            //                           });
-            //                     }
-            //                   },
-            //                   child: Container(
-            //                     padding: EdgeInsets.symmetric(horizontal: 10),
-            //                     height: ScreenUtil.instance.setWidth(30),
-            //                     child: Icon(Icons.more_horiz),
-            //                   ),
-            //                 )
-            //               ]),
-            //         )
-            //       ],
-            //     ));
+              isLoved: userTimelineList[i]['impression']['data'].length == 0
+                  ? false
+                  : impressionData.containsValue(widget.currentUserId) == true
+                      ? true
+                      : false,
+            );
           },
         ));
   }
@@ -1487,6 +1148,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
 
                             if (response.statusCode == 200) {
                               setState(() {
+                                userTimelineIsLoading = false;
                                 userTimelineList = extractedData['data'];
                               });
                             }
@@ -1535,6 +1197,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
     int currentPage = 1;
 
     setState(() {
+      userTimelineIsLoading = true;
       if (newPage != null) {
         currentPage += newPage;
       }

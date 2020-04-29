@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +12,11 @@ import 'FinishPostEvent.dart';
 
 
 class PostEventInvitePeople extends StatefulWidget{
+  final String calledFrom;
+  final eventId;
+
+  const PostEventInvitePeople({Key key, @required this.calledFrom, this.eventId}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     
@@ -61,7 +67,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
               child: Center(
                 child: GestureDetector(
                   onTap: () {
-                    finish();
+                    data == null ? Navigator.push(context, CupertinoPageRoute(builder: (context) => FinishPostEvent())) : finish();
                   },
                   child: Text(
                     'Next',
@@ -72,7 +78,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
             )
           ],
         ),
-        body: data == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20)),) : Container(
+        body: data == null ? HomeLoadingScreen().followListLoading() : Container(
           color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
@@ -88,7 +94,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
                   leading: CircleAvatar(backgroundImage: NetworkImage(data[i]['photo']),),
                   title: Text(data[i]['fullName'], style: TextStyle(fontWeight: FontWeight.bold),),
                   subtitle: Text('@' + data[i]['username']),
-                  trailing: Icon(Icons.check, color: Colors.grey,),
+                  trailing: Icon(Icons.check, color: invitedPeople.contains(data[i]['id']) ? eventajaGreenTeal : Colors.grey,),
                 );
               },
             ),
@@ -100,9 +106,17 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
     String url = BaseApi().apiUrl + '/invite_event/post';
     Map<dynamic, dynamic> body = {
         'X-API-KEY': API_KEY,
-        'eventID': prefs.getInt('NEW_EVENT_ID').toString(),
-        'userID[]': invitedPeople.toString(),
+        'eventID': widget.calledFrom == "other event" ? widget.eventId : prefs.getInt('NEW_EVENT_ID').toString()
       };
+
+    for(int i = 0; i < invitedPeople.length; i++){
+      var people = invitedPeople;
+      body.addAll({
+        'userID[$i]': people[i]
+      });
+    }
+
+    print(body.toString());
 
     final response = await http.post(
       url,
@@ -117,7 +131,12 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
 
     if(response.statusCode == 201){
       print(response.body);
-      Navigator.push(context, CupertinoPageRoute(builder: (context) => FinishPostEvent()));
+      if(widget.calledFrom == "other event"){
+        Navigator.pop(context);
+      }
+      else {
+        Navigator.push(context, CupertinoPageRoute(builder: (context) => FinishPostEvent()));
+      }
     }
   }
 
@@ -135,7 +154,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
 
   Future fetchData() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String url = BaseApi().apiUrl + '/user/follower?X-API-KEY=${API_KEY}&userID=${prefs.getString('Last User ID')}&page=1';
+    String url = BaseApi().apiUrl + '/user/follower?X-API-KEY=$API_KEY&userID=${prefs.getString('Last User ID')}&page=1';
     var extractedData;
 
     final response = await http.get(
@@ -143,7 +162,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople>{
       headers: ({'Authorization': AUTHORIZATION_KEY, 'cookie': prefs.getString('Session')})
     );
 
-    print(prefs.getInt('NEW_EVENT_ID'));
+    print(prefs.getInt('NEW_EVENT_ID').toString());
     print(response.statusCode);
     print(response.body);
     setState(() {

@@ -94,9 +94,8 @@ class InvoiceState extends State<Invoice> {
                     decoration: BoxDecoration(
                         image: DecorationImage(
                             image:
-                                AssetImage('assets/icons/ic_logo_company.png'),
-                            alignment: Alignment.centerLeft,
-                            fit: BoxFit.fill)),
+                                AssetImage('assets/icons/logo_company.png'),
+                            fit: BoxFit.contain)),
                   ),
                   SizedBox(height: ScreenUtil.instance.setWidth(10)),
                   Text(
@@ -177,7 +176,7 @@ class InvoiceState extends State<Invoice> {
                 height: ScreenUtil.instance.setWidth(55),
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                color: Colors.grey,
+                color: eventajaGreenTeal,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[

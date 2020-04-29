@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -22,7 +24,8 @@ class PostEventState extends State<PostEvent> {
   var thisScaffold = new GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -31,8 +34,8 @@ class PostEventState extends State<PostEvent> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomPadding: false,
         key: thisScaffold,
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -58,7 +61,9 @@ class PostEventState extends State<PostEvent> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -119,13 +124,18 @@ class PostEventState extends State<PostEvent> {
         ));
   }
 
-  navigateToNextStep() async{
+  navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (textController.text == null || textController.text == '' || textController.text == ' ') {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Input event name!'),
+    if (textController.text == null ||
+        textController.text == '' ||
+        textController.text == ' ') {
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Input event name!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
       prefs.setString('POST_EVENT_NAME', textController.text);
       prefs.getString('POST_EVENT_NAME');
@@ -150,7 +160,8 @@ class PostEvent2State extends State<PostEvent2> {
   bool isPrivateChecked = null;
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -187,7 +198,9 @@ class PostEvent2State extends State<PostEvent2> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -248,19 +261,25 @@ class PostEvent2State extends State<PostEvent2> {
                           navigateToNextStep();
                         },
                         child: Container(
-                            height: ScreenUtil.instance.setWidth(100),
+                            height: ScreenUtil.instance.setWidth(70),
                             width: ScreenUtil.instance.setWidth(320),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(60),
-                                  width: ScreenUtil.instance.setWidth(60),
-                                  child: Image.asset(
-                                    'assets/icons/Event_public.png',
-                                    fit: BoxFit.fill,
-                                  ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: ScreenUtil.instance.setWidth(40),
+                                      width: ScreenUtil.instance.setWidth(40),
+                                      child: Image.asset(
+                                        'assets/icons/Event_public.png',
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10,)
+                                  ],
                                 ),
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(15),
@@ -273,14 +292,16 @@ class PostEvent2State extends State<PostEvent2> {
                                       'Public Event',
                                       style: TextStyle(
                                           color: Colors.black54,
-                                          fontSize: ScreenUtil.instance.setSp(18),
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(18),
                                           fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(
                                       height: ScreenUtil.instance.setWidth(5),
                                     ),
                                     Container(
-                                        height: ScreenUtil.instance.setWidth(50),
+                                        height:
+                                            ScreenUtil.instance.setWidth(45),
                                         child: Text(
                                           'Everyone can discover and get \naccess to your event',
                                           maxLines: 2,
@@ -294,12 +315,16 @@ class PostEvent2State extends State<PostEvent2> {
                                         isPrivateChecked == true
                                     ? Container()
                                     : SizedBox(
-                                        height: ScreenUtil.instance.setWidth(20),
+                                        height:
+                                            ScreenUtil.instance.setWidth(20),
                                         width: ScreenUtil.instance.setWidth(20),
                                         child: Image.asset(
                                             'assets/icons/checklist_green.png'))
                               ],
                             )),
+                      ),
+                      SizedBox(
+                        height: ScreenUtil.instance.setWidth(20),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -310,19 +335,25 @@ class PostEvent2State extends State<PostEvent2> {
                           navigateToNextStep();
                         },
                         child: Container(
-                            height: ScreenUtil.instance.setWidth(100),
+                            height: ScreenUtil.instance.setWidth(70),
                             width: ScreenUtil.instance.setWidth(320),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(60),
-                                  width: ScreenUtil.instance.setWidth(60),
-                                  child: Image.asset(
-                                    'assets/icons/Event_private.png',
-                                    fit: BoxFit.fill,
-                                  ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      height: ScreenUtil.instance.setWidth(40),
+                                      width: ScreenUtil.instance.setWidth(35),
+                                      child: Image.asset(
+                                        'assets/icons/Event_private.png',
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10,)
+                                  ],
                                 ),
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(15),
@@ -335,14 +366,16 @@ class PostEvent2State extends State<PostEvent2> {
                                       'Private Event',
                                       style: TextStyle(
                                           color: Colors.black54,
-                                          fontSize: ScreenUtil.instance.setSp(18),
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(18),
                                           fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(
                                       height: ScreenUtil.instance.setWidth(5),
                                     ),
                                     Container(
-                                        height: ScreenUtil.instance.setWidth(50),
+                                        height:
+                                            ScreenUtil.instance.setWidth(45),
                                         child: Text(
                                           'For events that can be find and \naccess only by your invitation',
                                           maxLines: 2,
@@ -356,7 +389,8 @@ class PostEvent2State extends State<PostEvent2> {
                                         isPrivateChecked == false
                                     ? Container()
                                     : SizedBox(
-                                        height: ScreenUtil.instance.setWidth(20),
+                                        height:
+                                            ScreenUtil.instance.setWidth(20),
                                         width: ScreenUtil.instance.setWidth(20),
                                         child: Image.asset(
                                             'assets/icons/checklist_green.png'))
@@ -373,16 +407,18 @@ class PostEvent2State extends State<PostEvent2> {
   navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (isPrivate == null || isPrivate == '') {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Choose your event type!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Choose your event type!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
       print(isPrivate);
-      if(isPrivateChecked == true){
+      if (isPrivateChecked == true) {
         prefs.setString('POST_EVENT_TYPE', isPrivate);
-      }
-      else{
+      } else {
         prefs.setString('POST_EVENT_TYPE', isPrivate);
       }
       Navigator.push(
@@ -392,7 +428,6 @@ class PostEvent2State extends State<PostEvent2> {
 }
 
 class PostEvent3 extends StatefulWidget {
-  
   @override
   State<StatefulWidget> createState() {
     return PostEvent3State();
@@ -425,7 +460,8 @@ class PostEvent3State extends State<PostEvent3> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -470,7 +506,9 @@ class PostEvent3State extends State<PostEvent3> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -542,14 +580,27 @@ class PostEvent3State extends State<PostEvent3> {
   navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_selectedDate.day == null || _selectedDate.day.toString() == '') {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Choose event start date!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Choose event start date!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
-      prefs.setString('POST_EVENT_START_DATE', _selectedDate.year.toString() + '-' + _selectedDate.month.toString() + '-' + _selectedDate.day.toString());
+      prefs.setString(
+          'POST_EVENT_START_DATE',
+          _selectedDate.year.toString() +
+              '-' +
+              _selectedDate.month.toString() +
+              '-' +
+              _selectedDate.day.toString());
       Navigator.push(
-          context, CupertinoPageRoute(builder: (context) => PostEvent4(firstDate: _selectedDate,)));
+          context,
+          CupertinoPageRoute(
+              builder: (context) => PostEvent4(
+                    firstDate: _selectedDate,
+                  )));
     }
   }
 }
@@ -585,14 +636,15 @@ class PostEvent4State extends State<PostEvent4> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
+
     currentDateColor = eventajaGreenTeal;
     selectedDateStyleColor = Theme.of(context).accentTextTheme.body2.color;
     selectedSingleDateDecorationColor = Theme.of(context).accentColor;
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -601,7 +653,10 @@ class PostEvent4State extends State<PostEvent4> {
       allowFontScaling: true,
     )..init(context);
     dp.DatePickerStyles styles = dp.DatePickerStyles(
-      currentDateStyle: Theme.of(context).accentTextTheme.body2.copyWith(color: currentDateColor),
+        currentDateStyle: Theme.of(context)
+            .accentTextTheme
+            .body2
+            .copyWith(color: currentDateColor),
         selectedDateStyle: Theme.of(context)
             .accentTextTheme
             .body2
@@ -638,7 +693,9 @@ class PostEvent4State extends State<PostEvent4> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -703,12 +760,21 @@ class PostEvent4State extends State<PostEvent4> {
   navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (_selectedDate.day == null || _selectedDate.day.toString() == '') {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Choose event end date!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Choose event end date!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
-      prefs.setString('POST_EVENT_END_DATE', _selectedDate.year.toString() + '-' + _selectedDate.month.toString() + '-' + _selectedDate.day.toString());
+      prefs.setString(
+          'POST_EVENT_END_DATE',
+          _selectedDate.year.toString() +
+              '-' +
+              _selectedDate.month.toString() +
+              '-' +
+              _selectedDate.day.toString());
       Navigator.push(
           context, CupertinoPageRoute(builder: (context) => PostEvent5()));
       print(_selectedDate.day);
@@ -745,7 +811,8 @@ class PostEvent5State extends State<PostEvent5> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -790,7 +857,9 @@ class PostEvent5State extends State<PostEvent5> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -828,11 +897,19 @@ class PostEvent5State extends State<PostEvent5> {
                   height: ScreenUtil.instance.setWidth(10),
                 ),
               ),
-              SizedBox(height: ScreenUtil.instance.setWidth(30),),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(30),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('Start Time', style: TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
+                  Text(
+                    'Start Time',
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: ScreenUtil.instance.setSp(18),
+                        fontWeight: FontWeight.bold),
+                  ),
                   SizedBox(
                     width: ScreenUtil.instance.setWidth(30),
                   ),
@@ -866,14 +943,25 @@ class PostEvent5State extends State<PostEvent5> {
 
   navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (_selectedDate.hour == null || _selectedDate.hour.toString() == '' || _selectedDate.minute == null || _selectedDate.minute.toString() == '') {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Choose event start date!'),
+    if (_selectedDate.hour == null ||
+        _selectedDate.hour.toString() == '' ||
+        _selectedDate.minute == null ||
+        _selectedDate.minute.toString() == '') {
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Choose event start date!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
-      prefs.setString('POST_EVENT_START_TIME', _selectedDate.hour.toString() + ':' + _selectedDate.minute.toString());
-      Navigator.push(context, CupertinoPageRoute(builder: (context) => PostEvent6()));
+      prefs.setString(
+          'POST_EVENT_START_TIME',
+          _selectedDate.hour.toString() +
+              ':' +
+              _selectedDate.minute.toString());
+      Navigator.push(
+          context, CupertinoPageRoute(builder: (context) => PostEvent6()));
     }
   }
 }
@@ -909,7 +997,8 @@ class PostEvent6State extends State<PostEvent6> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -954,7 +1043,9 @@ class PostEvent6State extends State<PostEvent6> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -992,11 +1083,19 @@ class PostEvent6State extends State<PostEvent6> {
                   height: ScreenUtil.instance.setWidth(10),
                 ),
               ),
-              SizedBox(height: ScreenUtil.instance.setWidth(30),),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(30),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('End Time', style: TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
+                  Text(
+                    'End Time',
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: ScreenUtil.instance.setSp(18),
+                        fontWeight: FontWeight.bold),
+                  ),
                   SizedBox(
                     width: ScreenUtil.instance.setWidth(30),
                   ),
@@ -1030,15 +1129,25 @@ class PostEvent6State extends State<PostEvent6> {
 
   navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (_selectedDate.hour == null || _selectedDate.hour.toString() == '' || _selectedDate.minute == null || _selectedDate.minute.toString() == '') {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Choose event end time!'),
+    if (_selectedDate.hour == null ||
+        _selectedDate.hour.toString() == '' ||
+        _selectedDate.minute == null ||
+        _selectedDate.minute.toString() == '') {
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Choose event end time!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
-      prefs.setString('POST_EVENT_END_TIME', _selectedDate.hour.toString() + ':' + _selectedDate.minute.toString());
-      Navigator.push(context, CupertinoPageRoute(builder: (context) => PostEvent7()));
+      prefs.setString(
+          'POST_EVENT_END_TIME',
+          _selectedDate.hour.toString() +
+              ':' +
+              _selectedDate.minute.toString());
+      Navigator.push(
+          context, CupertinoPageRoute(builder: (context) => PostEvent7()));
     }
   }
 }
-

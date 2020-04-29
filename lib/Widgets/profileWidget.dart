@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/Widgets/editProfileWidget.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
@@ -53,6 +54,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     if (!mounted) {
       return;
     } else {
+      print(widget.userId);
       getUserProfileData();
     }
   }
@@ -67,10 +69,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       allowFontScaling: true,
     )..init(context);
     return userData == null
-        ? Container(
-            color: Colors.white,
-            child: Center(child: CupertinoActivityIndicator(radius: 20)),
-          )
+        ? HomeLoadingScreen().profileLoading(context)
         : ProfileHeader(
             username: username,
             fullName: fullName,
@@ -93,6 +92,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   }
 
   Future getUserProfileData() async {
+    print('get profile data....');
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var session = preferences.getString('Session');
 
@@ -106,8 +106,10 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     var extractedData = json.decode(response.body);
 
     print(response.statusCode);
+    print(response.body);
 
     if (response.statusCode == 200) {
+      print(response.body);
       setState(() {
         userData = extractedData['data'];
         username = userData[0]['username'];

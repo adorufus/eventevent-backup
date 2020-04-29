@@ -1,4 +1,5 @@
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -115,10 +116,13 @@ class CreateTicketNameState extends State<CreateTicketName> {
   navigateToNextStep() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (textController.text == null || textController.text == '' || textController.text == ' ') {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Input ticket name!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Input ticket name!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
       prefs.setString('SETUP_TICKET_NAME', textController.text);
       print(prefs.getString('SETUP_TICKET_NAME'));

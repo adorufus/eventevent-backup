@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io'; import 'package:flushbar/flushbar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/PostEvent/CreateTicketReview.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -32,6 +33,7 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
+
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
@@ -130,7 +132,7 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             image: DecorationImage(
-                                image: ExactAssetImage(posterFile.path),
+                                image: FileImage(posterFile),
                                 fit: BoxFit.fill)),
                       ),
               )
@@ -184,7 +186,7 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
       source: ImageSource.camera,
     );
 
-    //cropImage(galleryFile);
+    cropImage(galleryFile);
   }
 
   Future cropImage(File image) async {
@@ -194,8 +196,9 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
           ratioX: 2.0,
           ratioY: 3.0,
         ),
-        maxWidth: ScreenUtil.instance.setWidth(512),
-        maxHeight: ScreenUtil.instance.setWidth(512));
+        maxWidth: 512,
+        maxHeight: 512,
+      );
 
     print(croppedImage.path);
     setState(() {
@@ -206,10 +209,13 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
   void navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (posterFile == null) {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Ticket picture cannot be empty!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Ticket picture cannot be empty',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
       setState(() {
         prefs.setString('SETUP_TICKET_POSTER', posterFile.path);

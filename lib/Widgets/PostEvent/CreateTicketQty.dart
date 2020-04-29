@@ -1,5 +1,6 @@
 import 'package:eventevent/Widgets/PostEvent/CreateTicketStartDate.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +28,7 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         key: thisScaffold,
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -108,7 +110,7 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
                     hintText: 'enter your ticket quantity',
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ));
@@ -117,15 +119,19 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
   navigateToNextStep() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (textController.text == null || textController.text == '' || textController.text == ' ') {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Input ticket quantity!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Input ticket quantity!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
       prefs.setString('SETUP_TICKET_QTY', textController.text);
       print(prefs.getString('SETUP_TICKET_QTY'));
+      print(prefs.getString('NEW_EVENT_TICKET_TYPE_ID'));
       Navigator.push(context,
-          CupertinoPageRoute(builder: (BuildContext context) => prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '7' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '4' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ? CreateTicketStartDate() : CreateTicketPrice()));
+          CupertinoPageRoute(builder: (BuildContext context) => prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '7' ? CreateTicketStartDate() : CreateTicketPrice()));
     }
   }
 }

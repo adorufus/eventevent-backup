@@ -1,42 +1,50 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WaitTransaction.dart';
+import 'package:eventevent/Widgets/Transaction/Alfamart/WaitingTransactionAlfamart.dart';
+import 'package:eventevent/Widgets/Transaction/BCA/InputBankData.dart';
+import 'package:eventevent/Widgets/Transaction/CC.dart';
 import 'package:eventevent/Widgets/Transaction/ExpiredPage.dart';
+import 'package:eventevent/Widgets/Transaction/GOPAY/WaitingGopay.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/Widgets/notification/TransactionHistoryItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class TransactionHistory extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    
     return TransactionHistoryState();
   }
 }
 
 class TransactionHistoryState extends State<TransactionHistory> {
-  List transactionList = [];
+  List transactionList;
   Color paymentStatusColor;
   String paymentStatusText;
+  bool isLoading = false;
 
   @override
   void initState() {
-    if(!mounted){
+    if (!mounted) {
       return;
-    }
-    else{
+    } else {
       getTransactionHistory();
     }
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -44,7 +52,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    
+
     return SafeArea(
       bottom: false,
       child: Scaffold(
@@ -78,22 +86,21 @@ class TransactionHistoryState extends State<TransactionHistory> {
                 centerTitle: true,
                 title: Text(
                   'Transaction History',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(14)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: ScreenUtil.instance.setSp(14)),
                 ),
               ),
             )),
-        body: transactionList == null
-            ? Container(
-                child: Center(
-                  child: CupertinoActivityIndicator(radius: 20),
-                ),
-              )
-            : Container(
+        body: isLoading == true
+            ? HomeLoadingScreen().myTicketLoading()
+            : transactionList == null ? EmptyState(imagePath: 'assets/icons/empty_state/history.png', reasonText: 'You have no transaction yet.',) : Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
-                  itemCount:
-                      transactionList.length == null ? 0 : transactionList.length,
+                  itemCount: transactionList.length == null
+                      ? 0
+                      : transactionList.length,
                   itemBuilder: (BuildContext context, i) {
                     if (transactionList[i]['status_transaksi'] == 'completed') {
                       paymentStatusColor = eventajaGreenTeal;
@@ -108,6 +115,66 @@ class TransactionHistoryState extends State<TransactionHistory> {
                       paymentStatusText = 'Waiting for payment';
                     }
 
+                    Widget page = WaitTransaction(
+                      transactionID: transactionList[i]['id'],
+                      expDate: transactionList[i]['expired_time'],
+                      finalPrice: transactionList[i]['amount'],
+                    );
+
+                    if (transactionList[i].containsKey("payment").toString() ==
+                        'true') {
+                      if (transactionList[i]['payment']['method'] == 'Bca') {
+                        page = PaymentBCA(
+                          expDate: transactionList[i]['expired_time'],
+                          transactionID: transactionList[i]['id'],
+                        );
+                      } else if (transactionList[i]['payment']['method'] ==
+                          'Virtual Account') {
+                        page = WaitTransaction(
+                          transactionID: transactionList[i]['id'],
+                          expDate: transactionList[i]['expired_time'],
+                          finalPrice: transactionList[i]['amount'],
+                        );
+                      } else if (transactionList[i]['payment']['method'] ==
+                          'Alfamart') {
+                        page = WaitingTransactionAlfamart(
+                          expDate: transactionList[i]['expired_time'],
+                          transactionID: transactionList[i]['id'],
+                        );
+                      } else if (transactionList[i]['payment']['method'] ==
+                          'Gopay') {
+                        page = WaitingGopay(
+                          expDate: transactionList[i]['expired_time'],
+                          transactionID: transactionList[i]['id'],
+                          amount: transactionList[i]['amount'],
+                          deadline: transactionList[i]['expired_time'],
+                          gopaytoken: transactionList[i]['payment_vendor_code'],
+                        );
+                      } else if (transactionList[i]['payment']['method'] ==
+                          'Indomaret') {
+                        page = WebViewTest(
+                          url: transactionList[i]['payment']['data_vendor']
+                              ['payment_url'],
+                        );
+                      } else if (transactionList[i]['payment']['method'] ==
+                          'OVO') {
+                        page = WebViewTest(
+                          url: transactionList[i]['payment']['data_vendor']
+                              ['invoice_url'],
+                        );
+                      } else if (transactionList[i]['payment']['method'] ==
+                          'Credit Card') {
+                        page = CreditCardInput(
+                          transactionID: transactionList[i]['id'],
+                          expDate: transactionList[i]['expired_time'],
+                        );
+                      }
+                    }
+                    else{
+                      //do nothing
+                      page = SuccessPage();
+                    }
+
                     return GestureDetector(
                         onTap: () {
                           if (transactionList[i]['status_transaksi'] ==
@@ -115,21 +182,14 @@ class TransactionHistoryState extends State<TransactionHistory> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        WaitTransaction(
-                                          transactionID: transactionList[i]['id'],
-                                          expDate: transactionList[i]
-                                              ['expired_time'],
-                                          finalPrice: transactionList[i]
-                                              ['amount'],
-                                        )));
+                                    builder: (BuildContext context) => page));
                           } else if (transactionList[i]['status_transaksi'] ==
                               'completed') {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        SuccessPage()));
+                                        SuccessPage(invoiceNumber: transactionList[i]['transaction_code'],)));
                           } else if (transactionList[i]['status_transaksi'] ==
                               'expired') {
                             Navigator.push(
@@ -140,9 +200,13 @@ class TransactionHistoryState extends State<TransactionHistory> {
                           }
                         },
                         child: TransactionHistoryItem(
-                          image: transactionList[i]['ticket_image'] == false    ? '' : transactionList[i]['ticket_image']['secure_url'],
+                          image: transactionList[i]['ticket_image'] == false
+                              ? ''
+                              : transactionList[i]['ticket_image']
+                                  ['secure_url'],
                           ticketCode: transactionList[i]['transaction_code'],
-                          ticketName: transactionList[i]['ticket']['ticket_name'],
+                          ticketName: transactionList[i]['ticket']
+                              ['ticket_name'],
                           ticketStatus: paymentStatusText,
                           ticketColor: paymentStatusColor,
                           quantity: transactionList[i]['quantity'],
@@ -158,6 +222,9 @@ class TransactionHistoryState extends State<TransactionHistory> {
 
   Future getTransactionHistory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isLoading = true;
+    });
     String url =
         BaseApi().apiUrl + '/ticket_transaction/list?X-API-KEY=$API_KEY&page=1';
 
@@ -171,10 +238,16 @@ class TransactionHistoryState extends State<TransactionHistory> {
 
     if (response.statusCode == 200) {
       setState(() {
+        isLoading = false;
         var extractedData = json.decode(response.body);
 
         transactionList = extractedData['data'];
         print(transactionList);
+      });
+    }
+    else {
+      setState(() {
+        isLoading = false;
       });
     }
   }

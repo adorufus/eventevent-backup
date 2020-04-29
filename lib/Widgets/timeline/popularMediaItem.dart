@@ -20,6 +20,8 @@ class MediaItem extends StatefulWidget {
   final commentCount;
   final youtube;
   final videoUrl;
+  final isRest;
+  final isLiked;
 
   const MediaItem(
       {Key key,
@@ -32,7 +34,7 @@ class MediaItem extends StatefulWidget {
       this.articleDetail,
       this.mediaId,
       this.likeCount,
-      this.commentCount, this.youtube, this.videoUrl})
+      this.commentCount, this.youtube, this.videoUrl, @required this.isRest, this.isLiked})
       : super(key: key);
 
   @override
@@ -51,7 +53,7 @@ class _MediaItemState extends State<MediaItem> {
     setState(() {
       commentCount = widget.commentCount;
       likeCount = widget.likeCount;
-      isLiked = false;
+      isLiked = widget.isLiked;
     });
   }
 
@@ -65,7 +67,7 @@ class _MediaItemState extends State<MediaItem> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    print(MediaQuery.of(context).size.width);
+    // print(MediaQuery.of(context).size.width);
 
     return Container(
         margin: EdgeInsets.only(left: 13, top: 8, bottom: 8, right: 0),
@@ -146,6 +148,7 @@ class _MediaItemState extends State<MediaItem> {
                             height: ScreenUtil.instance.setWidth(40),
                             child: Text(
                               widget.title,
+                              maxLines: 2,
                               style: TextStyle(
                                   fontSize: ScreenUtil.instance.setSp(15),
                                   fontWeight: FontWeight.bold),
@@ -221,6 +224,7 @@ class _MediaItemState extends State<MediaItem> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => MediaDetails(
+                                            isRest: widget.isRest,
                                                 username: widget.username,
                                                 mediaTitle: widget.title,
                                                 userPicture: widget.userPicture,

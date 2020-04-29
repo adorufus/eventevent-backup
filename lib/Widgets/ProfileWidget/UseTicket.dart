@@ -1,20 +1,26 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/ProfileWidget/ScanBarcode.dart';
+import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/LivestreamPlayer.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsWidget.dart';
 import 'package:eventevent/Widgets/ProfileWidget/UseTicketSuccess.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
+import 'package:eventevent/Widgets/openMedia.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:eventevent/helper/countdownCounter.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/ZoomTicketPage.dart';
 
-
-class UseTicket extends StatefulWidget{
-
+class UseTicket extends StatefulWidget {
   final ticketTitle;
   final ticketImage;
   final ticketDate;
@@ -24,8 +30,25 @@ class UseTicket extends StatefulWidget{
   final ticketDesc;
   final ticketID;
   final usedStatus;
+  final livestreamUrl;
+  final zoomId;
+  final zoomDesc;
 
-  const UseTicket({Key key, this.ticketTitle, this.ticketImage, this.ticketDate, this.ticketCode, this.ticketStartTime, this.ticketEndTime, this.ticketDesc, this.ticketID, this.usedStatus}) : super(key: key);
+  const UseTicket({
+    Key key,
+    this.ticketTitle,
+    this.ticketImage,
+    this.ticketDate,
+    this.ticketCode,
+    this.ticketStartTime,
+    this.ticketEndTime,
+    this.ticketDesc,
+    this.ticketID,
+    this.usedStatus,
+    this.livestreamUrl,
+    this.zoomId,
+    this.zoomDesc,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -33,14 +56,28 @@ class UseTicket extends StatefulWidget{
   }
 }
 
-class UseTicketState extends State<UseTicket>{
+class UseTicketState extends State<UseTicket> {
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   String _scanBarcode = '';
   Future<String> _barcodeString;
 
+  DateTime startDate;
+  int seconds;
+
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  void initState() {
+    startDate =
+        DateTime.parse('${widget.ticketDate} ${widget.ticketStartTime}');
+    final remaining = startDate.difference(DateTime.now());
+    seconds = remaining.inSeconds;
+    setState(() {});
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -54,55 +91,121 @@ class UseTicketState extends State<UseTicket>{
         elevation: 0,
         backgroundColor: Colors.white,
         leading: GestureDetector(
-          onTap:(){
+          onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal,),
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: eventajaGreenTeal,
+          ),
         ),
         centerTitle: true,
-        title: Text(widget.ticketTitle, style: TextStyle(color: eventajaGreenTeal),),
+        title: Text(
+          widget.ticketTitle,
+          style: TextStyle(color: eventajaGreenTeal),
+        ),
       ),
       bottomNavigationBar: GestureDetector(
-        onTap: widget.usedStatus == 'USED'|| widget.usedStatus == 'EXPIRED' ? (){} : (){
-          scan().then((_) async{
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            String url = BaseApi().apiUrl + '/tickets/verify';
+        onTap: widget.usedStatus == 'Used' || widget.usedStatus == 'Expired'
+            ? () {}
+            : startDate.isAfter(DateTime.now())
+                ? () {}
+                : widget.usedStatus == 'Streaming' ||
+                        widget.usedStatus == 'Watch Playback'
+                    ? widget.zoomId != null || widget.zoomDesc != null
+                        ? () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ZoomTicketPage(
+                                    zoomLink: widget.zoomId,
+                                    zoomDesc: widget.zoomDesc),
+                              ),
+                            );
+                          }
+                        : () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LivestreamPlayer(
+                                        wowzaLiveUrl: widget.livestreamUrl)));
+                          }
+                    : () {
+                        scan().then((_) async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          String url = BaseApi().apiUrl + '/tickets/verify';
 
-            final response = await http.post(
-              url,
-              headers: {
-                'Authorization': AUTHORIZATION_KEY,
-                'cookie': prefs.getString('Session')
-              },
-              body: {
-                'X-API-KEY': API_KEY,
-                'qrData': _scanBarcode,
-                'ticketID': widget.ticketID
-              }
-            );
+                          final response = await http.post(url, headers: {
+                            'Authorization': AUTHORIZATION_KEY,
+                            'cookie': prefs.getString('Session')
+                          }, body: {
+                            'X-API-KEY': API_KEY,
+                            'qrData': _scanBarcode,
+                            'ticketID': widget.ticketID
+                          });
 
-            var extractedData = json.decode(response.body);
+                          var extractedData = json.decode(response.body);
 
-            if(response.statusCode == 200 || response.statusCode == 201){
-              print(extractedData['desc']);
-              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => UseTicketSuccess(eventName: 'test',)));
-            }
-            else{
-              scaffoldKey.currentState.showSnackBar(SnackBar(
-                backgroundColor: Colors.red,
-                content: extractedData['desc'] == null ? Text(extractedData['error']) : Text(extractedData['desc']),
-              ));
-            }
+                          if (response.statusCode == 200 ||
+                              response.statusCode == 201) {
+                            print(extractedData['desc']);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        UseTicketSuccess(
+                                          eventName: 'test',
+                                        )));
+                          } else {
+                            Flushbar(
+                              flushbarPosition: FlushbarPosition.TOP,
+                              message: extractedData['desc'] ??
+                                  extractedData['error'],
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 3),
+                              animationDuration: Duration(milliseconds: 500),
+                            )..show(context);
+                          }
 
-            //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsWidget()));
-          });
+                          //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsWidget()));
+                        });
 //          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ScanBarcode()));
-        },
+                      },
         child: Container(
           height: ScreenUtil.instance.setWidth(50),
-          color: widget.usedStatus == 'USED' ? Colors.grey : widget.usedStatus == 'EXPIRED' ? Colors.red : Colors.deepOrangeAccent,
+          color: widget.usedStatus == 'Used'
+              ? Colors.grey
+              : widget.usedStatus == 'Expired' ? Colors.red : Colors.orange,
           child: Center(
-            child: Text(widget.usedStatus == 'USED' ? 'USED' : widget.usedStatus == 'EXPIRED' ? 'EXPIRED' :  'USE TICKET', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(20)),),
+            child: startDate.isAfter(DateTime.now())
+                ? CountDownTimer(
+                    secondsRemaining: seconds,
+                    whenTimeExpires: () {},
+                    countDownTimerStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: ScreenUtil.instance.setSp(20),
+                        fontWeight: FontWeight.bold),
+                        isDay: true,
+                  )
+                : Text(
+                    widget.usedStatus == 'Used'
+                        ? 'USED'
+                        : widget.usedStatus == 'Expired'
+                            ? 'EXPIRED'
+                            : widget.usedStatus == 'Streaming'
+                                ? widget.zoomId != null ||
+                                        widget.zoomDesc != null
+                                    ? 'Get Zoom Link Here'
+                                    : 'Watch Livestream'
+                                : widget.usedStatus == 'Watch Playback'
+                                    ? 'Watch Playback'
+                                    : 'USE TICKET',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: ScreenUtil.instance.setSp(20)),
+                  ),
           ),
         ),
       ),
@@ -111,7 +214,15 @@ class UseTicketState extends State<UseTicket>{
         width: MediaQuery.of(context).size.width,
         child: Center(
           child: Container(
-            foregroundDecoration: BoxDecoration(backgroundBlendMode: widget.usedStatus == 'AVAILABLE' ? null : BlendMode.saturation, color: widget.usedStatus == 'AVAILABLE' ? null : Colors.grey),
+            foregroundDecoration: BoxDecoration(
+                backgroundBlendMode: widget.usedStatus == 'Available' ||
+                        widget.usedStatus == 'Streaming'
+                    ? null
+                    : BlendMode.saturation,
+                color: widget.usedStatus == 'Available' ||
+                        widget.usedStatus == 'Streaming'
+                    ? null
+                    : Colors.grey),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             margin: EdgeInsets.symmetric(horizontal: 25, vertical: 25),
@@ -133,13 +244,25 @@ class UseTicketState extends State<UseTicket>{
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                        Text(widget.ticketDate, style: TextStyle(color: eventajaGreenTeal),),
+                        Text(
+                          widget.ticketDate,
+                          style: TextStyle(color: eventajaGreenTeal),
+                        ),
                         SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                        Text(widget.ticketTitle, style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text(widget.ticketTitle,
+                            style: TextStyle(fontWeight: FontWeight.bold)),
                         SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                        Text(widget.ticketCode, style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18))),
+                        Text(widget.ticketCode,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: ScreenUtil.instance.setSp(18))),
                         SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                        Text(widget.ticketStartTime.toString() + ' - ' + widget.ticketEndTime.toString(), style: TextStyle(color: Colors.grey),),
+                        Text(
+                          widget.ticketStartTime.toString() +
+                              ' - ' +
+                              widget.ticketEndTime.toString(),
+                          style: TextStyle(color: Colors.grey),
+                        ),
                         SizedBox(height: ScreenUtil.instance.setWidth(10)),
                         Text(widget.ticketDesc)
                       ],
@@ -172,9 +295,9 @@ class UseTicketState extends State<UseTicket>{
     String barcodeScanRes;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      barcodeScanRes =
-      await FlutterBarcodeScanner.scanBarcode("#ff6666", "Cancel", true, ScanMode.QR);
-    } catch (e){
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          "#00DE91", "Cancel", false, ScanMode.QR);
+    } catch (e) {
       print(e.toString());
     }
 
@@ -186,7 +309,7 @@ class UseTicketState extends State<UseTicket>{
     setState(() {
       _scanBarcode = barcodeScanRes;
     });
-    
+
     print(_scanBarcode);
   }
 }

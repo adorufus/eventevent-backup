@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
+		2264B16023E82AFC0065B0C4 /* Runner.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 2264B15F23E82A560065B0C4 /* Runner.entitlements */; };
+		2264B16223E830260065B0C4 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2264B16123E830260065B0C4 /* AdSupport.framework */; };
+		2264B16423E8303A0065B0C4 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2264B16323E8303A0065B0C4 /* SafariServices.framework */; };
+		2264B16623E830490065B0C4 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2264B16523E830490065B0C4 /* MobileCoreServices.framework */; };
+		2264B16823E830550065B0C4 /* CoreSpotlight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2264B16723E830550065B0C4 /* CoreSpotlight.framework */; };
+		2264B16A23E830600065B0C4 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2264B16923E830600065B0C4 /* WebKit.framework */; };
+		2264B16C23E8306F0065B0C4 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2264B16B23E8306F0065B0C4 /* iAd.framework */; };
 		22E85DD82395251300FBB3FB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 22E85DD72395251300FBB3FB /* GoogleService-Info.plist */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		3B80C3941E831B6300D905FE /* App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B80C3931E831B6300D905FE /* App.framework */; };
@@ -40,6 +47,14 @@
 /* Begin PBXFileReference section */
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+		2264B15F23E82A560065B0C4 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
+		2264B16123E830260065B0C4 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		2264B16323E8303A0065B0C4 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
+		2264B16523E830490065B0C4 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		2264B16723E830550065B0C4 /* CoreSpotlight.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSpotlight.framework; path = System/Library/Frameworks/CoreSpotlight.framework; sourceTree = SDKROOT; };
+		2264B16923E830600065B0C4 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		2264B16B23E8306F0065B0C4 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		2264B16D23E830AA0065B0C4 /* Branch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Branch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		22E85DD72395251300FBB3FB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		3B80C3931E831B6300D905FE /* App.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = App.framework; path = Flutter/App.framework; sourceTree = "<group>"; };
@@ -65,9 +80,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2264B16823E830550065B0C4 /* CoreSpotlight.framework in Frameworks */,
 				9705A1C61CF904A100538489 /* Flutter.framework in Frameworks */,
+				2264B16A23E830600065B0C4 /* WebKit.framework in Frameworks */,
+				2264B16223E830260065B0C4 /* AdSupport.framework in Frameworks */,
 				3B80C3941E831B6300D905FE /* App.framework in Frameworks */,
+				2264B16623E830490065B0C4 /* MobileCoreServices.framework in Frameworks */,
+				2264B16C23E8306F0065B0C4 /* iAd.framework in Frameworks */,
 				BF0EA2A088AAFEA21908873B /* Pods_Runner.framework in Frameworks */,
+				2264B16423E8303A0065B0C4 /* SafariServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +98,13 @@
 		0EF3F8F55C1DC5DD5C6EA954 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2264B16D23E830AA0065B0C4 /* Branch.framework */,
+				2264B16B23E8306F0065B0C4 /* iAd.framework */,
+				2264B16923E830600065B0C4 /* WebKit.framework */,
+				2264B16723E830550065B0C4 /* CoreSpotlight.framework */,
+				2264B16523E830490065B0C4 /* MobileCoreServices.framework */,
+				2264B16323E8303A0065B0C4 /* SafariServices.framework */,
+				2264B16123E830260065B0C4 /* AdSupport.framework */,
 				DB77E5EC3596D9CCBE9F2B38 /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
@@ -127,6 +155,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				2264B15F23E82A560065B0C4 /* Runner.entitlements */,
 				22E85DD72395251300FBB3FB /* GoogleService-Info.plist */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -187,6 +216,7 @@
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = T8U2NVAXWC;
 						LastSwiftMigration = 0910;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -213,6 +243,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2264B16023E82AFC0065B0C4 /* Runner.entitlements in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				9740EEB41CF90195004384FC /* Debug.xcconfig in Resources */,
@@ -403,6 +434,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = T8U2NVAXWC;
 				ENABLE_BITCODE = NO;
@@ -416,8 +450,9 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.eventevent2.ios;
+				PRODUCT_BUNDLE_IDENTIFIER = com.trikarya.eventevent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -538,6 +573,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = T8U2NVAXWC;
 				ENABLE_BITCODE = NO;
@@ -551,8 +589,9 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.eventevent2.ios;
+				PRODUCT_BUNDLE_IDENTIFIER = com.trikarya.eventevent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
@@ -567,6 +606,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = T8U2NVAXWC;
 				ENABLE_BITCODE = NO;
@@ -580,8 +622,9 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.eventevent2.ios;
+				PRODUCT_BUNDLE_IDENTIFIER = com.trikarya.eventevent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;

@@ -20,6 +20,7 @@ class UserMediaDetail extends StatefulWidget {
   final userPicture;
   final autoFocus;
   final postID;
+  final type;
 
   const UserMediaDetail(
       {Key key,
@@ -30,7 +31,7 @@ class UserMediaDetail extends StatefulWidget {
       this.imageCount,
       this.userPicture,
       this.autoFocus,
-      this.postID})
+      this.postID, this.type})
       : super(key: key);
 
   @override
@@ -317,7 +318,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
   Future getMediaDetails() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/timeline/detail?X-API-KEY=$API_KEY&type=photo&id=${widget.postID}';
+    String url = BaseApi().apiUrl + '/timeline/detail?X-API-KEY=$API_KEY&type=${widget.type}&id=${widget.postID}';
 
     final response = await http.get(
         url,
@@ -339,7 +340,7 @@ class _UserMediaDetailState extends State<UserMediaDetail> {
 
   Future getCommentList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String url = BaseApi().apiUrl + '/timeline/detail?X-API-KEY=$API_KEY&type=photo&id=${widget.postID}';
+    String url = BaseApi().apiUrl + '/timeline/detail?X-API-KEY=$API_KEY&type=${widget.type}&id=${widget.postID}';
 //        '/photo_comment/list?X-API-KEY=$API_KEY&id=${widget.postID}&page=1';
 
     final response = await http.get(url, headers: {

@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/timeline/EditPost.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +14,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TimelineItem extends StatefulWidget {
+  final eventId;
   final id;
   final String userId;
   final String photo;
@@ -28,7 +31,7 @@ class TimelineItem extends StatefulWidget {
   final bool isLoved;
   final commentTotalRows;
   final String impressionId;
-
+  final String location;
 
   const TimelineItem(
       {Key key,
@@ -37,7 +40,18 @@ class TimelineItem extends StatefulWidget {
       this.isVerified,
       this.fullName,
       this.type,
-      this.name, this.photoFull, this.description, this.picture, this.pictureFull, this.userId, this.commentTotalRows, this.loveCount, this.isLoved, this.impressionId, this.dateTime})
+      this.name,
+      this.photoFull,
+      this.description,
+      this.picture,
+      this.pictureFull,
+      this.userId,
+      this.commentTotalRows,
+      this.loveCount,
+      this.isLoved,
+      this.impressionId,
+      this.dateTime,
+      this.location, this.eventId})
       : super(key: key);
 
   @override
@@ -61,14 +75,16 @@ class _TimelineItemState extends State<TimelineItem>
     setState(() {
       print(widget.dateTime.toString());
       var diff = DateTime.now().difference(widget.dateTime);
-      if(diff.inSeconds < 59){
+      if (diff.inSeconds < 59) {
         dateUploaded = 'Now';
-      }
-      else if(diff.inDays > 0 && diff.inDays < 2){
+      } else if (diff.inDays > 0 && diff.inDays < 2) {
         dateUploaded = 'a day ago';
-      }
-      else{
-        dateUploaded = widget.dateTime.day.toString() + ' - ' + widget.dateTime.month.toString() + ' - ' + widget.dateTime.year.toString();
+      } else {
+        dateUploaded = widget.dateTime.day.toString() +
+            ' - ' +
+            widget.dateTime.month.toString() +
+            ' - ' +
+            widget.dateTime.year.toString();
       }
       _isLoved = widget.isLoved;
       print('isLoved: ' + _isLoved.toString());
@@ -98,7 +114,7 @@ class _TimelineItemState extends State<TimelineItem>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Row(
@@ -166,10 +182,12 @@ class _TimelineItemState extends State<TimelineItem>
                                 )),
                           ]),
                       Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Text(
                             dateUploaded,
                             style: TextStyle(
+                                color: Colors.grey,
                                 fontSize: ScreenUtil.instance.setSp(10)),
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(4)),
@@ -190,7 +208,9 @@ class _TimelineItemState extends State<TimelineItem>
                           widget.type == 'event' ||
                           widget.type == 'eventgoing' ||
                           widget.id != null &&
-                              widget.type == 'love'
+                              widget.type != 'love' &&
+                              widget.type != 'relationship' &&
+                              widget.type != 'combined_relationship'
                       ? GestureDetector(
                           onTap: () {
                             if (widget.type == 'photo') {
@@ -199,6 +219,7 @@ class _TimelineItemState extends State<TimelineItem>
                                   MaterialPageRoute(
                                       builder: (context) => UserMediaDetail(
                                             postID: widget.id,
+                                            type: widget.type,
                                             imageUri: widget.photoFull,
                                             articleDetail: widget.description,
                                             mediaTitle: widget.description,
@@ -207,6 +228,9 @@ class _TimelineItemState extends State<TimelineItem>
                                             userPicture: widget.photo,
                                             imageCount: 1,
                                           )));
+                            } else if (widget.type == 'event' ||
+                                widget.type == 'eventgoing') {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailLoadingScreen(eventId: widget.eventId,)));
                             } else {
                               Navigator.push(
                                   context,
@@ -239,36 +263,66 @@ class _TimelineItemState extends State<TimelineItem>
                           ))
                       : Container(),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      widget.type == 'love'
+                          ? Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        spreadRadius: 3,
+                                        blurRadius: 5,
+                                        color:
+                                            Color(0xff8a8a8b).withOpacity(.5))
+                                  ],
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                        widget.type == 'video'
+                                            ? widget.picture
+                                            : widget.pictureFull,
+                                      ),
+                                      fit: BoxFit.cover)),
+                              height: ScreenUtil.instance.setWidth(100),
+                              width: ScreenUtil.instance.setWidth(66),
+                              child: Center(
+                                child: widget.type == 'video'
+                                    ? Icon(
+                                        Icons.play_circle_filled,
+                                        size: 80,
+                                        color: Colors.white,
+                                      )
+                                    : Container(),
+                              ),
+                            )
+                          : Container(),
+                      widget.type == 'love'
+                          ? Expanded(
+                              child: SizedBox(),
+                            )
+                          : Container(),
                       Container(
-                          margin: EdgeInsets.only(top: 15),
+                          margin: EdgeInsets.only(top: 0),
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(widget.fullName,
+                                Container(
+                                  width: 200,
+                                  child: Text(
+                                    widget.type == 'love'
+                                        ? widget.name
+                                        : widget.fullName,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize:
-                                            ScreenUtil.instance.setSp(15))),
+                                            ScreenUtil.instance.setSp(15)),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
                                 SizedBox(
                                     height: ScreenUtil.instance.setWidth(8)),
                                 Row(
                                   children: <Widget>[
-                                    widget.type == 'love'
-                                        ? Image.asset(
-                                            'assets/icons/aset_icon/like.png',
-                                            scale: 3,
-                                          )
-                                        : Container(),
-                                    SizedBox(
-                                        width: widget.type == 'love' ? 8 : 0),
-                                    widget.type == 'love'
-                                        ? Text('Loved')
-                                        : Container(),
-                                    SizedBox(
-                                        width: widget.type == 'love' ? 8 : 0),
                                     widget.type == 'video' ||
                                             widget.type == 'photo'
                                         ? Container(
@@ -283,12 +337,16 @@ class _TimelineItemState extends State<TimelineItem>
                                                     color: Color(0xFF8A8A8B))),
                                           )
                                         : Container(
-                                            width: ScreenUtil.instance
-                                                .setWidth(150),
+                                            width: ScreenUtil.instance.setWidth(
+                                                widget.type != 'love'
+                                                    ? 150
+                                                    : 250),
                                             child: Text(
-                                              widget.name == null
+                                              widget.location == null
                                                   ? ''
-                                                  : widget.name,
+                                                  : widget.location == null
+                                                      ? widget.name
+                                                      : widget.location,
                                               maxLines: 1,
                                               style: TextStyle(
                                                   color: Color(0xFF8A8A8B)),
@@ -298,6 +356,9 @@ class _TimelineItemState extends State<TimelineItem>
                                   ],
                                 )
                               ])),
+                      Expanded(
+                        child: SizedBox(),
+                      ),
                       // Container(
                       //   child: Image.asset('assets/btn_ticket/free-limited.png', scale: 7,),)
                       widget.type == 'event'
@@ -317,8 +378,8 @@ class _TimelineItemState extends State<TimelineItem>
                               : widget.type == 'relationship'
                                   ? CircleAvatar(
                                       backgroundColor: Color(0xff8a8a8b),
-                                      backgroundImage: NetworkImage(
-                                          widget.picture),
+                                      backgroundImage:
+                                          NetworkImage(widget.picture),
                                     )
                                   : Container()
                     ],
@@ -328,116 +389,129 @@ class _TimelineItemState extends State<TimelineItem>
             ),
             Container(
               margin: EdgeInsets.only(left: 13, top: 13, bottom: 13),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if(_isLoved == false){
-                            _loveCount += 1;
-                            _isLoved = true;
-                            doLove(widget.id, '6').then((response){
-                              print(response.body);
-                              print(response.statusCode);
-                            });
-                            doRefresh();
-                          } else {
-                            _loveCount -= 1;
-                            _isLoved = false;
-                            unLove(widget.id);
-                            doRefresh();
-                          }
+              child: Row(children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (_isLoved == false) {
+                        _loveCount += 1;
+                        _isLoved = true;
+                        doLove(widget.id, '6').then((response) {
+                          print(response.body);
+                          print(response.statusCode);
                         });
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: ScreenUtil.instance.setWidth(30),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 2,
-                                  spreadRadius: 1.5)
-                            ]),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Image.asset(
-                                'assets/icons/icon_apps/love.png',
-                                color: _loveCount > 0
-                                    ? Colors.red
-                                    : Colors.grey,
-                                scale: 3.5,
-                              ),
-                              SizedBox(width: ScreenUtil.instance.setWidth(_loveCount < 1 ? 0 : 5)),
-                              Text(_loveCount < 1 ? '' : _loveCount.toString(),
-                                  style: TextStyle(
-                                      color: Color(
-                                          0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
-                            ]),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: ScreenUtil.instance.setWidth(30),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 2,
-                                spreadRadius: 1.5)
-                          ]),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Image.asset(
-                              'assets/icons/icon_apps/comment.png',
-                              scale: 3.5,
-                            ),
-                            SizedBox(width: ScreenUtil.instance.setWidth(5)),
-                            Text(widget.commentTotalRows,
-                                style: TextStyle(
-                                    color: Color(
-                                        0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
-                          ]),
-                    ),
-                    SizedBox(width: _loveCount > 99 ? 100 : 150),
-                    GestureDetector(
-                      onTap: () async {
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        if (widget.userId ==
-                            prefs.getString('Last User ID')) {
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return showMoreOption(
-                                    widget.id, widget.type,
-                                    imageUrl: widget.picture);
-                              });
-                        } else {
-                          showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return showMoreOptionReport(
-                                  widget.id,
-                                  widget.type,
-                                );
-                              });
-                        }
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: ScreenUtil.instance.setWidth(30),
-                        child: Icon(Icons.more_horiz),
-                      ),
-                    )
-                  ]),
+                        doRefresh();
+                      } else {
+                        _loveCount -= 1;
+                        _isLoved = false;
+                        unLove(widget.id);
+                        doRefresh();
+                      }
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: _loveCount < 1 ? 7 : 10),
+                    height: ScreenUtil.instance.setWidth(30),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 2,
+                              spreadRadius: 1.5)
+                        ]),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            'assets/icons/icon_apps/love.png',
+                            color: _loveCount > 0 ? Colors.red : Colors.grey,
+                            scale: 3.5,
+                          ),
+                          SizedBox(
+                              width: ScreenUtil.instance
+                                  .setWidth(_loveCount < 1 ? 0 : 5)),
+                          Text(_loveCount < 1 ? '' : _loveCount.toString(),
+                              style: TextStyle(
+                                  color: Color(
+                                      0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
+                        ]),
+                  ),
+                ),
+                SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal:
+                            int.parse(widget.commentTotalRows) < 1 ? 8 : 10),
+                    height: ScreenUtil.instance.setWidth(30),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 2,
+                              spreadRadius: 1.5)
+                        ]),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            'assets/icons/icon_apps/comment.png',
+                            scale: 3.5,
+                            color: int.parse(widget.commentTotalRows) < 1
+                                ? Colors.grey
+                                : eventajaGreenTeal,
+                          ),
+                          SizedBox(
+                              width: ScreenUtil.instance.setWidth(
+                                  int.parse(widget.commentTotalRows) < 1
+                                      ? 0
+                                      : 5)),
+                          Text(
+                              int.parse(widget.commentTotalRows) < 1
+                                  ? ''
+                                  : widget.commentTotalRows,
+                              style: TextStyle(
+                                  color: Color(
+                                      0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
+                        ]),
+                  ),
+                ),
+                Expanded(child: SizedBox()),
+                GestureDetector(
+                  onTap: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    if (widget.userId == prefs.getString('Last User ID')) {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return showMoreOption(widget.id, widget.type,
+                                imageUrl: widget.picture);
+                          });
+                    } else {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return showMoreOptionReport(
+                              widget.id,
+                              widget.type,
+                            );
+                          });
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    height: ScreenUtil.instance.setWidth(30),
+                    child: Icon(Icons.more_horiz),
+                  ),
+                )
+              ]),
             )
           ],
         ));
@@ -803,34 +877,25 @@ class _TimelineItemState extends State<TimelineItem>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String url = '';
 
-    if(widget.type == 'video'){
+    if (widget.type == 'video') {
       url = BaseApi().apiUrl + '/video/impression';
-    }
-    else if(widget.type == 'photo'){
+    } else if (widget.type == 'photo') {
       url = BaseApi().apiUrl + '/photo_impression/post';
-    }
-    else if(widget.type == 'event'){
+    } else if (widget.type == 'event') {
       url = BaseApi().apiUrl + '/event_impression/post';
-    }
-    else if(widget.type == 'eventgoing'){
+    } else if (widget.type == 'eventgoing') {
       url = BaseApi().apiUrl + '/usergoing_impression/post';
-    }
-    else if(widget.type == 'love'){
+    } else if (widget.type == 'love') {
       url = BaseApi().apiUrl + '/love_impression/post';
-    }
-    else if(widget.type == 'relationship'){
+    } else if (widget.type == 'relationship') {
       url = BaseApi().apiUrl + '/relationship_impression/post';
-    }
-    else if(widget.type == 'thought'){
+    } else if (widget.type == 'thought') {
       url = BaseApi().apiUrl + '/thought_impression/post';
-    }
-    else if(widget.type == 'eventcheckin'){
+    } else if (widget.type == 'eventcheckin') {
       url = BaseApi().apiUrl + '/eventcheckin_impression/post';
-    }
-    else if(widget.type == 'checkin'){
+    } else if (widget.type == 'checkin') {
       url = BaseApi().apiUrl + '/photo_impression/post';
-    }
-    else if(widget.type == 'combined_relationship'){
+    } else if (widget.type == 'combined_relationship') {
       url = BaseApi().apiUrl + '/combined_relationship_impression/post';
     }
 
@@ -851,35 +916,26 @@ class _TimelineItemState extends State<TimelineItem>
 
     String url = '';
 
-    if(widget.type == 'video'){
+    if (widget.type == 'video') {
       print(widget.id);
       url = BaseApi().apiUrl + '/video/delete_impression';
-    }
-    else if(widget.type == 'photo'){
+    } else if (widget.type == 'photo') {
       url = BaseApi().apiUrl + '/photo_impression/delete';
-    }
-    else if(widget.type == 'event'){
+    } else if (widget.type == 'event') {
       url = BaseApi().apiUrl + '/event_impression/delete';
-    }
-    else if(widget.type == 'eventgoing'){
+    } else if (widget.type == 'eventgoing') {
       url = BaseApi().apiUrl + '/usergoing_impression/delete';
-    }
-    else if(widget.type == 'love'){
+    } else if (widget.type == 'love') {
       url = BaseApi().apiUrl + '/love_impression/delete';
-    }
-    else if(widget.type == 'relationship'){
+    } else if (widget.type == 'relationship') {
       url = BaseApi().apiUrl + '/relationship_impression/delete';
-    }
-    else if(widget.type == 'thought'){
+    } else if (widget.type == 'thought') {
       url = BaseApi().apiUrl + '/thought_impression/delete';
-    }
-    else if(widget.type == 'eventcheckin'){
+    } else if (widget.type == 'eventcheckin') {
       url = BaseApi().apiUrl + '/eventcheckin_impression/delete';
-    }
-    else if(widget.type == 'checkin'){
+    } else if (widget.type == 'checkin') {
       url = BaseApi().apiUrl + '/photo_impression/delete';
-    }
-    else if(widget.type == 'combined_relationship'){
+    } else if (widget.type == 'combined_relationship') {
       url = BaseApi().apiUrl + '/combined_relationship_impression/delete';
     }
 

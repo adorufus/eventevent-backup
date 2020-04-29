@@ -11,7 +11,7 @@ description: A new Flutter project.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 3.0.0+1
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -25,12 +25,21 @@ dependencies:
   cupertino_icons: ^0.1.2
   http: ^0.12.0+2
   shared_preferences:
-  dio: 2.1.13
+  dio: ^3.0.9
+  flutter_placeholder_textlines:
+  shimmer: ^1.0.1
   flutter_statusbarcolor: ^0.2.3
   path_provider:
   carousel_pro: ^1.0.0
   carousel_slider: ^1.3.0
-  place_picker: 0.9.11
+  flutter_branch_sdk: ^0.1.3
+  video_thumbnail: ^0.2.0
+  mime:
+  photo_view: ^0.9.1
+  rate_my_app: ^0.5.0+3
+  bloc: ^3.0.0
+  place_picker: ^0.9.11
+  liquid_progress_indicator:
   # google_places_picker:
   #   git:
   #     url: https://github.com/derTuca/flutter_google_places_picker.git
@@ -43,22 +52,25 @@ dependencies:
   intl: ^0.15.8
   location: ^2.3.5
   geocoder: ^0.2.1
+  flushbar: ^1.9.1
   auto_size_text: ^2.0.2+1
   marquee: ^1.3.0
   marquee_flutter: ^0.1.4
   flutter_money_formatter: ^0.8.2
   url_launcher: ^5.1.0
-  uuid: 2.0.2
-  flutter_facebook_login: 2.0.1
-  firebase_auth: 0.15.3
-  google_sign_in: 4.0.4
+  uuid: ^2.0.2
+  flutter_facebook_login: ^2.0.1
+  firebase_auth: ^0.15.3
+  google_sign_in: ^4.0.4
   package_info: ^0.4.0+4
-  googleapis: any
+  settings_ui: ^0.2.0
+  flutter_wowza: ^0.1.10
+  googleapis: ^0.54.0
   firebase_crashlytics: ^0.1.0+3
-  chewie:
+  chewie: ^0.9.10
   googleapis_auth: any
   clevertap_flutter: ^0.0.5
-  firebase_messaging: 5.1.5
+  firebase_messaging: ^6.0.13
   firebase_analytics: ^5.0.2
   webview_flutter: ^0.3.15+1
   flutter_html: ^0.8.2
@@ -67,27 +79,35 @@ dependencies:
   pie_chart: ^1.2.0
   launch_review: ^2.0.0
   flutter_screenutil:
+  firebase_core: ^0.4.3+3
 #  firebase_core: 0.2.5+1
   #flutter_gopay_midtrans: ^1.0.4
   # background_fetch: ^0.2.0
-  flutter_local_notifications: 0.8.4+3
+  flutter_local_notifications: ^1.2.2
   http_parser: ^3.1.3
-  rxdart: 0.22.6
+  rxdart: ^0.23.0
   permission_handler: ^3.2.2
   thumbnails: ^1.0.1
-  flutter_branch_io_plugin: ^0.0.3
   csv: ^4.0.3
+  uni_links: ^0.2.0
   video_player: ^0.10.2+3
   pull_to_refresh: ^1.5.6
-  share_extend: "^1.0.9"
+  share_extend: ^1.1.0
   youtube_player_flutter: 6.0.3+2
   flutter_typeahead: ^1.7.0
   percent_indicator: ^2.1.1+1
+  supernova_flutter_ui_toolkit: ^0.0.2
+  mid_flutter: ^0.0.1
   sqflite: any
-  share:
-    git:
-     url: https://github.com/d-silveira/flutter-share.git
-  camera: ^0.5.4
+  rive: any
+  screenshot: ^0.1.1
+  flutter_credit_card:
+  share: ^0.6.3+5
+  camera: ^0.5.7+4
+  page_indicator:
+  flutter_playout: ^1.0.35
+  
+  interactive_webview: ^0.1.2
   # apple_maps_flutter:
   #   git:
   #     url: https://github.com/LuisThein/apple_maps_flutter.git
@@ -98,6 +118,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.4
+
+flutter_icons:
+  image_path_android: "assets/icon_fix_eventevent.png"
+  image_path_ios: "assets/eventevent_icon_baru.png"
+  android: true
+  ios: true
 
 
 # For information on the generic Dart part of this file, see the
@@ -124,8 +151,14 @@ flutter:
         - asset: assets/fonts/Charter.ttf
 
   assets:
+    - assets/flare/splashicon.flr
+    - assets/flare/eventevent.flr
+    - assets/flare/Spalsh_Eventevent.flr
     - assets/docs.png
+    - assets/icon_eventevent_kecil.png
     - assets/qr-code.png
+    - assets/eventevent.png
+    - assets/failed-transaction.png
     - assets/bottom-bar/home-white.png
     - assets/bottom-bar/home-green.png
     - assets/bottom-bar/notification-white.png
@@ -168,6 +201,8 @@ flutter:
     - assets/icons/aset_icon/media.png
     - assets/icons/aset_icon/comment.png
     - assets/icons/aset_icon/popular.png
+    - assets/icons/aset_icon/wowza_livestream.png
+    - assets/icons/aset_icon/zoom_livestream.png
     - assets/icons/icon_apps/popular.png
     - assets/icons/icon_apps/home.png
     - assets/icons/icon_apps/wallet.png
@@ -226,6 +261,7 @@ flutter:
     - assets/icons/Icon_finish_create_event.png
     - assets/icons/page_post_event.png
     - assets/icons/page_post_media.png
+    - assets/icons/post_livestream.png
     - assets/icons/icon_line.png
     - assets/icons/Icon_finish_create_event.png
     - assets/drawable/bca.png
@@ -242,6 +278,12 @@ flutter:
     - assets/drawable/cimb.jpg
     - assets/drawable/mandiri.png
     - assets/drawable/amex.png
+    - assets/icons/empty_state/public_timeline.png
+    - assets/icons/empty_state/history.png
+    - assets/icons/empty_state/profile.png
+    - assets/icons/empty_state/my_ticket.png
+    - assets/icons/empty_state/notification.png
+    - assets/icons/empty_state/error.png
     - assets/drawable/cimbniaga.png
     - assets/drawable/bank.png
     - assets/drawable/discover.png
@@ -261,7 +303,11 @@ flutter:
     - assets/drawable/username-invalid.png
     - assets/drawable/username-valid.png
     - assets/drawable/cake.png
+    - assets/drawable/ic_tutorial_1.png
+    - assets/drawable/ic_tutorial_2.png
+    - assets/drawable/ic_tutorial_3.png
     - assets/logo_eventevent.png
+    - assets/map_bw.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

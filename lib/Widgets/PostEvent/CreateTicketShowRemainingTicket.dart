@@ -1,5 +1,6 @@
 import 'package:eventevent/Widgets/PostEvent/CreateTicketOnePurchase.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -127,10 +128,13 @@ class CreateTicketShowRemainingTicketState extends State<CreateTicketShowRemaini
   navigateToNextStep() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (__curValue == null) {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Choose at least one option', style: TextStyle(color: Colors.white),),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Choose at least one option',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
       prefs.setString('SETUP_TICKET_SHOW_REMAINING_TICKET', __curValue.toString());
       print(prefs.getString('SETUP_TICKET_SHOW_REMAINING_TICKET'));

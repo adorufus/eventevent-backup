@@ -5,7 +5,9 @@ import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/API/registerModel.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
@@ -25,6 +27,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  FocusNode _usernameFocusNode = FocusNode();
+  FocusNode _emailFocusNode = FocusNode();
+
   bool hidePassword = true;
   Widget validationEmailIcon;
   Widget validationUsernameIcon;
@@ -34,7 +39,133 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   bool isLoading = false;
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  void initState() {
+    _usernameFocusNode.addListener(() {
+      print(_usernameFocusNode.hasFocus);
+      if (_usernameFocusNode.hasFocus == false) {
+        isLoading = true;
+        Flushbar(
+          flushbarPosition: FlushbarPosition.TOP,
+          message: 'Checking username...',
+          backgroundColor: Colors.grey,
+          duration: Duration(seconds: 3),
+          animationDuration: Duration(milliseconds: 500),
+        )..show(context);
+        checkUsername(_usernameController.text).then((response) async {
+          var extractedData = json.decode(response.body);
+
+          if (extractedData['status'] == 'NOK') {
+            isLoading = false;
+            setState(() {
+              usernameStatus = 'nonavail';
+              validationUsernameIcon = Icon(
+                Icons.close,
+                color: Colors.red,
+              );
+            });
+            Flushbar(
+              flushbarPosition: FlushbarPosition.TOP,
+              message: extractedData['desc'],
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 3),
+              animationDuration: Duration(milliseconds: 500),
+            )..show(context);
+          } else if (response.statusCode == 200) {
+            
+            setState(() {
+              isLoading = false;
+              usernameStatus = 'avail';
+              validationUsernameIcon = Icon(
+                Icons.check,
+                color: eventajaGreenTeal,
+              );
+            });
+            Flushbar(
+              flushbarPosition: FlushbarPosition.TOP,
+              message: 'Username available',
+              backgroundColor: eventajaGreenTeal,
+              duration: Duration(seconds: 3),
+              animationDuration: Duration(milliseconds: 500),
+            )..show(context);
+          }
+        });
+      }
+    });
+    _emailFocusNode.addListener(() {
+      if (_emailFocusNode.hasFocus == false) {
+        
+        Pattern pattern =
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+        RegExp regex = new RegExp(pattern);
+        if (!regex.hasMatch(_emailController.text)) {
+          setState(() {
+            isLoading = false;
+            validationEmailIcon = Icon(
+              Icons.close,
+              color: Colors.red,
+            );
+          });
+          Flushbar(
+            flushbarPosition: FlushbarPosition.TOP,
+            message: 'Invalid Email Format!',
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+            animationDuration: Duration(milliseconds: 500),
+          )..show(context);
+        } else {
+          Flushbar(
+            flushbarPosition: FlushbarPosition.TOP,
+            message: 'Checking Email...',
+            backgroundColor: Colors.grey,
+            duration: Duration(seconds: 3),
+            animationDuration: Duration(milliseconds: 500),
+          )..show(context);
+          checkEmail(_emailController.text).then((response) {
+            var extractedData = json.decode(response.body);
+
+            if (extractedData['status'] == 'NOK') {
+              setState(() {
+                isLoading = false;
+                emailStatus = 'nonavail';
+                validationEmailIcon = Icon(
+                  Icons.close,
+                  color: Colors.red,
+                );
+              });
+              Flushbar(
+                flushbarPosition: FlushbarPosition.TOP,
+                message: extractedData['desc'],
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 3),
+                animationDuration: Duration(milliseconds: 500),
+              )..show(context);
+            } else if (response.statusCode == 200) {
+              isLoading = false;
+              setState(() {
+                emailStatus = 'avail';
+                validationEmailIcon = Icon(
+                  Icons.check,
+                  color: eventajaGreenTeal,
+                );
+              });
+              Flushbar(
+                flushbarPosition: FlushbarPosition.TOP,
+                message: 'Email available',
+                backgroundColor: eventajaGreenTeal,
+                duration: Duration(seconds: 3),
+                animationDuration: Duration(milliseconds: 500),
+              )..show(context);
+            }
+          });
+        }
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -48,8 +179,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         key: _scaffoldKey,
         backgroundColor: Colors.white,
         appBar: CupertinoNavigationBar(
-          padding:
-              EdgeInsetsDirectional.only(start: 15, bottom: 10, end: 15, top: 5),
+          padding: EdgeInsetsDirectional.only(
+              start: 15, bottom: 10, end: 15, top: 5),
           backgroundColor: Colors.white,
           leading: GestureDetector(
             onTap: () {
@@ -59,7 +190,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           ),
           middle: Text(
             'Register',
-            style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: eventajaGreenTeal),
+            style: TextStyle(
+                fontSize: ScreenUtil.instance.setSp(20),
+                color: eventajaGreenTeal),
           ),
         ),
         body: Stack(
@@ -79,7 +212,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             Positioned(
                 child: isLoading == true
                     ? Container(
-                        child: Center(child: CupertinoActivityIndicator(radius: 20)),
+                        child: Center(
+                            child: CupertinoActivityIndicator(radius: 20)),
                         color: Colors.black.withOpacity(0.5),
                       )
                     : Container())
@@ -100,15 +234,17 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         TextFormField(
           controller: _usernameController,
           keyboardType: TextInputType.text,
+          focusNode: _usernameFocusNode,
           autofocus: false,
           onFieldSubmitted: (i) async {
             isLoading = true;
-            _scaffoldKey.currentState.showSnackBar(SnackBar(
+            Flushbar(
+              flushbarPosition: FlushbarPosition.TOP,
+              message: 'Checking username...',
               backgroundColor: Colors.grey,
-              content: Text('Checking username...',
-                  style: TextStyle(color: Colors.white)),
-              duration: Duration(seconds: 1),
-            ));
+              duration: Duration(seconds: 3),
+              animationDuration: Duration(milliseconds: 500),
+            )..show(context);
             checkUsername(_usernameController.text).then((response) async {
               var extractedData = json.decode(response.body);
 
@@ -121,12 +257,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     color: Colors.red,
                   );
                 });
-                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                Flushbar(
+                  flushbarPosition: FlushbarPosition.TOP,
+                  message: extractedData['desc'],
                   backgroundColor: Colors.red,
-                  content: Text(extractedData['desc'],
-                      style: TextStyle(color: Colors.white)),
-                  duration: Duration(seconds: 2),
-                ));
+                  duration: Duration(seconds: 3),
+                  animationDuration: Duration(milliseconds: 500),
+                )..show(context);
               } else if (response.statusCode == 200) {
                 isLoading = false;
                 setState(() {
@@ -136,12 +273,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     color: eventajaGreenTeal,
                   );
                 });
-                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                Flushbar(
+                  flushbarPosition: FlushbarPosition.TOP,
+                  message: 'Username available',
                   backgroundColor: eventajaGreenTeal,
-                  content: Text('Username available',
-                      style: TextStyle(color: Colors.white)),
-                  duration: Duration(seconds: 2),
-                ));
+                  duration: Duration(seconds: 3),
+                  animationDuration: Duration(milliseconds: 500),
+                )..show(context);
               }
             });
           },
@@ -159,8 +297,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           controller: _emailController,
           keyboardType: TextInputType.text,
           autofocus: false,
+          focusNode: _emailFocusNode,
           onFieldSubmitted: (i) async {
-            setState((){
+            setState(() {
               isLoading = true;
             });
             Pattern pattern =
@@ -174,20 +313,21 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   color: Colors.red,
                 );
               });
-              _scaffoldKey.currentState.showSnackBar(SnackBar(
+              Flushbar(
+                flushbarPosition: FlushbarPosition.TOP,
+                message: 'Invalid Email Format!',
                 backgroundColor: Colors.red,
-                content: Text(
-                  'Invalid Email Format',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ));
+                duration: Duration(seconds: 3),
+                animationDuration: Duration(milliseconds: 500),
+              )..show(context);
             } else {
-              _scaffoldKey.currentState.showSnackBar(SnackBar(
+              Flushbar(
+                flushbarPosition: FlushbarPosition.TOP,
+                message: 'Checking Email...',
                 backgroundColor: Colors.grey,
-                content: Text('Checking email...',
-                    style: TextStyle(color: Colors.white)),
-                duration: Duration(seconds: 1),
-              ));
+                duration: Duration(seconds: 3),
+                animationDuration: Duration(milliseconds: 500),
+              )..show(context);
               checkEmail(_emailController.text).then((response) {
                 var extractedData = json.decode(response.body);
 
@@ -200,12 +340,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       color: Colors.red,
                     );
                   });
-                  _scaffoldKey.currentState.showSnackBar(SnackBar(
+                  Flushbar(
+                    flushbarPosition: FlushbarPosition.TOP,
+                    message: extractedData['desc'],
                     backgroundColor: Colors.red,
-                    content: Text(extractedData['desc'],
-                        style: TextStyle(color: Colors.white)),
-                    duration: Duration(seconds: 2),
-                  ));
+                    duration: Duration(seconds: 3),
+                    animationDuration: Duration(milliseconds: 500),
+                  )..show(context);
                 } else if (response.statusCode == 200) {
                   isLoading = false;
                   setState(() {
@@ -215,12 +356,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       color: eventajaGreenTeal,
                     );
                   });
-                  _scaffoldKey.currentState.showSnackBar(SnackBar(
+                  Flushbar(
+                    flushbarPosition: FlushbarPosition.TOP,
+                    message: 'Email available',
                     backgroundColor: eventajaGreenTeal,
-                    content: Text('Email available',
-                        style: TextStyle(color: Colors.white)),
-                    duration: Duration(seconds: 2),
-                  ));
+                    duration: Duration(seconds: 3),
+                    animationDuration: Duration(milliseconds: 500),
+                  )..show(context);
                 }
               });
             }
@@ -276,7 +418,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             child: Text('Register',
-                style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.white)),
+                style: TextStyle(
+                    fontSize: ScreenUtil.instance.setSp(15),
+                    color: Colors.white)),
             color: eventajaGreenTeal,
             onPressed: () {
               isLoading = true;
@@ -288,41 +432,41 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   _emailController.text.length == 0 ||
                   _passwordController.text.length == 0) {
                 isLoading = false;
-                _scaffoldKey.currentState.showSnackBar(SnackBar(
-                  content: Text(
-                    'Please check your input',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                Flushbar(
+                  flushbarPosition: FlushbarPosition.TOP,
+                  message: 'Please check your input',
                   backgroundColor: Colors.red,
-                ));
+                  duration: Duration(seconds: 3),
+                  animationDuration: Duration(milliseconds: 500),
+                )..show(context);
               } else if (!regex.hasMatch(_emailController.text)) {
                 isLoading = false;
-                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                Flushbar(
+                  flushbarPosition: FlushbarPosition.TOP,
+                  message: 'Invalid Email Format',
                   backgroundColor: Colors.red,
-                  content: Text(
-                    'Invalid Email Format',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ));
+                  duration: Duration(seconds: 3),
+                  animationDuration: Duration(milliseconds: 500),
+                )..show(context);
               } else if (_passwordController.text.length < 8) {
                 isLoading = false;
-                _scaffoldKey.currentState.showSnackBar(SnackBar(
-                  content: Text(
-                    'Password at least 8 characters',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                Flushbar(
+                  flushbarPosition: FlushbarPosition.TOP,
+                  message: 'Password at least 8 characters',
                   backgroundColor: Colors.red,
-                ));
+                  duration: Duration(seconds: 3),
+                  animationDuration: Duration(milliseconds: 500),
+                )..show(context);
               } else if (usernameStatus == 'nonavail' ||
                   emailStatus == 'nonavail') {
                 isLoading = false;
-                _scaffoldKey.currentState.showSnackBar(SnackBar(
-                  content: Text(
-                    'Please check your input',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                Flushbar(
+                  flushbarPosition: FlushbarPosition.TOP,
+                  message: 'Please check your input',
                   backgroundColor: Colors.red,
-                ));
+                  duration: Duration(seconds: 3),
+                  animationDuration: Duration(milliseconds: 500),
+                )..show(context);
               } else if (usernameStatus == 'avail' && emailStatus == 'avail') {
                 isLoading = false;
                 Navigator.push(

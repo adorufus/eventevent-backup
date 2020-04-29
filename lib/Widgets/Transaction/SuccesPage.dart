@@ -5,6 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SuccessPage extends StatefulWidget {
+  final invoiceNumber;
+
+  const SuccessPage({Key key, this.invoiceNumber}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return SuccessPageState();
@@ -67,7 +70,7 @@ class SuccessPageState extends State<SuccessPage> {
             SizedBox(
               height: ScreenUtil.instance.setWidth(20),
             ),
-            Text('INV/XXXX/XXX/XXXX/XXX', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
+            Text(widget.invoiceNumber, style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
             SizedBox(
               height: ScreenUtil.instance.setWidth(15),
             ),

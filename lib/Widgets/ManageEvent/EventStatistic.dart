@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,7 +65,7 @@ class EventStatisticState extends State<EventStatistic>{
     
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
+      appBar: sharedData == null || ticketData == null || checkinData == null || dataMap == null ? PreferredSize(child: Container(), preferredSize: Size(0, 0),) : AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
         leading: GestureDetector(
@@ -76,7 +77,7 @@ class EventStatisticState extends State<EventStatistic>{
         centerTitle: true,
         title: Text('EVENT STATISTIC', style: TextStyle(color: eventajaGreenTeal),),
       ),
-      body: sharedData == null || ticketData == null || checkinData == null || dataMap == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20),)) : Container(
+      body: sharedData == null || ticketData == null || checkinData == null || dataMap == null ? EventDetailLoadingScreen() : Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: ListView(
           children: <Widget>[

@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Transaction/Xendit/TicketReview.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,6 +23,7 @@ class ChooseBankAccount extends StatefulWidget {
 class _ChooseBankAccountState extends State<ChooseBankAccount> {
   List vaList;
   String vaPictureURI;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -29,7 +32,8 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -37,6 +41,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -71,7 +76,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
                   style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
                 )),
               ),
-              Container(
+              isLoading == true ? HomeLoadingScreen().myTicketLoading() : Container(
                 height: ScreenUtil.instance.setWidth(340),
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
@@ -79,14 +84,27 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
                   itemCount: vaList == null ? 0 : vaList.length,
                   itemBuilder: (BuildContext context, i) {
                     return GestureDetector(
-                      onTap: (){
-                        if(vaList[i]['bank_code'] == 'BNI'){
-                          getBankDetails(vaList[i]['bank_code'], vaList[i]['virtual_account_number'], vaList[i]['virtual_account_name']);
-                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TicketReview()));
-                        }
-                        else if(vaList[i]['bank_code'] == 'BRI'){
-                          getBankDetails(vaList[1]['bank_code'], vaList[1]['virtual_account_number'], vaList[1]['virtual_account_name']);
-                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TicketReview()));
+                      onTap: () {
+                        if (vaList[i]['bank_code'] == 'BNI') {
+                          getBankDetails(
+                              vaList[i]['bank_code'],
+                              vaList[i]['virtual_account_number'],
+                              vaList[i]['virtual_account_name']);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      TicketReview()));
+                        } else if (vaList[i]['bank_code'] == 'BRI') {
+                          getBankDetails(
+                              vaList[1]['bank_code'],
+                              vaList[1]['virtual_account_number'],
+                              vaList[1]['virtual_account_name']);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      TicketReview()));
                         }
                       },
                       child: Container(
@@ -99,8 +117,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
                             boxShadow: <BoxShadow>[
                               BoxShadow(
                                   color: Colors.grey,
-                                  blurRadius: 1,
-                                  offset: Offset(1, 1))
+                                  blurRadius: 1,)
                             ],
                             borderRadius: BorderRadius.circular(15)),
                         child: Row(
@@ -111,7 +128,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
                               alignment: Alignment.centerLeft,
                               child: SizedBox(
                                 height:
-                                    vaList[i]['bank_code'] == 'BNI' ? 40 : 30,
+                                    vaList[i]['bank_code'] == 'BNI' ? 50 : 50,
                                 child: Image.asset(
                                     vaList[i]['bank_code'] == 'BNI'
                                         ? 'assets/drawable/bni.png'
@@ -132,18 +149,23 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
                                         fontSize: ScreenUtil.instance.setSp(20),
                                         color: Colors.black54),
                                   ),
-                                  SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(10)),
                                   Text(vaList[i]['bank_code'],
                                       style: TextStyle(color: Colors.grey)),
-                                  SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                                  Text(
-                                    vaList[i]['virtual_account_number'],
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: ScreenUtil.instance.setSp(15),
-                                        color: Colors.black54),
-                                  ),
-                                ])
+                                ]),
+                            Expanded(
+                              child: SizedBox(),
+                            ),
+                            Flexible(
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                                              child: Padding(
+                                  padding: EdgeInsets.only(right: 13),
+                                  child: Icon(Icons.arrow_forward_ios),
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -176,6 +198,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
 
     setState(() {
       session = preferences.getString('Session');
+      isLoading = true;
     });
 
     String virtualAccURI = BaseApi().apiUrl + '/va/list?X-API-KEY=' + API_KEY;
@@ -186,6 +209,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
 
     if (response.statusCode == 200) {
       setState(() {
+        isLoading = false;
         var extractedData = json.decode(response.body);
         vaList = extractedData['data'];
       });

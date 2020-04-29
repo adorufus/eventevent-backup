@@ -7,11 +7,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class PopularEventWidget extends StatelessWidget {
   final imageUrl;
   final title;
-  final location;
+  final String location;
   final String price;
   final Color color;
   final type;
   final isAvailable;
+  final isGoing;
   final DateTime date;
 
   const PopularEventWidget(
@@ -22,7 +23,9 @@ class PopularEventWidget extends StatelessWidget {
       this.price,
       this.color,
       this.type,
-      this.isAvailable, this.date})
+      this.isAvailable,
+      this.date,
+      this.isGoing})
       : super(key: key);
 
   @override
@@ -36,7 +39,7 @@ class PopularEventWidget extends StatelessWidget {
       allowFontScaling: true,
     )..init(context);
 
-    print(MediaQuery.of(context).size.width);
+    // print(MediaQuery.of(context).size.width);
 
     return Stack(
       children: <Widget>[
@@ -57,9 +60,10 @@ class PopularEventWidget extends StatelessWidget {
               Container(
                 height: ScreenUtil.instance.setWidth(225),
                 decoration: BoxDecoration(
-                    color: Color(0xFFB5B5B5),
+                    color: Color(0xFFB5B5B5).withOpacity(.5),
                     image: DecorationImage(
-                        image: CachedNetworkImageProvider(imageUrl), fit: BoxFit.cover),
+                        image: CachedNetworkImageProvider(imageUrl),
+                        fit: BoxFit.cover),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(15),
                       topRight: Radius.circular(15),
@@ -75,7 +79,8 @@ class PopularEventWidget extends StatelessWidget {
                           title,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),
+                              fontSize: ScreenUtil.instance.setSp(15),
+                              fontWeight: FontWeight.bold),
                         )),
                     SizedBox(height: ScreenUtil.instance.setWidth(4)),
                     Row(
@@ -87,9 +92,13 @@ class PopularEventWidget extends StatelessWidget {
                         SizedBox(width: ScreenUtil.instance.setWidth(3)),
                         Container(
                           width: ScreenUtil.instance.setWidth(112),
-                          child: Text(location,
+                          child: Text(
+                              location.contains('\n\n')
+                                  ? 'location not set'
+                                  : location,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: ScreenUtil.instance.setSp(13))),
+                              style: TextStyle(
+                                  fontSize: ScreenUtil.instance.setSp(13))),
                         )
                       ],
                     ),
@@ -110,14 +119,10 @@ class PopularEventWidget extends StatelessWidget {
                     ], color: color, borderRadius: BorderRadius.circular(15)),
                     child: Center(
                         child: Text(
-                      type == 'paid' || type == 'paid_seating'
-                          ? isAvailable == '1'
-                              ? 'Rp. ' + price.toUpperCase() + ',-'
-                              : price.toUpperCase()
-                          : price.toUpperCase(),
+                      price.toUpperCase(),
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: ScreenUtil.instance.setSp(10),
+                          fontSize: ScreenUtil.instance.setSp(14),
                           fontWeight: FontWeight.bold),
                     )),
                   ),

@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io';
+import 'package:eventevent/helper/utils.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:googleapis/firestore/v1.dart' as prefix0;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -49,9 +52,9 @@ class PostEventReviewState extends State<PostEventReview> {
   LocationData currentLocation;
   StreamSubscription<LocationData> locationSubcription;
 
-  List<String> categoryList = new List<String>();
-  List<String> categoryIdList = new List<String>();
-  List<String> additionalMedia = new List<String>();
+  List<String> categoryList = [];
+  List<String> categoryIdList = [];
+  List<String> additionalMedia = [];
 
   TextEditingController eventNameController = new TextEditingController();
 
@@ -77,13 +80,7 @@ class PostEventReviewState extends State<PostEventReview> {
       websiteController.text = prefs.getString('CREATE_EVENT_WEBSITE');
       additionalInfoMapController.text =
           prefs.getString('CREATE_EVENT_ADDITIONAL_INFO');
-      additionalMedia = [
-        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_1'),
-        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_2'),
-        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_3'),
-        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_4'),
-        prefs.getString('POST_EVENT_ADDITIONAL_MEDIA_5')
-      ];
+      additionalMedia = prefs.getStringList('POST_EVENT_ADDITIONAL_MEDIA');
     });
   }
 
@@ -91,11 +88,7 @@ class PostEventReviewState extends State<PostEventReview> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     setState(() {
-      prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_1', additionalMedia[0]);
-      prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_2', additionalMedia[1]);
-      prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_3', additionalMedia[2]);
-      prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_4', additionalMedia[3]);
-      prefs.setString('POST_EVENT_ADDITIONAL_MEDIA_5', additionalMedia[4]);
+      prefs.setStringList('POST_EVENT_ADDITIONAL_MEDIA', additionalMedia);
       prefs.setString('POST_EVENT_NAME', eventNameController.text);
       prefs.setString('POST_EVENT_POSTER', imageUri);
       prefs.setString('POST_EVENT_TYPE', eventType);
@@ -111,10 +104,12 @@ class PostEventReviewState extends State<PostEventReview> {
       prefs.setString('CREATE_EVENT_TELEPHONE', telephoneController.text);
       prefs.setString('CREATE_EVENT_EMAIL', emailController.text);
       prefs.setString('CREATE_EVENT_WEBSITE', websiteController.text);
-      prefs.setString('CREATE_EVENT_ADDITIONAL_INFO', additionalInfoMapController.text);
+      prefs.setString(
+          'CREATE_EVENT_ADDITIONAL_INFO', additionalInfoMapController.text);
     });
 
-    Navigator.push(context, CupertinoPageRoute(builder: (context) => SelectTicketType()));
+    Navigator.push(
+        context, CupertinoPageRoute(builder: (context) => SelectTicketType()));
   }
 
   @override
@@ -125,14 +120,18 @@ class PostEventReviewState extends State<PostEventReview> {
     initPlatformState();
     locationSubcription =
         location.onLocationChanged().listen((LocationData result) {
+      if (!mounted) return;
       setState(() {
         currentLocation = result;
       });
     });
   }
 
+  var thisScaffold = new GlobalKey<ScaffoldState>();
+
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -140,7 +139,6 @@ class PostEventReviewState extends State<PostEventReview> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    var thisScaffold = new GlobalKey<ScaffoldState>();
     return Scaffold(
         resizeToAvoidBottomInset: true,
         key: thisScaffold,
@@ -171,7 +169,9 @@ class PostEventReviewState extends State<PostEventReview> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -228,7 +228,8 @@ class PostEventReviewState extends State<PostEventReview> {
                             width: ScreenUtil.instance.setWidth(150),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: Image.file(File(imageUri), fit: BoxFit.fill),
+                              child:
+                                  Image.file(File(imageUri), fit: BoxFit.fill),
                             ),
                           ),
                           SizedBox(
@@ -245,7 +246,8 @@ class PostEventReviewState extends State<PostEventReview> {
                                     color: Colors.black54,
                                     fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10)),
                               Container(
                                   width: ScreenUtil.instance.setWidth(170),
                                   height: ScreenUtil.instance.setWidth(50),
@@ -257,9 +259,12 @@ class PostEventReviewState extends State<PostEventReview> {
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         eventType == '0' ? 'PUBLIC' : 'PRIVATE',
-                                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
+                                        style: TextStyle(
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(15)),
                                       ))),
-                              SizedBox(height: ScreenUtil.instance.setWidth(20)),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(20)),
                               Text(
                                 'Category',
                                 style: TextStyle(
@@ -267,7 +272,8 @@ class PostEventReviewState extends State<PostEventReview> {
                                     color: Colors.black54,
                                     fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10)),
                               Container(
                                   width: ScreenUtil.instance.setWidth(170),
                                   height: ScreenUtil.instance.setWidth(50),
@@ -278,12 +284,10 @@ class PostEventReviewState extends State<PostEventReview> {
                                   child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        categoryList[0] +
-                                            ', ' +
-                                            categoryList[1] +
-                                            ', ' +
-                                            categoryList[2],
-                                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
+                                        categoryList.toString(),
+                                        style: TextStyle(
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(15)),
                                       )))
                             ],
                           )
@@ -296,7 +300,9 @@ class PostEventReviewState extends State<PostEventReview> {
                       children: <Widget>[
                         Text(
                           'Date',
-                          style: TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18)),
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: ScreenUtil.instance.setSp(18)),
                         ),
                         SizedBox(
                           height: ScreenUtil.instance.setWidth(15),
@@ -315,7 +321,9 @@ class PostEventReviewState extends State<PostEventReview> {
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       startDate,
-                                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(20)),
                                     ))),
                             SizedBox(
                               width: ScreenUtil.instance.setWidth(25),
@@ -331,7 +339,9 @@ class PostEventReviewState extends State<PostEventReview> {
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       endDate,
-                                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(20)),
                                     ))),
                           ],
                         ),
@@ -340,7 +350,9 @@ class PostEventReviewState extends State<PostEventReview> {
                         ),
                         Text(
                           'Time',
-                          style: TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18)),
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: ScreenUtil.instance.setSp(18)),
                         ),
                         SizedBox(
                           height: ScreenUtil.instance.setWidth(15),
@@ -359,7 +371,9 @@ class PostEventReviewState extends State<PostEventReview> {
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       startTime,
-                                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(20)),
                                     ))),
                             SizedBox(
                               width: ScreenUtil.instance.setWidth(25),
@@ -375,7 +389,9 @@ class PostEventReviewState extends State<PostEventReview> {
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       endTime,
-                                      style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(20)),
                                     ))),
                           ],
                         )
@@ -615,92 +631,105 @@ class PostEventReviewState extends State<PostEventReview> {
       child: ListView(
         padding: EdgeInsets.only(left: 10),
         scrollDirection: Axis.horizontal,
-        children: <Widget>[
-          Padding(
+        children: mapIndexed(additionalMedia, (index, item) {
+          return Padding(
             padding: EdgeInsets.only(right: 10),
-            child: additionalMedia[0] == ''
+            child: additionalMedia[index] == null
                 ? Container()
                 : Container(
                     child: Image.file(
-                      File(additionalMedia[0]),
+                      File(additionalMedia[index]),
                       fit: BoxFit.fill,
                     ),
                   ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia[1] == ''
-                ? Container()
-                : Container(
-                    child: Image.file(
-                      File(additionalMedia[1]),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia[2] == ''
-                ? Container()
-                : Container(
-                    child: Image.file(
-                      File(additionalMedia[2]),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia[3] == ''
-                ? Container()
-                : Container(
-                    child: Image.file(
-                      File(additionalMedia[3]),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: additionalMedia[4] == ''
-                ? Container()
-                : Container(
-                    child: Image.file(
-                      File(additionalMedia[4]),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-          ),
-          additionalMedia[4] == ''
-              ? GestureDetector(
-                  onTap: () {
-                    //_showDialog();
-                  },
-                  child: Container(
-                    color: Colors.grey,
-                    height: ScreenUtil.instance.setWidth(200),
-                    width: ScreenUtil.instance.setWidth(150),
-                    child: Center(
-                      child: SizedBox(
-                        height: ScreenUtil.instance.setWidth(50),
-                        width: ScreenUtil.instance.setWidth(50),
-                        child: Image.asset(
-                            'assets/bottom-bar/new-something-white.png'),
-                      ),
-                    ),
-                  ),
-                )
-              : Container(),
-        ],
+          );
+        }).toList(),
+        // children: <Widget>[
+        //   Padding(
+        //     padding: EdgeInsets.only(right: 10),
+        //     child: additionalMedia.length < 1
+        //         ? Container()
+        //         : Container(
+        //             child: Image.file(
+        //               File(additionalMedia[0]),
+        //               fit: BoxFit.fill,
+        //             ),
+        //           ),
+        //   ),
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 10),
+        //     child: additionalMedia.length < 2
+        //         ? Container()
+        //         : Container(
+        //             child: Image.file(
+        //               File(additionalMedia[1]),
+        //               fit: BoxFit.fill,
+        //             ),
+        //           ),
+        //   ),
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 10),
+        //     child: additionalMedia.length < 3
+        //         ? Container()
+        //         : Container(
+        //             child: Image.file(
+        //               File(additionalMedia[2]),
+        //               fit: BoxFit.fill,
+        //             ),
+        //           ),
+        //   ),
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 10),
+        //     child: additionalMedia.length < 4
+        //         ? Container()
+        //         : Container(
+        //             child: Image.file(
+        //               File(additionalMedia[3]),
+        //               fit: BoxFit.fill,
+        //             ),
+        //           ),
+        //   ),
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 10),
+        //     child: additionalMedia.length < 5
+        //         ? Container()
+        //         : Container(
+        //             child: Image.file(
+        //               File(additionalMedia[4]),
+        //               fit: BoxFit.fill,
+        //             ),
+        //           ),
+        //   ),
+        //   additionalMedia.length < 5
+        //       ? GestureDetector(
+        //           onTap: () {
+        //             //_showDialog();
+        //           },
+        //           child: Container(
+        //             color: Colors.grey,
+        //             height: ScreenUtil.instance.setWidth(200),
+        //             width: ScreenUtil.instance.setWidth(150),
+        //             child: Center(
+        //               child: SizedBox(
+        //                 height: ScreenUtil.instance.setWidth(50),
+        //                 width: ScreenUtil.instance.setWidth(50),
+        //                 child: Image.asset(
+        //                     'assets/bottom-bar/new-something-white.png'),
+        //               ),
+        //             ),
+        //           ),
+        //         )
+        //       : Container(),
+        // ],
       ),
     );
   }
 
   Widget showMap() {
     StaticMapsProvider mapProvider = new StaticMapsProvider(
-      GOOGLE_API_KEY: 'AIzaSyDjNpeyufzT81GAhQkCe85x83kxzfA7qbI',
-      height: ScreenUtil.instance.setWidth(1024),
-      width: ScreenUtil.instance.setWidth(1024),
+      GOOGLE_API_KEY: 'AIzaSyA2s9iDKooQ9Cwgr6HiDVQkG9p3fvsVmEI',
+      height: 1024,
+      width: 1024,
       latitude: lat,
       longitude: long,
       isRedirectToGMAP: false,
@@ -761,8 +790,11 @@ class PostEventReviewState extends State<PostEventReview> {
   showPlacePicker() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     LocationResult place = await Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => PlacePicker('AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI', displayLocation: LatLng(double.parse(currentLocation.latitude.toString()), double.parse(currentLocation.latitude.toString())
-    ))));
+        builder: (context) => PlacePicker(
+            'AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI',
+            displayLocation: LatLng(
+                double.parse(currentLocation.latitude.toString()),
+                double.parse(currentLocation.latitude.toString())))));
 
     if (!mounted) {
       return;
@@ -773,8 +805,10 @@ class PostEventReviewState extends State<PostEventReview> {
       lat = place.latLng.latitude.toString();
       long = place.latLng.longitude.toString();
       prefs.setString('CREATE_EVENT_LOCATION_ADDRESS', place.name);
-      prefs.setString('CREATE_EVENT_LOCATION_LAT', place.latLng.latitude.toString());
-      prefs.setString('CREATE_EVENT_LOCATION_LONG', place.latLng.longitude.toString());
+      prefs.setString(
+          'CREATE_EVENT_LOCATION_LAT', place.latLng.latitude.toString());
+      prefs.setString(
+          'CREATE_EVENT_LOCATION_LONG', place.latLng.longitude.toString());
     });
 
     print(prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'));

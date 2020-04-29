@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/ManageEvent/exportCounter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -20,8 +21,10 @@ import 'package:share_extend/share_extend.dart';
 class Buyers extends StatefulWidget {
   final ticketID;
   final eventName;
+  final ticketName;
 
-  const Buyers({Key key, this.ticketID, this.eventName}) : super(key: key);
+  const Buyers({Key key, this.ticketID, this.eventName, this.ticketName})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -33,18 +36,33 @@ class BuyersState extends State<Buyers> {
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   List buyerList = new List();
   List buyerListExport = new List();
+  bool isEmpty;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    print('counter list' + Counter().counter.length.toString());
+    print(widget.ticketID);
+    // print('counter list' + Counter().counter.length.toString());
     getBuyerList().then((response) {
       var extractedData = json.decode(response.body);
       if (response.statusCode == 200) {
         setState(() {
-          buyerList = extractedData['data'];
+          isLoading = false;
+        });
+        setState(() {
+          if (extractedData['desc'] == 'User not found') {
+            isEmpty = true;
+          } else {
+            isEmpty = false;
+            buyerList = extractedData['data'];
+          }
         });
       } else {
+        setState(() {
+          isLoading = false;
+        });
+        print(response.body);
         print('gagal');
       }
     });
@@ -53,20 +71,25 @@ class BuyersState extends State<Buyers> {
       var extractedData = json.decode(response.body);
       if (response.statusCode == 200) {
         setState(() {
-          buyerListExport = extractedData['data'];
+          isLoading = false;
+        });
+        setState(() {
+          if (extractedData['desc'] == 'User not found') {
+            isEmpty = true;
+          } else {
+            isEmpty = false;
+            buyerListExport = extractedData['data'];
+          }
         });
         print('Buyer List Export: ' + buyerListExport.length.toString());
       } else {
+        setState(() {
+          isLoading = false;
+        });
+        print(response.body);
         print('gagal');
       }
     });
-    // .timeout(Duration(seconds: 8), onTimeout: () {
-    //   scaffoldKey.currentState.showSnackBar(SnackBar(
-    //     backgroundColor: Colors.red,
-    //     content:
-    //         Text('Request Time Out!', style: TextStyle(color: Colors.white)),
-    //   ));
-    // });
   }
 
   @override
@@ -99,59 +122,76 @@ class BuyersState extends State<Buyers> {
           style: TextStyle(color: eventajaGreenTeal),
         ),
         actions: <Widget>[
-          GestureDetector(
-            onTap: () {
-              exportCSV();
-            },
-            child: Center(
-              child: Text('Export', style: TextStyle(color: eventajaGreenTeal)),
+          isEmpty == true ? Container() : Padding(
+            padding: EdgeInsets.only(right: 13),
+            child: GestureDetector(
+              onTap: () {
+                exportCSV();
+              },
+              child: Center(
+                child:
+                    Text('Export', style: TextStyle(color: eventajaGreenTeal)),
+              ),
             ),
           )
         ],
       ),
-      body: buyerList.length == 0 || buyerListExport.length == 0 ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20),),) : ListView.builder(
-        padding: EdgeInsets.only(bottom: 15),
-        itemCount: buyerList == null ? 0 : buyerList.length,
-        itemBuilder: (BuildContext context, i) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => Invoice(
-                        transactionID: buyerList[i]['id'],
-                      )));
-            },
-            child: Container(
-              margin: EdgeInsets.only(bottom: 15),
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              color: Colors.white,
-              child: Row(
-                children: <Widget>[
-                  Center(
-                      child: CircleAvatar(
-                    backgroundImage:
-                        NetworkImage(buyerList[i]['user']['pictureAvatarURL']),
-                  )),
-                  SizedBox(width: ScreenUtil.instance.setWidth(50)),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(buyerList[i]['user']['fullName']),
-                      Text('@' + buyerList[i]['user']['username']),
-                      Text('Ticket quantity: ' + buyerList[i]['quantity']),
-                    ],
-                  ),
-                  SizedBox(
-                    width: ScreenUtil.instance.setWidth(45),
-                  ),
-                  Center(
-                    child: Text('See Invoice >'),
-                  ),
-                ],
+      body: isLoading == true
+          ? Container(
+              child: Center(
+                child: CupertinoActivityIndicator(radius: 20),
               ),
-            ),
-          );
-        },
-      ),
+            )
+          : isEmpty == true
+              ? EmptyState(
+                imagePath: 'assets/icons/empty_state/my_ticket.png',
+                reasonText: 'There is no buyers :(',
+              )
+              : ListView.builder(
+                  padding: EdgeInsets.only(bottom: 15),
+                  itemCount: buyerList == null ? 0 : buyerList.length,
+                  itemBuilder: (BuildContext context, i) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => Invoice(
+                                  transactionID: buyerList[i]['id'],
+                                )));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 15),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        color: Colors.white,
+                        child: Row(
+                          children: <Widget>[
+                            Center(
+                                child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  buyerList[i]['user']['pictureAvatarURL']),
+                            )),
+                            SizedBox(width: ScreenUtil.instance.setWidth(50)),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(buyerList[i]['user']['fullName']),
+                                Text('@' + buyerList[i]['user']['username']),
+                                Text('Ticket quantity: ' +
+                                    buyerList[i]['quantity']),
+                              ],
+                            ),
+                            SizedBox(
+                              width: ScreenUtil.instance.setWidth(45),
+                            ),
+                            Center(
+                              child: Text('See Invoice >'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
     );
   }
 
@@ -167,7 +207,7 @@ class BuyersState extends State<Buyers> {
 
     print('buyerList length' + buyerListExport.length.toString());
 
-    for (var buyers in buyerListExport) {
+    for (Map buyers in buyerListExport) {
       print('buyers: ' + buyers.toString());
       List<dynamic> row = List();
 
@@ -175,13 +215,21 @@ class BuyersState extends State<Buyers> {
       row.add(buyers['user']['fullName']);
       row.add('@' + buyers['user']['username']);
       row.add(buyers['quantity']);
-      row.add(buyers['note']);
-      if (buyers['form'] != null || buyers['form'].length != 0) {
-        for (var formList in buyers['form']) {
-          setState(() {
-            formLists = formList;
-          });
-          row.add(formList['answer']);
+      row.add(buyers['email']);
+      row.add(buyers['phone']);
+      row.add(buyers['created_at']);
+      row.add(buyers['amount'] == '0' ? 'Free' : 'Rp. ${buyers['amount']}');
+      row.add(buyers['note'] == '' ? '-' : buyers['note']);
+      if (buyers.containsKey('form')) {
+        if (buyers['form'] != null || buyers['form'].length != 0) {
+          for (var formList in buyers['form']) {
+            setState(() {
+              formLists = formList;
+            });
+            row.add(formList['answer']);
+          }
+        } else {
+          row.add('-');
         }
       }
 
@@ -198,8 +246,12 @@ class BuyersState extends State<Buyers> {
       'Full Name',
       'Username',
       'Quantity',
+      'Buyer E-mail',
+      'Buyer Phone',
+      'Date',
+      'Total Paid',
       'Note',
-      formLists.length != 0 ? formLists['question'] : ''
+      formLists.length != 0 ? formLists['question'] : 'Custom Form'
     ]);
 
     Map<PermissionGroup, PermissionStatus> permissions =
@@ -209,39 +261,60 @@ class BuyersState extends State<Buyers> {
 
     print(checkPermission.toString());
 
-    if (checkPermission == PermissionStatus.granted) {
-      String dir = (await getExternalStorageDirectory()).absolute.path +
-          '/report_${widget.eventName}';
-      String file = "$dir";
-      print(file);
-      File f = new File(file + ".csv");
+    if (checkPermission == PermissionStatus.granted) {}
 
-      String csv = const ListToCsvConverter().convert(rows);
-      print(csv);
-      f.writeAsString(csv);
+    String dir;
 
-      print('saved');
-      // Share.file(path: f.path, mimeType: ShareType.TYPE_FILE, title: 'text');
-      ShareExtend.share(f.path, "file");
+    if (Platform.isAndroid) {
+      dir = (await getExternalStorageDirectory()).absolute.path +
+          '/report_${widget.ticketName}';
+    } else if (Platform.isIOS) {
+      dir = (await getLibraryDirectory()).absolute.path +
+          '/report_${widget.ticketName}';
     }
+
+    String file = "$dir";
+    print(file);
+    File f = new File(file + ".csv");
+
+    String csv = const ListToCsvConverter().convert(rows);
+    print(csv);
+    f.writeAsString(csv);
+
+    print('saved');
+    // Share.file(path: f.path, mimeType: ShareType.TYPE_FILE, title: 'text');
+    ShareExtend.share(f.path, "file");
   }
 
   Future<http.Response> getBuyerExport() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isLoading = true;
+    });
 
     String url = BaseApi().apiUrl +
         '/tickets/user?X-API-KEY=$API_KEY&ticketID=${widget.ticketID}&page=all';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
-    });
+    try {
+      final response = await http.get(url, headers: {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': prefs.getString('Session')
+      });
 
-    return response;
+      return response;
+    } catch (e) {
+      print('error occured: ' + e);
+    }
+
+    return null;
   }
 
   Future<http.Response> getBuyerList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      isLoading = true;
+    });
 
     String url = BaseApi().apiUrl +
         '/tickets/user?X-API-KEY=$API_KEY&ticketID=${widget.ticketID}&page=1';

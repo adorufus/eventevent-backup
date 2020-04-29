@@ -5,13 +5,16 @@ import 'package:eventevent/Database/Database.dart';
 import 'package:eventevent/Database/Models/EventBannerModel.dart';
 import 'package:eventevent/Models/BannerModels.dart';
 import 'package:eventevent/Widgets/CollectionPage.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/MyTicket.dart';
 import 'package:eventevent/Widgets/Home/PopularEventWidget.dart';
 import 'package:eventevent/Widgets/Home/SeeAll/SeeAllItem.dart';
 import 'package:eventevent/Widgets/Home/SeeAll/SeeAllPeople.dart';
 import 'package:eventevent/Widgets/LatestEventWidget.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/SearchWidget.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
+import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/Widgets/openMedia.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/Widgets/timeline/LatestMediaItem.dart';
@@ -22,6 +25,7 @@ import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/Models/PopularEventModels.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -59,7 +63,10 @@ class EventCatalog extends StatefulWidget {
 }
 
 class _EventCatalogState extends State<EventCatalog>
-    with WidgetsBindingObserver {
+    with
+        WidgetsBindingObserver,
+        AutomaticKeepAliveClientMixin<EventCatalog>,
+        TickerProviderStateMixin {
   TimelineDashboardState timelineState = new TimelineDashboardState();
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
@@ -88,6 +95,11 @@ class _EventCatalogState extends State<EventCatalog>
   ScrollController _scrollController = new ScrollController();
   List<Widget> mappedDataBanner;
   var session;
+  TabController tabController;
+  int currentTabIndex = 0;
+
+  List<bool> hasInit = [true, false, false];
+  List<Widget> pages = [];
 
   ///Inisialisasi semua fungsi untuk fetching dan hal hal lain yang dibutuhkan
   @override
@@ -137,21 +149,9 @@ class _EventCatalogState extends State<EventCatalog>
         urlType = BaseApi().apiUrl;
       }
     });
-
-    // timelineState.getMedia().then((response){
-    //   var extractedData = json.decode(response.body);
-
-    //   print(response.statusCode);
-    //   print(response.body);
-
-    //   if (response.statusCode == 200) {
-    //     setState(() {
-    //       mediaData = extractedData['data']['data'];
-    //     });
-    //   }
-    // });
-    //WidgetsBinding.instance.addPostFrameCallback((_) => _refreshIndicatorKey.currentState.show());
   }
+
+  bool isOnlyContainer = false;
 
   @override
   void dispose() {
@@ -165,6 +165,9 @@ class _EventCatalogState extends State<EventCatalog>
     print('state = $state');
     super.didChangeAppLifecycleState(state);
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -182,24 +185,35 @@ class _EventCatalogState extends State<EventCatalog>
             builder: (BuildContext context) {
               return GestureDetector(
                   onTap: () {
-                    if (bannerData['type'] == 'event') {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EventDetailsConstructView(
-                                  id: bannerData['eventID'],
-                                  name: bannerData['name'],
-                                  image: bannerData['photoFull'])));
+                    if (bannerData['type'] == 'event' &&
+                        bannerData['eventID'] != "") {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return EventDetailLoadingScreen(
+                            isRest: widget.isRest,
+                            eventId: bannerData['eventID']);
+                        // EventDetailsConstructView(
+                        //     id: bannerData['eventID'],
+                        //     name: bannerData['name'],
+                        //     image: bannerData['photoFull']);
+                      }));
                     } else if (bannerData['type'] == 'nolink') {
                       return;
                     } else if (bannerData['type'] == 'category') {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EventDetailsConstructView(
-                                  id: bannerData['categoryID'],
-                                  name: bannerData['name'],
-                                  image: bannerData['photoFull'])));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return EventDetailLoadingScreen(
+                                isRest: widget.isRest,
+                                eventId: bannerData['categoryID']);
+                            //  EventDetailsConstructView(
+                            //     id: bannerData['categoryID'],
+                            //     name: bannerData['name'],
+                            //     image: bannerData['photoFull']);
+                          },
+                        ),
+                      );
                     }
                   },
                   child: Container(
@@ -207,7 +221,9 @@ class _EventCatalogState extends State<EventCatalog>
                     margin: EdgeInsets.only(
                         left: 13, right: 13, bottom: 15, top: 13),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      image: DecorationImage(
+                          image: AssetImage('assets/grey-fade.jpg'),
+                          fit: BoxFit.cover),
                       shape: BoxShape.rectangle,
                       boxShadow: <BoxShadow>[
                         BoxShadow(
@@ -221,13 +237,9 @@ class _EventCatalogState extends State<EventCatalog>
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: CachedNetworkImage(
-                          imageUrl: bannerData["image"],
+                          imageUrl: bannerData["image_avatar"],
                           fit: BoxFit.cover,
-                          placeholder: (context, url) => new Container(
-                            child: Center(
-                              child: CupertinoActivityIndicator(radius: 20),
-                            ),
-                          )),
+                          placeholder: (context, url) => Container()),
                     ),
                   ));
             },
@@ -254,6 +266,7 @@ class _EventCatalogState extends State<EventCatalog>
                 elevation: 0,
                 backgroundColor: Colors.white,
                 titleSpacing: 0,
+                centerTitle: false,
                 title: Container(
                   width: ScreenUtil.instance.setWidth(240),
                   child: Row(
@@ -333,98 +346,106 @@ class _EventCatalogState extends State<EventCatalog>
               ),
             ),
           ),
-          body: ListView(
-            children: <Widget>[
-              DefaultTabController(
-                length: 3,
-                initialIndex: 0,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      color: Colors.white,
-                      child: TabBar(
-                        labelColor: Colors.black,
-                        labelStyle: TextStyle(fontFamily: 'Proxima'),
-                        tabs: [
-                          Tab(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Image.asset(
-                                  'assets/icons/icon_apps/home.png',
-                                  scale: 4.5,
-                                ),
-                                SizedBox(width: ScreenUtil.instance.setWidth(10)),
-                                Text('Home',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(12.5))),
-                              ],
+          body: DefaultTabController(
+            length: 3,
+            initialIndex: 0,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  color: Colors.white,
+                  child: TabBar(
+                    onTap: (val) {
+                      setState(() {
+                        if (val == 2 || val == 0) {
+                          isOnlyContainer = true;
+                        } else {
+                          isOnlyContainer = false;
+                        }
+                      });
+
+                      print(isOnlyContainer);
+                    },
+                    labelColor: Colors.black,
+                    labelStyle: TextStyle(fontFamily: 'Proxima'),
+                    tabs: [
+                      Tab(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Image.asset(
+                              'assets/icons/icon_apps/home.png',
+                              scale: 4.5,
                             ),
-                          ),
-                          Tab(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Image.asset(
-                                  'assets/icons/icon_apps/nearby.png',
-                                  scale: 4.5,
-                                ),
-                                SizedBox(width: ScreenUtil.instance.setWidth(10)),
-                                Text('Nearby',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(12.5))),
-                              ],
-                            ),
-                          ),
-                          Tab(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Image.asset(
-                                  'assets/icons/icon_apps/latest.png',
-                                  scale: 4.5,
-                                ),
-                                SizedBox(width: ScreenUtil.instance.setWidth(10)),
-                                Text('Latest',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(12.5))),
-                              ],
-                            ),
-                          ),
-                        ],
-                        unselectedLabelColor: Colors.grey,
+                            SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                            Text('Home',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: ScreenUtil.instance.setSp(12.5))),
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      alignment: Alignment.topCenter,
-                      height: MediaQuery.of(context).size.height - 191,
-                      child: TabBarView(
-                        physics: NeverScrollableScrollPhysics(),
-                        children: [
-                          home(),
-                          Container(
-                            child: Center(
-                              child: ListenPage(),
+                      Tab(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Image.asset(
+                              'assets/icons/icon_apps/nearby.png',
+                              scale: 4.5,
                             ),
-                          ),
-                          LatestEventWidget(),
-                        ],
+                            SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                            Text('Nearby',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: ScreenUtil.instance.setSp(12.5))),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      Tab(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Image.asset(
+                              'assets/icons/icon_apps/latest.png',
+                              scale: 4.5,
+                            ),
+                            SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                            Text('Latest',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: ScreenUtil.instance.setSp(12.5))),
+                          ],
+                        ),
+                      ),
+                    ],
+                    unselectedLabelColor: Colors.grey,
+                  ),
                 ),
-              ),
-            ],
+                Flexible(
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    height: MediaQuery.of(context).size.height - 191,
+                    child: TabBarView(
+                      physics: NeverScrollableScrollPhysics(),
+                      children: [
+                        home(),
+                        isOnlyContainer == true
+                            ? Container()
+                            : Container(
+                                child: Center(
+                                  child: ListenPage(),
+                                ),
+                              ),
+                        LatestEventWidget(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -495,128 +516,146 @@ class _EventCatalogState extends State<EventCatalog>
                   padding: EdgeInsets.only(bottom: 0),
                   child: Stack(
                     children: <Widget>[
-                      bannerData == null ? CupertinoActivityIndicator
-                      (radius: 13.5,) : banner(),
+                      bannerData == null
+                          ? HomeLoadingScreen().bannerLoading(context)
+                          : banner(),
                     ],
                   ),
                 ),
                 popularEventTitle(),
                 Container(
                     height: ScreenUtil.instance.setWidth(340),
-                    child: data == null ? CupertinoActivityIndicator(radius: 13.5) : ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: data == null ? 0 : data.length,
-                        itemBuilder: (BuildContext context, i) {
-                          Color itemColor;
-                          String itemPriceText;
-                          if (data[i]['isGoing'] == '1') {
-                            itemColor = Colors.blue;
-                            itemPriceText = 'Going!';
-                          } else {
-                            if (data[i]['ticket_type']['type'] == 'paid' ||
-                                data[i]['ticket_type']['type'] ==
-                                    'paid_seating') {
-                              if (data[i]['ticket']['availableTicketStatus'] ==
-                                  '1') {
-                                if (data[i]['ticket']['cheapestTicket'] ==
-                                    '0') {
-                                  itemColor = Color(0xFFFFAA00);
-                                  itemPriceText = 'Free Limited';
-                                } else {
-                                  itemColor = Color(0xFF34B323);
+                    child: data == null
+                        ? HomeLoadingScreen().eventLoading()
+                        : ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: data == null ? 0 : data.length,
+                            itemBuilder: (BuildContext context, i) {
+                              Color itemColor;
+                              String itemPriceText;
+                              if (data[i]['isGoing'] == '1') {
+                                itemColor = Colors.blue;
+                                itemPriceText = 'Going!';
+                              } else {
+                                if (data[i]['ticket_type']['type'] == 'paid' ||
+                                    data[i]['ticket_type']['type'] ==
+                                        'paid_seating') {
+                                  if (data[i]['ticket']
+                                          ['availableTicketStatus'] ==
+                                      '1') {
+                                    if (data[i]['ticket']['cheapestTicket'] ==
+                                        '0') {
+                                      itemColor = Color(0xFFFFAA00);
+                                      itemPriceText = 'Free Limited';
+                                    } else {
+                                      itemColor = Color(0xFF34B323);
+                                      itemPriceText = 'Rp. ' +
+                                          data[i]['ticket']['cheapestTicket'] +
+                                          ',-';
+                                    }
+                                  } else {
+                                    if (data[i]['ticket']['salesStatus'] ==
+                                        'comingSoon') {
+                                      itemColor =
+                                          Color(0xFF34B323).withOpacity(0.3);
+                                      itemPriceText = 'COMING SOON';
+                                    } else if (data[i]['ticket']
+                                            ['salesStatus'] ==
+                                        'endSales') {
+                                      itemColor = Color(0xFF8E1E2D);
+                                      if (data[i]['status'] == 'ended') {
+                                        itemPriceText = 'EVENT HAS ENDED';
+                                      }
+                                      itemPriceText = 'SALES ENDED';
+                                    } else {
+                                      itemColor = Color(0xFF8E1E2D);
+                                      itemPriceText = 'SOLD OUT';
+                                    }
+                                  }
+                                } else if (data[i]['ticket_type']['type'] ==
+                                    'no_ticket') {
+                                  itemColor = Color(0xFF652D90);
+                                  itemPriceText = 'NO TICKET';
+                                } else if (data[i]['ticket_type']['type'] ==
+                                    'on_the_spot') {
+                                  itemColor = Color(0xFF652D90);
                                   itemPriceText =
-                                      data[i]['ticket']['cheapestTicket'];
-                                }
-                              } else {
-                                if (data[i]['ticket']['salesStatus'] ==
-                                    'comingSoon') {
-                                  itemColor =
-                                      Color(0xFF34B323).withOpacity(0.3);
-                                  itemPriceText = 'COMING SOON';
-                                } else if (data[i]['ticket']['salesStatus'] ==
-                                    'endSales') {
-                                  itemColor = Color(0xFF8E1E2D);
-                                  if (data[i]['status'] == 'ended') {
-                                    itemPriceText = 'EVENT HAS ENDED';
-                                  }
-                                  itemPriceText = 'SALES ENDED';
-                                } else {
-                                  itemColor = Color(0xFF8E1E2D);
-                                  itemPriceText = 'SOLD OUT';
-                                }
-                              }
-                            } else if (data[i]['ticket_type']['type'] ==
-                                'no_ticket') {
-                              itemColor = Color(0xFF652D90);
-                              itemPriceText = 'NO TICKET';
-                            } else if (data[i]['ticket_type']['type'] ==
-                                'on_the_spot') {
-                              itemColor = Color(0xFF652D90);
-                              itemPriceText = data[i]['ticket_type']['name'];
-                            } else if (data[i]['ticket_type']['type'] ==
-                                'free') {
-                              itemColor = Color(0xFFFFAA00);
-                              itemPriceText = data[i]['ticket_type']['name'];
-                            } else if (data[i]['ticket_type']['type'] ==
-                                'free') {
-                              itemColor = Color(0xFFFFAA00);
-                              itemPriceText = data[i]['ticket_type']['name'];
-                            } else if (data[i]['ticket_type']['type'] ==
-                                'free_limited') {
-                              if (data[i]['ticket']['availableTicketStatus'] ==
-                                  '1') {
-                                itemColor = Color(0xFFFFAA00);
-                                itemPriceText = data[i]['ticket_type']['name'];
-                              } else {
-                                if (data[i]['ticket']['salesStatus'] ==
-                                    'comingSoon') {
-                                  itemColor =
-                                      Color(0xFF34B323).withOpacity(0.3);
-                                  itemPriceText = 'COMING SOON';
-                                } else if (data[i]['ticket']['salesStatus'] ==
-                                    'endSales') {
-                                  itemColor = Color(0xFF8E1E2D);
-                                  if (data[i]['status'] == 'ended') {
-                                    itemPriceText = 'EVENT HAS ENDED';
-                                  }
-                                  itemPriceText = 'SALES ENDED';
-                                } else {
+                                      data[i]['ticket_type']['name'];
+                                } else if (data[i]['ticket_type']['type'] ==
+                                    'free') {
                                   itemColor = Color(0xFFFFAA00);
-                                  itemPriceText = 'SOLD OUT';
+                                  itemPriceText =
+                                      data[i]['ticket_type']['name'];
+                                } else if (data[i]['ticket_type']['type'] ==
+                                    'free') {
+                                  itemColor = Color(0xFFFFAA00);
+                                  itemPriceText =
+                                      data[i]['ticket_type']['name'];
+                                } else if (data[i]['ticket_type']['type'] ==
+                                    'free_live_stream') {
+                                  itemColor = Color(0xFFFFAA00);
+                                  itemPriceText =
+                                      data[i]['ticket_type']['name'];
+                                } else if (data[i]['ticket_type']['type'] ==
+                                    'free_limited') {
+                                  if (data[i]['ticket']
+                                          ['availableTicketStatus'] ==
+                                      '1') {
+                                    itemColor = Color(0xFFFFAA00);
+                                    itemPriceText =
+                                        data[i]['ticket_type']['name'];
+                                  } else {
+                                    if (data[i]['ticket']['salesStatus'] ==
+                                        'comingSoon') {
+                                      itemColor =
+                                          Color(0xFF34B323).withOpacity(0.3);
+                                      itemPriceText = 'COMING SOON';
+                                    } else if (data[i]['ticket']
+                                            ['salesStatus'] ==
+                                        'endSales') {
+                                      itemColor = Color(0xFF8E1E2D);
+                                      if (data[i]['status'] == 'ended') {
+                                        itemPriceText = 'EVENT HAS ENDED';
+                                      }
+                                      itemPriceText = 'SALES ENDED';
+                                    } else {
+                                      itemColor = Color(0xFFFFAA00);
+                                      itemPriceText = 'SOLD OUT';
+                                    }
+                                  }
                                 }
                               }
-                            }
-                          }
 
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          EventDetailsConstructView(
-                                              id: data[i]['id'],
-                                              name: data[i]['name'],
-                                              image: data[i]['photoFull'])));
-                            },
-                            child: PopularEventWidget(
-                              imageUrl: data[i]['picture'],
-                              title: data[i]["name"],
-                              location: data[i]["address"],
-                              color: itemColor,
-                              price: itemPriceText,
-                              type: data[i]['ticket_type']['type'],
-                              date: DateTime.parse(data[i]['dateStart']),
-                              isAvailable: data[i]['ticket']
-                                  ['availableTicketStatus'],
-                            ),
-                          );
-                        })),
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              EventDetailLoadingScreen(
+                                                  isRest: widget.isRest,
+                                                  eventId: data[i]['id'])));
+                                },
+                                child: PopularEventWidget(
+                                  imageUrl: data[i]['picture'],
+                                  title: data[i]["name"],
+                                  location: data[i]["address"],
+                                  color: itemColor,
+                                  price: itemPriceText,
+                                  type: data[i]['ticket_type']['type'],
+                                  date: DateTime.parse(data[i]['dateStart']),
+                                  isAvailable: data[i]['ticket']
+                                      ['availableTicketStatus'],
+                                ),
+                              );
+                            })),
                 SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 mediaHeader(),
                 Container(
                   height: ScreenUtil.instance.setWidth(247),
-                  child: data == null ? CupertinoActivityIndicator(radius: 13.5) : ListView.builder(
+                  child: data == null
+                      ? HomeLoadingScreen().mediaLoading()
+                      : ListView.builder(
                           itemCount: mediaData == null ? 0 : mediaData.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, i) {
@@ -626,6 +665,7 @@ class _EventCatalogState extends State<EventCatalog>
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => MediaDetails(
+                                              isRest: widget.isRest,
                                               videoUrl: mediaData[i]['video'],
                                               youtubeUrl: mediaData[i]
                                                   ['youtube'],
@@ -636,7 +676,8 @@ class _EventCatalogState extends State<EventCatalog>
                                               imageCount: 'img' + i.toString(),
                                               username: mediaData[i]['creator']
                                                   ['username'],
-                                              imageUri: mediaData[i]['banner'],
+                                              imageUri: mediaData[i]
+                                                  ['banner_timeline'],
                                               mediaTitle: mediaData[i]['title'],
                                               isVideo: true,
                                               mediaId: mediaData[i]['id'],
@@ -644,7 +685,9 @@ class _EventCatalogState extends State<EventCatalog>
                                             )));
                               },
                               child: MediaItem(
+                                isRest: widget.isRest,
                                 isVideo: true,
+                                isLiked: mediaData[i]['is_loved'],
                                 image: mediaData[i]['thumbnail_timeline'],
                                 title: mediaData[i]['title'],
                                 username: mediaData[i]['creator']['username'],
@@ -688,12 +731,12 @@ class _EventCatalogState extends State<EventCatalog>
           SizedBox(height: ScreenUtil.instance.setWidth(15)),
           discoverEvent(),
           discoverData == null
-              ? Container()
+              ? HomeLoadingScreen().eventLoading()
               : Container(
                   height: ScreenUtil.instance.setWidth(340),
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: data == null ? 0 : data.length,
+                      itemCount: discoverData == null ? 0 : discoverData.length,
                       itemBuilder: (BuildContext context, i) {
                         Color itemColor;
                         String itemPriceText;
@@ -709,8 +752,9 @@ class _EventCatalogState extends State<EventCatalog>
                                     ['availableTicketStatus'] ==
                                 '1') {
                               itemColor = Color(0xFF34B323);
-                              itemPriceText =
-                                  discoverData[i]['ticket']['cheapestTicket'];
+                              itemPriceText = 'Rp. ' +
+                                  discoverData[i]['ticket']['cheapestTicket'] +
+                                  ',-';
                             } else {
                               if (discoverData[i]['ticket']['salesStatus'] ==
                                   'comingSoon') {
@@ -749,7 +793,14 @@ class _EventCatalogState extends State<EventCatalog>
                             itemPriceText =
                                 discoverData[i]['ticket_type']['name'];
                           } else if (discoverData[i]['ticket_type']['type'] ==
-                              'free_limited') {
+                              'free_live_stream') {
+                            itemColor = Color(0xFFFFAA00);
+                            itemPriceText =
+                                discoverData[i]['ticket_type']['name'];
+                          } else if (discoverData[i]['ticket_type']['type'] ==
+                                  'free_limited' ||
+                              discoverData[i]['ticket_type']['type'] ==
+                                  'free_limited_seating') {
                             if (discoverData[i]['ticket']
                                     ['availableTicketStatus'] ==
                                 '1') {
@@ -782,11 +833,9 @@ class _EventCatalogState extends State<EventCatalog>
                                 context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        EventDetailsConstructView(
-                                            id: discoverData[i]['id'],
-                                            name: discoverData[i]['name'],
-                                            image: discoverData[i]
-                                                ['photoFull'])));
+                                        EventDetailLoadingScreen(
+                                            isRest: widget.isRest,
+                                            eventId: discoverData[i]['id'])));
                           },
                           child: PopularEventWidget(
                             imageUrl: discoverData[i]['picture'],
@@ -794,6 +843,9 @@ class _EventCatalogState extends State<EventCatalog>
                             location: discoverData[i]["address"],
                             price: itemPriceText,
                             color: itemColor,
+                            isGoing: discoverData[i]['isGoing'] == '1'
+                                ? true
+                                : false,
                             date: DateTime.parse(discoverData[i]['dateStart']),
                             type: discoverData[i]['ticket_type']['type'],
                             isAvailable: discoverData[i]['ticket']
@@ -857,6 +909,7 @@ class _EventCatalogState extends State<EventCatalog>
                 horizontal: MediaQuery.of(context).size.width / 4.5,
               )),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -865,11 +918,16 @@ class _EventCatalogState extends State<EventCatalog>
                                 initialIndex: 0,
                               )));
                 },
-                child: Text(
-                  'See All',
-                  style: TextStyle(
-                      color: eventajaGreenTeal,
-                      fontSize: ScreenUtil.instance.setSp(12)),
+                child: Container(
+                  height: 20,
+                  child: Center(
+                    child: Text(
+                      'See All',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(12)),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -887,7 +945,9 @@ class _EventCatalogState extends State<EventCatalog>
   Widget popularEventContent() {
     return Container(
         height: ScreenUtil.instance.setWidth(269),
-        child:  data == null ? CupertinoActivityIndicator(radius: 13.5) : new ListView.builder(
+        child: data == null
+            ? CupertinoActivityIndicator(radius: 13.5)
+            : new ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: data == null ? 0 : data.length,
                 itemBuilder: (BuildContext context, i) {
@@ -907,14 +967,15 @@ class _EventCatalogState extends State<EventCatalog>
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            EventDetailsConstructView(
-                                                eventDetailsData: data[i],
-                                                id: data[i]['id'],
-                                                name: data[i]['name'],
-                                                image: data[i]['photoFull'])));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        EventDetailLoadingScreen(
+                                      isRest: widget.isRest,
+                                      eventId: data[i]['id'],
+                                    ),
+                                  ),
+                                );
                               },
                               child: Container(
                                 height: ScreenUtil.instance.setWidth(250),
@@ -928,8 +989,8 @@ class _EventCatalogState extends State<EventCatalog>
                                           spreadRadius: 1.5)
                                     ],
                                     image: DecorationImage(
-                                        image: NetworkImage(
-                                            data[i]['picture_timeline'])),
+                                        image:
+                                            NetworkImage(data[i]['picture'])),
                                     borderRadius: BorderRadius.circular(15)),
                               ),
                             ),
@@ -981,6 +1042,7 @@ class _EventCatalogState extends State<EventCatalog>
                 horizontal: MediaQuery.of(context).size.width / 4.5,
               )),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -989,11 +1051,16 @@ class _EventCatalogState extends State<EventCatalog>
                                 initialIndex: 1,
                               )));
                 },
-                child: Text(
-                  'See All',
-                  style: TextStyle(
-                      color: eventajaGreenTeal,
-                      fontSize: ScreenUtil.instance.setSp(12)),
+                child: Container(
+                  height: 20,
+                  child: Center(
+                    child: Text(
+                      'See All',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(12)),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -1077,6 +1144,7 @@ class _EventCatalogState extends State<EventCatalog>
                 horizontal: MediaQuery.of(context).size.width / 4.5,
               )),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -1085,11 +1153,16 @@ class _EventCatalogState extends State<EventCatalog>
                                 initialIndex: 0,
                               )));
                 },
-                child: Text(
-                  'See All',
-                  style: TextStyle(
-                      color: eventajaGreenTeal,
-                      fontSize: ScreenUtil.instance.setSp(12)),
+                child: Container(
+                  height: 20,
+                  child: Center(
+                    child: Text(
+                      'See All',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(12)),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -1107,8 +1180,8 @@ class _EventCatalogState extends State<EventCatalog>
   Widget popularPeopleImage() {
     return Container(
       height: ScreenUtil.instance.setWidth(80),
-      child: isLoading
-          ? Center(child: CupertinoActivityIndicator(radius: 20))
+      child: popularPeopleData == null
+          ? HomeLoadingScreen().peopleLoading()
           : ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount:
@@ -1176,7 +1249,9 @@ class _EventCatalogState extends State<EventCatalog>
           ),
           SizedBox(height: ScreenUtil.instance.setWidth(5)),
           Text('Check out our hand-picked collectoins bellow',
-              style: TextStyle(color: Color(0xFF868686), fontSize: ScreenUtil.instance.setSp(14))),
+              style: TextStyle(
+                  color: Color(0xFF868686),
+                  fontSize: ScreenUtil.instance.setSp(14))),
         ],
       ),
     );
@@ -1186,63 +1261,62 @@ class _EventCatalogState extends State<EventCatalog>
     return Container(
       height: ScreenUtil.instance.setWidth(90),
       child: collectionData == null
-              ? errReasonWidget
-              : ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: collectionData == null ? 0 : collectionData.length,
-                  itemBuilder: (BuildContext context, i) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => CollectionPage(
-                                  headerImage: collectionData[i]['image'],
-                                  categoryId: collectionData[i]['id'],
-                                  collectionName: collectionData[i]['name'],
-                                )));
-                      },
-                      child: new Container(
-                        width: ScreenUtil.instance.setWidth(150),
-                        margin: i == 0
-                            ? EdgeInsets.only(left: 13)
-                            : EdgeInsets.only(left: 13),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              height: ScreenUtil.instance.setWidth(70),
-                              width: ScreenUtil.instance.setWidth(150),
-                              decoration: BoxDecoration(
-                                  color: Color(0xff8a8a8b),
+          ? HomeLoadingScreen().collectionLoading()
+          : ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: collectionData == null ? 0 : collectionData.length,
+              itemBuilder: (BuildContext context, i) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CollectionPage(
+                              headerImage: collectionData[i]['image'],
+                              categoryId: collectionData[i]['id'],
+                              collectionName: collectionData[i]['name'],
+                            )));
+                  },
+                  child: new Container(
+                    width: ScreenUtil.instance.setWidth(150),
+                    margin: i == 0
+                        ? EdgeInsets.only(left: 13)
+                        : EdgeInsets.only(left: 13),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          height: ScreenUtil.instance.setWidth(70),
+                          width: ScreenUtil.instance.setWidth(150),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                    blurRadius: 2,
+                                    color: Colors.black.withOpacity(0.1),
+                                    spreadRadius: 1.5)
+                              ]),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: CachedNetworkImage(
+                              imageUrl: collectionData[i]['image_small'],
+                              placeholder: (context, url) => Container(
+                                child: ClipRRect(
                                   borderRadius: BorderRadius.circular(5),
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        blurRadius: 2,
-                                        color: Colors.black.withOpacity(0.1),
-                                        spreadRadius: 1.5)
-                                  ]),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5),
-                                child: CachedNetworkImage(
-                                  imageUrl: collectionData[i]['image'],
-                                  placeholder: (context, url) => Container(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(5),
-                                      child: Image.asset(
-                                        'assets/grey-fade.jpg',
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
+                                  child: Image.asset(
+                                    'assets/grey-fade.jpg',
+                                    fit: BoxFit.fill,
                                   ),
-                                  fit: BoxFit.fill,
                                 ),
                               ),
+                              fit: BoxFit.fill,
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 
@@ -1267,6 +1341,7 @@ class _EventCatalogState extends State<EventCatalog>
                 horizontal: MediaQuery.of(context).size.width / 4.5 - 5,
               )),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.push(
                       context,
@@ -1275,11 +1350,16 @@ class _EventCatalogState extends State<EventCatalog>
                                 initialIndex: 1,
                               )));
                 },
-                child: Text(
-                  'See All',
-                  style: TextStyle(
-                      color: eventajaGreenTeal,
-                      fontSize: ScreenUtil.instance.setSp(12)),
+                child: Container(
+                  height: 20,
+                  child: Center(
+                    child: Text(
+                      'See All',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(12)),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -1297,8 +1377,8 @@ class _EventCatalogState extends State<EventCatalog>
   Widget discoverPeopleImage() {
     return Container(
       height: ScreenUtil.instance.setWidth(80),
-      child: isLoading
-          ? Center(child: CupertinoActivityIndicator(radius: 20))
+      child: discoverPeopleData == null
+          ? HomeLoadingScreen().peopleLoading()
           : ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount:
@@ -1324,6 +1404,7 @@ class _EventCatalogState extends State<EventCatalog>
                           height: ScreenUtil.instance.setWidth(40.50),
                           width: ScreenUtil.instance.setWidth(41.50),
                           decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.5),
                               boxShadow: <BoxShadow>[
                                 BoxShadow(
                                     color: Colors.black26,
@@ -1349,20 +1430,26 @@ class _EventCatalogState extends State<EventCatalog>
   ///Construct BannerCarousel Widget
   ///
   Widget banner() {
-    return bannerData == null ? CupertinoActivityIndicator(radius: 13.5) :  CarouselSlider(
-      height: ScreenUtil.instance.setWidth(200),
-      items: bannerData.length < 1 ? [CupertinoActivityIndicator(radius: 13.5,)] : mappedDataBanner,
-      enlargeCenterPage: false,
-      initialPage: 0,
-      autoPlay: true,
-      aspectRatio: 2.0,
-      viewportFraction: 1.0,
-      onPageChanged: (index) {
-        setState(() {
-          _current = index;
-        });
-      },
-    );
+    return bannerData == null
+        ? HomeLoadingScreen().bannerLoading(context)
+        : bannerData.length < 1
+            ? HomeLoadingScreen().bannerLoading(context)
+            : CarouselSlider(
+                height: ScreenUtil.instance.setWidth(200),
+                items: bannerData.length < 1
+                    ? [HomeLoadingScreen().bannerLoading(context)]
+                    : mappedDataBanner,
+                enlargeCenterPage: false,
+                initialPage: 0,
+                autoPlay: true,
+                aspectRatio: 2.0,
+                viewportFraction: 1.0,
+                onPageChanged: (index) {
+                  setState(() {
+                    _current = index;
+                  });
+                },
+              );
   }
 
   Widget bannerCarousel() {
@@ -1407,16 +1494,24 @@ class _EventCatalogState extends State<EventCatalog>
                 horizontal: MediaQuery.of(context).size.width / 4.5,
               )),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          SeeAllMediaItem(initialIndex: 0, isVideo: true)));
+                      builder: (BuildContext context) => SeeAllMediaItem(
+                          isRest: widget.isRest,
+                          initialIndex: 0,
+                          isVideo: true)));
                 },
-                child: Text(
-                  'See All',
-                  style: TextStyle(
-                      color: eventajaGreenTeal,
-                      fontSize: ScreenUtil.instance.setSp(12)),
+                child: Container(
+                  height: 20,
+                  child: Center(
+                    child: Text(
+                      'See All',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(12)),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -1604,7 +1699,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -1638,7 +1733,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -1693,7 +1788,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -1721,20 +1816,22 @@ class _EventCatalogState extends State<EventCatalog>
         isLoading = false;
       });
 
-      Scaffold.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 3),
-        content:
-        Text(response.reasonPhrase, style: TextStyle(color: Colors.white)),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: response.reasonPhrase,
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context).then((val) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+        });
     }
   }
 
   Stream<List<BannerModel>> get BannerList async* {
     yield await fetchBanner();
   }
-
-
 
   BannerManager() {
     BannerList.listen((list) => _bannerCount.add(list.length));
@@ -1763,7 +1860,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -1791,12 +1888,16 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Scaffold.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 3),
-        content:
-            Text(response.reasonPhrase, style: TextStyle(color: Colors.white)),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Collections' + response.reasonPhrase,
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context).then((val) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+        });
     } else if (extractedData['desc'] == 'Event Not Found') {
       setState(() {
         isLoading = false;
@@ -1826,20 +1927,27 @@ class _EventCatalogState extends State<EventCatalog>
                 horizontal: MediaQuery.of(context).size.width / 4.5,
               )),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => SeeAllMediaItem(
+                                isRest: widget.isRest,
                                 initialIndex: 1,
                                 isVideo: true,
                               )));
                 },
-                child: Text(
-                  'See All',
-                  style: TextStyle(
-                      color: eventajaGreenTeal,
-                      fontSize: ScreenUtil.instance.setSp(12)),
+                child: Container(
+                  height: 20,
+                  child: Center(
+                    child: Text(
+                      'See All',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(12)),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -1850,40 +1958,48 @@ class _EventCatalogState extends State<EventCatalog>
   }
 
   Widget latestVideoContent() {
-    return latestMediaVideo == null ? CupertinoActivityIndicator(radius: 13.5) : ColumnBuilder(
-      itemCount: latestMediaVideo == null ? 0 : latestMediaVideo.length,
-      itemBuilder: (BuildContext context, i) {
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MediaDetails(
-                          isVideo: true,
-                          videoUrl: latestMediaVideo[i]['video'],
-                          youtubeUrl: latestMediaVideo[i]['youtube'],
-                          userPicture: latestMediaVideo[i]['creator']['photo'],
-                          articleDetail: latestMediaVideo[i]['content'],
-                          imageCount: 'img' + i.toString(),
-                          username: latestMediaVideo[i]['creator']['username'],
-                          imageUri: latestMediaVideo[i]['thumbnail_timeline'],
-                          mediaTitle: latestMediaVideo[i]['title'],
-                          autoFocus: false,
-                          mediaId: latestMediaVideo[i]['id'],
-                        )));
-          },
-          child: LatestMediaItem(
-            isVideo: true,
-            image: latestMediaVideo[i]['thumbnail_timeline'],
-            title: latestMediaVideo[i]['title'],
-            username: latestMediaVideo[i]['creator']['username'],
-            userImage: latestMediaVideo[i]['creator']['photo'],
-            likeCount: latestMediaVideo[i]['count_loved'],
-            commentCount: latestMediaVideo[i]['comment'],
-          ),
-        );
-      },
-    );
+    return latestMediaVideo == null
+        ? HomeLoadingScreen().mediaLoading()
+        : ColumnBuilder(
+            itemCount: latestMediaVideo == null ? 0 : latestMediaVideo.length,
+            itemBuilder: (BuildContext context, i) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MediaDetails(
+                                isRest: widget.isRest,
+                                isVideo: true,
+                                videoUrl: latestMediaVideo[i]['video'],
+                                youtubeUrl: latestMediaVideo[i]['youtube'],
+                                userPicture: latestMediaVideo[i]['creator']
+                                    ['photo'],
+                                articleDetail: latestMediaVideo[i]['content'],
+                                imageCount: 'img' + i.toString(),
+                                username: latestMediaVideo[i]['creator']
+                                    ['username'],
+                                imageUri: latestMediaVideo[i]
+                                    ['thumbnail_timeline'],
+                                mediaTitle: latestMediaVideo[i]['title'],
+                                autoFocus: false,
+                                mediaId: latestMediaVideo[i]['id'],
+                              )));
+                },
+                child: LatestMediaItem(
+                  isRest: widget.isRest,
+                  isVideo: true,
+                  isLiked: latestMediaVideo[i]['is_loved'],
+                  image: latestMediaVideo[i]['thumbnail_timeline'],
+                  title: latestMediaVideo[i]['title'],
+                  username: latestMediaVideo[i]['creator']['username'],
+                  userImage: latestMediaVideo[i]['creator']['photo'],
+                  likeCount: latestMediaVideo[i]['count_loved'],
+                  commentCount: latestMediaVideo[i]['comment'],
+                ),
+              );
+            },
+          );
   }
 
   ///Untuk Fetching gambar PopularPeople
@@ -1911,7 +2027,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -1941,12 +2057,16 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Scaffold.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 3),
-        content:
-            Text(response.reasonPhrase, style: TextStyle(color: Colors.white)),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: response.reasonPhrase,
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context).then((val) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+        });
     }
   }
 
@@ -1975,7 +2095,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -2004,12 +2124,16 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Scaffold.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 3),
-        content:
-            Text(response.reasonPhrase, style: TextStyle(color: Colors.white)),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: response.reasonPhrase,
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context).then((val) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+        });
     }
   }
 
@@ -2039,7 +2163,7 @@ class _EventCatalogState extends State<EventCatalog>
 
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -2059,6 +2183,10 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         var extractedData = json.decode(response.body);
         discoverData = extractedData['data'];
+        discoverData.removeWhere((item) =>
+            item['ticket_type']['type'] == 'free_limited_seating' ||
+            item['ticket_type']['type'] == 'paid_seating' ||
+            item['ticket_type']['type'] == 'paid_seating');
 
         isLoading = false;
       });
@@ -2066,12 +2194,16 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Scaffold.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 3),
-        content:
-            Text(response.reasonPhrase, style: TextStyle(color: Colors.white)),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: response.reasonPhrase,
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context).then((val) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+        });
     }
   }
 
@@ -2097,9 +2229,11 @@ class _EventCatalogState extends State<EventCatalog>
       'cookie': preferences.getString('Session')
     };
 
+    print(headerProd);
+
     Map<String, String> headerRest = {
       'Authorization': AUTHORIZATION_KEY,
-      'signature': signature
+      'signature': SIGNATURE
     };
 
     setState(() {
@@ -2119,6 +2253,10 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         var extractedData = json.decode(response.body);
         data = extractedData['data'];
+        data.removeWhere((item) =>
+            item['ticket_type']['type'] == 'free_limited_seating' ||
+            item['ticket_type']['type'] == 'paid_seating' ||
+            item['ticket_type']['type'] == 'paid_seating');
 
         isLoading = false;
       });
@@ -2126,12 +2264,16 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Scaffold.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 3),
-        content:
-            Text(response.reasonPhrase, style: TextStyle(color: Colors.white)),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: response.reasonPhrase,
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context).then((val) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+        });
     }
   }
 }

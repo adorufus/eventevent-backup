@@ -1,7 +1,11 @@
 const API_KEY = '47d32cb10889cbde94e5f5f28ab461e52890034b';
 const AUTHORIZATION_KEY = 'Basic YWRtaW46MTIzNA==';
-const signature = '9029c9b70f13ba8329bdc57df3e1cd8ad94fcdc0';
+const SIGNATURE = '9029c9b70f13ba8329bdc57df3e1cd8ad94fcdc0';
 const CLINET_ID = "VT-client-Rstbf0xkIEkYi9P_";
+const MIDTRANS_CLIENT_KEY = "VT-client-Rstbf0xkIEkYi9P_";
+const MIDTRANS_SERVER_KEY = "VT-server-ITqwlFiu66yWI-tvIr-Td7bS";
+const WOWZA_API_KEY = "wI0jotQ5gDWid0IFNw7LezwAjlnu4hnhftYC2oRHhToeuwsweqRYfCz9TxX4372b";
+const WOWZA_ACCESS_KEY = "K5PHukmFofCOVPrSw0AeWbDAbSYfYXsqumk8cBhdS3PVYal4wG8aZTNu80Wi342d";
 
 const ALFAMART_HOWTO_LINE1_ID = "1. Catat kode pembayaran di atas dan datang ke gerai Alfamart, Alfa Midi, Alfa Express, Lawson atau DAN+DAN terdekat.\n\n2. Beritahukan ke kasir bahwa anda ingin melakukan pembayaran DOKU.\n\n3. Jika kasir tidak mengetahui mengenai pembayaran DOKU, informasikan ke kasir untuk membuka terminal e-transaction, pilih \"2\", lalu \"2\", lalu \"2\" yang akan menampilkan pilihan DOKU.\n\n4. Kasir akan menanyakan kode pembayaran. Berikan kode pembayaran anda ";
 const ALFAMART_HOWTO_LINE2_ID = ", Kasir akan menginformasikan nominal yang harus dibayarkan.\n\n5. Lakukan pembayaran ke kasir sejumlah nominal yang disebutkan. Pembayaran dapat menggunakan uang tunai atau non tunai. Non tunai antara lain Kartu Debit BCA, Kartu Debit BNI, BCA Flazz, BNI Prepaid dan Mandiri e-money.\n\n6. Terima struk sebagai bukti pembayaran sudah sukses dilakukan. Notifikasi pembayaran akan langsung diterima oleh Merchant.\n\n7. Selesai.";
@@ -20,6 +24,8 @@ const GOPAY_HEADER_EN = "How to pay using GO-PAY";
 class BaseApi{
   final apiUrl = "https://home.eventeventapp.com/api";
   final restUrl = "https://home.eventeventapp.com/rest";
+  static final midtransUrlProd = "https://api.midtrans.com/";
+  static final wowzaUrl = "https://api.cloud.wowza.com/api/v1.3/";
 
 //   final apiUrl = "http://staging.eventeventapp.com/api";
 //   final restUrl = "http://staging.eventeventapp.com/rest";

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/PeopleItem.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
@@ -72,11 +73,7 @@ class _ListViewWithAppBar extends State<ListViewWithAppBar> {
         ),
       ),
       body: profileData == null
-          ? Container(
-              child: Center(
-                child: CupertinoActivityIndicator(radius: 20),
-              ),
-            )
+          ? HomeLoadingScreen().followListLoading()
           : isEmpty == true
               ? EmptyState(
                   emptyImage: 'assets/drawable/profile_empty_state.png',

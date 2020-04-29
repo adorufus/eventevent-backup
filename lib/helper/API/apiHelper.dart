@@ -19,32 +19,21 @@ String cookies = '';
 
 GoogleSignIn googleSignIn = new GoogleSignIn();
 
+Future<http.Response> getWowzaLivestreamState(String streamingId) async {
+    final response = await http.get(
+      BaseApi.wowzaUrl +
+          'live_streams/$streamingId/state',
+      headers: {
+        'wsc-api-key': WOWZA_API_KEY,
+        'wsc-access-key': WOWZA_ACCESS_KEY,
+        'Content-Type': 'application/json'
+      },
+    );
 
+    print("FETCHING CURRENT LIVESTREAM STATE, PLEASE WAIT.....");
+    print(
+        "WOWZA RESPONSE: ${response.body} WITH STATUS CODE: ${response.statusCode}");
 
-requestLogout(BuildContext context) async {
-  final logoutApiUrl = BaseApi().apiUrl + '/signout';
-
-  Map<String, String> body = {
-    'X-API-KEY': apiKey
-  };
-
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  
-  final response = await http.post(
-    logoutApiUrl,
-    body: body,
-    headers: {'Authorization': "Basic YWRtaW46MTIzNA==", 'cookie': prefs.getString('Session')}
-  );
-
-  print(response.statusCode);
-
-  if(prefs.getBool('isUsingGoogle') == true){
-    googleSignIn.signOut();
+    return response;
   }
 
-  if(response.statusCode == 200){
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginRegisterWidget()), (Route<dynamic> route) => false);
-    prefs.clear();
-    print(prefs.getKeys());
-  }
-}

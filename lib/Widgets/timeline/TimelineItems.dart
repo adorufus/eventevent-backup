@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/timeline/EditPost.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
@@ -17,8 +19,10 @@ import 'package:http/http.dart' as http;
 
 class UserTimelineItem extends StatefulWidget {
   final currentUserId;
+  final eventId;
+  final timelineType;
 
-  const UserTimelineItem({Key key, this.currentUserId}) : super(key: key);
+  const UserTimelineItem({Key key, this.currentUserId, this.eventId, this.timelineType}) : super(key: key);
 
   @override
   _UserTimelineItemState createState() => _UserTimelineItemState();
@@ -31,26 +35,41 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
 
   int newPage = 0;
 
-  List timelineList = [];
+  List timelineList;
 
   bool isLoading = false;
+  bool isEmpty = false;
+  bool isFromLoad = false;
 
   Future<http.Response> getTimelineList({int newPage}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int currentPage = 1;
+    String urlType = 'timeline';
 
     setState(() {
+      if(isFromLoad == false){
+        isLoading = true;
+      }
       if (newPage != null) {
         currentPage += newPage;
       }
 
+      if(widget.timelineType == 'eventDetail'){
+        urlType = BaseApi().apiUrl + '/event_activity/list?X-API-KEY=$API_KEY&page=$currentPage&eventID=${widget.eventId}';
+      }
+      else{
+        urlType = BaseApi().apiUrl + '/timeline/list?X-API-KEY=$API_KEY&page=$currentPage';;
+      }
+
       print(currentPage);
     });
+    
 
-    String url = BaseApi().apiUrl +
-        '/timeline/list?X-API-KEY=$API_KEY&page=$currentPage';
+    // String url = BaseApi().apiUrl + '/timeline/list?X-API-KEY=$API_KEY&page=$currentPage';
 
-    final response = await http.get(url, headers: {
+    print('url: ' + urlType);
+
+    final response = await http.get(urlType, headers: {
       'Authorization': AUTHORIZATION_KEY,
       'cookie': prefs.getString('Session')
     });
@@ -63,6 +82,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
   void _onLoading() async {
     await Future.delayed(Duration(milliseconds: 2000));
     setState(() {
+      isFromLoad = true;
       newPage += 1;
     });
 
@@ -97,7 +117,14 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
 
       if (response.statusCode == 200) {
         setState(() {
-          timelineList = extractedData['data'];
+          isLoading = false;
+          print(isLoading);
+
+          if(extractedData['desc'] == " Timeline not found"){
+            isEmpty = true;
+          } else {
+            timelineList = extractedData['data'];
+          }
         });
       }
     });
@@ -106,108 +133,119 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
 
   @override
   Widget build(BuildContext context) {
-    return SmartRefresher(
-      enablePullDown: true,
-      enablePullUp: true,
-      footer: CustomFooter(builder: (BuildContext context, LoadStatus mode) {
-        Widget body;
-        if (mode == LoadStatus.idle) {
-          body = Text("Load data");
-        } else if (mode == LoadStatus.loading) {
-          body = CupertinoActivityIndicator(radius: 20);
-        } else if (mode == LoadStatus.failed) {
-          body = Text("Load Failed!");
-        } else if (mode == LoadStatus.canLoading) {
-          body = Text('More');
-        } else {
-          body = Container();
-        }
-
-        return Container(
-            margin: EdgeInsets.only(bottom: 25),
-            height: ScreenUtil.instance.setWidth(35),
-            child: Center(child: body));
-      }),
-      controller: refreshController,
-      onRefresh: () {
-        setState(() {
-          newPage = 0;
-        });
-        getTimelineList(newPage: newPage).then((response) {
-          var extractedData = json.decode(response.body);
-
-          print(response.statusCode);
-          print(response.body);
-
-          if (response.statusCode == 200) {
-            setState(() {
-              timelineList = extractedData['data'];
-            });
-            if (mounted) setState(() {});
-            refreshController.refreshCompleted();
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      child: isLoading == true ? HomeLoadingScreen().timelineLoading() : timelineList == null ? EmptyState(imagePath: 'assets/icons/empty_state/public_timeline.png', reasonText: 'Your timeline is empty :(',) : SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: true,
+        footer: CustomFooter(builder: (BuildContext context, LoadStatus mode) {
+          Widget body;
+          if (mode == LoadStatus.idle) {
+            body = Text("Load data");
+          } else if (mode == LoadStatus.loading) {
+            body = CupertinoActivityIndicator(radius: 20);
+          } else if (mode == LoadStatus.failed) {
+            body = Text("Load Failed!");
+          } else if (mode == LoadStatus.canLoading) {
+            body = Text('More');
           } else {
-            if (mounted) setState(() {});
-            refreshController.refreshFailed();
-          }
-        });
-      },
-      onLoading: _onLoading,
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: timelineList == null ? 0 : timelineList.length,
-        itemBuilder: (BuildContext context, i) {
-          List _loveCount = timelineList[i]['impression']['data'];
-          List commentList = timelineList[i]['comment']['data'];
-          List impressions = new List();
-          bool isLiked = false;
-          String likeCount = '';
-
-          if(timelineList[i]['impression']['data'].length == 0){
-            isLiked = false;
-
-            print('is liked data = 0 ' + isLiked.toString());
-          }
-          else{
-            timelineList[i]['impression']['data'].map((impressions) {
-              if(impressions.containsValue(widget.currentUserId)){
-                isLiked = true;
-                print('is liked data > 0 ' + isLiked.toString());
-              }
-              else{
-                isLiked = false;
-                print('is we already likeit? ' + isLiked.toString());
-              }
-            });
+            body = Container();
           }
 
-          Map impressionData;
+          return Container(
+              margin: EdgeInsets.only(bottom: 25),
+              height: ScreenUtil.instance.setWidth(35),
+              child: Center(child: body));
+        }),
+        controller: refreshController,
+        onRefresh: () {
+          setState(() {
+            newPage = 0;
+          });
+          getTimelineList(newPage: newPage).then((response) {
+            var extractedData = json.decode(response.body);
 
-          for(var impres in timelineList[i]['impression']['data']){
-            impressionData = impres;
-            print(impressionData.toString());
-          }
+            print(response.statusCode);
+            print(response.body);
 
-          print('is have current user id: ' + timelineList[2]['impression']['data'].contains('userID: ${widget.currentUserId}').toString());
-
-          return TimelineItem(
-            id: timelineList[i]['id'],
-            commentTotalRows: timelineList[i]['comment']['totalRows'],
-            fullName: timelineList[i]['fullName'],
-            description: timelineList[i]['description'],
-            isVerified: timelineList[i]['isVerified'],
-            name: timelineList[i]['name'],
-            photo: timelineList[i]['photo'],
-            dateTime: DateTime.parse(timelineList[i]['createdDate']),
-            photoFull: timelineList[i]['photoFull'],
-            picture: timelineList[i]['picture'],
-            pictureFull: timelineList[i]['pictureFull'],
-            type: timelineList[i]['type'],
-            userId: timelineList[i]['userID'],
-            impressionId: timelineList[i]['impression']['data'].length == 0 ? '' : impressionData['id'],
-            loveCount: timelineList[i]['impression']['data'].length,
-            isLoved: timelineList[i]['impression']['data'].length == 0 ? false : impressionData.containsValue(widget.currentUserId) == true ? true : false,
-          );
+            if (response.statusCode == 200) {
+              setState(() {
+                timelineList = extractedData['data'];
+              });
+              if (mounted) setState(() {});
+              refreshController.refreshCompleted();
+            } else {
+              if (mounted) setState(() {});
+              refreshController.refreshFailed();
+            }
+          });
         },
+        onLoading: _onLoading,
+        child: timelineList.length < 1 ? Center(child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset('assets/icons/empty_state/public_timeline.png', scale: 1.5,),
+            Text('Your timeline is empty :(', style: TextStyle(fontWeight: FontWeight.bold),)
+          ],
+        ),) : ListView.builder(
+          shrinkWrap: true,
+          itemCount: timelineList == null ? 0 : timelineList.length,
+          itemBuilder: (BuildContext context, i) {
+            List _loveCount = timelineList[i]['impression']['data'];
+            List commentList = timelineList[i]['comment']['data'];
+            List impressions = new List();
+            bool isLiked = false;
+            String likeCount = '';
+
+            if(timelineList[i]['impression']['data'].length == 0){
+              isLiked = false;
+
+              print('is liked data = 0 ' + isLiked.toString());
+            }
+            else{
+              timelineList[i]['impression']['data'].map((impressions) {
+                if(impressions.containsValue(widget.currentUserId)){
+                  isLiked = true;
+                  print('is liked data > 0 ' + isLiked.toString());
+                }
+                else{
+                  isLiked = false;
+                  print('is we already likeit? ' + isLiked.toString());
+                }
+              });
+            }
+
+            Map impressionData;
+
+            for(var impres in timelineList[i]['impression']['data']){
+              impressionData = impres;
+              print(impressionData.toString());
+            }
+
+            // print('is have current user id: ' + timelineList[2]['impression']['data'].contains('userID: ${widget.currentUserId}').toString());
+
+            return TimelineItem(
+              eventId: timelineList[i]['eventID'],
+              id: timelineList[i]['id'],
+              commentTotalRows: timelineList[i]['comment']['totalRows'],
+              fullName: timelineList[i]['fullName'],
+              description: timelineList[i]['description'],
+              isVerified: timelineList[i]['isVerified'],
+              name: timelineList[i]['name'],
+              photo: timelineList[i]['photo'],
+              dateTime: DateTime.parse(timelineList[i]['createdDate']),
+              photoFull: timelineList[i]['photoFull'],
+              picture: timelineList[i]['picture'],
+              pictureFull: timelineList[i]['pictureFull'],
+              type: timelineList[i]['type'],
+              userId: timelineList[i]['userID'],
+              location: timelineList[i]['locationName'],
+              impressionId: timelineList[i]['impression']['data'].length == 0 ? '' : impressionData['id'],
+              loveCount: timelineList[i]['impression']['data'].length,
+              isLoved: timelineList[i]['impression']['data'].length == 0 ? false : impressionData.containsValue(widget.currentUserId) == true ? true : false,
+            );
+          },
+        ),
       ),
     );
   }

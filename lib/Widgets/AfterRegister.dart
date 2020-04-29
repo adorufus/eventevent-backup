@@ -1,5 +1,9 @@
 import 'dart:convert';
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:async';
 
 import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -7,11 +11,16 @@ import 'package:eventevent/helper/API/registerModel.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:async/async.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
 
 import 'dashboardWidget.dart';
 
@@ -20,7 +29,8 @@ class AfterRegister extends StatefulWidget {
   final email;
   final password;
 
-  const AfterRegister({Key key, this.username, this.email, this.password}) : super(key: key);
+  const AfterRegister({Key key, this.username, this.email, this.password})
+      : super(key: key);
 
   @override
   _AfterRegisterState createState() => _AfterRegisterState();
@@ -33,6 +43,9 @@ const String INIT_DATETIME = '2019-05-17';
 class _AfterRegisterState extends State<AfterRegister> {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   File _image;
+  Dio dio = new Dio(BaseOptions(
+      baseUrl: BaseApi().apiUrl, connectTimeout: 15000, receiveTimeout: 15000));
+  bool isLoading = false;
 
   var usernameController = new TextEditingController();
   var phoneController = new TextEditingController();
@@ -42,6 +55,7 @@ class _AfterRegisterState extends State<AfterRegister> {
   var lastNameController = new TextEditingController();
 
   File profilePictureFile = File('aofkafoa');
+  File croppedProfilePicture;
   String profilePictureURI = 'fa';
   int currentValue = 0;
   String birthDate;
@@ -54,20 +68,34 @@ class _AfterRegisterState extends State<AfterRegister> {
 
   DateTime _dateTime;
 
-  
-
   bool isPasswordObsecure = true;
 
-  Future getImage() async{
+  Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-    setState((){
+    setState(() {
       profilePictureFile = image;
+
+      cropImage(profilePictureFile);
     });
   }
 
+  Future cropImage(File image) async {
+    File croppedImage = await ImageCropper.cropImage(
+      sourcePath: image.path,
+      aspectRatio: CropAspectRatio(ratioX: 2.0, ratioY: 3.0),
+      maxHeight: 512,
+      maxWidth: 512,
+    );
+
+    croppedProfilePicture = croppedImage;
+
+    setState(() {});
+  }
+
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -79,8 +107,8 @@ class _AfterRegisterState extends State<AfterRegister> {
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
+          elevation: 0,
+          backgroundColor: Colors.white,
           leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);
@@ -92,13 +120,27 @@ class _AfterRegisterState extends State<AfterRegister> {
             ),
           ),
           centerTitle: true,
-          title: Text('COMPLETE YOUR PROFILE', style: TextStyle(color: eventajaGreenTeal))),
-      body: ListView(
+          title: Text('COMPLETE YOUR PROFILE',
+              style: TextStyle(color: eventajaGreenTeal))),
+      body: Stack(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: registerGoogleWidget()
-          )
+          ListView(
+            children: <Widget>[
+              Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: registerGoogleWidget())
+            ],
+          ),
+          isLoading == false
+              ? Container()
+              : Container(
+                  color: Colors.black.withOpacity(0.5),
+                  child: Center(
+                    child: CupertinoActivityIndicator(
+                      animating: true,
+                    ),
+                  ),
+                )
         ],
       ),
     );
@@ -109,42 +151,49 @@ class _AfterRegisterState extends State<AfterRegister> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        SizedBox(height: ScreenUtil.instance.setWidth(10),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(10),
+        ),
         GestureDetector(
-          onTap: (){
-            getImage();
-          },
-          child: Column(
-            children: <Widget>[
+            onTap: () {
+              getImage();
+            },
+            child: Column(children: <Widget>[
               CircleAvatar(
                 radius: 80,
                 backgroundColor: eventajaGreenTeal,
-                backgroundImage: FileImage(
-                  profilePictureFile
-                ),
+                backgroundImage: croppedProfilePicture == null
+                    ? AssetImage('assets/grey-fade.jpg')
+                    : FileImage(croppedProfilePicture),
               ),
-              SizedBox(height: ScreenUtil.instance.setWidth(10),),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(10),
+              ),
               Text('Tap to change / edit photo')
-            ]
-          )
+            ])),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
         TextFormField(
           controller: firstNameController,
           decoration: InputDecoration(
             hintText: 'First Name',
           ),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         TextFormField(
           controller: lastNameController,
           decoration: InputDecoration(
             hintText: 'Last Name',
           ),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         TextFormField(
-          onTap: (){
+          onTap: () {
             showDatePicker();
           },
           controller: birthdateController,
@@ -152,7 +201,9 @@ class _AfterRegisterState extends State<AfterRegister> {
             hintText: 'Birth Date',
           ),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         TextFormField(
           controller: phoneController,
           keyboardType: TextInputType.phone,
@@ -160,13 +211,15 @@ class _AfterRegisterState extends State<AfterRegister> {
             hintText: '(Phone, e.g. 0818123456)',
           ),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Radio(
               groupValue: currentValue,
-              onChanged: (int i) => setState((){
+              onChanged: (int i) => setState(() {
                 currentValue = i;
                 gender = 'Male';
               }),
@@ -176,7 +229,7 @@ class _AfterRegisterState extends State<AfterRegister> {
             SizedBox(width: ScreenUtil.instance.setWidth(30)),
             Radio(
               groupValue: currentValue,
-              onChanged: (int i) => setState((){
+              onChanged: (int i) => setState(() {
                 currentValue = i;
                 gender = 'Female';
               }),
@@ -186,7 +239,7 @@ class _AfterRegisterState extends State<AfterRegister> {
             SizedBox(width: ScreenUtil.instance.setWidth(30)),
             Radio(
               groupValue: currentValue,
-              onChanged: (int i) => setState((){
+              onChanged: (int i) => setState(() {
                 currentValue = i;
                 gender = 'Other';
               }),
@@ -195,38 +248,46 @@ class _AfterRegisterState extends State<AfterRegister> {
             Text('Other')
           ],
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         GestureDetector(
-          onTap: (){
+          onTap: () {
             requestRegister(
-              context,
-              widget.username,
-              widget.email,
-              widget.password,
-              firstNameController.text,
-              lastNameController.text,
-              birthdateController.text,
-              phoneController.text,
-              gender,
-              _scaffoldKey
-            )
-            .catchError((e){
-              _scaffoldKey.currentState.showSnackBar(SnackBar(
-                content: Text(e.toString()),
+                    context,
+                    widget.username,
+                    widget.email,
+                    widget.password,
+                    firstNameController.text,
+                    lastNameController.text,
+                    birthdateController.text,
+                    phoneController.text,
+                    gender,
+                    _scaffoldKey)
+                .catchError((e) {
+              Flushbar(
+                flushbarPosition: FlushbarPosition.TOP,
+                message: '${e.toString()}',
                 backgroundColor: Colors.red,
-              ));
+                duration: Duration(seconds: 3),
+                animationDuration: Duration(milliseconds: 500),
+              )..show(context);
             });
           },
           child: Container(
             height: ScreenUtil.instance.setWidth(50),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: eventajaGreenTeal,
-              borderRadius: BorderRadius.circular(30)
-            ),
+                color: eventajaGreenTeal,
+                borderRadius: BorderRadius.circular(30)),
             child: Center(
-              child: Text('DONE', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18) ,color: Colors.white, fontWeight: FontWeight.bold),)
-            ),
+                child: Text(
+              'DONE',
+              style: TextStyle(
+                  fontSize: ScreenUtil.instance.setSp(18),
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            )),
           ),
         )
       ],
@@ -244,105 +305,145 @@ class _AfterRegisterState extends State<AfterRegister> {
       String phoneNumber,
       String genderSpec,
       GlobalKey<ScaffoldState> _scaffoldKey) async {
-        SharedPreferences prefs =await SharedPreferences.getInstance();
-    final registerApiUrl = BaseApi().apiUrl + '/signup/register';
+    setState(() {
+      isLoading = true;
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final registerApiUrl = '/signup/register';
 
-    print(username);
-    print(email);
-    print(password);
-    print(fullName);
-    print(lastName);
-    print(birthDay);
-    print(phoneNumber);
-    print(genderSpec);
+    try {
+      Response response = await dio.post(
+        registerApiUrl,
+        options: Options(
+          headers: {'Authorization': AUTHORIZATION_KEY},
+          responseType: ResponseType.plain,
+        ),
+        data: FormData.fromMap(
+          {
+            'X-API-KEY': API_KEY,
+            'username': username,
+            'email': email,
+            'password': password,
+            'fullName': fullName,
+            'lastName': lastName,
+            'birthDay': birthDay,
+            'phone': phoneNumber,
+            'gender': gender,
+            'photo': croppedProfilePicture == null
+                ? '$gender.jpg'
+                : await MultipartFile.fromFile(croppedProfilePicture.path,
+                    filename:
+                        "eventevent-profilepicture-${DateTime.now().toString()}.jpg",
+                    contentType: MediaType('image', 'jpg'))
+          },
+        ),
+      );
 
-    Map<String, String> body = {
-      'username': username,
-      'email': email,
-      'password': password,
-      'gender': genderSpec,
-      'fullName': fullName,
-      'lastName': lastName,
-      'birthDay': birthDay,
-      'phone': phoneNumber,
-      'X-API-KEY': apiKey,
-      'pictureAvatarURL': "male.jpg"
-    };
+      print(username);
+      print(email);
+      print(password);
+      print(fullName);
+      print(lastName);
+      print(birthDay);
+      print(phoneNumber);
+      print(genderSpec);
 
-    final response = await http.post(registerApiUrl,
-        body: body, headers: {'Authorization': "Basic YWRtaW46MTIzNA=="});
-
-    print(response.statusCode);
-    final myResponse = json.decode(response.body);
-
-    if (response.statusCode == 201) {
-      setState(() {
-        prefs.setString('Session', response.headers['set-cookie']);
-      });
       Map responseJson;
 
       setState(() {
-        responseJson = jsonDecode(response.body);
+        responseJson = jsonDecode(response.data);
       });
 
-      SharedPrefs().saveCurrentSession(response, responseJson);
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget()));
-      return Register.fromJson(responseJson);
-    } else if (response.statusCode == 400) {
-      final responseJson = json.decode(response.body);
-      //Register registerModel = new Register.fromJson(responseJson);
-
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        content: Text(
-          responseJson['desc'],
-          style: TextStyle(color: Colors.white),
-        ),
-      ));
-    } else if (myResponse.containsKey('username')) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        content: Text(
-          'Username already taken',
-          style: TextStyle(color: Colors.white),
-        ),
-      ));
-    }
-  }
-  
-
-  void showDatePicker(){
-    DatePicker.showDatePicker(
-      context,
-      pickerTheme: DateTimePickerTheme(
-        showTitle: true,
-        confirm: Text('Done', style: TextStyle(color: eventajaGreenTeal),),
-        cancel: Text('Cancel', style: TextStyle(color: Colors.red),)
-      ),
-      minDateTime: DateTime.parse(MIN_DATETIME),
-      maxDateTime: DateTime.parse(MAX_DATETIME),
-      initialDateTime: _dateTime,
-      dateFormat: _format,
-      locale: _locale,
-      onClose: () => {},
-      onCancel: () => {},
-      onChange: (dateTime, List<int> index){
-        setState((){
-          _dateTime = dateTime;
-          birthdateController.text = '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+      if (response.statusCode == 201) {
+        setState(() {
+          isLoading = false;
         });
-      },
-      onConfirm: (dateTime, List<int> index){
-        setState((){
-          _dateTime = dateTime;
-          birthdateController.text = '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+        setState(() {
+          prefs.setString('Session', response.headers['set-cookie'].first);
         });
+
+        SharedPrefs().saveCurrentSession(responseJson);
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => DashboardWidget(
+                      isRest: false,
+                      selectedPage: 0,
+                    )));
+        return Register.fromJson(responseJson);
+      } else if (response.statusCode == 400) {
+        setState(() {
+          isLoading = false;
+        });
+        //Register registerModel = new Register.fromJson(responseJson);
+        Flushbar(
+          flushbarPosition: FlushbarPosition.TOP,
+          message: responseJson['desc'].toString(),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+          animationDuration: Duration(milliseconds: 500),
+        )..show(context);
+      } else if (responseJson.containsKey('username')) {
+        setState(() {
+          isLoading = false;
+        });
+        Flushbar(
+          flushbarPosition: FlushbarPosition.TOP,
+          message: 'Username already taken',
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+          animationDuration: Duration(milliseconds: 500),
+        )..show(context);
       }
-    );
+    } on DioError catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      if (e.response != null) {
+        print(e.response.data);
+        print(e.response.statusCode);
+        print(e.response.request);
+      } else {
+        print(e.message);
+        print(e.error);
+      }
+    }
+
+    return null;
+  }
+
+  void showDatePicker() {
+    DatePicker.showDatePicker(context,
+        pickerTheme: DateTimePickerTheme(
+            showTitle: true,
+            confirm: Text(
+              'Done',
+              style: TextStyle(color: eventajaGreenTeal),
+            ),
+            cancel: Text(
+              'Cancel',
+              style: TextStyle(color: Colors.red),
+            )),
+        minDateTime: DateTime.parse(MIN_DATETIME),
+        maxDateTime: DateTime.parse(MAX_DATETIME),
+        initialDateTime: _dateTime,
+        dateFormat: _format,
+        locale: _locale,
+        onClose: () => {},
+        onCancel: () => {},
+        onChange: (dateTime, List<int> index) {
+          setState(() {
+            _dateTime = dateTime;
+            birthdateController.text =
+                '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+          });
+        },
+        onConfirm: (dateTime, List<int> index) {
+          setState(() {
+            _dateTime = dateTime;
+            birthdateController.text =
+                '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+          });
+        });
   }
 }

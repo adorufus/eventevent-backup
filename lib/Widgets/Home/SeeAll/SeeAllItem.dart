@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:flutter/material.dart';
@@ -128,51 +130,51 @@ class _SeeAllItemState extends State<SeeAllItem> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    return SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(null, 100),
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size(null, 100),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: ScreenUtil.instance.setWidth(75),
           child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: ScreenUtil.instance.setWidth(75),
+            color: Colors.white,
             child: Container(
-              color: Colors.white,
-              child: Container(
-                margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
-                child: Row(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(15.49),
-                            width: ScreenUtil.instance.setWidth(9.73),
-                            child: Image.asset(
-                              'assets/icons/icon_apps/arrow.png',
-                              fit: BoxFit.fill,
-                            ),
+              margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
+              child: Row(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        SizedBox(
+                          height: ScreenUtil.instance.setWidth(15.49),
+                          width: ScreenUtil.instance.setWidth(9.73),
+                          child: Image.asset(
+                            'assets/icons/icon_apps/arrow.png',
+                            fit: BoxFit.fill,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: MediaQuery.of(context).size.width / 2.8),
-                    Text(
-                      'All Event',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: ScreenUtil.instance.setSp(14)),
-                    )
-                  ],
-                ),
+                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width / 2.8),
+                  Text(
+                    'All Event',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: ScreenUtil.instance.setSp(14)),
+                  )
+                ],
               ),
             ),
           ),
         ),
-        body: DefaultTabController(
+      ),
+      body: SafeArea(
+        child: DefaultTabController(
           initialIndex: widget.initialIndex,
           length: 2,
           child: ListView(
@@ -235,16 +237,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
   Widget popularEvent() {
     return Container(
         child: popularEventList == null
-            ? Center(
-                child: Container(
-                  width: ScreenUtil.instance.setWidth(25),
-                  height: ScreenUtil.instance.setWidth(25),
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: CupertinoActivityIndicator(radius: 20),
-                  ),
-                ),
-              )
+            ? HomeLoadingScreen().myTicketLoading()
             : SmartRefresher(
                 enablePullDown: true,
                 enablePullUp: true,
@@ -306,7 +299,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                               ['availableTicketStatus'] ==
                           '1') {
                         itemColor = Color(0xFF34B323);
-                        itemPriceText =
+                        itemPriceText = 'Rp. ' +
                             popularEventList[i]['ticket']['cheapestTicket'];
                       } else {
                         if (popularEventList[i]['ticket']['salesStatus'] ==
@@ -346,6 +339,11 @@ class _SeeAllItemState extends State<SeeAllItem> {
                       itemPriceText =
                           popularEventList[i]['ticket_type']['name'];
                     } else if (popularEventList[i]['ticket_type']['type'] ==
+                        'free_live_stream') {
+                      itemColor = Color(0xFFFFAA00);
+                      itemPriceText =
+                          popularEventList[i]['ticket_type']['name'];
+                    } else if (popularEventList[i]['ticket_type']['type'] ==
                         'free_limited') {
                       if (popularEventList[i]['ticket']
                               ['availableTicketStatus'] ==
@@ -378,11 +376,8 @@ class _SeeAllItemState extends State<SeeAllItem> {
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    EventDetailsConstructView(
-                                        id: popularEventList[i]['id'],
-                                        name: popularEventList[i]['name'],
-                                        image: popularEventList[i]
-                                            ['photoFull'])));
+                                    EventDetailLoadingScreen(
+                                        eventId: popularEventList[i]['id'])));
                       },
                       child: new LatestEventItem(
                           image: popularEventList[i]['picture_timeline'],
@@ -403,16 +398,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
   Widget discoverEvent() {
     return Container(
         child: discoverEventList == null
-            ? Center(
-                child: Container(
-                  width: ScreenUtil.instance.setWidth(25),
-                  height: ScreenUtil.instance.setWidth(25),
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: CupertinoActivityIndicator(radius: 20),
-                  ),
-                ),
-              )
+            ? HomeLoadingScreen().myTicketLoading()
             : SmartRefresher(
                 enablePullDown: true,
                 enablePullUp: true,
@@ -474,7 +460,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                               ['availableTicketStatus'] ==
                           '1') {
                         itemColor = Color(0xFF34B323);
-                        itemPriceText =
+                        itemPriceText = 'Rp. ' +
                             discoverEventList[i]['ticket']['cheapestTicket'];
                       } else {
                         if (discoverEventList[i]['ticket']['salesStatus'] ==
@@ -514,6 +500,11 @@ class _SeeAllItemState extends State<SeeAllItem> {
                       itemPriceText =
                           discoverEventList[i]['ticket_type']['name'];
                     } else if (discoverEventList[i]['ticket_type']['type'] ==
+                        'free_live_stream') {
+                      itemColor = Color(0xFFFFAA00);
+                      itemPriceText =
+                          discoverEventList[i]['ticket_type']['name'];
+                    } else if (discoverEventList[i]['ticket_type']['type'] ==
                         'free_limited') {
                       if (discoverEventList[i]['ticket']
                               ['availableTicketStatus'] ==
@@ -542,15 +533,13 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     }
 
                     return GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          EventDetailsConstructView(
-                                              id: discoverEventList[i]['id'],
-                                              name: discoverEventList[i]['name'],
-                                              image: discoverEventList[i]['photoFull'])));
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    EventDetailLoadingScreen(
+                                        eventId: discoverEventList[i]['id'])));
                       },
                       child: new LatestEventItem(
                           image: discoverEventList[i]['picture_timeline'],
@@ -595,7 +584,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
     int currentPage = 1;
 
     setState(() {
-      if (newPage != null || newPage != 0) {
+      if (newPage != null) {
         currentPage += newPage;
       }
     });

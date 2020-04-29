@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/TransactionHistory.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:quiver/async.dart';
 
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -28,13 +29,13 @@ class WaitTransaction extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _WaitTransactionState();
-
   }
 }
 
 // InitInAppBrowser inAppBrowserFallback = new InitInAppBrowser();
 
-class _WaitTransactionState extends State<WaitTransaction> with TickerProviderStateMixin{
+class _WaitTransactionState extends State<WaitTransaction>
+    with TickerProviderStateMixin {
   String month;
   String hour;
   String min;
@@ -60,19 +61,13 @@ class _WaitTransactionState extends State<WaitTransaction> with TickerProviderSt
 
   AnimationController animationController;
 
-  timerCounter(){
-
-  }
+  timerCounter() {}
 
   String get timerString {
     Duration duration =
         animationController.duration * animationController.value;
-    return '${duration.inMinutes}:${(duration.inSeconds % 60)
-        .toString()
-        .padLeft(2, '0')}';
+    return '${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
-
-
 
   void startCounter(String expired) {
     int hoursStart, minuteStart, secondStart;
@@ -139,18 +134,27 @@ class _WaitTransactionState extends State<WaitTransaction> with TickerProviderSt
 
     print(countdownAsString);
 
-    animationController = AnimationController(vsync: this, duration: Duration(days: days, hours: hours, minutes: minutes, seconds: seconds));
+    animationController = AnimationController(
+        vsync: this,
+        duration: Duration(
+            days: days, hours: hours, minutes: minutes, seconds: seconds));
 
     animationController.reverse(
-      from: animationController.value == 0.0 ? 1.0 : animationController.value
-    );
+        from:
+            animationController.value == 0.0 ? 1.0 : animationController.value);
 
     duration = animationController.duration * animationController.value;
 
-    timertick = '${duration.inHours % 24} : ${duration.inMinutes % 60 } : ${(duration.inSeconds % 60)}';
+    timertick =
+        '${duration.inHours % 24} : ${duration.inMinutes % 60} : ${(duration.inSeconds % 60)}';
 
     print(timertick);
+  }
+  
 
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -171,8 +175,16 @@ class _WaitTransactionState extends State<WaitTransaction> with TickerProviderSt
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false, selectedPage: 3,)), ModalRoute.withName('/EventDetails'));
-            Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionHistory()));
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DashboardWidget(
+                          isRest: false,
+                          selectedPage: 3,
+                        )),
+                ModalRoute.withName('/EventDetails'));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => TransactionHistory()));
           },
           child: Icon(
             Icons.close,
@@ -185,14 +197,12 @@ class _WaitTransactionState extends State<WaitTransaction> with TickerProviderSt
           ? Container(
               child: Center(child: CupertinoActivityIndicator(radius: 20)),
             )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
+          : ListView(
               children: <Widget>[
                 Container(
                   height: ScreenUtil.instance.setWidth(380),
                   color: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -208,23 +218,23 @@ class _WaitTransactionState extends State<WaitTransaction> with TickerProviderSt
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             SizedBox(
-                              height: ScreenUtil.instance.setWidth(10),
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Text('Complete Payment In',
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: ScreenUtil.instance.setSp(18),
+                                    fontSize: ScreenUtil.instance.setSp(14),
                                     fontWeight: FontWeight.bold)),
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
                             ),
                             CountDownTimer(
                               secondsRemaining: seconds,
-                              whenTimeExpires: () {
-
-                              },
-                              countDownTimerStyle: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(18),
-                fontWeight: FontWeight.bold),
+                              whenTimeExpires: () {},
+                              countDownTimerStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil.instance.setSp(38),
+                                  fontWeight: FontWeight.bold),
                             ),
 //                            AnimatedBuilder(
 //                              animation: animationController,
@@ -274,11 +284,13 @@ class _WaitTransactionState extends State<WaitTransaction> with TickerProviderSt
                                 Text(
                                   'Complete payment before ',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
                                 ),
                                 Text('${widget.expDate}',
                                     style: TextStyle(
                                         color: Colors.white,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold))
                               ],
                             )
@@ -302,7 +314,7 @@ class _WaitTransactionState extends State<WaitTransaction> with TickerProviderSt
                           Text(
                             'Rp. ' + widget.finalPrice.toString(),
                             style: TextStyle(
-                                fontSize: 50, fontWeight: FontWeight.bold),
+                                fontSize: 35, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
@@ -320,20 +332,25 @@ class _WaitTransactionState extends State<WaitTransaction> with TickerProviderSt
                 SizedBox(
                   height: ScreenUtil.instance.setWidth(20),
                 ),
-                Text(
-                  'TRANSFER TO',
-                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
+                Center(
+                  child: Text(
+                    'TRANSFER TO',
+                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
+                  ),
                 ),
-                SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                // Expanded(child: SizedBox(),),
                 GestureDetector(
                   onTap: () {
                     if (paymentData['payment_method_id'] == '2') {
                       print('string copied');
                       Clipboard.setData(ClipboardData(text: bank_number));
                       print(Clipboard.getData('text/plain'));
-                      _scaffoldKey.currentState.showSnackBar(SnackBar(
-                        content: Text('Text Coppied!'),
-                      ));
+                      Flushbar(
+                        flushbarPosition: FlushbarPosition.TOP,
+                        message: 'Text Coppied!',
+                        duration: Duration(seconds: 3),
+                        animationDuration: Duration(milliseconds: 500),
+                      )..show(context);
                     } else if (paymentData['payment_method_id'] == '9') {
                       String url =
                           paymentData['payment']['data_vendor']['payment_url'];
@@ -365,8 +382,9 @@ class _WaitTransactionState extends State<WaitTransaction> with TickerProviderSt
                         Align(
                           alignment: Alignment.centerLeft,
                           child: SizedBox(
-                            height: ScreenUtil.instance.setWidth(30),
-                            child: Image.asset(paymentData['payment']['vendor'] == 'bca' ? 'assets/drawable/bca.png'
+                            height: ScreenUtil.instance.setWidth(60),
+                            child: Image.asset(bank_code.toLowerCase() == 'bni'
+                                ? 'assets/drawable/bni.png'
                                 : 'assets/drawable/bri.png'),
                           ),
                         ),
@@ -378,9 +396,12 @@ class _WaitTransactionState extends State<WaitTransaction> with TickerProviderSt
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                paymentData['payment']['vendor'] == 'bca' ? paymentData['payment']['data_vendor']['account_name'] : paymentData['payment']['data_vendor']
-                                        ['available_banks'][0]
-                                    ['account_holder_name'],
+                                paymentData['payment']['vendor'] == 'bca'
+                                    ? paymentData['payment']['data_vendor']
+                                        ['account_name']
+                                    : paymentData['payment']['data_vendor']
+                                            ['available_banks'][0]
+                                        ['account_holder_name'],
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: ScreenUtil.instance.setSp(20),
@@ -389,16 +410,21 @@ class _WaitTransactionState extends State<WaitTransaction> with TickerProviderSt
                               SizedBox(
                                   height: ScreenUtil.instance.setWidth(10)),
                               Text(
-                                  paymentData['payment']['vendor'] == 'bca' ? paymentData['payment']['method']: paymentData['payment']['data_vendor']
-                                      ['available_banks'][0]['bank_code'],
+                                  paymentData['payment']['vendor'] == 'bca'
+                                      ? paymentData['payment']['method']
+                                      : paymentData['payment']['data_vendor']
+                                          ['available_banks'][0]['bank_code'],
                                   style: TextStyle(color: Colors.grey)),
                               SizedBox(
                                   height: ScreenUtil.instance.setWidth(10)),
                               Text(
-                                paymentData['payment']['vendor'] == 'bca' ? paymentData['payment']['data_vendor']['account_number'] : paymentData['payment']['data_vendor']
-                                            ['available_banks'][0]
-                                        ['bank_account_number']
-                                    .toString(),
+                                paymentData['payment']['vendor'] == 'bca'
+                                    ? paymentData['payment']['data_vendor']
+                                        ['account_number']
+                                    : paymentData['payment']['data_vendor']
+                                                ['available_banks'][0]
+                                            ['bank_account_number']
+                                        .toString(),
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: ScreenUtil.instance.setSp(15),
@@ -413,8 +439,6 @@ class _WaitTransactionState extends State<WaitTransaction> with TickerProviderSt
             ),
     );
   }
-
-
 
 //  Widget countdownTimer() {
 //    final salesDay = _dDay;

@@ -76,12 +76,12 @@ class _WaitingTransactionAlfamartState
       backgroundColor: Colors.white.withOpacity(0.9),
       bottomNavigationBar: GestureDetector(
         onTap: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SuccessPage()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SuccessPage(invoiceNumber: paymentData['transaction_code'])));
         },
         child: Container(
           height: ScreenUtil.instance.setWidth(50),
           width: MediaQuery.of(context).size.width,
-          color: Colors.orangeAccent,
+          color: Colors.orange,
           child: Text('test succes page'),
         ),
       ),
@@ -126,12 +126,12 @@ class _WaitingTransactionAlfamartState
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             SizedBox(
-                              height: ScreenUtil.instance.setWidth(10),
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Text('Complete Payment In',
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: ScreenUtil.instance.setSp(18),
+                                    fontSize: ScreenUtil.instance.setSp(14),
                                     fontWeight: FontWeight.bold)),
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
@@ -220,11 +220,11 @@ class _WaitingTransactionAlfamartState
                                 Text(
                                   'Complete payment before ',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Colors.white, fontSize: 14),
                                 ),
                                 Text('${widget.expDate}',
                                     style: TextStyle(
-                                        color: Colors.white,
+                                        color: Colors.white, fontSize: 12,
                                         fontWeight: FontWeight.bold))
                               ],
                             )

@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:eventevent/Widgets/Home/ZoomDetailForm.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/PostMedia.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
@@ -12,11 +15,15 @@ import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/PushNotification.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'PostEvent/PostEvent.dart';
 import 'eventCatalogWidget.dart';
@@ -49,15 +56,27 @@ var initializationSettingsAndroid;
 var initializationSettingsIOS;
 var initializationSettings;
 
-Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
-  return Future<void>.value();
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
+  if (message.containsKey('data')) {
+    // Handle data message
+    final dynamic data = message['data'];
+  }
+
+  if (message.containsKey('notification')) {
+    // Handle notification message
+    final dynamic notification = message['notification'];
+  }
+
+  // Or do other work.
 }
 
 class DashboardWidget extends StatefulWidget {
   final isRest;
   final selectedPage;
+  final userId;
 
-  const DashboardWidget({Key key, this.isRest, this.selectedPage = 0})
+  const DashboardWidget(
+      {Key key, this.isRest, this.selectedPage = 0, this.userId})
       : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -66,11 +85,51 @@ class DashboardWidget extends StatefulWidget {
 }
 
 class _DashboardWidgetState extends State<DashboardWidget>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   int _selectedPage = 0;
   String currentUserId;
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   String urlPrefix = '';
+  Utils utility = Utils();
+
+  // RateMyApp rateMyApp = RateMyApp(
+  //   preferencesPrefix: 'rateMyApp_',
+  //   minDays: 1,
+  //   minLaunches: 1,
+  //   remindDays: 2,
+  //   remindLaunches: 5,
+  //   googlePlayIdentifier: 'com.eventevent.android',
+  //   appStoreIdentifier: 'com.trikarya.eventevent',
+  // );
+
+  StreamSubscription<Map> streamSubscription;
+  StreamController<String> controllerData = StreamController<String>();
+  StreamController<String> controllerInitSession = StreamController<String>();
+
+  void listenDynamicLink() async {
+    streamSubscription = FlutterBranchSdk.initSession().listen((data) {
+      controllerData.sink.add((data.toString()));
+      if (data.containsKey("+clicked_branch_link") &&
+          data["+clicked_branch_link"] == true) {
+        print(data);
+        print(data['event_id']);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EventDetailLoadingScreen(
+                      eventId: data['event_id'],
+                    )));
+      }
+      print(data);
+      print(data['event_id']);
+    }, onError: (error) {
+      PlatformException platformException = error as PlatformException;
+      print(
+          'InitSession error: ${platformException.code} - ${platformException.message}');
+      controllerInitSession.add(
+          'InitSession error: ${platformException.code} - ${platformException.message}');
+    });
+  }
 
   _saveCurrentRoute(String lastRoute) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -87,14 +146,20 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
   @override
   void initState() {
+    listenDynamicLink();
+
     _saveCurrentRoute('/Dashboard');
     WidgetsBinding.instance.addObserver(this);
     super.initState();
 
     initializationSettingsAndroid =
-        new AndroidInitializationSettings('app_icon');
-    initializationSettingsIOS =
-        new IOSInitializationSettings(defaultPresentBadge: true);
+        new AndroidInitializationSettings('mipmap/ic_launcher');
+    initializationSettingsIOS = new IOSInitializationSettings(
+        defaultPresentBadge: true,
+        onDidReceiveLocalNotification:
+            (int id, String title, String body, String payload) async =>
+                didRecieveLocalNotificationSubject
+                    .add(RecievedNotification(id, title, body, payload)));
     initializationSettings = new InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
@@ -105,28 +170,30 @@ class _DashboardWidgetState extends State<DashboardWidget>
       selectNotificationSubject.add(payload);
     });
 
-    _firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) async {
-          print('on message $message');
-          print(message['notification']);
-        },
-        onBackgroundMessage: myBackgroundMessageHandler,
-        onResume: (Map<String, dynamic> message) async {
-          List<Widget> navPages = [
-            EventDetailsConstructView(id: '15'),
-          ];
+    // _firebaseMessaging.configure(
+    //     onMessage: (Map<String, dynamic> message) async {
+    //       print('on message $message');
+    //       print(message['notification']);
+    //     },
+    //     onBackgroundMessage: myBackgroundMessageHandler,
+    //     onResume: (Map<String, dynamic> message) async {
+    //       List<Widget> navPages = [
+    //         EventDetailsConstructView(id: '15'),
+    //       ];
 
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => navPages[0]));
-          print('on resume $message');
-        },
-        onLaunch: (Map<String, dynamic> message) async {
-          print('on launch $message');
-        });
+    //       Navigator.push(
+    //           context, MaterialPageRoute(builder: (context) => navPages[0]));
+    //       print('on resume $message');
+    //     },
+    //     onLaunch: (Map<String, dynamic> message) async {
+    //       print('on launch $message');
+    //     });
 
     // didRecieveLocalNotificationSubject.stream.listen((RecievedNotification recievedNotification) async {
 
     // });
+
+    registerNotification();
 
     selectNotificationSubject.stream.listen((String payload) async {
       await onSelectNotification(payload);
@@ -138,7 +205,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
     _selectedPage = widget.selectedPage;
 
-    // registerNotification();
     // configureNotification();
 
     if (widget.isRest == true) {
@@ -217,8 +283,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
       print(payloadData.toString());
 
       if (payloadData['data']['type'] == 'reminder_event') {
-        navigationHandler(EventDetailsConstructView(
-          id: payloadData['data']['id'],
+        navigationHandler(EventDetailLoadingScreen(
+          eventId: payloadData['data']['id'],
         ));
       } else if (payloadData['data']['type'] == 'relationship') {
         navigationHandler(ProfileWidget(
@@ -226,9 +292,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
           initialIndex: 0,
         ));
       } else if (payloadData['data']['type'] == 'live_stream_cancel') {
-        navigationHandler(EventDetailsConstructView(
-          id: payloadData['data']['id'],
-        ));
+        navigationHandler(
+            EventDetailLoadingScreen(eventId: payloadData['data']['id']));
       } else if (payloadData['data']['type'] == 'photo_comment') {
         navigationHandler(UserMediaDetail(
           postID: payloadData['data']['id'],
@@ -301,9 +366,14 @@ class _DashboardWidgetState extends State<DashboardWidget>
           autoFocus: true,
         ));
       } else if (payloadData['data']['type'] == 'eventgoingstatus') {
-        navigationHandler(EventDetailsConstructView(
-          id: payloadData['data']['id'],
-        ));
+        navigationHandler(
+            EventDetailLoadingScreen(eventId: payloadData['data']['id']));
+      } else if (payloadData['data']['type'] == 'eventdetail_comment') {
+        navigationHandler(
+            EventDetailLoadingScreen(eventId: payloadData['data']['id']));
+      } else if (payloadData['data']['type'] == 'eventdetail_love') {
+        navigationHandler(
+            EventDetailLoadingScreen(eventId: payloadData['data']['id']));
       } else if (payloadData['data']['type'] == 'photo_impression') {
         navigationHandler(UserMediaDetail(
           postID: payloadData['data']['id'],
@@ -311,10 +381,10 @@ class _DashboardWidgetState extends State<DashboardWidget>
         ));
       } else if (payloadData['data']['type'] == 'event') {
         navigationHandler(
-            EventDetailsConstructView(id: payloadData['data']['id']));
+            EventDetailLoadingScreen(eventId: payloadData['data']['id']));
       } else if (payloadData['data']['type'] == 'eventinvite') {
         navigationHandler(
-            EventDetailsConstructView(id: payloadData['data']['id']));
+            EventDetailLoadingScreen(eventId: payloadData['data']['id']));
       } else if (payloadData['data']['type'] == 'reminder_qr') {
         navigationHandler(ShowQr(
           qrUrl: payloadData['data']['id'],
@@ -325,7 +395,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
   @override
   void didChangeDependencies() {
-    registerNotification();
     super.didChangeDependencies();
   }
 
@@ -341,7 +410,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
         await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-        'com.eventeven2.android',
+        'com.eventevent.android',
         'EventEvent notification channel',
         'channel description',
         playSound: true,
@@ -355,6 +424,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
     var platformChannelSpecifics = new NotificationDetails(
         androidPlatformChannelSpecifics, iosPlatformChannelSpecifics);
 
+    print('showing notificaiton to your device');
     print('message: ' + message.toString());
     print('message: ' + message['notification'].toString());
 
@@ -389,24 +459,26 @@ class _DashboardWidgetState extends State<DashboardWidget>
   void registerNotification() {
     _firebaseMessaging.requestNotificationPermissions();
 
-    _firebaseMessaging.configure(
-        onMessage: (Map<String, dynamic> message) {
-          print('onMessage: $message');
-          showNotification(message);
-          return;
-        },
-        onResume: (Map<String, dynamic> message) {
-          print('onResume: $message');
-          return;
-        },
-        onLaunch: (Map<String, dynamic> message) {
-          print('onResume: $message');
-          return;
-        },
-        onBackgroundMessage: Theme.of(context).platform == TargetPlatform.iOS
-            ? null
-            : myBackgroundMessageHandler);
-
+    try {
+      _firebaseMessaging.configure(
+          onMessage: (Map<String, dynamic> message) {
+            print('onMessage: $message');
+            showNotification(message);
+            return;
+          },
+          onResume: (Map<String, dynamic> message) {
+            print('onResume: $message');
+            return;
+          },
+          onLaunch: (Map<String, dynamic> message) {
+            print('onResume: $message');
+            return;
+          },
+          onBackgroundMessage:
+              Platform.isIOS ? null : myBackgroundMessageHandler);
+    } on PlatformException catch (e) {
+      print(e.message + ' ' + e.code);
+    }
     _firebaseMessaging.getToken().then((token) {
       print('firebase token: $token');
       setState(() {
@@ -445,19 +517,21 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
     final _pageOptions = [
       EventCatalog(isRest: widget.isRest),
-      widget.isRest == true ? LoginRegisterWidget() : TimelineDashboard(),
+      TimelineDashboard(isRest: widget.isRest),
       widget.isRest == true ? LoginRegisterWidget() : Container(),
       widget.isRest == true ? LoginRegisterWidget() : PushNotification(),
       widget.isRest == true
           ? LoginRegisterWidget()
           : ProfileWidget(
               initialIndex: 0,
-              userId: currentUserId,
+              userId: currentUserId ?? widget.userId,
             ),
     ];
 
-    return SafeArea(
-      bottom: false,
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle(
+          statusBarColor: Colors.white,
+          statusBarIconBrightness: Brightness.dark),
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
@@ -466,14 +540,14 @@ class _DashboardWidgetState extends State<DashboardWidget>
           //   leading: ,
           // ),
           key: scaffoldKey,
-          backgroundColor: Colors.grey[100],
+          backgroundColor: Colors.white,
           bottomNavigationBar: SafeArea(
             bottom: true,
             child: CupertinoTabBar(
                 currentIndex: _selectedPage,
                 onTap: (int index) {
                   setState(() {
-                    if (index == 2) {
+                    if (index == 2 && widget.isRest == false) {
                       showModalBottomSheet(
                         context: context,
                         builder: (context) {
@@ -507,6 +581,78 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                       height: ScreenUtil.instance.setWidth(35)),
                                   GestureDetector(
                                     onTap: () {
+                                      // imageCaputreCamera();
+                                      Navigator.of(context)
+                                          .pushNamed('/CustomCamera');
+                                    },
+                                    child: Container(
+                                      color: Colors.white,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                'Post Media',
+                                                style: TextStyle(
+                                                    fontSize: ScreenUtil
+                                                        .instance
+                                                        .setSp(16),
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(
+                                                  height: ScreenUtil.instance
+                                                      .setWidth(4)),
+                                              Text(
+                                                  'Share your excitement to the others ',
+                                                  style: TextStyle(
+                                                    fontSize: ScreenUtil
+                                                        .instance
+                                                        .setSp(10),
+                                                  ))
+                                            ],
+                                          ),
+                                          Container(
+                                            height: ScreenUtil.instance
+                                                .setWidth(44),
+                                            width: ScreenUtil.instance
+                                                .setWidth(50),
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/icons/page_post_media.png'),
+                                                  fit: BoxFit.fill),
+                                              borderRadius:
+                                                  BorderRadius.circular(11),
+                                              boxShadow: <BoxShadow>[
+                                                BoxShadow(
+                                                    blurRadius: 10,
+                                                    color: Colors.grey
+                                                        .withOpacity(0.3),
+                                                    spreadRadius: .5)
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(19)),
+                                  Divider(),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(16)),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
+
+                                      prefs.setBool('isLivestream', false);
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -576,10 +722,14 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                   SizedBox(
                                       height: ScreenUtil.instance.setWidth(16)),
                                   GestureDetector(
-                                    onTap: () {
+                                    onTap: () async {
+                                      SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
+
+                                      prefs.setBool('isLivestream', true);
                                       // imageCaputreCamera();
-                                      Navigator.of(context)
-                                          .pushNamed('/CustomCamera');
+                                      Navigator.pop(context);
+                                      livestreamSelectDialog(context);
                                     },
                                     child: Container(
                                       color: Colors.white,
@@ -593,7 +743,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                                 CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Text(
-                                                'Post Media',
+                                                'New Livestream Event',
                                                 style: TextStyle(
                                                     fontSize: ScreenUtil
                                                         .instance
@@ -605,7 +755,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                                   height: ScreenUtil.instance
                                                       .setWidth(4)),
                                               Text(
-                                                  'Share your excitement to the others ',
+                                                  'Create your livestream event ',
                                                   style: TextStyle(
                                                     fontSize: ScreenUtil
                                                         .instance
@@ -621,7 +771,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                             decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                     image: AssetImage(
-                                                        'assets/icons/page_post_media.png'),
+                                                        'assets/icons/post_livestream.png'),
                                                     fit: BoxFit.fill),
                                                 borderRadius: BorderRadius.circular(11),
                                                 boxShadow: <BoxShadow>[
@@ -635,7 +785,10 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                         ],
                                       ),
                                     ),
-                                  )
+                                  ),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(19)),
+                                  Divider(),
                                 ],
                               ),
                             ),
@@ -755,6 +908,122 @@ class _DashboardWidgetState extends State<DashboardWidget>
     return response;
   }
 
+  Future livestreamSelectDialog(BuildContext context) {
+    double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
+
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
+    return showDialog(
+        context: context,
+        builder: (thisContext) {
+          return Dialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            backgroundColor: Colors.white,
+            child: Container(
+              width: ScreenUtil.instance.setWidth(290),
+              height: ScreenUtil.instance.setWidth(250),
+              padding:
+                  EdgeInsets.only(left: 16, right: 12, top: 16, bottom: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Choose Livestream Platform',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                  SizedBox(height: 11),
+                  Divider(),
+                  SizedBox(height: 11),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () async {
+                      Navigator.push(
+                          thisContext,
+                          MaterialPageRoute(
+                              builder: (thisContext) => PostEvent()));
+                    },
+                    child: Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 31,
+                            width: 116.8,
+                            child: Image.asset(
+                              'assets/icons/aset_icon/wowza_livestream.png',
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Eventevent Livestream',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11.7),
+                              ),
+                              Text('Broadcast using our app',
+                                  style: TextStyle(fontSize: 11)),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 50),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () async {
+                      Navigator.of(thisContext).push(
+                        MaterialPageRoute(
+                          builder: (thisContext) => ZoomDetailForm(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 31,
+                            width: 116.8,
+                            child: Image.asset(
+                              'assets/icons/aset_icon/zoom_livestream.png',
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Zoom',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11.7),
+                              ),
+                              Text('Broadcast using zoom',
+                                  style: TextStyle(fontSize: 11)),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   void imageCaputreCamera() async {
     var galleryFile = await ImagePicker.pickImage(
       source: ImageSource.camera,
@@ -771,8 +1040,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
         ratioX: 2.0,
         ratioY: 3.0,
       ),
-      maxHeight: ScreenUtil.instance.setWidth(512),
-      maxWidth: ScreenUtil.instance.setWidth(512),
+      maxHeight: 512,
+      maxWidth: 512,
     );
 
     print(croppedImage.path);
@@ -803,4 +1072,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
           );
         });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -1,11 +1,14 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankOptions.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/SetupBankAccount.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawConfirmation.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
@@ -14,6 +17,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class WithdrawBank extends StatefulWidget {
+  final currentTab;
+
+  const WithdrawBank({Key key, this.currentTab = 0}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return WithdrawBankState();
@@ -32,16 +38,21 @@ class WithdrawBankState extends State<WithdrawBank> {
 
   MoneyFormatterOutput fo;
 
-  int _currentValue = 0;
+  int _currentValue;
+  int _initialTabIndex = 0;
   String user_bank_id;
   String bank_id;
   String account_name;
   String account_number;
   String bank_name;
+  String bank_code;
+  Map bankJson;
 
   @override
   void initState() {
     super.initState();
+    _initialTabIndex = widget.currentTab;
+    setState(() {});
     getBalance();
     getBank();
     getHistory().then((response) {
@@ -57,12 +68,14 @@ class WithdrawBankState extends State<WithdrawBank> {
       } else {
         print('gagal');
       }
-    }).timeout(Duration(seconds: 8), onTimeout: () {
-      scaffoldKey.currentState.showSnackBar(SnackBar(
+    }).timeout(Duration(seconds: 10), onTimeout: () {
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Request Time Out!',
         backgroundColor: Colors.red,
-        content:
-            Text('Request Time Out!', style: TextStyle(color: Colors.white)),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     });
   }
 
@@ -126,6 +139,7 @@ class WithdrawBankState extends State<WithdrawBank> {
           onTap: () async {
             showModalBottomSheet(
                 context: context,
+                isScrollControlled: true,
                 builder: (BuildContext context) {
                   return showBottomPopup();
                 });
@@ -144,7 +158,7 @@ class WithdrawBankState extends State<WithdrawBank> {
           children: <Widget>[
             DefaultTabController(
               length: 2,
-              initialIndex: 0,
+              initialIndex: _initialTabIndex,
               child: Column(
                 children: <Widget>[
                   Container(
@@ -207,131 +221,139 @@ class WithdrawBankState extends State<WithdrawBank> {
   }
 
   Widget showBottomPopup() {
-    return Container(
-      color: Color(0xFF737373),
+    return Padding(
+      padding: MediaQuery.of(context).viewInsets,
       child: Container(
-        padding: EdgeInsets.only(top: 13, left: 25, right: 25, bottom: 30),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15),
-            )),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                child: SizedBox(
-                    height: ScreenUtil.instance.setWidth(5),
-                    width: ScreenUtil.instance.setWidth(50),
-                    child: Image.asset(
-                      'assets/icons/icon_line.png',
-                      fit: BoxFit.fill,
-                    ))),
-            SizedBox(height: ScreenUtil.instance.setWidth(30)),
-            Align(
-                alignment: Alignment.topCenter,
-                child: Text(
-                    'Available Balance For Withdraw: ' + '\nRp. ${balanceData['amount']},-', style: TextStyle(color: eventajaGreenTeal), textAlign: TextAlign.center)),
-            SizedBox(height: ScreenUtil.instance.setWidth(26)),
-            Container(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Withdraw Ammount',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: ScreenUtil.instance.setSp(17)),
-                    ),
-                    SizedBox(height: ScreenUtil.instance.setWidth(20)),
-                    TextFormField(
-                      controller: amountController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 2, vertical: 12),
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: 'Enter withdraw amount (e.g. 125000)',
-                          hintStyle: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(12))),
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        Navigator.pop(context);
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
+        color: Color(0xFF737373),
+        child: Container(
+          padding: EdgeInsets.only(top: 13, left: 25, right: 25, bottom: 30),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15),
+                topRight: Radius.circular(15),
+              )),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  child: SizedBox(
+                      height: ScreenUtil.instance.setWidth(5),
+                      width: ScreenUtil.instance.setWidth(50),
+                      child: Image.asset(
+                        'assets/icons/icon_line.png',
+                        fit: BoxFit.fill,
+                      ))),
+              SizedBox(height: ScreenUtil.instance.setWidth(30)),
+              Align(
+                  alignment: Alignment.topCenter,
+                  child: Text(
+                      'Available Balance For Withdraw: ' +
+                          '\nRp. ${balanceData['amount']},-',
+                      style: TextStyle(color: eventajaGreenTeal),
+                      textAlign: TextAlign.center)),
+              SizedBox(height: ScreenUtil.instance.setWidth(26)),
+              Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Withdraw Amount',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: ScreenUtil.instance.setSp(17)),
+                      ),
+                      SizedBox(height: ScreenUtil.instance.setWidth(20)),
+                      TextFormField(
+                        autofocus: true,
+                        controller: amountController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 2, vertical: 12),
+                            filled: true,
+                            fillColor: Colors.white,
+                            hintText: 'Enter withdraw amount (e.g. 125000)',
+                            hintStyle: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(12))),
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          Navigator.pop(context);
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
 
-                        prefs.setString('WITHDRAW_USER_BANK_ID', user_bank_id);
-                        prefs.setString('WITHDRAW_ACCOUNT_NAME', account_name);
-                        prefs.setString('WITHDRAW_BANK_ID', bank_id);
-                        prefs.setString(
-                            'WITHDRAW_ACCOUNT_NUMBER', account_number);
-                        prefs.setString('WITHDRAW_BANK_NAME', user_bank_id);
-                        prefs.setString(
-                            'WITHDRAW_AMOUNT', amountController.text);
+                          prefs.setString(
+                              'WITHDRAW_USER_BANK_ID', user_bank_id);
+                          prefs.setString(
+                              'WITHDRAW_ACCOUNT_NAME', account_name);
+                          prefs.setString('WITHDRAW_BANK_ID', bank_id);
+                          prefs.setString(
+                              'WITHDRAW_ACCOUNT_NUMBER', account_number);
+                          prefs.setString('WITHDRAW_BANK_NAME', bank_name);
+                          prefs.setString(
+                              'WITHDRAW_AMOUNT', amountController.text);
 
-                        if (amountController.text == '') {
-                          scaffoldKey.currentState.showSnackBar(SnackBar(
-                            content: Text(
-                              'Input withdraw amount first!',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            backgroundColor: Colors.red,
-                            duration: Duration(seconds: 3),
-                          ));
-                        } else if (int.parse(amountController.text) < 10000) {
-                          scaffoldKey.currentState.showSnackBar(SnackBar(
-                            content: Text(
-                              'Minimum withdraw amount is Rp. 10.000,-',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            backgroundColor: Colors.red,
-                            duration: Duration(seconds: 3),
-                          ));
-                        } else if (int.parse(amountController.text) >
-                            int.parse(balanceData['amount'])) {
-                          scaffoldKey.currentState.showSnackBar(SnackBar(
-                            content: Text(
-                              'Withdraw amount is bigger than your balance! ',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            backgroundColor: Colors.red,
-                            duration: Duration(seconds: 3),
-                          ));
-                        } else {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  WithdrawConfirmation()));
-                        }
-                      },
-                      child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.only(top: 31, bottom: 35),
-                          height: ScreenUtil.instance.setWidth(37),
-                          decoration: BoxDecoration(
-                              color: Color(0xFFFFAA00),
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                    blurRadius: 2,
-                                    color: Color(0xFFFFAA00).withOpacity(0.5),
-                                    spreadRadius: 1.5)
-                              ]),
-                          child: Center(
-                              child: Text(
-                            'WITHDRAW',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ))),
-                    )
-                  ],
-                ))
-          ],
+                          if (amountController.text == '') {
+                            Flushbar(
+                              flushbarPosition: FlushbarPosition.TOP,
+                              message: 'Input withdraw amount first!',
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 3),
+                              animationDuration: Duration(milliseconds: 500),
+                            )..show(context);
+                          } else if (int.parse(amountController.text) < 10000) {
+                            Flushbar(
+                              flushbarPosition: FlushbarPosition.TOP,
+                              message:
+                                  'Minimum withdraw amount is Rp. 10.000,-',
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 3),
+                              animationDuration: Duration(milliseconds: 500),
+                            )..show(context);
+                          } else if (int.parse(amountController.text) >
+                              int.parse(balanceData['amount'])) {
+                            Flushbar(
+                              flushbarPosition: FlushbarPosition.TOP,
+                              message:
+                                  'Withdraw amount is bigger than your balance! ',
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 3),
+                              animationDuration: Duration(milliseconds: 500),
+                            )..show(context);
+                          } else {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    WithdrawConfirmation(bankCode: bank_code)));
+                          }
+                        },
+                        child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(top: 31, bottom: 35),
+                            height: ScreenUtil.instance.setWidth(37),
+                            decoration: BoxDecoration(
+                                color: Color(0xFFFFAA00),
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      blurRadius: 2,
+                                      color: Color(0xFFFFAA00).withOpacity(0.5),
+                                      spreadRadius: 1.5)
+                                ]),
+                            child: Center(
+                                child: Text(
+                              'WITHDRAW',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ))),
+                      )
+                    ],
+                  ))
+            ],
+          ),
         ),
       ),
     );
@@ -339,11 +361,7 @@ class WithdrawBankState extends State<WithdrawBank> {
 
   Widget Withdraw() {
     return balanceData == null
-        ? Container(
-            child: Center(
-              child: CupertinoActivityIndicator(radius: 20),
-            ),
-          )
+        ? HomeLoadingScreen().followListLoading()
         : ListView(
             shrinkWrap: true,
             children: <Widget>[
@@ -399,7 +417,7 @@ class WithdrawBankState extends State<WithdrawBank> {
               // SizedBox(
               //   height: ScreenUtil.instance.setWidth(25),
               // ),
-              bankList.length == 3
+              bankList != null && bankList.length == 3
                   ? Container()
                   : GestureDetector(
                       onTap: () {
@@ -454,7 +472,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                   )),
               ColumnBuilder(
                 mainAxisAlignment: MainAxisAlignment.center,
-                itemCount: bankList.length == null ? 0 : bankList.length,
+                itemCount: bankList == null ? 0 : bankList.length,
                 itemBuilder: (BuildContext context, i) {
                   String bankImageUri = '';
 
@@ -483,13 +501,17 @@ class WithdrawBankState extends State<WithdrawBank> {
                         context,
                         MaterialPageRoute(
                           builder: (BuildContext context) => BankOptions(
-                            accountName: bankList[i]['account_name'],
-                            accountNumber: bankList[i]['account_number'],
-                            bankName: bankList[i]['bank_name'],
-                            userBankId: bankList[i]['id'],
-                          ),
+                              accountName: bankList[i]['account_name'],
+                              accountNumber: bankList[i]['account_number'],
+                              bankName: bankList[i]['bank_name'],
+                              userBankId: bankList[i]['id'],
+                              bankIndex: i),
                         ),
-                      );
+                      ).then((val) {
+                        if (val != null) {
+                          bankList.removeAt(val);
+                        }
+                      });
                     },
                     child: Container(
                       height: ScreenUtil.instance.setWidth(85),
@@ -570,12 +592,14 @@ class WithdrawBankState extends State<WithdrawBank> {
                                     account_number =
                                         bankList[index]['account_number'];
                                     bank_name = bankList[index]['bank_name'];
+                                    bank_code = bankList[index]['bank_code'];
 
                                     print(user_bank_id);
                                     print(bank_id);
                                     print(account_name);
                                     print(account_number);
                                     print(bank_name);
+                                    print(bank_code);
                                   });
                                 },
                               ),
@@ -625,13 +649,27 @@ class WithdrawBankState extends State<WithdrawBank> {
       'cookie': prefs.getString('Session')
     });
 
-    print(response.statusCode);
-    print(response.body);
+    print('getBank: ' + response.statusCode.toString());
+    print('getBank:' + response.body);
 
     if (response.statusCode == 200) {
       setState(() {
         var extractedData = json.decode(response.body);
+        bankJson = extractedData;
         bankList = extractedData['data'];
+        print('bankJson: ' + bankJson.toString());
+        user_bank_id = bankList[0]['id'];
+        account_name = bankList[0]['account_name'];
+        bank_id = bankList[0]['bank_id'];
+        account_number = bankList[0]['account_number'];
+        bank_name = bankList[0]['bank_name'];
+        bank_code = bankList[0]['bank_code'];
+
+        print(user_bank_id);
+        print(bank_id);
+        print(account_name);
+        print(account_number);
+        print(bank_name);
       });
     }
   }
@@ -641,8 +679,11 @@ class WithdrawBankState extends State<WithdrawBank> {
     Color transactionColor;
     Color amountColor;
 
-    return historyList == null
-        ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20)))
+    return historyList.isEmpty || bankJson == null
+        ? EmptyState(
+            imagePath: 'assets/icons/empty_state/history.png',
+            reasonText: 'You have no transaction yet',
+          )
         : ListView.builder(
             shrinkWrap: true,
             itemCount: historyList == null ? 0 : historyList.length,
@@ -666,6 +707,10 @@ class WithdrawBankState extends State<WithdrawBank> {
                 transactionStatus = 'ADDED BALANCE';
                 transactionColor = Colors.lightGreen;
                 amountColor = eventajaGreenTeal;
+              } else if(historyList[i]['status'] == 'declined'){
+                transactionStatus = 'DECLINED';
+                transactionColor = Colors.red;
+                amountColor = Colors.red;
               }
 
               return Container(

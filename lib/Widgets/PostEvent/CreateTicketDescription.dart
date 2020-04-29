@@ -1,7 +1,9 @@
 import 'package:eventevent/Widgets/PostEvent/CreateTicketPicture.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'CreateTicketQty.dart';
@@ -18,7 +20,8 @@ class CreateTicketDescriptionState extends State<CreateTicketDescription> {
   var thisScaffold = new GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -53,7 +56,9 @@ class CreateTicketDescriptionState extends State<CreateTicketDescription> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -160,10 +165,13 @@ class CreateTicketDescriptionState extends State<CreateTicketDescription> {
     if (textController.text == null ||
         textController.text == '' ||
         textController.text == ' ') {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Input ticket description!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Input ticket description',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
       prefs.setString('SETUP_TICKET_DESCRIPTION', textController.text);
       print(prefs.getString('SETUP_TICKET_DESCRIPTION'));

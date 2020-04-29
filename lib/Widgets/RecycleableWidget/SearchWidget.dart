@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -56,108 +59,117 @@ class SearchState extends State<Search> {
       }
     });
 
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        resizeToAvoidBottomPadding: false,
-        appBar: PreferredSize(
-          preferredSize: Size(null, 100),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
+      appBar: PreferredSize(
+        preferredSize: Size(null, 100),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: ScreenUtil.instance.setWidth(75),
           child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: ScreenUtil.instance.setWidth(75),
+            color: Colors.white,
             child: Container(
-              color: Colors.white,
-              child: Container(
-                margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: ScreenUtil.instance.setWidth(280),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                blurRadius: 2,
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 1.5)
-                          ]),
-                      height: ScreenUtil.instance.setWidth(32.95),
-                      child: Material(
+              margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: ScreenUtil.instance.setWidth(300),
+                    decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(40),
-                        child: TextFormField(
-                          controller: searchController,
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.search,
-                          onFieldSubmitted: (value) {
-                            if (value != null) {
-                              _getEvents();
-                              _getProfile().then((response) {
-                                var extractedData = json.decode(response.body);
-                                List resultData = extractedData['data'];
-                                List tempList = new List();
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              blurRadius: 2,
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 1.5)
+                        ]),
+                    height: ScreenUtil.instance.setWidth(50),
+                    child: Material(
+                      borderRadius: BorderRadius.circular(40),
+                      child: TextFormField(
+                        controller: searchController,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.search,
+                        onFieldSubmitted: (value) {
+                          if (value != null) {
+                            _getEvents();
+                            _getProfile().then((response) {
+                              var extractedData = json.decode(response.body);
+                              List resultData = extractedData['data'];
+                              List tempList = new List();
 
-                                if (response.statusCode == 200) {
-                                  isLoading = false;
-                                  notFound = false;
-                                  for (int i = 0; i < resultData.length; i++) {
-                                    tempList.add(resultData[i]);
-                                  }
-
-                                  profile = tempList;
-                                  filteredProfile = profile;
-                                } else if (response.statusCode == 400) {
-                                  isLoading = false;
-                                  notFound = true;
+                              if (response.statusCode == 200) {
+                                isLoading = false;
+                                notFound = false;
+                                for (int i = 0; i < resultData.length; i++) {
+                                  tempList.add(resultData[i]);
                                 }
-                              });
-                            }
-                          },
-                          style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(12)),
-                          autofocus: true,
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                              prefixIcon: Image.asset(
-                                'assets/icons/icon_apps/search.png',
-                                scale: 4.5,
-                                color: Color(0xFF81818B),
-                              ),
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 15),
-                              hintText: 'Search',
-                              hintStyle: TextStyle(
-                                  fontSize: ScreenUtil.instance.setSp(12)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                  borderSide: BorderSide(
-                                      color: Color.fromRGBO(0, 0, 0, 0))),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                  borderSide: BorderSide(
-                                      color: Color.fromRGBO(0, 0, 0, 0)))),
-                        ),
+
+                                profile = tempList;
+                                filteredProfile = profile;
+                              } else if (response.statusCode == 400) {
+                                isLoading = false;
+                                notFound = true;
+                              }
+                            });
+                          }
+                        },
+                        style:
+                            TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
+                        autofocus: true,
+                        autocorrect: false,
+                        decoration: InputDecoration(
+                            prefixIcon: Image.asset(
+                              'assets/icons/icon_apps/search.png',
+                              scale: 3.5,
+                              color: Color(0xFF81818B),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 15),
+                            hintText: 'Search',
+                            hintStyle: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(18)),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(40),
+                                borderSide: BorderSide(
+                                    color: Color.fromRGBO(0, 0, 0, 0))),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(40),
+                                borderSide: BorderSide(
+                                    color: Color.fromRGBO(0, 0, 0, 0)))),
                       ),
                     ),
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
+                  ),
+                  Expanded(child: SizedBox()),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      height: 50,
+                      child: Center(
                         child: Text(
                           'Cancel',
                           style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(12),
+                              fontSize: ScreenUtil.instance.setSp(15),
                               color: eventajaGreenTeal),
-                        ))
-                  ],
-                ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10)
+                ],
               ),
             ),
           ),
         ),
-        body: Container(
-          child: Column(
+      ),
+      body: SafeArea(
+        child: Container(
+          child: ListView(
+            shrinkWrap: true,
             children: <Widget>[
               DefaultTabController(
                 length: 2,
@@ -187,7 +199,12 @@ class SearchState extends State<Search> {
                           child: TabBarView(
                             children: <Widget>[
                               notFound == true
-                                  ? Container(child: Text('Not Found'))
+                                  ? EmptyState(
+                                      imagePath:
+                                          'assets/icons/empty_state/profile.png',
+                                      reasonText:
+                                          'No result for: \n ${searchController.text}',
+                                    )
                                   : _buildList(),
                               _buildListProfile()
                             ],
@@ -216,11 +233,7 @@ class SearchState extends State<Search> {
       filteredEvents = tempList;
 
       return isLoading == true
-          ? Container(
-              child: Center(
-                child: CupertinoActivityIndicator(radius: 20),
-              ),
-            )
+          ? HomeLoadingScreen().myTicketLoading()
           : ListView.builder(
               itemCount: events == null ? 0 : filteredEvents.length,
               itemBuilder: (BuildContext context, i) {
@@ -229,7 +242,9 @@ class SearchState extends State<Search> {
 
                 if (filteredEvents[i]['ticket_type']['type'] == 'paid' ||
                     filteredEvents[i]['ticket_type']['type'] ==
-                        'paid_seating') {
+                        'paid_seating' ||
+                    filteredEvents[i]['ticket_type']['type'] ==
+                        'paid_live_stream') {
                   if (filteredEvents[i]['ticket']['availableTicketStatus'] ==
                       '1') {
                     itemColor = Color(0xFF34B323);
@@ -267,7 +282,9 @@ class SearchState extends State<Search> {
                   itemColor = Color(0xFFFFAA00);
                   itemPriceText = filteredEvents[i]['ticket_type']['name'];
                 } else if (filteredEvents[i]['ticket_type']['type'] ==
-                    'free_limited') {
+                        'free_limited' ||
+                    filteredEvents[i]['ticket_type']['type'] ==
+                        'free_live_stream') {
                   if (filteredEvents[i]['ticket']['availableTicketStatus'] ==
                       '1') {
                     itemColor = Color(0xFFFFAA00);
@@ -293,10 +310,14 @@ class SearchState extends State<Search> {
 
                 return GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailsConstructView(id: filteredEvents[i]['id'], image: filteredEvents[i]['picture'], name: filteredEvents[i]['name'],)));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EventDetailLoadingScreen(
+                                eventId: filteredEvents[i]['id'])));
                   },
                   child: LatestEventItem(
-                    image: filteredEvents[i]['picture'],
+                    image: filteredEvents[i]['picture_timeline'],
                     isAvailable: filteredEvents[i]['ticket']
                         ['availableTicketStatus'],
                     itemPrice: itemPriceText,
@@ -414,98 +435,100 @@ class SearchState extends State<Search> {
     }
 
     return isLoading == true
-        ? Container(
-            child: Center(
-              child: CupertinoActivityIndicator(radius: 20),
-            ),
-          )
-        : ListView.builder(
-            itemCount: filteredProfile == null ? 0 : filteredProfile.length,
-            itemBuilder: (BuildContext context, i) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => ProfileWidget(
-                            initialIndex: 0,
-                            userId: filteredProfile[i]['id'],
-                          )));
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(bottom: BorderSide(color: Colors.grey[300])),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 25,
-                        backgroundImage:
-                            NetworkImage(filteredProfile[i]['photo']),
-                        backgroundColor: Colors.grey,
+        ? HomeLoadingScreen().followListLoading()
+        : filteredProfile.length < 1
+            ? EmptyState(
+                imagePath: 'assets/icons/empty_state/profile.png',
+                reasonText: 'No result for: \n ${searchController.text}',
+              )
+            : ListView.builder(
+                itemCount: filteredProfile == null ? 0 : filteredProfile.length,
+                itemBuilder: (BuildContext context, i) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => ProfileWidget(
+                                initialIndex: 0,
+                                userId: filteredProfile[i]['id'],
+                              )));
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border:
+                            Border(bottom: BorderSide(color: Colors.grey[300])),
                       ),
-                      SizedBox(width: ScreenUtil.instance.setWidth(20)),
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Row(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          CircleAvatar(
+                            radius: 25,
+                            backgroundImage:
+                                NetworkImage(filteredProfile[i]['photo']),
+                            backgroundColor: Colors.grey,
+                          ),
+                          SizedBox(width: ScreenUtil.instance.setWidth(20)),
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                filteredProfile[i]['isVerified'] == '0'
-                                    ? Container()
-                                    : CircleAvatar(
-                                        backgroundImage: AssetImage(
-                                            'assets/icons/icon_apps/verif.png'),
-                                        radius: 10,
+                                Row(
+                                  children: <Widget>[
+                                    filteredProfile[i]['isVerified'] == '0'
+                                        ? Container()
+                                        : CircleAvatar(
+                                            backgroundImage: AssetImage(
+                                                'assets/icons/icon_apps/verif.png'),
+                                            radius: 10,
+                                          ),
+                                    SizedBox(
+                                      width: ScreenUtil.instance.setWidth(3),
+                                    ),
+                                    Container(
+                                      width: ScreenUtil.instance.setWidth(150),
+                                      child: Text(
+                                        filteredProfile[i]['fullName'] == null
+                                            ? filteredProfile[i]['username']
+                                            : filteredProfile[i]['fullName'],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
+                                    ),
+                                  ],
+                                ),
                                 SizedBox(
-                                  width: ScreenUtil.instance.setWidth(3),
+                                  height: ScreenUtil.instance.setWidth(15),
                                 ),
                                 Container(
                                   width: ScreenUtil.instance.setWidth(150),
-                                  child: Text(
-                                    filteredProfile[i]['fullName'] == null
-                                        ? filteredProfile[i]['username']
-                                        : filteredProfile[i]['fullName'],
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                                  child: Text(filteredProfile[i]['username'],
+                                      style: TextStyle(color: Colors.grey),
+                                      overflow: TextOverflow.ellipsis),
                                 ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(15),
-                            ),
-                            Container(
-                              width: ScreenUtil.instance.setWidth(150),
-                              child: Text(filteredProfile[i]['username'],
-                                  style: TextStyle(color: Colors.grey),
-                                  overflow: TextOverflow.ellipsis),
-                            ),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(15),
-                            ),
-                          ]),
-                      Expanded(
-                        child: SizedBox(),
+                                SizedBox(
+                                  height: ScreenUtil.instance.setWidth(15),
+                                ),
+                              ]),
+                          Expanded(
+                            child: SizedBox(),
+                          ),
+                          Container(
+                              margin: EdgeInsets.only(right: 20),
+                              height: ScreenUtil.instance.setWidth(30),
+                              width: ScreenUtil.instance.setWidth(80),
+                              child: Image.asset(
+                                'assets/icons/btn_follow.png',
+                                fit: BoxFit.cover,
+                              ))
+                        ],
                       ),
-                      Container(
-                          margin: EdgeInsets.only(right: 20),
-                          height: ScreenUtil.instance.setWidth(30),
-                          width: ScreenUtil.instance.setWidth(80),
-                          child: Image.asset(
-                            'assets/icons/btn_follow.png',
-                            fit: BoxFit.cover,
-                          ))
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               );
-            },
-          );
   }
 
   Future<http.Response> _getProfile() async {

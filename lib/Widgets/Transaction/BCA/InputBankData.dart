@@ -6,6 +6,7 @@ import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -109,8 +110,16 @@ class PaymentBcaState extends State<PaymentBCA> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false, selectedPage: 3,)), ModalRoute.withName('/EventDetails'));
-            Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionHistory()));
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DashboardWidget(
+                          isRest: false,
+                          selectedPage: 3,
+                        )),
+                ModalRoute.withName('/EventDetails'));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => TransactionHistory()));
           },
           child: Icon(
             Icons.close,
@@ -153,13 +162,13 @@ class PaymentBcaState extends State<PaymentBCA> {
                           height: ScreenUtil.instance.setWidth(20),
                         ),
                         CountDownTimer(
-                              secondsRemaining: seconds,
-                              whenTimeExpires: () {
-
-                              },
-                              countDownTimerStyle: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(18),
-                fontWeight: FontWeight.bold),
-                            ),
+                          secondsRemaining: seconds,
+                          whenTimeExpires: () {},
+                          countDownTimerStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: ScreenUtil.instance.setSp(38),
+                              fontWeight: FontWeight.bold),
+                        ),
                         SizedBox(
                           height: ScreenUtil.instance.setWidth(20),
                         ),
@@ -274,9 +283,12 @@ class PaymentBcaState extends State<PaymentBCA> {
                         onTap: () {
                           Clipboard.setData(ClipboardData(text: bank_number));
                           print(Clipboard.getData('text/plain'));
-                          _scaffoldKey.currentState.showSnackBar(SnackBar(
-                            content: Text('Text Coppied!'),
-                          ));
+                          Flushbar(
+                            flushbarPosition: FlushbarPosition.TOP,
+                            message: 'Text Coppied!',
+                            duration: Duration(seconds: 3),
+                            animationDuration: Duration(milliseconds: 500),
+                          )..show(context);
                         },
                         child: Container(
                           height: ScreenUtil.instance.setWidth(100),
@@ -299,7 +311,7 @@ class PaymentBcaState extends State<PaymentBCA> {
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: SizedBox(
-                                  height: ScreenUtil.instance.setWidth(20),
+                                  width: ScreenUtil.instance.setWidth(50),
                                   child: Image.asset('assets/drawable/bca.png'),
                                 ),
                               ),
@@ -349,7 +361,7 @@ class PaymentBcaState extends State<PaymentBCA> {
 
   Widget countdownTimer() {
     var countdownAsString;
-    
+
     setState(() {
       final salesDay = _dDay;
       print('salesDay:' + salesDay.toString());
@@ -369,7 +381,7 @@ class PaymentBcaState extends State<PaymentBCA> {
       child: Center(
         child: Text(countdownAsString,
             style: TextStyle(
-              color: Colors.white,
+                color: Colors.white,
                 fontSize: ScreenUtil.instance.setSp(18),
                 fontWeight: FontWeight.bold)),
       ),

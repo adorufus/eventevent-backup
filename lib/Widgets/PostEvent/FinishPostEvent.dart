@@ -1,4 +1,9 @@
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventList.dart';
+import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
+import 'package:eventevent/Widgets/profileWidget.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,6 +17,7 @@ class FinishPostEvent extends StatefulWidget{
 
 class FinishPostEventState extends State<FinishPostEvent>{
   String newEventId;
+  Utils utility = Utils();
 
   @override
   void initState() {
@@ -44,10 +50,10 @@ class FinishPostEventState extends State<FinishPostEvent>{
         width: MediaQuery.of(context).size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-              height: ScreenUtil.instance.setWidth(450),
+              height: ScreenUtil.instance.setWidth(200),
               width: MediaQuery.of(context).size.width,
               child: Image.asset('assets/icons/Icon_finish_create_event.png')
             ),
@@ -60,8 +66,10 @@ class FinishPostEventState extends State<FinishPostEvent>{
               height: ScreenUtil.instance.setWidth(20)
             ),
             GestureDetector(
-              onTap: (){
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => EventDetailsConstructView(id: newEventId,)), ModalRoute.withName('/PostEvent'));
+              onTap: () async {
+                SharedPreferences preferences = await SharedPreferences.getInstance();
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false, selectedPage: 4, userId: preferences.getString('Last User ID'),)), ModalRoute.withName('/Dashboard'));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailLoadingScreen(eventId: newEventId)));
               },
               child: SizedBox(
                 height: ScreenUtil.instance.setWidth(50), 

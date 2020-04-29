@@ -1,8 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:eventevent/Providers/EventListProviders.dart';
 import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
+import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -32,47 +36,46 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/services.dart';
 
-
-
 List<CameraDescription> cameras;
 
 Future<Null> main() async {
   Crashlytics.instance.enableInDevMode = true;
-  // FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
   // HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.white, statusBarIconBrightness: Brightness.dark));
   cameras = await availableCameras();
 
   runApp(new RunApp());
 }
 
-Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
-  if (message.containsKey('data')) {
-    // Handle data message
-    final dynamic data = message['data'];
-  }
-
-  if (message.containsKey('notification')) {
-    // Handle notification message
-    final dynamic notification = message['notification'];
-  }
-
-  // Or do other work.
-}
-
-class RunApp extends StatelessWidget {
+class RunApp extends StatefulWidget {
   // This widget is the root of your application.
 
-  Widget homeScreenWidget = LoginRegisterWidget();
   static FirebaseAnalytics analytics = new FirebaseAnalytics();
-  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
+
+  @override
+  _RunAppState createState() => _RunAppState();
+}
+
+class _RunAppState extends State<RunApp> {
+  Widget homeScreenWidget = LoginRegisterWidget();
+  
+
+  
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    FlutterStatusbarcolor.setStatusBarColor(Colors.white);
     return MaterialApp(
       // navigatorObservers: [
       //   FirebaseAnalyticsObserver(analytics:  analytics)
@@ -83,19 +86,64 @@ class RunApp extends StatelessWidget {
       theme: ThemeData(
           fontFamily: 'Proxima',
           primarySwatch: eventajaGreen,
+          brightness: Brightness.light,
           backgroundColor: Colors.white),
       // home: CrashlyticsTester(),
-      home: SplashScreen(analytics: RunApp.analytics, observer: RunApp.observer),
+      home: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+            statusBarColor: Colors.white,
+            statusBarIconBrightness: Brightness.dark),
+        child: SplashScreen(
+            analytics: RunApp.analytics, observer: RunApp.observer),
+      ),
       routes: <String, WidgetBuilder>{
-        '/LoginRegister': (BuildContext context) => LoginRegisterWidget(),
-        '/Login': (BuildContext context) => LoginWidget(),
-        '/Register': (BuildContext context) => RegisterWidget(),
-        '/Dashboard': (BuildContext context) => DashboardWidget(),
-        '/Profile': (BuildContext context) => ProfileWidget(),
-        '/EventDetails': (BuildContext context) => EventDetailsConstructView(),
-        '/EditProfile': (BuildContext context) => EditProfileWidget(),
-        '/PostEvent': (BuildContext context) => PostEvent(),
-        '/CustomCamera': (BuildContext context) => CustomCamera(cameras)
+        '/LoginRegister': (BuildContext context) =>
+            AnnotatedRegion<SystemUiOverlayStyle>(
+                value: SystemUiOverlayStyle(
+                    statusBarColor: Colors.white,
+                    statusBarIconBrightness: Brightness.dark),
+                child: LoginRegisterWidget()),
+        '/WithdrawBank': (BuildContext context) => WithdrawBank(),
+        '/Login': (BuildContext context) => AnnotatedRegion(
+            value: SystemUiOverlayStyle(
+                statusBarColor: Colors.white,
+                statusBarIconBrightness: Brightness.dark),
+            child: LoginWidget()),
+        '/Register': (BuildContext context) => AnnotatedRegion(
+            value: SystemUiOverlayStyle(
+                statusBarColor: Colors.white,
+                statusBarIconBrightness: Brightness.dark),
+            child: RegisterWidget()),
+        '/Dashboard': (BuildContext context) => AnnotatedRegion(
+            value: SystemUiOverlayStyle(
+                statusBarColor: Colors.white,
+                statusBarIconBrightness: Brightness.dark),
+            child: DashboardWidget()),
+        '/Profile': (BuildContext context) => AnnotatedRegion(
+            value: SystemUiOverlayStyle(
+                statusBarColor: Colors.white,
+                statusBarIconBrightness: Brightness.dark),
+            child: ProfileWidget()),
+        '/EventDetails': (BuildContext context) => AnnotatedRegion(
+            value: SystemUiOverlayStyle(
+                statusBarColor: Colors.white,
+                statusBarIconBrightness: Brightness.dark),
+            child: EventDetailsConstructView()),
+        '/EditProfile': (BuildContext context) => AnnotatedRegion(
+            value: SystemUiOverlayStyle(
+                statusBarColor: Colors.white,
+                statusBarIconBrightness: Brightness.dark),
+            child: EditProfileWidget()),
+        '/PostEvent': (BuildContext context) => AnnotatedRegion(
+            value: SystemUiOverlayStyle(
+                statusBarColor: Colors.white,
+                statusBarIconBrightness: Brightness.dark),
+            child: PostEvent()),
+        '/CustomCamera': (BuildContext context) => AnnotatedRegion(
+            value: SystemUiOverlayStyle(
+                statusBarColor: Colors.white,
+                statusBarIconBrightness: Brightness.dark),
+            child: CustomCamera(cameras)), 
       },
     );
   }
@@ -111,8 +159,6 @@ class RunApp extends StatelessWidget {
     }
   }
 }
-
-
 
 class MyHttpOverrides extends HttpOverrides {
   @override

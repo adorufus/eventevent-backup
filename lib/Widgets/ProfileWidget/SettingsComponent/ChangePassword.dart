@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -121,28 +122,40 @@ class ChangePasswordState extends State<ChangePassword>{
     String url = BaseApi().apiUrl + '/password/change';
 
     if(currentPasswordController.text == null || currentPasswordController.text == '' || currentPasswordController.text == ' '){
-      thisScaffold.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Current password cannot be empty!',
         backgroundColor: Colors.red,
-        content: Text('Current Password cannot be empty!'),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
     else if(newPasswordController.text == null || newPasswordController.text == '' || newPasswordController.text == ' '){
-      thisScaffold.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'New password cannot be empty!',
         backgroundColor: Colors.red,
-        content: Text('New password cannot be empty!'),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
     else if(confirmPasswordController.text != newPasswordController.text){
-      thisScaffold.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'New password didn\'t match!',
         backgroundColor: Colors.red,
-        content: Text('New password didn\'t match!'),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
     else if(confirmPasswordController.text == null || confirmPasswordController.text == '' || confirmPasswordController.text == ' '){
-      thisScaffold.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Confirm password cannot be empty!',
         backgroundColor: Colors.red,
-        content: Text('Confirm password cannot be empty!'),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
 
     final response = await http.post(
@@ -162,20 +175,26 @@ class ChangePasswordState extends State<ChangePassword>{
 
     if(response.statusCode == 200){
       print('berhasil: ' + response.body);
-      thisScaffold.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: extractedData['desc'],
         backgroundColor: eventajaGreenTeal,
-        content: Text(extractedData['desc']),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
       Future.delayed(Duration(seconds: 3), (){
         Navigator.of(context).pop();
       });
 
     }
     else if(response.statusCode == 400 && extractedData['desc'] == "Wrong current password"){
-      thisScaffold.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Wrong current password!',
         backgroundColor: Colors.red,
-        content: Text('Wrong current password!'),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     }
   }
 }

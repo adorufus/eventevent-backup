@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -46,11 +47,13 @@ class _StaticMapsProviderState extends State<StaticMapsProvider>{
       await launch(url);
     }
     else{
-      Scaffold.of(context).showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Couldn\'t open map!',
         backgroundColor: Colors.red,
-        content: Text('Couldn\'t open map'),
         duration: Duration(seconds: 3),
-      ));
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } 
   }    
 }

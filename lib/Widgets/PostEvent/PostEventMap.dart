@@ -4,9 +4,12 @@ import 'dart:io';
 import 'package:eventevent/Widgets/PostEvent/Components/IOSMap.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
@@ -21,23 +24,32 @@ class PostEventMap extends StatefulWidget {
   }
 }
 
-class PostEventMapState extends State<PostEventMap>{
+class PostEventMapState extends State<PostEventMap> {
   var thisScaffold = new GlobalKey<ScaffoldState>();
   TextEditingController additionalInfoController = new TextEditingController();
 
   String placeName = '';
-  String lat = '';
-  String long = '';
+  String lat = '-6.121435';
+  String long = '106.774124';
   String err;
   Location location = new Location();
   LocationData currentLocation;
+  bool _serviceEnabled;
+  PermissionStatus _permissionGranted;
   StreamSubscription<LocationData> locationSubcription;
 
-showPlacePicker() async {
+  showPlacePicker() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     LocationResult place = await Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => PlacePicker('AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI', displayLocation: LatLng(currentLocation.latitude, currentLocation.longitude)
-    )));
+        builder: (context) => PlacePicker(
+            'AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI',
+            displayLocation: LatLng(
+                currentLocation.latitude == null
+                    ? -6.1753924
+                    : currentLocation.latitude,
+                currentLocation.longitude == null
+                    ? 106.8249641
+                    : currentLocation.longitude))));
 
     if (!mounted) {
       return;
@@ -48,8 +60,10 @@ showPlacePicker() async {
       lat = place.latLng.latitude.toString();
       long = place.latLng.longitude.toString();
       prefs.setString('CREATE_EVENT_LOCATION_ADDRESS', place.formattedAddress);
-      prefs.setString('CREATE_EVENT_LOCATION_LAT', place.latLng.latitude.toString());
-      prefs.setString('CREATE_EVENT_LOCATION_LONG', place.latLng.longitude.toString());
+      prefs.setString(
+          'CREATE_EVENT_LOCATION_LAT', place.latLng.latitude.toString());
+      prefs.setString(
+          'CREATE_EVENT_LOCATION_LONG', place.latLng.longitude.toString());
     });
 
     print(prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'));
@@ -60,12 +74,15 @@ showPlacePicker() async {
     try {
       currentLocation = await location.getLocation();
       err = "";
+      setState((){});
     } on PlatformException catch (e) {
+      print(e.message + ' ' + e.code);
       if (e.code == "PERMISSION_DENIED") {
         err = 'Permission Denied';
+        print(e.message + ' ' + e.code);
       } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
-        err =
-            'Permission denied - please ask the user to enable location service';
+        print(e.message + ' ' + e.code);
+        err = 'Permission denied - please ask the user to enable   service';
       }
       currentLocation = null;
     }
@@ -80,20 +97,21 @@ showPlacePicker() async {
     });
   }
 
-  saveDataAndNext() async{
+  saveDataAndNext() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if(additionalInfoController.text == null || additionalInfoController.text == ''){
+    if (additionalInfoController.text == null ||
+        additionalInfoController.text == '') {
       prefs.setString('CREATE_EVENT_ADDITIONAL_INFO', '');
-    }
-    else{
-      prefs.setString('CREATE_EVENT_ADDITIONAL_INFO', additionalInfoController.text);
+    } else {
+      prefs.setString(
+          'CREATE_EVENT_ADDITIONAL_INFO', additionalInfoController.text);
     }
   }
 
   Widget showMap() {
     StaticMapsProvider mapProvider = new StaticMapsProvider(
-      GOOGLE_API_KEY: 'AIzaSyDjNpeyufzT81GAhQkCe85x83kxzfA7qbI',
+      GOOGLE_API_KEY: 'AIzaSyA2s9iDKooQ9Cwgr6HiDVQkG9p3fvsVmEI',
       height: 1024,
       width: 1024,
       latitude: lat,
@@ -102,17 +120,26 @@ showPlacePicker() async {
     );
 
     return Container(
-      height: ScreenUtil.instance.setWidth(300),
+      height: ScreenUtil.instance.setWidth(200),
       width: MediaQuery.of(context).size.width,
-      child: Stack(alignment: Alignment.bottomCenter, children: <Widget>[
-        Positioned(
-          left: 15,
-          child: GestureDetector(
-              onTap: () {
-                showPlacePicker();
-              },
-              child: mapProvider),
-        ),
+      child: Stack(alignment: Alignment.topCenter, children: <Widget>[
+        GestureDetector(
+            onTap: () {
+              showPlacePicker();
+            },
+            child: placeName == ''
+                ? Container(
+                    height: 200,
+                    width: 600,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('assets/map_bw.jpg'),
+                            fit: BoxFit.cover,
+                            colorFilter: ColorFilter.mode(
+                                Colors.black.withOpacity(.2),
+                                BlendMode.dstATop))),
+                  )
+                : mapProvider),
         Center(
           child: SizedBox(
             height: ScreenUtil.instance.setWidth(50),
@@ -124,33 +151,52 @@ showPlacePicker() async {
     );
   }
 
-  navigateToNextStep(){
-    if(placeName == null || placeName == ''){
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Please select location first!'),
+  navigateToNextStep() {
+    if (placeName == null || placeName == '') {
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Please select location first!',
         backgroundColor: Colors.red,
-      ));
-    }
-    else{
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
+    } else {
       saveDataAndNext();
-      Navigator.of(context).push(CupertinoPageRoute(builder: (BuildContext context) => PostEventCreatorDetails()));
+      Navigator.of(context).push(CupertinoPageRoute(
+          builder: (BuildContext context) => PostEventCreatorDetails()));
     }
   }
+
+  // void checkLocationService() async {
+  //   _serviceEnabled = await location.serviceEnabled();
+  //   if (!_serviceEnabled) {
+  //     _serviceEnabled = await location.requestService();
+  //     if (!_serviceEnabled) {
+  //       return;
+  //     }
+  //   }
+
+  //   _permissionGranted = await location.hasPermission();
+
+  // }
 
   @override
   void initState() {
     super.initState();
+
     initPlatformState();
     locationSubcription =
         location.onLocationChanged().listen((LocationData result) {
       setState(() {
         currentLocation = result;
+        print(currentLocation.latitude);
       });
     });
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -188,7 +234,9 @@ showPlacePicker() async {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -241,7 +289,9 @@ showPlacePicker() async {
                   Container(
                     height: MediaQuery.of(context).size.height / 1.32,
                     child: ListView(children: <Widget>[
-                      showMap(),
+                      Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: showMap()),
                       SizedBox(
                         height: ScreenUtil.instance.setWidth(20),
                       ),
@@ -257,19 +307,25 @@ showPlacePicker() async {
                       SizedBox(
                         height: ScreenUtil.instance.setWidth(12),
                       ),
-                      Container(
-                        height: ScreenUtil.instance.setWidth(80),
-                        width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.only(right: 18),
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                            color: eventajaGreenTeal,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Text(
-                          placeName,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
+                      placeName == ''
+                          ? Container(
+                              child: Text(
+                              'Select event location from the map above',
+                              style: TextStyle(color: Colors.grey),
+                            ))
+                          : Container(
+                              height: ScreenUtil.instance.setWidth(80),
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.only(right: 18),
+                              padding: EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                  color: eventajaGreenTeal,
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Text(
+                                placeName,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
                       SizedBox(
                         height: ScreenUtil.instance.setWidth(20),
                       ),
@@ -289,7 +345,8 @@ showPlacePicker() async {
                         decoration: InputDecoration(
                             fillColor: Colors.grey.withOpacity(0.2),
                             filled: true,
-                            hintText: 'Type additional information here, example: Near lion statue, or on the second floor',
+                            hintText:
+                                'Type additional information here, example: Near lion statue, or on the second floor',
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide:

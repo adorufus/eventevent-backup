@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -43,6 +45,10 @@ class _LatestEventWidget extends State<LatestEventWidget> {
           }
           print('data: ' + updatedData.toString());
           latestEventData.addAll(updatedData);
+          latestEventData.removeWhere((item) =>
+              item['ticket_type']['type'] == 'free_limited_seating' ||
+              item['ticket_type']['type'] == 'paid_seating' ||
+              item['ticket_type']['type'] == 'paid_seating');
         });
         if (mounted) setState(() {});
         refreshController.loadComplete();
@@ -58,6 +64,10 @@ class _LatestEventWidget extends State<LatestEventWidget> {
         setState(() {
           var extractedData = json.decode(response.body);
           latestEventData = extractedData['data'];
+          latestEventData.removeWhere((item) =>
+              item['ticket_type']['type'] == 'free_limited_seating' ||
+              item['ticket_type']['type'] == 'paid_seating' ||
+              item['ticket_type']['type'] == 'paid_seating');
         });
       }
     });
@@ -76,7 +86,9 @@ class _LatestEventWidget extends State<LatestEventWidget> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          child: SmartRefresher(
+          child: latestEventData == null
+              ? HomeLoadingScreen().myTicketLoading()
+              : SmartRefresher(
                   enablePullDown: true,
                   enablePullUp: true,
                   footer: CustomFooter(
@@ -108,6 +120,11 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                         setState(() {
                           var extractedData = json.decode(response.body);
                           latestEventData = extractedData['data'];
+                          latestEventData.removeWhere((item) =>
+                              item['ticket_type']['type'] ==
+                                  'free_limited_seating' ||
+                              item['ticket_type']['type'] == 'paid_seating' ||
+                              item['ticket_type']['type'] == 'paid_seating');
                         });
                         if (mounted) setState(() {});
                         refreshController.refreshCompleted();
@@ -123,6 +140,8 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                     itemBuilder: (BuildContext context, i) {
                       Color itemColor;
                       String itemPriceText;
+                      latestEventData.removeWhere(
+                          (item) => item['type'] == 'free_limited_seating');
                       if (latestEventData[i]['isGoing'] == '1') {
                         itemColor = Colors.blue;
                         itemPriceText = 'Going!';
@@ -135,8 +154,9 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                                   ['availableTicketStatus'] ==
                               '1') {
                             itemColor = Color(0xFF34B323);
-                            itemPriceText =
-                                latestEventData[i]['ticket']['cheapestTicket'];
+                            itemPriceText = 'Rp. ' +
+                                latestEventData[i]['ticket']['cheapestTicket'] +
+                                ',-';
                           } else {
                             if (latestEventData[i]['ticket']['salesStatus'] ==
                                 'comingSoon') {
@@ -174,8 +194,16 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                           itemColor = Color(0xFFFFAA00);
                           itemPriceText =
                               latestEventData[i]['ticket_type']['name'];
+                        } else if (latestEventData[i]['ticket_type']
+                                ['type'] ==
+                            'free_live_stream') {
+                          itemColor = Color(0xFFFFAA00);
+                          itemPriceText =
+                              latestEventData[i]['ticket_type']['name'];
                         } else if (latestEventData[i]['ticket_type']['type'] ==
-                            'free_limited') {
+                                'free_limited' ||
+                            latestEventData[i]['ticket_type']['type'] ==
+                                'free_limited_seating') {
                           if (latestEventData[i]['ticket']
                                   ['availableTicketStatus'] ==
                               '1') {
@@ -208,8 +236,8 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                               context,
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      EventDetailsConstructView(
-                                          id: latestEventData[i]['id'])));
+                                      EventDetailLoadingScreen(
+                                          eventId: latestEventData[i]['id'])));
                         },
                         child: new LatestEventItem(
                           image: latestEventData[i]['picture_timeline'],

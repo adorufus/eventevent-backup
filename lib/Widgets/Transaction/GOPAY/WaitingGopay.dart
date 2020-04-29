@@ -1,23 +1,33 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/TransactionHistory.dart';
+import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:flutter_gopay_midtrans/flutter_gopay_midtrans.dart';
 
-class WaitingGopay extends StatefulWidget{
-
+class WaitingGopay extends StatefulWidget {
   final String amount;
   final String deadline;
   final String gopaytoken;
   final expDate;
   final String transactionID;
 
-  const WaitingGopay({Key key, this.amount, this.deadline, this.gopaytoken, this.expDate, this.transactionID}) : super(key: key);
+  const WaitingGopay(
+      {Key key,
+      this.amount,
+      this.deadline,
+      this.gopaytoken,
+      this.expDate,
+      this.transactionID})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -25,7 +35,7 @@ class WaitingGopay extends StatefulWidget{
   }
 }
 
-class _WaitingGopayState extends State<WaitingGopay>{
+class _WaitingGopayState extends State<WaitingGopay> {
   String month;
   String hour;
   String min;
@@ -70,7 +80,8 @@ class _WaitingGopayState extends State<WaitingGopay>{
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -83,14 +94,27 @@ class _WaitingGopayState extends State<WaitingGopay>{
         backgroundColor: Colors.white,
         elevation: 1,
         leading: GestureDetector(
-          onTap: (){
-            Navigator.of(context).pop();
+          onTap: () {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DashboardWidget(
+                          isRest: false,
+                          selectedPage: 3,
+                        )),
+                ModalRoute.withName('/EventDetails'));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => TransactionHistory()));
           },
-          child: Icon(Icons.close, size: 35, color: eventajaGreenTeal,),
+          child: Icon(
+            Icons.close,
+            size: 35,
+            color: eventajaGreenTeal,
+          ),
         ),
       ),
       bottomNavigationBar: GestureDetector(
-        onTap: (){
+        onTap: () {
           // FlutterGopayMidtrans.configure(
           //   client_id: CLINET_ID,
           //   amount: widget.amount,
@@ -100,22 +124,33 @@ class _WaitingGopayState extends State<WaitingGopay>{
           // );
           launch(paymentData['payment']['data_vendor']['payment_url']);
         },
-        child: Container(
-                  height: ScreenUtil.instance.setWidth(50),
-                  color: Colors.deepOrangeAccent,
-                  child: Center(
-                    child: Text(
-                      'PAY WITH GO-PAY',
-                      style: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(20)),
-                    ),
-                  )),
+        child: paymentData == null
+            ? Container()
+            : Container(
+                height: ScreenUtil.instance.setWidth(50),
+                color: Colors.orange,
+                child: Center(
+                  child: Text(
+                    'PAY WITH GO-PAY',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: ScreenUtil.instance.setSp(20)),
+                  ),
+                )),
       ),
-      body: ListView(
-        children: <Widget>[
-          Container(
+      body: paymentData == null
+          ? Center(
+            child: CupertinoActivityIndicator(
+                animating: true,
+                radius: 15,
+              ),
+          )
+          : ListView(
+              children: <Widget>[
+                Container(
                   height: ScreenUtil.instance.setWidth(380),
                   color: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 25),
+                  padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -131,22 +166,22 @@ class _WaitingGopayState extends State<WaitingGopay>{
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             SizedBox(
-                              height: ScreenUtil.instance.setWidth(10),
+                              height: ScreenUtil.instance.setWidth(20),
                             ),
                             Text('Complete Payment In',
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: ScreenUtil.instance.setSp(18),
+                                    fontSize: ScreenUtil.instance.setSp(14),
                                     fontWeight: FontWeight.bold)),
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
                             ),
                             CountDownTimer(
                               secondsRemaining: seconds,
-                              whenTimeExpires: () {
-
-                              },
-                              countDownTimerStyle: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(18),
+                              whenTimeExpires: () {},
+                              countDownTimerStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil.instance.setSp(38),
                                   fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
@@ -158,19 +193,25 @@ class _WaitingGopayState extends State<WaitingGopay>{
                               children: <Widget>[
                                 Text('H',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20))),
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('M',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20))),
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('S',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20))),
                               ],
                             ),
                             SizedBox(
@@ -182,11 +223,13 @@ class _WaitingGopayState extends State<WaitingGopay>{
                                 Text(
                                   'Complete payment before ',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
                                 ),
                                 Text('${widget.expDate}',
                                     style: TextStyle(
                                         color: Colors.white,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold))
                               ],
                             )
@@ -202,8 +245,9 @@ class _WaitingGopayState extends State<WaitingGopay>{
                         children: <Widget>[
                           Text(
                             'TRANSFER AMOUNT',
-                            style:
-                                TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.black45),
+                            style: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(20),
+                                color: Colors.black45),
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
@@ -215,7 +259,9 @@ class _WaitingGopayState extends State<WaitingGopay>{
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
                             'Eventevent will automatically check your payment. It may take up to 1 hour to process',
-                            style: TextStyle(color: Colors.grey, fontSize: ScreenUtil.instance.setSp(12)),
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: ScreenUtil.instance.setSp(12)),
                             textAlign: TextAlign.center,
                           )
                         ],
@@ -223,13 +269,13 @@ class _WaitingGopayState extends State<WaitingGopay>{
                     ],
                   ),
                 ),
-          howToTab()
-        ],
-      ),
+                howToTab()
+              ],
+            ),
     );
   }
 
-  Widget howToTab(){
+  Widget howToTab() {
     return Container(
       color: Colors.white,
       child: DefaultTabController(
@@ -237,54 +283,54 @@ class _WaitingGopayState extends State<WaitingGopay>{
         child: Column(
           children: <Widget>[
             TabBar(
-              tabs: <Widget>[
-                Tab(text: 'BAHASA'),
-                Tab(text: 'ENGLISH')
-              ],
+              tabs: <Widget>[Tab(text: 'BAHASA'), Tab(text: 'ENGLISH')],
             ),
             Container(
               color: Colors.white.withOpacity(0.9),
               height: MediaQuery.of(context).size.height,
-              child: TabBarView(
-                children: <Widget> [
-                  ListView(
-                      children: <Widget> [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 15, right: 15, top: 15 ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget> [
-                              Text(GOPAY_HEADER_ID, style: TextStyle(fontWeight: FontWeight.bold)),
-                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                              Text(GOPAY_HOWTO_LINE1_ID, style: TextStyle(fontSize: ScreenUtil.instance.setSp(14)),),
-                            ]
-                          ),
-                        )
-                      ]
-                    ),
+              child: TabBarView(children: <Widget>[
+                ListView(children: <Widget>[
                   Padding(
+                    padding:
+                        const EdgeInsets.only(left: 15, right: 15, top: 15),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(GOPAY_HEADER_ID,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                          Text(
+                            GOPAY_HOWTO_LINE1_ID,
+                            style: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(14)),
+                          ),
+                        ]),
+                  )
+                ]),
+                Padding(
                     padding: EdgeInsets.only(top: 10),
-                    child: ListView(
-                      children: <Widget> [
-                        Padding(
-                          padding: EdgeInsets.only(left: 15, right: 15, top: 15),
+                    child: ListView(children: <Widget>[
+                      Padding(
+                          padding:
+                              EdgeInsets.only(left: 15, right: 15, top: 15),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget> [
-                              Text(GOPAY_HEADER_EN, style: TextStyle(fontWeight: FontWeight.bold)),
-                              SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                              Text(GOPAY_HOWTO_LINE1_EN, style: TextStyle(fontSize: ScreenUtil.instance.setSp(14)),),
-                              
-                            ]
-                          )
-                        )
-                      ]
-                    )
-                  ),
-                ]
-              ),
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(GOPAY_HEADER_EN,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(10)),
+                                Text(
+                                  GOPAY_HOWTO_LINE1_EN,
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil.instance.setSp(14)),
+                                ),
+                              ]))
+                    ])),
+              ]),
             )
           ],
         ),

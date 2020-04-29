@@ -4,11 +4,14 @@ import 'package:eventevent/Widgets/RecycleableWidget/WaitTransaction.dart';
 import 'package:eventevent/Widgets/Transaction/Alfamart/WaitingTransactionAlfamart.dart';
 import 'package:eventevent/Widgets/Transaction/BCA/InputBankData.dart';
 import 'package:eventevent/Widgets/Transaction/GOPAY/WaitingGopay.dart';
+import 'package:eventevent/Widgets/Transaction/ProcessingPayment.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
@@ -19,10 +22,19 @@ import '../CC.dart';
 
 class TicketReview extends StatefulWidget {
   final ticketType;
-  final List customForm;
-  
+  final List<Map<String, dynamic>> customForm;
+  final List customFormList;
+  final List customFormId;
+  final bool isCustomForm;
 
-  const TicketReview({Key key, this.ticketType, this.customForm}) : super(key: key);
+  const TicketReview(
+      {Key key,
+      this.ticketType,
+      this.customForm,
+      this.customFormList,
+      this.customFormId,
+      this.isCustomForm})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _TicketReviewState();
@@ -42,7 +54,6 @@ class _TicketReviewState extends State<TicketReview> {
   String thisTicketAmount;
   String thisTicketPrice;
   String thisTicketFee;
-  String expDate;
   String desc;
   String couponButtonText = 'Apply';
   Map<String, dynamic> paymentData;
@@ -82,12 +93,11 @@ class _TicketReviewState extends State<TicketReview> {
       thisEventEndTime = eventEndTime;
       thisTicketAmount = ticketAmount;
       thisTicketPrice = ticketPrice;
-      if(widget.ticketType == 'free_limited'){
+      if (widget.ticketType == 'free_limited' || widget.ticketType == 'free_live_stream') {
         thisTicketFee = '0';
         pajak = 0;
         total = 0;
-      }
-      else{
+      } else {
         thisTicketFee = ticketFee;
         pajak = int.parse(thisTicketFee);
         total = int.parse(thisTicketPrice) + pajak;
@@ -95,24 +105,16 @@ class _TicketReviewState extends State<TicketReview> {
     });
   }
 
-  Future getPaymentData(String expired) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setString('expDate', expired);
-
-    var expiredDate = preferences.getString('expDate');
-
-    expDate = expiredDate;
-    print(expDate);
-  }
-
   @override
   void initState() {
     super.initState();
     getEventDetails();
+    print('answer list' + widget.customFormList.toString());
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -121,7 +123,7 @@ class _TicketReviewState extends State<TicketReview> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.9),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1,
@@ -142,16 +144,39 @@ class _TicketReviewState extends State<TicketReview> {
         ),
       ),
       bottomNavigationBar: GestureDetector(
-        onTap: () {
-          postPurchaseTicket();
+        onTap: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProcessingPayment(
+                customFormList: widget.customFormList,
+                customFormId: widget.customFormId,
+                isCustomForm: widget.isCustomForm,
+                uuid: uuid,
+                ticketType: widget.ticketType,
+                total: total,
+                loadingType: 'buy ticket',
+              ),
+            ),
+          ).then((val){
+            Flushbar(
+            flushbarPosition: FlushbarPosition.TOP,
+            message: '$val',
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+            animationDuration: Duration(milliseconds: 500),
+          )..show(context);
+          });
         },
         child: Container(
             height: ScreenUtil.instance.setWidth(50),
-            color: Colors.deepOrangeAccent,
+            color: Colors.orange,
             child: Center(
               child: Text(
                 'PURCHASE',
-                style: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(20)),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ScreenUtil.instance.setSp(20)),
               ),
             )),
       ),
@@ -167,11 +192,16 @@ class _TicketReviewState extends State<TicketReview> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Center(
-                      child: Text(
-                        thisEventName == null ? '' : thisEventName,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(22)),
-                        textAlign: TextAlign.center,
+                      child: Container(
+                          width: 300,
+                        child: Text(
+                          thisEventName == null ? '' : thisEventName,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: ScreenUtil.instance.setSp(22)),
+                          textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                     SizedBox(height: ScreenUtil.instance.setWidth(20)),
@@ -195,7 +225,8 @@ class _TicketReviewState extends State<TicketReview> {
                                 Text(thisTicketAmount == null
                                     ? ''
                                     : thisTicketAmount + 'X' + ' Ticket(s)'),
-                                SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(15)),
                                 Text(
                                     thisTicketName == null
                                         ? ''
@@ -203,7 +234,8 @@ class _TicketReviewState extends State<TicketReview> {
                                     style: TextStyle(
                                         fontSize: ScreenUtil.instance.setSp(20),
                                         fontWeight: FontWeight.bold)),
-                                SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(15)),
                                 Container(
                                     width: ScreenUtil.instance.setWidth(190),
                                     child: Text(
@@ -211,10 +243,12 @@ class _TicketReviewState extends State<TicketReview> {
                                             ? ''
                                             : thisEventAddres,
                                         overflow: TextOverflow.ellipsis)),
-                                SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(15)),
                                 Text(
                                     thisEventDate == null ? '' : thisEventDate),
-                                SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(15)),
                                 Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
@@ -234,9 +268,10 @@ class _TicketReviewState extends State<TicketReview> {
                   ])),
           SizedBox(height: ScreenUtil.instance.setWidth(50)),
           Container(
-              padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 15),
+              padding:
+                  EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 15),
               color: Colors.white,
-              height: ScreenUtil.instance.setWidth(150),
+              height: ScreenUtil.instance.setWidth(200),
               width: MediaQuery.of(context).size.width,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,7 +282,12 @@ class _TicketReviewState extends State<TicketReview> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text('Input Promo Code'),
-                        showCheck == false ? Container() : Icon(iconStatus, color: iconStatusColor,)
+                        showCheck == false
+                            ? Container()
+                            : Icon(
+                                iconStatus,
+                                color: iconStatusColor,
+                              )
                       ],
                     ),
                     TextFormField(
@@ -278,7 +318,7 @@ class _TicketReviewState extends State<TicketReview> {
                                         });
                                       }
                                     : () {
-                                        setState((){
+                                        setState(() {
                                           isPromoCodePressed = true;
                                         });
                                         postPromoCode();
@@ -319,7 +359,8 @@ class _TicketReviewState extends State<TicketReview> {
                 SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 Align(
                     alignment: Alignment.centerRight,
-                    child: Divider(height: ScreenUtil.instance.setWidth(10), indent: 150)),
+                    child: Divider(
+                        height: ScreenUtil.instance.setWidth(10), indent: 150)),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -384,16 +425,13 @@ class _TicketReviewState extends State<TicketReview> {
             iconStatusColor = eventajaGreenTeal;
             iconStatus = Icons.check;
           });
-        }
-        else if(desc == 'Promo not valid'){
+        } else if (desc == 'Promo not valid') {
           setState(() {
             showCheck = true;
             iconStatus = Icons.close;
             iconStatusColor = Colors.red;
           });
-        }
-        
-        else {
+        } else {
           setState(() {
             buttonColor = eventajaGreenTeal;
             couponButtonText = 'APPLY';
@@ -408,141 +446,19 @@ class _TicketReviewState extends State<TicketReview> {
         total = int.parse(
             promoData['data']['amount_detail']['price_after_discount']);
       });
-    }
-    else if(response.statusCode == 400){
-      setState((){
+    } else if (response.statusCode == 400) {
+      setState(() {
         var extractedJson = json.decode(response.body);
         promoData = extractedJson;
         desc = extractedJson['desc'];
       });
-      
-      if(desc == 'Promo not valid'){
-          setState(() {
-            showCheck = true;
-            iconStatus = Icons.close;
-            iconStatusColor = Colors.red;
-          });
-        }
-    }
-  }
 
-  Future<Null> postPurchaseTicket() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    var session;
-
-    setState(() {
-      session = prefs.getString('Session');
-    });
-
-    Map<String, dynamic> body = {
-      'X-API-KEY': API_KEY,
-      'ticketID': prefs.getString('TicketID'),
-      'quantity': prefs.getString('ticket_many'),
-      'firstname': prefs.getString('ticket_about_firstname'),
-      'lastname': prefs.getString('ticket_about_lastname'),
-      'email': prefs.getString('ticket_about_email'),
-      'phone': prefs.getString('ticket_about_phone'),
-      'note': prefs.getString('ticket_about_aditional'),
-      'payment_method_id': prefs.getString('payment_method_id'),
-      'identifier': uuid.v4().toString()
-    };
-
-    Map<String, dynamic> bodyFreeLimit = {
-      'X-API-KEY': API_KEY,
-      'ticketID': prefs.getString('TicketID'),
-      'quantity': prefs.getString('ticket_many'),
-      'firstname': prefs.getString('ticket_about_firstname'),
-      'lastname': prefs.getString('ticket_about_lastname'),
-      'email': prefs.getString('ticket_about_email'),
-      'phone': prefs.getString('ticket_about_phone'),
-      'note': prefs.getString('ticket_about_aditional'),
-      'identifier': uuid.v4().toString(),
-      'form[0]': ''
-    };
-
-    
-
-    // for(int i = 0; i < widget.customForm.length; i++){
-    //   var customForm = widget.customForm;
-    //   bodyFreeLimit.putIfAbsent('form[$i][id]', customForm[i]['id']);
-    //   bodyFreeLimit.putIfAbsent('form[$i][answer]', customForm[i]['answer']);
-    // }
-
-    String purchaseUri = BaseApi().apiUrl + '/ticket_transaction/post';
-    final response = await http.post(purchaseUri,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session},
-        body: widget.ticketType == 'free_limited' ? bodyFreeLimit : body);
-
-    print(response.statusCode);
-    print(response.body);
-
-    if (response.statusCode == 200) {
-      print('mantab gan');
-      print(response.body);
-      var extractedData = json.decode(response.body);
-      setState(() {
-        paymentData = extractedData['data'];
-        print(paymentData['expired_time']);
-        getPaymentData(paymentData['expired_time']);
-      });
-      if(widget.ticketType == 'free_limited'){
-        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SuccessPage()));
-      }
-      else if (paymentData['payment_method_id'] == '1') {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => CreditCardInput(
-                      transactionID: paymentData['id'],
-                      expDate: paymentData['expired_time'],
-                    )));
-      } else if (paymentData['payment_method_id'] == '4') {
-        Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (BuildContext context) => WaitingGopay(
-                      amount: paymentData['amount'],
-                      deadline: paymentData['expired_time'],
-                      gopaytoken: paymentData['gopay'],
-                      expDate: paymentData['expired_time'],
-                      transactionID: paymentData['id'],
-                    )),);
-      } else if (paymentData['payment_method_id'] == '2') {
-        Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (BuildContext context) => WaitTransaction(
-                    expDate: paymentData['expired_time'],
-                    transactionID: paymentData['id'],
-                    finalPrice: total.toString())),);
-      } else if (paymentData['payment_method_id'] == '3') {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-              builder: (BuildContext context) => WaitingTransactionAlfamart(
-                    transactionID: paymentData['id'],
-                    expDate: paymentData['expired_time'],
-                  )),
-        );
-      } else if (paymentData['payment_method_id'] == '5') {
-//        launch(paymentData['payment']['data_vendor']['payment_url']);
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) => WebViewTest(
-            url: paymentData['payment']['data_vendor']['payment_url'],
-          )
-        ));
-      } else if (paymentData['payment_method_id'] == '9') {
-        Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (BuildContext context) => WaitTransaction(
-                    expDate: paymentData['expired_time'],
-                    transactionID: paymentData['id'],
-                    finalPrice: total.toString())),);
-      } else if (paymentData['payment_method_id'] == '7') {
-        Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (BuildContext context) => PaymentBCA(
-                      expDate: paymentData['expired_time'],
-                      transactionID: paymentData['id'],
-                    )),);
+      if (desc == 'Promo not valid') {
+        setState(() {
+          showCheck = true;
+          iconStatus = Icons.close;
+          iconStatusColor = Colors.red;
+        });
       }
     }
   }

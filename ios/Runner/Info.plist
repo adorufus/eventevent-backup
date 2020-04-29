@@ -35,6 +35,14 @@
 				<string>com.googleusercontent.apps.192954205664-0fmvrn1t263lksjtg0kfa9l87abvlavl</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.192954205664-fgf044g528sou85l0qmu8j5nng75k3be</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
@@ -66,6 +74,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -88,6 +97,16 @@
 	<string>eventevent.app.link</string>
 	<key>branch_key</key>
 	<string>key_live_ijCwqgMyqksKHN0YEnvjJiocuzi2ciR4</string>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>Allow to acces media library</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+   	<string>armv7</string>
+	</array>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
 </dict>

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/CategoryPage.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -41,7 +42,7 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
     )..init(context);
     mappedCategoryData = categoryEventData?.map((categoryData) {
           return categoryData == null
-              ? CupertinoActivityIndicator(radius: 20)
+              ? HomeLoadingScreen().categoryLoading()
               : Builder(
                   builder: (BuildContext context) {
                     return GestureDetector(
@@ -95,18 +96,7 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
       height: ScreenUtil.instance.setWidth(220),
       padding: EdgeInsets.symmetric(horizontal: 0),
       width: MediaQuery.of(context).size.width,
-      child: categoryEventData == null
-          ? Center(
-              child: Container(
-                width: ScreenUtil.instance.setWidth(25),
-                height: ScreenUtil.instance.setWidth(25),
-                child: FittedBox(
-                  fit: BoxFit.fill,
-                  child: CupertinoActivityIndicator(radius: 20),
-                ),
-              ),
-            )
-          : ListView(
+      child: categoryEventData == null ? HomeLoadingScreen().categoryLoading() : ListView(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               children: <Widget>[

@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'dart:io';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/PostEvent/CreateTicketFinal.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:place_picker/place_picker.dart';
@@ -96,7 +98,8 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
       prefs.setString('SETUP_TICKET_MAX_BOUGHT', maxTicketController.text);
       prefs.setString('SETUP_TICKET_NAME', eventNameController.text);
       prefs.setString('SETUP_TICKET_POSTER', imageUri);
-      prefs.setString('SETUP_TICKET_SHOW_REMAINING_TICKET', __curValue.toString());
+      prefs.setString(
+          'SETUP_TICKET_SHOW_REMAINING_TICKET', __curValue.toString());
       prefs.setString('SETUP_TICKET_IS_ONE_PURCHASE', __curValue2.toString());
       prefs.setString('SETUP_TICKET_START_DATE', startDate);
       prefs.setString('SETUP_TICKET_END_DATE', endDate);
@@ -116,14 +119,19 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
     getData();
     locationSubcription =
         location.onLocationChanged().listen((LocationData result) {
+          if(!mounted)
+            return;
       setState(() {
         currentLocation = result;
       });
     });
   }
 
+  var thisScaffold = new GlobalKey<ScaffoldState>();
+
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -131,102 +139,228 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    var thisScaffold = new GlobalKey<ScaffoldState>();
+
     return Scaffold(
-        key: thisScaffold,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 1,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: eventajaGreenTeal,
-            ),
-          ),
-          centerTitle: true,
-          title: Text(
-            'SUMMARY',
-            style: TextStyle(color: eventajaGreenTeal),
+      key: thisScaffold,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 1,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: eventajaGreenTeal,
           ),
         ),
-        body: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: ListView(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Column(
+        centerTitle: true,
+        title: Text(
+          'SUMMARY',
+          style: TextStyle(color: eventajaGreenTeal),
+        ),
+      ),
+      bottomNavigationBar: GestureDetector(
+        onTap: () {
+          saveFinalData();
+        },
+        child: Container(
+          height: 60,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 2,
+                spreadRadius: 1.5,
+                color: Color(0xff8a8a8b).withOpacity(.3),
+                offset: Offset(0, -1)
+              )
+            ]
+          ),
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+            height: ScreenUtil.instance.setWidth(50),
+            child: ClipRRect(
+              clipBehavior: Clip.antiAlias,
+              borderRadius: BorderRadius.circular(50),
+                          child: RaisedButton(
+                color: eventajaGreenTeal,
+                onPressed: () {
+                  saveFinalData();
+                },
+                child: Text(
+                  'CREATE TICKET',
+                  style:
+                      TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: ListView(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Ticket Name',
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: ScreenUtil.instance.setSp(18),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil.instance.setWidth(5),
+                  ),
+                  TextFormField(
+                    controller: eventNameController,
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(8),
+                        )),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil.instance.setWidth(15),
+                  ),
+                  Container(
+                    height: ScreenUtil.instance.setWidth(250),
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          height: ScreenUtil.instance.setWidth(225),
+                          width: ScreenUtil.instance.setWidth(150),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.file(File(imageUri), fit: BoxFit.fill),
+                          ),
+                        ),
+                        SizedBox(
+                          width: ScreenUtil.instance.setWidth(20),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Ticket Quantity',
+                              style: TextStyle(
+                                  fontSize: ScreenUtil.instance.setSp(18),
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                            Container(
+                                width: ScreenUtil.instance.setWidth(170),
+                                height: ScreenUtil.instance.setWidth(50),
+                                padding: EdgeInsets.only(left: 10),
+                                child: TextFormField(
+                                  controller: ticketQuantityController,
+                                  decoration: InputDecoration(
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius:
+                                              BorderRadius.circular(7)),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius:
+                                              BorderRadius.circular(7))),
+                                )),
+                            SizedBox(height: ScreenUtil.instance.setWidth(20)),
+                            Text(
+                              'Set The Price',
+                              style: TextStyle(
+                                  fontSize: ScreenUtil.instance.setSp(18),
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              'Set your ticket price',
+                              style: TextStyle(
+                                  fontSize: ScreenUtil.instance.setSp(15),
+                                  color: Colors.grey[300],
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                            Container(
+                                width: ScreenUtil.instance.setWidth(170),
+                                height: ScreenUtil.instance.setWidth(50),
+                                padding: EdgeInsets.only(left: 10),
+                                child: ticketTypeID == '5' ||
+                                        ticketTypeID == '10'
+                                    ? Text('FREE',
+                                        style: TextStyle(
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(18),
+                                            color: Colors.grey[300],
+                                            fontWeight: FontWeight.bold))
+                                    : TextFormField(
+                                        controller: priceController,
+                                        decoration: InputDecoration(
+                                            fillColor: Colors.white,
+                                            filled: true,
+                                            enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide.none,
+                                                borderRadius:
+                                                    BorderRadius.circular(7)),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide.none,
+                                                borderRadius:
+                                                    BorderRadius.circular(7))),
+                                      ))
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.black,
+                  ),
+                  SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        'Ticket Name',
-                        style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: ScreenUtil.instance.setSp(18),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: ScreenUtil.instance.setWidth(5),
-                      ),
-                      TextFormField(
-                        controller: eventNameController,
-                        decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(8),
-                            )),
-                      ),
-                      SizedBox(
-                        height: ScreenUtil.instance.setWidth(15),
-                      ),
-                      Container(
-                        height: ScreenUtil.instance.setWidth(250),
-                        width: MediaQuery.of(context).size.width,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              height: ScreenUtil.instance.setWidth(225),
-                              width: ScreenUtil.instance.setWidth(150),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.file(File(imageUri),
-                                    fit: BoxFit.fill),
-                              ),
-                            ),
-                            SizedBox(
-                              width: ScreenUtil.instance.setWidth(20),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Column(
                               mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'Ticket Quantity',
+                                  'Min Ticket',
                                   style: TextStyle(
                                       fontSize: ScreenUtil.instance.setSp(18),
                                       color: Colors.black54,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(10)),
                                 Container(
                                     width: ScreenUtil.instance.setWidth(170),
                                     height: ScreenUtil.instance.setWidth(50),
                                     padding: EdgeInsets.only(left: 10),
                                     child: TextFormField(
-                                      controller: ticketQuantityController,
+                                      controller: minTicketController,
                                       decoration: InputDecoration(
                                           fillColor: Colors.white,
                                           filled: true,
@@ -239,342 +373,247 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                               borderRadius:
                                                   BorderRadius.circular(7))),
                                     )),
-                                SizedBox(height: ScreenUtil.instance.setWidth(20)),
+                              ]),
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
                                 Text(
-                                  'Set The Price',
+                                  'Max Ticket',
                                   style: TextStyle(
                                       fontSize: ScreenUtil.instance.setSp(18),
                                       color: Colors.black54,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Text(
-                                  'Set your ticket price',
-                                  style: TextStyle(
-                                      fontSize: ScreenUtil.instance.setSp(15),
-                                      color: Colors.grey[300],
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(10)),
                                 Container(
                                     width: ScreenUtil.instance.setWidth(170),
                                     height: ScreenUtil.instance.setWidth(50),
                                     padding: EdgeInsets.only(left: 10),
-                                    child: ticketTypeID == '5' ||
-                                            ticketTypeID == '10'
-                                        ? Text('FREE',
-                                            style: TextStyle(
-                                                fontSize: ScreenUtil.instance.setSp(18),
-                                                color: Colors.grey[300],
-                                                fontWeight: FontWeight.bold))
-                                        : TextFormField(
-                                            controller: priceController,
-                                            decoration: InputDecoration(
-                                                fillColor: Colors.white,
-                                                filled: true,
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                        borderSide:
-                                                            BorderSide.none,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(7)),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                        borderSide:
-                                                            BorderSide.none,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(7))),
-                                          ))
-                              ],
-                            )
-                          ],
-                        ),
+                                    child: TextFormField(
+                                      controller: maxTicketController,
+                                      decoration: InputDecoration(
+                                          fillColor: Colors.white,
+                                          filled: true,
+                                          enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide.none,
+                                              borderRadius:
+                                                  BorderRadius.circular(7)),
+                                          focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide.none,
+                                              borderRadius:
+                                                  BorderRadius.circular(7))),
+                                    )),
+                              ])
+                        ],
                       ),
-                      Divider(
-                        color: Colors.black,
+                      Text(
+                        'Ticket Sales Starts',
+                        style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: ScreenUtil.instance.setSp(18)),
                       ),
-                      SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      SizedBox(
+                        height: ScreenUtil.instance.setWidth(15),
+                      ),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      'Min Ticket',
-                                      style: TextStyle(
-                                          fontSize: ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                                    Container(
-                                        width: ScreenUtil.instance.setWidth(170),
-                                        height: ScreenUtil.instance.setWidth(50),
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: TextFormField(
-                                          controller: minTicketController,
-                                          decoration: InputDecoration(
-                                              fillColor: Colors.white,
-                                              filled: true,
-                                              enabledBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide.none,
-                                                  borderRadius:
-                                                      BorderRadius.circular(7)),
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide.none,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          7))),
-                                        )),
-                                  ]),
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      'Max Ticket',
-                                      style: TextStyle(
-                                          fontSize: ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                                    Container(
-                                        width: ScreenUtil.instance.setWidth(170),
-                                        height: ScreenUtil.instance.setWidth(50),
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: TextFormField(
-                                          controller: maxTicketController,
-                                          decoration: InputDecoration(
-                                              fillColor: Colors.white,
-                                              filled: true,
-                                              enabledBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide.none,
-                                                  borderRadius:
-                                                      BorderRadius.circular(7)),
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide.none,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          7))),
-                                        )),
-                                  ])
-                            ],
+                          Container(
+                              width: ScreenUtil.instance.setWidth(150),
+                              height: ScreenUtil.instance.setWidth(50),
+                              padding: EdgeInsets.only(left: 10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    startDate,
+                                    style: TextStyle(
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20)),
+                                  ))),
+                          SizedBox(
+                            width: ScreenUtil.instance.setWidth(25),
                           ),
+                          Container(
+                              width: ScreenUtil.instance.setWidth(150),
+                              height: ScreenUtil.instance.setWidth(50),
+                              padding: EdgeInsets.only(left: 10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    startTime,
+                                    style: TextStyle(
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20)),
+                                  ))),
+                        ],
+                      ),
+                      SizedBox(
+                        height: ScreenUtil.instance.setWidth(20),
+                      ),
+                      Text(
+                        'Ticket Sales Ends',
+                        style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: ScreenUtil.instance.setSp(18)),
+                      ),
+                      SizedBox(
+                        height: ScreenUtil.instance.setWidth(15),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              width: ScreenUtil.instance.setWidth(150),
+                              height: ScreenUtil.instance.setWidth(50),
+                              padding: EdgeInsets.only(left: 10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    endDate,
+                                    style: TextStyle(
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20)),
+                                  ))),
+                          SizedBox(
+                            width: ScreenUtil.instance.setWidth(25),
+                          ),
+                          Container(
+                              width: ScreenUtil.instance.setWidth(150),
+                              height: ScreenUtil.instance.setWidth(50),
+                              padding: EdgeInsets.only(left: 10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    endTime,
+                                    style: TextStyle(
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20)),
+                                  ))),
+                        ],
+                      ),
+                      SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
                           Text(
-                            'Ticket Sales Starts',
-                            style:
-                                TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18)),
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(15),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                  width: ScreenUtil.instance.setWidth(150),
-                                  height: ScreenUtil.instance.setWidth(50),
-                                  padding: EdgeInsets.only(left: 10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        startDate,
-                                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
-                                      ))),
-                              SizedBox(
-                                width: ScreenUtil.instance.setWidth(25),
-                              ),
-                              Container(
-                                  width: ScreenUtil.instance.setWidth(150),
-                                  height: ScreenUtil.instance.setWidth(50),
-                                  padding: EdgeInsets.only(left: 10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        startTime,
-                                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
-                                      ))),
-                            ],
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(20),
-                          ),
-                          Text(
-                            'Ticket Sales Ends',
-                            style:
-                                TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18)),
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(15),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                  width: ScreenUtil.instance.setWidth(150),
-                                  height: ScreenUtil.instance.setWidth(50),
-                                  padding: EdgeInsets.only(left: 10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        endDate,
-                                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
-                                      ))),
-                              SizedBox(
-                                width: ScreenUtil.instance.setWidth(25),
-                              ),
-                              Container(
-                                  width: ScreenUtil.instance.setWidth(150),
-                                  height: ScreenUtil.instance.setWidth(50),
-                                  padding: EdgeInsets.only(left: 10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        endTime,
-                                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
-                                      ))),
-                            ],
-                          ),
-                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Show Remaining Ticket',
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: ScreenUtil.instance.setSp(18),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(10),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Radio(
-                                groupValue: __curValue,
-                                onChanged: (int i) =>
-                                    setState(() => __curValue = i),
-                                value: 1,
-                              ),
-                              Text('Yes'),
-                              SizedBox(
-                                width: ScreenUtil.instance.setWidth(25),
-                              ),
-                              Radio(
-                                groupValue: __curValue,
-                                onChanged: (int i) => setState(() {
-                                      __curValue = i;
-                                      print(MaterialTapTargetSize.values);
-                                    }),
-                                value: 0,
-                              ),
-                              Text('No')
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'One Purchase Per User',
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: ScreenUtil.instance.setSp(18),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(10),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Radio(
-                                groupValue: __curValue2,
-                                onChanged: (int i) =>
-                                    setState(() => __curValue2 = i),
-                                value: 1,
-                              ),
-                              Text('Yes'),
-                              SizedBox(
-                                width: ScreenUtil.instance.setWidth(25),
-                              ),
-                              Radio(
-                                groupValue: __curValue2,
-                                onChanged: (int i) => setState(() {
-                                      __curValue2 = i;
-                                      print(MaterialTapTargetSize.values);
-                                    }),
-                                value: 0,
-                              ),
-                              Text('No')
-                            ],
-                          ),
-                          SizedBox(height: ScreenUtil.instance.setWidth(20)),
-                          Text(
-                            'Description',
+                            'Show Remaining Ticket',
                             style: TextStyle(
                                 color: Colors.black54,
                                 fontSize: ScreenUtil.instance.setSp(18),
                                 fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(10),
-                          ),
-                          TextFormField(
-                            controller: descController,
-                            maxLines: 10,
-                            decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide.none),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide.none)),
-                          ),
-                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: ScreenUtil.instance.setWidth(50),
-                            child: RaisedButton(
-                              color: eventajaGreenTeal,
-                              onPressed: (){
-                                saveFinalData();
-                              },
-                              child: Text('CREATE EVENT', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                            ),
-                          )
                         ],
+                      ),
+                      SizedBox(
+                        height: ScreenUtil.instance.setWidth(10),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Radio(
+                            groupValue: __curValue,
+                            onChanged: (int i) =>
+                                setState(() => __curValue = i),
+                            value: 1,
+                          ),
+                          Text('Yes'),
+                          SizedBox(
+                            width: ScreenUtil.instance.setWidth(25),
+                          ),
+                          Radio(
+                            groupValue: __curValue,
+                            onChanged: (int i) => setState(() {
+                              __curValue = i;
+                              print(MaterialTapTargetSize.values);
+                            }),
+                            value: 0,
+                          ),
+                          Text('No')
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'One Purchase Per User',
+                            style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: ScreenUtil.instance.setSp(18),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: ScreenUtil.instance.setWidth(10),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Radio(
+                            groupValue: __curValue2,
+                            onChanged: (int i) =>
+                                setState(() => __curValue2 = i),
+                            value: 1,
+                          ),
+                          Text('Yes'),
+                          SizedBox(
+                            width: ScreenUtil.instance.setWidth(25),
+                          ),
+                          Radio(
+                            groupValue: __curValue2,
+                            onChanged: (int i) => setState(() {
+                              __curValue2 = i;
+                              print(MaterialTapTargetSize.values);
+                            }),
+                            value: 0,
+                          ),
+                          Text('No')
+                        ],
+                      ),
+                      SizedBox(height: ScreenUtil.instance.setWidth(20)),
+                      Text(
+                        'Description',
+                        style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: ScreenUtil.instance.setSp(18),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: ScreenUtil.instance.setWidth(10),
+                      ),
+                      TextFormField(
+                        controller: descController,
+                        maxLines: 10,
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            enabledBorder:
+                                OutlineInputBorder(borderSide: BorderSide.none),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none)),
                       ),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),);
+          ],
+        ),
+      ),
+    );
   }
 
   void handleEventTypeDialog() {}
@@ -584,8 +623,11 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
   showPlacePicker() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     LocationResult place = await Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => PlacePicker('AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI', displayLocation: LatLng(double.parse(currentLocation.latitude.toString()), double.parse(currentLocation.latitude.toString())
-    ))));
+        builder: (context) => PlacePicker(
+            'AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI',
+            displayLocation: LatLng(
+                double.parse(currentLocation.latitude.toString()),
+                double.parse(currentLocation.latitude.toString())))));
 
     if (!mounted) {
       return;
@@ -596,8 +638,10 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
       lat = place.latLng.latitude.toString();
       long = place.latLng.longitude.toString();
       prefs.setString('CREATE_EVENT_LOCATION_ADDRESS', place.name);
-      prefs.setString('CREATE_EVENT_LOCATION_LAT', place.latLng.latitude.toString());
-      prefs.setString('CREATE_EVENT_LOCATION_LONG', place.latLng.longitude.toString());
+      prefs.setString(
+          'CREATE_EVENT_LOCATION_LAT', place.latLng.latitude.toString());
+      prefs.setString(
+          'CREATE_EVENT_LOCATION_LONG', place.latLng.longitude.toString());
     });
 
     print(prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'));

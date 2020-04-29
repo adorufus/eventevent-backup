@@ -114,7 +114,7 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget()));
+              builder: (BuildContext context) => DashboardWidget(isRest: false,)));
     } else {
       var extractedData = json.decode(response.body);
       if (extractedData['desc'] == 'User is not register') {
@@ -148,7 +148,7 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget()));
+              builder: (BuildContext context) => DashboardWidget(isRest: false,)));
     } else {
       var extractedData = json.decode(response.body);
       String message = extractedData['desc'];

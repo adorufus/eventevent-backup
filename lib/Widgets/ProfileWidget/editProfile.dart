@@ -1,9 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -39,7 +45,6 @@ class EditProfileWidget extends StatefulWidget {
 
 class _EditProfileWidgetState extends State<EditProfileWidget>
     with AutomaticKeepAliveClientMixin<EditProfileWidget> {
-
   TextEditingController usernameController = new TextEditingController();
   TextEditingController firstNameController = new TextEditingController();
   TextEditingController lastNameController = new TextEditingController();
@@ -63,6 +68,10 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
   String following;
   String lastName;
   String bio;
+  File profilePictureFile;
+  File croppedProfilePicture;
+  Dio dio = new Dio(BaseOptions(
+      baseUrl: BaseApi().apiUrl, connectTimeout: 15000, receiveTimeout: 15000));
 
   bool isLoading = false;
 
@@ -78,7 +87,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -86,7 +96,6 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-
 
     return Scaffold(
       appBar: AppBar(
@@ -108,25 +117,28 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
         ),
         actions: <Widget>[
           GestureDetector(
-            onTap: (){
+            onTap: () {
               postUserProfileUpdate();
-              if(isLoading == true){
-                showDialog(context: context, builder: (BuildContext context){
-                  return Material(
-                    color: Colors.transparent,
-                    child: Center(
-                      child: Container(
-                        color: Colors.white,
-                        height: ScreenUtil.instance.setWidth(120),
-                        width: ScreenUtil.instance.setWidth(120),
-                        child: SizedBox(
-                            height: ScreenUtil.instance.setWidth(50), width: ScreenUtil.instance.setWidth(50), child: CupertinoActivityIndicator(radius: 20)),
-                      ),
-                    ),
-                  );
-                });
-              }
-              else{
+              if (isLoading == true) {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Material(
+                        color: Colors.transparent,
+                        child: Center(
+                          child: Container(
+                            color: Colors.white,
+                            height: ScreenUtil.instance.setWidth(120),
+                            width: ScreenUtil.instance.setWidth(120),
+                            child: SizedBox(
+                                height: ScreenUtil.instance.setWidth(50),
+                                width: ScreenUtil.instance.setWidth(50),
+                                child: CupertinoActivityIndicator(radius: 20)),
+                          ),
+                        ),
+                      );
+                    });
+              } else {
                 Navigator.of(context).pop();
               }
             },
@@ -135,14 +147,20 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
               child: Center(
                 child: Text(
                   'SAVE',
-                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: eventajaGreenTeal),
+                  style: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(20),
+                      color: eventajaGreenTeal),
                 ),
               ),
             ),
           )
         ],
       ),
-      body: userData == null ? Container(child: Center(child: CupertinoActivityIndicator(radius: 20)),) : buildMainView(),
+      body: userData == null
+          ? Container(
+              child: Center(child: CupertinoActivityIndicator(radius: 20)),
+            )
+          : buildMainView(),
     );
   }
 
@@ -170,6 +188,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
 
   Widget profilePicture() {
     return GestureDetector(
+      onTap: () {
+        getImage();
+      },
       child: Column(
         children: <Widget>[
           Container(
@@ -178,8 +199,12 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                    image: pictureUri == null ? AssetImage('assets/white.png') : NetworkImage(pictureUri),
-                    fit: BoxFit.contain)),
+                    image: pictureUri == null
+                        ? AssetImage('assets/white.png')
+                        : croppedProfilePicture == null
+                            ? NetworkImage(pictureUri)
+                            : FileImage(croppedProfilePicture),
+                    fit: BoxFit.cover)),
           ),
           SizedBox(
             height: ScreenUtil.instance.setWidth(30),
@@ -204,6 +229,29 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
     );
   }
 
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      profilePictureFile = image;
+
+      cropImage(profilePictureFile);
+    });
+  }
+
+  Future cropImage(File image) async {
+    File croppedImage = await ImageCropper.cropImage(
+      sourcePath: image.path,
+      aspectRatio: CropAspectRatio(ratioX: 2.0, ratioY: 3.0),
+      maxHeight: 512,
+      maxWidth: 512,
+    );
+
+    croppedProfilePicture = croppedImage;
+
+    setState(() {});
+  }
+
   Widget basicSettings() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -212,7 +260,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
         Text(
           'BASIC SETTINGS',
           style: TextStyle(
-              fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold, color: Colors.grey),
+              fontSize: ScreenUtil.instance.setSp(15),
+              fontWeight: FontWeight.bold,
+              color: Colors.grey),
         ),
         SizedBox(
           height: ScreenUtil.instance.setWidth(15),
@@ -228,101 +278,175 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
               ]),
           child: Padding(
             padding: EdgeInsets.only(top: 15, right: 15, left: 15, bottom: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: <Widget>[
-                    Text('Username', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
-                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
-                    Text('First Name', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
-                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
-                    Text('Last Name', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
-                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
-                    Text('Date Of Birth', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
-                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
-                    Text('Bio', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
-                  ],),
-                SizedBox(
-                  width: ScreenUtil.instance.setWidth(25),
+                    Text(
+                      'Username',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    Container(
+                      width: ScreenUtil.instance.setWidth(150),
+                      child: TextFormField(
+                        controller: usernameController,
+                        textAlign: TextAlign.start,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(vertical: 1),
+                          hintText: 'Username',
+                          hintStyle: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(15)),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
                 ),
-                Column(
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(20),
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'First Name',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    Container(
+                      width: ScreenUtil.instance.setWidth(150),
+                      child: TextFormField(
+                        controller: firstNameController,
+                        textAlign: TextAlign.start,
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(vertical: 1),
+                            border: InputBorder.none,
+                            hintText: 'First Name',
+                            hintStyle: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(15))),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(20),
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'Last Name',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    Container(
+                      width: ScreenUtil.instance.setWidth(150),
+                      child: TextFormField(
+                        controller: lastNameController,
+                        textAlign: TextAlign.start,
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(vertical: 1),
+                            border: InputBorder.none,
+                            hintText: 'Last Name',
+                            hintStyle: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(15))),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(20),
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'Date Of Birth',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    Container(
+                      width: ScreenUtil.instance.setWidth(150),
+                      child: TextFormField(
+                        controller: birthDateController,
+                        textAlign: TextAlign.start,
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(vertical: 1),
+                            border: InputBorder.none,
+                            hintText: 'Birthday',
+                            hintStyle: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(15))),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(20),
+                ),
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    Text(
+                      'Bio',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
                     Container(
-                        width: ScreenUtil.instance.setWidth(150),
-                        child: TextFormField(
-                          controller: usernameController,
-                          textAlign: TextAlign.start,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
+                      width: ScreenUtil.instance.setWidth(150),
+                      child: TextFormField(
+                        controller: shortBioController,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        textAlign: TextAlign.start,
+                        decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(vertical: 1),
-                            hintText: 'Username',
-                            hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
-                          ),
-                        ),
+                            border: InputBorder.none,
+                            hintText: 'Short Bio',
+                            hintStyle: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(15))),
                       ),
-                    SizedBox(height: ScreenUtil.instance.setWidth(15),),
-                    Container(
-                        width: ScreenUtil.instance.setWidth(150),
-                        child: TextFormField(
-                          controller: firstNameController,
-                          textAlign: TextAlign.start,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 1),
-                              border: InputBorder.none,
-                              hintText: 'First Name',
-                              hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15))
-                          ),
-                        ),
-                      ),
-                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
-                    Container(
-                        width: ScreenUtil.instance.setWidth(150),
-                        child: TextFormField(
-                          controller: lastNameController,
-                          textAlign: TextAlign.start,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 1),
-                              border: InputBorder.none,
-                              hintText: 'Last Name',
-                              hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15))
-                          ),
-                        ),
-                      ),
-                    SizedBox(height: ScreenUtil.instance.setWidth(15),),
-                    Container(
-                        width: ScreenUtil.instance.setWidth(150),
-                        child: TextFormField(
-                          controller: birthDateController,
-                          textAlign: TextAlign.start,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 1),
-                              border: InputBorder.none,
-                              hintText: 'Birthday',
-                              hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15))
-                          ),
-                        ),
-                      ),
-                    SizedBox(height: ScreenUtil.instance.setWidth(15),),
-                    Container(
-                        width: ScreenUtil.instance.setWidth(150),
-                        child: TextFormField(
-                          controller: shortBioController,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          textAlign: TextAlign.start,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 1),
-                              border: InputBorder.none,
-                              hintText: 'Short Bio',
-                              hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15))
-                          ),
-                        ),
-                      ),
-                  ],)
+                    ),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
               ],
             ),
           ),
@@ -339,13 +463,14 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
         Text(
           'CONTACT SETTINGS',
           style: TextStyle(
-              fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold, color: Colors.grey),
+              fontSize: ScreenUtil.instance.setSp(15),
+              fontWeight: FontWeight.bold,
+              color: Colors.grey),
         ),
         SizedBox(
           height: ScreenUtil.instance.setWidth(15),
         ),
         Container(
-          height: ScreenUtil.instance.setWidth(120),
           width: MediaQuery.of(context).size.width / 1.2,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
@@ -356,25 +481,21 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
               ]),
           child: Padding(
             padding: EdgeInsets.only(top: 15, right: 15, left: 15, bottom: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: <Widget>[
-                    Text('Email', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
-                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
-                    Text('Phone', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
-                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
-                    Text('Website', style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(15), fontWeight: FontWeight.bold),),
-                  ],),
-                SizedBox(
-                  width: ScreenUtil.instance.setWidth(57),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                    Text(
+                      'Email',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
                     Container(
                       width: ScreenUtil.instance.setWidth(150),
                       child: TextFormField(
@@ -384,11 +505,31 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(vertical: 1),
                           hintText: 'Email Address',
-                          hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
+                          hintStyle: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(15)),
                         ),
                       ),
                     ),
-                    SizedBox(height: ScreenUtil.instance.setWidth(15),),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(20),
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'Phone',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
                     Container(
                       width: ScreenUtil.instance.setWidth(150),
                       child: TextFormField(
@@ -398,11 +539,30 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                             contentPadding: EdgeInsets.symmetric(vertical: 1),
                             border: InputBorder.none,
                             hintText: 'Phone Number',
-                            hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15))
-                        ),
+                            hintStyle: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(15))),
                       ),
                     ),
-                    SizedBox(height: ScreenUtil.instance.setWidth(20),),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(20),
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'Website',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
                     Container(
                       width: ScreenUtil.instance.setWidth(150),
                       child: TextFormField(
@@ -412,11 +572,15 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                             contentPadding: EdgeInsets.symmetric(vertical: 1),
                             border: InputBorder.none,
                             hintText: 'Website',
-                            hintStyle: TextStyle(fontSize: ScreenUtil.instance.setSp(15))
-                        ),
+                            hintStyle: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(15))),
                       ),
                     ),
-                  ],)
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
               ],
             ),
           ),
@@ -432,7 +596,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
 
     print(userId);
 
-    final userProfileAPI = BaseApi().apiUrl + '/user/detail?X-API-KEY=$API_KEY&userID=$userId';
+    final userProfileAPI =
+        BaseApi().apiUrl + '/user/detail?X-API-KEY=$API_KEY&userID=$userId';
     print(userProfileAPI);
     final response = await http.get(userProfileAPI, headers: {
       'Authorization': 'Basic YWRtaW46MTIzNA==',
@@ -473,44 +638,68 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
 
     print(userId);
 
-    final userProfileAPI = BaseApi().apiUrl + '/user/update_profile';
+    final userProfileAPI = '/user/update_profile';
     print(userProfileAPI);
-    final response = await http.post(
+
+    try {
+      Response response = await dio.post(
         userProfileAPI,
-        headers: {
-          'Authorization': 'Basic YWRtaW46MTIzNA==',
-          'cookie': session
-        },
-        body: {
-          'X-API-KEY': API_KEY,
-          'fullName': firstNameController.text,
-          'lastName': lastNameController.text,
-          'phone': phoneController.text,
-          'shortBio': shortBioController.text,
-          'birthDay': birthDateController.text,
-          'website': websiteController.text,
-          'username': usernameController.text,
-        }
-     );
+        options: Options(
+          headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session},
+          responseType: ResponseType.plain,
+        ),
+        data: FormData.fromMap(
+          {
+            'X-API-KEY': API_KEY,
+            'fullName': firstNameController.text,
+            'lastName': lastNameController.text,
+            'phone': phoneController.text,
+            'shortBio': shortBioController.text,
+            'birthDay': birthDateController.text,
+            'website': websiteController.text,
+            'username': usernameController.text,
+            'photo': croppedProfilePicture == null
+                ? ''
+                : await MultipartFile.fromFile(croppedProfilePicture.path,
+                    filename: "eventevent-profilepicture-${DateTime.now().toString()}.jpg",
+                    contentType: MediaType('image', 'jpg'))
+          },
+        ),
+      );
 
-    print(response.statusCode);
+      print(response.statusCode);
 
-    if(response.statusCode == null){
-      setState(() {
-        isLoading = true;
-      });
-      print('loading');
-    }
-    if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.statusCode == null) {
+        setState(() {
+          isLoading = true;
+        });
+        print('loading');
+      }
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        setState(() {
+          isLoading = false;
+          print('edit berhasil');
+          Navigator.pop(context);
+          Navigator.pop(context);
+        });
+      } else {
+        setState((){
+          isLoading = false;
+        });
+        print(response.data);
+      }
+    } on DioError catch (e) {
       setState(() {
         isLoading = false;
-        print('edit berhasil');
-        Navigator.pop(context);
-        Navigator.pop(context);
       });
-    }
-    else{
-      print(response.body);
+      if (e.response != null) {
+        print(e.response.data);
+        print(e.response.statusCode);
+        print(e.response.request);
+      } else {
+        print(e.message);
+        print(e.error);
+      }
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,12 +31,12 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          // leading: GestureDetector(
-          //   onTap: (){
-          //     Navigator.popUntil(context, ModalRoute.withName('/Dashboard'));
-          //   },
-          //   child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal,),
-          // ),
+          leading: GestureDetector(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal,),
+          ),
           centerTitle: true,
           title: Text(
             'CREATE TICKET',
@@ -102,6 +103,7 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
                   autocorrect: false,
                   autofocus: false,
                   textAlign: TextAlign.center,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     hintText: 'enter your ticket price',
                   ),
@@ -115,10 +117,13 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
   navigateToNextStep() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (textController.text == null || textController.text == '' || textController.text == ' ') {
-      thisScaffold.currentState.showSnackBar(SnackBar(
-        content: Text('Input ticket price!'),
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: 'Input ticket price!',
         backgroundColor: Colors.red,
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     } else {
       prefs.setString('SETUP_TICKET_PRICE', textController.text);
       print(prefs.getString('SETUP_TICKET_PRICE'));

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/ManageEvent/BalanceOnHoldDetails.dart';
 import 'package:eventevent/Widgets/ManageEvent/Buyers.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -57,7 +58,11 @@ class TicketSalesState extends State<TicketSales> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal),
+        leading: GestureDetector(
+          onTap: (){
+            Navigator.pop(context);
+          },
+          child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal)),
       ),
       body: ticketSalesData == null || ticketData == null
           ? Container(
@@ -127,6 +132,9 @@ class TicketSalesState extends State<TicketSales> {
                           height: ScreenUtil.instance.setWidth(15),
                         ),
                         GestureDetector(
+                          onTap: (){
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => BalanceOnHoldDetails(ticketSales: ticketSalesData, eventId: widget.eventID,)));
+                          },
                           child: Text(
                             'SEE DETAILS >',
                             style: TextStyle(color: Colors.orange),
@@ -215,7 +223,14 @@ class TicketSalesState extends State<TicketSales> {
                           itemBuilder: (BuildContext context, i) {
                             return GestureDetector(
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Buyers(eventName: widget.eventName, ticketID: ticketData[i]['id'],)));
+                                try{
+                                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Buyers(
+                                    ticketName: ticketData[i]['ticket_name'],
+                                    eventName: widget.eventName, ticketID: ticketData[i]['id'],)));
+                                }
+                                catch(e){
+                                  print('error occured: ' + e);
+                                }
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,

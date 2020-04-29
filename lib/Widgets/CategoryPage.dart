@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
+import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,13 +39,13 @@ class _CategoryPageState extends State<CategoryPage> {
         refreshController.refreshCompleted();
       }
     }).catchError((e) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: e.toString(),
         backgroundColor: Colors.red,
-        content: Text(
-          e.toString(),
-          style: TextStyle(color: Colors.white),
-        ),
-      ));
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context);
     });
     super.initState();
   }
@@ -78,164 +80,119 @@ class _CategoryPageState extends State<CategoryPage> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: PreferredSize(
-          preferredSize: Size(null, 100),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: ScreenUtil.instance.setWidth(50),
-            padding: EdgeInsets.symmetric(horizontal: 13),
-            color: Colors.white,
-            child: AppBar(
-              elevation: 0,
-              backgroundColor: Colors.white,
-              leading: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Image.asset(
-                  'assets/icons/icon_apps/arrow.png',
-                  scale: 5.5,
-                  alignment: Alignment.centerLeft,
-                ),
+    
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: PreferredSize(
+        preferredSize: Size(null, 100),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: ScreenUtil.instance.setWidth(50),
+          padding: EdgeInsets.symmetric(horizontal: 13),
+          color: Colors.white,
+          child: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Image.asset(
+                'assets/icons/icon_apps/arrow.png',
+                scale: 5.5,
+                alignment: Alignment.centerLeft,
               ),
-              title: Text('Category'),
-              centerTitle: true,
-              textTheme: TextTheme(
-                  title: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: ScreenUtil.instance.setSp(14),
-                color: Colors.black,
-              )),
             ),
+            title: Text('Category'),
+            centerTitle: true,
+            textTheme: TextTheme(
+                title: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: ScreenUtil.instance.setSp(14),
+              color: Colors.black,
+            )),
           ),
         ),
-        body: Container(
-            child: eventByCategoryList == null
-                ? Center(
-                    child: Container(
-                      width: ScreenUtil.instance.setWidth(25),
-                      height: ScreenUtil.instance.setWidth(25),
-                      child: FittedBox(
-                        fit: BoxFit.fill,
-                        child: CupertinoActivityIndicator(radius: 20),
-                      ),
+      ),
+      body: SafeArea(
+        child: Container(
+          child: eventByCategoryList == null
+              ? Center(
+                  child: Container(
+                    width: ScreenUtil.instance.setWidth(25),
+                    height: ScreenUtil.instance.setWidth(25),
+                    child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: CupertinoActivityIndicator(radius: 20),
                     ),
-                  )
-                : SmartRefresher(
-                    enablePullDown: true,
-                    enablePullUp: true,
-                    footer: CustomFooter(
-                        builder: (BuildContext context, LoadStatus mode) {
-                      Widget body;
-                      if (mode == LoadStatus.idle) {
-                        body = Text("Load data");
-                      } else if (mode == LoadStatus.loading) {
-                        body = CupertinoActivityIndicator(radius: 20);
-                      } else if (mode == LoadStatus.failed) {
-                        body = Text("Load Failed!");
-                      } else if (mode == LoadStatus.canLoading) {
-                        body = Text('More');
-                      } else {
-                        body = Container();
+                  ),
+                )
+              : SmartRefresher(
+                  enablePullDown: true,
+                  enablePullUp: true,
+                  footer: CustomFooter(
+                      builder: (BuildContext context, LoadStatus mode) {
+                    Widget body;
+                    if (mode == LoadStatus.idle) {
+                      body = Text("Load data");
+                    } else if (mode == LoadStatus.loading) {
+                      body = CupertinoActivityIndicator(radius: 20);
+                    } else if (mode == LoadStatus.failed) {
+                      body = Text("Load Failed!");
+                    } else if (mode == LoadStatus.canLoading) {
+                      body = Text('More');
+                    } else {
+                      body = Container();
+                    }
+
+                    return Container(
+                        height: ScreenUtil.instance.setWidth(35),
+                        child: Center(child: body));
+                  }),
+                  onRefresh: () {
+                    setState(() {
+                      newPage = 0;
+                    });
+
+                    fetchCategoryById().then((response) {
+                      if (response.statusCode == 200) {
+                        setState(() {
+                          var extractedData = json.decode(response.body);
+                          eventByCategoryList = extractedData['data'];
+                        });
+                        if (mounted) setState(() {});
+                        refreshController.refreshCompleted();
                       }
+                    });
 
-                      return Container(
-                          height: ScreenUtil.instance.setWidth(35),
-                          child: Center(child: body));
-                    }),
-                    onRefresh: () {
-                      setState(() {
-                        newPage = 0;
-                      });
+                    if (mounted) setState(() {});
+                    refreshController.refreshCompleted();
+                  },
+                  onLoading: _onLoading,
+                  controller: refreshController,
+                  child: ListView.builder(
+                    itemCount: eventByCategoryList == null
+                        ? 0
+                        : eventByCategoryList.length,
+                    itemBuilder: (BuildContext context, i) {
+                      Color itemColor;
+                      String itemPriceText;
 
-                      fetchCategoryById().then((response) {
-                        if (response.statusCode == 200) {
-                          setState(() {
-                            var extractedData = json.decode(response.body);
-                            eventByCategoryList = extractedData['data'];
-                          });
-                          if (mounted) setState(() {});
-                          refreshController.refreshCompleted();
-                        }
-                      });
-
-                      if (mounted) setState(() {});
-                      refreshController.refreshCompleted();
-                    },
-                    onLoading: _onLoading,
-                    controller: refreshController,
-                    child: ListView.builder(
-                      itemCount: eventByCategoryList == null
-                          ? 0
-                          : eventByCategoryList.length,
-                      itemBuilder: (BuildContext context, i) {
-                        Color itemColor;
-                        String itemPriceText;
-
-                        if (eventByCategoryList[i]['ticket_type']['type'] ==
-                                'paid' ||
-                            eventByCategoryList[i]['ticket_type']['type'] ==
-                                'paid_seating') {
-                          if (eventByCategoryList[i]['ticket']
-                                  ['availableTicketStatus'] ==
-                              '1') {
-                            itemColor = Color(0xFF34B323);
-                            itemPriceText = eventByCategoryList[i]['ticket']
-                                ['cheapestTicket'];
-                          } else {
-                            if (eventByCategoryList[i]['ticket']
-                                    ['salesStatus'] ==
-                                'comingSoon') {
-                              itemColor = Color(0xFF34B323).withOpacity(0.3);
-                              itemPriceText = 'COMING SOON';
-                            } else if (eventByCategoryList[i]['ticket']
-                                    ['salesStatus'] ==
-                                'endSales') {
-                              itemColor = Color(0xFF8E1E2D);
-                              if (eventByCategoryList[i]['status'] == 'ended') {
-                                itemPriceText = 'EVENT HAS ENDED';
-                              }
-                              itemPriceText = 'SALES ENDED';
-                            } else {
-                              itemColor = Color(0xFF8E1E2D);
-                              itemPriceText = 'SOLD OUT';
-                            }
-                          }
-                        } else if (eventByCategoryList[i]['ticket_type']
-                                ['type'] ==
-                            'no_ticket') {
-                          itemColor = Color(0xFF652D90);
-                          itemPriceText = 'NO TICKET';
-                        } else if (eventByCategoryList[i]['ticket_type']
-                                ['type'] ==
-                            'on_the_spot') {
-                          itemColor = Color(0xFF652D90);
-                          itemPriceText =
-                              eventByCategoryList[i]['ticket_type']['name'];
-                        } else if (eventByCategoryList[i]['ticket_type']
-                                ['type'] ==
-                            'free') {
-                          itemColor = Color(0xFFFFAA00);
-                          itemPriceText =
-                              eventByCategoryList[i]['ticket_type']['name'];
-                        } else if (eventByCategoryList[i]['ticket_type']
-                                ['type'] ==
-                            'free') {
-                          itemColor = Color(0xFFFFAA00);
-                          itemPriceText =
-                              eventByCategoryList[i]['ticket_type']['name'];
-                        } else if (eventByCategoryList[i]['ticket_type']
-                                ['type'] ==
-                            'free_limited') {
-                          if (eventByCategoryList[i]['ticket']
-                                  ['availableTicketStatus'] ==
-                              '1') {
-                            itemColor = Color(0xFFFFAA00);
-                            itemPriceText =
-                                eventByCategoryList[i]['ticket_type']['name'];
+                      if (eventByCategoryList[i]['ticket_type']['type'] ==
+                              'paid' ||
+                          eventByCategoryList[i]['ticket_type']['type'] ==
+                              'paid_seating') {
+                        if (eventByCategoryList[i]['ticket']
+                                ['availableTicketStatus'] ==
+                            '1') {
+                          itemColor = Color(0xFF34B323);
+                          itemPriceText = eventByCategoryList[i]['ticket']
+                              ['cheapestTicket'];
+                        } else {
+                          if (eventByCategoryList[i]['ticket']['salesStatus'] ==
+                              'comingSoon') {
+                            itemColor = Color(0xFF34B323).withOpacity(0.3);
+                            itemPriceText = 'COMING SOON';
                           } else if (eventByCategoryList[i]['ticket']
                                   ['salesStatus'] ==
                               'endSales') {
@@ -249,30 +206,84 @@ class _CategoryPageState extends State<CategoryPage> {
                             itemPriceText = 'SOLD OUT';
                           }
                         }
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        EventDetailsConstructView(
-                                            id: eventByCategoryList[i]['id'])));
-                          },
-                          child: new LatestEventItem(
-                            image: eventByCategoryList[i]['picture_timeline'],
-                            title: eventByCategoryList[i]['name'],
-                            location: eventByCategoryList[i]['address'],
-                            itemColor: itemColor,
-                            itemPrice: itemPriceText,
-                            type: eventByCategoryList[i]['ticket_type']['type'],
-                            isAvailable: eventByCategoryList[i]['ticket']
-                                ['availableTicketStatus'],
-                            date: DateTime.parse(eventByCategoryList[i]['dateStart']),
-                          ),
-                        );
-                      },
-                    ),
-                  )),
+                      } else if (eventByCategoryList[i]['ticket_type']
+                              ['type'] ==
+                          'no_ticket') {
+                        itemColor = Color(0xFF652D90);
+                        itemPriceText = 'NO TICKET';
+                      } else if (eventByCategoryList[i]['ticket_type']
+                              ['type'] ==
+                          'on_the_spot') {
+                        itemColor = Color(0xFF652D90);
+                        itemPriceText =
+                            eventByCategoryList[i]['ticket_type']['name'];
+                      } else if (eventByCategoryList[i]['ticket_type']
+                              ['type'] ==
+                          'free') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText =
+                            eventByCategoryList[i]['ticket_type']['name'];
+                      } else if (eventByCategoryList[i]['ticket_type']
+                              ['type'] ==
+                          'free') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText =
+                            eventByCategoryList[i]['ticket_type']['name'];
+                      } else if (eventByCategoryList[i]['ticket_type']
+                              ['type'] ==
+                          'free_live_stream') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText =
+                            eventByCategoryList[i]['ticket_type']['name'];
+                      } else if (eventByCategoryList[i]['ticket_type']
+                              ['type'] ==
+                          'free_limited') {
+                        if (eventByCategoryList[i]['ticket']
+                                ['availableTicketStatus'] ==
+                            '1') {
+                          itemColor = Color(0xFFFFAA00);
+                          itemPriceText =
+                              eventByCategoryList[i]['ticket_type']['name'];
+                        } else if (eventByCategoryList[i]['ticket']
+                                ['salesStatus'] ==
+                            'endSales') {
+                          itemColor = Color(0xFF8E1E2D);
+                          if (eventByCategoryList[i]['status'] == 'ended') {
+                            itemPriceText = 'EVENT HAS ENDED';
+                          }
+                          itemPriceText = 'SALES ENDED';
+                        } else {
+                          itemColor = Color(0xFF8E1E2D);
+                          itemPriceText = 'SOLD OUT';
+                        }
+                      }
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      EventDetailLoadingScreen(
+                                          eventId: eventByCategoryList[i]
+                                              ['id'])));
+                        },
+                        child: new LatestEventItem(
+                          image: eventByCategoryList[i]['picture_timeline'],
+                          title: eventByCategoryList[i]['name'],
+                          location: eventByCategoryList[i]['address'],
+                          itemColor: itemColor,
+                          itemPrice: itemPriceText,
+                          type: eventByCategoryList[i]['ticket_type']['type'],
+                          isAvailable: eventByCategoryList[i]['ticket']
+                              ['availableTicketStatus'],
+                          date: DateTime.parse(
+                              eventByCategoryList[i]['dateStart']),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+        ),
       ),
     );
   }
