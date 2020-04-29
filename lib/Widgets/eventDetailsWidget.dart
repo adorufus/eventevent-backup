@@ -164,14 +164,17 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   void initState() {
     // FlutterBranchSdk.validateSDKIntegration();
     generateLink();
-    getWowzaLivestreamState(widget.detailData['livestream'][0]['streaming_id'])
-        .then((response) {
-      var extractedResponse = json.decode(response.body);
+    if (widget.detailData.containsKey("livestream")) {
+      getWowzaLivestreamState(
+              widget.detailData['livestream'][0]['streaming_id'])
+          .then((response) {
+        var extractedResponse = json.decode(response.body);
 
-      streamingState = extractedResponse['live_stream']['state'];
-      if (!mounted) return;
-      setState(() {});
-    });
+        streamingState = extractedResponse['live_stream']['state'];
+        if (!mounted) return;
+        setState(() {});
+      });
+    }
 
     setState(() {
       detailData = widget.detailData;
@@ -2144,27 +2147,28 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 } else {
                                                   if (streamingState ==
                                                       'stopped') {
-                                                        showCupertinoDialog(
-                                                      context: context,
-                                                      builder: (thisContext) {
-                                                        return CupertinoAlertDialog(
-                                                          title: Text('Notice'),
-                                                          content: Text(
-                                                            'Please broadcast 5 minutes before the event start',
-                                                          ),
-                                                          actions: <Widget>[
-                                                            CupertinoDialogAction(
-                                                              child:
-                                                                  Text('Close'),
-                                                              onPressed: () {
-                                                                Navigator.of(
-                                                                        thisContext)
-                                                                    .pop();
-                                                              },
-                                                            )
-                                                          ],
-                                                        );
-                                                      });
+                                                    showCupertinoDialog(
+                                                        context: context,
+                                                        builder: (thisContext) {
+                                                          return CupertinoAlertDialog(
+                                                            title:
+                                                                Text('Notice'),
+                                                            content: Text(
+                                                              'Please broadcast 5 minutes before the event start',
+                                                            ),
+                                                            actions: <Widget>[
+                                                              CupertinoDialogAction(
+                                                                child: Text(
+                                                                    'Close'),
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          thisContext)
+                                                                      .pop();
+                                                                },
+                                                              )
+                                                            ],
+                                                          );
+                                                        });
                                                   } else {
                                                     Navigator.push(
                                                       context,
@@ -2235,8 +2239,21 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             ? 'assets/btn_ticket/live.png'
                                                             : 'assets/icons/icon_apps/qr.png',
                                                         fit: BoxFit.fill,
-                                                        colorBlendMode: BlendMode.srcATop,
-                                                        color: widget.detailData['ticket_type']['type'] == 'free_live_stream' ? streamingState == 'stopped' ? Colors.grey.withOpacity(.9) : Colors.transparent : Colors.transparent,
+                                                        colorBlendMode:
+                                                            BlendMode.srcATop,
+                                                        color: widget.detailData[
+                                                                        'ticket_type']
+                                                                    ['type'] ==
+                                                                'free_live_stream'
+                                                            ? streamingState ==
+                                                                    'stopped'
+                                                                ? Colors.grey
+                                                                    .withOpacity(
+                                                                        .9)
+                                                                : Colors
+                                                                    .transparent
+                                                            : Colors
+                                                                .transparent,
                                                       )),
                                                   SizedBox(
                                                     height: ScreenUtil.instance
