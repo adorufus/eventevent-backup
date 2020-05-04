@@ -275,8 +275,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   }
 
   void _onTimeChange(Timer timer) {
-      if(!mounted) return;
-      setState(() {
+    if (!mounted) return;
+    setState(() {
       _currentTime = DateTime.now();
     });
   }
@@ -900,19 +900,42 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   height: ScreenUtil.instance
                                                       .setWidth(10)),
                                               Container(
-                                                  width: ScreenUtil.instance
-                                                      .setWidth(180),
-                                                  child: Text(
-                                                    widget.dateTime,
-                                                    style: TextStyle(
-                                                        fontSize: ScreenUtil
-                                                            .instance
-                                                            .setSp(12),
-                                                        color: Colors.grey),
-                                                  )),
+                                                width: ScreenUtil.instance
+                                                    .setWidth(180),
+                                                child: Text(
+                                                  widget.dateTime,
+                                                  style: TextStyle(
+                                                    fontSize: ScreenUtil
+                                                        .instance
+                                                        .setSp(12),
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                              ),
                                               SizedBox(
-                                                  height: ScreenUtil.instance
-                                                      .setWidth(10)),
+                                                height: ScreenUtil.instance
+                                                    .setWidth(10),
+                                              ),
+                                              detailData['isHybridEvent'] == 'streamOnly' ? Row(
+                                                children: <Widget>[
+                                                  Image.asset(
+                                                      'assets/icons/icon_apps/LivestreamTagIcon.png',
+                                                      scale: 25),
+                                                  SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  Text(
+                                                    'Livestream Event',
+                                                    style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontSize: 13),
+                                                  )
+                                                ],
+                                              ) : Container(),
+                                              SizedBox(
+                                                height: ScreenUtil.instance
+                                                    .setWidth(10),
+                                              ),
                                               Container(
                                                   height: ScreenUtil.instance
                                                       .setWidth(widget
@@ -2224,26 +2247,31 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     MainAxisAlignment.center,
                                                 children: <Widget>[
                                                   SizedBox(
-                                                      width: ScreenUtil.instance
-                                                          .setWidth(widget.detailData[
-                                                                          'ticket_type']
+                                                      width: ScreenUtil.instance.setWidth(widget
+                                                                          .detailData[
+                                                                      'ticket_type']
+                                                                  ['type'] ==
+                                                              'free_live_stream'
+                                                          ? widget.detailData[
+                                                                          'livestream'][0]
                                                                       [
-                                                                      'type'] ==
-                                                                  'free_live_stream'
-                                                              ? widget.detailData[
-                                                      'livestream'][0]
-                                                      ['zoom_id'] !=
-                                                          null ? 80 : 50
-                                                              : 20.9),
+                                                                      'zoom_id'] !=
+                                                                  null
+                                                              ? 80
+                                                              : 50
+                                                          : 20.9),
                                                       child: Image.asset(
                                                         widget.detailData[
                                                                         'ticket_type']
                                                                     ['type'] ==
                                                                 'free_live_stream'
                                                             ? widget.detailData[
-                                                        'livestream'][0]
-                                                        ['zoom_id'] !=
-                                                            null ? 'assets/icons/aset_icon/zoom_livestream.png' : 'assets/btn_ticket/live.png'
+                                                                            'livestream'][0]
+                                                                        [
+                                                                        'zoom_id'] !=
+                                                                    null
+                                                                ? 'assets/icons/aset_icon/zoom_livestream.png'
+                                                                : 'assets/btn_ticket/live.png'
                                                             : 'assets/icons/icon_apps/qr.png',
                                                         fit: BoxFit.fill,
                                                         colorBlendMode:

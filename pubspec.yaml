@@ -214,6 +214,7 @@ flutter:
     - assets/icons/icon_apps/public_timeline.png
     - assets/icons/icon_apps/search.png
     - assets/icons/icon_apps/ticket.png
+    - assets/icons/icon_apps/LivestreamTagIcon.png
     - assets/icons/icon_apps/edit.png
     - assets/icons/icon_apps/discover.png
     - assets/icons/icon_apps/delete.png

@@ -639,6 +639,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 child: PopularEventWidget(
                                   imageUrl: data[i]['picture'],
                                   title: data[i]["name"],
+                                  isHybridEvent: data[i]['isHybridEvent'],
                                   location: data[i]["address"],
                                   color: itemColor,
                                   price: itemPriceText,

@@ -14,6 +14,7 @@ class PopularEventWidget extends StatelessWidget {
   final isAvailable;
   final isGoing;
   final DateTime date;
+  final isHybridEvent;
 
   const PopularEventWidget(
       {Key key,
@@ -25,7 +26,7 @@ class PopularEventWidget extends StatelessWidget {
       this.type,
       this.isAvailable,
       this.date,
-      this.isGoing})
+      this.isGoing, this.isHybridEvent})
       : super(key: key);
 
   @override
@@ -138,6 +139,11 @@ class PopularEventWidget extends StatelessWidget {
             date: date,
           ),
         ),
+        isHybridEvent == 'streamOnly' ? Positioned(
+          bottom: ScreenUtil.instance.setWidth(100),
+          right: ScreenUtil.instance.setWidth(10),
+          child: Image.asset('assets/icons/icon_apps/LivestreamTagIcon.png', scale: 20)
+        ): Container()
       ],
     );
   }

@@ -194,7 +194,14 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                           itemColor = Color(0xFFFFAA00);
                           itemPriceText =
                               latestEventData[i]['ticket_type']['name'];
-                        } else if (latestEventData[i]['ticket_type']
+                        }else if (latestEventData[i]['ticket_type']
+                        ['type'] ==
+                            'paid_live_stream') {
+                          itemColor = eventajaGreenTeal;
+                          itemPriceText =
+                          'Rp. ' + latestEventData[i]['ticket']['cheapestTicket'];
+                        }
+                        else if (latestEventData[i]['ticket_type']
                                 ['type'] ==
                             'free_live_stream') {
                           itemColor = Color(0xFFFFAA00);
@@ -240,6 +247,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                                           eventId: latestEventData[i]['id'])));
                         },
                         child: new LatestEventItem(
+                          isHybridEvent: latestEventData[i]['isHybridEvent'],
                           image: latestEventData[i]['picture_timeline'],
                           title: latestEventData[i]['name'],
                           location: latestEventData[i]['address'],

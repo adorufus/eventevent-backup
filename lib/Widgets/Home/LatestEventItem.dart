@@ -15,6 +15,7 @@ class LatestEventItem extends StatelessWidget {
   final type;
   final isAvailable;
   final DateTime date;
+  final isHybridEvent;
 
   const LatestEventItem(
       {Key key,
@@ -26,7 +27,7 @@ class LatestEventItem extends StatelessWidget {
       this.itemPrice,
       this.type,
       this.isAvailable,
-      this.date})
+      this.date, this.isHybridEvent})
       : super(key: key);
 
   @override
@@ -109,6 +110,14 @@ class LatestEventItem extends StatelessWidget {
                     ],
                   ),
                 ),
+                SizedBox(height: 6,),
+                isHybridEvent == 'streamOnly' ? Row(
+                  children: <Widget>[
+                    Image.asset('assets/icons/icon_apps/LivestreamTagIcon.png', scale: 25),
+                    SizedBox(width: 8,),
+                    Text('Livestream Event', style: TextStyle(color: Colors.red, fontSize: 13),)
+                  ],
+                ) : Container(),
                 Expanded(
                   child: SizedBox(),
                 ),
