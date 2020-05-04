@@ -106,6 +106,8 @@ dependencies:
   camera: ^0.5.7+4
   page_indicator:
   flutter_playout: ^1.0.35
+  web_socket_channel: ^1.1.0
+  wakelock: ^0.1.4+1
   
   interactive_webview: ^0.1.2
   # apple_maps_flutter:

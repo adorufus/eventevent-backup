@@ -145,6 +145,332 @@ class HomeLoadingScreen {
     );
   }
 
+  Widget basicSettingsLoading(BuildContext context, eventajaGreenTeal) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'BASIC SETTINGS',
+          style: TextStyle(
+              fontSize: ScreenUtil.instance.setSp(15),
+              fontWeight: FontWeight.bold,
+              color: Colors.grey),
+        ),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width / 1.2,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.grey, offset: Offset(1, 1), blurRadius: 2)
+              ]),
+          child: Padding(
+            padding: EdgeInsets.only(top: 15, right: 15, left: 15, bottom: 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'Username',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    Container(
+                      width: ScreenUtil.instance.setWidth(150),
+                      child: PlaceholderLines(
+                        count: 1,
+                        color: Colors.grey,
+                        align: TextAlign.left,
+                        animate: true,
+                        lineHeight: 10,
+                      )
+                    ),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(20),
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'First Name',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    Container(
+                      width: ScreenUtil.instance.setWidth(150),
+                      child: PlaceholderLines(
+                        count: 1,
+                        color: Colors.grey,
+                        align: TextAlign.left,
+                        animate: true,
+                        lineHeight: 10,
+                      )
+                    ),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(20),
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'Last Name',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    Container(
+                      width: ScreenUtil.instance.setWidth(150),
+                      child: PlaceholderLines(
+                        count: 1,
+                        color: Colors.grey,
+                        align: TextAlign.left,
+                        animate: true,
+                        lineHeight: 10,
+                      )
+                    ),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(20),
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'Date Of Birth',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    Container(
+                      width: ScreenUtil.instance.setWidth(150),
+                      child: PlaceholderLines(
+                        count: 1,
+                        color: Colors.grey,
+                        align: TextAlign.left,
+                        animate: true,
+                        lineHeight: 10,
+                      )
+                    ),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(20),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Bio',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    Container(
+                      width: ScreenUtil.instance.setWidth(150),
+                      child: PlaceholderLines(
+                        count: 1,
+                        color: Colors.grey,
+                        align: TextAlign.left,
+                        animate: true,
+                        lineHeight: 10,
+                      )
+                    ),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget contactSettingsLoading(BuildContext context, eventajaGreenTeal) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'CONTACT SETTINGS',
+          style: TextStyle(
+              fontSize: ScreenUtil.instance.setSp(15),
+              fontWeight: FontWeight.bold,
+              color: Colors.grey),
+        ),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width / 1.2,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.grey, offset: Offset(1, 1), blurRadius: 2)
+              ]),
+          child: Padding(
+            padding: EdgeInsets.only(top: 15, right: 15, left: 15, bottom: 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'Email',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    Container(
+                      width: ScreenUtil.instance.setWidth(150),
+                      child: PlaceholderLines(
+                        count: 1,
+                        color: Colors.grey,
+                        align: TextAlign.left,
+                        animate: true,
+                        lineHeight: 10,
+                      )
+                    ),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(20),
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'Phone',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    Container(
+                      width: ScreenUtil.instance.setWidth(150),
+                      child: PlaceholderLines(
+                        count: 1,
+                        color: Colors.grey,
+                        align: TextAlign.left,
+                        animate: true,
+                        lineHeight: 10,
+                      )
+                    ),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: ScreenUtil.instance.setWidth(20),
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      'Website',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(15),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: SizedBox(),
+                    ),
+                    Container(
+                      width: ScreenUtil.instance.setWidth(150),
+                      child: PlaceholderLines(
+                        count: 1,
+                        color: Colors.grey,
+                        align: TextAlign.left,
+                        animate: true,
+                        lineHeight: 10,
+                      )
+                    ),
+                    SizedBox(
+                      width: 25,
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget EditProfilePictureLoading(){
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300],
+      highlightColor: Colors.grey[100],
+      enabled: true,
+      child: Container(
+        height: ScreenUtil.instance.setWidth(200),
+        width: ScreenUtil.instance.setWidth(200),
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+                image:AssetImage('assets/white.png'),
+                fit: BoxFit.cover)),
+      ),
+    );
+  }
+
   Widget withdrawLoading(BuildContext context) {
     return Container(
       color: Colors.white,

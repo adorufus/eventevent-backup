@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/ProfileWidget/ScanBarcode.dart';
-import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/LivestreamPlayer.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsWidget.dart';
 import 'package:eventevent/Widgets/ProfileWidget/UseTicketSuccess.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
@@ -10,6 +9,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
+import 'package:eventevent/livestream/LivestreamPlayer.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

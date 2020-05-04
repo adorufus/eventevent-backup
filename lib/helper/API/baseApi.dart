@@ -26,6 +26,8 @@ class BaseApi{
   final restUrl = "https://home.eventeventapp.com/rest";
   static final midtransUrlProd = "https://api.midtrans.com/";
   static final wowzaUrl = "https://api.cloud.wowza.com/api/v1.3/";
+  static final eventeventWebSocket = "ws://52.220.123.23:7181";
+  static final eventeventWebPort = "7181";
 
 //   final apiUrl = "http://staging.eventeventapp.com/api";
 //   final restUrl = "http://staging.eventeventapp.com/rest";

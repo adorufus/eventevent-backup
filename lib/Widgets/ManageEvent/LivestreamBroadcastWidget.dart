@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_wowza/gocoder/wowza_gocoder.dart';
+import 'package:wakelock/wakelock.dart';
 
 class LivestreamBroadcast extends StatefulWidget {
   final eventDetail;
@@ -40,7 +41,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
       portNumber: 1935,
       applicationName: appName,
       streamName: streamName,
-      scaleMode: ScaleMode.FILL_VIEW,
+      scaleMode: ScaleMode.RESIZE_TO_ASPECT,
     );
 
     if (!mounted) return;
@@ -103,6 +104,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
 
   @override
   void initState() {
+    Wakelock.enable();
     getWowzaConfigData();
     // initializeWowzaLivestream().then((response) {
     //   if (response.statusCode == 200 || response.statusCode == 201) {}
@@ -112,6 +114,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
 
   @override
   void dispose() {
+    Wakelock.disable();
     wowzCameraController.dispose();
     super.dispose();
   }

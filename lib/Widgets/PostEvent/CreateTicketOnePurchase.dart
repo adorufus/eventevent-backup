@@ -20,6 +20,21 @@ class CreateTicketOnePurchaseState extends State<CreateTicketOnePurchase> {
 
   int __curValue = 0;
 
+  bool isLivestream = false;
+
+  void checkIfTicketLivestream() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    if(preferences.getBool('isLivestream') == true){
+      isLivestream = true;
+      __curValue = 1;
+    }
+
+    setState(() {
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
@@ -110,7 +125,7 @@ class CreateTicketOnePurchaseState extends State<CreateTicketOnePurchase> {
                     SizedBox(width: ScreenUtil.instance.setWidth(25),),
                     Radio(
                       groupValue: __curValue,
-                      onChanged: (int i) => setState((){
+                      onChanged: isLivestream == true ? null : (int i) => setState((){
                         __curValue = i;
                         print(MaterialTapTargetSize.values);
                       }),

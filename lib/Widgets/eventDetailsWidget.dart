@@ -275,7 +275,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   }
 
   void _onTimeChange(Timer timer) {
-    setState(() {
+      if(!mounted) return;
+      setState(() {
       _currentTime = DateTime.now();
     });
   }
@@ -2229,14 +2230,20 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                       [
                                                                       'type'] ==
                                                                   'free_live_stream'
-                                                              ? 50
+                                                              ? widget.detailData[
+                                                      'livestream'][0]
+                                                      ['zoom_id'] !=
+                                                          null ? 80 : 50
                                                               : 20.9),
                                                       child: Image.asset(
                                                         widget.detailData[
                                                                         'ticket_type']
                                                                     ['type'] ==
                                                                 'free_live_stream'
-                                                            ? 'assets/btn_ticket/live.png'
+                                                            ? widget.detailData[
+                                                        'livestream'][0]
+                                                        ['zoom_id'] !=
+                                                            null ? 'assets/icons/aset_icon/zoom_livestream.png' : 'assets/btn_ticket/live.png'
                                                             : 'assets/icons/icon_apps/qr.png',
                                                         fit: BoxFit.fill,
                                                         colorBlendMode:
