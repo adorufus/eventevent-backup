@@ -225,6 +225,8 @@ class _MyTicketState extends State<MyTicket> {
                             Color ticketColor;
                             String ticketStatusText;
 
+                            print('PLAYBACK URL: ${myTicketList[i]['livestream']['playback_url']}');
+
                             if (myTicketList[i]['usedStatus'] == 'available') {
                               ticketColor = eventajaGreenTeal;
                               ticketStatusText = 'Available';
@@ -265,6 +267,7 @@ class _MyTicketState extends State<MyTicket> {
 
                             return GestureDetector(
                               onTap: () {
+
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -291,12 +294,12 @@ class _MyTicketState extends State<MyTicket> {
                                                       ['livestream']
                                                   ['zoom_description'],
                                               livestreamUrl: ticketStatusText ==
-                                                          "Streaming" ||
-                                                      ticketStatusText ==
-                                                          'Watch Playback'
-                                                  ? myTicketList[i]
-                                                      ['livestream']['playback']
-                                                  : '',
+	                                            "Streaming" ||
+	                                            ticketStatusText ==
+		                                            'Watch Playback' || ticketStatusText == 'Expired'
+	                                            ? myTicketList[i]['livestream']['playback_url'] == 'not_available' ? myTicketList[i]
+                                            ['livestream']['playback'] : myTicketList[i]['livestream']['playback_url']
+	                                            : '',
                                               usedStatus: ticketStatusText,
                                             )));
                               },

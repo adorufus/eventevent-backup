@@ -33,6 +33,7 @@ class UseTicket extends StatefulWidget {
   final livestreamUrl;
   final zoomId;
   final zoomDesc;
+  final playbackUrl;
 
   const UseTicket({
     Key key,
@@ -47,7 +48,7 @@ class UseTicket extends StatefulWidget {
     this.usedStatus,
     this.livestreamUrl,
     this.zoomId,
-    this.zoomDesc,
+    this.zoomDesc, this.playbackUrl,
   }) : super(key: key);
 
   @override
@@ -106,12 +107,12 @@ class UseTicketState extends State<UseTicket> {
         ),
       ),
       bottomNavigationBar: GestureDetector(
-        onTap: widget.usedStatus == 'Used' || widget.usedStatus == 'Expired'
+        onTap: widget.usedStatus == 'Used'
             ? () {}
             : startDate.isAfter(DateTime.now())
                 ? () {}
                 : widget.usedStatus == 'Streaming' ||
-                        widget.usedStatus == 'Watch Playback'
+                        widget.usedStatus == 'Watch Playback' || widget.usedStatus == 'Expired'
                     ? widget.zoomId != null || widget.zoomDesc != null
                         ? () {
                             Navigator.push(
@@ -128,9 +129,9 @@ class UseTicketState extends State<UseTicket> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => LivestreamPlayer(
-                                        wowzaLiveUrl: widget.livestreamUrl)));
+                                        wowzaLiveUrl: widget.livestreamUrl),),);
                           }
-                    : () {
+                    : widget.usedStatus == 'Expired' ? (){} : () {
                         scan().then((_) async {
                           SharedPreferences prefs =
                               await SharedPreferences.getInstance();

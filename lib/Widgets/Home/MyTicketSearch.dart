@@ -229,6 +229,7 @@ class MyTicketSearchState extends State<MyTicketSearch> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => UseTicket(
+                                  playbackUrl: filteredEvents[i]['livestream']['playback_url'],
                                               ticketTitle: filteredEvents[i]
                                                   ['ticket']['ticket_name'],
                                               ticketImage: filteredEvents[i]

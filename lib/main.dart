@@ -46,7 +46,7 @@ Future<Null> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.white, statusBarIconBrightness: Brightness.dark));
+      statusBarColor: Colors.white, statusBarIconBrightness: Brightness.light));
   cameras = await availableCameras();
 
   runApp(new RunApp());
@@ -92,7 +92,7 @@ class _RunAppState extends State<RunApp> {
       home: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
             statusBarColor: Colors.white,
-            statusBarIconBrightness: Brightness.dark),
+            statusBarIconBrightness: Brightness.light),
         child: SplashScreen(
             analytics: RunApp.analytics, observer: RunApp.observer),
       ),
@@ -101,48 +101,48 @@ class _RunAppState extends State<RunApp> {
             AnnotatedRegion<SystemUiOverlayStyle>(
                 value: SystemUiOverlayStyle(
                     statusBarColor: Colors.white,
-                    statusBarIconBrightness: Brightness.dark),
+                    statusBarIconBrightness: Brightness.light),
                 child: LoginRegisterWidget()),
         '/WithdrawBank': (BuildContext context) => WithdrawBank(),
         '/Login': (BuildContext context) => AnnotatedRegion(
             value: SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.dark),
+                statusBarIconBrightness: Brightness.light),
             child: LoginWidget()),
         '/Register': (BuildContext context) => AnnotatedRegion(
             value: SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.dark),
+                statusBarIconBrightness: Brightness.light),
             child: RegisterWidget()),
         '/Dashboard': (BuildContext context) => AnnotatedRegion(
             value: SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.dark),
+                statusBarIconBrightness: Brightness.light),
             child: DashboardWidget()),
         '/Profile': (BuildContext context) => AnnotatedRegion(
             value: SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.dark),
+                statusBarIconBrightness: Brightness.light),
             child: ProfileWidget()),
         '/EventDetails': (BuildContext context) => AnnotatedRegion(
             value: SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.dark),
+                statusBarIconBrightness: Brightness.light),
             child: EventDetailsConstructView()),
         '/EditProfile': (BuildContext context) => AnnotatedRegion(
             value: SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.dark),
+                statusBarIconBrightness: Brightness.light),
             child: EditProfileWidget()),
         '/PostEvent': (BuildContext context) => AnnotatedRegion(
             value: SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.dark),
+                statusBarIconBrightness: Brightness.light),
             child: PostEvent()),
         '/CustomCamera': (BuildContext context) => AnnotatedRegion(
             value: SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.dark),
+                statusBarIconBrightness: Brightness.light),
             child: CustomCamera(cameras)), 
       },
     );

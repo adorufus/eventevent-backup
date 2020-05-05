@@ -185,9 +185,8 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                         ['zoom_description'],
                                     livestreamUrl: ticketStatusText ==
                                                 "Streaming" ||
-                                            ticketStatusText == 'Watch Playback'
-                                        ? ticketDetailData[i]['livestream']
-                                            ['playback']
+                                            ticketStatusText == 'Watch Playback' || ticketStatusText == 'Expired'
+                                        ? ticketDetailData[i]['livestream']['playback_url'] == 'not_available' ? ticketDetailData[i]['livestream']['playback'] : ticketDetailData[i]['livestream']['playback_url']
                                         : '',
                                   )));
                         },

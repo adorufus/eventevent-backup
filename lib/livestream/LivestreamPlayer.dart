@@ -29,7 +29,7 @@ class _LivestreamPlayerState extends State<LivestreamPlayer>
   @override
   void initState() {
     socketConnect();
-    print('wowza url' + widget.wowzaLiveUrl);
+    print('wowza url' + widget.wowzaLiveUrl.toString());
     videoPlayerController = VideoPlayerController.network(widget.wowzaLiveUrl);
     setState(() {});
     chewieController = ChewieController(
