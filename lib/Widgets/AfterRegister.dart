@@ -107,6 +107,7 @@ class _AfterRegisterState extends State<AfterRegister> {
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
+        brightness: Brightness.light,
           elevation: 0,
           backgroundColor: Colors.white,
           leading: GestureDetector(

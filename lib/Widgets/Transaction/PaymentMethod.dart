@@ -70,6 +70,7 @@ class PaymentMethodState extends State<PaymentMethod> {
     )..init(context);
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         elevation: 0,
         backgroundColor: Colors.white,
         leading: GestureDetector(

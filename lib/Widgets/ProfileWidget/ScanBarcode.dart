@@ -64,7 +64,9 @@ class _ScanBarcodeState extends State<ScanBarcode> {
     )..init(context);
     return MaterialApp(
         home: Scaffold(
-            appBar: AppBar(title: const Text('Barcode scan')),
+            appBar: AppBar(
+                brightness: Brightness.light,
+                title: const Text('Barcode scan')),
             body: Builder(builder: (BuildContext context) {
               return Container(
                   alignment: Alignment.center,

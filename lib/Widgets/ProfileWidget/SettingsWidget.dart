@@ -61,6 +61,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     )..init(context);
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         elevation: 1,
         backgroundColor: Colors.white,
         leading: GestureDetector(

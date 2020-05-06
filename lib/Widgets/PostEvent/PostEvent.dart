@@ -38,6 +38,7 @@ class PostEventState extends State<PostEvent> {
         resizeToAvoidBottomPadding: false,
         key: thisScaffold,
         appBar: AppBar(
+          brightness: Brightness.light,
           backgroundColor: Colors.white,
           elevation: 0,
           // leading: GestureDetector(
@@ -172,6 +173,7 @@ class PostEvent2State extends State<PostEvent2> {
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
+          brightness: Brightness.light,
           backgroundColor: Colors.white,
           elevation: 0,
           leading: GestureDetector(
@@ -480,6 +482,7 @@ class PostEvent3State extends State<PostEvent3> {
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
+          brightness: Brightness.light,
           backgroundColor: Colors.white,
           elevation: 0,
           leading: GestureDetector(
@@ -667,6 +670,7 @@ class PostEvent4State extends State<PostEvent4> {
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
+          brightness: Brightness.light,
           backgroundColor: Colors.white,
           elevation: 0,
           leading: GestureDetector(
@@ -831,6 +835,7 @@ class PostEvent5State extends State<PostEvent5> {
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
+          brightness: Brightness.light,
           backgroundColor: Colors.white,
           elevation: 0,
           leading: GestureDetector(
@@ -1017,6 +1022,7 @@ class PostEvent6State extends State<PostEvent6> {
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
+          brightness: Brightness.light,
           backgroundColor: Colors.white,
           elevation: 0,
           leading: GestureDetector(

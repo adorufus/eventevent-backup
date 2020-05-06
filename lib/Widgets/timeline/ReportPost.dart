@@ -40,6 +40,7 @@ class ReportPostState extends State<ReportPost> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         leading: GestureDetector(
           child: Icon(
@@ -300,6 +301,7 @@ class SuccesReportPage extends StatelessWidget {
     )..init(context);
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         leading: GestureDetector(
           child: Icon(

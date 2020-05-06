@@ -39,7 +39,7 @@ import 'package:flutter/services.dart';
 List<CameraDescription> cameras;
 
 Future<Null> main() async {
-  Crashlytics.instance.enableInDevMode = true;
+  Crashlytics.instance.enableInDevMode = false;
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
   // HttpOverrides.global = MyHttpOverrides();

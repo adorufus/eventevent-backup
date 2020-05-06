@@ -123,6 +123,7 @@ class CreditCardInputState extends State<CreditCardInput> {
             )),
       ),
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: GestureDetector(

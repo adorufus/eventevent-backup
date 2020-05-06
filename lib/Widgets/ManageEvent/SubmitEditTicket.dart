@@ -91,6 +91,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
         key: thisScaffold,
         backgroundColor: Colors.white.withOpacity(.5),
         appBar: AppBar(
+          brightness: Brightness.light,
           backgroundColor: Colors.white,
           elevation: 1,
           leading: GestureDetector(

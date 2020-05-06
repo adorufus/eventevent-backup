@@ -294,6 +294,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 child: Container(
                   color: Colors.white,
                   child: AppBar(
+                    brightness: Brightness.light,
                     automaticallyImplyLeading: false,
                     elevation: 0,
                     backgroundColor: Colors.white,

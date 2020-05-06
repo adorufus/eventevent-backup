@@ -100,6 +100,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
 
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         elevation: 1,
         backgroundColor: Colors.white,
         leading: GestureDetector(

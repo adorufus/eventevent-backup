@@ -16,6 +16,7 @@ class ExpiredPageState extends State<ExpiredPage> {
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.95),
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         elevation: 1,
         leading: GestureDetector(

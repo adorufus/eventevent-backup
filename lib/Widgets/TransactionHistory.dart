@@ -60,6 +60,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
             preferredSize: Size.fromHeight(50),
             child: Container(
               child: AppBar(
+                brightness: Brightness.light,
                 elevation: 0,
                 backgroundColor: Colors.white,
                 leading: Padding(

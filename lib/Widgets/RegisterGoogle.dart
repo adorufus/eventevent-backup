@@ -60,6 +60,7 @@ class GoogleRegisterState extends State<GoogleRegister> {
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
+        brightness: Brightness.light,
         elevation: 0,
         backgroundColor: Colors.white,
           leading: GestureDetector(

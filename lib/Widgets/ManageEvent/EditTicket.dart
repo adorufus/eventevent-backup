@@ -82,6 +82,7 @@ class _EditTicketState extends State<EditTicket> {
     return Scaffold(
       key: thisScaffold,
       appBar: AppBar(
+          brightness: Brightness.light,
         backgroundColor: Colors.white,
         elevation: 1,
         leading: GestureDetector(

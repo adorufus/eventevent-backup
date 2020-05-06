@@ -86,6 +86,7 @@ class _WaitingTransactionAlfamartState
         ),
       ),
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         elevation: 1,
         leading: GestureDetector(

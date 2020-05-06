@@ -89,6 +89,7 @@ class UseTicketState extends State<UseTicket> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
+        brightness: Brightness.light,
         elevation: 0,
         backgroundColor: Colors.white,
         leading: GestureDetector(

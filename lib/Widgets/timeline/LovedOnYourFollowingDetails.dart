@@ -53,6 +53,7 @@ class _LovedOnYourFollowingDetailsState extends State<LovedOnYourFollowingDetail
           padding: EdgeInsets.symmetric(horizontal: 13),
           color: Colors.white,
           child: AppBar(
+            brightness: Brightness.light,
             elevation: 0,
             backgroundColor: Colors.white,
             leading: GestureDetector(

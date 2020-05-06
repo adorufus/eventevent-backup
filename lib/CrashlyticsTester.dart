@@ -128,6 +128,7 @@ class _CrashlyticsTesterState extends State<CrashlyticsTester> {
   Widget build(BuildContext context) { 
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         title: Text('Crashlytics tester'),
       ),
       body: ListView(
