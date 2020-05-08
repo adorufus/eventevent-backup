@@ -11,8 +11,9 @@ import 'package:wakelock/wakelock.dart';
 
 class LivestreamBroadcast extends StatefulWidget {
   final eventDetail;
+  final bitrate;
 
-  const LivestreamBroadcast({Key key, this.eventDetail}) : super(key: key);
+  const LivestreamBroadcast({Key key, this.eventDetail, this.bitrate}) : super(key: key);
   @override
   _LivestreamBroadcastState createState() => _LivestreamBroadcastState();
 }
@@ -42,6 +43,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
       applicationName: appName,
       streamName: streamName,
       scaleMode: ScaleMode.RESIZE_TO_ASPECT,
+      bps: widget.bitrate
     );
 
     if (!mounted) return;

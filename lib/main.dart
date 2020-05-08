@@ -49,7 +49,9 @@ Future<Null> main() async {
       statusBarColor: Colors.white, statusBarIconBrightness: Brightness.light));
   cameras = await availableCameras();
 
-  runApp(new RunApp());
+  runZoned((){
+    runApp(new RunApp());
+  }, onError: Crashlytics.instance.recordError);
 }
 
 class RunApp extends StatefulWidget {

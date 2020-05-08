@@ -358,7 +358,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                 padding: EdgeInsets.symmetric(horizontal: 13),
                 color: Colors.white,
                 child: AppBar(
-	                brightness: Brightness.light,
+                  brightness: Brightness.light,
                   elevation: 0,
                   backgroundColor: Colors.white,
                   leading: GestureDetector(
@@ -917,22 +917,25 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 height: ScreenUtil.instance
                                                     .setWidth(10),
                                               ),
-                                              detailData['isHybridEvent'] == 'streamOnly' ? Row(
-                                                children: <Widget>[
-                                                  Image.asset(
-                                                      'assets/icons/icon_apps/LivestreamTagIcon.png',
-                                                      scale: 25),
-                                                  SizedBox(
-                                                    width: 8,
-                                                  ),
-                                                  Text(
-                                                    'Livestream Event',
-                                                    style: TextStyle(
-                                                        color: Colors.red,
-                                                        fontSize: 13),
-                                                  )
-                                                ],
-                                              ) : Container(),
+                                              detailData['isHybridEvent'] ==
+                                                      'streamOnly'
+                                                  ? Row(
+                                                      children: <Widget>[
+                                                        Image.asset(
+                                                            'assets/icons/icon_apps/LivestreamTagIcon.png',
+                                                            scale: 25),
+                                                        SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        Text(
+                                                          'Livestream Event',
+                                                          style: TextStyle(
+                                                              color: Colors.red,
+                                                              fontSize: 13),
+                                                        )
+                                                      ],
+                                                    )
+                                                  : Container(),
                                               SizedBox(
                                                 height: ScreenUtil.instance
                                                     .setWidth(10),
@@ -2195,15 +2198,96 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           );
                                                         });
                                                   } else {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            LivestreamBroadcast(
-                                                                eventDetail: widget
-                                                                    .detailData),
-                                                      ),
-                                                    );
+                                                    showCupertinoModalPopup(
+                                                        context: context,
+                                                        builder: (thisContext) {
+                                                          return CupertinoActionSheet(
+                                                            title: Text(
+                                                                'Set Broadcast Bitrate'),
+                                                            actions: <Widget>[
+                                                              CupertinoActionSheetAction(
+                                                                onPressed:
+                                                                    () {
+                                                                        Navigator.push(
+                                                                            context,
+                                                                            MaterialPageRoute(
+                                                                                builder: (context) =>
+                                                                                    LivestreamBroadcast(
+                                                                                        bitrate: 1000,
+                                                                                        eventDetail: widget
+                                                                                            .detailData),
+                                                                            ),
+                                                                        );
+                                                                    },
+                                                                child: Text(
+                                                                    '1000 Kbps'),
+                                                              ),
+                                                              CupertinoActionSheetAction(
+                                                                onPressed:
+                                                                    () {
+                                                                        Navigator.push(
+                                                                            context,
+                                                                            MaterialPageRoute(
+                                                                                builder: (context) =>
+                                                                                    LivestreamBroadcast(
+                                                                                        bitrate: 2500,
+                                                                                        eventDetail: widget
+                                                                                            .detailData),
+                                                                            ),
+                                                                        );
+                                                                    },
+                                                                child: Text(
+                                                                    '2500 Kbps'),
+                                                              ),
+                                                              CupertinoActionSheetAction(
+                                                                onPressed:
+                                                                    () {
+                                                                        Navigator.push(
+                                                                            context,
+                                                                            MaterialPageRoute(
+                                                                                builder: (context) =>
+                                                                                    LivestreamBroadcast(
+                                                                                        bitrate: 3750,
+                                                                                        eventDetail: widget
+                                                                                            .detailData),
+                                                                            ),
+                                                                        );
+                                                                    },
+                                                                child: Text(
+                                                                    '3750 Kbps'),
+                                                              ),
+                                                              CupertinoActionSheetAction(
+                                                                  onPressed:
+                                                                      () {
+                                                                          Navigator.push(
+                                                                              context,
+                                                                              MaterialPageRoute(
+                                                                                  builder: (context) =>
+                                                                                      LivestreamBroadcast(
+                                                                                          bitrate: 5000,
+                                                                                          eventDetail: widget
+                                                                                              .detailData),
+                                                                              ),
+                                                                          );
+                                                                      },
+                                                                  child: Text(
+                                                                      '5000 Kbps'))
+                                                            ],
+                                                            cancelButton:
+                                                                CupertinoActionSheetAction(
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    thisContext);
+                                                              },
+                                                              child: Text(
+                                                                'Cancel',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .red),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        });
                                                   }
                                                 }
                                               } else {
