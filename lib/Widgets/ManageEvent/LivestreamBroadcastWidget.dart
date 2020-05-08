@@ -2,18 +2,22 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/main.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rtmp_publisher/flutter_rtmp_publisher.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_wowza/gocoder/wowza_gocoder.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:wakelock/wakelock.dart';
 
 class LivestreamBroadcast extends StatefulWidget {
   final eventDetail;
   final bitrate;
 
-  const LivestreamBroadcast({Key key, this.eventDetail, this.bitrate}) : super(key: key);
+  const LivestreamBroadcast({Key key, this.eventDetail, this.bitrate})
+      : super(key: key);
   @override
   _LivestreamBroadcastState createState() => _LivestreamBroadcastState();
 }
@@ -26,88 +30,101 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
   String appName = '';
   String streamName = '';
 
-  void getWowzaConfigData() {
-    hostAddress = widget.eventDetail['livestream'][0]['primary_server']
-        .toString()
-        .substring(7, 40);
-    appName = widget.eventDetail['livestream'][0]['primary_server']
-        .toString()
-        .substring(41);
-    streamName = widget.eventDetail['livestream'][0]['stream_name'];
+  // void getWowzaConfigData() {
+  //   hostAddress = widget.eventDetail['livestream'][0]['primary_server']
+  //       .toString()
+  //       .substring(7, 40);
+  //   appName = widget.eventDetail['livestream'][0]['primary_server']
+  //       .toString()
+  //       .substring(41);
+  //   streamName = widget.eventDetail['livestream'][0]['stream_name'];
 
-    print('host address: ' + hostAddress + ' app name: ' + appName);
+  //   print('host address: ' + hostAddress + ' app name: ' + appName);
 
-    wowzCameraController.setWOWZConfig(
-      hostAddress: hostAddress,
-      portNumber: 1935,
-      applicationName: appName,
-      streamName: streamName,
-      scaleMode: ScaleMode.RESIZE_TO_ASPECT,
-      bps: widget.bitrate
-    );
+  //   wowzCameraController.setWOWZConfig(
+  //     hostAddress: hostAddress,
+  //     portNumber: 1935,
+  //     applicationName: appName,
+  //     streamName: streamName,
+  //     scaleMode: ScaleMode.RESIZE_TO_ASPECT,
+  //     bps: widget.bitrate
+  //   );
 
-    if (!mounted) return;
-    setState(() {});
-  }
+  //   wowzCameraController.startPreview();
 
-  Future<http.Response> initializeWowzaLivestream() async {
-    final response = await http.put(
-      BaseApi.wowzaUrl +
-          'live_streams/${widget.eventDetail['livestream'][0]['streaming_id']}/start',
-      headers: {
-        'wsc-api-key': WOWZA_API_KEY,
-        'wsc-access-key': WOWZA_ACCESS_KEY,
-        'Content-Type': 'application/json'
-      },
-    );
+  //   if (!mounted) return;
+  //   setState(() {});
+  // }
 
-    print("WOWZA INITIALIZATION PROCESS, PLEASE WAIT.....");
-    print(
-        "WOWZA RESPONSE: ${response.body} WITH STATUS CODE: ${response.statusCode}");
+  // Future<http.Response> initializeWowzaLivestream() async {
 
-    return response;
-  }
+  //   final response = await http.put(
+  //     BaseApi.wowzaUrl +
+  //         'live_streams/${widget.eventDetail['livestream'][0]['streaming_id']}/start',
+  //     headers: {
+  //       'wsc-api-key': WOWZA_API_KEY,
+  //       'wsc-access-key': WOWZA_ACCESS_KEY,
+  //       'Content-Type': 'application/json'
+  //     },
+  //   );
 
-  Future<http.Response> stopWowzaLivestream() async {
-    final response = await http.put(
-      BaseApi.wowzaUrl +
-          'live_streams/${widget.eventDetail['livestream'][0]['streaming_id']}/stop',
-      headers: {
-        'wsc-api-key': WOWZA_API_KEY,
-        'wsc-access-key': WOWZA_ACCESS_KEY,
-        'Content-Type': 'application/json'
-      },
-    );
+  //   print("WOWZA INITIALIZATION PROCESS, PLEASE WAIT.....");
+  //   print(
+  //       "WOWZA RESPONSE: ${response.body} WITH STATUS CODE: ${response.statusCode}");
 
-    print("Stopping WOWZA PROCESS, PLEASE WAIT.....");
-    print(
-        "WOWZA RESPONSE: ${response.body} WITH STATUS CODE: ${response.statusCode}");
+  //   return response;
+  // }
 
-    return response;
-  }
+  // Future<http.Response> stopWowzaLivestream() async {
+  //   final response = await http.put(
+  //     BaseApi.wowzaUrl +
+  //         'live_streams/${widget.eventDetail['livestream'][0]['streaming_id']}/stop',
+  //     headers: {
+  //       'wsc-api-key': WOWZA_API_KEY,
+  //       'wsc-access-key': WOWZA_ACCESS_KEY,
+  //       'Content-Type': 'application/json'
+  //     },
+  //   );
 
-  Future<http.Response> getWowzaLivestreamState() async {
-    final response = await http.get(
-      BaseApi.wowzaUrl +
-          'live_streams/${widget.eventDetail['livestream'][0]['streaming_id']}/state',
-      headers: {
-        'wsc-api-key': WOWZA_API_KEY,
-        'wsc-access-key': WOWZA_ACCESS_KEY,
-        'Content-Type': 'application/json'
-      },
-    );
+  //   print("Stopping WOWZA PROCESS, PLEASE WAIT.....");
+  //   print(
+  //       "WOWZA RESPONSE: ${response.body} WITH STATUS CODE: ${response.statusCode}");
 
-    print("FETCHING CURRENT LIVESTREAM STATE, PLEASE WAIT.....");
-    print(
-        "WOWZA RESPONSE: ${response.body} WITH STATUS CODE: ${response.statusCode}");
+  //   return response;
+  // }
 
-    return response;
+  // Future<http.Response> getWowzaLivestreamState() async {
+  //   final response = await http.get(
+  //     BaseApi.wowzaUrl +
+  //         'live_streams/${widget.eventDetail['livestream'][0]['streaming_id']}/state',
+  //     headers: {
+  //       'wsc-api-key': WOWZA_API_KEY,
+  //       'wsc-access-key': WOWZA_ACCESS_KEY,
+  //       'Content-Type': 'application/json'
+  //     },
+  //   );
+
+  //   print("FETCHING CURRENT LIVESTREAM STATE, PLEASE WAIT.....");
+  //   print(
+  //       "WOWZA RESPONSE: ${response.body} WITH STATUS CODE: ${response.statusCode}");
+
+  //   return response;
+  // }
+
+  Future getPermission() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.microphone,
+      Permission.camera,
+    ].request();
+
+    print(statuses[Permission.microphone]);
   }
 
   @override
   void initState() {
     Wakelock.enable();
-    getWowzaConfigData();
+    getPermission();
+    // getWowzaConfigData();
     // initializeWowzaLivestream().then((response) {
     //   if (response.statusCode == 200 || response.statusCode == 201) {}
     // });
@@ -194,7 +211,8 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
                           builder: (thisContext) {
                             return CupertinoAlertDialog(
                               title: Text('Warning'),
-                              content: Text('Do you want to stop broadcasting?'),
+                              content:
+                                  Text('Do you want to stop broadcasting?'),
                               actions: <Widget>[
                                 CupertinoDialogAction(
                                   child: Text('No'),
@@ -206,22 +224,22 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
                                   child: Text('Yes'),
                                   onPressed: () {
                                     wowzCameraController.endBroadcast();
-                                    stopWowzaLivestream().then((response) {
-                                      if (response.statusCode == 200 ||
-                                          response.statusCode == 201) {
-                                        print(
-                                            'Stopping livestream succes: ${response.body} With Status Code: ${response.statusCode}');
-                                            Navigator.pop(thisContext);
-                                            Navigator.pop(context);
-                                      }
-                                    });
+                                    // stopWowzaLivestream().then((response) {
+                                    //   if (response.statusCode == 200 ||
+                                    //       response.statusCode == 201) {
+                                    //     print(
+                                    //         'Stopping livestream succes: ${response.body} With Status Code: ${response.statusCode}');
+                                    //         Navigator.pop(thisContext);
+                                    //         Navigator.pop(context);
+                                    //   }
+                                    // },);
                                   },
                                 )
                               ],
                             );
                           });
                     } else {
-                      wowzCameraController.startBroadcast();
+                      
                     }
 
                     isStarting = !isStarting;

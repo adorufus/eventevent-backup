@@ -14,6 +14,7 @@ import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
+import 'package:flutter_rtmp_publisher/flutter_rtmp_publisher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/LoveItem.dart';
@@ -32,6 +33,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:marquee_flutter/marquee_flutter.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:share_extend/share_extend.dart';
@@ -157,6 +159,15 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   List timelineList = [];
   String currentUserId = "";
 
+  Future getPermission() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.microphone,
+      Permission.camera,
+    ].request();
+
+    print(statuses[Permission.microphone]);
+  }
+
   @override
   bool get wantKeepAlive => true;
 
@@ -170,7 +181,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
           .then((response) {
         var extractedResponse = json.decode(response.body);
 
-        streamingState = extractedResponse['live_stream']['state'];
+        streamingState = 'started';
         if (!mounted) return;
         setState(() {});
       });
@@ -2206,72 +2217,39 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                 'Set Broadcast Bitrate'),
                                                             actions: <Widget>[
                                                               CupertinoActionSheetAction(
-                                                                onPressed:
-                                                                    () {
-                                                                        Navigator.push(
-                                                                            context,
-                                                                            MaterialPageRoute(
-                                                                                builder: (context) =>
-                                                                                    LivestreamBroadcast(
-                                                                                        bitrate: 1000,
-                                                                                        eventDetail: widget
-                                                                                            .detailData),
-                                                                            ),
-                                                                        );
-                                                                    },
+                                                                onPressed: () {
+                                                                  getPermission()
+                                                                      .then(
+                                                                          (_) {
+                                                                    Navigator
+                                                                        .push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              RTMPPublisher.streamVideo('rtmp://35.185.178.144:1935/app-84f4/7100dff1')),
+                                                                    );
+                                                                  });
+                                                                },
                                                                 child: Text(
-                                                                    '1000 Kbps'),
+                                                                    '1000 Kbps ( Medium Quality )'),
                                                               ),
                                                               CupertinoActionSheetAction(
-                                                                onPressed:
-                                                                    () {
-                                                                        Navigator.push(
-                                                                            context,
-                                                                            MaterialPageRoute(
-                                                                                builder: (context) =>
-                                                                                    LivestreamBroadcast(
-                                                                                        bitrate: 2500,
-                                                                                        eventDetail: widget
-                                                                                            .detailData),
-                                                                            ),
-                                                                        );
-                                                                    },
+                                                                onPressed: () {
+                                                                  Navigator
+                                                                      .push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                      builder: (context) => LivestreamBroadcast(
+                                                                          bitrate:
+                                                                              2500,
+                                                                          eventDetail:
+                                                                              widget.detailData),
+                                                                    ),
+                                                                  );
+                                                                },
                                                                 child: Text(
-                                                                    '2500 Kbps'),
+                                                                    '2500 Kbps ( High Quality )'),
                                                               ),
-                                                              CupertinoActionSheetAction(
-                                                                onPressed:
-                                                                    () {
-                                                                        Navigator.push(
-                                                                            context,
-                                                                            MaterialPageRoute(
-                                                                                builder: (context) =>
-                                                                                    LivestreamBroadcast(
-                                                                                        bitrate: 3750,
-                                                                                        eventDetail: widget
-                                                                                            .detailData),
-                                                                            ),
-                                                                        );
-                                                                    },
-                                                                child: Text(
-                                                                    '3750 Kbps'),
-                                                              ),
-                                                              CupertinoActionSheetAction(
-                                                                  onPressed:
-                                                                      () {
-                                                                          Navigator.push(
-                                                                              context,
-                                                                              MaterialPageRoute(
-                                                                                  builder: (context) =>
-                                                                                      LivestreamBroadcast(
-                                                                                          bitrate: 5000,
-                                                                                          eventDetail: widget
-                                                                                              .detailData),
-                                                                              ),
-                                                                          );
-                                                                      },
-                                                                  child: Text(
-                                                                      '5000 Kbps'))
                                                             ],
                                                             cancelButton:
                                                                 CupertinoActionSheetAction(
