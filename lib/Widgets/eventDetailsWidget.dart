@@ -174,6 +174,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   @override
   void initState() {
     // FlutterBranchSdk.validateSDKIntegration();
+    getPermission();
     generateLink();
     if (widget.detailData.containsKey("livestream")) {
       getWowzaLivestreamState(
@@ -2218,11 +2219,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             actions: <Widget>[
                                                               CupertinoActionSheetAction(
                                                                 onPressed: () {
-                                                                  getPermission()
-                                                                      .then(
-                                                                          (_) {
-                                                                    RTMPPublisher.streamVideo('rtmp://35.185.178.144:1935/app-84f4/7100dff1');
-                                                                  });
+                                                                  RTMPPublisher.streamVideo('rtmp://35.185.178.144:1935/app-84f4/7100dff1');
                                                                 },
                                                                 child: Text(
                                                                     '1000 Kbps ( Medium Quality )'),
