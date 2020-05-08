@@ -2221,13 +2221,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                   getPermission()
                                                                       .then(
                                                                           (_) {
-                                                                    Navigator
-                                                                        .push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              RTMPPublisher.streamVideo('rtmp://35.185.178.144:1935/app-84f4/7100dff1')),
-                                                                    );
+                                                                    RTMPPublisher.streamVideo('rtmp://35.185.178.144:1935/app-84f4/7100dff1');
                                                                   });
                                                                 },
                                                                 child: Text(
