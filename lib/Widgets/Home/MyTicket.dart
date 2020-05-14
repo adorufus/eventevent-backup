@@ -274,6 +274,7 @@ class _MyTicketState extends State<MyTicket> {
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
                                             UseTicket(
+                                            eventId: myTicketList[i]['event_id'],
                                               ticketTitle: myTicketList[i]
                                                   ['ticket']['ticket_name'],
                                               ticketImage: myTicketList[i]

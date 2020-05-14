@@ -14,7 +14,6 @@ import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
-import 'package:flutter_rtmp_publisher/flutter_rtmp_publisher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/LoveItem.dart';
@@ -182,7 +181,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
           .then((response) {
         var extractedResponse = json.decode(response.body);
 
-        streamingState = 'started';
+        streamingState = extractedResponse['live_stream']['state'];
+        // streamingState = 'started';
         if (!mounted) return;
         setState(() {});
       });
@@ -2219,7 +2219,17 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             actions: <Widget>[
                                                               CupertinoActionSheetAction(
                                                                 onPressed: () {
-                                                                  RTMPPublisher.streamVideo('rtmp://35.185.178.144:1935/app-84f4/7100dff1');
+                                                                  Navigator
+                                                                      .push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                      builder: (context) => LivestreamBroadcast(
+                                                                          bitrate:
+                                                                              1000,
+                                                                          eventDetail:
+                                                                              widget.detailData),
+                                                                    ),
+                                                                  );
                                                                 },
                                                                 child: Text(
                                                                     '1000 Kbps ( Medium Quality )'),
@@ -2336,7 +2346,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                 'free_live_stream'
                                                             ? streamingState ==
                                                                     'stopped'
-                                                                ? Colors.grey
+                                                                ? Colors.white
                                                                     .withOpacity(
                                                                         .9)
                                                                 : Colors

@@ -5,6 +5,7 @@ import 'package:eventevent/Widgets/ProfileWidget/SettingsWidget.dart';
 import 'package:eventevent/Widgets/ProfileWidget/UseTicketSuccess.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/Widgets/openMedia.dart';
+import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -29,6 +30,7 @@ class UseTicket extends StatefulWidget {
   final ticketEndTime;
   final ticketDesc;
   final ticketID;
+  final eventId;
   final usedStatus;
   final livestreamUrl;
   final zoomId;
@@ -45,10 +47,12 @@ class UseTicket extends StatefulWidget {
     this.ticketEndTime,
     this.ticketDesc,
     this.ticketID,
+    this.eventId,
     this.usedStatus,
     this.livestreamUrl,
     this.zoomId,
-    this.zoomDesc, this.playbackUrl,
+    this.zoomDesc,
+    this.playbackUrl,
   }) : super(key: key);
 
   @override
@@ -113,7 +117,8 @@ class UseTicketState extends State<UseTicket> {
             : startDate.isAfter(DateTime.now())
                 ? () {}
                 : widget.usedStatus == 'Streaming' ||
-                        widget.usedStatus == 'Watch Playback' || widget.usedStatus == 'Expired'
+                        widget.usedStatus == 'Watch Playback' ||
+                        widget.usedStatus == 'Expired'
                     ? widget.zoomId != null || widget.zoomDesc != null
                         ? () {
                             Navigator.push(
@@ -125,55 +130,103 @@ class UseTicketState extends State<UseTicket> {
                               ),
                             );
                           }
+                        : () async {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+
+                            if (prefs.containsKey('streaming_token') &&
+                                prefs.getString('streaming_token') != null) {
+                                  print(prefs.getString('streaming_token'));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LivestreamPlayer(
+                                    wowzaLiveUrl: widget.livestreamUrl,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              print(prefs.getString('streaming_token'));
+                              getWatchLivestreamToken(widget.eventId)
+                                  .then((response) async {
+                                print('code: ' +
+                                    response.statusCode.toString() +
+                                    ' message: ' +
+                                    response.body);
+                                var extractedData = json.decode(response.body);
+
+                                if (response.statusCode == 200 ||
+                                    response.statusCode == 201) {
+                                  prefs.setString('streaming_token',
+                                      extractedData['data']['streaming_token']);
+                                  // getEventStreamingDetail();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => LivestreamPlayer(
+                                        wowzaLiveUrl: widget.livestreamUrl,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  prefs.setString('streaming_token', null);
+                                  Flushbar(
+                                    animationDuration:
+                                        Duration(milliseconds: 500),
+                                    duration: Duration(seconds: 3),
+                                    backgroundColor: Colors.red,
+                                    message: 'User Have No Access!',
+                                    flushbarPosition: FlushbarPosition.TOP,
+                                  ).show(context);
+                                }
+                              });
+                            }
+                          }
+                    : widget.usedStatus == 'Expired'
+                        ? () {}
                         : () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LivestreamPlayer(
-                                        wowzaLiveUrl: widget.livestreamUrl),),);
-                          }
-                    : widget.usedStatus == 'Expired' ? (){} : () {
-                        scan().then((_) async {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          String url = BaseApi().apiUrl + '/tickets/verify';
+                            scan().then((_) async {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              String url = BaseApi().apiUrl + '/tickets/verify';
 
-                          final response = await http.post(url, headers: {
-                            'Authorization': AUTHORIZATION_KEY,
-                            'cookie': prefs.getString('Session')
-                          }, body: {
-                            'X-API-KEY': API_KEY,
-                            'qrData': _scanBarcode,
-                            'ticketID': widget.ticketID
-                          });
+                              final response = await http.post(url, headers: {
+                                'Authorization': AUTHORIZATION_KEY,
+                                'cookie': prefs.getString('Session')
+                              }, body: {
+                                'X-API-KEY': API_KEY,
+                                'qrData': _scanBarcode,
+                                'ticketID': widget.ticketID
+                              });
 
-                          var extractedData = json.decode(response.body);
+                              var extractedData = json.decode(response.body);
 
-                          if (response.statusCode == 200 ||
-                              response.statusCode == 201) {
-                            print(extractedData['desc']);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        UseTicketSuccess(
-                                          eventName: 'test',
-                                        )));
-                          } else {
-                            Flushbar(
-                              flushbarPosition: FlushbarPosition.TOP,
-                              message: extractedData['desc'] ??
-                                  extractedData['error'],
-                              backgroundColor: Colors.red,
-                              duration: Duration(seconds: 3),
-                              animationDuration: Duration(milliseconds: 500),
-                            )..show(context);
-                          }
+                              if (response.statusCode == 200 ||
+                                  response.statusCode == 201) {
+                                print(extractedData['desc']);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            UseTicketSuccess(
+                                              eventName: 'test',
+                                            )));
+                              } else {
+                                Flushbar(
+                                  flushbarPosition: FlushbarPosition.TOP,
+                                  message: extractedData['desc'] ??
+                                      extractedData['error'],
+                                  backgroundColor: Colors.red,
+                                  duration: Duration(seconds: 3),
+                                  animationDuration:
+                                      Duration(milliseconds: 500),
+                                )..show(context);
+                              }
 
-                          //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsWidget()));
-                        });
+                              //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsWidget()));
+                            });
 //          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ScanBarcode()));
-                      },
+                          },
         child: Container(
           height: ScreenUtil.instance.setWidth(50),
           color: widget.usedStatus == 'Used'
@@ -188,7 +241,7 @@ class UseTicketState extends State<UseTicket> {
                         color: Colors.white,
                         fontSize: ScreenUtil.instance.setSp(20),
                         fontWeight: FontWeight.bold),
-                        isDay: true,
+                    isDay: true,
                   )
                 : Text(
                     widget.usedStatus == 'Used'

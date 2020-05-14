@@ -163,9 +163,10 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => UseTicket(
+                                eventId: ticketDetailData[i]['event_id'],
                                     ticketTitle: ticketDetailData[i]['ticket']
                                         ['ticket_name'],
-                                    ticketImage: ticketDetailData[i]
+                                    ticketImage: ticketDetailData[i]['ticket_image'] == false ? 'assets/grey-fade.jpg' : ticketDetailData[i]
                                         ['ticket_image']['url'],
                                     ticketCode: ticketDetailData[i]
                                         ['ticket_code'],

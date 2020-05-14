@@ -36,6 +36,12 @@ class CreateTicketOnePurchaseState extends State<CreateTicketOnePurchase> {
   }
 
   @override
+  void initState() {
+    checkIfTicketLivestream();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
@@ -132,7 +138,7 @@ class CreateTicketOnePurchaseState extends State<CreateTicketOnePurchase> {
                       }),
                       value: 0,
                     ),
-                    Text('No')
+                    Text('No', style: TextStyle(color: isLivestream == true ? Colors.grey : Colors.black),)
                   ],
                 )
               )

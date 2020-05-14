@@ -50,6 +50,8 @@
 	<string>482210258650577</string>
 	<key>FacebookDisplayName</key>
 	<string>EventEvent</string>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>itms</string>
@@ -80,9 +82,16 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+		<string>arm64</string>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -101,14 +110,5 @@
 	<true/>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>Allow to acces media library</string>
-	<key>FirebaseAppDelegateProxyEnabled</key>
-	<false/>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-   	<string>armv7</string>
-   	<string>arm64</string>
-	</array>
-	<key>io.flutter.embedded_views_preview</key>
-	<true/>
 </dict>
 </plist>

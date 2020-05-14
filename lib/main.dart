@@ -47,7 +47,11 @@ Future<Null> main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.white, statusBarIconBrightness: Brightness.light));
-  cameras = await availableCameras();
+  // try{
+    cameras = await availableCameras();
+  // } on CameraException catch (e){
+  //   print('code: ${e.code} message: ${e.description}');
+  // }
 
   runZoned((){
     runApp(new RunApp());
