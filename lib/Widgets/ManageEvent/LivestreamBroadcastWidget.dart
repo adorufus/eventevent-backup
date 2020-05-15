@@ -48,10 +48,12 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
   bool flashLight = false;
   bool isStarting = false;
   bool isRear = true;
+  bool isStopped = false;
   String hostAddress = '';
   String appName = '';
   String streamName = '';
-  
+  String statusText = 'idle';
+
   Future getPermission() async {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.microphone,
@@ -80,27 +82,56 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
 
     print(description.sensorOrientation);
 
-    
-
     if (!mounted) return;
     setState(() {});
 
     try {
       cameraController =
           CameraController(description, resolutionPreset, enableAudio: true);
-          
+
       cameraController.initialize().then((_) {
         if (!mounted) {
           return;
         }
-        
-        
+
+        cameraController.addListener(camControlListener);
 
         setState(() {});
       });
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  void camControlListener() {
+    if (cameraController.value.isStreamingVideoRtmp) {
+      print('Camera Is Recording RTMP');
+      statusText = 'Recording';
+    } else {
+      if (isStopped == true) {
+        print('stream ended by user');
+        statusText = 'Streaming ended by user';
+      } else {
+        print('stream ended by unexpected event');
+        statusText = 'Streaming ended by unexpected event';
+        startVideoStreaming().then((url) {
+          statusText = 'Reconnected';
+          if (mounted) setState(() {});
+          print(url);
+        });
+      }
+    }
+
+    if (cameraController.value.isStreamingPaused) {
+      print('Streaming rtmp paused');
+    }
+
+    if (cameraController.value.hasError) {
+      print('Error: ${cameraController.value.errorDescription}');
+      statusText = cameraController.value.errorDescription;
+    }
+
+    if(mounted) setState((){});
   }
 
   void onVideoStreamingButtonPressed() {
@@ -111,10 +142,9 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
   }
 
   void onStopStreamingButtonPressed() {
+    isStopped = true;
     stopVideoStreaming().then((_) {
-      stopVideoStreaming().then((_) {
-        if (mounted) setState(() {});
-      });
+      if (mounted) setState(() {});
     });
   }
 
@@ -205,9 +235,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
       return e.toString();
     }
 
-    cameraController.addListener((){
-
-    });
+    cameraController.addListener(() {});
 
     return 'it works!';
   }
@@ -472,6 +500,10 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
                                             onPressed: () {
                                               onStopStreamingButtonPressed();
                                               isStarting = !isStarting;
+
+                                              print('is stopped: ' +
+                                                  isStopped.toString());
+                                              if (mounted) setState(() {});
                                               Navigator.pop(thisContext);
                                               // stopWowzaLivestream().then((response) {
                                               //   if (response.statusCode == 200 ||
@@ -489,6 +521,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
                                     });
                               } else {
                                 onVideoStreamingButtonPressed();
+                                isStopped = false;
                                 isStarting = !isStarting;
                               }
 
@@ -519,18 +552,22 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
                   left: 25,
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onTap: (){
-                      if(cameraController != null){
+                    onTap: () {
+                      if (cameraController != null) {
                         cameraController.dispose();
                         onStopStreamingButtonPressed();
                       }
-                      
-                      
+
                       Navigator.pop(context);
                     },
                     child: Icon(Icons.close, color: Colors.white),
                   ),
-                  )
+                ),
+                Positioned(
+                  right: 25,
+                  top: 25,
+                  child: Text(statusText, style: TextStyle(color: Colors.white))
+                )
                 // Padding(
                 //   padding: const EdgeInsets.only(right: 30, bottom: 20),
                 //   child: Align(
