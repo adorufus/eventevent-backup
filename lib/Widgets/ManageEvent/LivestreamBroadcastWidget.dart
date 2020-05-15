@@ -51,6 +51,15 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
   String hostAddress = '';
   String appName = '';
   String streamName = '';
+  
+  Future getPermission() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.microphone,
+      Permission.camera,
+    ].request();
+
+    print(statuses[Permission.microphone]);
+  }
 
   Future<List<CameraDescription>> getAvailableCamera() async {
     try {
@@ -84,6 +93,9 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
         if (!mounted) {
           return;
         }
+        
+        
+
         setState(() {});
       });
     } catch (e) {
@@ -193,6 +205,10 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
       return e.toString();
     }
 
+    cameraController.addListener((){
+
+    });
+
     return 'it works!';
   }
 
@@ -290,14 +306,14 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
   //   return response;
   // }
 
-  Future getPermission() async {
-    Map<Permission, PermissionStatus> statuses = await [
-      Permission.microphone,
-      Permission.camera,
-    ].request();
+  // Future getPermission() async {
+  //   Map<Permission, PermissionStatus> statuses = await [
+  //     Permission.microphone,
+  //     Permission.camera,
+  //   ].request();
 
-    print(statuses[Permission.microphone]);
-  }
+  //   print(statuses[Permission.microphone]);
+  // }
 
   @override
   void initState() {

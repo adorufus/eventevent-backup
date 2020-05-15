@@ -158,14 +158,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   List timelineList = [];
   String currentUserId = "";
 
-  Future getPermission() async {
-    Map<Permission, PermissionStatus> statuses = await [
-      Permission.microphone,
-      Permission.camera,
-    ].request();
-
-    print(statuses[Permission.microphone]);
-  }
+  
 
   @override
   bool get wantKeepAlive => true;
@@ -173,7 +166,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   @override
   void initState() {
     // FlutterBranchSdk.validateSDKIntegration();
-    getPermission();
+    
     generateLink();
     if (widget.detailData.containsKey("livestream")) {
       getWowzaLivestreamState(
