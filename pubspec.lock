@@ -492,13 +492,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.1+1"
-  lamp:
-    dependency: "direct main"
-    description:
-      name: lamp
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.6"
   launch_review:
     dependency: "direct main"
     description:
@@ -854,6 +847,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  torch_compat:
+    dependency: "direct main"
+    description:
+      name: torch_compat
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   typed_data:
     dependency: transitive
     description:

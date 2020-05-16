@@ -12,8 +12,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_wowza/gocoder/wowza_gocoder.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:torch_compat/torch_compat.dart';
 import 'package:wakelock/wakelock.dart';
-import 'package:lamp/lamp.dart';
+
 
 class LivestreamBroadcast extends StatefulWidget {
   final eventDetail;
@@ -458,10 +459,10 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
                         if (flashLight == true) {
-                          Lamp.turnOff();
+                          TorchCompat.turnOff();
                           flashLight = !flashLight;
                         } else {
-                          Lamp.turnOn();
+                          TorchCompat.turnOn();
                           flashLight = !flashLight;
                         }
                         setState(() {});

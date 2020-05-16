@@ -69,7 +69,8 @@ dependencies:
   firebase_crashlytics: ^0.1.0+3
   chewie: ^0.9.10
   googleapis_auth: any
-  lamp: ^0.0.6
+  # lamp: ^0.0.6
+  torch_compat: ^1.0.2
   native_device_orientation:
   clevertap_flutter: ^0.0.5
   firebase_messaging: ^6.0.13
