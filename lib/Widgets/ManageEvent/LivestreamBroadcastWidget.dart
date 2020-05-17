@@ -15,7 +15,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:torch_compat/torch_compat.dart';
 import 'package:wakelock/wakelock.dart';
 
-
 class LivestreamBroadcast extends StatefulWidget {
   final eventDetail;
   final bitrate;
@@ -132,7 +131,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
       statusText = cameraController.value.errorDescription;
     }
 
-    if(mounted) setState((){});
+    if (mounted) setState(() {});
   }
 
   void onVideoStreamingButtonPressed() {
@@ -352,9 +351,10 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
     //   DeviceOrientation.landscapeLeft,
     //   DeviceOrientation.portraitUp,
     // ]);
-    getPermission();
-    getAvailableCamera().then((cameraList) {
-      setupLivestreamCamera(cameraList.first);
+    getPermission().then((_) {
+      getAvailableCamera().then((cameraList) {
+        setupLivestreamCamera(cameraList.first);
+      });
     });
 
     // startVideoStreaming();
@@ -368,9 +368,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
   @override
   void dispose() {
     Wakelock.disable();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
+    
     cameraController?.dispose();
     wowzCameraController.dispose();
     super.dispose();
@@ -379,223 +377,196 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NativeDeviceOrientationReader(
-        useSensor: true,
-        builder: (context) {
-          NativeDeviceOrientation orientation =
-              NativeDeviceOrientationReader.orientation(context);
+        body: SafeArea(
+      child: Stack(
+        children: <Widget>[
+          Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: cameraController != null
+                  ? AspectRatio(
+                      aspectRatio: MediaQuery.of(context).size.height /
+                          MediaQuery.of(context).size.width,
+                      child: CameraPreview(cameraController),
+                    )
+                  : Center(
+                      child: Text(
+                        'No Camera Detected',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    )
+              //   WOWZCameraView(
+              //     controller: wowzCameraController,
+              //     androidLicenseKey: 'GOSK-A847-010C-B1B7-290A-960F',
+              //     iosLicenseKey: 'GOSK-A847-010C-BD3A-1853-C20A',
+              //     broadcastStatusCallback: (status) {
+              //       print(status.message);
+              //       print(status.state);
 
-          int turns;
-          switch (orientation) {
-            case NativeDeviceOrientation.landscapeLeft:
-              turns = -1;
-              break;
-            case NativeDeviceOrientation.landscapeRight:
-              turns = 1;
-              break;
-            case NativeDeviceOrientation.portraitDown:
-              turns = 2;
-              break;
-            default:
-              turns = 0;
-              break;
-          }
-          print("Received new orientation: $orientation");
-          return SafeArea(
-            child: Stack(
-              children: <Widget>[
-                Container(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: cameraController != null
-                        ? AspectRatio(
-                            aspectRatio: MediaQuery.of(context).size.height /
-                                MediaQuery.of(context).size.width,
-                            child: CameraPreview(cameraController),
-                          )
-                        : Center(
-                            child: Text(
-                              'No Camera Detected',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          )
-                    //   WOWZCameraView(
-                    //     controller: wowzCameraController,
-                    //     androidLicenseKey: 'GOSK-A847-010C-B1B7-290A-960F',
-                    //     iosLicenseKey: 'GOSK-A847-010C-BD3A-1853-C20A',
-                    //     broadcastStatusCallback: (status) {
-                    //       print(status.message);
-                    //       print(status.state);
+              //       if (status.state == BroadcastState.IDLE_ERROR ||
+              //           status.state == BroadcastState.BROADCASTING_ERROR ||
+              //           status.state == BroadcastState.READY_ERROR) {
+              //         Flushbar(
+              //           animationDuration: Duration(milliseconds: 500),
+              //           backgroundColor: Colors.red,
+              //           duration: Duration(seconds: 3),
+              //           flushbarPosition: FlushbarPosition.TOP,
+              //           message: status.message,
+              //         ).show(context);
+              //       } else if (status.state == BroadcastState.BROADCASTING) {
+              //         isStarting = true;
+              //       }
 
-                    //       if (status.state == BroadcastState.IDLE_ERROR ||
-                    //           status.state == BroadcastState.BROADCASTING_ERROR ||
-                    //           status.state == BroadcastState.READY_ERROR) {
-                    //         Flushbar(
-                    //           animationDuration: Duration(milliseconds: 500),
-                    //           backgroundColor: Colors.red,
-                    //           duration: Duration(seconds: 3),
-                    //           flushbarPosition: FlushbarPosition.TOP,
-                    //           message: status.message,
-                    //         ).show(context);
-                    //       } else if (status.state == BroadcastState.BROADCASTING) {
-                    //         isStarting = true;
-                    //       }
+              //       setState(() {});
+              //     },
+              //     statusCallback: (status) {
+              //       print("test");
+              //       print(status.mState.toString());
+              //       print(status.isStarting().toString());
+              //       print(status.isReady().toString());
+              //     },
+              //   ),
+              ),
+          Padding(
+            padding: const EdgeInsets.only(left: 30, bottom: 20),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  if (flashLight == true) {
+                    TorchCompat.turnOff();
+                    flashLight = !flashLight;
+                  } else {
+                    TorchCompat.turnOn();
+                    flashLight = !flashLight;
+                  }
+                  setState(() {});
+                },
+                child: Container(
+                    child: Image.asset('assets/drawable/flashlight.png',
+                        scale: 2)),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: GestureDetector(
+                onTap: cameraController == null
+                    ? () {}
+                    : () {
+                        if (isStarting == true) {
+                          showCupertinoDialog(
+                              context: context,
+                              builder: (thisContext) {
+                                return CupertinoAlertDialog(
+                                  title: Text('Warning'),
+                                  content:
+                                      Text('Do you want to stop broadcasting?'),
+                                  actions: <Widget>[
+                                    CupertinoDialogAction(
+                                      child: Text('No'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    CupertinoDialogAction(
+                                      child: Text('Yes'),
+                                      onPressed: () {
+                                        onStopStreamingButtonPressed();
+                                        isStarting = !isStarting;
 
-                    //       setState(() {});
-                    //     },
-                    //     statusCallback: (status) {
-                    //       print("test");
-                    //       print(status.mState.toString());
-                    //       print(status.isStarting().toString());
-                    //       print(status.isReady().toString());
-                    //     },
-                    //   ),
-                    ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 30, bottom: 20),
-                  child: Align(
-                    alignment: Alignment.bottomLeft,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        if (flashLight == true) {
-                          TorchCompat.turnOff();
-                          flashLight = !flashLight;
+                                        print('is stopped: ' +
+                                            isStopped.toString());
+                                        if (mounted) setState(() {});
+                                        Navigator.pop(thisContext);
+                                        // stopWowzaLivestream().then((response) {
+                                        //   if (response.statusCode == 200 ||
+                                        //       response.statusCode == 201) {
+                                        //     print(
+                                        //         'Stopping livestream succes: ${response.body} With Status Code: ${response.statusCode}');
+                                        //         Navigator.pop(thisContext);
+                                        //         Navigator.pop(context);
+                                        //   }
+                                        // },);
+                                      },
+                                    )
+                                  ],
+                                );
+                              });
                         } else {
-                          TorchCompat.turnOn();
-                          flashLight = !flashLight;
+                          onVideoStreamingButtonPressed();
+                          isStopped = false;
+                          isStarting = !isStarting;
                         }
+
                         setState(() {});
                       },
-                      child: Container(
-                          child: Image.asset('assets/drawable/flashlight.png',
-                              scale: 2)),
-                    ),
+                child: Container(
+                  height: 50,
+                  width: 200,
+                  decoration: BoxDecoration(
+                      color:
+                          cameraController != null ? Colors.red : Colors.grey,
+                      borderRadius: BorderRadius.circular(30)),
+                  child: Center(
+                    child: Text(
+                        '${isStarting == false ? 'Start' : 'End'} Livestream',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold)),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: GestureDetector(
-                      onTap: cameraController == null
-                          ? () {}
-                          : () {
-                              if (isStarting == true) {
-                                showCupertinoDialog(
-                                    context: context,
-                                    builder: (thisContext) {
-                                      return CupertinoAlertDialog(
-                                        title: Text('Warning'),
-                                        content: Text(
-                                            'Do you want to stop broadcasting?'),
-                                        actions: <Widget>[
-                                          CupertinoDialogAction(
-                                            child: Text('No'),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                          CupertinoDialogAction(
-                                            child: Text('Yes'),
-                                            onPressed: () {
-                                              onStopStreamingButtonPressed();
-                                              isStarting = !isStarting;
-
-                                              print('is stopped: ' +
-                                                  isStopped.toString());
-                                              if (mounted) setState(() {});
-                                              Navigator.pop(thisContext);
-                                              // stopWowzaLivestream().then((response) {
-                                              //   if (response.statusCode == 200 ||
-                                              //       response.statusCode == 201) {
-                                              //     print(
-                                              //         'Stopping livestream succes: ${response.body} With Status Code: ${response.statusCode}');
-                                              //         Navigator.pop(thisContext);
-                                              //         Navigator.pop(context);
-                                              //   }
-                                              // },);
-                                            },
-                                          )
-                                        ],
-                                      );
-                                    });
-                              } else {
-                                onVideoStreamingButtonPressed();
-                                isStopped = false;
-                                isStarting = !isStarting;
-                              }
-
-                              setState(() {});
-                            },
-                      child: Container(
-                        height: 50,
-                        width: 200,
-                        decoration: BoxDecoration(
-                            color: cameraController != null
-                                ? Colors.red
-                                : Colors.grey,
-                            borderRadius: BorderRadius.circular(30)),
-                        child: Center(
-                          child: Text(
-                              '${isStarting == false ? 'Start' : 'End'} Livestream',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 25,
-                  left: 25,
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      if (cameraController != null) {
-                        cameraController.dispose();
-                        onStopStreamingButtonPressed();
-                      }
-
-                      Navigator.pop(context);
-                    },
-                    child: Icon(Icons.close, color: Colors.white),
-                  ),
-                ),
-                Positioned(
-                  right: 25,
-                  top: 25,
-                  child: Text(statusText, style: TextStyle(color: Colors.white))
-                )
-                // Padding(
-                //   padding: const EdgeInsets.only(right: 30, bottom: 20),
-                //   child: Align(
-                //     alignment: Alignment.bottomRight,
-                //     child: GestureDetector(
-                //       behavior: HitTestBehavior.opaque,
-                //       onTap: () {
-                //         onChangeCamera();
-                //         // wowzCameraController.isSwitchCameraAvailable().then(
-                //         //   (isSwitchCamAvailable) {
-                //         //     if (isSwitchCamAvailable == true) {
-
-                //         //     }
-                //         //   },
-                //         // );
-                //       },
-                //       child: Container(
-                //           child: Image.asset('assets/drawable/cam_switch.png', scale: 12,)),
-                //     ),
-                //   ),
-                // ),
-              ],
+              ),
             ),
-          );
-        },
+          ),
+          Positioned(
+            top: 25,
+            left: 25,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                if (cameraController != null) {
+                  cameraController.dispose();
+                  onStopStreamingButtonPressed();
+                }
+
+                Navigator.pop(context);
+              },
+              child: Icon(Icons.close, color: Colors.white),
+            ),
+          ),
+          Positioned(
+              right: 25,
+              top: 25,
+              child: Text(statusText, style: TextStyle(color: Colors.white)))
+          // Padding(
+          //   padding: const EdgeInsets.only(right: 30, bottom: 20),
+          //   child: Align(
+          //     alignment: Alignment.bottomRight,
+          //     child: GestureDetector(
+          //       behavior: HitTestBehavior.opaque,
+          //       onTap: () {
+          //         onChangeCamera();
+          //         // wowzCameraController.isSwitchCameraAvailable().then(
+          //         //   (isSwitchCamAvailable) {
+          //         //     if (isSwitchCamAvailable == true) {
+
+          //         //     }
+          //         //   },
+          //         // );
+          //       },
+          //       child: Container(
+          //           child: Image.asset('assets/drawable/cam_switch.png', scale: 12,)),
+          //     ),
+          //   ),
+          // ),
+        ],
       ),
-    );
+    ));
   }
 
   void stopBroadcastDialog() {}

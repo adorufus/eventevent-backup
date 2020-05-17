@@ -74,22 +74,43 @@ class _LivestreamPlayerState extends State<LivestreamPlayer>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Container(
-          color: Colors.black,
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: AspectRatio(
-            aspectRatio: 3 / 4,
-            child: Video(
-              url: widget.wowzaLiveUrl,
-              autoPlay: true,
-              isLiveStream: true,
-              onViewCreated: _onViewCreated,
-              showControls: true,
-              position: 1,
+      body: SafeArea(
+              child: Stack(
+          children: <Widget>[
+            Container(
+              child: Container(
+                color: Colors.black,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: AspectRatio(
+                  aspectRatio: 3 / 4,
+                  child: Video(
+                    url: widget.wowzaLiveUrl,
+                    autoPlay: true,
+                    isLiveStream: true,
+                    onViewCreated: _onViewCreated,
+                    showControls: true,
+                    position: 1,
+                  ),
+                ),
+              ),
             ),
-          ),
+            Positioned(
+              top: 15,
+              left: 15,
+              child: GestureDetector(
+                behavior: HitTestBehavior.deferToChild,
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Icons.close,
+                  size: 30,
+                  color: Colors.white,
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

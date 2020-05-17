@@ -51,7 +51,10 @@ class PublicEventListState extends State<PublicEventList> {
           print(response.body);
           setState(() {
             publicData = extractedData['data']['public']['data'];
-            publicData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
+            publicData.removeWhere((item) =>
+                item['ticket_type']['type'] == 'free_limited_seating' ||
+                item['ticket_type']['type'] == 'paid_seating' ||
+                item['ticket_type']['type'] == 'paid_seating');
             print(publicData);
           });
         }
@@ -75,7 +78,10 @@ class PublicEventListState extends State<PublicEventList> {
           List updatedData = extractedData['data']['public']['data'];
           print('data: ' + updatedData.toString());
           publicData.addAll(updatedData);
-          publicData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
+          publicData.removeWhere((item) =>
+              item['ticket_type']['type'] == 'free_limited_seating' ||
+              item['ticket_type']['type'] == 'paid_seating' ||
+              item['ticket_type']['type'] == 'paid_seating');
         });
         if (mounted) setState(() {});
         refreshController.loadComplete();
@@ -117,7 +123,11 @@ class PublicEventListState extends State<PublicEventList> {
                         setState(() {
                           var extractedData = json.decode(response.body);
                           publicData = extractedData['data']['public']['data'];
-                          publicData.removeWhere((item) => item['ticket_type']['type'] == 'free_limited_seating' || item['ticket_type']['type'] == 'paid_seating' || item['ticket_type']['type'] == 'paid_seating');
+                          publicData.removeWhere((item) =>
+                              item['ticket_type']['type'] ==
+                                  'free_limited_seating' ||
+                              item['ticket_type']['type'] == 'paid_seating' ||
+                              item['ticket_type']['type'] == 'paid_seating');
                           assert(publicData != null);
 
                           print(publicData);
@@ -212,6 +222,10 @@ class PublicEventListState extends State<PublicEventList> {
                         itemColor = Color(0xFFFFAA00);
                         itemPriceText = publicData[i]['ticket_type']['name'];
                       } else if (publicData[i]['ticket_type']['type'] ==
+                          'paid_live_stream') {
+                        itemColor = eventajaGreenTeal;
+                        itemPriceText = publicData[i]['ticket_type']['name'];
+                      } else if (publicData[i]['ticket_type']['type'] ==
                               'free_limited' ||
                           publicData[i]['ticket_type']['type'] ==
                               'free_limited_seating') {
@@ -247,7 +261,9 @@ class PublicEventListState extends State<PublicEventList> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       EventDetailLoadingScreen(
-                                          eventId: widget.type == 'going' ? publicData[i]['eventID'] : publicData[i]['id'])));
+                                          eventId: widget.type == 'going'
+                                              ? publicData[i]['eventID']
+                                              : publicData[i]['id'])));
                         },
                         child: new LatestEventItem(
                           image: publicData[i]['picture'],
@@ -370,7 +386,7 @@ class PublicEventListState extends State<PublicEventList> {
     print(prefs.getString('Last User ID'));
     String uri = BaseApi().apiUrl +
         '/user/${widget.type}?X-API-KEY=$API_KEY&page=$currentPage&userID=${widget.userId == prefs.getString('Last User ID') ? prefs.getString('Last User ID') : widget.userId}&isPrivate=0';
-        print(uri);
+    print(uri);
     print(uri);
     final response = await http.get(
       uri,
