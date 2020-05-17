@@ -23,7 +23,8 @@ class _LivestreamPlayerState extends State<LivestreamPlayer>
     with PlayerObserver, MultiAudioSupport {
   VideoPlayerController videoPlayerController;
   ChewieController chewieController;
-  IOWebSocketChannel channel = IOWebSocketChannel.connect(BaseApi.eventeventWebSocket);
+  IOWebSocketChannel channel =
+      IOWebSocketChannel.connect(BaseApi.eventeventWebSocket);
   int messageNum = 0;
 
   @override
@@ -59,8 +60,6 @@ class _LivestreamPlayerState extends State<LivestreamPlayer>
   void socketConnect() async {
     print("web socket connecting...");
     channel = IOWebSocketChannel.connect(BaseApi.eventeventWebSocket);
-
-
   }
 
   void socketDisconnect() {
@@ -80,25 +79,17 @@ class _LivestreamPlayerState extends State<LivestreamPlayer>
           color: Colors.black,
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          child: Stack(children: <Widget>[
-            AspectRatio(
-              aspectRatio: 3 / 4,
-              child: Video(
-                url: widget.wowzaLiveUrl,
-                autoPlay: true,
-                isLiveStream: true,
-                onViewCreated: _onViewCreated,
-                showControls: true,
-                position: 1,
-              ),
+          child: AspectRatio(
+            aspectRatio: 3 / 4,
+            child: Video(
+              url: widget.wowzaLiveUrl,
+              autoPlay: true,
+              isLiveStream: true,
+              onViewCreated: _onViewCreated,
+              showControls: true,
+              position: 1,
             ),
-            StreamBuilder(
-              stream: channel.stream,
-              builder: (context, snapshot){
-                return Text(snapshot.hasData ? snapshot.data : '', style: TextStyle(color: Colors.white),);
-              },
-            )
-          ]),
+          ),
         ),
       ),
     );
