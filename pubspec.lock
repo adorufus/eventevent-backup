@@ -356,6 +356,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.35"
+  flutter_rtmp_publisher:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: d09e7eb638c2041a99b4438d34ec8e38e7ecd09f
+      url: "git://github.com/OhYee/flutter_rtmp_publisher.git"
+    source: git
+    version: "0.0.1"
   flutter_screenutil:
     dependency: "direct main"
     description:
