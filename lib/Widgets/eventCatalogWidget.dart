@@ -262,6 +262,7 @@ class _EventCatalogState extends State<EventCatalog>
               padding: EdgeInsets.symmetric(horizontal: 13),
               color: Colors.white,
               child: AppBar(
+                brightness: Brightness.light,
                 automaticallyImplyLeading: false,
                 elevation: 0,
                 backgroundColor: Colors.white,
@@ -639,6 +640,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 child: PopularEventWidget(
                                   imageUrl: data[i]['picture'],
                                   title: data[i]["name"],
+                                  isHybridEvent: data[i]['isHybridEvent'],
                                   location: data[i]["address"],
                                   color: itemColor,
                                   price: itemPriceText,

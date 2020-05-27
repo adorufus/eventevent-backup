@@ -47,6 +47,7 @@ class ManageTicketState extends State<ManageTicket> {
 
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);

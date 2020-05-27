@@ -28,6 +28,7 @@ class ForgotPasswordState extends State<ForgotPassword> {
     )..init(context);
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: (){
@@ -148,6 +149,7 @@ class SuccessResetPassword extends StatelessWidget{
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         elevation: 1,
         leading: GestureDetector(

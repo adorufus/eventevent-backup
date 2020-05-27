@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:eventevent/Widgets/EventDetailComment.dart';
 import 'package:eventevent/Widgets/EventDetailItems/FeedbackLogic.dart';
 import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
 import 'package:eventevent/Widgets/ManageEvent/LivestreamBroadcastWidget.dart';
+import 'package:eventevent/Widgets/ManageEvent/LivestreamBroadcastWidgetAndroid.dart';
 import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
@@ -32,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:marquee_flutter/marquee_flutter.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:share_extend/share_extend.dart';
@@ -157,12 +160,15 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   List timelineList = [];
   String currentUserId = "";
 
+  
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
     // FlutterBranchSdk.validateSDKIntegration();
+    
     generateLink();
     if (widget.detailData.containsKey("livestream")) {
       getWowzaLivestreamState(
@@ -171,6 +177,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
         var extractedResponse = json.decode(response.body);
 
         streamingState = extractedResponse['live_stream']['state'];
+        // streamingState = 'started';
         if (!mounted) return;
         setState(() {});
       });
@@ -275,6 +282,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   }
 
   void _onTimeChange(Timer timer) {
+    if (!mounted) return;
     setState(() {
       _currentTime = DateTime.now();
     });
@@ -357,6 +365,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                 padding: EdgeInsets.symmetric(horizontal: 13),
                 color: Colors.white,
                 child: AppBar(
+                  brightness: Brightness.light,
                   elevation: 0,
                   backgroundColor: Colors.white,
                   leading: GestureDetector(
@@ -899,19 +908,45 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   height: ScreenUtil.instance
                                                       .setWidth(10)),
                                               Container(
-                                                  width: ScreenUtil.instance
-                                                      .setWidth(180),
-                                                  child: Text(
-                                                    widget.dateTime,
-                                                    style: TextStyle(
-                                                        fontSize: ScreenUtil
-                                                            .instance
-                                                            .setSp(12),
-                                                        color: Colors.grey),
-                                                  )),
+                                                width: ScreenUtil.instance
+                                                    .setWidth(180),
+                                                child: Text(
+                                                  widget.dateTime,
+                                                  style: TextStyle(
+                                                    fontSize: ScreenUtil
+                                                        .instance
+                                                        .setSp(12),
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                              ),
                                               SizedBox(
-                                                  height: ScreenUtil.instance
-                                                      .setWidth(10)),
+                                                height: ScreenUtil.instance
+                                                    .setWidth(10),
+                                              ),
+                                              detailData['isHybridEvent'] ==
+                                                      'streamOnly'
+                                                  ? Row(
+                                                      children: <Widget>[
+                                                        Image.asset(
+                                                            'assets/icons/icon_apps/LivestreamTagIcon.png',
+                                                            scale: 25),
+                                                        SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        Text(
+                                                          'Livestream Event',
+                                                          style: TextStyle(
+                                                              color: Colors.red,
+                                                              fontSize: 13),
+                                                        )
+                                                      ],
+                                                    )
+                                                  : Container(),
+                                              SizedBox(
+                                                height: ScreenUtil.instance
+                                                    .setWidth(10),
+                                              ),
                                               Container(
                                                   height: ScreenUtil.instance
                                                       .setWidth(widget
@@ -2170,15 +2205,63 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           );
                                                         });
                                                   } else {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            LivestreamBroadcast(
-                                                                eventDetail: widget
-                                                                    .detailData),
-                                                      ),
-                                                    );
+                                                    showCupertinoModalPopup(
+                                                        context: context,
+                                                        builder: (thisContext) {
+                                                          return CupertinoActionSheet(
+                                                            title: Text(
+                                                                'Set Broadcast Bitrate'),
+                                                            actions: <Widget>[
+                                                              CupertinoActionSheetAction(
+                                                                onPressed: () {
+                                                                  Navigator
+                                                                      .push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                      builder: (context) => LivestreamBroadcast(
+                                                                          bitrate:
+                                                                              1000,
+                                                                          eventDetail:
+                                                                              widget.detailData),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                                child: Text(
+                                                                    '1000 Kbps ( Medium Quality )'),
+                                                              ),
+                                                              CupertinoActionSheetAction(
+                                                                onPressed: () {
+                                                                  Navigator
+                                                                      .push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                      builder: (context) => LivestreamBroadcast(
+                                                                          bitrate:
+                                                                              2500,
+                                                                          eventDetail:
+                                                                              widget.detailData),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                                child: Text(
+                                                                    '2500 Kbps ( High Quality )'),
+                                                              ),
+                                                            ],
+                                                            cancelButton:
+                                                                CupertinoActionSheetAction(
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    thisContext);
+                                                              },
+                                                              child: Text(
+                                                                'Cancel',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .red),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        });
                                                   }
                                                 }
                                               } else {
@@ -2223,20 +2306,31 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     MainAxisAlignment.center,
                                                 children: <Widget>[
                                                   SizedBox(
-                                                      width: ScreenUtil.instance
-                                                          .setWidth(widget.detailData[
-                                                                          'ticket_type']
+                                                      width: ScreenUtil.instance.setWidth(widget
+                                                                          .detailData[
+                                                                      'ticket_type']
+                                                                  ['type'] ==
+                                                              'free_live_stream'
+                                                          ? widget.detailData[
+                                                                          'livestream'][0]
                                                                       [
-                                                                      'type'] ==
-                                                                  'free_live_stream'
-                                                              ? 50
-                                                              : 20.9),
+                                                                      'zoom_id'] !=
+                                                                  null
+                                                              ? 80
+                                                              : 50
+                                                          : 20.9),
                                                       child: Image.asset(
                                                         widget.detailData[
                                                                         'ticket_type']
                                                                     ['type'] ==
                                                                 'free_live_stream'
-                                                            ? 'assets/btn_ticket/live.png'
+                                                            ? widget.detailData[
+                                                                            'livestream'][0]
+                                                                        [
+                                                                        'zoom_id'] !=
+                                                                    null
+                                                                ? 'assets/icons/aset_icon/zoom_livestream.png'
+                                                                : 'assets/btn_ticket/live.png'
                                                             : 'assets/icons/icon_apps/qr.png',
                                                         fit: BoxFit.fill,
                                                         colorBlendMode:
@@ -2247,7 +2341,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                 'free_live_stream'
                                                             ? streamingState ==
                                                                     'stopped'
-                                                                ? Colors.grey
+                                                                ? Colors.white
                                                                     .withOpacity(
                                                                         .9)
                                                                 : Colors

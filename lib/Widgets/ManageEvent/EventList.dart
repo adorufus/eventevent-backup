@@ -49,6 +49,7 @@ class EventListState extends State<EventList>{
     
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: GestureDetector(

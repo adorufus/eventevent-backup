@@ -57,6 +57,7 @@ class EditEventDateState extends State<EditEventDate> {
 	return Scaffold(
 		key: thisScaffold,
 		appBar: AppBar(
+			brightness: Brightness.light,
 			backgroundColor: Colors.white,
 			elevation: 0,
 			leading: GestureDetector(

@@ -796,7 +796,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
                         },
                         elevation: 1,
                       );
-                    } else {
+                    }
+                    else {
                       _selectedPage = index;
                     }
                   });

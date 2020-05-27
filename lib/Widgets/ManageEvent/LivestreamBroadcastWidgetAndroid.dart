@@ -8,6 +8,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_rtmp_publisher/flutter_rtmp_publisher.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_wowza/gocoder/wowza_gocoder.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
@@ -15,14 +16,15 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:torch_compat/torch_compat.dart';
 import 'package:wakelock/wakelock.dart';
 
-class LivestreamBroadcast extends StatefulWidget {
+class LivestreamBroadcastAndroid extends StatefulWidget {
   final eventDetail;
   final bitrate;
 
-  const LivestreamBroadcast({Key key, this.eventDetail, this.bitrate})
+  const LivestreamBroadcastAndroid({Key key, this.eventDetail, this.bitrate})
       : super(key: key);
   @override
-  _LivestreamBroadcastState createState() => _LivestreamBroadcastState();
+  _LivestreamBroadcastAndroidState createState() =>
+      _LivestreamBroadcastAndroidState();
 }
 
 IconData getCameraLensIcon(CameraLensDirection direction) {
@@ -40,9 +42,13 @@ IconData getCameraLensIcon(CameraLensDirection direction) {
 void logError(String code, String message) =>
     print('Error: $code\nError Message: $message');
 
-class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
+class _LivestreamBroadcastAndroidState
+    extends State<LivestreamBroadcastAndroid> {
   WOWZCameraController wowzCameraController = WOWZCameraController();
   CameraController cameraController;
+  RTMPCamera rtmpCameraController = RTMPCamera();
+  StreamController<List<CameraSize>> streamController =
+      StreamController<List<CameraSize>>();
   ResolutionPreset resolutionPreset = ResolutionPreset.medium;
   List<CameraDescription> cameras;
   bool flashLight = false;
@@ -63,89 +69,49 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
     print(statuses[Permission.microphone]);
   }
 
-  Future<List<CameraDescription>> getAvailableCamera() async {
-    try {
-      cameras = await availableCameras();
-      return cameras;
-    } on CameraException catch (e) {
-      print('code:  ${e.code} message: ${e.description}');
-      return null;
-    }
-  }
-
-  void setupLivestreamCamera(CameraDescription description) {
-    if (widget.bitrate == 1000) {
-      resolutionPreset = ResolutionPreset.medium;
-    } else if (widget.bitrate == 2500) {
-      resolutionPreset = ResolutionPreset.high;
-    }
-
-    print(description.sensorOrientation);
-
-    if (!mounted) return;
-    setState(() {});
-
-    try {
-      cameraController =
-          CameraController(description, resolutionPreset, enableAudio: true);
-
-      cameraController.initialize().then((_) {
-        if (!mounted) {
-          return;
-        }
-
-        cameraController.addListener(camControlListener);
-
-        setState(() {});
-      });
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
   void camControlListener() {
-    if (cameraController.value.isStreamingVideoRtmp) {
-      print('Camera Is Recording RTMP');
-      statusText = 'Recording';
-    } else {
-      if (isStopped == true) {
-        print('stream ended by user');
-        statusText = 'Streaming ended by user';
-      } else {
-        print('stream ended by unexpected event');
-        statusText = 'Streaming ended by unexpected event';
-        startVideoStreaming().then((url) {
-          statusText = 'Reconnected';
-          if (mounted) setState(() {});
-          print(url);
-        });
-      }
-    }
+    // if (cameraController.value.isStreamingVideoRtmp) {
+    //   print('Camera Is Recording RTMP');
+    //   statusText = 'Recording';
+    // } else {
+    //   if (isStopped == true) {
+    //     print('stream ended by user');
+    //     statusText = 'Streaming ended by user';
+    //   } else {
+    //     print('stream ended by unexpected event');
+    //     statusText = 'Streaming ended by unexpected event';
+    //     startVideoStreaming().then((url) {
+    //       statusText = 'Reconnected';
+    //       if (mounted) setState(() {});
+    //       print(url);
+    //     });
+    //   }
+    // }
 
-    if (cameraController.value.isStreamingPaused) {
-      print('Streaming rtmp paused');
-    }
+    // if (cameraController.value.isStreamingPaused) {
+    //   print('Streaming rtmp paused');
+    // }
 
-    if (cameraController.value.hasError) {
-      print('Error: ${cameraController.value.errorDescription}');
-      statusText = cameraController.value.errorDescription;
-    }
+    // if (cameraController.value.hasError) {
+    //   print('Error: ${cameraController.value.errorDescription}');
+    //   statusText = cameraController.value.errorDescription;
+    // }
 
-    if (mounted) setState(() {});
+    // if (mounted) setState(() {});
   }
 
   void onVideoStreamingButtonPressed() {
-    startVideoStreaming().then((url) {
-      if (mounted) setState(() {});
-      print(url);
-    });
+    // startVideoStreaming().then((url) {
+    //   if (mounted) setState(() {});
+    //   print(url);
+    // });
   }
 
   void onStopStreamingButtonPressed() {
     isStopped = true;
-    stopVideoStreaming().then((_) {
-      if (mounted) setState(() {});
-    });
+    // stopVideoStreaming().then((_) {
+    //   if (mounted) setState(() {});
+    // });
   }
 
   void onFlashlightPressed() {}
@@ -153,43 +119,38 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
   void onChangeCamera() {
     final lensDirection = cameraController.description.lensDirection;
 
-    CameraDescription newDescription;
+    // CameraDescription newDescription;
 
-    if (lensDirection == CameraLensDirection.front) {
-      newDescription = cameras.firstWhere((description) =>
-          description.lensDirection == CameraLensDirection.back);
-    } else {
-      newDescription = cameras.firstWhere((description) =>
-          description.lensDirection == CameraLensDirection.front);
-    }
+    // if (lensDirection == CameraLensDirection.front) {
+    //   newDescription = cameras.firstWhere((description) =>
+    //       description.lensDirection == CameraLensDirection.back);
+    // } else {
+    //   newDescription = cameras.firstWhere((description) =>
+    //       description.lensDirection == CameraLensDirection.front);
+    // }
 
-    if (newDescription != null) {
-      setupLivestreamCamera(newDescription);
-    } else {
-      print('no camera found');
-    }
+    // if (newDescription != null) {
+    //   setupLivestreamCamera(newDescription);
+    // } else {
+    //   print('no camera found');
+    // }
   }
 
-  void onNewCameraSelected(CameraDescription cameraDescription) async {
-    if (cameraController != null) {
-      await cameraController.dispose();
-    }
-
-    cameraController = CameraController(
-      cameraDescription,
-      resolutionPreset,
-      enableAudio: true,
-    );
-
-    cameraController.addListener(() {
-      if (mounted) setState(() {});
-      if (cameraController.value.hasError) {
-        print('Camera Error: ${cameraController.value.errorDescription}');
+  void onFlipCamera() {
+    if (cameras.isEmpty) {
+      print('No camera found');
+    } else {
+      for (CameraDescription cameraDesc in cameras) {
+        if (cameraController != null &&
+            cameraController.value.isRecordingVideo) {
+        } else {
+          onNewCameraSelected(cameraDesc);
+        }
       }
-
-      if (mounted) setState(() {});
-    });
+    }
   }
+
+  void onNewCameraSelected(CameraDescription cameraDescription) async {}
 
   Future<String> startVideoStreaming() async {
     String broadcastServerUrl =
@@ -204,130 +165,12 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
 
     print('finalBroadcast url: ' + finalBroadcastServerUrl);
 
-    if (!cameraController.value.isInitialized) {
-      print('error: select camera first');
-      return 'error: select camera first';
-    }
-
-    if (cameraController.value.isStreamingVideoRtmp) {
-      print('error: select camera first');
-      return 'currently streaming, please stop broadcasting first';
-    }
-
-    try {
-      await cameraController.startVideoStreaming(finalBroadcastServerUrl);
-    } on CameraException catch (e) {
-      print(e);
-      return e.toString();
-    }
-
-    cameraController.addListener(() {});
-
     return 'it works!';
   }
 
-  Future<void> stopVideoStreaming() async {
-    if (!cameraController.value.isStreamingVideoRtmp) {
-      return null;
-    }
+  Future<void> stopVideoStreaming() async {}
 
-    try {
-      await cameraController.stopVideoStreaming();
-    } on CameraException catch (e) {
-      print(e);
-      return null;
-    }
-  }
-
-  // void getWowzaConfigData() {
-  //   hostAddress = widget.eventDetail['livestream'][0]['primary_server']
-  //       .toString()
-  //       .substring(7, 40);
-  //   appName = widget.eventDetail['livestream'][0]['primary_server']
-  //       .toString()
-  //       .substring(41);
-  //   streamName = widget.eventDetail['livestream'][0]['stream_name'];
-
-  //   print('host address: ' + hostAddress + ' app name: ' + appName);
-
-  //   wowzCameraController.setWOWZConfig(
-  //     hostAddress: hostAddress,
-  //     portNumber: 1935,
-  //     applicationName: appName,
-  //     streamName: streamName,
-  //     scaleMode: ScaleMode.RESIZE_TO_ASPECT,
-  //     bps: widget.bitrate
-  //   );
-
-  //   wowzCameraController.startPreview();
-
-  //   if (!mounted) return;
-  //   setState(() {});
-  // }
-
-  // Future<http.Response> initializeWowzaLivestream() async {
-
-  //   final response = await http.put(
-  //     BaseApi.wowzaUrl +
-  //         'live_streams/${widget.eventDetail['livestream'][0]['streaming_id']}/start',
-  //     headers: {
-  //       'wsc-api-key': WOWZA_API_KEY,
-  //       'wsc-access-key': WOWZA_ACCESS_KEY,
-  //       'Content-Type': 'application/json'
-  //     },
-  //   );
-
-  //   print("WOWZA INITIALIZATION PROCESS, PLEASE WAIT.....");
-  //   print(
-  //       "WOWZA RESPONSE: ${response.body} WITH STATUS CODE: ${response.statusCode}");
-
-  //   return response;
-  // }
-
-  Future<http.Response> stopWowzaLivestream() async {
-    final response = await http.put(
-      BaseApi.wowzaUrl +
-          'live_streams/${widget.eventDetail['livestream'][0]['streaming_id']}/stop',
-      headers: {
-        'wsc-api-key': WOWZA_API_KEY,
-        'wsc-access-key': WOWZA_ACCESS_KEY,
-        'Content-Type': 'application/json'
-      },
-    );
-
-    print("Stopping WOWZA PROCESS, PLEASE WAIT.....");
-    print(
-        "WOWZA RESPONSE: ${response.body} WITH STATUS CODE: ${response.statusCode}");
-
-    return response;
-  }
-
-  // Future<http.Response> getWowzaLivestreamState() async {
-  //   final response = await http.get(
-  //     BaseApi.wowzaUrl +
-  //         'live_streams/${widget.eventDetail['livestream'][0]['streaming_id']}/state',
-  //     headers: {
-  //       'wsc-api-key': WOWZA_API_KEY,
-  //       'wsc-access-key': WOWZA_ACCESS_KEY,
-  //       'Content-Type': 'application/json'
-  //     },
-  //   );
-
-  //   print("FETCHING CURRENT LIVESTREAM STATE, PLEASE WAIT.....");
-  //   print(
-  //       "WOWZA RESPONSE: ${response.body} WITH STATUS CODE: ${response.statusCode}");
-
-  //   return response;
-  // }
-
-  // Future getPermission() async {
-  //   Map<Permission, PermissionStatus> statuses = await [
-  //     Permission.microphone,
-  //     Permission.camera,
-  //   ].request();
-
-  //   print(statuses[Permission.microphone]);
-  // }
+  StreamSubscription<List<CameraSize>> listener;
 
   @override
   void initState() {
@@ -337,10 +180,20 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
     //   DeviceOrientation.landscapeLeft,
     //   DeviceOrientation.portraitUp,
     // ]);
-    getPermission().then((_) {
-      getAvailableCamera().then((cameraList) {
-        setupLivestreamCamera(cameraList.first);
-      });
+    // listener = streamController.stream.listen((rl){
+    //   if(mounted) setState(() {
+    //     if(rl.length > 0){
+    //       print(rl[0].height + rl[0].width);
+    //     }
+    //   });
+    // });
+    getPermission().then((_) async {
+      // await rtmpCameraController.startPreview();
+      // rtmpCameraController.onPreview().then((preview){
+      //   setState(() {
+      //     print('is on preview: ' + preview.toString());
+      //   });
+      // });
     });
 
     // startVideoStreaming();
@@ -354,8 +207,11 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
   @override
   void dispose() {
     Wakelock.disable();
-    
+
     cameraController?.dispose();
+    rtmpCameraController.dispose();
+    streamController.close();
+    listener.cancel();
     wowzCameraController.dispose();
     super.dispose();
   }
@@ -366,52 +222,62 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
         body: SafeArea(
       child: Stack(
         children: <Widget>[
-          Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: cameraController != null
-                  ? AspectRatio(
-                      aspectRatio: cameraController.value.previewSize != null ? cameraController.value.aspectRatio : 1.0,
-                      child: CameraPreview(cameraController),
-                    )
-                  : Center(
-                      child: Text(
-                        'No Camera Detected',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    )
-              //   WOWZCameraView(
-              //     controller: wowzCameraController,
-              //     androidLicenseKey: 'GOSK-A847-010C-B1B7-290A-960F',
-              //     iosLicenseKey: 'GOSK-A847-010C-BD3A-1853-C20A',
-              //     broadcastStatusCallback: (status) {
-              //       print(status.message);
-              //       print(status.state);
+          rtmpCameraController != null
+              ? Container(
+                height: 1280,
+                width: 720,
+                child: AspectRatio(
+                    aspectRatio: 3 / 4,
+                    child: RTMPCameraPreview(
+                      controller: rtmpCameraController,
+                      createdCallback: (int id) {
+                        rtmpCameraController
+                            .getResolutions()
+                            .then((resolutionList) {
+                          streamController.add(resolutionList);
+                        });
+                      },
+                    ),
+                  ),
+              )
+              : Center(
+                  child: Text(
+                    'No Camera Detected',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+          //   WOWZCameraView(
+          //     controller: wowzCameraController,
+          //     androidLicenseKey: 'GOSK-A847-010C-B1B7-290A-960F',
+          //     iosLicenseKey: 'GOSK-A847-010C-BD3A-1853-C20A',
+          //     broadcastStatusCallback: (status) {
+          //       print(status.message);
+          //       print(status.state);
 
-              //       if (status.state == BroadcastState.IDLE_ERROR ||
-              //           status.state == BroadcastState.BROADCASTING_ERROR ||
-              //           status.state == BroadcastState.READY_ERROR) {
-              //         Flushbar(
-              //           animationDuration: Duration(milliseconds: 500),
-              //           backgroundColor: Colors.red,
-              //           duration: Duration(seconds: 3),
-              //           flushbarPosition: FlushbarPosition.TOP,
-              //           message: status.message,
-              //         ).show(context);
-              //       } else if (status.state == BroadcastState.BROADCASTING) {
-              //         isStarting = true;
-              //       }
+          //       if (status.state == BroadcastState.IDLE_ERROR ||
+          //           status.state == BroadcastState.BROADCASTING_ERROR ||
+          //           status.state == BroadcastState.READY_ERROR) {
+          //         Flushbar(
+          //           animationDuration: Duration(milliseconds: 500),
+          //           backgroundColor: Colors.red,
+          //           duration: Duration(seconds: 3),
+          //           flushbarPosition: FlushbarPosition.TOP,
+          //           message: status.message,
+          //         ).show(context);
+          //       } else if (status.state == BroadcastState.BROADCASTING) {
+          //         isStarting = true;
+          //       }
 
-              //       setState(() {});
-              //     },
-              //     statusCallback: (status) {
-              //       print("test");
-              //       print(status.mState.toString());
-              //       print(status.isStarting().toString());
-              //       print(status.isReady().toString());
-              //     },
-              //   ),
-              ),
+          //       setState(() {});
+          //     },
+          //     statusCallback: (status) {
+          //       print("test");
+          //       print(status.mState.toString());
+          //       print(status.isStarting().toString());
+          //       print(status.isReady().toString());
+          //     },
+          //   ),
+
           Padding(
             padding: const EdgeInsets.only(left: 30, bottom: 20),
             child: Align(
@@ -461,7 +327,6 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
                                       child: Text('Yes'),
                                       onPressed: () {
                                         onStopStreamingButtonPressed();
-                                        stopWowzaLivestream();
                                         isStarting = !isStarting;
 
                                         print('is stopped: ' +

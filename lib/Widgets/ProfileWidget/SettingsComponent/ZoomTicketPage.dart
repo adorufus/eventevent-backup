@@ -18,31 +18,34 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: ScreenUtil.instance.setWidth(50),
-          padding: EdgeInsets.symmetric(horizontal: 13),
-          color: Colors.white,
-          child: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.white,
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Image.asset(
-                'assets/icons/icon_apps/arrow.png',
-                scale: 5.5,
-                alignment: Alignment.centerLeft,
+        child: SafeArea(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: ScreenUtil.instance.setWidth(50),
+            padding: EdgeInsets.symmetric(horizontal: 13),
+            color: Colors.white,
+            child: AppBar(
+              brightness: Brightness.light,
+              elevation: 0,
+              backgroundColor: Colors.white,
+              leading: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Image.asset(
+                  'assets/icons/icon_apps/arrow.png',
+                  scale: 5.5,
+                  alignment: Alignment.centerLeft,
+                ),
               ),
-            ),
-            title: Text('Zoom Detais'),
-            centerTitle: true,
-            textTheme: TextTheme(
-              title: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: ScreenUtil.instance.setSp(14),
-                color: Colors.black,
+              title: Text('Zoom Details'),
+              centerTitle: true,
+              textTheme: TextTheme(
+                title: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: ScreenUtil.instance.setSp(14),
+                  color: Colors.black,
+                ),
               ),
             ),
           ),
@@ -52,13 +55,15 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
         child: Container(
           padding: EdgeInsets.all(16),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Image.asset('assets/icons/aset_icon/zoom_livestream.png',),
+              Image.asset('assets/icons/aset_icon/zoom_livestream.png', scale: 2
+                ,),
               SizedBox(
                 height: 15,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text('Zoom ID: ', style: TextStyle(fontSize: 15),),
                   GestureDetector(
@@ -76,6 +81,7 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
                 height: 15,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text('Zoom Description: ', style: TextStyle(fontSize: 15),),
                   Text('${widget.zoomDesc}', style: TextStyle(fontSize: 15),),

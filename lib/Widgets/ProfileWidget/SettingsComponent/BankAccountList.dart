@@ -36,6 +36,7 @@ class BankAccountListState extends State<BankAccountList> {
     )..init(context);
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         elevation: 1,
         backgroundColor: Colors.white,
         leading: GestureDetector(

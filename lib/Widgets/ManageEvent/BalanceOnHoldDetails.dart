@@ -41,6 +41,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
     return Scaffold(
       // backgroundColor: Colors.grey.withOpacity(.1),
       appBar: AppBar(
+        brightness: Brightness.light,
         elevation: 0,
         backgroundColor: Colors.white,
         leading: GestureDetector(

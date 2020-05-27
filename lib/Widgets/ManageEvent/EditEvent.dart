@@ -287,6 +287,7 @@ class EditEventState extends State<EditEvent> {
     return Scaffold(
       key: thisScaffold,
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         elevation: 1,
         leading: GestureDetector(

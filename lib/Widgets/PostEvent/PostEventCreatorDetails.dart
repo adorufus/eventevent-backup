@@ -36,6 +36,7 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
         key: thisScaffold,
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
+          brightness: Brightness.light,
           backgroundColor: Colors.white,
           elevation: 0,
           leading: GestureDetector(

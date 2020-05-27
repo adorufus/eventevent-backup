@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
@@ -99,6 +100,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
 
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         elevation: 1,
         backgroundColor: Colors.white,
         leading: GestureDetector(
@@ -156,11 +158,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
           )
         ],
       ),
-      body: userData == null
-          ? Container(
-              child: Center(child: CupertinoActivityIndicator(radius: 20)),
-            )
-          : buildMainView(),
+      body: buildMainView(),
     );
   }
 
@@ -174,11 +172,11 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
         SizedBox(
           height: ScreenUtil.instance.setWidth(30),
         ),
-        basicSettings(),
+        userData == null ? HomeLoadingScreen().basicSettingsLoading(context, eventajaGreenTeal) : basicSettings(),
         SizedBox(
           height: ScreenUtil.instance.setWidth(20),
         ),
-        contactSettings(),
+        userData == null ? HomeLoadingScreen().contactSettingsLoading(context, eventajaGreenTeal) : contactSettings(),
         SizedBox(
           height: ScreenUtil.instance.setWidth(20),
         )
@@ -193,7 +191,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
       },
       child: Column(
         children: <Widget>[
-          Container(
+          userData == null ? HomeLoadingScreen().EditProfilePictureLoading() : Container(
             height: ScreenUtil.instance.setWidth(200),
             width: ScreenUtil.instance.setWidth(200),
             decoration: BoxDecoration(

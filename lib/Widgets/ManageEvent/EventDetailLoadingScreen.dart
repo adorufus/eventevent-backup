@@ -7,6 +7,7 @@ import 'package:eventevent/Widgets/LoveItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -303,6 +304,13 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
           } else if (detailData['status'] == 'canceled') {
             itemColor = Colors.red;
             ticketPrice = 'Canceled';
+          }
+          if (detailData['ticket']['salesStatus'] == 'endSales') {
+            itemColor = Color(0xFF8E1E2D);
+            if (detailData['status'] == 'ended') {
+              ticketPrice = 'EVENT HAS ENDED';
+            }
+            ticketPrice = 'SALES ENDED';
           } else {
             if (detailData['ticket_type']['type'] == 'paid' ||
                 detailData['ticket_type']['type'] == 'paid_seating') {
@@ -344,7 +352,25 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
               ticketPrice = detailData['ticket_type']['name'];
             } else if (detailData['ticket_type']['type'] ==
                 'free_live_stream') {
+              if (detailData['ticket']['salesStatus'] == 'endSales') {
+                itemColor = Color(0xFF8E1E2D);
+                if (detailData['status'] == 'ended') {
+                  ticketPrice = 'EVENT HAS ENDED';
+                }
+                ticketPrice = 'SALES ENDED';
+              }
               itemColor = Color(0xFFFFAA00);
+              ticketPrice = detailData['ticket_type']['name'];
+            } else if (detailData['ticket_type']['type'] ==
+                'paid_live_stream') {
+              if (detailData['ticket']['salesStatus'] == 'endSales') {
+                itemColor = Color(0xFF8E1E2D);
+                if (detailData['status'] == 'ended') {
+                  ticketPrice = 'EVENT HAS ENDED';
+                }
+                ticketPrice = 'SALES ENDED';
+              }
+              itemColor = eventajaGreenTeal;
               ticketPrice = detailData['ticket_type']['name'];
             } else if (detailData['ticket_type']['type'] == 'free_limited') {
               if (detailData['ticket']['availableTicketStatus'] == '1') {
@@ -442,6 +468,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
             padding: EdgeInsets.symmetric(horizontal: 13),
             color: Colors.white,
             child: AppBar(
+              brightness: Brightness.light,
               elevation: 0,
               backgroundColor: Colors.white,
               leading: GestureDetector(

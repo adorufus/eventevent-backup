@@ -71,6 +71,7 @@ class ShowQrState extends State<ShowQr> {
 
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         elevation: 0,
         leading: GestureDetector(
           behavior: HitTestBehavior.opaque,

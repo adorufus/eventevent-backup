@@ -61,6 +61,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     )..init(context);
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         elevation: 1,
         backgroundColor: Colors.white,
         leading: GestureDetector(
@@ -167,7 +168,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           //         SettingsTile(
           //           title: 'Open Source Library',
           //           onTap: (){
-                      
+
           //           },
           //         )
           //       ],
@@ -403,7 +404,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       context: context,
                       builder: (BuildContext thisContext) {
                         return StatefulBuilder(
-                          builder: (thisContext, setState) => CupertinoAlertDialog(
+                          builder: (thisContext, setState) =>
+                              CupertinoAlertDialog(
                             title: Text('Oops'),
                             content: Text('Do you want to log out?'),
                             actions: <Widget>[
@@ -575,9 +577,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   Future requestLogout(BuildContext context) async {
     final logoutApiUrl = BaseApi().apiUrl + '/signout';
 
-    Map<String, String> body = {'X-API-KEY': apiKey};
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Map<String, String> body = {
+      'X-API-KEY': apiKey,
+      'streaming_token': prefs.containsKey('streaming_key') && prefs.getString('streaming_key') != null ? prefs.getString('streaming_key') : ''
+    };
+
+    
 
     setState(() {
       isLoading = true;

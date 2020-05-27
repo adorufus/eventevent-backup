@@ -35,6 +35,7 @@ class WebViewTestState extends State<WebViewTest> {
     )..init(context);
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         title: Text(
           headerText,

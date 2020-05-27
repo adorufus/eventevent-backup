@@ -123,6 +123,7 @@ class CreditCardInputState extends State<CreditCardInput> {
             )),
       ),
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: GestureDetector(
@@ -312,7 +313,7 @@ class CreditCardInputState extends State<CreditCardInput> {
         midtransCC3DS(extractedData['token_id']);
       } else {
         for(int i = 0; i < extractedData['validation_messages'].length; i++){
-          var error = extractedData['validation_messages'].toString();
+           var error = extractedData['validation_messages'].toString();
           print(error);
           Flushbar(
             animationDuration: Duration(milliseconds: 500),

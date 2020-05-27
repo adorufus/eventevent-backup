@@ -6,6 +6,8 @@ import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/SubmitEditTicket.dart';
 import 'package:eventevent/Widgets/PostEvent/FinishPostEvent.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
+import 'package:eventevent/Widgets/timeline/EditEventItem/EditEventDate.dart';
+import 'package:eventevent/Widgets/timeline/EditEventItem/EditEventTime.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/DateTimeConverter.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -82,6 +84,7 @@ class _EditTicketState extends State<EditTicket> {
     return Scaffold(
       key: thisScaffold,
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         elevation: 1,
         leading: GestureDetector(
@@ -385,39 +388,68 @@ class _EditTicketState extends State<EditTicket> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              Container(
-                                  width: ScreenUtil.instance.setWidth(150),
-                                  height: ScreenUtil.instance.setWidth(50),
-                                  padding: EdgeInsets.only(left: 10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        startDate,
-                                        style: TextStyle(
-                                            fontSize:
-                                                ScreenUtil.instance.setSp(20)),
-                                      ))),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditEventDate()),
+                                  ).then((value) {
+                                    if (value != null) {
+                                      print(value);
+                                      startDate = value;
+                                    }
+                                    setState(() {});
+                                  });
+                                },
+                                child: Container(
+                                    width: ScreenUtil.instance.setWidth(150),
+                                    height: ScreenUtil.instance.setWidth(50),
+                                    padding: EdgeInsets.only(left: 10),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          startDate,
+                                          style: TextStyle(
+                                              fontSize: ScreenUtil.instance
+                                                  .setSp(20)),
+                                        ))),
+                              ),
                               SizedBox(
                                 width: ScreenUtil.instance.setWidth(25),
                               ),
-                              Container(
-                                  width: ScreenUtil.instance.setWidth(150),
-                                  height: ScreenUtil.instance.setWidth(50),
-                                  padding: EdgeInsets.only(left: 10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        startTime,
-                                        style: TextStyle(
-                                            fontSize:
-                                                ScreenUtil.instance.setSp(20)),
-                                      ))),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              EditEventTime())).then((value) {
+                                    if (value != null) {
+                                      startTime = value;
+                                      setState(() {});
+                                    }
+                                  });
+                                },
+                                child: Container(
+                                    width: ScreenUtil.instance.setWidth(150),
+                                    height: ScreenUtil.instance.setWidth(50),
+                                    padding: EdgeInsets.only(left: 10),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          startTime,
+                                          style: TextStyle(
+                                              fontSize: ScreenUtil.instance
+                                                  .setSp(20)),
+                                        ))),
+                              ),
                             ],
                           ),
                           SizedBox(
@@ -435,39 +467,68 @@ class _EditTicketState extends State<EditTicket> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              Container(
-                                  width: ScreenUtil.instance.setWidth(150),
-                                  height: ScreenUtil.instance.setWidth(50),
-                                  padding: EdgeInsets.only(left: 10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        endDate,
-                                        style: TextStyle(
-                                            fontSize:
-                                                ScreenUtil.instance.setSp(20)),
-                                      ))),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditEventDate()),
+                                  ).then((value) {
+                                    if (value != null) {
+                                      print(value);
+                                      endDate = value;
+                                    }
+                                    setState(() {});
+                                  });
+                                },
+                                child: Container(
+                                    width: ScreenUtil.instance.setWidth(150),
+                                    height: ScreenUtil.instance.setWidth(50),
+                                    padding: EdgeInsets.only(left: 10),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          endDate,
+                                          style: TextStyle(
+                                              fontSize: ScreenUtil.instance
+                                                  .setSp(20)),
+                                        ))),
+                              ),
                               SizedBox(
                                 width: ScreenUtil.instance.setWidth(25),
                               ),
-                              Container(
-                                  width: ScreenUtil.instance.setWidth(150),
-                                  height: ScreenUtil.instance.setWidth(50),
-                                  padding: EdgeInsets.only(left: 10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        endTime,
-                                        style: TextStyle(
-                                            fontSize:
-                                                ScreenUtil.instance.setSp(20)),
-                                      ))),
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              EditEventTime())).then((value) {
+                                    if (value != null) {
+                                      endTime = value;
+                                      setState(() {});
+                                    }
+                                  });
+                                },
+                                child: Container(
+                                    width: ScreenUtil.instance.setWidth(150),
+                                    height: ScreenUtil.instance.setWidth(50),
+                                    padding: EdgeInsets.only(left: 10),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          endTime,
+                                          style: TextStyle(
+                                              fontSize: ScreenUtil.instance
+                                                  .setSp(20)),
+                                        ))),
+                              ),
                             ],
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
@@ -623,8 +684,10 @@ class _EditTicketState extends State<EditTicket> {
           'is_single_ticket': __curValue2.toString(),
           'ticket_image': imageFile == null
               ? ''
-              : await MultipartFile.fromFile(imageFile.path,
-                  filename: "eventeventticket-${DateTime.now().toString()}.jpg",)
+              : await MultipartFile.fromFile(
+                  imageFile.path,
+                  filename: "eventeventticket-${DateTime.now().toString()}.jpg",
+                )
         };
 
         print(body);
@@ -709,7 +772,9 @@ class _EditTicketState extends State<EditTicket> {
         'single_ticket': __curValue2.toString(),
         'description': descController.text,
         'ticket_type_id': '1',
-        'image_url': imageFile != null ? imageFile : widget.ticketDetail['ticket_image']['secure_url']
+        'image_url': imageFile != null
+            ? imageFile
+            : widget.ticketDetail['ticket_image']['secure_url']
       };
 
       Navigator.push(

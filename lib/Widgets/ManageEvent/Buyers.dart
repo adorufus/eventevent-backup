@@ -106,6 +106,7 @@ class BuyersState extends State<Buyers> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
+        brightness: Brightness.light,
         elevation: 1,
         backgroundColor: Colors.white,
         leading: GestureDetector(
@@ -122,18 +123,20 @@ class BuyersState extends State<Buyers> {
           style: TextStyle(color: eventajaGreenTeal),
         ),
         actions: <Widget>[
-          isEmpty == true ? Container() : Padding(
-            padding: EdgeInsets.only(right: 13),
-            child: GestureDetector(
-              onTap: () {
-                exportCSV();
-              },
-              child: Center(
-                child:
-                    Text('Export', style: TextStyle(color: eventajaGreenTeal)),
-              ),
-            ),
-          )
+          isEmpty == true
+              ? Container()
+              : Padding(
+                  padding: EdgeInsets.only(right: 13),
+                  child: GestureDetector(
+                    onTap: () {
+                      exportCSV();
+                    },
+                    child: Center(
+                      child: Text('Export',
+                          style: TextStyle(color: eventajaGreenTeal)),
+                    ),
+                  ),
+                )
         ],
       ),
       body: isLoading == true
@@ -144,9 +147,9 @@ class BuyersState extends State<Buyers> {
             )
           : isEmpty == true
               ? EmptyState(
-                imagePath: 'assets/icons/empty_state/my_ticket.png',
-                reasonText: 'There is no buyers :(',
-              )
+                  imagePath: 'assets/icons/empty_state/my_ticket.png',
+                  reasonText: 'There is no buyers :(',
+                )
               : ListView.builder(
                   padding: EdgeInsets.only(bottom: 15),
                   itemCount: buyerList == null ? 0 : buyerList.length,
@@ -254,10 +257,13 @@ class BuyersState extends State<Buyers> {
       formLists.length != 0 ? formLists['question'] : 'Custom Form'
     ]);
 
-    Map<PermissionGroup, PermissionStatus> permissions =
-        await PermissionHandler().requestPermissions([PermissionGroup.storage]);
-    PermissionStatus checkPermission = await PermissionHandler()
-        .checkPermissionStatus(PermissionGroup.storage);
+    Map<Permission, PermissionStatus> permissions = await [
+      Permission.storage,
+    ].request();
+
+    // Map<Permission, PermissionStatus> permissions =
+    //     await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+    PermissionStatus checkPermission = permissions[Permission.storage];
 
     print(checkPermission.toString());
 

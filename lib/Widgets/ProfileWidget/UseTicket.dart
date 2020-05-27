@@ -1,16 +1,18 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/ProfileWidget/ScanBarcode.dart';
-import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/LivestreamPlayer.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsWidget.dart';
 import 'package:eventevent/Widgets/ProfileWidget/UseTicketSuccess.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/Widgets/openMedia.dart';
+import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
+import 'package:eventevent/livestream/LivestreamPlayer.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
@@ -29,10 +31,13 @@ class UseTicket extends StatefulWidget {
   final ticketEndTime;
   final ticketDesc;
   final ticketID;
+  final eventId;
   final usedStatus;
   final livestreamUrl;
   final zoomId;
   final zoomDesc;
+  final playbackUrl;
+  final Map ticketDetail;
 
   const UseTicket({
     Key key,
@@ -44,10 +49,13 @@ class UseTicket extends StatefulWidget {
     this.ticketEndTime,
     this.ticketDesc,
     this.ticketID,
+    this.eventId,
     this.usedStatus,
     this.livestreamUrl,
     this.zoomId,
     this.zoomDesc,
+    this.playbackUrl,
+    this.ticketDetail,
   }) : super(key: key);
 
   @override
@@ -88,6 +96,7 @@ class UseTicketState extends State<UseTicket> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
+        brightness: Brightness.light,
         elevation: 0,
         backgroundColor: Colors.white,
         leading: GestureDetector(
@@ -106,77 +115,158 @@ class UseTicketState extends State<UseTicket> {
         ),
       ),
       bottomNavigationBar: GestureDetector(
-        onTap: widget.usedStatus == 'Used' || widget.usedStatus == 'Expired'
+        onTap: widget.usedStatus == 'Used'
             ? () {}
             : startDate.isAfter(DateTime.now())
                 ? () {}
                 : widget.usedStatus == 'Streaming' ||
-                        widget.usedStatus == 'Watch Playback'
-                    ? widget.zoomId != null || widget.zoomDesc != null
+                        widget.usedStatus == 'Watch Playback' ||
+                        widget.usedStatus == 'Playback' ||
+                        widget.usedStatus == 'Expired'
+                    ? DateTime.parse(widget.ticketDetail['event']['dateEnd'])
+                            .isBefore(DateTime.now()) && widget.ticketDetail['livestream']['playback_url'] == 'not_available'
                         ? () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ZoomTicketPage(
-                                    zoomLink: widget.zoomId,
-                                    zoomDesc: widget.zoomDesc),
-                              ),
-                            );
+                            showCupertinoDialog(
+                                context: context,
+                                builder: (thisContext) {
+                                  return CupertinoAlertDialog(
+                                    title: Text('Notice'),
+                                    content: Text(
+                                      'playback not available yet, it my takes1-2 hours for playback to be available',
+                                    ),
+                                    actions: <Widget>[
+                                      CupertinoDialogAction(
+                                        child: Text('Close'),
+                                        onPressed: () {
+                                          Navigator.of(thisContext).pop();
+                                        },
+                                      )
+                                    ],
+                                  );
+                                });
                           }
+                        : widget.zoomId != null || widget.zoomDesc != null
+                            ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ZoomTicketPage(
+                                        zoomLink: widget.zoomId,
+                                        zoomDesc: widget.zoomDesc),
+                                  ),
+                                );
+                              }
+                            : () async {
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+
+                                if (prefs.containsKey('streaming_token') &&
+                                    prefs.getString('streaming_token') !=
+                                        null) {
+                                  print(prefs.getString('streaming_token'));
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => LivestreamPlayer(
+                                        wowzaLiveUrl: widget.livestreamUrl,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  print(prefs.getString('streaming_token'));
+                                  getWatchLivestreamToken(widget.eventId)
+                                      .then((response) async {
+                                    print('code: ' +
+                                        response.statusCode.toString() +
+                                        ' message: ' +
+                                        response.body);
+                                    var extractedData =
+                                        json.decode(response.body);
+
+                                    if (response.statusCode == 200 ||
+                                        response.statusCode == 201) {
+                                      prefs.setString(
+                                          'streaming_token',
+                                          extractedData['data']
+                                              ['streaming_token']);
+                                      // getEventStreamingDetail();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              LivestreamPlayer(
+                                            wowzaLiveUrl: widget.livestreamUrl,
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      prefs.setString('streaming_token', null);
+                                      Flushbar(
+                                        animationDuration:
+                                            Duration(milliseconds: 500),
+                                        duration: Duration(seconds: 3),
+                                        backgroundColor: Colors.red,
+                                        message: 'User Have No Access!',
+                                        flushbarPosition: FlushbarPosition.TOP,
+                                      ).show(context);
+                                    }
+                                  });
+                                }
+                              }
+                    : widget.usedStatus == 'Expired' ||
+                            widget.usedStatus == 'Expired Zoom Session'
+                        ? () {}
                         : () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LivestreamPlayer(
-                                        wowzaLiveUrl: widget.livestreamUrl)));
-                          }
-                    : () {
-                        scan().then((_) async {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          String url = BaseApi().apiUrl + '/tickets/verify';
+                            scan().then((_) async {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              String url = BaseApi().apiUrl + '/tickets/verify';
 
-                          final response = await http.post(url, headers: {
-                            'Authorization': AUTHORIZATION_KEY,
-                            'cookie': prefs.getString('Session')
-                          }, body: {
-                            'X-API-KEY': API_KEY,
-                            'qrData': _scanBarcode,
-                            'ticketID': widget.ticketID
-                          });
+                              final response = await http.post(url, headers: {
+                                'Authorization': AUTHORIZATION_KEY,
+                                'cookie': prefs.getString('Session')
+                              }, body: {
+                                'X-API-KEY': API_KEY,
+                                'qrData': _scanBarcode,
+                                'ticketID': widget.ticketID
+                              });
 
-                          var extractedData = json.decode(response.body);
+                              var extractedData = json.decode(response.body);
 
-                          if (response.statusCode == 200 ||
-                              response.statusCode == 201) {
-                            print(extractedData['desc']);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        UseTicketSuccess(
-                                          eventName: 'test',
-                                        )));
-                          } else {
-                            Flushbar(
-                              flushbarPosition: FlushbarPosition.TOP,
-                              message: extractedData['desc'] ??
-                                  extractedData['error'],
-                              backgroundColor: Colors.red,
-                              duration: Duration(seconds: 3),
-                              animationDuration: Duration(milliseconds: 500),
-                            )..show(context);
-                          }
+                              if (response.statusCode == 200 ||
+                                  response.statusCode == 201) {
+                                print(extractedData['desc']);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            UseTicketSuccess(
+                                              eventName: 'test',
+                                            )));
+                              } else {
+                                Flushbar(
+                                  flushbarPosition: FlushbarPosition.TOP,
+                                  message: extractedData['desc'] ??
+                                      extractedData['error'],
+                                  backgroundColor: Colors.red,
+                                  duration: Duration(seconds: 3),
+                                  animationDuration:
+                                      Duration(milliseconds: 500),
+                                )..show(context);
+                              }
 
-                          //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsWidget()));
-                        });
+                              //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsWidget()));
+                            });
 //          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ScanBarcode()));
-                      },
+                          },
         child: Container(
           height: ScreenUtil.instance.setWidth(50),
           color: widget.usedStatus == 'Used'
               ? Colors.grey
-              : widget.usedStatus == 'Expired' ? Colors.red : Colors.orange,
+              : widget.usedStatus == 'Expired' ||
+                      widget.usedStatus == 'Expired Zoom Session'
+                  ? Colors.red
+                  : Colors.orange,
           child: Center(
             child: startDate.isAfter(DateTime.now())
                 ? CountDownTimer(
@@ -186,21 +276,29 @@ class UseTicketState extends State<UseTicket> {
                         color: Colors.white,
                         fontSize: ScreenUtil.instance.setSp(20),
                         fontWeight: FontWeight.bold),
-                        isDay: true,
+                    isDay: true,
                   )
                 : Text(
                     widget.usedStatus == 'Used'
                         ? 'USED'
                         : widget.usedStatus == 'Expired'
-                            ? 'EXPIRED'
-                            : widget.usedStatus == 'Streaming'
-                                ? widget.zoomId != null ||
-                                        widget.zoomDesc != null
-                                    ? 'Get Zoom Link Here'
-                                    : 'Watch Livestream'
-                                : widget.usedStatus == 'Watch Playback'
+                            ? !widget.ticketDetail.containsKey('livestream')
+                                ? 'EXPIRED'
+                                : widget.zoomId != null
+                                    ? 'Zoom Session Ended'
+                                    : 'Watch Playback'
+                            : widget.usedStatus == 'Expired Zoom Session'
+                                ? 'Zoom Session Ended'
+                                : widget.usedStatus == 'Playback'
                                     ? 'Watch Playback'
-                                    : 'USE TICKET',
+                                    : widget.usedStatus == 'Streaming'
+                                        ? widget.zoomId != null ||
+                                                widget.zoomDesc != null
+                                            ? 'Get Zoom Link Here'
+                                            : 'Watch Livestream'
+                                        : widget.usedStatus == 'Watch Playback'
+                                            ? 'Watch Playback'
+                                            : 'USE TICKET',
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

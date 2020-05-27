@@ -10,6 +10,9 @@ PODS:
   - Branch/Core (0.31.3)
   - camera (0.0.1):
     - Flutter
+  - camera_with_rtmp (0.0.1):
+    - Flutter
+    - HaishinKit (~> 1.0.7)
   - CleverTap-iOS-SDK (3.6.0):
     - SDWebImage (~> 5.0)
   - clevertap_flutter (0.0.1):
@@ -180,12 +183,16 @@ PODS:
   - GoogleUtilities/UserDefaults (6.4.0):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.3.0)
+  - HaishinKit (1.0.7):
+    - Logboard (~> 2.1.2)
   - image_cropper (0.0.2):
     - Flutter
     - TOCropViewController (~> 2.5.2)
   - image_picker (0.0.1):
     - Flutter
   - interactive_webview (0.0.1):
+    - Flutter
+  - lamp (0.0.1):
     - Flutter
   - launch_review (0.0.1):
     - Flutter
@@ -200,6 +207,7 @@ PODS:
   - libwebp/webp (1.1.0)
   - location (0.0.1):
     - Flutter
+  - Logboard (2.1.2)
   - mid_flutter (0.0.1):
     - Flutter
   - nanopb (0.3.9011):
@@ -207,11 +215,13 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
+  - native_device_orientation (0.0.1):
+    - Flutter
   - package_info (0.0.1):
     - Flutter
   - path_provider (0.0.1):
     - Flutter
-  - permission_handler (3.3.0):
+  - "permission_handler (5.0.0+hotfix.5)":
     - Flutter
   - Protobuf (3.11.2)
   - rate_my_app (0.1):
@@ -258,6 +268,7 @@ PODS:
 DEPENDENCIES:
   - Branch
   - camera (from `.symlinks/plugins/camera/ios`)
+  - camera_with_rtmp (from `.symlinks/plugins/camera_with_rtmp/ios`)
   - clevertap_flutter (from `.symlinks/plugins/clevertap_flutter/ios`)
   - FBSDKCoreKit (~> 4.39.1)
   - FBSDKLoginKit (~> 4.39.1)
@@ -268,7 +279,7 @@ DEPENDENCIES:
   - firebase_core_web (from `.symlinks/plugins/firebase_core_web/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `.symlinks/flutter/ios-release`)
   - flutter_barcode_scanner (from `.symlinks/plugins/flutter_barcode_scanner/ios`)
   - flutter_branch_sdk (from `.symlinks/plugins/flutter_branch_sdk/ios`)
   - flutter_facebook_login (from `.symlinks/plugins/flutter_facebook_login/ios`)
@@ -284,9 +295,11 @@ DEPENDENCIES:
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - interactive_webview (from `.symlinks/plugins/interactive_webview/ios`)
+  - lamp (from `.symlinks/plugins/lamp/ios`)
   - launch_review (from `.symlinks/plugins/launch_review/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - mid_flutter (from `.symlinks/plugins/mid_flutter/ios`)
+  - native_device_orientation (from `.symlinks/plugins/native_device_orientation/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -336,7 +349,9 @@ SPEC REPOS:
     - GoogleToolboxForMac
     - GoogleUtilities
     - GTMSessionFetcher
+    - HaishinKit
     - libwebp
+    - Logboard
     - nanopb
     - Protobuf
     - SDWebImage
@@ -345,6 +360,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   camera:
     :path: ".symlinks/plugins/camera/ios"
+  camera_with_rtmp:
+    :path: ".symlinks/plugins/camera_with_rtmp/ios"
   clevertap_flutter:
     :path: ".symlinks/plugins/clevertap_flutter/ios"
   firebase_analytics:
@@ -362,7 +379,7 @@ EXTERNAL SOURCES:
   firebase_messaging:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: ".symlinks/flutter/ios-release"
   flutter_barcode_scanner:
     :path: ".symlinks/plugins/flutter_barcode_scanner/ios"
   flutter_branch_sdk:
@@ -393,12 +410,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker/ios"
   interactive_webview:
     :path: ".symlinks/plugins/interactive_webview/ios"
+  lamp:
+    :path: ".symlinks/plugins/lamp/ios"
   launch_review:
     :path: ".symlinks/plugins/launch_review/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
   mid_flutter:
     :path: ".symlinks/plugins/mid_flutter/ios"
+  native_device_orientation:
+    :path: ".symlinks/plugins/native_device_orientation/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider:
@@ -444,6 +465,7 @@ SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   Branch: 9b299693ee54b308ff8c18146afe1f711c2069ec
   camera: 38cc83ae9a5667bb5a71c7d9edaf60a91920fd4e
+  camera_with_rtmp: 156b8d51b8de72a5174c0cf5a085c0e649059317
   CleverTap-iOS-SDK: 664ae5dccfe2673c21a842b624f2558d34f76d14
   clevertap_flutter: a35b2b54bac7bcf5a743eeea3e385853fb374b75
   Crashlytics: 2dfd686bcb918dc10ee0e76f7f853fe42c7bd552
@@ -489,17 +511,21 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: b3553629623a3b1bff17f555e736cd5a6d95ad55
   GoogleUtilities: 29bd0d8f850efbd28cff6d99e8b7da1f8d236bcf
   GTMSessionFetcher: 43b8b64263023d4f32caa0b40f4c8bfa3c5f36d8
+  HaishinKit: ae275690ee78fb39185e2182dc9e5e315766593c
   image_cropper: 3c16d7651730ffe85897f5a1c4e2547e6b54989a
   image_picker: e3eacd46b94694dde7cf2705955cece853aa1a8f
   interactive_webview: 645deb8ecb0f8564ca2017e691338854c5d6a061
+  lamp: d36cd3552d535c77ab49112704c0c9386b9268bb
   launch_review: 75d5a956ba8eaa493e9c9d4bf4c05e505e8d5ed0
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
+  Logboard: e3342fa111e26268bb89577e6a40a0660a423ddd
   mid_flutter: 9c5da20385159bbc4c3de2e82088e61ae761900e
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
+  native_device_orientation: e24d00be281de72996640885d80e706142707660
   package_info: 48b108e75b8802c2d5e126f208ef540561c98aef
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
-  permission_handler: 67637977b227d62d46bfbf524f335f8568de5a73
+  permission_handler: 6226fcb78b97c7c7458a95c7346a11d5184fec12
   Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
   rate_my_app: 45513a2f4d9a55b7b46d19b64fc13882fd101157
   SDWebImage: 920f1a2ff1ca8296ad34f6e0510a1ef1d70ac965
@@ -518,7 +544,7 @@ SPEC CHECKSUMS:
   video_player: 69c5f029fac4ffe4fc8a85ea7f7b793709661549
   video_player_web: da8cadb8274ed4f8dbee8d7171b420dedd437ce7
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
-  wakelock: bd3dcc6a8bcf53a1c0309780ff192dcee67c6ccb
+  wakelock: 0d4a70faf8950410735e3f61fb15d517c8a6efc4
   webview_flutter: db3aba222b23e4dc432e0c5882834123dc50ff9f
 
 PODFILE CHECKSUM: f8a0226f8c438acd8d440c95d894abe93561d619

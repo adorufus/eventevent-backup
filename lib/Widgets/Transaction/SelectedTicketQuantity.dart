@@ -99,6 +99,7 @@ class _SelectedTicketQuantityWidgetState
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          brightness: Brightness.light,
           backgroundColor: Colors.white,
           elevation: 1,
           leading: GestureDetector(

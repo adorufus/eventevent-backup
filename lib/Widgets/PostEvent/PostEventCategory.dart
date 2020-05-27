@@ -68,6 +68,7 @@ class PostEvent7State extends State<PostEvent7> {
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
+          brightness: Brightness.light,
           backgroundColor: Colors.white,
           elevation: 0,
           leading: GestureDetector(

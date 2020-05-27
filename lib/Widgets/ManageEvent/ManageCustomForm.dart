@@ -122,6 +122,7 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          brightness: Brightness.light,
           elevation: 1,
           backgroundColor: Colors.white,
           centerTitle: true,
@@ -409,6 +410,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         elevation: 1,
         backgroundColor: Colors.white,
         centerTitle: true,

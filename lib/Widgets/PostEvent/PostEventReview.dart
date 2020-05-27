@@ -143,6 +143,7 @@ class PostEventReviewState extends State<PostEventReview> {
         resizeToAvoidBottomInset: true,
         key: thisScaffold,
         appBar: AppBar(
+          brightness: Brightness.light,
           backgroundColor: Colors.white,
           elevation: 1,
           leading: GestureDetector(

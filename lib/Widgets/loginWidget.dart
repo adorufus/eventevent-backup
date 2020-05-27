@@ -637,6 +637,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
       ///simpan sesi saat ini
       setState(() {
+        prefs.setString('UserPw', password);
         prefs.setString('Session', response.headers['set-cookie']);
         prefs.setString(
             'UserPicture', responseJson['data']['pictureAvatarURL']);

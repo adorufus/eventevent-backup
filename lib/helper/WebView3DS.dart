@@ -46,6 +46,7 @@ class WebView3DSState extends State<WebView3DS> {
     )..init(context);
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         title: Text(
           headerText,

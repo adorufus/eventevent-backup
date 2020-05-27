@@ -147,12 +147,27 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                         ticketStatusText = 'Watch Playback';
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'expired') {
-                        ticketColor = Color(0xFF8E1E2D);
-                        ticketStatusText = 'Expired';
+                        if (ticketDetailData[i].containsKey('livestream')) {
+                          if (ticketDetailData[i]['livestream']['zoom_id'] ==
+                              null) {
+                            ticketColor = eventajaGreenTeal;
+                            ticketStatusText = 'Playback';
+                          } else {
+                            ticketColor = Color(0xFF8E1E2D);
+                            ticketStatusText = 'Expired Zoom Session';
+                          }
+                        } else {
+                          ticketColor = Color(0xFF8E1E2D);
+                          ticketStatusText = 'Expired';
+                        }
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'refund') {
                         ticketColor = Colors.blue;
                         ticketStatusText = 'refund';
+                      } else if (ticketDetailData[i]['on_demand_link'] !=
+                          null) {
+                        ticketColor = eventajaGreenTeal;
+                        ticketStatusText = 'On Demand Video';
                       }
 
                       print(ticketDetailData[i]
@@ -163,10 +178,16 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => UseTicket(
+                                    ticketDetail: ticketDetailData[i],
+                                    eventId: ticketDetailData[i]['event_id'],
                                     ticketTitle: ticketDetailData[i]['ticket']
                                         ['ticket_name'],
                                     ticketImage: ticketDetailData[i]
-                                        ['ticket_image']['url'],
+                                                ['ticket_image'] ==
+                                            false
+                                        ? 'assets/grey-fade.jpg'
+                                        : ticketDetailData[i]['ticket_image']
+                                            ['url'],
                                     ticketCode: ticketDetailData[i]
                                         ['ticket_code'],
                                     ticketDate: ticketDetailData[i]['event']
@@ -184,11 +205,21 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                     zoomDesc: ticketDetailData[i]['livestream']
                                         ['zoom_description'],
                                     livestreamUrl: ticketStatusText ==
-                                                "Streaming" ||
-                                            ticketStatusText == 'Watch Playback'
-                                        ? ticketDetailData[i]['livestream']
-                                            ['playback']
-                                        : '',
+                                            'On Demand Video'
+                                        ? ticketDetailData[i]['on_demand_link']
+                                        : ticketStatusText == "Streaming" ||
+                                                ticketStatusText ==
+                                                    'Watch Playback' || ticketStatusText == 'Playback' ||
+                                                ticketStatusText == 'Expired'
+                                            ? ticketDetailData[i]['livestream']
+                                                        ['playback_url'] ==
+                                                    'not_available'
+                                                ? ticketDetailData[i]
+                                                    ['livestream']['playback']
+                                                : ticketDetailData[i]
+                                                        ['livestream']
+                                                    ['playback_url']
+                                            : '',
                                   )));
                         },
                         child: new MyTicketItem(

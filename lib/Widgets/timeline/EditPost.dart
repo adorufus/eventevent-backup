@@ -49,6 +49,7 @@ class EditPostState extends State<EditPost> {
       child: Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
+          brightness: Brightness.light,
           elevation: 1,
           backgroundColor: Colors.white,
           leading: GestureDetector(
