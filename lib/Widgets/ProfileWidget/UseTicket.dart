@@ -12,6 +12,7 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
 import 'package:eventevent/livestream/LivestreamPlayer.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
@@ -36,6 +37,7 @@ class UseTicket extends StatefulWidget {
   final zoomId;
   final zoomDesc;
   final playbackUrl;
+  final Map ticketDetail;
 
   const UseTicket({
     Key key,
@@ -53,6 +55,7 @@ class UseTicket extends StatefulWidget {
     this.zoomId,
     this.zoomDesc,
     this.playbackUrl,
+    this.ticketDetail,
   }) : super(key: key);
 
   @override
@@ -118,48 +121,49 @@ class UseTicketState extends State<UseTicket> {
                 ? () {}
                 : widget.usedStatus == 'Streaming' ||
                         widget.usedStatus == 'Watch Playback' ||
+                        widget.usedStatus == 'Playback' ||
                         widget.usedStatus == 'Expired'
-                    ? widget.zoomId != null || widget.zoomDesc != null
+                    ? DateTime.parse(widget.ticketDetail['event']['dateEnd'])
+                            .isBefore(DateTime.now()) && widget.ticketDetail['livestream']['playback_url'] == 'not_available'
                         ? () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ZoomTicketPage(
-                                    zoomLink: widget.zoomId,
-                                    zoomDesc: widget.zoomDesc),
-                              ),
-                            );
+                            showCupertinoDialog(
+                                context: context,
+                                builder: (thisContext) {
+                                  return CupertinoAlertDialog(
+                                    title: Text('Notice'),
+                                    content: Text(
+                                      'playback not available yet, it my takes1-2 hours for playback to be available',
+                                    ),
+                                    actions: <Widget>[
+                                      CupertinoDialogAction(
+                                        child: Text('Close'),
+                                        onPressed: () {
+                                          Navigator.of(thisContext).pop();
+                                        },
+                                      )
+                                    ],
+                                  );
+                                });
                           }
-                        : () async {
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-
-                            if (prefs.containsKey('streaming_token') &&
-                                prefs.getString('streaming_token') != null) {
-                                  print(prefs.getString('streaming_token'));
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => LivestreamPlayer(
-                                    wowzaLiveUrl: widget.livestreamUrl,
+                        : widget.zoomId != null || widget.zoomDesc != null
+                            ? () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ZoomTicketPage(
+                                        zoomLink: widget.zoomId,
+                                        zoomDesc: widget.zoomDesc),
                                   ),
-                                ),
-                              );
-                            } else {
-                              print(prefs.getString('streaming_token'));
-                              getWatchLivestreamToken(widget.eventId)
-                                  .then((response) async {
-                                print('code: ' +
-                                    response.statusCode.toString() +
-                                    ' message: ' +
-                                    response.body);
-                                var extractedData = json.decode(response.body);
+                                );
+                              }
+                            : () async {
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
 
-                                if (response.statusCode == 200 ||
-                                    response.statusCode == 201) {
-                                  prefs.setString('streaming_token',
-                                      extractedData['data']['streaming_token']);
-                                  // getEventStreamingDetail();
+                                if (prefs.containsKey('streaming_token') &&
+                                    prefs.getString('streaming_token') !=
+                                        null) {
+                                  print(prefs.getString('streaming_token'));
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -169,20 +173,48 @@ class UseTicketState extends State<UseTicket> {
                                     ),
                                   );
                                 } else {
-                                  prefs.setString('streaming_token', null);
-                                  Flushbar(
-                                    animationDuration:
-                                        Duration(milliseconds: 500),
-                                    duration: Duration(seconds: 3),
-                                    backgroundColor: Colors.red,
-                                    message: 'User Have No Access!',
-                                    flushbarPosition: FlushbarPosition.TOP,
-                                  ).show(context);
+                                  print(prefs.getString('streaming_token'));
+                                  getWatchLivestreamToken(widget.eventId)
+                                      .then((response) async {
+                                    print('code: ' +
+                                        response.statusCode.toString() +
+                                        ' message: ' +
+                                        response.body);
+                                    var extractedData =
+                                        json.decode(response.body);
+
+                                    if (response.statusCode == 200 ||
+                                        response.statusCode == 201) {
+                                      prefs.setString(
+                                          'streaming_token',
+                                          extractedData['data']
+                                              ['streaming_token']);
+                                      // getEventStreamingDetail();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              LivestreamPlayer(
+                                            wowzaLiveUrl: widget.livestreamUrl,
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      prefs.setString('streaming_token', null);
+                                      Flushbar(
+                                        animationDuration:
+                                            Duration(milliseconds: 500),
+                                        duration: Duration(seconds: 3),
+                                        backgroundColor: Colors.red,
+                                        message: 'User Have No Access!',
+                                        flushbarPosition: FlushbarPosition.TOP,
+                                      ).show(context);
+                                    }
+                                  });
                                 }
-                              });
-                            }
-                          }
-                    : widget.usedStatus == 'Expired'
+                              }
+                    : widget.usedStatus == 'Expired' ||
+                            widget.usedStatus == 'Expired Zoom Session'
                         ? () {}
                         : () {
                             scan().then((_) async {
@@ -231,7 +263,10 @@ class UseTicketState extends State<UseTicket> {
           height: ScreenUtil.instance.setWidth(50),
           color: widget.usedStatus == 'Used'
               ? Colors.grey
-              : widget.usedStatus == 'Expired' ? Colors.red : Colors.orange,
+              : widget.usedStatus == 'Expired' ||
+                      widget.usedStatus == 'Expired Zoom Session'
+                  ? Colors.red
+                  : Colors.orange,
           child: Center(
             child: startDate.isAfter(DateTime.now())
                 ? CountDownTimer(
@@ -247,15 +282,23 @@ class UseTicketState extends State<UseTicket> {
                     widget.usedStatus == 'Used'
                         ? 'USED'
                         : widget.usedStatus == 'Expired'
-                            ? 'EXPIRED'
-                            : widget.usedStatus == 'Streaming'
-                                ? widget.zoomId != null ||
-                                        widget.zoomDesc != null
-                                    ? 'Get Zoom Link Here'
-                                    : 'Watch Livestream'
-                                : widget.usedStatus == 'Watch Playback'
+                            ? !widget.ticketDetail.containsKey('livestream')
+                                ? 'EXPIRED'
+                                : widget.zoomId != null
+                                    ? 'Zoom Session Ended'
+                                    : 'Watch Playback'
+                            : widget.usedStatus == 'Expired Zoom Session'
+                                ? 'Zoom Session Ended'
+                                : widget.usedStatus == 'Playback'
                                     ? 'Watch Playback'
-                                    : 'USE TICKET',
+                                    : widget.usedStatus == 'Streaming'
+                                        ? widget.zoomId != null ||
+                                                widget.zoomDesc != null
+                                            ? 'Get Zoom Link Here'
+                                            : 'Watch Livestream'
+                                        : widget.usedStatus == 'Watch Playback'
+                                            ? 'Watch Playback'
+                                            : 'USE TICKET',
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

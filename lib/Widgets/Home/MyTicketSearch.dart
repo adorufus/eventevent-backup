@@ -205,12 +205,31 @@ class MyTicketSearchState extends State<MyTicketSearch> {
                 } else if (filteredEvents[i]['usedStatus'] == 'used') {
                   ticketColor = Color(0xFF652D90);
                   ticketStatusText = 'Used';
+                } else if (filteredEvents[i]['usedStatus'] == 'streaming') {
+                  ticketColor = eventajaGreenTeal;
+                  ticketStatusText = 'Streaming';
+                } else if (filteredEvents[i]['usedStatus'] == 'playback') {
+                  ticketColor = eventajaGreenTeal;
+                  ticketStatusText = 'Watch Playback';
                 } else if (filteredEvents[i]['usedStatus'] == 'expired') {
-                  ticketColor = Color(0xFF8E1E2D);
-                  ticketStatusText = 'Expired';
+                  if (filteredEvents[i].containsKey('livestream')) {
+                    if (filteredEvents[i]['livestream']['zoom_id'] == null) {
+                      ticketColor = eventajaGreenTeal;
+                      ticketStatusText = 'Playback';
+                    } else {
+                      ticketColor = Color(0xFF8E1E2D);
+                      ticketStatusText = 'Expired Zoom Session';
+                    }
+                  } else {
+                    ticketColor = Color(0xFF8E1E2D);
+                    ticketStatusText = 'Expired';
+                  }
                 } else if (filteredEvents[i]['usedStatus'] == 'refund') {
                   ticketColor = Colors.blue;
                   ticketStatusText = 'Refund';
+                } else if (filteredEvents[i]['on_demand_link'] != null) {
+                  ticketColor = eventajaGreenTeal;
+                  ticketStatusText = 'On Demand Video';
                 }
 
                 print(filteredEvents[i].containsKey('ticket_image').toString());
@@ -229,26 +248,43 @@ class MyTicketSearchState extends State<MyTicketSearch> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => UseTicket(
-                                eventId: filteredEvents[i]['event_id'],
-                                  playbackUrl: filteredEvents[i]['livestream']['playback_url'],
-                                              ticketTitle: filteredEvents[i]
-                                                  ['ticket']['ticket_name'],
-                                              ticketImage: filteredEvents[i]
-                                                  ['ticket_image']['url'],
-                                              ticketCode: filteredEvents[i]
-                                                  ['ticket_code'],
-                                              ticketDate: filteredEvents[i]
-                                                  ['event']['dateStart'],
-                                              ticketStartTime: filteredEvents[i]
-                                                  ['event']['timeStart'],
-                                              ticketEndTime: filteredEvents[i]
-                                                  ['event']['timeEnd'],
-                                              ticketDesc: filteredEvents[i]
-                                                  ['event']['name'],
-                                              ticketID: filteredEvents[i]['id'],
-                                              usedStatus: ticketStatusText
-                                                  .toUpperCase(),
-                                            )));
+                                    ticketDetail: filteredEvents[i],
+                                    eventId: filteredEvents[i]['event_id'],
+                                    playbackUrl: filteredEvents[i]['livestream']
+                                        ['playback_url'],
+                                    livestreamUrl: ticketStatusText ==
+                                            'On Demand Video'
+                                        ? filteredEvents[i]['on_demand_link']
+                                        : ticketStatusText == "Streaming" ||
+                                                ticketStatusText ==
+                                                    'Watch Playback' || ticketStatusText == 'Playback' ||
+                                                ticketStatusText == 'Expired'
+                                            ? filteredEvents[i]['livestream']
+                                                        ['playback_url'] ==
+                                                    'not_available'
+                                                ? filteredEvents[i]
+                                                    ['livestream']['playback']
+                                                : filteredEvents[i]
+                                                        ['livestream']
+                                                    ['playback_url']
+                                            : '',
+                                    ticketTitle: filteredEvents[i]['ticket']
+                                        ['ticket_name'],
+                                    ticketImage: filteredEvents[i]
+                                        ['ticket_image']['url'],
+                                    ticketCode: filteredEvents[i]
+                                        ['ticket_code'],
+                                    ticketDate: filteredEvents[i]['event']
+                                        ['dateStart'],
+                                    ticketStartTime: filteredEvents[i]['event']
+                                        ['timeStart'],
+                                    ticketEndTime: filteredEvents[i]['event']
+                                        ['timeEnd'],
+                                    ticketDesc: filteredEvents[i]['event']
+                                        ['name'],
+                                    ticketID: filteredEvents[i]['id'],
+                                    usedStatus: ticketStatusText.toUpperCase(),
+                                  )));
                     },
                     child: MyTicketItem(
                       image: filteredEvents[i]

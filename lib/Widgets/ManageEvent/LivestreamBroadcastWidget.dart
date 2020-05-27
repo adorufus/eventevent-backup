@@ -170,20 +170,6 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
     }
   }
 
-  void onFlipCamera() {
-    if (cameras.isEmpty) {
-      print('No camera found');
-    } else {
-      for (CameraDescription cameraDesc in cameras) {
-        if (cameraController != null &&
-            cameraController.value.isRecordingVideo) {
-        } else {
-          onNewCameraSelected(cameraDesc);
-        }
-      }
-    }
-  }
-
   void onNewCameraSelected(CameraDescription cameraDescription) async {
     if (cameraController != null) {
       await cameraController.dispose();
@@ -385,8 +371,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
               width: MediaQuery.of(context).size.width,
               child: cameraController != null
                   ? AspectRatio(
-                      aspectRatio: MediaQuery.of(context).size.height /
-                          MediaQuery.of(context).size.width,
+                      aspectRatio: cameraController.value.previewSize != null ? cameraController.value.aspectRatio : 1.0,
                       child: CameraPreview(cameraController),
                     )
                   : Center(

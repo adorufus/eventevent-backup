@@ -226,7 +226,8 @@ class _MyTicketState extends State<MyTicket> {
                             Color ticketColor;
                             String ticketStatusText;
 
-                            print('PLAYBACK URL: ${myTicketList[i]['livestream']['playback_url']}');
+                            print(
+                                'PLAYBACK URL: ${myTicketList[i]['livestream']['playback_url']}');
 
                             if (myTicketList[i]['usedStatus'] == 'available') {
                               ticketColor = eventajaGreenTeal;
@@ -245,12 +246,27 @@ class _MyTicketState extends State<MyTicket> {
                               ticketStatusText = 'Watch Playback';
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'expired') {
-                              ticketColor = Color(0xFF8E1E2D);
-                              ticketStatusText = 'Expired';
+                              if (myTicketList[i].containsKey('livestream')) {
+                                if (myTicketList[i]['livestream']['zoom_id'] ==
+                                    null) {
+                                  ticketColor = eventajaGreenTeal;
+                                  ticketStatusText = 'Playback';
+                                } else {
+                                  ticketColor = Color(0xFF8E1E2D);
+                                  ticketStatusText = 'Expired Zoom Session';
+                                }
+                              } else {
+                                ticketColor = Color(0xFF8E1E2D);
+                                ticketStatusText = 'Expired';
+                              }
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'refund') {
                               ticketColor = Colors.blue;
                               ticketStatusText = 'Refund';
+                            } else if (myTicketList[i]['on_demand_link'] !=
+                                null) {
+                              ticketColor = eventajaGreenTeal;
+                              ticketStatusText = 'On Demand Video';
                             }
 
                             print(myTicketList[i]
@@ -268,13 +284,14 @@ class _MyTicketState extends State<MyTicket> {
 
                             return GestureDetector(
                               onTap: () {
-
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
                                             UseTicket(
-                                            eventId: myTicketList[i]['event_id'],
+                                              ticketDetail: myTicketList[i],
+                                              eventId: myTicketList[i]
+                                                  ['event_id'],
                                               ticketTitle: myTicketList[i]
                                                   ['ticket']['ticket_name'],
                                               ticketImage: myTicketList[i]
@@ -296,12 +313,27 @@ class _MyTicketState extends State<MyTicket> {
                                                       ['livestream']
                                                   ['zoom_description'],
                                               livestreamUrl: ticketStatusText ==
-	                                            "Streaming" ||
-	                                            ticketStatusText ==
-		                                            'Watch Playback' || ticketStatusText == 'Expired'
-	                                            ? myTicketList[i]['livestream']['playback_url'] == 'not_available' ? myTicketList[i]
-                                            ['livestream']['playback'] : myTicketList[i]['livestream']['playback_url']
-	                                            : '',
+                                                      'On Demand Video'
+                                                  ? myTicketList[i]
+                                                      ['on_demand_link']
+                                                  : ticketStatusText ==
+                                                              "Streaming" ||
+                                                          ticketStatusText ==
+                                                              'Watch Playback' ||
+                                                          ticketStatusText ==
+                                                              'Playback' ||
+                                                          ticketStatusText ==
+                                                              'Expired'
+                                                      ? myTicketList[i]['livestream'][
+                                                                  'playback_url'] ==
+                                                              'not_available'
+                                                          ? myTicketList[i]
+                                                                  ['livestream']
+                                                              ['playback']
+                                                          : myTicketList[i]
+                                                                  ['livestream']
+                                                              ['playback_url']
+                                                      : '',
                                               usedStatus: ticketStatusText,
                                             )));
                               },
