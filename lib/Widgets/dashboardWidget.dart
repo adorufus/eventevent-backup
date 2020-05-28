@@ -8,6 +8,7 @@ import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/PostMedia.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
+import 'package:eventevent/Widgets/merch/MerchDashboard.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/Widgets/timeline/LovedOnYourFollowingDetails.dart';
 import 'package:eventevent/Widgets/timeline/TimelineDashboard.dart';
@@ -518,7 +519,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
     final _pageOptions = [
       EventCatalog(isRest: widget.isRest),
       TimelineDashboard(isRest: widget.isRest),
-      widget.isRest == true ? LoginRegisterWidget() : Container(),
+      widget.isRest == true ? LoginRegisterWidget() : MerchDashboard(),
       widget.isRest == true ? LoginRegisterWidget() : PushNotification(),
       widget.isRest == true
           ? LoginRegisterWidget()
@@ -541,7 +542,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
           // ),
           key: scaffoldKey,
           backgroundColor: Colors.white,
-          floatingActionButton: GestureDetector(
+          floatingActionButton: _selectedPage == 0 ? GestureDetector(
             onTap: () {
               if (widget.isRest == false) {
                 showModalBottomSheet(
@@ -783,7 +784,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                           color: Colors.white,
                           fontWeight: FontWeight.bold))),
             ),
-          ),
+          ) : Container(),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
           bottomNavigationBar: SafeArea(

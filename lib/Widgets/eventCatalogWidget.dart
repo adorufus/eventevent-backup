@@ -123,7 +123,7 @@ class _EventCatalogState extends State<EventCatalog>
         print(response.body);
 
         if (response.statusCode == 200) {
-          setState(() {
+          if(mounted) setState(() {
             mediaData = extractedData['data']['data'];
           });
         }
@@ -1807,14 +1807,14 @@ class _EventCatalogState extends State<EventCatalog>
         'event catalog widget - fetchBanner' + response.statusCode.toString());
 
     if (response.statusCode == 200) {
-      setState(() {
+      if(mounted) setState(() {
         var extractedData = json.decode(response.body);
         bannerData = extractedData['data'];
 
         isLoading = false;
       });
     } else if (response.statusCode == 403) {
-      setState(() {
+      if(mounted) setState(() {
         isLoading = false;
       });
 

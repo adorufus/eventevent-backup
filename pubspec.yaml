@@ -30,6 +30,8 @@ dependencies:
   shimmer: ^1.0.1
   flutter_statusbarcolor: ^0.2.3
   path_provider:
+  redux: ^4.0.0
+  flutter_redux:
   carousel_pro: ^1.0.0
   carousel_slider: ^1.3.0
   flutter_branch_sdk: ^0.1.3
@@ -111,7 +113,7 @@ dependencies:
   flutter_playout: ^1.0.35
   web_socket_channel: ^1.1.0
   wakelock: ^0.1.4+1
-  camera_with_rtmp: ^0.1.3
+  camera_with_rtmp: ^0.1.7
   
 
   
@@ -284,6 +286,7 @@ flutter:
     - assets/drawable/permata.png
     - assets/drawable/backaccount.png
     - assets/drawable/cimb.jpg
+    - assets/drawable/emerch-logo.png
     - assets/drawable/mandiri.png
     - assets/drawable/amex.png
     - assets/icons/empty_state/public_timeline.png
