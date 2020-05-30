@@ -43,7 +43,7 @@ void logError(String code, String message) =>
 class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
   WOWZCameraController wowzCameraController = WOWZCameraController();
   CameraController cameraController;
-  ResolutionPreset resolutionPreset = ResolutionPreset.medium;
+  ResolutionPreset resolutionPreset = ResolutionPreset.high;
   List<CameraDescription> cameras;
   bool flashLight = false;
   bool isStarting = false;
@@ -75,9 +75,9 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
 
   void setupLivestreamCamera(CameraDescription description) {
     if (widget.bitrate == 1000) {
-      resolutionPreset = ResolutionPreset.medium;
-    } else if (widget.bitrate == 2500) {
       resolutionPreset = ResolutionPreset.high;
+    } else if (widget.bitrate == 2500) {
+      resolutionPreset = ResolutionPreset.veryHigh;
     }
 
     print(description.sensorOrientation);

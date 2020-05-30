@@ -856,6 +856,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
               type: userTimelineList[i]['type'],
               userId: userTimelineList[i]['userID'],
               location: userTimelineList[i]['locationName'],
+              eventId: userTimelineList[i]['type'] == 'event' ? userTimelineList[i]['eventID'] : null,
               impressionId:
                   userTimelineList[i]['impression']['data'].length == 0
                       ? ''
