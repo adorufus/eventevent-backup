@@ -132,7 +132,7 @@ class UseTicketState extends State<UseTicket> {
                                   return CupertinoAlertDialog(
                                     title: Text('Notice'),
                                     content: Text(
-                                      'playback not available yet, it my takes1-2 hours for playback to be available',
+                                      'playback not available yet, it my takes 1-2 hours for playback to be available',
                                     ),
                                     actions: <Widget>[
                                       CupertinoDialogAction(

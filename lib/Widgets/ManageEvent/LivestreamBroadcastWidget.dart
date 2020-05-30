@@ -98,6 +98,8 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
 
         setState(() {});
       });
+
+      // cameraController.prepareForVideoStreaming();
     } catch (e) {
       print(e.toString());
     }
@@ -215,7 +217,8 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
     }
 
     try {
-      await cameraController.startVideoStreaming(finalBroadcastServerUrl);
+      await cameraController.startVideoStreaming(finalBroadcastServerUrl,
+          androidUseOpenGL: true);
     } on CameraException catch (e) {
       print(e);
       return e.toString();
@@ -339,6 +342,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
     // ]);
     getPermission().then((_) {
       getAvailableCamera().then((cameraList) {
+        print(cameraList.first.toString());
         setupLivestreamCamera(cameraList.first);
       });
     });
@@ -354,7 +358,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
   @override
   void dispose() {
     Wakelock.disable();
-    
+
     cameraController?.dispose();
     wowzCameraController.dispose();
     super.dispose();
@@ -371,7 +375,9 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
               width: MediaQuery.of(context).size.width,
               child: cameraController != null
                   ? AspectRatio(
-                      aspectRatio: cameraController.value.previewSize != null ? cameraController.value.aspectRatio : 1.0,
+                      aspectRatio: cameraController.value.previewSize != null
+                          ? cameraController.value.aspectRatio
+                          : 1.0,
                       child: CameraPreview(cameraController),
                     )
                   : Center(

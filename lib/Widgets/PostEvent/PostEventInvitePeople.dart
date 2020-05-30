@@ -296,7 +296,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
           'cookie': prefs.getString('Session')
         }));
 
-    print(prefs.getInt('NEW_EVENT_ID').toString());
+    // print(prefs.getInt('NEW_EVENT_ID').toString());
     print(response.statusCode);
     print(response.body);
     setState(() {
