@@ -160,15 +160,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   List timelineList = [];
   String currentUserId = "";
 
-  
-
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
     // FlutterBranchSdk.validateSDKIntegration();
-    
+
     generateLink();
     if (widget.detailData.containsKey("livestream")) {
       getWowzaLivestreamState(
@@ -1647,18 +1645,16 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         MaterialPageRoute(
                                                             builder: (context) =>
                                                                 ReviewDetails(
-                                                                  eventId: widget
-                                                                          .detailData[
-                                                                      'id'],
-                                                                  eventName: widget
+                                                                  eventId: detailData != null || !detailData.isEmpty ? detailData['id'] : widget.detailData['id'],
+                                                                  eventName: detailData != null || !detailData.isEmpty ? detailData['name'] : widget
                                                                           .detailData[
                                                                       'name'],
-                                                                  goodReview: widget
+                                                                  goodReview: detailData != null || !detailData.isEmpty ? detailData['event_review']['percent_review']['good'] : widget
                                                                               .detailData[
                                                                           'event_review']
                                                                       [
                                                                       'percent_review']['good'],
-                                                                  badReview: widget
+                                                                  badReview: detailData != null || !detailData.isEmpty ? detailData['event_review']['percent_review']['bad'] : widget
                                                                               .detailData[
                                                                           'event_review']
                                                                       [
@@ -1690,7 +1686,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       .setWidth(10),
                                                   progressColor:
                                                       eventajaGreenTeal,
-                                                  percent: int.parse(widget
+                                                  percent: int.parse(detailData != null || !detailData.isEmpty ? detailData['event_review']['percent_review']['good'] : widget
                                                                       .detailData[
                                                                   'event_review']
                                                               ['percent_review']
@@ -1702,7 +1698,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 width: ScreenUtil.instance
                                                     .setWidth(40),
                                                 child: Text(
-                                                  (detailData['event_review']
+                                                  (detailData != null || !detailData.isEmpty ? detailData['event_review']['percent_review']['good'] : detailData['event_review']
                                                               ['percent_review']
                                                           ['good'] +
                                                       '%'),
@@ -1730,7 +1726,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       .instance
                                                       .setWidth(10),
                                                   progressColor: Colors.red,
-                                                  percent: int.parse(widget
+                                                  percent: int.parse(detailData != null || !detailData.isEmpty ? detailData['event_review']['percent_review']['bad'] : widget
                                                                       .detailData[
                                                                   'event_review']
                                                               ['percent_review']
@@ -1742,7 +1738,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 width: ScreenUtil.instance
                                                     .setWidth(40),
                                                 child: Text(
-                                                  detailData['event_review']
+                                                  detailData != null || !detailData.isEmpty ? detailData['event_review']['percent_review']['bad'] : widget.detailData['event_review']
                                                               ['percent_review']
                                                           ['bad'] +
                                                       '%',
@@ -1969,8 +1965,16 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                               (response) {
                                                                             if (response.statusCode == 201 ||
                                                                                 response.statusCode == 200) {
-                                                                              getEventDetailsSpecificInfo();
-                                                                              isLoading = false;
+                                                                              getEventDetailsSpecificInfo().then((response) {
+                                                                                print(response.statusCode);
+                                                                                var extractedData = json.decode(response.body);
+                                                                                if (response.statusCode == 200) {
+                                                                                  setState(() {
+                                                                                    detailData = extractedData['data'];
+                                                                                    isLoading = false;
+                                                                                  });
+                                                                                }
+                                                                              });
                                                                             } else {
                                                                               isLoading = false;
                                                                               print(response.body);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankAccountList.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/ChangePassword.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/Feedback.dart';
@@ -37,7 +39,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   getInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      appVersion = appVersion + '3.0.4';
+      appVersion = appVersion + '${Platform.isAndroid ? '3.0.4' : '3.0.0'}';
     });
 
     print(appVersion);
@@ -581,10 +583,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
     Map<String, String> body = {
       'X-API-KEY': apiKey,
-      'streaming_token': prefs.containsKey('streaming_key') && prefs.getString('streaming_key') != null ? prefs.getString('streaming_key') : ''
+      'streaming_token': prefs.containsKey('streaming_key') &&
+              prefs.getString('streaming_key') != null
+          ? prefs.getString('streaming_key')
+          : ''
     };
-
-    
 
     setState(() {
       isLoading = true;

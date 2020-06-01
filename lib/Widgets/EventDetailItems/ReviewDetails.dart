@@ -15,14 +15,15 @@ class ReviewDetails extends StatefulWidget {
   final badReview;
   final eventId;
 
-  const ReviewDetails({Key key, this.eventName, this.goodReview, this.badReview, this.eventId}) : super(key: key);
+  const ReviewDetails(
+      {Key key, this.eventName, this.goodReview, this.badReview, this.eventId})
+      : super(key: key);
 
   @override
   _ReviewDetailsState createState() => _ReviewDetailsState();
 }
 
 class _ReviewDetailsState extends State<ReviewDetails> {
-
   @override
   void initState() {
     getReviewData();
@@ -64,10 +65,10 @@ class _ReviewDetailsState extends State<ReviewDetails> {
             centerTitle: true,
             textTheme: TextTheme(
                 title: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: ScreenUtil.instance.setSp(14),
-                  color: Colors.black,
-                )),
+              fontWeight: FontWeight.bold,
+              fontSize: ScreenUtil.instance.setSp(14),
+              color: Colors.black,
+            )),
           ),
         ),
       ),
@@ -78,75 +79,60 @@ class _ReviewDetailsState extends State<ReviewDetails> {
           children: <Widget>[
             Container(
               color: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: ScreenUtil.instance.setWidth(13), vertical: ScreenUtil.instance.setWidth(13)),
+              padding: EdgeInsets.symmetric(
+                  horizontal: ScreenUtil.instance.setWidth(13),
+                  vertical: ScreenUtil.instance.setWidth(13)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(widget.eventName.toString().toUpperCase()),
-                  SizedBox(height: ScreenUtil.instance.setWidth(15),),
+                  SizedBox(
+                    height: ScreenUtil.instance.setWidth(15),
+                  ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Icon(Icons.thumb_up,
-                          size: 30,
-                          color: eventajaGreenTeal),
+                      Icon(Icons.thumb_up, size: 30, color: eventajaGreenTeal),
                       Expanded(
                         child: LinearPercentIndicator(
-                          lineHeight: ScreenUtil
-                              .instance
-                              .setWidth(10),
-                          progressColor:
-                          eventajaGreenTeal,
-                          percent: int.parse(widget.goodReview) /
-                              100,
+                          lineHeight: ScreenUtil.instance.setWidth(10),
+                          progressColor: eventajaGreenTeal,
+                          percent: int.parse(widget.goodReview) / 100,
                         ),
                       ),
                       Container(
-                        width: ScreenUtil.instance
-                            .setWidth(40),
+                        width: ScreenUtil.instance.setWidth(40),
                         child: Text(
-                          (widget.goodReview +
-                              '%'),
+                          (widget.goodReview + '%'),
                           style: TextStyle(
                               color: eventajaGreenTeal,
-                              fontWeight:
-                              FontWeight.bold),
-                          textAlign:
-                          TextAlign.end,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.end,
                         ),
                       )
                     ],
                   ),
                   SizedBox(
-                    height: ScreenUtil.instance
-                        .setWidth(15),
+                    height: ScreenUtil.instance.setWidth(15),
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Icon(Icons.thumb_down,
-                          size: 30, color: Colors.red),
+                      Icon(Icons.thumb_down, size: 30, color: Colors.red),
                       Expanded(
                         child: LinearPercentIndicator(
-                          lineHeight: ScreenUtil
-                              .instance
-                              .setWidth(10),
+                          lineHeight: ScreenUtil.instance.setWidth(10),
                           progressColor: Colors.red,
-                          percent: int.parse(widget.badReview) /
-                              100,
+                          percent: int.parse(widget.badReview) / 100,
                         ),
                       ),
                       Container(
-                        width: ScreenUtil.instance
-                            .setWidth(40),
+                        width: ScreenUtil.instance.setWidth(40),
                         child: Text(
-                          widget.badReview +
-                              '%',
+                          widget.badReview + '%',
                           style: TextStyle(
-                              color: Colors.red,
-                              fontWeight:
-                              FontWeight.bold),
+                              color: Colors.red, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.end,
                         ),
                       )
@@ -159,21 +145,37 @@ class _ReviewDetailsState extends State<ReviewDetails> {
               thickness: 1.5,
               color: Color(0xff8a8a8b),
             ),
-            SizedBox(height: ScreenUtil.instance.setWidth(13),),
+            SizedBox(
+              height: ScreenUtil.instance.setWidth(13),
+            ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: ScreenUtil.instance.setWidth(13)),
-                child: Text('0 Review', style: TextStyle(color: Color(0xff8a8a8b), fontSize: ScreenUtil.instance.setSp(13)),)),
+                margin: EdgeInsets.symmetric(
+                    horizontal: ScreenUtil.instance.setWidth(13)),
+                child: Text(
+                  'Review',
+                  style: TextStyle(
+                      color: Color(0xff8a8a8b),
+                      fontSize: ScreenUtil.instance.setSp(13)),
+                )),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: ScreenUtil.instance.setWidth(13)),
+              margin: EdgeInsets.symmetric(
+                  horizontal: ScreenUtil.instance.setWidth(13)),
               child: FutureBuilder(
                 future: getReviewData(),
-                builder: (context, snapshot){
-                  switch(snapshot.connectionState){
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
                     case ConnectionState.none:
-                      Container(child: Center(child: Text('Please Enable Your Intenet Connection', style: TextStyle(fontWeight: FontWeight.bold),),),);
+                      return Container(
+                        child: Center(
+                          child: Text(
+                            'Please Enable Your Intenet Connection',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      );
                       break;
                     case ConnectionState.waiting:
-                      Container(
+                      return Container(
                         child: Center(
                           child: CupertinoActivityIndicator(radius: 20),
                         ),
@@ -184,7 +186,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                       break;
                     case ConnectionState.done:
                       print(snapshot.data['data']['data_review']);
-                      if(snapshot.data['data']['data_review'] != false){
+                      if (snapshot.data['data']['data_review'] != false) {
                         List reviewData = snapshot.data['data']['data_review'];
                         print(reviewData);
 
@@ -195,27 +197,33 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                           itemBuilder: (context, i) {
                             return ListTile(
                               leading: CircleAvatar(
-                                backgroundImage: NetworkImage(reviewData[i]['user']['pictureCommentURL']),
+                                backgroundImage: NetworkImage(
+                                    reviewData[i]['user']['pictureCommentURL']),
                               ),
                               title: Text(
-                                reviewData[i]['user']['fullName'] + ' ${reviewData[i]['user']['lastName']}' +
+                                reviewData[i]['user']['fullName'] +
+                                    ' ${reviewData[i]['user']['lastName']}' +
                                     ': ',
                                 style: TextStyle(
                                     fontSize: ScreenUtil.instance.setSp(12),
                                     fontWeight: FontWeight.bold),
                               ),
-                              subtitle: Text('\"${reviewData[i]['description'] == null ? reviewData[i]['review_type']['type_name'] : reviewData[i]['description']}\"'),
-                              trailing: reviewData[i]['review_type']['type'] == 'good' ? Icon(Icons.thumb_up,
-                                  size: 30, color: eventajaGreenTeal) : Icon(Icons.thumb_down,
-                                  size: 30, color: Colors.red),
+                              subtitle: Text(
+                                  '\"${reviewData[i]['description'] == null ? reviewData[i]['review_type']['type_name'] : reviewData[i]['description']}\"'),
+                              trailing:
+                                  reviewData[i]['review_type']['type'] == 'good'
+                                      ? Icon(Icons.thumb_up,
+                                          size: 30, color: eventajaGreenTeal)
+                                      : Icon(Icons.thumb_down,
+                                          size: 30, color: Colors.red),
                             );
                           },
                         );
-
-                      }
-                      else{
+                      } else {
                         return Container(
-                          child: Center(child: Text('No review found'),),
+                          child: Center(
+                            child: Text('No review found'),
+                          ),
                         );
                       }
                       break;
@@ -232,15 +240,13 @@ class _ReviewDetailsState extends State<ReviewDetails> {
 
   Future getReviewData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String url = BaseApi().apiUrl + '/event_review/list?X-API-KEY=$API_KEY&eventID=${widget.eventId}&page=1';
+    String url = BaseApi().apiUrl +
+        '/event_review/list?X-API-KEY=$API_KEY&eventID=${widget.eventId}&page=1';
 
-    final response = await http.get(
-      url,
-      headers: {
-        'Authorization': AUTHORIZATION_KEY,
-        'cookie': sharedPreferences.getString('Session')
-      }
-    );
+    final response = await http.get(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': sharedPreferences.getString('Session')
+    });
 
     var extractedData = json.decode(response.body);
 
