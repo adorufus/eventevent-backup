@@ -40,7 +40,7 @@ IconData getCameraLensIcon(CameraLensDirection direction) {
 void logError(String code, String message) =>
     print('Error: $code\nError Message: $message');
 
-class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
+class _LivestreamBroadcastState extends State<LivestreamBroadcast> with WidgetsBindingObserver {
   WOWZCameraController wowzCameraController = WOWZCameraController();
   CameraController cameraController;
   ResolutionPreset resolutionPreset = ResolutionPreset.high;
@@ -75,9 +75,9 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
 
   void setupLivestreamCamera(CameraDescription description) {
     if (widget.bitrate == 1000) {
-      resolutionPreset = ResolutionPreset.high;
+      resolutionPreset = ResolutionPreset.medium;
     } else if (widget.bitrate == 2500) {
-      resolutionPreset = ResolutionPreset.veryHigh;
+      resolutionPreset = ResolutionPreset.high;
     }
 
     print(description.sensorOrientation);
@@ -212,13 +212,12 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
     }
 
     if (cameraController.value.isStreamingVideoRtmp) {
-      print('error: select camera first');
+      
       return 'currently streaming, please stop broadcasting first';
     }
 
     try {
-      await cameraController.startVideoStreaming(finalBroadcastServerUrl,
-          androidUseOpenGL: true);
+      await cameraController.startVideoStreaming(finalBroadcastServerUrl);
     } on CameraException catch (e) {
       print(e);
       return e.toString();
@@ -242,50 +241,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
     }
   }
 
-  // void getWowzaConfigData() {
-  //   hostAddress = widget.eventDetail['livestream'][0]['primary_server']
-  //       .toString()
-  //       .substring(7, 40);
-  //   appName = widget.eventDetail['livestream'][0]['primary_server']
-  //       .toString()
-  //       .substring(41);
-  //   streamName = widget.eventDetail['livestream'][0]['stream_name'];
-
-  //   print('host address: ' + hostAddress + ' app name: ' + appName);
-
-  //   wowzCameraController.setWOWZConfig(
-  //     hostAddress: hostAddress,
-  //     portNumber: 1935,
-  //     applicationName: appName,
-  //     streamName: streamName,
-  //     scaleMode: ScaleMode.RESIZE_TO_ASPECT,
-  //     bps: widget.bitrate
-  //   );
-
-  //   wowzCameraController.startPreview();
-
-  //   if (!mounted) return;
-  //   setState(() {});
-  // }
-
-  // Future<http.Response> initializeWowzaLivestream() async {
-
-  //   final response = await http.put(
-  //     BaseApi.wowzaUrl +
-  //         'live_streams/${widget.eventDetail['livestream'][0]['streaming_id']}/start',
-  //     headers: {
-  //       'wsc-api-key': WOWZA_API_KEY,
-  //       'wsc-access-key': WOWZA_ACCESS_KEY,
-  //       'Content-Type': 'application/json'
-  //     },
-  //   );
-
-  //   print("WOWZA INITIALIZATION PROCESS, PLEASE WAIT.....");
-  //   print(
-  //       "WOWZA RESPONSE: ${response.body} WITH STATUS CODE: ${response.statusCode}");
-
-  //   return response;
-  // }
+  
 
   Future<http.Response> stopWowzaLivestream() async {
     final response = await http.put(
@@ -305,32 +261,18 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> {
     return response;
   }
 
-  // Future<http.Response> getWowzaLivestreamState() async {
-  //   final response = await http.get(
-  //     BaseApi.wowzaUrl +
-  //         'live_streams/${widget.eventDetail['livestream'][0]['streaming_id']}/state',
-  //     headers: {
-  //       'wsc-api-key': WOWZA_API_KEY,
-  //       'wsc-access-key': WOWZA_ACCESS_KEY,
-  //       'Content-Type': 'application/json'
-  //     },
-  //   );
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state){
+    if(cameraController == null || cameraController.value.isInitialized){
+      return;
+    }
 
-  //   print("FETCHING CURRENT LIVESTREAM STATE, PLEASE WAIT.....");
-  //   print(
-  //       "WOWZA RESPONSE: ${response.body} WITH STATUS CODE: ${response.statusCode}");
-
-  //   return response;
-  // }
-
-  // Future getPermission() async {
-  //   Map<Permission, PermissionStatus> statuses = await [
-  //     Permission.microphone,
-  //     Permission.camera,
-  //   ].request();
-
-  //   print(statuses[Permission.microphone]);
-  // }
+    if(state == AppLifecycleState.inactive){
+      cameraController?.dispose();
+    } else if (state == AppLifecycleState.resumed){
+      onNewCameraSelected(cameraController.description);
+    }
+  }
 
   @override
   void initState() {

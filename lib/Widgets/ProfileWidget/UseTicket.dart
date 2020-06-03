@@ -79,6 +79,7 @@ class UseTicketState extends State<UseTicket> {
         DateTime.parse('${widget.ticketDate} ${widget.ticketStartTime}');
     final remaining = startDate.difference(DateTime.now());
     seconds = remaining.inSeconds;
+    print("in seconds" + seconds.toString());
     setState(() {});
     super.initState();
   }
@@ -271,12 +272,13 @@ class UseTicketState extends State<UseTicket> {
             child: startDate.isAfter(DateTime.now())
                 ? CountDownTimer(
                     secondsRemaining: seconds,
+                    useHHMMSS: true,
                     whenTimeExpires: () {},
                     countDownTimerStyle: TextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil.instance.setSp(20),
                         fontWeight: FontWeight.bold),
-                    isDay: true,
+                    isDay: false,
                   )
                 : Text(
                     widget.usedStatus == 'Used'

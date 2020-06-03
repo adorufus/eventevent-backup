@@ -111,7 +111,7 @@ dependencies:
   flutter_playout: ^1.0.35
   web_socket_channel: ^1.1.0
   wakelock: ^0.1.4+1
-  camera_with_rtmp: ^0.2.0
+  camera_with_rtmp: ^0.2.2
   flutter_rtmp_publisher:
     git:
       url: git://github.com/OhYee/flutter_rtmp_publisher.git
