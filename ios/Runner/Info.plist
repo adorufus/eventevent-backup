@@ -45,7 +45,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
 	<string>482210258650577</string>
 	<key>FacebookDisplayName</key>
@@ -63,24 +63,24 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>EventEvent need permission for your Apple Music</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>EventEvent need permission for your calendars, so we can create events reminder for you.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>EventEvent need to use the camera</string>
+	<key>NSContactsUsageDescription</key>
+	<string>EventEvent need permission for your contacts, to see if your friends already registered on EventEvent or not.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Needed to access location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Needed to access location</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>EventEvent need to use the mic</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>EventEvent need to access to your gallery</string>
-	<key>NSContactsUsageDescription</key>
-	<string>EventEvent need permission for your contacts, to see if your friends already registered on EventEvent or not.</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>EventEvent need permission for your calendars, so we can create events reminder for you.</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>EventEvent need permission for your Apple Music</string>
 	<key>NSMotionUsageDescription</key>
 	<string>EventEvent need permission for Motion</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>EventEvent need to access to your gallery</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>EventEvent need permission for SpeechRecognition</string>
 	<key>UIBackgroundModes</key>

@@ -133,7 +133,7 @@ dev_dependencies:
 
 flutter_icons:
   image_path_android: "assets/icon_fix_eventevent.png"
-  image_path_ios: "assets/eventevent_icon_baru.png"
+  image_path_ios: "assets/eventevent_icon_baru.jpg"
   android: true
   ios: true
 
