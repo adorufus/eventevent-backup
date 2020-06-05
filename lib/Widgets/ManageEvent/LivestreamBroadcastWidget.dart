@@ -75,9 +75,9 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> with WidgetsB
 
   void setupLivestreamCamera(CameraDescription description) {
     if (widget.bitrate == 1000) {
-      resolutionPreset = ResolutionPreset.medium;
-    } else if (widget.bitrate == 2500) {
       resolutionPreset = ResolutionPreset.high;
+    } else if (widget.bitrate == 2500) {
+      resolutionPreset = ResolutionPreset.veryHigh;
     }
 
     print(description.sensorOrientation);
@@ -217,7 +217,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> with WidgetsB
     }
 
     try {
-      await cameraController.startVideoStreaming(finalBroadcastServerUrl);
+      await cameraController.startVideoStreaming(finalBroadcastServerUrl, androidUseOpenGL: true);
     } on CameraException catch (e) {
       print(e);
       return e.toString();
@@ -318,7 +318,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> with WidgetsB
               child: cameraController != null
                   ? AspectRatio(
                       aspectRatio: cameraController.value.previewSize != null
-                          ? cameraController.value.aspectRatio
+                          ? cameraController.resolutionPreset == ResolutionPreset.medium ? 4 / 3 : cameraController.value.aspectRatio
                           : 1.0,
                       child: CameraPreview(cameraController),
                     )

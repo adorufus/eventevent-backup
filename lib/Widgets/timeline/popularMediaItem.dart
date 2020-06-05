@@ -34,7 +34,11 @@ class MediaItem extends StatefulWidget {
       this.articleDetail,
       this.mediaId,
       this.likeCount,
-      this.commentCount, this.youtube, this.videoUrl, @required this.isRest, this.isLiked})
+      this.commentCount,
+      this.youtube,
+      this.videoUrl,
+      @required this.isRest,
+      this.isLiked})
       : super(key: key);
 
   @override
@@ -127,18 +131,14 @@ class _MediaItemState extends State<MediaItem> {
                               width: ScreenUtil.instance.setWidth(2.68),
                             ),
                             Container(
-                                width: ScreenUtil.instance.setWidth(125),
-                                child: Text(
-                                  '@' + widget.username.toString(),
-                                  style: TextStyle(
-                                      color: Color(0xFF8A8A8B),
-                                      fontSize: ScreenUtil.instance.setSp(12)),
-                                )),
-                            Text(
-                              '19 - 08 - 2019',
-                              style: TextStyle(
-                                  fontSize: 8, color: Color(0xFF8A8A8B)),
-                            )
+                              width: ScreenUtil.instance.setWidth(125),
+                              child: Text(
+                                '@' + widget.username.toString(),
+                                style: TextStyle(
+                                    color: Color(0xFF8A8A8B),
+                                    fontSize: ScreenUtil.instance.setSp(12)),
+                              ),
+                            ),
                           ],
                         ),
                         SizedBox(
@@ -224,25 +224,25 @@ class _MediaItemState extends State<MediaItem> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => MediaDetails(
-                                            isRest: widget.isRest,
-                                                username: widget.username,
-                                                mediaTitle: widget.title,
-                                                userPicture: widget.userPicture,
-                                                imageUri: widget.image,
-                                                imageCount: 'img' +
-                                                    widget.imageIndex
-                                                        .toString(),
-                                                articleDetail:
-                                                    widget.articleDetail,
-                                                    mediaId: widget.mediaId,
-                                                autoFocus: true,
-                                                isVideo: widget.isVideo,
-                                                videoUrl: widget.videoUrl,
-                                                youtubeUrl: widget.youtube
-                                              )));
+                                              isRest: widget.isRest,
+                                              username: widget.username,
+                                              mediaTitle: widget.title,
+                                              userPicture: widget.userPicture,
+                                              imageUri: widget.image,
+                                              imageCount: 'img' +
+                                                  widget.imageIndex.toString(),
+                                              articleDetail:
+                                                  widget.articleDetail,
+                                              mediaId: widget.mediaId,
+                                              autoFocus: true,
+                                              isVideo: widget.isVideo,
+                                              videoUrl: widget.videoUrl,
+                                              youtubeUrl: widget.youtube)));
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal:  commentCount.length < 1 ? 8 : 13),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal:
+                                          commentCount.length < 1 ? 8 : 13),
                                   height: ScreenUtil.instance.setWidth(30),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
@@ -259,14 +259,21 @@ class _MediaItemState extends State<MediaItem> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         Image.asset(
-                                          'assets/icons/icon_apps/comment.png',
-                                          scale: 3,
-                                          color:  commentCount.length < 1 ? Colors.grey : eventajaGreenTeal
-                                        ),
+                                            'assets/icons/icon_apps/comment.png',
+                                            scale: 3,
+                                            color: commentCount.length < 1
+                                                ? Colors.grey
+                                                : eventajaGreenTeal),
                                         SizedBox(
-                                            width: ScreenUtil.instance
-                                                .setWidth(commentCount.length < 1 ? 0 : 5)),
-                                        Text(commentCount.length < 1 ? '' : commentCount.length.toString(),
+                                            width: ScreenUtil.instance.setWidth(
+                                                commentCount.length < 1
+                                                    ? 0
+                                                    : 5)),
+                                        Text(
+                                            commentCount.length < 1
+                                                ? ''
+                                                : commentCount.length
+                                                    .toString(),
                                             style: TextStyle(
                                                 color: Color(
                                                     0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']

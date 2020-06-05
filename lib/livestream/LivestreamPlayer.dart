@@ -35,12 +35,16 @@ class _LivestreamPlayerState extends State<LivestreamPlayer>
     setState(() {});
     chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
-      aspectRatio: 3 / 2,
+      aspectRatio: 10 / 18,
       autoPlay: true,
+      autoInitialize: true,
       looping: false,
+      
+      showControls: true,
       allowFullScreen: true,
       deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
-      fullScreenByDefault: true,
+
+      fullScreenByDefault: false,
       isLive: true,
     );
 
@@ -75,25 +79,19 @@ class _LivestreamPlayerState extends State<LivestreamPlayer>
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-              child: Stack(
+        child: Stack(
+          fit: StackFit.expand,
           children: <Widget>[
             Container(
               child: Container(
-                color: Colors.black,
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: AspectRatio(
-                  aspectRatio: 3 / 4,
-                  child: Video(
-                    url: widget.wowzaLiveUrl,
-                    autoPlay: true,
-                    isLiveStream: true,
-                    onViewCreated: _onViewCreated,
-                    showControls: true,
-                    position: 1,
-                  ),
-                ),
-              ),
+                  color: Colors.black,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: Center(
+                    child: Chewie(
+                      controller: chewieController,
+                    ),
+                  )),
             ),
             Positioned(
               top: 15,

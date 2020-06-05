@@ -2155,7 +2155,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             onTap: () async {
                                               if (widget.detailData[
                                                       'ticket_type']['type'] ==
-                                                  'free_live_stream') {
+                                                  'free_live_stream' || widget
+                                                                          .detailData[
+                                                                      'ticket_type']
+                                                                  ['type'] ==
+                                                              'paid_live_stream') {
                                                 print('isLivestream');
 
                                                 if (widget.detailData[
@@ -2314,7 +2318,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                           .detailData[
                                                                       'ticket_type']
                                                                   ['type'] ==
-                                                              'free_live_stream'
+                                                              'free_live_stream' || widget
+                                                                          .detailData[
+                                                                      'ticket_type']
+                                                                  ['type'] ==
+                                                              'paid_live_stream'
                                                           ? widget.detailData[
                                                                           'livestream'][0]
                                                                       [
@@ -2327,7 +2335,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         widget.detailData[
                                                                         'ticket_type']
                                                                     ['type'] ==
-                                                                'free_live_stream'
+                                                                'free_live_stream' || widget
+                                                                          .detailData[
+                                                                      'ticket_type']
+                                                                  ['type'] ==
+                                                              'paid_live_stream'
                                                             ? widget.detailData[
                                                                             'livestream'][0]
                                                                         [
@@ -2342,7 +2354,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         color: widget.detailData[
                                                                         'ticket_type']
                                                                     ['type'] ==
-                                                                'free_live_stream'
+                                                                'free_live_stream' || widget
+                                                                          .detailData[
+                                                                      'ticket_type']
+                                                                  ['type'] ==
+                                                              'paid_live_stream'
                                                             ? streamingState ==
                                                                     'stopped'
                                                                 ? Colors.white
@@ -2361,7 +2377,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       widget.detailData[
                                                                       'ticket_type']
                                                                   ['type'] ==
-                                                              'free_live_stream'
+                                                              'free_live_stream' || widget
+                                                                          .detailData[
+                                                                      'ticket_type']
+                                                                  ['type'] ==
+                                                              'paid_live_stream'
                                                           ? 'NOW !'
                                                           : 'SHOW QR CODE',
                                                       style: TextStyle(

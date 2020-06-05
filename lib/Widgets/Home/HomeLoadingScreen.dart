@@ -849,6 +849,7 @@ class HomeLoadingScreen {
           child: AppBar(
             brightness: Brightness.light,
             elevation: 0,
+            automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
           ),
         ),
