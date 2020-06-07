@@ -1,3 +1,4 @@
+import 'package:eventevent/Widgets/merch/BuyOptionSelector.dart';
 import 'package:eventevent/Widgets/merch/MerchLove.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
@@ -190,23 +191,28 @@ class _MerchDetailsState extends State<MerchDetails> {
   }
 
   Widget priceButton() {
-    return Container(
-      height: ScreenUtil.instance.setWidth(28),
-      width: ScreenUtil.instance.setWidth(120),
-      decoration: BoxDecoration(boxShadow: <BoxShadow>[
-        BoxShadow(
-            color: eventajaGreenTeal.withOpacity(0.4),
-            blurRadius: 2,
-            spreadRadius: 1.5)
-      ], color: eventajaGreenTeal, borderRadius: BorderRadius.circular(15)),
-      child: Center(
-          child: Text(
-        'Rp. 50.0000,-',
-        style: TextStyle(
-            color: Colors.white,
-            fontSize: ScreenUtil.instance.setSp(14),
-            fontWeight: FontWeight.bold),
-      )),
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => BuyOptionSelector()));
+      },
+          child: Container(
+        height: ScreenUtil.instance.setWidth(28),
+        width: ScreenUtil.instance.setWidth(120),
+        decoration: BoxDecoration(boxShadow: <BoxShadow>[
+          BoxShadow(
+              color: eventajaGreenTeal.withOpacity(0.4),
+              blurRadius: 2,
+              spreadRadius: 1.5)
+        ], color: eventajaGreenTeal, borderRadius: BorderRadius.circular(15)),
+        child: Center(
+            child: Text(
+          'Rp. 50.0000,-',
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: ScreenUtil.instance.setSp(14),
+              fontWeight: FontWeight.bold),
+        )),
+      ),
     );
   }
 

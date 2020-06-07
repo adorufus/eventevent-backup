@@ -95,7 +95,8 @@ class _RunAppState extends State<RunApp> {
           brightness: Brightness.light,
           backgroundColor: Colors.white),
       // home: CrashlyticsTester(),
-      home: AnnotatedRegion<SystemUiOverlayStyle>(
+      home:
+       AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
             statusBarColor: Colors.white,
             statusBarIconBrightness: Brightness.light),

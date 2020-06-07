@@ -1,3 +1,4 @@
+import 'package:eventevent/helper/BaseBodyWithScaffoldAndAppBar.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class _MerchCollectionState extends State<MerchCollection> {
         child: SafeArea(
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: ScreenUtil.instance.setWidth(50),
+            height: 50,
             padding: EdgeInsets.symmetric(horizontal: 13),
             color: Colors.white,
             child: AppBar(
@@ -40,7 +41,7 @@ class _MerchCollectionState extends State<MerchCollection> {
               textTheme: TextTheme(
                   title: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: ScreenUtil.instance.setSp(14),
+                fontSize: 14,
                 color: Colors.black,
               )),
             ),

@@ -1,14 +1,17 @@
-import 'package:eventevent/Widgets/merch/CollectionItem.dart';
-import 'package:eventevent/helper/BaseBodyWithScaffoldAndAppBar.dart';
-import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 
-class PopularItem extends StatefulWidget {
+class BaseBodyWithScaffoldAndAppBar extends StatefulWidget {
+  final String title;
+  final customAppBar;
+  final bottomNavBar;
+  final Widget body;
+
+  const BaseBodyWithScaffoldAndAppBar({Key key, this.title, this.body, this.customAppBar, this.bottomNavBar}) : super(key: key);
   @override
-  _PopularItemState createState() => _PopularItemState();
+  _BaseBodyWithScaffoldAndAppBarState createState() => _BaseBodyWithScaffoldAndAppBarState();
 }
 
-class _PopularItemState extends State<PopularItem> {
+class _BaseBodyWithScaffoldAndAppBarState extends State<BaseBodyWithScaffoldAndAppBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +37,7 @@ class _PopularItemState extends State<PopularItem> {
                   alignment: Alignment.centerLeft,
                 ),
               ),
-              title: Text('Popular'),
+              title: Text(widget.title),
               centerTitle: true,
               textTheme: TextTheme(
                   title: TextStyle(
@@ -46,19 +49,8 @@ class _PopularItemState extends State<PopularItem> {
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: 10,
-        padding: EdgeInsets.only(bottom: 13, left: 13, right: 13),
-        itemBuilder: (context, i) {
-          return CollectionItem(
-            image: 'test',
-            itemColor: eventajaGreenTeal,
-            itemPrice: 'Rp. 50.000',
-            title: 'Keramik Mahal',
-            username: 'Budi Jaya Sentosa Raya Agung',
-          );
-        },
-      ),
+      bottomNavigationBar: widget.bottomNavBar != null ? widget.bottomNavBar : Container(),
+      body: widget.body,
     );
   }
 }

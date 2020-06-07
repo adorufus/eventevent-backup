@@ -1,5 +1,7 @@
 import 'package:eventevent/Widgets/Home/PopularEventWidget.dart';
 import 'package:eventevent/Widgets/merch/MerchDetails.dart';
+import 'package:eventevent/Widgets/merch/PopularItem.dart';
+import 'package:eventevent/helper/BaseBodyWithScaffoldAndAppBar.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -97,7 +99,26 @@ class _MerchDashboardState extends State<MerchDashboard> {
                 titleText('Collections',
                     'Check out our hand picked collection bellow'),
                 collectionImage(),
-                titleText('Popular Merch', 'Lorem Ipsum Dolor'),
+                Row(children: <Widget>[
+                  titleText('Popular Merch', 'Lorem Ipsum Dolor'),
+                  Expanded(
+                    child: SizedBox(),
+                  ),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PopularItem()));
+                    },
+                    child: Text(
+                      'See All',
+                      style: TextStyle(color: eventajaGreenTeal),
+                    ),
+                  ),
+                  SizedBox(width: 13,)
+                ]),
                 merchItem(),
                 titleText('Lorem Ipsum', 'Lorem Ipsum Dolor Sit Amet'),
                 merchItem(),
