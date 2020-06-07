@@ -14,6 +14,7 @@ import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -1645,20 +1646,50 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         MaterialPageRoute(
                                                             builder: (context) =>
                                                                 ReviewDetails(
-                                                                  eventId: detailData != null || !detailData.isEmpty ? detailData['id'] : widget.detailData['id'],
-                                                                  eventName: detailData != null || !detailData.isEmpty ? detailData['name'] : widget
-                                                                          .detailData[
-                                                                      'name'],
-                                                                  goodReview: detailData != null || !detailData.isEmpty ? detailData['event_review']['percent_review']['good'] : widget
-                                                                              .detailData[
-                                                                          'event_review']
-                                                                      [
-                                                                      'percent_review']['good'],
-                                                                  badReview: detailData != null || !detailData.isEmpty ? detailData['event_review']['percent_review']['bad'] : widget
-                                                                              .detailData[
-                                                                          'event_review']
-                                                                      [
-                                                                      'percent_review']['bad'],
+                                                                  eventId: detailData !=
+                                                                              null ||
+                                                                          !detailData
+                                                                              .isEmpty
+                                                                      ? detailData[
+                                                                          'id']
+                                                                      : widget.detailData[
+                                                                          'id'],
+                                                                  eventName: detailData !=
+                                                                              null ||
+                                                                          !detailData
+                                                                              .isEmpty
+                                                                      ? detailData[
+                                                                          'name']
+                                                                      : widget.detailData[
+                                                                          'name'],
+                                                                  goodReview: detailData !=
+                                                                              null ||
+                                                                          !detailData
+                                                                              .isEmpty
+                                                                      ? detailData['event_review']
+                                                                              [
+                                                                              'percent_review']
+                                                                          [
+                                                                          'good']
+                                                                      : widget.detailData['event_review']
+                                                                              [
+                                                                              'percent_review']
+                                                                          [
+                                                                          'good'],
+                                                                  badReview: detailData !=
+                                                                              null ||
+                                                                          !detailData
+                                                                              .isEmpty
+                                                                      ? detailData['event_review']
+                                                                              [
+                                                                              'percent_review']
+                                                                          [
+                                                                          'bad']
+                                                                      : widget.detailData['event_review']
+                                                                              [
+                                                                              'percent_review']
+                                                                          [
+                                                                          'bad'],
                                                                 )));
                                                   },
                                                   child: Text('See All >',
@@ -1686,11 +1717,20 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       .setWidth(10),
                                                   progressColor:
                                                       eventajaGreenTeal,
-                                                  percent: int.parse(detailData != null || !detailData.isEmpty ? detailData['event_review']['percent_review']['good'] : widget
-                                                                      .detailData[
-                                                                  'event_review']
-                                                              ['percent_review']
-                                                          ['good']) /
+                                                  percent: int.parse(detailData !=
+                                                                  null ||
+                                                              !detailData
+                                                                  .isEmpty
+                                                          ? detailData[
+                                                                      'event_review']
+                                                                  [
+                                                                  'percent_review']
+                                                              ['good']
+                                                          : widget.detailData[
+                                                                      'event_review']
+                                                                  [
+                                                                  'percent_review']
+                                                              ['good']) /
                                                       100,
                                                 ),
                                               ),
@@ -1698,10 +1738,16 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 width: ScreenUtil.instance
                                                     .setWidth(40),
                                                 child: Text(
-                                                  (detailData != null || !detailData.isEmpty ? detailData['event_review']['percent_review']['good'] : detailData['event_review']
+                                                  (detailData != null ||
+                                                          !detailData.isEmpty
+                                                      ? detailData['event_review']
                                                               ['percent_review']
-                                                          ['good'] +
-                                                      '%'),
+                                                          ['good']
+                                                      : detailData['event_review']
+                                                                  [
+                                                                  'percent_review']
+                                                              ['good'] +
+                                                          '%'),
                                                   style: TextStyle(
                                                       color: eventajaGreenTeal,
                                                       fontWeight:
@@ -1726,11 +1772,20 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       .instance
                                                       .setWidth(10),
                                                   progressColor: Colors.red,
-                                                  percent: int.parse(detailData != null || !detailData.isEmpty ? detailData['event_review']['percent_review']['bad'] : widget
-                                                                      .detailData[
-                                                                  'event_review']
-                                                              ['percent_review']
-                                                          ['bad']) /
+                                                  percent: int.parse(detailData !=
+                                                                  null ||
+                                                              !detailData
+                                                                  .isEmpty
+                                                          ? detailData[
+                                                                      'event_review']
+                                                                  [
+                                                                  'percent_review']
+                                                              ['bad']
+                                                          : widget.detailData[
+                                                                      'event_review']
+                                                                  [
+                                                                  'percent_review']
+                                                              ['bad']) /
                                                       100,
                                                 ),
                                               ),
@@ -1738,10 +1793,18 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 width: ScreenUtil.instance
                                                     .setWidth(40),
                                                 child: Text(
-                                                  detailData != null || !detailData.isEmpty ? detailData['event_review']['percent_review']['bad'] : widget.detailData['event_review']
+                                                  detailData != null ||
+                                                          !detailData.isEmpty
+                                                      ? detailData[
+                                                                  'event_review']
                                                               ['percent_review']
-                                                          ['bad'] +
-                                                      '%',
+                                                          ['bad']
+                                                      : widget.detailData[
+                                                                      'event_review']
+                                                                  [
+                                                                  'percent_review']
+                                                              ['bad'] +
+                                                          '%',
                                                   style: TextStyle(
                                                       color: Colors.red,
                                                       fontWeight:
@@ -2154,12 +2217,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           GestureDetector(
                                             onTap: () async {
                                               if (widget.detailData[
-                                                      'ticket_type']['type'] ==
-                                                  'free_live_stream' || widget
-                                                                          .detailData[
-                                                                      'ticket_type']
-                                                                  ['type'] ==
-                                                              'paid_live_stream') {
+                                                              'ticket_type']
+                                                          ['type'] ==
+                                                      'free_live_stream' ||
+                                                  widget.detailData[
+                                                              'ticket_type']
+                                                          ['type'] ==
+                                                      'paid_live_stream') {
                                                 print('isLivestream');
 
                                                 if (widget.detailData[
@@ -2315,31 +2379,29 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 children: <Widget>[
                                                   SizedBox(
                                                       width: ScreenUtil.instance.setWidth(widget
-                                                                          .detailData[
-                                                                      'ticket_type']
-                                                                  ['type'] ==
-                                                              'free_live_stream' || widget
-                                                                          .detailData[
-                                                                      'ticket_type']
-                                                                  ['type'] ==
-                                                              'paid_live_stream'
-                                                          ? widget.detailData[
-                                                                          'livestream'][0]
-                                                                      [
-                                                                      'zoom_id'] !=
+                                                                          .detailData['ticket_type'][
+                                                                      'type'] ==
+                                                                  'free_live_stream' ||
+                                                              widget.detailData[
+                                                                          'ticket_type'][
+                                                                      'type'] ==
+                                                                  'paid_live_stream'
+                                                          ? widget.detailData['livestream'][0]
+                                                                      ['zoom_id'] !=
                                                                   null
                                                               ? 80
                                                               : 50
                                                           : 20.9),
                                                       child: Image.asset(
-                                                        widget.detailData[
-                                                                        'ticket_type']
-                                                                    ['type'] ==
-                                                                'free_live_stream' || widget
-                                                                          .detailData[
-                                                                      'ticket_type']
-                                                                  ['type'] ==
-                                                              'paid_live_stream'
+                                                        widget.detailData['ticket_type']
+                                                                        [
+                                                                        'type'] ==
+                                                                    'free_live_stream' ||
+                                                                widget.detailData[
+                                                                            'ticket_type']
+                                                                        [
+                                                                        'type'] ==
+                                                                    'paid_live_stream'
                                                             ? widget.detailData[
                                                                             'livestream'][0]
                                                                         [
@@ -2352,13 +2414,15 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         colorBlendMode:
                                                             BlendMode.srcATop,
                                                         color: widget.detailData[
-                                                                        'ticket_type']
-                                                                    ['type'] ==
-                                                                'free_live_stream' || widget
-                                                                          .detailData[
-                                                                      'ticket_type']
-                                                                  ['type'] ==
-                                                              'paid_live_stream'
+                                                                            'ticket_type']
+                                                                        [
+                                                                        'type'] ==
+                                                                    'free_live_stream' ||
+                                                                widget.detailData[
+                                                                            'ticket_type']
+                                                                        [
+                                                                        'type'] ==
+                                                                    'paid_live_stream'
                                                             ? streamingState ==
                                                                     'stopped'
                                                                 ? Colors.white
@@ -2374,14 +2438,15 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         .setWidth(15),
                                                   ),
                                                   Text(
-                                                      widget.detailData[
-                                                                      'ticket_type']
-                                                                  ['type'] ==
-                                                              'free_live_stream' || widget
-                                                                          .detailData[
-                                                                      'ticket_type']
-                                                                  ['type'] ==
-                                                              'paid_live_stream'
+                                                      widget.detailData['ticket_type']
+                                                                      [
+                                                                      'type'] ==
+                                                                  'free_live_stream' ||
+                                                              widget.detailData[
+                                                                          'ticket_type']
+                                                                      [
+                                                                      'type'] ==
+                                                                  'paid_live_stream'
                                                           ? 'NOW !'
                                                           : 'SHOW QR CODE',
                                                       style: TextStyle(
@@ -2770,18 +2835,111 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                       ? 0
                       : detailData['comment'].length,
                   itemBuilder: (context, i) {
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(detailData['comment'][i]['photo']),
+                    List commentList = detailData['comment'];
+                    return Container(
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(detailData['comment'][i]['photo']),
+                        ),
+                        trailing: detailData['comment'][i]['userID'] ==
+                                currentUserId
+                            ? Container(
+                                height: 50,
+                                width: 50,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    showCupertinoDialog(
+                                      context: context,
+                                      builder: (thisContext) {
+                                        return CupertinoAlertDialog(
+                                          title: Text('Notice'),
+                                          content: Text(
+                                            'Do you want to delete this comment?',
+                                          ),
+                                          actions: <Widget>[
+                                            CupertinoDialogAction(
+                                              child: Text('No'),
+                                              onPressed: () {
+                                                Navigator.of(
+                                                  thisContext,
+                                                ).pop();
+                                              },
+                                            ),
+                                            CupertinoDialogAction(
+                                              child: Text('Yes'),
+                                              onPressed: () {
+                                                Navigator.of(
+                                                  thisContext,
+                                                ).pop();
+                                                deleteComment(
+                                                  detailData['comment'][i]
+                                                      ['id'],
+                                                ).then(
+                                                  (response) {
+                                                    if (response.statusCode ==
+                                                            200 ||
+                                                        response.statusCode ==
+                                                            201) {
+                                                      print(response.body);
+                                                      isLoading = false;
+                                                      detailData['comment'].removeAt(i);
+                                                    } else {
+                                                      print(response.body);
+                                                      isLoading = false;
+                                                      Flushbar(
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                        flushbarPosition:
+                                                            FlushbarPosition
+                                                                .TOP,
+                                                        animationDuration:
+                                                            Duration(
+                                                                milliseconds:
+                                                                    500),
+                                                        duration: Duration(
+                                                            seconds: 3),
+                                                        message: response.body,
+                                                      ).show(context);
+                                                    }
+                                                  },
+                                                ).catchError((err) {
+                                                  isLoading = false;
+                                                  Flushbar(
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                          flushbarPosition:
+                                                              FlushbarPosition
+                                                                  .TOP,
+                                                          animationDuration:
+                                                              Duration(
+                                                                  milliseconds:
+                                                                      500),
+                                                          duration: Duration(
+                                                              seconds: 3),
+                                                          message:
+                                                              err.toString())
+                                                      .show(context);
+                                                });
+                                              },
+                                            )
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Icon(Icons.delete, color: Colors.red),
+                                ),
+                              )
+                            : Container(width: 100),
+                        title: Text(
+                          detailData['comment'][i]['fullName'] + '' + ': ',
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(12),
+                              fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(detailData['comment'][i]['response']),
                       ),
-                      title: Text(
-                        detailData['comment'][i]['fullName'] + '' + ': ',
-                        style: TextStyle(
-                            fontSize: ScreenUtil.instance.setSp(12),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(detailData['comment'][i]['response']),
                     );
                   },
                 )
@@ -2799,6 +2957,25 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       color: color ?? Theme.of(context).dividerColor,
       width: width,
     );
+  }
+
+  Future<http.Response> deleteComment(String commentId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    isLoading = true;
+    if (mounted) {
+      setState(() {});
+    }
+
+    String url = BaseApi().apiUrl + '/eventdetail_comment/delete';
+
+    final response = await http.delete(url, headers: {
+      'cookie': prefs.getString('Session'),
+      'Authorization': AUTHORIZATION_KEY,
+      'X-API-KEY': API_KEY,
+      'id': commentId
+    });
+
+    return response;
   }
 
   Widget countdownTimer() {

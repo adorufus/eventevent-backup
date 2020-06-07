@@ -39,7 +39,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   getInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      appVersion = appVersion + '${Platform.isAndroid ? '3.0.4' : '3.0.0'}';
+      appVersion = appVersion + '${Platform.isAndroid ? '3.0.5' : '3.0.1'}';
     });
 
     print(appVersion);
