@@ -1,6 +1,8 @@
 import 'package:eventevent/helper/BaseBodyWithScaffoldAndAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'AddressItem.dart';
+import 'DeliveryOptions.dart';
 
 class SelectAddress extends StatefulWidget {
   @override
@@ -12,14 +14,19 @@ class _SelectAddressState extends State<SelectAddress> {
   Widget build(BuildContext context) {
     return BaseBodyWithScaffoldAndAppBar(
       title: 'Select An Address',
-      bottomNavBar: Container(
-        height: ScreenUtil.instance.setWidth(50),
-        color: Color(0xFFff8812),
-        child: Center(
-            child: Text(
-          'BUY',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        )),
+      bottomNavBar: GestureDetector(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => DeliveryOptions()));
+        },
+        child: Container(
+          height: ScreenUtil.instance.setWidth(50),
+          color: Color(0xFFff8812),
+          child: Center(
+              child: Text(
+            'BUY',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          )),
+        ),
       ),
       body: SafeArea(
         child: ListView(
@@ -36,15 +43,15 @@ class _SelectAddressState extends State<SelectAddress> {
                     fontSize: ScreenUtil.instance.setSp(14)),
               ),
             ),
-            addressItem(),
+            AddressItem(),
             SizedBox(
               height: 12,
             ),
-            addressItem(),
+            AddressItem(),
             SizedBox(
               height: 12,
             ),
-            addressItem(),
+            AddressItem(),
             Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(bottom: 9, top: 20),
