@@ -319,7 +319,7 @@ class _EventCatalogState extends State<EventCatalog>
                         )),
                   ),
                   SizedBox(width: ScreenUtil.instance.setWidth(8)),
-                  GestureDetector(
+                  widget.isRest == true ? Container() : GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (BuildContext context) => MyTicket()));
