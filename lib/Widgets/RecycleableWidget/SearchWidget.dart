@@ -17,6 +17,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class Search extends StatefulWidget {
+  final isRest;
+
+  const Search({Key key, this.isRest}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return SearchState();
@@ -116,8 +119,8 @@ class SearchState extends State<Search> {
                               });
                             }
                           },
-                          style:
-                              TextStyle(fontSize: ScreenUtil.instance.setSp(12)),
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(12)),
                           autofocus: true,
                           autocorrect: false,
                           decoration: InputDecoration(
@@ -537,14 +540,31 @@ class SearchState extends State<Search> {
     setState(() {
       isLoading = true;
     });
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String url = BaseApi().apiUrl +
+
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': prefs.getString('Session')
+      };
+    }
+
+    
+    String url = baseUrl +
         '/user/search?X-API-KEY=$API_KEY&people=${searchController.text}&page=1';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
-    });
+    final response = await http.get(url, headers: headers);
 
     print(response.statusCode);
 
@@ -556,13 +576,28 @@ class SearchState extends State<Search> {
       isLoading = true;
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String url = BaseApi().apiUrl +
+
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': prefs.getString('Session')
+      };
+    }
+
+    String url = baseUrl +
         '/event/search?X-API-KEY=$API_KEY&event=${searchController.text}&page=1';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
-    });
+    final response = await http.get(url, headers: headers);
 
     print(response.statusCode);
 

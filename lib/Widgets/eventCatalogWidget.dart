@@ -298,7 +298,9 @@ class _EventCatalogState extends State<EventCatalog>
                       Navigator.push(
                           context,
                           CupertinoPageRoute(
-                              builder: (BuildContext context) => Search()));
+                              builder: (BuildContext context) => Search(
+                                isRest: widget.isRest,
+                              )));
                     },
                     child: Container(
                         height: ScreenUtil.instance.setWidth(35),
@@ -725,7 +727,9 @@ class _EventCatalogState extends State<EventCatalog>
               //           spreadRadius: 1.5)
               //     ]),
               margin: EdgeInsets.symmetric(vertical: 13, horizontal: 13),
-              child: Center(child: CategoryEventWidget())),
+              child: Center(child: CategoryEventWidget(
+                isRest: widget.isRest
+              ),),),
           collection(),
           collectionImage(),
           popularPeople(),

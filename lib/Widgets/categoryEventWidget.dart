@@ -10,6 +10,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CategoryEventWidget extends StatefulWidget {
+  final isRest;
+
+  const CategoryEventWidget({Key key, this.isRest}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _CategoryEventWidget();
@@ -114,17 +117,28 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
   Future fetchCategoryEvent() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    if (!mounted) return;
-    setState(() {
-      session = preferences.getString('Session');
-    });
+    
+
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session')
+      };
+    }
 
     final categoryApi =
-        BaseApi().apiUrl + '/category/list?X-API-KEY=${API_KEY}&page=1';
-    final response = await http.get(categoryApi, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': session
-    });
+        baseUrl + '/category/list?X-API-KEY=${API_KEY}&page=1';
+    final response = await http.get(categoryApi, headers: headers);
 
     print(response.body);
 
