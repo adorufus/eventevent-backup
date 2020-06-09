@@ -1,3 +1,6 @@
+import 'package:eventevent/Models/AppState.dart';
+import 'package:eventevent/Redux/Actions/BannerActions.dart';
+import 'package:eventevent/Redux/Reducers/logger.dart';
 import 'package:eventevent/Widgets/Home/PopularEventWidget.dart';
 import 'package:eventevent/Widgets/merch/MerchDetails.dart';
 import 'package:eventevent/Widgets/merch/PopularItem.dart';
@@ -10,6 +13,8 @@ import 'package:redux/redux.dart';
 import 'package:eventevent/Models/MerchBannerModel.dart';
 import 'package:eventevent/Redux/Reducers/BannerReducers.dart';
 import 'package:eventevent/Widgets/merch/Banner.dart';
+import 'package:redux_api_middleware/redux_api_middleware.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 import 'MerchItem.dart';
 import 'MerchCollection.dart';
 
@@ -19,9 +24,9 @@ class MerchDashboard extends StatefulWidget {
 }
 
 class _MerchDashboardState extends State<MerchDashboard> {
-  Store<List<MerchBannerModel>> bannerStore = new Store<List<MerchBannerModel>>(
-      merchBannerReducers,
-      initialState: new List());
+  void handleInitialBuild(BannerScreenProps props) {
+    props.getBanner();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +100,16 @@ class _MerchDashboardState extends State<MerchDashboard> {
           children: <Widget>[
             Column(
               children: <Widget>[
-                BannerWidget(),
+                StoreConnector<AppState, BannerScreenProps>(
+                  converter: (store) => mapStateToProps(store),
+                  onInitialBuild: (props) => handleInitialBuild(props),
+                  builder: (context, props) {
+                    List<MerchBannerModel> data = props.listResponse.data;
+                    bool loading = props.listResponse.loading;
+
+                    return BannerWidget(loading: loading, data: data);
+                  },
+                ),
                 titleText('Collections',
                     'Check out our hand picked collection bellow'),
                 collectionImage(),
@@ -117,7 +131,9 @@ class _MerchDashboardState extends State<MerchDashboard> {
                       style: TextStyle(color: eventajaGreenTeal),
                     ),
                   ),
-                  SizedBox(width: 13,)
+                  SizedBox(
+                    width: 13,
+                  )
                 ]),
                 merchItem(),
                 titleText('Lorem Ipsum', 'Lorem Ipsum Dolor Sit Amet'),
@@ -232,4 +248,18 @@ class _MerchDashboardState extends State<MerchDashboard> {
               );
             }));
   }
+}
+
+class BannerScreenProps {
+  final Function getBanner;
+  final ListBannerState listResponse;
+
+  BannerScreenProps({this.getBanner, this.listResponse});
+}
+
+BannerScreenProps mapStateToProps(Store<AppState> store) {
+  return BannerScreenProps(
+    listResponse: store.state.banner.list,
+    getBanner: () => store.dispatch(getBanners()),
+  );
 }

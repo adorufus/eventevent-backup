@@ -362,7 +362,7 @@ packages:
       name: flutter_redux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.0"
+    version: "0.5.4"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -449,7 +449,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.0+3"
+    version: "0.12.1"
   http_parser:
     dependency: "direct main"
     description:
@@ -701,7 +701,21 @@ packages:
       name: redux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0"
+    version: "3.0.0"
+  redux_api_middleware:
+    dependency: "direct main"
+    description:
+      name: redux_api_middleware
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.9"
+  redux_thunk:
+    dependency: "direct main"
+    description:
+      name: redux_thunk
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.1"
   rive:
     dependency: "direct main"
     description:
