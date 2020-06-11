@@ -271,6 +271,7 @@ class _EventCatalogState extends State<EventCatalog>
                 title: Container(
                   width: ScreenUtil.instance.setWidth(240),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
                         height: ScreenUtil.instance.setWidth(23),

@@ -32,6 +32,36 @@ class HomeLoadingScreen {
     1
   ];
 
+  static List merchCategory = [1, 2, 3, 4, 5, 6];
+
+  Widget merchCategoryLoading() {
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      children: merchCategory.map((data) {
+        return Shimmer.fromColors(
+          baseColor: Colors.grey[300],
+          highlightColor: Colors.grey[100],
+          enabled: true,
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                    blurRadius: 2,
+                    color: Colors.black.withOpacity(.1),
+                    spreadRadius: 1.5)
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
   List<Widget> mappedCategoryData = categoryCount?.map((categoryData) {
         return SizedBox(
           height: ScreenUtil.instance.setWidth(85),
@@ -187,15 +217,14 @@ class HomeLoadingScreen {
                       child: SizedBox(),
                     ),
                     Container(
-                      width: ScreenUtil.instance.setWidth(150),
-                      child: PlaceholderLines(
-                        count: 1,
-                        color: Colors.grey,
-                        align: TextAlign.left,
-                        animate: true,
-                        lineHeight: 10,
-                      )
-                    ),
+                        width: ScreenUtil.instance.setWidth(150),
+                        child: PlaceholderLines(
+                          count: 1,
+                          color: Colors.grey,
+                          align: TextAlign.left,
+                          animate: true,
+                          lineHeight: 10,
+                        )),
                     SizedBox(
                       width: 25,
                     )
@@ -217,15 +246,14 @@ class HomeLoadingScreen {
                       child: SizedBox(),
                     ),
                     Container(
-                      width: ScreenUtil.instance.setWidth(150),
-                      child: PlaceholderLines(
-                        count: 1,
-                        color: Colors.grey,
-                        align: TextAlign.left,
-                        animate: true,
-                        lineHeight: 10,
-                      )
-                    ),
+                        width: ScreenUtil.instance.setWidth(150),
+                        child: PlaceholderLines(
+                          count: 1,
+                          color: Colors.grey,
+                          align: TextAlign.left,
+                          animate: true,
+                          lineHeight: 10,
+                        )),
                     SizedBox(
                       width: 25,
                     )
@@ -247,15 +275,14 @@ class HomeLoadingScreen {
                       child: SizedBox(),
                     ),
                     Container(
-                      width: ScreenUtil.instance.setWidth(150),
-                      child: PlaceholderLines(
-                        count: 1,
-                        color: Colors.grey,
-                        align: TextAlign.left,
-                        animate: true,
-                        lineHeight: 10,
-                      )
-                    ),
+                        width: ScreenUtil.instance.setWidth(150),
+                        child: PlaceholderLines(
+                          count: 1,
+                          color: Colors.grey,
+                          align: TextAlign.left,
+                          animate: true,
+                          lineHeight: 10,
+                        )),
                     SizedBox(
                       width: 25,
                     )
@@ -277,15 +304,14 @@ class HomeLoadingScreen {
                       child: SizedBox(),
                     ),
                     Container(
-                      width: ScreenUtil.instance.setWidth(150),
-                      child: PlaceholderLines(
-                        count: 1,
-                        color: Colors.grey,
-                        align: TextAlign.left,
-                        animate: true,
-                        lineHeight: 10,
-                      )
-                    ),
+                        width: ScreenUtil.instance.setWidth(150),
+                        child: PlaceholderLines(
+                          count: 1,
+                          color: Colors.grey,
+                          align: TextAlign.left,
+                          animate: true,
+                          lineHeight: 10,
+                        )),
                     SizedBox(
                       width: 25,
                     )
@@ -308,15 +334,14 @@ class HomeLoadingScreen {
                       child: SizedBox(),
                     ),
                     Container(
-                      width: ScreenUtil.instance.setWidth(150),
-                      child: PlaceholderLines(
-                        count: 1,
-                        color: Colors.grey,
-                        align: TextAlign.left,
-                        animate: true,
-                        lineHeight: 10,
-                      )
-                    ),
+                        width: ScreenUtil.instance.setWidth(150),
+                        child: PlaceholderLines(
+                          count: 1,
+                          color: Colors.grey,
+                          align: TextAlign.left,
+                          animate: true,
+                          lineHeight: 10,
+                        )),
                     SizedBox(
                       width: 25,
                     )
@@ -372,15 +397,14 @@ class HomeLoadingScreen {
                       child: SizedBox(),
                     ),
                     Container(
-                      width: ScreenUtil.instance.setWidth(150),
-                      child: PlaceholderLines(
-                        count: 1,
-                        color: Colors.grey,
-                        align: TextAlign.left,
-                        animate: true,
-                        lineHeight: 10,
-                      )
-                    ),
+                        width: ScreenUtil.instance.setWidth(150),
+                        child: PlaceholderLines(
+                          count: 1,
+                          color: Colors.grey,
+                          align: TextAlign.left,
+                          animate: true,
+                          lineHeight: 10,
+                        )),
                     SizedBox(
                       width: 25,
                     )
@@ -402,15 +426,14 @@ class HomeLoadingScreen {
                       child: SizedBox(),
                     ),
                     Container(
-                      width: ScreenUtil.instance.setWidth(150),
-                      child: PlaceholderLines(
-                        count: 1,
-                        color: Colors.grey,
-                        align: TextAlign.left,
-                        animate: true,
-                        lineHeight: 10,
-                      )
-                    ),
+                        width: ScreenUtil.instance.setWidth(150),
+                        child: PlaceholderLines(
+                          count: 1,
+                          color: Colors.grey,
+                          align: TextAlign.left,
+                          animate: true,
+                          lineHeight: 10,
+                        )),
                     SizedBox(
                       width: 25,
                     )
@@ -432,15 +455,14 @@ class HomeLoadingScreen {
                       child: SizedBox(),
                     ),
                     Container(
-                      width: ScreenUtil.instance.setWidth(150),
-                      child: PlaceholderLines(
-                        count: 1,
-                        color: Colors.grey,
-                        align: TextAlign.left,
-                        animate: true,
-                        lineHeight: 10,
-                      )
-                    ),
+                        width: ScreenUtil.instance.setWidth(150),
+                        child: PlaceholderLines(
+                          count: 1,
+                          color: Colors.grey,
+                          align: TextAlign.left,
+                          animate: true,
+                          lineHeight: 10,
+                        )),
                     SizedBox(
                       width: 25,
                     )
@@ -454,7 +476,7 @@ class HomeLoadingScreen {
     );
   }
 
-  Widget EditProfilePictureLoading(){
+  Widget EditProfilePictureLoading() {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300],
       highlightColor: Colors.grey[100],
@@ -465,8 +487,7 @@ class HomeLoadingScreen {
         decoration: BoxDecoration(
             shape: BoxShape.circle,
             image: DecorationImage(
-                image:AssetImage('assets/white.png'),
-                fit: BoxFit.cover)),
+                image: AssetImage('assets/white.png'), fit: BoxFit.cover)),
       ),
     );
   }

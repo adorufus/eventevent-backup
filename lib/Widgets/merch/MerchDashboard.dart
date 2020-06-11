@@ -1,10 +1,13 @@
 import 'package:eventevent/Models/AppState.dart';
 import 'package:eventevent/Models/DiscoverMerchModel.dart';
+import 'package:eventevent/Models/MerchCategoryModel.dart';
 import 'package:eventevent/Models/MerchCollectionModel.dart';
 import 'package:eventevent/Models/PopularMerchModel.dart';
 import 'package:eventevent/Redux/Actions/BannerActions.dart';
+import 'package:eventevent/Redux/Actions/CategoryActions.dart';
 import 'package:eventevent/Redux/Actions/CollectionActions.dart';
 import 'package:eventevent/Redux/Actions/DiscoverMerchActions.dart';
+import 'package:eventevent/Redux/Actions/MerchDetailsActions.dart';
 import 'package:eventevent/Redux/Actions/PopularMerchActions.dart';
 import 'package:eventevent/Redux/Reducers/logger.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
@@ -36,6 +39,7 @@ class _MerchDashboardState extends State<MerchDashboard> {
     props.getCollection();
     props.getPopularMerch();
     props.getDiscoverMerch();
+    props.getCategoryList();
   }
 
   // void handleCollectionInitialBuild(CollectionScreenProps collectionProps) {
@@ -83,133 +87,138 @@ class _MerchDashboardState extends State<MerchDashboard> {
               fontSize: ScreenUtil.instance.setSp(14),
               color: Colors.black,
             )),
-            actions: <Widget>[
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                    height: ScreenUtil.instance.setWidth(35),
-                    width: ScreenUtil.instance.setWidth(35),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              offset: Offset(0, 0),
-                              spreadRadius: 1.5,
-                              blurRadius: 2)
-                        ]),
-                    child: Image.asset(
-                      'assets/icons/icon_apps/search.png',
-                      scale: 4.5,
-                    )),
-              ),
-              SizedBox(width: ScreenUtil.instance.setWidth(8)),
-            ],
+            // actions: <Widget>[
+            //   GestureDetector(
+            //     onTap: () {},
+            //     child: Container(
+            //         height: ScreenUtil.instance.setWidth(35),
+            //         width: ScreenUtil.instance.setWidth(35),
+            //         decoration: BoxDecoration(
+            //             color: Colors.white,
+            //             shape: BoxShape.circle,
+            //             boxShadow: <BoxShadow>[
+            //               BoxShadow(
+            //                   color: Colors.black.withOpacity(0.1),
+            //                   offset: Offset(0, 0),
+            //                   spreadRadius: 1.5,
+            //                   blurRadius: 2)
+            //             ]),
+            //         child: Image.asset(
+            //           'assets/icons/icon_apps/search.png',
+            //           scale: 4.5,
+            //         )),
+            //   ),
+            //   SizedBox(width: ScreenUtil.instance.setWidth(8)),
+            // ],
           ),
         ),
       ),
       body: SafeArea(
-        child: ListView(
-          children: <Widget>[
-            Column(
+        child: StoreConnector<AppState, AppScreenProps>(
+          converter: (store) => mapStateToProps(store),
+          onInitialBuild: (props) => handleInitialBuild(props),
+          builder: (context, props) {
+            List<MerchBannerModel> bannerData = props.listResponse.data;
+            List<MerchCollectionModel> collectionData =
+                props.listCollectionResponse.data;
+            List<PopularMerchModel> popularMerchData =
+                props.listPopularMerchResponse.data;
+            List<DiscoverMerchModel> discoverMerchData =
+                props.listDiscoverResponse.data;
+            List<MerchCategoryModel> categoryData =
+                props.listCategoryResponse.data;
+            bool bannerLoading = props.listResponse.loading;
+            bool collectionLoading = props.listCollectionResponse.loading;
+            bool popularMerchLoading = props.listPopularMerchResponse.loading;
+            bool discoverMerchLoading = props.listDiscoverResponse.loading;
+            bool categoryLoading = props.listCategoryResponse.loading;
+
+            return ListView(
               children: <Widget>[
-                StoreConnector<AppState, AppScreenProps>(
-                  converter: (store) => mapStateToProps(store),
-                  onInitialBuild: (props) => handleInitialBuild(props),
-                  builder: (context, props) {
-                    List<MerchBannerModel> data = props.listResponse.data;
-                    bool loading = props.listResponse.loading;
-
-                    return BannerWidget(loading: loading, data: data);
-                  },
-                ),
-                titleText('Collections',
-                    'Check out our hand picked collection bellow'),
-                StoreConnector<AppState, AppScreenProps>(
-                  converter: (store) => mapStateToProps(store),
-                  onInitialBuild: (props) => handleInitialBuild(props),
-                  builder: (context, props) {
-                    List<MerchCollectionModel> data =
-                        props.listCollectionResponse.data;
-                    bool loading = props.listCollectionResponse.loading;
-
-                    if (loading) {
-                      return HomeLoadingScreen().collectionLoading();
-                    } else {
-                      return collectionImage(data: data);
-                    }
-                  },
-                ),
-                Row(children: <Widget>[
-                  titleText('Popular Merch', 'Lorem Ipsum Dolor'),
-                  Expanded(
-                    child: SizedBox(),
-                  ),
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              StoreConnector<AppState, AppScreenProps>(
-                            converter: (store) => mapStateToProps(store),
-                            builder: (context, props) {
-                              bool loading =
-                                  props.listPopularMerchResponse.loading;
-                              List<PopularMerchModel> data =
-                                  props.listPopularMerchResponse.data;
-
-                              return PopularItem(loading: loading, data: data);
-                            },
+                Column(
+                  children: <Widget>[
+                    BannerWidget(loading: bannerLoading, data: bannerData),
+                    titleText('Category', ''),
+                    categoryLoading == true
+                        ? HomeLoadingScreen().merchCategoryLoading()
+                        : SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 13,
+                              vertical: 6,
+                            ),
+                            child: categoryWidget(data: categoryData),
                           ),
+                    titleText('Collections',
+                        'Check out our hand picked collection bellow'),
+                    collectionLoading == true
+                        ? HomeLoadingScreen().collectionLoading()
+                        : collectionImage(data: collectionData),
+                    Row(children: <Widget>[
+                      titleText('Popular Merch', 'Lorem Ipsum Dolor'),
+                      Expanded(
+                        child: SizedBox(),
+                      ),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PopularItem(
+                                loading: popularMerchLoading,
+                                data: popularMerchData,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'See All',
+                          style: TextStyle(color: eventajaGreenTeal),
                         ),
-                      );
-                    },
-                    child: Text(
-                      'See All',
-                      style: TextStyle(color: eventajaGreenTeal),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 13,
-                  )
-                ]),
-                StoreConnector<AppState, AppScreenProps>(
-                  converter: (store) => mapStateToProps(store),
-                  // onInitialBuild: (props) => handleInitialBuild(props),
-                  builder: (context, props) {
-                    bool loading = props.listPopularMerchResponse.loading;
-                    List<PopularMerchModel> data =
-                        props.listPopularMerchResponse.data;
-
-                    if (loading) {
-                      return HomeLoadingScreen().eventLoading();
-                    } else {
-                      return merchItem(data: data);
-                    }
-                  },
-                ),
-                titleText('Discover Merch', 'Lorem Ipsum Dolor Sit Amet'),
-                StoreConnector<AppState, AppScreenProps>(
-                  converter: (store) => mapStateToProps(store),
-                  // onInitialBuild: (props) => handleInitialBuild(props),
-                  builder: (context, props) {
-                    bool loading = props.listDiscoverResponse.loading;
-                    List<DiscoverMerchModel> data =
-                        props.listDiscoverResponse.data;
-
-                    if (loading) {
-                      return HomeLoadingScreen().eventLoading();
-                    } else {
-                      return merchItem(data: data);
-                    }
-                  },
+                      ),
+                      SizedBox(
+                        width: 13,
+                      )
+                    ]),
+                    popularMerchLoading == true
+                        ? HomeLoadingScreen().eventLoading()
+                        : merchItem(data: popularMerchData, props: props),
+                    Row(children: <Widget>[
+                      titleText('Discover Merch', 'Lorem Ipsum Dolor Sit Amet'),
+                      Expanded(
+                        child: SizedBox(),
+                      ),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PopularItem(
+                                loading: discoverMerchLoading,
+                                data: discoverMerchData,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'See All',
+                          style: TextStyle(color: eventajaGreenTeal),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 13,
+                      )
+                    ]),
+                    discoverMerchLoading == true
+                        ? HomeLoadingScreen().eventLoading()
+                        : merchItem(data: discoverMerchData, props: props),
+                  ],
                 ),
               ],
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
@@ -239,6 +248,35 @@ class _MerchDashboardState extends State<MerchDashboard> {
                   color: Color(0xFF868686),
                   fontSize: ScreenUtil.instance.setSp(14))),
         ],
+      ),
+    );
+  }
+
+  Widget categoryWidget({List<MerchCategoryModel> data}) {
+    return Container(
+      width: 550,
+      child: Wrap(
+        spacing: 12,
+        runSpacing: 12,
+        children: data.map((data) {
+          return Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              image: DecorationImage(
+                image: NetworkImage(data.imageUrl),
+              ),
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                    blurRadius: 2,
+                    color: Colors.black.withOpacity(.1),
+                    spreadRadius: 1.5)
+              ],
+            ),
+          );
+        }).toList(),
       ),
     );
   }
@@ -295,11 +333,11 @@ class _MerchDashboardState extends State<MerchDashboard> {
     );
   }
 
-  Widget merchItem({List<dynamic> data}) {
+  Widget merchItem({List<dynamic> data, AppScreenProps props}) {
     // print(data[0]);
 
     return Container(
-        height: ScreenUtil.instance.setWidth(340),
+        height: ScreenUtil.instance.setWidth(300),
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: data == null ? 0 : data.length,
@@ -307,6 +345,7 @@ class _MerchDashboardState extends State<MerchDashboard> {
               print(data[i]);
               return GestureDetector(
                 onTap: () {
+                  props.getMerchDetail(data[i].merchId);
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => MerchDetails()));
                 },
@@ -332,8 +371,13 @@ class AppScreenProps {
   final ListPopularState listPopularMerchResponse;
   final Function getDiscoverMerch;
   final ListDiscoverState listDiscoverResponse;
+  final Function getCategoryList;
+  final ListCategoryState listCategoryResponse;
+  final Function getMerchDetail;
 
   AppScreenProps({
+    this.getCategoryList,
+    this.listCategoryResponse,
     this.getBanner,
     this.listResponse,
     this.getCollection,
@@ -342,6 +386,7 @@ class AppScreenProps {
     this.listPopularMerchResponse,
     this.getDiscoverMerch,
     this.listDiscoverResponse,
+    this.getMerchDetail,
   });
 }
 
@@ -364,9 +409,12 @@ AppScreenProps mapStateToProps(Store<AppState> store) {
     listCollectionResponse: store.state.collections.list,
     listPopularMerchResponse: store.state.popularMerch.list,
     listDiscoverResponse: store.state.discoverMerch.list,
+    listCategoryResponse: store.state.category.list,
     getCollection: () => store.dispatch(getCollection()),
     getBanner: () => store.dispatch(getBanners()),
     getPopularMerch: () => store.dispatch(getPopularMerch()),
     getDiscoverMerch: () => store.dispatch(getDiscoverMerch()),
+    getCategoryList: () => store.dispatch(getCategory()),
+    getMerchDetail: (String id) => store.dispatch(getMerchDetail(id)),
   );
 }

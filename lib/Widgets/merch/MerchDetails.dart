@@ -1,8 +1,12 @@
+import 'package:eventevent/Models/AppState.dart';
+import 'package:eventevent/Models/MerchDetailModel.dart';
 import 'package:eventevent/Widgets/merch/BuyOptionSelector.dart';
 import 'package:eventevent/Widgets/merch/MerchLove.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:redux/redux.dart';
 
 class MerchDetails extends StatefulWidget {
   @override
@@ -14,147 +18,150 @@ class _MerchDetailsState extends State<MerchDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(null, 100),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: ScreenUtil.instance.setWidth(75),
-          padding: EdgeInsets.symmetric(horizontal: 13),
-          color: Colors.white,
-          child: AppBar(
-            brightness: Brightness.light,
-            elevation: 0,
-            backgroundColor: Colors.white,
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Image.asset(
-                'assets/icons/icon_apps/arrow.png',
-                scale: 5.5,
-                alignment: Alignment.centerLeft,
+    return StoreConnector<AppState, MerchDetailScreenProps>(
+      converter: (store) => mapStateToProps(store),
+      builder: (context, props) => Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size(null, 100),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: ScreenUtil.instance.setWidth(75),
+            padding: EdgeInsets.symmetric(horizontal: 13),
+            color: Colors.white,
+            child: AppBar(
+              brightness: Brightness.light,
+              elevation: 0,
+              backgroundColor: Colors.white,
+              leading: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Image.asset(
+                  'assets/icons/icon_apps/arrow.png',
+                  scale: 5.5,
+                  alignment: Alignment.centerLeft,
+                ),
               ),
+              actions: <Widget>[
+                actionButton(
+                  icons: Icons.share,
+                ),
+                SizedBox(width: ScreenUtil.instance.setWidth(8)),
+                actionButton(
+                  icons: Icons.more_vert,
+                ),
+                SizedBox(width: ScreenUtil.instance.setWidth(8)),
+              ],
             ),
-            actions: <Widget>[
-              actionButton(
-                icons: Icons.share,
-              ),
-              SizedBox(width: ScreenUtil.instance.setWidth(8)),
-              actionButton(
-                icons: Icons.more_vert,
-              ),
-              SizedBox(width: ScreenUtil.instance.setWidth(8)),
-            ],
           ),
         ),
-      ),
-      body: SafeArea(
-        child: Container(
-          child: ListView(
-            children: <Widget>[
-              Container(
-                height: ScreenUtil.instance
-                    .setWidth(MediaQuery.of(context).size.height / 1.05),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(.2),
-                      blurRadius: 2.5,
-                      spreadRadius: 2,
-                    ),
-                  ],
+        body: SafeArea(
+          child: Container(
+            child: ListView(
+              children: <Widget>[
+                Container(
+                  height: ScreenUtil.instance
+                      .setWidth(MediaQuery.of(context).size.height / 1.05),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(.2),
+                        blurRadius: 2.5,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 15.3),
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 13),
+                        padding: EdgeInsets.symmetric(vertical: 13),
+                        height: ScreenUtil.instance.setWidth(455),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(.2),
+                              blurRadius: 2.5,
+                              spreadRadius: 2,
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            imageItem(data: props.merchDetailResponse.data),
+                            SizedBox(
+                              height: 12,
+                            ),
+                            usernameWithProfilePic(),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            productName(),
+                            itemButton()
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 28.4,
+                      ),
+                      Flexible(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            contactButton(
+                              image: 'assets/icons/btn_phone.png',
+                            ),
+                            SizedBox(width: 50),
+                            contactButton(
+                              image: 'assets/icons/btn_mail.png',
+                            ),
+                            SizedBox(width: 50),
+                            contactButton(
+                              image: 'assets/icons/btn_web.png',
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(child: SizedBox()),
+                      Container(
+                        height: ScreenUtil.instance.setWidth(40),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            tabItem(
+                              title: 'Detail',
+                              thisCurrentTab: 0,
+                              onTap: () {
+                                currentTab = 0;
+                                if (mounted) setState(() {});
+                              },
+                            ),
+                            tabItem(
+                              title: 'Comments',
+                              thisCurrentTab: 1,
+                              onTap: () {
+                                currentTab = 1;
+                                if (mounted) setState(() {});
+                              },
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 15.3),
-                child: Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 13),
-                      padding: EdgeInsets.symmetric(vertical: 13),
-                      height: ScreenUtil.instance.setWidth(455),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(.2),
-                            blurRadius: 2.5,
-                            spreadRadius: 2,
-                          )
-                        ],
-                      ),
-                      child: Column(
-                        children: <Widget>[
-                          imageItem(),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          usernameWithProfilePic(),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          productName(),
-                          itemButton()
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 28.4,
-                    ),
-                    Flexible(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          contactButton(
-                            image: 'assets/icons/btn_phone.png',
-                          ),
-                          SizedBox(width: 50),
-                          contactButton(
-                            image: 'assets/icons/btn_mail.png',
-                          ),
-                          SizedBox(width: 50),
-                          contactButton(
-                            image: 'assets/icons/btn_web.png',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(child: SizedBox()),
-                    Container(
-                      height: ScreenUtil.instance.setWidth(40),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          tabItem(
-                            title: 'Detail',
-                            thisCurrentTab: 0,
-                            onTap: () {
-                              currentTab = 0;
-                              if (mounted) setState(() {});
-                            },
-                          ),
-                          tabItem(
-                            title: 'Comments',
-                            thisCurrentTab: 1,
-                            onTap: () {
-                              currentTab = 1;
-                              if (mounted) setState(() {});
-                            },
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              currentTab == 0 ? details() : commentButton()
-            ],
+                currentTab == 0 ? details() : commentButton()
+              ],
+            ),
           ),
         ),
       ),
@@ -192,10 +199,11 @@ class _MerchDetailsState extends State<MerchDetails> {
 
   Widget priceButton() {
     return GestureDetector(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => BuyOptionSelector()));
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => BuyOptionSelector()));
       },
-          child: Container(
+      child: Container(
         height: ScreenUtil.instance.setWidth(28),
         width: ScreenUtil.instance.setWidth(120),
         decoration: BoxDecoration(boxShadow: <BoxShadow>[
@@ -299,13 +307,16 @@ class _MerchDetailsState extends State<MerchDetails> {
     );
   }
 
-  Widget imageItem() {
+  Widget imageItem({MerchDetailModel data}) {
     return Container(
       width: ScreenUtil.instance.setWidth(330),
       height: ScreenUtil.instance.setHeight(330),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: Color(0xfffec97c),
+        color: Colors.grey,
+        image: DecorationImage(
+          image: NetworkImage(data.imageUrl)
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(.2),
@@ -407,4 +418,14 @@ class _MerchDetailsState extends State<MerchDetails> {
       ),
     );
   }
+}
+
+class MerchDetailScreenProps {
+  final MerchDetailState merchDetailResponse;
+
+  MerchDetailScreenProps({this.merchDetailResponse});
+}
+
+MerchDetailScreenProps mapStateToProps(Store<AppState> store) {
+  return MerchDetailScreenProps(merchDetailResponse: store.state.merchDetails);
 }

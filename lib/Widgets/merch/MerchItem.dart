@@ -52,7 +52,7 @@ class MerchItem extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Container(
-                height: ScreenUtil.instance.setWidth(200),
+                height: ScreenUtil.instance.setWidth(150),
                 decoration: BoxDecoration(
                     color: Color(0xFFB5B5B5).withOpacity(.5),
                     image: DecorationImage(
