@@ -281,7 +281,7 @@ DEPENDENCIES:
   - firebase_core_web (from `.symlinks/plugins/firebase_core_web/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `.symlinks/flutter/ios-release`)
   - flutter_barcode_scanner (from `.symlinks/plugins/flutter_barcode_scanner/ios`)
   - flutter_branch_sdk (from `.symlinks/plugins/flutter_branch_sdk/ios`)
   - flutter_facebook_login (from `.symlinks/plugins/flutter_facebook_login/ios`)
@@ -382,7 +382,7 @@ EXTERNAL SOURCES:
   firebase_messaging:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: ".symlinks/flutter/ios-release"
   flutter_barcode_scanner:
     :path: ".symlinks/plugins/flutter_barcode_scanner/ios"
   flutter_branch_sdk:
@@ -470,7 +470,7 @@ SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   Branch: 9b299693ee54b308ff8c18146afe1f711c2069ec
   camera: 38cc83ae9a5667bb5a71c7d9edaf60a91920fd4e
-  camera_with_rtmp: 102fa74beedaf46944a86a1a632f4b5975093621
+  camera_with_rtmp: 156b8d51b8de72a5174c0cf5a085c0e649059317
   CleverTap-iOS-SDK: 664ae5dccfe2673c21a842b624f2558d34f76d14
   clevertap_flutter: a35b2b54bac7bcf5a743eeea3e385853fb374b75
   Crashlytics: 2dfd686bcb918dc10ee0e76f7f853fe42c7bd552
