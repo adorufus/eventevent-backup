@@ -1,6 +1,13 @@
 import 'package:eventevent/Models/AppState.dart';
+import 'package:eventevent/Models/DiscoverMerchModel.dart';
+import 'package:eventevent/Models/MerchCollectionModel.dart';
+import 'package:eventevent/Models/PopularMerchModel.dart';
 import 'package:eventevent/Redux/Actions/BannerActions.dart';
+import 'package:eventevent/Redux/Actions/CollectionActions.dart';
+import 'package:eventevent/Redux/Actions/DiscoverMerchActions.dart';
+import 'package:eventevent/Redux/Actions/PopularMerchActions.dart';
 import 'package:eventevent/Redux/Reducers/logger.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/PopularEventWidget.dart';
 import 'package:eventevent/Widgets/merch/MerchDetails.dart';
 import 'package:eventevent/Widgets/merch/PopularItem.dart';
@@ -24,9 +31,16 @@ class MerchDashboard extends StatefulWidget {
 }
 
 class _MerchDashboardState extends State<MerchDashboard> {
-  void handleInitialBuild(BannerScreenProps props) {
+  void handleInitialBuild(AppScreenProps props) {
     props.getBanner();
+    props.getCollection();
+    props.getPopularMerch();
+    props.getDiscoverMerch();
   }
+
+  // void handleCollectionInitialBuild(CollectionScreenProps collectionProps) {
+  //   collectionProps.getCollection();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +114,7 @@ class _MerchDashboardState extends State<MerchDashboard> {
           children: <Widget>[
             Column(
               children: <Widget>[
-                StoreConnector<AppState, BannerScreenProps>(
+                StoreConnector<AppState, AppScreenProps>(
                   converter: (store) => mapStateToProps(store),
                   onInitialBuild: (props) => handleInitialBuild(props),
                   builder: (context, props) {
@@ -112,7 +126,21 @@ class _MerchDashboardState extends State<MerchDashboard> {
                 ),
                 titleText('Collections',
                     'Check out our hand picked collection bellow'),
-                collectionImage(),
+                StoreConnector<AppState, AppScreenProps>(
+                  converter: (store) => mapStateToProps(store),
+                  onInitialBuild: (props) => handleInitialBuild(props),
+                  builder: (context, props) {
+                    List<MerchCollectionModel> data =
+                        props.listCollectionResponse.data;
+                    bool loading = props.listCollectionResponse.loading;
+
+                    if (loading) {
+                      return HomeLoadingScreen().collectionLoading();
+                    } else {
+                      return collectionImage(data: data);
+                    }
+                  },
+                ),
                 Row(children: <Widget>[
                   titleText('Popular Merch', 'Lorem Ipsum Dolor'),
                   Expanded(
@@ -122,9 +150,22 @@ class _MerchDashboardState extends State<MerchDashboard> {
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PopularItem()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              StoreConnector<AppState, AppScreenProps>(
+                            converter: (store) => mapStateToProps(store),
+                            builder: (context, props) {
+                              bool loading =
+                                  props.listPopularMerchResponse.loading;
+                              List<PopularMerchModel> data =
+                                  props.listPopularMerchResponse.data;
+
+                              return PopularItem(loading: loading, data: data);
+                            },
+                          ),
+                        ),
+                      );
                     },
                     child: Text(
                       'See All',
@@ -135,9 +176,37 @@ class _MerchDashboardState extends State<MerchDashboard> {
                     width: 13,
                   )
                 ]),
-                merchItem(),
-                titleText('Lorem Ipsum', 'Lorem Ipsum Dolor Sit Amet'),
-                merchItem(),
+                StoreConnector<AppState, AppScreenProps>(
+                  converter: (store) => mapStateToProps(store),
+                  // onInitialBuild: (props) => handleInitialBuild(props),
+                  builder: (context, props) {
+                    bool loading = props.listPopularMerchResponse.loading;
+                    List<PopularMerchModel> data =
+                        props.listPopularMerchResponse.data;
+
+                    if (loading) {
+                      return HomeLoadingScreen().eventLoading();
+                    } else {
+                      return merchItem(data: data);
+                    }
+                  },
+                ),
+                titleText('Discover Merch', 'Lorem Ipsum Dolor Sit Amet'),
+                StoreConnector<AppState, AppScreenProps>(
+                  converter: (store) => mapStateToProps(store),
+                  // onInitialBuild: (props) => handleInitialBuild(props),
+                  builder: (context, props) {
+                    bool loading = props.listDiscoverResponse.loading;
+                    List<DiscoverMerchModel> data =
+                        props.listDiscoverResponse.data;
+
+                    if (loading) {
+                      return HomeLoadingScreen().eventLoading();
+                    } else {
+                      return merchItem(data: data);
+                    }
+                  },
+                ),
               ],
             ),
           ],
@@ -174,12 +243,12 @@ class _MerchDashboardState extends State<MerchDashboard> {
     );
   }
 
-  Widget collectionImage() {
+  Widget collectionImage({List<MerchCollectionModel> data}) {
     return Container(
       height: ScreenUtil.instance.setWidth(90),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 5,
+        itemCount: data.length,
         itemBuilder: (BuildContext context, i) {
           return GestureDetector(
             onTap: () {
@@ -211,8 +280,8 @@ class _MerchDashboardState extends State<MerchDashboard> {
                         ]),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                      child: Image.asset(
-                        'assets/grey-fade.jpg',
+                      child: Image.network(
+                        data[i].imageUrl,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -226,40 +295,78 @@ class _MerchDashboardState extends State<MerchDashboard> {
     );
   }
 
-  Widget merchItem() {
+  Widget merchItem({List<dynamic> data}) {
+    // print(data[0]);
+
     return Container(
         height: ScreenUtil.instance.setWidth(340),
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: 5,
+            itemCount: data == null ? 0 : data.length,
             itemBuilder: (BuildContext context, i) {
+              print(data[i]);
               return GestureDetector(
                 onTap: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => MerchDetails()));
                 },
                 child: MerchItem(
-                  imageUrl: 'assets/grey-fade.jpg',
-                  title: 'lorem ipsum',
+                  imageUrl: data[i].imageUrl,
+                  title: data[i].productName,
                   color: eventajaGreenTeal,
-                  price: '50000',
-                  merchantName: 'john doe',
+                  profilePictUrl: data[i].profileImageUrl,
+                  price: 'Rp. ' + data[i].details[0]['basic_price'],
+                  merchantName: data[i].merchantName,
                 ),
               );
             }));
   }
 }
 
-class BannerScreenProps {
+class AppScreenProps {
   final Function getBanner;
   final ListBannerState listResponse;
+  final Function getCollection;
+  final ListCollectionState listCollectionResponse;
+  final Function getPopularMerch;
+  final ListPopularState listPopularMerchResponse;
+  final Function getDiscoverMerch;
+  final ListDiscoverState listDiscoverResponse;
 
-  BannerScreenProps({this.getBanner, this.listResponse});
+  AppScreenProps({
+    this.getBanner,
+    this.listResponse,
+    this.getCollection,
+    this.listCollectionResponse,
+    this.getPopularMerch,
+    this.listPopularMerchResponse,
+    this.getDiscoverMerch,
+    this.listDiscoverResponse,
+  });
 }
 
-BannerScreenProps mapStateToProps(Store<AppState> store) {
-  return BannerScreenProps(
+// class CollectionScreenProps {
+//   final Function getCollection;
+//   final ListCollectionState listResponse;
+
+//   CollectionScreenProps({this.getCollection, this.listResponse});
+// }
+
+// CollectionScreenProps mapCollectionStateToProps(Store<AppState> store) {
+//   return CollectionScreenProps(
+//       listResponse: store.state.collections.list,
+//       getCollection: () => store.dispatch(getCollection()));
+// }
+
+AppScreenProps mapStateToProps(Store<AppState> store) {
+  return AppScreenProps(
     listResponse: store.state.banner.list,
+    listCollectionResponse: store.state.collections.list,
+    listPopularMerchResponse: store.state.popularMerch.list,
+    listDiscoverResponse: store.state.discoverMerch.list,
+    getCollection: () => store.dispatch(getCollection()),
     getBanner: () => store.dispatch(getBanners()),
+    getPopularMerch: () => store.dispatch(getPopularMerch()),
+    getDiscoverMerch: () => store.dispatch(getDiscoverMerch()),
   );
 }

@@ -44,6 +44,9 @@ import 'Widgets/loginRegisterWidget.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/services.dart';
+import 'package:redux_persist/redux_persist.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart';
 
 List<CameraDescription> cameras;
 
@@ -62,17 +65,48 @@ Future<Null> main() async {
   //   print('code: ${e.code} message: ${e.description}');
   // }
 
+  Map<Permission, PermissionStatus> permissions =
+      await [Permission.location, Permission.storage].request();
+  PermissionStatus checkPermission = permissions[Permission.storage];
+
+  print(checkPermission.toString());
+
+  if (checkPermission == PermissionStatus.granted) {}
+  File storage = File(Platform.isIOS ? (await getLibraryDirectory()).absolute.path + '/appstate.json' : (await getExternalStorageDirectory()).absolute.path + '/appstate.json');
+  // final persistor = Persistor<AppState>(
+  //     storage: FileStorage(storage),
+  //     serializer: JsonSerializer<AppState>(AppState.fromJson));
+
+  // final initialState = await persistor.load();
+
+  final store = new Store<AppState>(
+    appReducer,
+    initialState: AppState.initial(),
+    middleware: [
+      thunkMiddleware,
+      apiMiddleware,
+      loggingMiddleware,
+      // persistor.createMiddleware()
+    ],
+  );
+
   runZoned(() {
-    runApp(new RunApp());
+    runApp(new RunApp(
+      store: store,
+    ));
   }, onError: Crashlytics.instance.recordError);
 }
 
 class RunApp extends StatefulWidget {
   // This widget is the root of your application.
 
+  final store;
+
   static FirebaseAnalytics analytics = new FirebaseAnalytics();
   static FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: analytics);
+
+  const RunApp({Key key, this.store}) : super(key: key);
 
   @override
   _RunAppState createState() => _RunAppState();
@@ -80,9 +114,6 @@ class RunApp extends StatefulWidget {
 
 class _RunAppState extends State<RunApp> {
   Widget homeScreenWidget = LoginRegisterWidget();
-  final store = new Store<AppState>(appReducer,
-      initialState: AppState.initial(),
-      middleware: [thunkMiddleware, apiMiddleware, loggingMiddleware]);
 
   @override
   void initState() {
@@ -92,7 +123,7 @@ class _RunAppState extends State<RunApp> {
   @override
   Widget build(BuildContext context) {
     return StoreProvider<AppState>(
-      store: store,
+      store: widget.store,
       child: MaterialApp(
         // navigatorObservers: [
         //   FirebaseAnalyticsObserver(analytics:  analytics)

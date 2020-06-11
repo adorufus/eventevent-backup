@@ -4,6 +4,11 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 
 class PopularItem extends StatefulWidget {
+  final bool loading;
+  final data;
+
+  const PopularItem({Key key, this.loading, this.data}) : super(key: key);
+
   @override
   _PopularItemState createState() => _PopularItemState();
 }
@@ -47,15 +52,16 @@ class _PopularItemState extends State<PopularItem> {
         ),
       ),
       body: ListView.builder(
-        itemCount: 10,
+        itemCount: widget.data == null ? 0 : widget.data.length,
         padding: EdgeInsets.only(bottom: 13, left: 13, right: 13),
         itemBuilder: (context, i) {
           return CollectionItem(
-            image: 'test',
+            image: widget.data[i].imageUrl,
             itemColor: eventajaGreenTeal,
-            itemPrice: 'Rp. 50.000',
-            title: 'Keramik Mahal',
-            username: 'Budi Jaya Sentosa Raya Agung',
+            profileImage: widget.data[i].profileImageUrl,
+            itemPrice: 'Rp. ' + widget.data[i].details[0]['basic_price'],
+            title: widget.data[i].productName,
+            username: widget.data[i].merchantName,
           );
         },
       ),

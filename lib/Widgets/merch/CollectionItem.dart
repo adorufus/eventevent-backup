@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CollectionItem extends StatefulWidget {
   final image;
+  final profileImage;
   final title;
   final username;
   final Color itemColor;
@@ -16,7 +17,7 @@ class CollectionItem extends StatefulWidget {
       this.username,
       this.itemColor,
       this.itemPrice,
-      this.isAvailable})
+      this.isAvailable, this.profileImage})
       : super(key: key);
   @override
   _CollectionItemState createState() => _CollectionItemState();
@@ -54,7 +55,7 @@ class _CollectionItemState extends State<CollectionItem> {
                   children: <Widget>[
                     CircleAvatar(
                       radius: 8,
-                      backgroundImage: AssetImage('assets/grey-fade.jpg'),
+                      backgroundImage: NetworkImage(widget.profileImage),
                     ),
                     SizedBox(
                       width: 5,

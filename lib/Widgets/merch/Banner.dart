@@ -31,7 +31,7 @@ class _BannerWidgetState extends State<BannerWidget> {
             width: MediaQuery.of(context).size.width,
             child: CarouselSlider(
               height: ScreenUtil.instance.setWidth(200),
-              items: widget.loading == false ? widget.data.map((data) {
+              items: widget.loading == false && widget.data.isNotEmpty ? widget.data.map((data) {
                 return Stack(
                   children: <Widget>[
                     Container(

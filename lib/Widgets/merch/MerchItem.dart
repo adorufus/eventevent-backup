@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MerchItem extends StatelessWidget {
   final imageUrl;
+  final profilePictUrl;
   final title;
   final String price;
   final Color color;
@@ -18,7 +19,7 @@ class MerchItem extends StatelessWidget {
       this.price,
       this.color,
       this.isAvailable,
-      this.merchantName})
+      this.merchantName, this.profilePictUrl})
       : super(key: key);
 
   @override
@@ -38,7 +39,7 @@ class MerchItem extends StatelessWidget {
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(left: 13, top: 8, bottom: 8, right: 3),
-          width: ScreenUtil.instance.setWidth(150),
+          width: ScreenUtil.instance.setWidth(200),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
@@ -51,7 +52,7 @@ class MerchItem extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Container(
-                height: ScreenUtil.instance.setWidth(225),
+                height: ScreenUtil.instance.setWidth(200),
                 decoration: BoxDecoration(
                     color: Color(0xFFB5B5B5).withOpacity(.5),
                     image: DecorationImage(
@@ -65,12 +66,13 @@ class MerchItem extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(left: 7, top: 20),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Row(
                       children: <Widget>[
                         CircleAvatar(
                           radius: 8,
-                          backgroundImage: AssetImage('assets/grey-fade.jpg'),
+                          backgroundImage: NetworkImage(profilePictUrl),
                         ),
                         SizedBox(width: ScreenUtil.instance.setWidth(3)),
                         Container(
