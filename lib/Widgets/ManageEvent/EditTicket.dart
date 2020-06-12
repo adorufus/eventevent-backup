@@ -14,6 +14,8 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditTicket extends StatefulWidget {
@@ -44,6 +46,7 @@ class _EditTicketState extends State<EditTicket> {
   int __curValue2 = 0;
   bool isLoading = false;
   File imageFile;
+  File imageUri;
 
   setupValue() {
     setState(() {
@@ -183,15 +186,20 @@ class _EditTicketState extends State<EditTicket> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Container(
-                              height: ScreenUtil.instance.setWidth(225),
-                              width: ScreenUtil.instance.setWidth(150),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: Image.network(
-                                    widget.ticketDetail['ticket_image']
-                                        ['secure_url'],
-                                    fit: BoxFit.fill),
+                            GestureDetector(
+                              onTap: () {
+                                getImage();
+                              },
+                              child: Container(
+                                height: ScreenUtil.instance.setWidth(225),
+                                width: ScreenUtil.instance.setWidth(150),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: imageUri == null ? widget.ticketDetail.containsKey('ticket_image') ? Image.asset('assets/grey-fade.jpg') : Image.network(
+                                      widget.ticketDetail['ticket_image']
+                                          ['secure_url'],
+                                      fit: BoxFit.fill) : Image.file(File(imageUri.path), fit: BoxFit.cover),
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -501,7 +509,7 @@ class _EditTicketState extends State<EditTicket> {
                                 width: ScreenUtil.instance.setWidth(25),
                               ),
                               GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -772,9 +780,10 @@ class _EditTicketState extends State<EditTicket> {
         'single_ticket': __curValue2.toString(),
         'description': descController.text,
         'ticket_type_id': '1',
-        'image_url': imageFile != null
-            ? imageFile
-            : widget.ticketDetail['ticket_image']['secure_url']
+        'image_url': imageUri != null
+            ? await MultipartFile.fromFile(imageUri.path, filename:
+                  "eventevent_ticket_photo-${DateTime.now().toString()}.jpg")
+            : ''
       };
 
       Navigator.push(
@@ -784,5 +793,28 @@ class _EditTicketState extends State<EditTicket> {
                     ticketDetail: ticketDetail,
                   )));
     }
+  }
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      imageUri = image;
+
+      cropImage(imageUri);
+    });
+  }
+
+  Future cropImage(File image) async {
+    File croppedImage = await ImageCropper.cropImage(
+      sourcePath: image.path,
+      aspectRatio: CropAspectRatio(ratioX: 2.0, ratioY: 3.0),
+      maxHeight: 512,
+      maxWidth: 512,
+    );
+
+    imageUri = croppedImage;
+
+    setState(() {});
   }
 }
