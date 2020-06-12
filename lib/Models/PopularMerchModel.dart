@@ -19,7 +19,7 @@ class PopularMerchModel {
 
   factory PopularMerchModel.fromJson(Map<String, dynamic> json) =>
       PopularMerchModel(
-          merchId: json['id'] as String,
+          merchId: json['product_id'] as String,
           details: json['details'],
           merchantName: json['seller']['username'],
           profileImageUrl: json['seller']['photo'],

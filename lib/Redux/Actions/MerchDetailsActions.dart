@@ -17,6 +17,7 @@ RSAA getMerchDetailsRequest(String session, String id) {
   final String baseUrl = BaseApi().restUrl;
   final String getMerchDetailUrl =
       baseUrl + '/product/detail?X-API-KEY=$API_KEY&productId=$id';
+      print(getMerchDetailUrl);
   return RSAA(
     method: 'GET',
     endpoint: getMerchDetailUrl,

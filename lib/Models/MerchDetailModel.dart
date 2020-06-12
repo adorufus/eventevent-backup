@@ -36,7 +36,7 @@ class MerchDetailModel {
         imageUrl: json['image']['mainImage'] as String,
         description: json['description'] as String,
         comments: json['comment'],
-        commentCount: json['commentCount'],
+        commentCount: json['count_comment'],
         likeCount: json['like']
       );
 }

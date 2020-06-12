@@ -4,16 +4,20 @@ import 'package:googleapis/androidenterprise/v1.dart';
 class MerchCategoryModel {
   final String categoryId;
   final String imageUrl;
+  final String categoryName;
 
   MerchCategoryModel({
     @required this.categoryId,
     @required this.imageUrl,
+    @required this.categoryName,
   });
 
   factory MerchCategoryModel.fromJson(Map<String, dynamic> json) =>
       MerchCategoryModel(
-          categoryId: json['id'] as String,
-          imageUrl: json['logo_avatar'] as String);
+        categoryId: json['id'] as String,
+        imageUrl: json['logo_avatar'] as String,
+        categoryName: json['name'] as String,
+      );
 }
 
 class MerchCategoryState {

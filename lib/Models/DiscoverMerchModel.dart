@@ -18,7 +18,7 @@ class DiscoverMerchModel {
 
   factory DiscoverMerchModel.fromJson(Map<String, dynamic> json) =>
       DiscoverMerchModel(
-          merchId: json['id'] as String,
+          merchId: json['product_id'] as String,
           details: json['details'],
           merchantName: json['seller']['username'],
           profileImageUrl: json['seller']['photo'],

@@ -97,12 +97,13 @@ class _MerchDetailsState extends State<MerchDetails> {
                             SizedBox(
                               height: 12,
                             ),
-                            usernameWithProfilePic(),
+                            usernameWithProfilePic(
+                                data: props.merchDetailResponse.data),
                             SizedBox(
                               height: 10,
                             ),
-                            productName(),
-                            itemButton()
+                            productName(data: props.merchDetailResponse.data),
+                            itemButton(data: props.merchDetailResponse.data)
                           ],
                         ),
                       ),
@@ -159,7 +160,7 @@ class _MerchDetailsState extends State<MerchDetails> {
                     ],
                   ),
                 ),
-                currentTab == 0 ? details() : commentButton()
+                currentTab == 0 ? details(data: props.merchDetailResponse.data) : commentButton()
               ],
             ),
           ),
@@ -168,7 +169,7 @@ class _MerchDetailsState extends State<MerchDetails> {
     );
   }
 
-  Widget itemButton() {
+  Widget itemButton({MerchDetailModel data}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 13),
       child: Row(
@@ -176,7 +177,7 @@ class _MerchDetailsState extends State<MerchDetails> {
           MerchLove(
             merchId: 0,
             isComment: false,
-            loveCount: 99,
+            loveCount: data.likeCount,
             isAlreadyLoved: true,
           ),
           SizedBox(
@@ -185,19 +186,19 @@ class _MerchDetailsState extends State<MerchDetails> {
           MerchLove(
             merchId: 0,
             isComment: true,
-            commentCount: '99',
+            commentCount: data.commentCount,
             isAlreadyCommented: true,
           ),
           Expanded(
             child: SizedBox(),
           ),
-          priceButton()
+          priceButton(data: data)
         ],
       ),
     );
   }
 
-  Widget priceButton() {
+  Widget priceButton({MerchDetailModel data}) {
     return GestureDetector(
       onTap: () {
         Navigator.push(context,
@@ -214,7 +215,7 @@ class _MerchDetailsState extends State<MerchDetails> {
         ], color: eventajaGreenTeal, borderRadius: BorderRadius.circular(15)),
         child: Center(
             child: Text(
-          'Rp. 50.0000,-',
+          'Rp. ${data.details[0]['basic_price']},-',
           style: TextStyle(
               color: Colors.white,
               fontSize: ScreenUtil.instance.setSp(14),
@@ -224,7 +225,7 @@ class _MerchDetailsState extends State<MerchDetails> {
     );
   }
 
-  Widget productName() {
+  Widget productName({MerchDetailModel data}) {
     return Flexible(
       child: Align(
         alignment: Alignment.topLeft,
@@ -233,7 +234,7 @@ class _MerchDetailsState extends State<MerchDetails> {
           width:
               ScreenUtil.instance.setWidth(MediaQuery.of(context).size.width),
           child: Text(
-            'Flowers Logo T-Shirt The 1975',
+            data.productName,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
                 fontSize: ScreenUtil.instance.setSp(16),
@@ -244,20 +245,21 @@ class _MerchDetailsState extends State<MerchDetails> {
     );
   }
 
-  Widget usernameWithProfilePic() {
+  Widget usernameWithProfilePic({MerchDetailModel data}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 13),
       child: Row(
         children: <Widget>[
           CircleAvatar(
             radius: 10,
-            backgroundImage: AssetImage('assets/grey-fade.jpg'),
+            backgroundImage: NetworkImage(data.profileImageUrl),
+            backgroundColor: Colors.grey,
           ),
           SizedBox(width: ScreenUtil.instance.setWidth(3)),
           Container(
             width: ScreenUtil.instance.setWidth(112),
             child: Text(
-              'wijaya teknik',
+              data.merchantName,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   fontSize: ScreenUtil.instance.setSp(15),
@@ -315,7 +317,8 @@ class _MerchDetailsState extends State<MerchDetails> {
         borderRadius: BorderRadius.circular(15),
         color: Colors.grey,
         image: DecorationImage(
-          image: NetworkImage(data.imageUrl)
+          image: NetworkImage(data.imageUrl),
+          fit: BoxFit.cover,
         ),
         boxShadow: [
           BoxShadow(
@@ -328,7 +331,7 @@ class _MerchDetailsState extends State<MerchDetails> {
     );
   }
 
-  Widget details() {
+  Widget details({MerchDetailModel data}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 13, vertical: 25),
       padding: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
@@ -347,7 +350,7 @@ class _MerchDetailsState extends State<MerchDetails> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Flowers Logo T-shirt The 1975',
+            data.productName,
             style: TextStyle(
                 color: eventajaBlack,
                 fontSize: 16.3,
@@ -356,8 +359,7 @@ class _MerchDetailsState extends State<MerchDetails> {
           SizedBox(
             height: 22,
           ),
-          Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')
+          Text(data.description)
         ],
       ),
     );

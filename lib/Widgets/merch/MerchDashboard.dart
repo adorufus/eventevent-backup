@@ -141,14 +141,7 @@ class _MerchDashboardState extends State<MerchDashboard> {
                     titleText('Category', ''),
                     categoryLoading == true
                         ? HomeLoadingScreen().merchCategoryLoading()
-                        : SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 13,
-                              vertical: 6,
-                            ),
-                            child: categoryWidget(data: categoryData),
-                          ),
+                        : categoryWidget(data: categoryData),
                     titleText('Collections',
                         'Check out our hand picked collection bellow'),
                     collectionLoading == true
@@ -226,7 +219,7 @@ class _MerchDashboardState extends State<MerchDashboard> {
 
   Widget titleText(String mainTitle, String subTitle) {
     return Padding(
-      padding: EdgeInsets.only(left: 13, right: 13, top: 20, bottom: 6),
+      padding: EdgeInsets.only(left: 13, right: 13, top: 20, bottom: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -242,7 +235,7 @@ class _MerchDashboardState extends State<MerchDashboard> {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil.instance.setWidth(5)),
+          SizedBox(height: ScreenUtil.instance.setWidth(subTitle != '' ? 5 : 0)),
           Text(subTitle,
               style: TextStyle(
                   color: Color(0xFF868686),
@@ -254,19 +247,15 @@ class _MerchDashboardState extends State<MerchDashboard> {
 
   Widget categoryWidget({List<MerchCategoryModel> data}) {
     return Container(
-      width: 550,
       child: Wrap(
-        spacing: 12,
-        runSpacing: 12,
+        spacing: 16,
+        runSpacing: 16,
         children: data.map((data) {
           return Container(
             height: 100,
             width: 100,
             decoration: BoxDecoration(
-              color: Colors.grey,
-              image: DecorationImage(
-                image: NetworkImage(data.imageUrl),
-              ),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
@@ -275,6 +264,25 @@ class _MerchDashboardState extends State<MerchDashboard> {
                     spreadRadius: 1.5)
               ],
             ),
+            child: Center(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: SizedBox(),
+                ),
+                Image.network(
+                  data.imageUrl,
+                  scale: 6,
+                ),
+                Expanded(
+                  child: SizedBox(),
+                ),
+                Text(data.categoryName),
+                SizedBox(height: 15,)
+              ],
+            )),
           );
         }).toList(),
       ),

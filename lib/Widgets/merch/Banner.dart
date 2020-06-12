@@ -27,10 +27,10 @@ class _BannerWidgetState extends State<BannerWidget> {
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         SizedBox(
-            height: ScreenUtil.instance.setWidth(250),
+            height: ScreenUtil.instance.setWidth(200),
             width: MediaQuery.of(context).size.width,
             child: CarouselSlider(
-              height: ScreenUtil.instance.setWidth(250),
+              height: ScreenUtil.instance.setWidth(200),
               items: widget.loading == false && widget.data.isNotEmpty
                   ? widget.data.map((data) {
                       return Container(
