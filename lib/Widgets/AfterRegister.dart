@@ -82,6 +82,7 @@ class _AfterRegisterState extends State<AfterRegister> {
 
   Future cropImage(File image) async {
     File croppedImage = await ImageCropper.cropImage(
+      cropStyle: CropStyle.circle,
       sourcePath: image.path,
       aspectRatio: CropAspectRatio(ratioX: 2.0, ratioY: 3.0),
       maxHeight: 512,
