@@ -143,7 +143,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
       return myResponse;
     } on HttpException catch (e) {
       print(e.message);
-      errorReason = 'Something went wrong with our server';
+      errorReason = 'Something went wrong';
       isTimeout = true;
       setState(() {});
       return myResponse;
@@ -171,7 +171,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
         isTimeout = true;
         setState(() {});
       } else {
-        errorReason = 'Something went wrong with our server';
+        errorReason = 'Something went wrong';
         isTimeout = true;
         setState(() {});
       }
