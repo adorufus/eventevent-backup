@@ -22,7 +22,8 @@ class MerchLove extends StatefulWidget {
     this.loveCount,
     this.commentCount,
     this.isAlreadyCommented,
-    this.isAlreadyLoved, @required this.merchId,
+    this.isAlreadyLoved,
+    @required this.merchId,
   }) : super(key: key);
 
   @override
@@ -38,7 +39,6 @@ class _MerchLoveState extends State<MerchLove> {
     receiveTimeout: 10000,
     connectTimeout: 10000,
   ));
-
 
   @override
   void initState() {
@@ -61,8 +61,8 @@ class _MerchLoveState extends State<MerchLove> {
     )..init(context);
 
     return GestureDetector(
-      onTap: (){
-        if(_isLoved == false){
+      onTap: () {
+        if (_isLoved == false) {
           setState(() {
             _loveCount += 1;
             _isLoved = true;
@@ -75,7 +75,10 @@ class _MerchLoveState extends State<MerchLove> {
         }
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: widget.isComment == false ? _loveCount < 1 ? 7.5 : 13 : widget.commentCount == 0 ? 7.5 : 13),
+        padding: EdgeInsets.symmetric(
+            horizontal: widget.isComment == false
+                ? _loveCount < 1 ? 7.5 : 13
+                : widget.commentCount == 0 ? 7.5 : 13),
         height: ScreenUtil.instance.setWidth(30),
         decoration: BoxDecoration(
             color: Colors.white,
@@ -99,14 +102,30 @@ class _MerchLoveState extends State<MerchLove> {
                     : eventajaGreenTeal,
             scale: 3.5,
           ),
-          widget.isComment == false ? _loveCount < 1 ? Container() : SizedBox(width: ScreenUtil.instance.setWidth(5)) : widget.commentCount == 0 ? Container() : SizedBox(width: ScreenUtil.instance.setWidth(5)),
-          widget.isComment == false ? _loveCount < 1 ? Container() : Text(_loveCount.toString(),
-              style: TextStyle(
-                  color: Color(
-                      0xFF8A8A8B))) :  widget.commentCount == 0 ? Container() : Text(widget.commentCount,
-              style: TextStyle(
-                  color: Color(
-                      0xFF8A8A8B)))
+          widget.isComment == false
+              ? _loveCount < 1
+                  ? Container()
+                  : SizedBox(width: ScreenUtil.instance.setWidth(5))
+              : widget.commentCount == 0
+                  ? Container()
+                  : SizedBox(width: ScreenUtil.instance.setWidth(5)),
+          widget.isComment == false
+              ? _loveCount < 1
+                  ? Container()
+                  : Text(
+                      _loveCount.toString(),
+                      style: TextStyle(
+                        color: Color(0xFF8A8A8B),
+                      ),
+                    )
+              : widget.commentCount == 0
+                  ? Container()
+                  : Text(
+                      widget.commentCount.toString(),
+                      style: TextStyle(
+                        color: Color(0xFF8A8A8B),
+                      ),
+                    )
         ]),
       ),
     );
@@ -115,25 +134,20 @@ class _MerchLoveState extends State<MerchLove> {
   Future doLove() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    try{
-      Map<String, dynamic> data = {
-        'X-API-KEY': API_KEY,
-        'id': widget.merchId
-      };
+    try {
+      Map<String, dynamic> data = {'X-API-KEY': API_KEY, 'id': widget.merchId};
 
-      Response response = await dio.post(
-        '/event_love/post',
-        options: Options(
+      Response response = await dio.post('/event_love/post',
+          options: Options(
             headers: {
               'Authorization': AUTHORIZATION_KEY,
               'cookie': prefs.getString('Session')
             },
             contentType: 'text',
-        ),
-        data: FormData.fromMap(data)
-      );
+          ),
+          data: FormData.fromMap(data));
 
-      if(response.statusCode == 200 || response.statusCode == 201){
+      if (response.statusCode == 200 || response.statusCode == 201) {
         print('BERHASIL LIKE EVENT!');
       } else {
         print('GAGAL LIKE EVENT, KENAPA? ');
@@ -144,39 +158,38 @@ class _MerchLoveState extends State<MerchLove> {
         });
       }
     } catch (e) {
-        if(e is DioError){
-          print(e.response);
-          print(e.message);
-          print(e.error);
-          setState(() {
-            _isLoved = false;
-            _loveCount -= 1;
-          });
-        } else if( e is NoSuchMethodError){
-          print(e.stackTrace);
-        }
+      if (e is DioError) {
+        print(e.response);
+        print(e.message);
+        print(e.error);
+        setState(() {
+          _isLoved = false;
+          _loveCount -= 1;
+        });
+      } else if (e is NoSuchMethodError) {
+        print(e.stackTrace);
+      }
     }
   }
 
   Future doUnlove() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    try{
-
+    try {
       Response response = await dio.delete(
-          '/event_love/delete',
-          options: Options(
-              headers: {
-                'Authorization': AUTHORIZATION_KEY,
-                'cookie': prefs.getString('Session'),
-                'X-API-KEY': API_KEY,
-                'id': widget.merchId
-              },
-              contentType: 'text',
-          ),
+        '/event_love/delete',
+        options: Options(
+          headers: {
+            'Authorization': AUTHORIZATION_KEY,
+            'cookie': prefs.getString('Session'),
+            'X-API-KEY': API_KEY,
+            'id': widget.merchId
+          },
+          contentType: 'text',
+        ),
       );
 
-      if(response.statusCode == 200 || response.statusCode == 201){
+      if (response.statusCode == 200 || response.statusCode == 201) {
         print('BERHASIL DISLIKE EVENT!');
       } else {
         print('GAGAL LIKE EVENT, KENAPA? ');
@@ -187,7 +200,7 @@ class _MerchLoveState extends State<MerchLove> {
         });
       }
     } catch (e) {
-      if(e is DioError){
+      if (e is DioError) {
         print(e.response);
         print(e.message);
         print(e.error);
@@ -195,7 +208,7 @@ class _MerchLoveState extends State<MerchLove> {
           _isLoved = true;
           _loveCount += 1;
         });
-      } else if( e is NoSuchMethodError){
+      } else if (e is NoSuchMethodError) {
         print(e.stackTrace);
       }
     }

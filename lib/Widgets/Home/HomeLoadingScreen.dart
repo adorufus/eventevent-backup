@@ -1276,4 +1276,57 @@ class HomeLoadingScreen {
       ),
     );
   }
+
+  Widget merchImageDetailLoading() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300],
+      highlightColor: Colors.grey[100],
+      enabled: true,
+      child: Container(
+        width: ScreenUtil.instance.setWidth(330),
+        height: ScreenUtil.instance.setHeight(330),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Colors.grey,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(.2),
+              blurRadius: 2.5,
+              spreadRadius: 2,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget merchDetailUsernameWithProfilePicLoading() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 13),
+      child: Row(
+        children: <Widget>[
+          Shimmer.fromColors(
+            baseColor: Colors.grey[300],
+            highlightColor: Colors.grey[100],
+            enabled: true,
+            child: CircleAvatar(
+              radius: 10,
+              backgroundColor: Colors.grey,
+            ),
+          ),
+          SizedBox(width: ScreenUtil.instance.setWidth(3)),
+          Container(
+            width: ScreenUtil.instance.setWidth(112),
+            child: PlaceholderLines(
+              count: 1,
+              color: Colors.grey,
+              align: TextAlign.left,
+              animate: true,
+              lineHeight: 10,
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:eventevent/Models/AppState.dart';
 import 'package:eventevent/Models/MerchDetailModel.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/merch/BuyOptionSelector.dart';
 import 'package:eventevent/Widgets/merch/MerchLove.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -93,17 +94,17 @@ class _MerchDetailsState extends State<MerchDetails> {
                         ),
                         child: Column(
                           children: <Widget>[
-                            imageItem(data: props.merchDetailResponse.data),
+                            props.merchDetailResponse.loading == true ? HomeLoadingScreen().merchImageDetailLoading() : imageItem(data: props.merchDetailResponse.data),
                             SizedBox(
                               height: 12,
                             ),
-                            usernameWithProfilePic(
+                            props.merchDetailResponse.loading == true ? HomeLoadingScreen().merchDetailUsernameWithProfilePicLoading() : usernameWithProfilePic(
                                 data: props.merchDetailResponse.data),
                             SizedBox(
                               height: 10,
                             ),
-                            productName(data: props.merchDetailResponse.data),
-                            itemButton(data: props.merchDetailResponse.data)
+                            props.merchDetailResponse.loading == true ? Container() : productName(data: props.merchDetailResponse.data),
+                            props.merchDetailResponse.loading == true ? Container() : itemButton(data: props.merchDetailResponse.data)
                           ],
                         ),
                       ),
@@ -160,7 +161,7 @@ class _MerchDetailsState extends State<MerchDetails> {
                     ],
                   ),
                 ),
-                currentTab == 0 ? details(data: props.merchDetailResponse.data) : commentButton()
+                currentTab == 0 ? props.merchDetailResponse.loading == true ? Container() : details(data: props.merchDetailResponse.data) : commentButton(data: props.merchDetailResponse.data)
               ],
             ),
           ),
@@ -271,7 +272,7 @@ class _MerchDetailsState extends State<MerchDetails> {
     );
   }
 
-  Widget commentButton() {
+  Widget commentButton({MerchDetailModel data}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 13),
       child: ListView(
@@ -304,6 +305,28 @@ class _MerchDetailsState extends State<MerchDetails> {
               ),
             ),
           ),
+          ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: data.comments == null || data.comments.isEmpty
+                      ? 0
+                      : data.comments.length,
+                  itemBuilder: (context, i) {
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage:
+                            NetworkImage(data.comments[i]['user']['photo']),
+                      ),
+                      title: Text(
+                        data.comments[i]['user']['username'] + '' + ': ',
+                        style: TextStyle(
+                            fontSize: ScreenUtil.instance.setSp(12),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(data.comments[i]['comment']),
+                    );
+                  },
+                )
         ],
       ),
     );
