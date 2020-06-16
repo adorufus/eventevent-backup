@@ -56,6 +56,58 @@ class _MerchDetailsState extends State<MerchDetails> {
             ),
           ),
         ),
+        bottomNavigationBar: Container(
+          height: 80,
+          padding: EdgeInsets.symmetric(horizontal: 25.7),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                  offset: Offset(0, -1),
+                  blurRadius: 2,
+                  color: Color(0xff8a8a8b).withOpacity(.2),
+                  spreadRadius: 1.5)
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Buy this product',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Color(0xff231f20),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Expanded(
+                child: SizedBox(),
+              ),
+              Container(
+                height: ScreenUtil.instance.setWidth(28 * 1.1),
+                width: ScreenUtil.instance.setWidth(133 * 1.1),
+                decoration: BoxDecoration(
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: eventajaGreenTeal.withOpacity(0.4),
+                          blurRadius: 2,
+                          spreadRadius: 1.5)
+                    ],
+                    color: eventajaGreenTeal,
+                    borderRadius: BorderRadius.circular(15)),
+                child: Center(
+                  child: Text(
+                    props.merchDetailResponse.data.details[0]['basic_price'],
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: ScreenUtil.instance.setSp(14),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
         body: SafeArea(
           child: Container(
             child: ListView(
@@ -94,17 +146,30 @@ class _MerchDetailsState extends State<MerchDetails> {
                         ),
                         child: Column(
                           children: <Widget>[
-                            props.merchDetailResponse.loading == true ? HomeLoadingScreen().merchImageDetailLoading() : imageItem(data: props.merchDetailResponse.data),
+                            props.merchDetailResponse.loading == true
+                                ? HomeLoadingScreen().merchImageDetailLoading()
+                                : imageItem(
+                                    data: props.merchDetailResponse.data),
                             SizedBox(
                               height: 12,
                             ),
-                            props.merchDetailResponse.loading == true ? HomeLoadingScreen().merchDetailUsernameWithProfilePicLoading() : usernameWithProfilePic(
-                                data: props.merchDetailResponse.data),
+                            props.merchDetailResponse.loading == true
+                                ? Container()
+                                : productName(
+                                    data: props.merchDetailResponse.data),
                             SizedBox(
                               height: 10,
                             ),
-                            props.merchDetailResponse.loading == true ? Container() : productName(data: props.merchDetailResponse.data),
-                            props.merchDetailResponse.loading == true ? Container() : itemButton(data: props.merchDetailResponse.data)
+                            props.merchDetailResponse.loading == true
+                                ? HomeLoadingScreen()
+                                    .merchDetailUsernameWithProfilePicLoading()
+                                : usernameWithProfilePic(
+                                    data: props.merchDetailResponse.data),
+                            SizedBox(height: 12),
+                            props.merchDetailResponse.loading == true
+                                ? Container()
+                                : itemButton(
+                                    data: props.merchDetailResponse.data)
                           ],
                         ),
                       ),
@@ -161,7 +226,11 @@ class _MerchDetailsState extends State<MerchDetails> {
                     ],
                   ),
                 ),
-                currentTab == 0 ? props.merchDetailResponse.loading == true ? Container() : details(data: props.merchDetailResponse.data) : commentButton(data: props.merchDetailResponse.data)
+                currentTab == 0
+                    ? props.merchDetailResponse.loading == true
+                        ? Container()
+                        : details(data: props.merchDetailResponse.data)
+                    : commentButton(data: props.merchDetailResponse.data)
               ],
             ),
           ),
@@ -306,27 +375,27 @@ class _MerchDetailsState extends State<MerchDetails> {
             ),
           ),
           ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: data.comments == null || data.comments.isEmpty
-                      ? 0
-                      : data.comments.length,
-                  itemBuilder: (context, i) {
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(data.comments[i]['user']['photo']),
-                      ),
-                      title: Text(
-                        data.comments[i]['user']['username'] + '' + ': ',
-                        style: TextStyle(
-                            fontSize: ScreenUtil.instance.setSp(12),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(data.comments[i]['comment']),
-                    );
-                  },
-                )
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: data.comments == null || data.comments.isEmpty
+                ? 0
+                : data.comments.length,
+            itemBuilder: (context, i) {
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage:
+                      NetworkImage(data.comments[i]['user']['photo']),
+                ),
+                title: Text(
+                  data.comments[i]['user']['username'] + '' + ': ',
+                  style: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(12),
+                      fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text(data.comments[i]['comment']),
+              );
+            },
+          )
         ],
       ),
     );
