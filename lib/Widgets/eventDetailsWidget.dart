@@ -393,7 +393,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (BuildContext context) => EventStatistic(),
+                            builder: (BuildContext context) => EventStatistic(eventId: widget.id,),
                           ),
                         );
                       },

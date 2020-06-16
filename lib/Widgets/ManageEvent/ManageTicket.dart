@@ -75,24 +75,94 @@ class ManageTicketState extends State<ManageTicket> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     itemCount: ticketList == null ? 0 : ticketList.length,
                     itemBuilder: (BuildContext context, i) {
+                      Color itemColor;
+                      String itemPriceText;
+                      ticketList.removeWhere((item) =>
+                          item['event']['ticket_type']['type'] ==
+                          'free_limited_seating');
+                      if (ticketList[i]['event']['ticket_type']['type'] ==
+                              'paid' ||
+                          ticketList[i]['event']['ticket_type']['type'] ==
+                              'paid_seating') {
+                        itemColor = Color(0xFF34B323);
+                        itemPriceText =
+                            'Rp. ' + ticketList[i]['final_price'] + ',-';
+                      } else if (ticketList[i]['event']['ticket_type']
+                              ['type'] ==
+                          'no_ticket') {
+                        itemColor = Color(0xFF652D90);
+                        itemPriceText = 'NO TICKET';
+                      } else if (ticketList[i]['event']['ticket_type']
+                              ['type'] ==
+                          'on_the_spot') {
+                        itemColor = Color(0xFF652D90);
+                        itemPriceText =
+                            ticketList[i]['event']['ticket_type']['name'];
+                      } else if (ticketList[i]['event']['ticket_type']
+                              ['type'] ==
+                          'free') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText =
+                            ticketList[i]['event']['ticket_type']['name'];
+                      } else if (ticketList[i]['event']['ticket_type']
+                              ['type'] ==
+                          'free') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText =
+                            ticketList[i]['event']['ticket_type']['name'];
+                      } else if (ticketList[i]['event']['ticket_type']
+                              ['type'] ==
+                          'paid_live_stream') {
+                        itemColor = eventajaGreenTeal;
+                        itemPriceText = 'Rp. ' + ticketList[i]['final_price'];
+                      } else if (ticketList[i]['event']['ticket_type']
+                              ['type'] ==
+                          'free_live_stream') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText =
+                            ticketList[i]['event']['ticket_type']['name'];
+                      } else if (ticketList[i]['event']['ticket_type']
+                                  ['type'] ==
+                              'free_limited' ||
+                          ticketList[i]['event']['ticket_type']['type'] ==
+                              'free_limited_seating') {
+                        itemColor = Color(0xFFFFAA00);
+                        itemPriceText =
+                            ticketList[i]['event']['ticket_type']['name'];
+                      }
+
                       print(ticketID);
                       return GestureDetector(
                         onTap: () async {
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
                           prefs.setString('Previous Widget', 'AddNewTicket');
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => EditTicketDetail(
-                            ticketTitle: ticketList[i]['ticket_name'],
-                            ticketImage: ticketList[i]['ticket_image']['secure_url'],
-                            ticketQuantity: ticketList[i]['quantity'],
-                            ticketDescription: ticketList[i]['descriptions'],
-                            ticketSalesStartDate: ticketList[i]['sales_start_date'],
-                            ticketSalesEndDate: ticketList[i]['sales_end_date'],
-                            eventStartDate: ticketList[i]['event']['dateStart'],
-                            eventEndDate: ticketList[i]['event']['dateEnd'],
-                            eventStartTime: ticketList[i]['event']['timeStart'],
-                            eventEndTime: ticketList[i]['event']['timeEnd'],
-                            ticketDetail: ticketList[i],
-                          )));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditTicketDetail(
+                                        ticketTitle: ticketList[i]
+                                            ['ticket_name'],
+                                        ticketImage: ticketList[i]
+                                            ['ticket_image']['secure_url'],
+                                        ticketQuantity: ticketList[i]
+                                            ['quantity'],
+                                        ticketDescription: ticketList[i]
+                                            ['descriptions'],
+                                        ticketSalesStartDate: ticketList[i]
+                                            ['sales_start_date'],
+                                        ticketSalesEndDate: ticketList[i]
+                                            ['sales_end_date'],
+                                        eventStartDate: ticketList[i]['event']
+                                            ['dateStart'],
+                                        eventEndDate: ticketList[i]['event']
+                                            ['dateEnd'],
+                                        eventStartTime: ticketList[i]['event']
+                                            ['timeStart'],
+                                        eventEndTime: ticketList[i]['event']
+                                            ['timeEnd'],
+                                        ticketDetail: ticketList[i],
+                                      )));
                         },
                         child: Container(
                           height: ScreenUtil.instance.setWidth(200),
@@ -140,18 +210,19 @@ class ManageTicketState extends State<ManageTicket> {
                                         )
                                       ]),
                                   Container(
-                                    height: ScreenUtil.instance.setWidth(55),
-                                    width: ScreenUtil.instance.setWidth(125),
+                                    margin: EdgeInsets.symmetric(vertical: 5),
+                                    height: ScreenUtil.instance.setWidth(28),
+                                    width: ScreenUtil.instance.setWidth(133),
                                     decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: AssetImage(ticketList[i][
-                                                            'paid_ticket_type_id'] ==
-                                                        '2' ||
-                                                    ticketList[i][
-                                                            'paid_ticket_type_id'] ==
-                                                        '7'
-                                                ? 'assets/btn_ticket/free-limited.png'
-                                                : 'assets/btn_ticket/paid-value.png'))),
+                                      boxShadow: <BoxShadow>[
+                                        BoxShadow(
+                                            color: itemColor.withOpacity(0.4),
+                                            blurRadius: 2,
+                                            spreadRadius: 1.5)
+                                      ],
+                                      color: itemColor,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
                                     child: ticketList[i]
                                                     ['paid_ticket_type_id'] ==
                                                 '2' ||
@@ -161,8 +232,7 @@ class ManageTicketState extends State<ManageTicket> {
                                         ? Container()
                                         : Center(
                                             child: Text(
-                                            'Rp. ' +
-                                                ticketList[i]['final_price'],
+                                            itemPriceText,
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold),

@@ -10,6 +10,9 @@ import 'package:pie_chart/pie_chart.dart';
 import 'package:http/http.dart' as http;
 
 class EventStatistic extends StatefulWidget{
+  final eventId;
+
+  const EventStatistic({Key key, this.eventId}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     
@@ -78,7 +81,7 @@ class EventStatisticState extends State<EventStatistic>{
         centerTitle: true,
         title: Text('EVENT STATISTIC', style: TextStyle(color: eventajaGreenTeal),),
       ),
-      body: sharedData == null || ticketData == null || checkinData == null || dataMap == null ? EventDetailLoadingScreen() : Container(
+      body: sharedData == null || ticketData == null || checkinData == null || dataMap == null ? CupertinoActivityIndicator(animating: true, radius: 20,) : Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: ListView(
           children: <Widget>[
@@ -204,7 +207,7 @@ class EventStatisticState extends State<EventStatistic>{
                     SizedBox(
                       height: ScreenUtil.instance.setWidth(10),
                     ),
-                    Text(totalMale, style: TextStyle(fontWeight: FontWeight.bold))
+                    Text(totalMale == null ? '0%' : totalMale, style: TextStyle(fontWeight: FontWeight.bold))
                   ],
                 ),
                 Column(
@@ -217,7 +220,7 @@ class EventStatisticState extends State<EventStatistic>{
                     SizedBox(
                       height: ScreenUtil.instance.setWidth(10),
                     ),
-                    Text(totalFemale, style: TextStyle(fontWeight: FontWeight.bold))
+                    Text(totalFemale == null ? '0%' : totalFemale, style: TextStyle(fontWeight: FontWeight.bold))
                   ],
                 ),
                 Column(
@@ -323,7 +326,7 @@ class EventStatisticState extends State<EventStatistic>{
   Future getCheckedIn() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/analytic_event/checkin?X-API-KEY=$API_KEY&event_id=${prefs.getString('NEW_EVENT_ID')}';
+    String url = BaseApi().apiUrl + '/analytic_event/checkin?X-API-KEY=$API_KEY&event_id=${widget.eventId}';
 
     final response = await http.get(
         url,
