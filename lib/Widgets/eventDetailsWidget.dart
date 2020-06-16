@@ -928,17 +928,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   ? Row(
                                                       children: <Widget>[
                                                         Image.asset(
-                                                            'assets/icons/icon_apps/LivestreamTagIcon.png',
+                                                            'assets/online-event.png',
                                                             scale: 25),
-                                                        SizedBox(
-                                                          width: 8,
-                                                        ),
-                                                        Text(
-                                                          'Livestream Event',
-                                                          style: TextStyle(
-                                                              color: Colors.red,
-                                                              fontSize: 13),
-                                                        )
                                                       ],
                                                     )
                                                   : Container(),
@@ -2392,7 +2383,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                               ? 80
                                                               : 50
                                                           : 20.9),
-                                                      child: Image.asset(
+                                                      child: widget.detailData.containsKey('livestream') && widget.detailData['livestream'][0]['on_demand_link'] != null ? Text('On Demand Video', style: TextStyle(fontWeight: FontWeight.bold,), textAlign: TextAlign.center,) : Image.asset(
                                                         widget.detailData['ticket_type']
                                                                         [
                                                                         'type'] ==
@@ -2433,7 +2424,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             : Colors
                                                                 .transparent,
                                                       )),
-                                                  SizedBox(
+                                                  widget.detailData.containsKey('livestream') && widget.detailData['livestream'][0]['on_demand_link'] != null ? Container() : SizedBox(
                                                     height: ScreenUtil.instance
                                                         .setWidth(15),
                                                   ),
@@ -2447,7 +2438,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                       [
                                                                       'type'] ==
                                                                   'paid_live_stream'
-                                                          ? 'NOW !'
+                                                          ? widget.detailData['livestream'][0]['on_demand_link'] != null ? '' : 'NOW !'
                                                           : 'SHOW QR CODE',
                                                       style: TextStyle(
                                                           color:
