@@ -675,7 +675,7 @@ class PushNotificationState extends State<PushNotification> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Image.asset('assets/icons/icon_apps/nearby.png', scale: 3),
+            Image.asset('assets/icons/icon_apps/announcement.png', scale: 5),
             SizedBox(width: 15),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -693,7 +693,7 @@ class PushNotificationState extends State<PushNotification> {
                         ),
                       )
                     : Text(
-                        notificationData[index]['caption'],
+                        notificationData[index]['type'] == 'reminder_event' ? 'Post a new event' : notificationData[index]['caption'],
                         maxLines: 2,
                         style: TextStyle(
                             fontSize: ScreenUtil.instance.setSp(13),
