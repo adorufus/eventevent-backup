@@ -5,7 +5,7 @@ import 'package:eventevent/Widgets/EventDetailComment.dart';
 import 'package:eventevent/Widgets/EventDetailItems/FeedbackLogic.dart';
 import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
 import 'package:eventevent/Widgets/ManageEvent/LivestreamBroadcastWidget.dart';
-import 'package:eventevent/Widgets/ManageEvent/LivestreamBroadcastWidgetAndroid.dart';
+// import 'package:eventevent/Widgets/ManageEvent/LivestreamBroadcastWidgetAndroid.dart';
 import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
@@ -393,7 +393,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (BuildContext context) => EventStatistic(eventId: widget.id,),
+                            builder: (BuildContext context) => EventStatistic(
+                              eventId: widget.id,
+                            ),
                           ),
                         );
                       },
@@ -2219,29 +2221,56 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
                                                 if (widget.detailData[
                                                             'livestream'][0]
+                                                        ['on_demand_link'] !=
+                                                    null) {
+                                                  showCupertinoDialog(
+                                                    context: context,
+                                                    builder: (thisContext) {
+                                                      return CupertinoAlertDialog(
+                                                        title: Text('Notice'),
+                                                        content: Text(
+                                                          'You uploaded on demand video',
+                                                        ),
+                                                        actions: <Widget>[
+                                                          CupertinoDialogAction(
+                                                            child:
+                                                                Text('Close'),
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      thisContext)
+                                                                  .pop();
+                                                            },
+                                                          )
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                } else if (widget.detailData[
+                                                            'livestream'][0]
                                                         ['zoom_id'] !=
                                                     null) {
                                                   showCupertinoDialog(
-                                                      context: context,
-                                                      builder: (thisContext) {
-                                                        return CupertinoAlertDialog(
-                                                          title: Text('Notice'),
-                                                          content: Text(
-                                                            'please start broadcast using zoom link you provide to your attandees',
-                                                          ),
-                                                          actions: <Widget>[
-                                                            CupertinoDialogAction(
-                                                              child:
-                                                                  Text('Close'),
-                                                              onPressed: () {
-                                                                Navigator.of(
-                                                                        thisContext)
-                                                                    .pop();
-                                                              },
-                                                            )
-                                                          ],
-                                                        );
-                                                      });
+                                                    context: context,
+                                                    builder: (thisContext) {
+                                                      return CupertinoAlertDialog(
+                                                        title: Text('Notice'),
+                                                        content: Text(
+                                                          'please start broadcast using zoom link you provide to your attandees',
+                                                        ),
+                                                        actions: <Widget>[
+                                                          CupertinoDialogAction(
+                                                            child:
+                                                                Text('Close'),
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      thisContext)
+                                                                  .pop();
+                                                            },
+                                                          )
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
                                                 } else {
                                                   if (streamingState ==
                                                       'stopped') {
@@ -2369,76 +2398,93 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     MainAxisAlignment.center,
                                                 children: <Widget>[
                                                   SizedBox(
-                                                      width: ScreenUtil.instance.setWidth(widget
-                                                                          .detailData['ticket_type'][
-                                                                      'type'] ==
+                                                      width: ScreenUtil.instance.setWidth(widget.detailData['ticket_type']['type'] ==
                                                                   'free_live_stream' ||
-                                                              widget.detailData[
-                                                                          'ticket_type'][
-                                                                      'type'] ==
+                                                              widget.detailData['ticket_type']['type'] ==
                                                                   'paid_live_stream'
-                                                          ? widget.detailData['livestream'][0]
-                                                                      ['zoom_id'] !=
-                                                                  null
+                                                          ? widget.detailData['livestream'][0]['zoom_id'] != null
                                                               ? 80
                                                               : 50
                                                           : 20.9),
-                                                      child: widget.detailData.containsKey('livestream') && widget.detailData['livestream'][0]['on_demand_link'] != null ? Text('On Demand Video', style: TextStyle(fontWeight: FontWeight.bold,), textAlign: TextAlign.center,) : Image.asset(
-                                                        widget.detailData['ticket_type']
-                                                                        [
-                                                                        'type'] ==
-                                                                    'free_live_stream' ||
-                                                                widget.detailData[
-                                                                            'ticket_type']
-                                                                        [
-                                                                        'type'] ==
-                                                                    'paid_live_stream'
-                                                            ? widget.detailData[
-                                                                            'livestream'][0]
-                                                                        [
-                                                                        'zoom_id'] !=
-                                                                    null
-                                                                ? 'assets/icons/aset_icon/zoom_livestream.png'
-                                                                : 'assets/btn_ticket/live.png'
-                                                            : 'assets/icons/icon_apps/qr.png',
-                                                        fit: BoxFit.fill,
-                                                        colorBlendMode:
-                                                            BlendMode.srcATop,
-                                                        color: widget.detailData[
-                                                                            'ticket_type']
-                                                                        [
-                                                                        'type'] ==
-                                                                    'free_live_stream' ||
-                                                                widget.detailData[
-                                                                            'ticket_type']
-                                                                        [
-                                                                        'type'] ==
-                                                                    'paid_live_stream'
-                                                            ? streamingState ==
-                                                                    'stopped'
-                                                                ? Colors.white
-                                                                    .withOpacity(
-                                                                        .9)
-                                                                : Colors
-                                                                    .transparent
-                                                            : Colors
-                                                                .transparent,
-                                                      )),
-                                                  widget.detailData.containsKey('livestream') && widget.detailData['livestream'][0]['on_demand_link'] != null ? Container() : SizedBox(
-                                                    height: ScreenUtil.instance
-                                                        .setWidth(15),
-                                                  ),
+                                                      child:
+                                                          widget.detailData
+                                                                      .containsKey(
+                                                                          'livestream') &&
+                                                                  widget.detailData['livestream']
+                                                                              [
+                                                                              0]
+                                                                          [
+                                                                          'on_demand_link'] !=
+                                                                      null
+                                                              ? Text(
+                                                                  'On Demand Video',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  maxLines: 2,
+                                                                )
+                                                              : Image.asset(
+                                                                  widget.detailData['ticket_type']['type'] ==
+                                                                              'free_live_stream' ||
+                                                                          widget.detailData['ticket_type']['type'] ==
+                                                                              'paid_live_stream'
+                                                                      ? widget.detailData['livestream'][0]['zoom_id'] !=
+                                                                              null
+                                                                          ? 'assets/icons/aset_icon/zoom_livestream.png'
+                                                                          : 'assets/btn_ticket/live.png'
+                                                                      : 'assets/icons/icon_apps/qr.png',
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                  colorBlendMode:
+                                                                      BlendMode
+                                                                          .srcATop,
+                                                                  color: widget.detailData['ticket_type']['type'] ==
+                                                                              'free_live_stream' ||
+                                                                          widget.detailData['ticket_type']['type'] ==
+                                                                              'paid_live_stream'
+                                                                      ? streamingState ==
+                                                                              'stopped'
+                                                                          ? Colors.white.withOpacity(
+                                                                              .9)
+                                                                          : Colors
+                                                                              .transparent
+                                                                      : Colors
+                                                                          .transparent,
+                                                                )),
+                                                  widget.detailData.containsKey(
+                                                              'livestream') &&
+                                                          widget.detailData[
+                                                                      'livestream'][0]
+                                                                  [
+                                                                  'on_demand_link'] !=
+                                                              null
+                                                      ? Container()
+                                                      : SizedBox(
+                                                          height: ScreenUtil
+                                                              .instance
+                                                              .setWidth(15),
+                                                        ),
                                                   Text(
-                                                      widget.detailData['ticket_type']
-                                                                      [
-                                                                      'type'] ==
+                                                      widget.detailData['ticket_type']['type'] ==
                                                                   'free_live_stream' ||
-                                                              widget.detailData[
-                                                                          'ticket_type']
+                                                              widget.detailData['ticket_type']
                                                                       [
                                                                       'type'] ==
                                                                   'paid_live_stream'
-                                                          ? widget.detailData['livestream'][0]['on_demand_link'] != null ? '' : 'NOW !'
+                                                          ? widget.detailData['livestream']
+                                                                          [0][
+                                                                      'on_demand_link'] !=
+                                                                  null
+                                                              ? ''
+                                                              : 'NOW !'
                                                           : 'SHOW QR CODE',
                                                       style: TextStyle(
                                                           color:
@@ -2874,7 +2920,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             201) {
                                                       print(response.body);
                                                       isLoading = false;
-                                                      detailData['comment'].removeAt(i);
+                                                      detailData['comment']
+                                                          .removeAt(i);
                                                     } else {
                                                       print(response.body);
                                                       isLoading = false;

@@ -447,13 +447,13 @@ class PushNotificationState extends State<PushNotification> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset('assets/icons/icon_apps/nearby.png', scale: 3),
+            Image.asset('assets/icons/icon_apps/announcement.png', scale: 3),
             SizedBox(width: 15),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  notificationData[index]['caption'],
+                  notificationData[index]['type'] == 'reminder_ticket' ? 'Post a new event' : notificationData[index]['caption'],
                   style: TextStyle(
                       fontSize: ScreenUtil.instance.setSp(13),
                       fontWeight: FontWeight.bold),
@@ -906,14 +906,16 @@ class PushNotificationState extends State<PushNotification> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => page));
   }
 
-  Future<http.Response> getNotification({int page}) async {
+  Future<http.Response> getNotification({int page, bool isOnInitial}) async {
     print('[BackgroundFetch] Headless event received1.');
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     int currentPage = 1;
 
     setState(() {
-      isLoading = true;
+      if(isOnInitial == true){
+        isLoading = true;
+      }
       if (page != null) {
         currentPage += page;
       }
