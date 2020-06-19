@@ -83,7 +83,7 @@ class _MerchDetailsState extends State<MerchDetails> {
               Expanded(
                 child: SizedBox(),
               ),
-              Container(
+              props.merchDetailResponse.loading == true ? Container() : Container(
                 height: ScreenUtil.instance.setWidth(28 * 1.1),
                 width: ScreenUtil.instance.setWidth(133 * 1.1),
                 decoration: BoxDecoration(
@@ -97,7 +97,7 @@ class _MerchDetailsState extends State<MerchDetails> {
                     borderRadius: BorderRadius.circular(15)),
                 child: Center(
                   child: Text(
-                    props.merchDetailResponse.data.details[0]['basic_price'],
+                    'Rp. ' + props.merchDetailResponse.data.details[0]['basic_price'],
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil.instance.setSp(14),

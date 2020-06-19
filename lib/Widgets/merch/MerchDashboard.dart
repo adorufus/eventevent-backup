@@ -9,9 +9,11 @@ import 'package:eventevent/Redux/Actions/CollectionActions.dart';
 import 'package:eventevent/Redux/Actions/DiscoverMerchActions.dart';
 import 'package:eventevent/Redux/Actions/MerchDetailsActions.dart';
 import 'package:eventevent/Redux/Actions/PopularMerchActions.dart';
+import 'package:eventevent/Redux/Actions/SpecificCategoryActions.dart';
 import 'package:eventevent/Redux/Reducers/logger.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/PopularEventWidget.dart';
+import 'package:eventevent/Widgets/merch/CategoryItem.dart';
 import 'package:eventevent/Widgets/merch/MerchDetails.dart';
 import 'package:eventevent/Widgets/merch/PopularItem.dart';
 import 'package:eventevent/helper/BaseBodyWithScaffoldAndAppBar.dart';
@@ -141,7 +143,7 @@ class _MerchDashboardState extends State<MerchDashboard> {
                     titleText('Category', ''),
                     categoryLoading == true
                         ? HomeLoadingScreen().merchCategoryLoading()
-                        : categoryWidget(data: categoryData),
+                        : categoryWidget(data: categoryData, props: props),
                     titleText('Collections',
                         'Check out our hand picked collection bellow'),
                     collectionLoading == true
@@ -235,7 +237,8 @@ class _MerchDashboardState extends State<MerchDashboard> {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil.instance.setWidth(subTitle != '' ? 5 : 0)),
+          SizedBox(
+              height: ScreenUtil.instance.setWidth(subTitle != '' ? 5 : 0)),
           Text(subTitle,
               style: TextStyle(
                   color: Color(0xFF868686),
@@ -245,44 +248,59 @@ class _MerchDashboardState extends State<MerchDashboard> {
     );
   }
 
-  Widget categoryWidget({List<MerchCategoryModel> data}) {
+  Widget categoryWidget({List<MerchCategoryModel> data, AppScreenProps props}) {
     return Container(
       child: Wrap(
         spacing: 16,
         runSpacing: 16,
         children: data.map((data) {
-          return Container(
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                    blurRadius: 2,
-                    color: Colors.black.withOpacity(.1),
-                    spreadRadius: 1.5)
-              ],
+          return GestureDetector(
+            onTap: () {
+              props.getSpecificCategoryList(data.categoryId);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CategoryItem(
+                    categoryTitle: data.categoryName,
+                  ),
+                ),
+              );
+            },
+            child: Container(
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 2,
+                      color: Colors.black.withOpacity(.1),
+                      spreadRadius: 1.5)
+                ],
+              ),
+              child: Center(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: SizedBox(),
+                  ),
+                  Image.network(
+                    data.imageUrl,
+                    scale: 6,
+                  ),
+                  Expanded(
+                    child: SizedBox(),
+                  ),
+                  Text(data.categoryName),
+                  SizedBox(
+                    height: 15,
+                  )
+                ],
+              )),
             ),
-            child: Center(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: SizedBox(),
-                ),
-                Image.network(
-                  data.imageUrl,
-                  scale: 6,
-                ),
-                Expanded(
-                  child: SizedBox(),
-                ),
-                Text(data.categoryName),
-                SizedBox(height: 15,)
-              ],
-            )),
           );
         }).toList(),
       ),
@@ -301,7 +319,10 @@ class _MerchDashboardState extends State<MerchDashboard> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MerchCollection(),
+                  builder: (context) => MerchCollection(
+                    merchId: data[i].collectionId,
+                    merchBannerImage: data[i].imageUrl,
+                  ),
                 ),
               );
             },
@@ -382,20 +403,21 @@ class AppScreenProps {
   final Function getCategoryList;
   final ListCategoryState listCategoryResponse;
   final Function getMerchDetail;
+  final Function getSpecificCategoryList;
 
-  AppScreenProps({
-    this.getCategoryList,
-    this.listCategoryResponse,
-    this.getBanner,
-    this.listResponse,
-    this.getCollection,
-    this.listCollectionResponse,
-    this.getPopularMerch,
-    this.listPopularMerchResponse,
-    this.getDiscoverMerch,
-    this.listDiscoverResponse,
-    this.getMerchDetail,
-  });
+  AppScreenProps(
+      {this.getCategoryList,
+      this.listCategoryResponse,
+      this.getBanner,
+      this.listResponse,
+      this.getCollection,
+      this.listCollectionResponse,
+      this.getPopularMerch,
+      this.listPopularMerchResponse,
+      this.getDiscoverMerch,
+      this.listDiscoverResponse,
+      this.getMerchDetail,
+      this.getSpecificCategoryList});
 }
 
 // class CollectionScreenProps {
@@ -424,5 +446,7 @@ AppScreenProps mapStateToProps(Store<AppState> store) {
     getDiscoverMerch: () => store.dispatch(getDiscoverMerch()),
     getCategoryList: () => store.dispatch(getCategory()),
     getMerchDetail: (String id) => store.dispatch(getMerchDetail(id)),
+    getSpecificCategoryList: (String id) =>
+        store.dispatch(getSpecificCategory(id)),
   );
 }

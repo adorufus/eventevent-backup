@@ -9,6 +9,7 @@ void loggingMiddleware<State>(
   if(action is FSA){
     print('{');
     print(' Action: ${action.type}');
+    print(action.payload.runtimeType);
 
     if(action.payload != null){
       print(' Payload: ${action.payload}');
