@@ -170,7 +170,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                 } else if (ticketListData[i]['event']['ticket_type']['type'] ==
                     'paid_live_stream') {
                   itemColor = eventajaGreenTeal;
-                  ticketPrice = ticketListData[i]['paid_ticket_type']['name'];
+                  ticketPrice = 'Rp. ' + ticketListData[i]['final_price'];
                 } else if (ticketListData[i]['event']['ticket_type']['type'] ==
                         'free_limited' ||
                     ticketListData[i]['event']['ticket_type']['type'] ==
