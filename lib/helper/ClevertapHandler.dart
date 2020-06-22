@@ -1,37 +1,33 @@
-import 'package:clevertap_flutter/clevertap_flutter.dart';
+// import 'package:clevertap_flutter/clevertap_flutter.dart';
+import 'package:clevertap_plugin/clevertap_plugin.dart';
 import 'package:uuid/uuid.dart';
 
 class ClevertapHandler {
   static void recordEvent(String name, {Map<String, dynamic> withProps}) {
-    if (withProps != null) {
-      ClevertapFlutter.pushEvent(name, withProps);
-    } else {
-      ClevertapFlutter.pushEvent(name);
-    }
+    CleverTapPlugin.recordEvent(name, withProps);
   }
 
   //Event Handling
-  static void handleEventDetail(String eventName, String eventOrganizer, String startDate, String endDate, String private, List categories) {
+  static void handleEventDetail(String eventName, String eventOrganizer,
+      String startDate, String endDate, String private, List categories) {
     print("************************");
     print("CleverTap record Event");
 
     String privateType = "Undefined";
 
-    if(private == '0'){
+    if (private == '0') {
       privateType = "Public event";
-    }
-    else if(private == '1'){
+    } else if (private == '1') {
       privateType = "Private event";
     }
 
     String categoryString = "";
 
-    if(categories != null){
-      for(var cat in categories){
-        if(categoryString == ""){
+    if (categories != null) {
+      for (var cat in categories) {
+        if (categoryString == "") {
           categoryString = cat['name'].toString() ?? "";
-        }
-        else{
+        } else {
           categoryString = categoryString + ", " + cat['name'].toString() ?? "";
         }
       }
@@ -89,7 +85,7 @@ class ClevertapHandler {
       parameters['Phone'] = userPhone;
     }
 
-    ClevertapFlutter.onUserLogin(parameters);
+    CleverTapPlugin.onUserLogin(parameters);
   }
 
   static void removeUserProfile(
@@ -120,6 +116,6 @@ class ClevertapHandler {
     parameters['Gender'] = '-';
     parameters['Phone'] = '-';
 
-    ClevertapFlutter.onUserLogin(parameters);
+    CleverTapPlugin.onUserLogin(parameters);
   }
 }

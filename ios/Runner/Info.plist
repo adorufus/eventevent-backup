@@ -118,6 +118,10 @@
 	<string>key_live_ijCwqgMyqksKHN0YEnvjJiocuzi2ciR4</string>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+	<key>CleverTapAccoutID</key>
+	<string>WR9-Z48-7Z5Z</string>
+	<key>CleverTapToken</key>
+	<string>b41-c20</string>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>Allow to acces media library, so you can choose your photo or video and upload it to EventEvent, maybe for event additional information, or for your timeline.</string>
 </dict>

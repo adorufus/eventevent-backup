@@ -10,6 +10,7 @@ import io.flutter.app.FlutterApplication;
 public class Application extends FlutterApplication implements PluginRegistrantCallback {
   @Override
   public void onCreate() {
+    ActivityLifecycleCallback.register(this);
     super.onCreate();
     FlutterFirebaseMessagingService.setPluginRegistrant(this);
   }

@@ -99,13 +99,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.10"
-  clevertap_flutter:
+  clevertap_plugin:
     dependency: "direct main"
     description:
-      name: clevertap_flutter
+      name: clevertap_plugin
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.5"
+    version: "1.1.2"
   collection:
     dependency: transitive
     description:
