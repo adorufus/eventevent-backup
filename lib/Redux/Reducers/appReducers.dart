@@ -3,6 +3,7 @@ import 'package:eventevent/Redux/Reducers/BannerReducers.dart';
 import 'package:eventevent/Redux/Reducers/CategoryReducers.dart';
 import 'package:eventevent/Redux/Reducers/CollectionReducers.dart';
 import 'package:eventevent/Redux/Reducers/DiscoverMerchReducers.dart';
+import 'package:eventevent/Redux/Reducers/MerchCommentReducers.dart';
 import 'package:eventevent/Redux/Reducers/MerchDetailReducers.dart';
 import 'package:eventevent/Redux/Reducers/PopularMerchReducers.dart';
 import 'package:eventevent/Redux/Reducers/SpecificCategoryReducers.dart';
@@ -19,5 +20,6 @@ AppState appReducer(AppState state, action){
     merchDetails: merchDetailReducer(state.merchDetails, action),
     specificCollections: specificCollectionReducer(state.specificCollections, action),
     specificCategories: specificCategoryReducer(state.specificCategories, action),
+    merchComments: merchCommentListReducer(state.merchComments, action),
   );
 }

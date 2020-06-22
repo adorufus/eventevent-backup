@@ -1,26 +1,53 @@
 import 'package:eventevent/Models/AppState.dart';
 import 'package:eventevent/Models/MerchDetailModel.dart';
+import 'package:eventevent/Redux/Actions/MerchDetailsActions.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/merch/BuyOptionSelector.dart';
+import 'package:eventevent/Widgets/merch/MerchCommentDetail.dart';
 import 'package:eventevent/Widgets/merch/MerchLove.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:redux/redux.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class MerchDetails extends StatefulWidget {
+  final merchId;
+
+  const MerchDetails({Key key, this.merchId}) : super(key: key);
   @override
   _MerchDetailsState createState() => _MerchDetailsState();
 }
 
 class _MerchDetailsState extends State<MerchDetails> {
   int currentTab = 0;
+  String currentUserID = "";
+  SharedPreferences preferences;
+
+  void initialization() async {
+    preferences = await SharedPreferences.getInstance();
+
+    currentUserID = preferences.getString("Last User ID");
+
+    if (mounted) setState(() {});
+  }
+
+  @override
+  void initState() {
+    initialization();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, MerchDetailScreenProps>(
       converter: (store) => mapStateToProps(store),
+      onInitialBuild: (props) => props.getMerchDetail(widget.merchId),
       builder: (context, props) => Scaffold(
         appBar: PreferredSize(
           preferredSize: Size(null, 100),
@@ -83,28 +110,32 @@ class _MerchDetailsState extends State<MerchDetails> {
               Expanded(
                 child: SizedBox(),
               ),
-              props.merchDetailResponse.loading == true ? Container() : Container(
-                height: ScreenUtil.instance.setWidth(28 * 1.1),
-                width: ScreenUtil.instance.setWidth(133 * 1.1),
-                decoration: BoxDecoration(
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: eventajaGreenTeal.withOpacity(0.4),
-                          blurRadius: 2,
-                          spreadRadius: 1.5)
-                    ],
-                    color: eventajaGreenTeal,
-                    borderRadius: BorderRadius.circular(15)),
-                child: Center(
-                  child: Text(
-                    'Rp. ' + props.merchDetailResponse.data.details[0]['basic_price'],
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: ScreenUtil.instance.setSp(14),
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              props.merchDetailResponse.loading == true
+                  ? Container()
+                  : Container(
+                      height: ScreenUtil.instance.setWidth(28 * 1.1),
+                      width: ScreenUtil.instance.setWidth(133 * 1.1),
+                      decoration: BoxDecoration(
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: eventajaGreenTeal.withOpacity(0.4),
+                                blurRadius: 2,
+                                spreadRadius: 1.5)
+                          ],
+                          color: eventajaGreenTeal,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Center(
+                        child: Text(
+                          'Rp. ' +
+                              props.merchDetailResponse.data.details[0]
+                                  ['basic_price'],
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: ScreenUtil.instance.setSp(14),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ),
@@ -158,14 +189,14 @@ class _MerchDetailsState extends State<MerchDetails> {
                                 : productName(
                                     data: props.merchDetailResponse.data),
                             SizedBox(
-                              height: 10,
+                              height: 6,
                             ),
                             props.merchDetailResponse.loading == true
                                 ? HomeLoadingScreen()
                                     .merchDetailUsernameWithProfilePicLoading()
                                 : usernameWithProfilePic(
                                     data: props.merchDetailResponse.data),
-                            SizedBox(height: 12),
+                            SizedBox(height: 25),
                             props.merchDetailResponse.loading == true
                                 ? Container()
                                 : itemButton(
@@ -177,23 +208,25 @@ class _MerchDetailsState extends State<MerchDetails> {
                         height: 28.4,
                       ),
                       Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            contactButton(
-                              image: 'assets/icons/btn_phone.png',
-                            ),
-                            SizedBox(width: 50),
-                            contactButton(
-                              image: 'assets/icons/btn_mail.png',
-                            ),
-                            SizedBox(width: 50),
-                            contactButton(
-                              image: 'assets/icons/btn_web.png',
-                            ),
-                          ],
-                        ),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          contactButton(
+                            image: 'assets/icons/btn_phone.png',
+                          ),
+                          SizedBox(width: 50),
+                          contactButton(
+                            image: 'assets/icons/btn_mail.png',
+                          ),
+                          SizedBox(width: 50),
+                          contactButton(
+                            image: 'assets/icons/btn_web.png',
+                          ),
+                        ],
+                      ),
                       // Expanded(child: SizedBox()),
-                      SizedBox(height: 15,),
+                      SizedBox(
+                        height: 15,
+                      ),
                       Container(
                         height: ScreenUtil.instance.setWidth(40),
                         decoration: BoxDecoration(
@@ -229,7 +262,8 @@ class _MerchDetailsState extends State<MerchDetails> {
                     ? props.merchDetailResponse.loading == true
                         ? Container()
                         : details(data: props.merchDetailResponse.data)
-                    : commentButton(data: props.merchDetailResponse.data)
+                    : commentButton(
+                        data: props.merchDetailResponse.data, props: props)
               ],
             ),
           ),
@@ -340,7 +374,7 @@ class _MerchDetailsState extends State<MerchDetails> {
     );
   }
 
-  Widget commentButton({MerchDetailModel data}) {
+  Widget commentButton({MerchDetailModel data, MerchDetailScreenProps props}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 13),
       child: ListView(
@@ -348,10 +382,17 @@ class _MerchDetailsState extends State<MerchDetails> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              // Navigator.of(context).push(MaterialPageRoute(
-              //     builder: (context) => EventDetailComment(
-              //           eventID: detailData['id'],
-              //         )));
+              Navigator.of(context)
+                  .push(
+                MaterialPageRoute(
+                  builder: (context) => MerchCommentDetail(
+                    merchId: data.merchId,
+                  ),
+                ),
+              )
+                  .then((onValue) {
+                props.getMerchDetail(widget.merchId);
+              });
             },
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 13),
@@ -376,9 +417,10 @@ class _MerchDetailsState extends State<MerchDetails> {
           ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: data.comments == null || data.comments.isEmpty
-                ? 0
-                : data.comments.length,
+            itemCount:
+                data == null || data.comments == null || data.comments.isEmpty
+                    ? 0
+                    : data.comments.length,
             itemBuilder: (context, i) {
               return ListTile(
                 leading: CircleAvatar(
@@ -386,12 +428,86 @@ class _MerchDetailsState extends State<MerchDetails> {
                       NetworkImage(data.comments[i]['user']['photo']),
                 ),
                 title: Text(
-                  data.comments[i]['user']['username'] + '' + ': ',
+                  data.comments[i]['user']['fullName'] + '' + ': ',
                   style: TextStyle(
                       fontSize: ScreenUtil.instance.setSp(12),
                       fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(data.comments[i]['comment']),
+                trailing: data.comments[i]['user_id'] == currentUserID
+                    ? Container(
+                        height: 50,
+                        width: 50,
+                        child: GestureDetector(
+                          onTap: () {
+                            showCupertinoDialog(
+                              context: context,
+                              builder: (thisContext) {
+                                return CupertinoAlertDialog(
+                                  title: Text('Notice'),
+                                  content: Text(
+                                    'Do you want to delete this comment?',
+                                  ),
+                                  actions: <Widget>[
+                                    CupertinoDialogAction(
+                                      child: Text('No'),
+                                      onPressed: () {
+                                        Navigator.of(
+                                          thisContext,
+                                        ).pop();
+                                      },
+                                    ),
+                                    CupertinoDialogAction(
+                                      child: Text('Yes'),
+                                      onPressed: () {
+                                        Navigator.of(
+                                          thisContext,
+                                        ).pop();
+                                        deleteComment(
+                                          data.comments[i]['id'],
+                                        ).then(
+                                          (response) {
+                                            data.comments.removeAt(i);
+                                            if (mounted) setState(() {});
+                                            if (response.statusCode == 200 ||
+                                                response.statusCode == 201) {
+                                              print(response.body);
+                                            } else {
+                                              print(response.body);
+                                              Flushbar(
+                                                backgroundColor: Colors.red,
+                                                flushbarPosition:
+                                                    FlushbarPosition.TOP,
+                                                animationDuration:
+                                                    Duration(milliseconds: 500),
+                                                duration: Duration(seconds: 3),
+                                                message: response.body,
+                                              ).show(context);
+                                            }
+                                          },
+                                        ).catchError((err) {
+                                          Flushbar(
+                                                  backgroundColor: Colors.red,
+                                                  flushbarPosition:
+                                                      FlushbarPosition.TOP,
+                                                  animationDuration: Duration(
+                                                      milliseconds: 500),
+                                                  duration:
+                                                      Duration(seconds: 3),
+                                                  message: err.toString())
+                                              .show(context);
+                                        });
+                                      },
+                                    )
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: Icon(Icons.delete, color: Colors.red),
+                        ),
+                      )
+                    : Container(width: 100),
               );
             },
           )
@@ -511,14 +627,36 @@ class _MerchDetailsState extends State<MerchDetails> {
       ),
     );
   }
+
+  Future<http.Response> deleteComment(String commentId) async {
+    String baseUrl = BaseApi().apiUrl;
+    String finalUrl = baseUrl + '/product/delete_comment';
+
+    final response = await http.post(
+      finalUrl,
+      body: {
+        'X-API-KEY': API_KEY,
+        'commentId': commentId,
+      },
+      headers: {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session'),
+      },
+    );
+
+    return response;
+  }
 }
 
 class MerchDetailScreenProps {
   final MerchDetailState merchDetailResponse;
+  final Function getMerchDetail;
 
-  MerchDetailScreenProps({this.merchDetailResponse});
+  MerchDetailScreenProps({this.merchDetailResponse, this.getMerchDetail});
 }
 
 MerchDetailScreenProps mapStateToProps(Store<AppState> store) {
-  return MerchDetailScreenProps(merchDetailResponse: store.state.merchDetails);
+  return MerchDetailScreenProps(
+      merchDetailResponse: store.state.merchDetails,
+      getMerchDetail: (merchId) => store.dispatch(getMerchDetail(merchId)));
 }

@@ -374,9 +374,8 @@ class _MerchDashboardState extends State<MerchDashboard> {
               print(data[i]);
               return GestureDetector(
                 onTap: () {
-                  props.getMerchDetail(data[i].merchId);
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MerchDetails()));
+                      MaterialPageRoute(builder: (context) => MerchDetails(merchId: data[i].merchId)));
                 },
                 child: MerchItem(
                   imageUrl: data[i].imageUrl,
@@ -402,7 +401,6 @@ class AppScreenProps {
   final ListDiscoverState listDiscoverResponse;
   final Function getCategoryList;
   final ListCategoryState listCategoryResponse;
-  final Function getMerchDetail;
   final Function getSpecificCategoryList;
 
   AppScreenProps(
@@ -416,7 +414,6 @@ class AppScreenProps {
       this.listPopularMerchResponse,
       this.getDiscoverMerch,
       this.listDiscoverResponse,
-      this.getMerchDetail,
       this.getSpecificCategoryList});
 }
 
@@ -445,7 +442,6 @@ AppScreenProps mapStateToProps(Store<AppState> store) {
     getPopularMerch: () => store.dispatch(getPopularMerch()),
     getDiscoverMerch: () => store.dispatch(getDiscoverMerch()),
     getCategoryList: () => store.dispatch(getCategory()),
-    getMerchDetail: (String id) => store.dispatch(getMerchDetail(id)),
     getSpecificCategoryList: (String id) =>
         store.dispatch(getSpecificCategory(id)),
   );
