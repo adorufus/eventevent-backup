@@ -361,19 +361,7 @@ class _TimelineItemState extends State<TimelineItem>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             isLivestream == true
-                                ? Row(children: <Widget>[
-                                    Image.asset(
-                                        'assets/icons/icon_apps/LivestreamTagIcon.png',
-                                        scale: 25),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                      'Livestream Event',
-                                      style: TextStyle(
-                                          color: Colors.red, fontSize: 13),
-                                    )
-                                  ])
+                                ? Image.asset('assets/icons/icon_apps/LivestreamTagIcon.png', scale: 25)
                                 : Container(),
                             Container(
                               width: 200,
