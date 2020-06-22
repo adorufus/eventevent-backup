@@ -113,8 +113,8 @@ class _MerchDetailsState extends State<MerchDetails> {
             child: ListView(
               children: <Widget>[
                 Container(
-                  height: ScreenUtil.instance
-                      .setWidth(MediaQuery.of(context).size.height / 1.05),
+                  // height: ScreenUtil.instance
+                  //     .setWidth(MediaQuery.of(context).size.height / 1.05),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -176,8 +176,7 @@ class _MerchDetailsState extends State<MerchDetails> {
                       SizedBox(
                         height: 28.4,
                       ),
-                      Flexible(
-                        child: Row(
+                      Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             contactButton(
@@ -193,8 +192,8 @@ class _MerchDetailsState extends State<MerchDetails> {
                             ),
                           ],
                         ),
-                      ),
-                      Expanded(child: SizedBox()),
+                      // Expanded(child: SizedBox()),
+                      SizedBox(height: 15,),
                       Container(
                         height: ScreenUtil.instance.setWidth(40),
                         decoration: BoxDecoration(
@@ -505,7 +504,7 @@ class _MerchDetailsState extends State<MerchDetails> {
   Widget contactButton({String image, Function onTap}) {
     return GestureDetector(
       onTap: onTap,
-      child: SizedBox(
+      child: Container(
         height: ScreenUtil.instance.setWidth(50),
         width: ScreenUtil.instance.setWidth(50),
         child: Image.asset(image),
