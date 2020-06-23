@@ -13,10 +13,10 @@ PODS:
   - camera_with_rtmp (0.0.1):
     - Flutter
     - HaishinKit (~> 1.0.7)
-  - CleverTap-iOS-SDK (3.6.0):
-    - SDWebImage (~> 5.0)
-  - clevertap_flutter (0.0.1):
-    - CleverTap-iOS-SDK
+  - CleverTap-iOS-SDK (3.8.0):
+    - SDWebImage (~> 5.1)
+  - clevertap_plugin (1.1.2):
+    - CleverTap-iOS-SDK (~> 3.8.0)
     - Flutter
   - Crashlytics (3.13.4):
     - Fabric (~> 1.10.2)
@@ -224,9 +224,9 @@ PODS:
   - Protobuf (3.11.2)
   - rate_my_app (0.1):
     - Flutter
-  - SDWebImage (5.0.6):
-    - SDWebImage/Core (= 5.0.6)
-  - SDWebImage/Core (5.0.6)
+  - SDWebImage (5.8.1):
+    - SDWebImage/Core (= 5.8.1)
+  - SDWebImage/Core (5.8.1)
   - share (0.5.2):
     - Flutter
   - share_extend (0.0.1):
@@ -269,7 +269,7 @@ DEPENDENCIES:
   - Branch
   - camera (from `.symlinks/plugins/camera/ios`)
   - camera_with_rtmp (from `.symlinks/plugins/camera_with_rtmp/ios`)
-  - clevertap_flutter (from `.symlinks/plugins/clevertap_flutter/ios`)
+  - clevertap_plugin (from `.symlinks/plugins/clevertap_plugin/ios`)
   - FBSDKCoreKit (~> 4.39.1)
   - FBSDKLoginKit (~> 4.39.1)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
@@ -279,7 +279,7 @@ DEPENDENCIES:
   - firebase_core_web (from `.symlinks/plugins/firebase_core_web/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
-  - Flutter (from `.symlinks/flutter/ios-release`)
+  - Flutter (from `.symlinks/flutter/ios`)
   - flutter_barcode_scanner (from `.symlinks/plugins/flutter_barcode_scanner/ios`)
   - flutter_branch_sdk (from `.symlinks/plugins/flutter_branch_sdk/ios`)
   - flutter_facebook_login (from `.symlinks/plugins/flutter_facebook_login/ios`)
@@ -362,8 +362,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/camera/ios"
   camera_with_rtmp:
     :path: ".symlinks/plugins/camera_with_rtmp/ios"
-  clevertap_flutter:
-    :path: ".symlinks/plugins/clevertap_flutter/ios"
+  clevertap_plugin:
+    :path: ".symlinks/plugins/clevertap_plugin/ios"
   firebase_analytics:
     :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_auth:
@@ -379,7 +379,7 @@ EXTERNAL SOURCES:
   firebase_messaging:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios-release"
+    :path: ".symlinks/flutter/ios"
   flutter_barcode_scanner:
     :path: ".symlinks/plugins/flutter_barcode_scanner/ios"
   flutter_branch_sdk:
@@ -466,8 +466,8 @@ SPEC CHECKSUMS:
   Branch: 9b299693ee54b308ff8c18146afe1f711c2069ec
   camera: 38cc83ae9a5667bb5a71c7d9edaf60a91920fd4e
   camera_with_rtmp: 156b8d51b8de72a5174c0cf5a085c0e649059317
-  CleverTap-iOS-SDK: 664ae5dccfe2673c21a842b624f2558d34f76d14
-  clevertap_flutter: a35b2b54bac7bcf5a743eeea3e385853fb374b75
+  CleverTap-iOS-SDK: 1513db126149ca523b25fdcf3121a4204709c733
+  clevertap_plugin: ce10a1dd8ffd391e484f40feb071669de92e553c
   Crashlytics: 2dfd686bcb918dc10ee0e76f7f853fe42c7bd552
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   FBSDKCoreKit: f442aa96179cc9b382bb4abeb7e340a47cca8f91
@@ -527,7 +527,7 @@ SPEC CHECKSUMS:
   permission_handler: 6226fcb78b97c7c7458a95c7346a11d5184fec12
   Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
   rate_my_app: 45513a2f4d9a55b7b46d19b64fc13882fd101157
-  SDWebImage: 920f1a2ff1ca8296ad34f6e0510a1ef1d70ac965
+  SDWebImage: e3eae2eda88578db0685a0c88597fdadd9433f05
   share: bae0a282aab4483288913fc4dc0b935d4b491f2e
   share_extend: b6748dc53695587891126a89533b862b92548c7b
   shared_preferences: 430726339841afefe5142b9c1f50cb6bd7793e01

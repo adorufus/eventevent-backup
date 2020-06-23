@@ -30,8 +30,8 @@
         android:xlargeScreens="true" />
 
     <application android:name=".Application" android:label="eventevent" android:icon="@mipmap/ic_launcher" tools:replace="android:name,android:label">
-        <meta-data android:name="CLEVERTAP_ACCOUNT_ID" android:value="WR9-Z48-7Z5Z" />
-        <meta-data android:name="CLEVERTAP_TOKEN" android:value="b41-c20" />
+        <meta-data android:name="CLEVERTAP_ACCOUNT_ID" android:value="R97-7Z8-R95Z" />
+        <meta-data android:name="CLEVERTAP_TOKEN" android:value="b1a-ac2" />
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDDiAXxJg_gijrCw4bhcrEiINHYMh0VDdE"/>
         <activity android:name="com.facebook.FacebookActivity" android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:label="@string/app_name" />
