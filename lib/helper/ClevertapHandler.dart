@@ -89,29 +89,23 @@ class ClevertapHandler {
   }
 
   static void removeUserProfile(
-      String deviceName,
-      String email,
-      String pictureNormalUrl,
-      String userBirthDay,
-      String username,
-      String userGender,
-      String userPhone) {
+    String deviceName,
+  ) {
     print("************************");
-    print("CleverTap push user data");
+    print("CleverTap remove user data");
 
     var uuid = new Uuid();
 
     var parameters = Map<String, dynamic>();
     parameters['Name'] = '$deviceName Unauthenticated';
     parameters['Email'] = '-';
+    parameters['Photo'] = '-';
 
     parameters['Tz'] = DateTime.now().timeZoneName;
 
-    if (userBirthDay != null) {
-      parameters['DOB'] = '-';
-    }
+    parameters['DOB'] = '-';
 
-    parameters['Identity'] = uuid.v4.toString();
+    parameters['Identity'] = uuid.v4.toString() ?? '-';
 
     parameters['Gender'] = '-';
     parameters['Phone'] = '-';

@@ -195,10 +195,16 @@ class _EditTicketState extends State<EditTicket> {
                                 width: ScreenUtil.instance.setWidth(150),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
-                                  child: imageUri == null ? widget.ticketDetail.containsKey('ticket_image') ? Image.asset('assets/grey-fade.jpg') : Image.network(
-                                      widget.ticketDetail['ticket_image']
-                                          ['secure_url'],
-                                      fit: BoxFit.fill) : Image.file(File(imageUri.path), fit: BoxFit.cover),
+                                  child: imageUri == null
+                                      ? widget.ticketDetail
+                                              .containsKey('ticket_image')
+                                          ? Image.asset('assets/grey-fade.jpg')
+                                          : Image.network(
+                                              widget.ticketDetail[
+                                                  'ticket_image']['secure_url'],
+                                              fit: BoxFit.fill)
+                                      : Image.file(File(imageUri.path),
+                                          fit: BoxFit.cover),
                                 ),
                               ),
                             ),
@@ -772,17 +778,16 @@ class _EditTicketState extends State<EditTicket> {
         'price': priceController.text,
         'min_ticket': minTicketController.text,
         'max_ticket': maxTicketController.text,
-        'start_date': startDate,
-        'start_time': startTime,
-        'end_date': endDate,
-        'end_time': endTime,
+        'sales_start_date': startDate + ' ' + startTime,
+        'sales_end_date': endDate + ' ' + endTime,
         'show_remaining_ticket': __curValue.toString(),
         'single_ticket': __curValue2.toString(),
         'description': descController.text,
         'ticket_type_id': '1',
         'image_url': imageUri != null
-            ? await MultipartFile.fromFile(imageUri.path, filename:
-                  "eventevent_ticket_photo-${DateTime.now().toString()}.jpg")
+            ? await MultipartFile.fromFile(imageUri.path,
+                filename:
+                    "eventevent_ticket_photo-${DateTime.now().toString()}.jpg")
             : ''
       };
 

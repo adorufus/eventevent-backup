@@ -2169,6 +2169,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       builder: (BuildContext
                                                               context) =>
                                                           ManageTicket(
+                                                            isLivestream: detailData['isHybridEvent'] ==
+                                                      'streamOnly' ? true : false,
                                                             eventID: widget.id,
                                                           )));
                                             },

@@ -13,8 +13,9 @@ import 'package:http/http.dart' as http;
 
 class ManageTicket extends StatefulWidget {
   final String eventID;
+  final isLivestream;
 
-  const ManageTicket({Key key, this.eventID}) : super(key: key);
+  const ManageTicket({Key key, this.eventID, @required this.isLivestream}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -110,12 +111,12 @@ class ManageTicketState extends State<ManageTicket> {
                         itemColor = Color(0xFFFFAA00);
                         itemPriceText =
                             ticketList[i]['event']['ticket_type']['name'];
-                      } else if (ticketList[i]['event']['ticket_type']
+                      } else if (ticketList[i]['paid_ticket_type']
                               ['type'] ==
                           'paid_live_stream') {
                         itemColor = eventajaGreenTeal;
                         itemPriceText = 'Rp. ' + ticketList[i]['final_price'];
-                      } else if (ticketList[i]['event']['ticket_type']
+                      } else if (ticketList[i]['paid_ticket_type']
                               ['type'] ==
                           'free_live_stream') {
                         itemColor = Color(0xFFFFAA00);
@@ -262,7 +263,7 @@ class ManageTicketState extends State<ManageTicket> {
                       print(prefs.getInt('NEW_EVENT_ID'));
                       prefs.setString('Previous Widget', 'AddNewTicket');
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) => AddNewTicket()));
+                          builder: (BuildContext context) => AddNewTicket(isLivestream: widget.isLivestream,)));
                     },
                     child: Container(
                       color: Colors.white,

@@ -61,10 +61,8 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
       imageUri = widget.ticketDetail['image_url'];
       ticketQuantity = widget.ticketDetail['quantity'];
       price = widget.ticketDetail['price'];
-      startDate = widget.ticketDetail['start_date'];
-      endDate = widget.ticketDetail['end_date'];
-      startTime = widget.ticketDetail['start_time'];
-      endTime = widget.ticketDetail['end_time'];
+      startDate = widget.ticketDetail['sales_start_date'];
+      endDate = widget.ticketDetail['sales_end_date'];
       desc = widget.ticketDetail['description'];
       ticketTypeId = widget.ticketDetail['ticket_type_id'];
     });
@@ -226,7 +224,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                                         height:
                                             ScreenUtil.instance.setWidth(40),
                                         child:
-                                            Text(startDate + ' ' + startTime)),
+                                            Text(startDate)),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(7)),
@@ -246,7 +244,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                                             ScreenUtil.instance.setWidth(170),
                                         height:
                                             ScreenUtil.instance.setWidth(40),
-                                        child: Text(endDate + ' ' + endTime)),
+                                        child: Text(endDate)),
                                   ],
                                 )
                               ],
@@ -808,8 +806,8 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
         'price': price,
         'min_ticket': widget.ticketDetail['min_ticket'],
         'max_ticket': widget.ticketDetail['max_ticket'],
-        'sales_start_date': startDate + startTime,
-        'sales_end_date': endDate + endTime,
+        'sales_start_date': startDate,
+        'sales_end_date': endDate,
         'descriptions': desc,
         'show_remaining_ticket': widget.ticketDetail['show_remaining_ticket'],
         'fee_paid_by': ticketPaidBy,

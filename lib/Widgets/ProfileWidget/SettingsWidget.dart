@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:clevertap_plugin/clevertap_plugin.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankAccountList.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/ChangePassword.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/Feedback.dart';
@@ -10,6 +11,7 @@ import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
@@ -608,7 +610,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       googleSignIn.signOut();
     }
 
+    String deviceType = Platform.isIOS ? 'iOS' : 'Android';
+
     if (response.statusCode == 200) {
+      ClevertapHandler.removeUserProfile(deviceType);
       setState(() {
         isLoading = false;
       });
