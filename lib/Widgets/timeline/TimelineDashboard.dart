@@ -13,6 +13,7 @@ import 'package:eventevent/Widgets/timeline/SeeAllMediaItem.dart';
 import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
 import 'package:eventevent/Widgets/timeline/popularMediaItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
@@ -37,7 +38,7 @@ class TimelineDashboard extends StatefulWidget {
 }
 
 class TimelineDashboardState extends State<TimelineDashboard>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   List mediaData = [];
   List popularMediaVideo;
   List latestMediaPhoto = [];
@@ -56,6 +57,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
   int likeCount = 0;
 
   GlobalKey modalBottomSheetKey = new GlobalKey();
+
+  TabController thisTabController;
 
   void getDetail() {
     getPopularMediaPhoto().then((response) {
@@ -191,9 +194,16 @@ class TimelineDashboardState extends State<TimelineDashboard>
   @override
   void initState() {
     super.initState();
+    thisTabController = TabController(initialIndex: 0, vsync: this, length: 2);
+
+    thisTabController.addListener(handleSelectedTab);
     WidgetsBinding.instance.addObserver(this);
     getUserData();
     getDetail();
+  }
+
+  void handleSelectedTab() {
+    print(thisTabController.index);
   }
 
   @override
@@ -349,6 +359,16 @@ class TimelineDashboardState extends State<TimelineDashboard>
                           Container(
                             color: Colors.white,
                             child: TabBar(
+                              controller: thisTabController,
+                              onTap: (index) {
+                                if (index == 0) {
+                                  ClevertapHandler.logPageView(
+                                      "E-Media Timeline");
+                                } else {
+                                  ClevertapHandler.logPageView(
+                                      "Timeline");
+                                }
+                              },
                               tabs: <Widget>[
                                 Tab(
                                   child: Row(

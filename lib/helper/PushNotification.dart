@@ -10,6 +10,7 @@ import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/Widgets/timeline/LovedOnYourFollowingDetails.dart';
 import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
@@ -50,6 +51,7 @@ class PushNotificationState extends State<PushNotification> {
   @override
   void initState() {
     super.initState();
+    ClevertapHandler.logPageView("Notification");
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     var initializationSettingsAndroid =
         new AndroidInitializationSettings('app_icon');

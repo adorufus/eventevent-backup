@@ -5,6 +5,7 @@ import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -44,6 +45,7 @@ class _ListenPageState extends State<ListenPage> {
   @override
   void initState() {
     super.initState();
+    ClevertapHandler.logPageView("Nearby");
     if (!mounted) {
       return;
     } else {

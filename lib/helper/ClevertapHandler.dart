@@ -7,17 +7,53 @@ class ClevertapHandler {
     CleverTapPlugin.recordEvent(name, withProps);
   }
 
+  static void logPageView(String pageName){
+    print("**************");
+    print("CleverTap record page view");
+
+    Map<String, dynamic> props = {'Name': pageName as dynamic};
+    recordEvent("Page viewed", withProps: props);
+  }
+
+  static void logCategoryView(String categoryName){
+    print("**************");
+    print("CleverTap record category view");
+
+    Map<String, dynamic> props = {'Name': categoryName as dynamic};
+    recordEvent("Category viewed", withProps: props);
+  }
+
+  static void handleViewUserProfile(String username, String userID){
+    if(userID == null){
+      return;
+    }
+
+    print("****************");
+    print("CleverTap record see user profile");
+
+    Map<String, dynamic> props = {'Username': username ?? "" as dynamic, 'UserID': userID as dynamic};
+    recordEvent("User viewed", withProps: props);
+  }
+
+  static void handleSearch(String searchString){
+    print("****************");
+    print("CleverTap record search");
+
+    Map<String, dynamic> props = {"keyword": searchString as dynamic};
+    recordEvent("Search", withProps: props);
+  }
+
   //Event Handling
   static void handleEventDetail(String eventName, String eventOrganizer,
-      String startDate, String endDate, String private, List categories) {
+      String startDate, String endDate, String isPrivate, List categories) {
     print("************************");
     print("CleverTap record Event");
 
     String privateType = "Undefined";
 
-    if (private == '0') {
+    if (isPrivate == '0') {
       privateType = "Public event";
-    } else if (private == '1') {
+    } else if (isPrivate == '1') {
       privateType = "Private event";
     }
 

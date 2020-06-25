@@ -5,6 +5,7 @@ import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
   int newPage = 0;
 
   void _onLoading() async {
+    ClevertapHandler.logPageView("Latest");
     await Future.delayed(Duration(milliseconds: 2000));
     setState(() {
       newPage += 1;

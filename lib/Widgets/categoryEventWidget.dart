@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/CategoryPage.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
@@ -50,6 +51,7 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
                   builder: (BuildContext context) {
                     return GestureDetector(
                       onTap: (){
+                        ClevertapHandler.logCategoryView(categoryData['name']);
                         Navigator.push(context, MaterialPageRoute(settings: RouteSettings(name: 'CategoryList'), builder: (context) => CategoryPage(categoryId: categoryData['id'],)));
                       },
                         child: SizedBox(

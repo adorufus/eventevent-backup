@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/Widgets/editProfileWidget.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
@@ -55,7 +56,18 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       return;
     } else {
       print(widget.userId);
+      initializeClevertap();
       getUserProfileData();
+    }
+  }
+
+  void initializeClevertap() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    if(widget.userId == preferences.getString("Last User ID")){
+      ClevertapHandler.logPageView("Self-Profile");
+    } else {
+      ClevertapHandler.handleViewUserProfile(username, widget.userId);
     }
   }
 

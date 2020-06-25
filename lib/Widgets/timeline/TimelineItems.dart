@@ -15,6 +15,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:eventevent/helper/ClevertapHandler.dart';
 
 
 class UserTimelineItem extends StatefulWidget {
@@ -47,6 +48,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
     String urlType = 'timeline';
 
     setState(() {
+      // ClevertapHandler.logPageView("Timeline");
       if(isFromLoad == false){
         isLoading = true;
       }

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutt
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:io' show Platform;
 
@@ -246,6 +247,7 @@ class RegisterFacebookState extends State<RegisterFacebook> {
 
     if(response.statusCode == 201){
       final responseJson = json.decode(response.body);
+      ClevertapHandler.pushUserProfile(responseJson['data']['fullName'], responseJson['data']['lastName'], responseJson['data']['email'], responseJson['data']['pictureNormalURL'], responseJson['data']['birthday'] == null ? '-' : responseJson['data']['birthday'], responseJson['data']['username'], responseJson['data']['gender'], responseJson['data']['phone']);
       preferences.setString('Session', response.headers['set-cookie']);
       SharedPrefs().saveCurrentSession(responseJson);
       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => DashboardWidget()));

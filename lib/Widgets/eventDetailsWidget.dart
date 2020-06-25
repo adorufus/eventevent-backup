@@ -14,6 +14,7 @@ import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
@@ -167,7 +168,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   @override
   void initState() {
     // FlutterBranchSdk.validateSDKIntegration();
-
     generateLink();
     if (widget.detailData.containsKey("livestream")) {
       getWowzaLivestreamState(
@@ -184,6 +184,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
     setState(() {
       detailData = widget.detailData;
+      ClevertapHandler.handleEventDetail(
+          detailData['name'],
+          detailData['creatorName'],
+          detailData['dateStart'],
+          detailData['dateEnd'],
+          detailData['isPrivate'],
+          detailData['category']['data']);
     });
 
     if (detailData["isGoing"] == '1') {
@@ -2166,13 +2173,18 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               saveId(detailData['id']);
                                               Navigator.of(context).push(
                                                   MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          ManageTicket(
-                                                            isLivestream: detailData['isHybridEvent'] ==
-                                                      'streamOnly' ? true : false,
-                                                            eventID: widget.id,
-                                                          )));
+                                                      builder:
+                                                          (BuildContext
+                                                                  context) =>
+                                                              ManageTicket(
+                                                                isLivestream:
+                                                                    detailData['isHybridEvent'] ==
+                                                                            'streamOnly'
+                                                                        ? true
+                                                                        : false,
+                                                                eventID:
+                                                                    widget.id,
+                                                              )));
                                             },
                                             child: SizedBox(
                                               height: ScreenUtil.instance

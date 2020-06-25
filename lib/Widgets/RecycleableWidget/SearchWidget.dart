@@ -7,6 +7,7 @@ import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
@@ -97,6 +98,7 @@ class SearchState extends State<Search> {
                           textInputAction: TextInputAction.search,
                           onFieldSubmitted: (value) {
                             if (value != null) {
+                              ClevertapHandler.handleSearch(value);
                               _getEvents();
                               _getProfile().then((response) {
                                 var extractedData = json.decode(response.body);

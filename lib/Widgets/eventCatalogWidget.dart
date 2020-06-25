@@ -21,6 +21,7 @@ import 'package:eventevent/Widgets/timeline/LatestMediaItem.dart';
 import 'package:eventevent/Widgets/timeline/MediaDetails.dart';
 import 'package:eventevent/Widgets/timeline/SeeAllMediaItem.dart';
 import 'package:eventevent/Widgets/timeline/popularMediaItem.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/Models/PopularEventModels.dart';
 import 'package:eventevent/helper/WebView.dart';
@@ -106,6 +107,8 @@ class _EventCatalogState extends State<EventCatalog>
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     super.initState();
+
+    ClevertapHandler.logPageView("Home");
 
     if (!mounted) {
       return;
