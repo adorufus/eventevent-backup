@@ -238,8 +238,15 @@ class _MyTicketState extends State<MyTicket> {
                               ticketStatusText = 'Used';
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'streaming') {
-                              ticketColor = eventajaGreenTeal;
-                              ticketStatusText = 'Streaming';
+                              if (myTicketList[i]['livestream']
+                                      ['on_demand_link'] !=
+                                  null) {
+                                ticketColor = eventajaGreenTeal;
+                                ticketStatusText = 'On Demand Video';
+                              } else {
+                                ticketColor = eventajaGreenTeal;
+                                ticketStatusText = 'Streaming';
+                              }
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'playback') {
                               ticketColor = eventajaGreenTeal;
@@ -263,11 +270,9 @@ class _MyTicketState extends State<MyTicket> {
                                 'refund') {
                               ticketColor = Colors.blue;
                               ticketStatusText = 'Refund';
-                            } else if (myTicketList[i]['on_demand_link'] !=
-                                null) {
-                              ticketColor = eventajaGreenTeal;
-                              ticketStatusText = 'On Demand Video';
                             }
+
+                            print('ticketStatusText');
 
                             print(myTicketList[i]
                                 .containsKey('ticket_image')
@@ -315,6 +320,7 @@ class _MyTicketState extends State<MyTicket> {
                                               livestreamUrl: ticketStatusText ==
                                                       'On Demand Video'
                                                   ? myTicketList[i]
+                                                          ['livestream']
                                                       ['on_demand_link']
                                                   : ticketStatusText ==
                                                               "Streaming" ||
@@ -324,8 +330,7 @@ class _MyTicketState extends State<MyTicket> {
                                                               'Playback' ||
                                                           ticketStatusText ==
                                                               'Expired'
-                                                      ? myTicketList[i]['livestream'][
-                                                                  'playback_url'] ==
+                                                      ? myTicketList[i]['livestream']['playback_url'] ==
                                                               'not_available'
                                                           ? myTicketList[i]
                                                                   ['livestream']

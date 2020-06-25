@@ -139,8 +139,15 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                         ticketStatusText = 'Used';
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'streaming') {
-                        ticketColor = eventajaGreenTeal;
-                        ticketStatusText = 'Streaming';
+                        if (ticketDetailData[i]['livestream']
+                                ['on_demand_link'] !=
+                            null) {
+                          ticketColor = eventajaGreenTeal;
+                          ticketStatusText = 'On Demand Video';
+                        } else {
+                          ticketColor = eventajaGreenTeal;
+                          ticketStatusText = 'Streaming';
+                        }
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'playback') {
                         ticketColor = eventajaGreenTeal;
@@ -163,12 +170,10 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'refund') {
                         ticketColor = Colors.blue;
-                        ticketStatusText = 'refund';
-                      } else if (ticketDetailData[i]['on_demand_link'] !=
-                          null) {
-                        ticketColor = eventajaGreenTeal;
-                        ticketStatusText = 'On Demand Video';
+                        ticketStatusText = 'Refund';
                       }
+
+                      // print('status text ' + ticketStatusText);
 
                       print(ticketDetailData[i]
                           .containsKey('ticket_image')
@@ -201,15 +206,17 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                     ticketID: ticketDetailData[i]['id'],
                                     usedStatus: ticketStatusText,
                                     zoomId: ticketDetailData[i]['livestream']
-                                        ['zoom_id'],
+                                        ['zoom_id'] == "" ? null : ticketDetailData[i]['livestream']['zoom_id'],
                                     zoomDesc: ticketDetailData[i]['livestream']
-                                        ['zoom_description'],
+                                        ['zoom_description'] == "" ? null : ticketDetailData[i]['livestream']['zoom_description'],
                                     livestreamUrl: ticketStatusText ==
                                             'On Demand Video'
-                                        ? ticketDetailData[i]['on_demand_link']
+                                        ? ticketDetailData[i]['livestream']['on_demand_link']
                                         : ticketStatusText == "Streaming" ||
                                                 ticketStatusText ==
-                                                    'Watch Playback' || ticketStatusText == 'Playback' ||
+                                                    'Watch Playback' ||
+                                                ticketStatusText ==
+                                                    'Playback' ||
                                                 ticketStatusText == 'Expired'
                                             ? ticketDetailData[i]['livestream']
                                                         ['playback_url'] ==

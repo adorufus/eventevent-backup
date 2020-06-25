@@ -321,8 +321,8 @@ class _CollectionPageState extends State<CollectionPage> {
                                           ['availableTicketStatus'] ==
                                       '1') {
                                     itemColor = Color(0xFF34B323);
-                                    itemPriceText = eventByCategoryList[i]
-                                        ['ticket']['cheapestTicket'];
+                                    itemPriceText = 'Rp. ' + eventByCategoryList[i]
+                                        ['ticket']['cheapestTicket'] + ',-';
                                   } else {
                                     if (eventByCategoryList[i]['ticket']
                                             ['salesStatus'] ==

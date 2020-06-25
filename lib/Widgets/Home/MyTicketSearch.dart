@@ -206,8 +206,14 @@ class MyTicketSearchState extends State<MyTicketSearch> {
                   ticketColor = Color(0xFF652D90);
                   ticketStatusText = 'Used';
                 } else if (filteredEvents[i]['usedStatus'] == 'streaming') {
-                  ticketColor = eventajaGreenTeal;
-                  ticketStatusText = 'Streaming';
+                  if (filteredEvents[i]['livestream']['on_demand_link'] !=
+                      null) {
+                    ticketColor = eventajaGreenTeal;
+                    ticketStatusText = 'On Demand Video';
+                  } else {
+                    ticketColor = eventajaGreenTeal;
+                    ticketStatusText = 'Streaming';
+                  }
                 } else if (filteredEvents[i]['usedStatus'] == 'playback') {
                   ticketColor = eventajaGreenTeal;
                   ticketStatusText = 'Watch Playback';
@@ -227,9 +233,6 @@ class MyTicketSearchState extends State<MyTicketSearch> {
                 } else if (filteredEvents[i]['usedStatus'] == 'refund') {
                   ticketColor = Colors.blue;
                   ticketStatusText = 'Refund';
-                } else if (filteredEvents[i]['on_demand_link'] != null) {
-                  ticketColor = eventajaGreenTeal;
-                  ticketStatusText = 'On Demand Video';
                 }
 
                 print(filteredEvents[i].containsKey('ticket_image').toString());
@@ -254,10 +257,13 @@ class MyTicketSearchState extends State<MyTicketSearch> {
                                         ['playback_url'],
                                     livestreamUrl: ticketStatusText ==
                                             'On Demand Video'
-                                        ? filteredEvents[i]['on_demand_link']
+                                        ? filteredEvents[i]['livestream']
+                                            ['on_demand_link']
                                         : ticketStatusText == "Streaming" ||
                                                 ticketStatusText ==
-                                                    'Watch Playback' || ticketStatusText == 'Playback' ||
+                                                    'Watch Playback' ||
+                                                ticketStatusText ==
+                                                    'Playback' ||
                                                 ticketStatusText == 'Expired'
                                             ? filteredEvents[i]['livestream']
                                                         ['playback_url'] ==

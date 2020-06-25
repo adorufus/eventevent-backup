@@ -121,11 +121,14 @@ class UseTicketState extends State<UseTicket> {
             : startDate.isAfter(DateTime.now())
                 ? () {}
                 : widget.usedStatus == 'Streaming' ||
+                        widget.usedStatus == 'On Demand Video' ||
                         widget.usedStatus == 'Watch Playback' ||
                         widget.usedStatus == 'Playback' ||
                         widget.usedStatus == 'Expired'
                     ? DateTime.parse(widget.ticketDetail['event']['dateEnd'])
-                            .isBefore(DateTime.now()) && widget.ticketDetail['livestream']['playback_url'] == 'not_available'
+                                .isBefore(DateTime.now()) &&
+                            widget.ticketDetail['livestream']['playback_url'] ==
+                                'not_available'
                         ? () {
                             showCupertinoDialog(
                                 context: context,
@@ -146,7 +149,8 @@ class UseTicketState extends State<UseTicket> {
                                   );
                                 });
                           }
-                        : widget.zoomId != null || widget.zoomDesc != null
+                        : widget.zoomId != null ||
+                                widget.zoomDesc != null
                             ? () {
                                 Navigator.push(
                                   context,
@@ -293,14 +297,19 @@ class UseTicketState extends State<UseTicket> {
                                 ? 'Zoom Session Ended'
                                 : widget.usedStatus == 'Playback'
                                     ? 'Watch Playback'
-                                    : widget.usedStatus == 'Streaming'
-                                        ? widget.zoomId != null ||
-                                                widget.zoomDesc != null
-                                            ? 'Get Zoom Link Here'
-                                            : 'Watch Livestream'
-                                        : widget.usedStatus == 'Watch Playback'
-                                            ? 'Watch Playback'
-                                            : 'USE TICKET',
+                                    : widget.usedStatus == 'On Demand Video'
+                                        ? 'Watch On Demand Video'
+                                        : widget.usedStatus == 'Streaming'
+                                            ? widget.zoomId != null ||
+                                                    widget.zoomId != "" ||
+                                                    widget.zoomDesc != null ||
+                                                    widget.zoomDesc != ""
+                                                ? 'Get Zoom Link Here'
+                                                : 'Watch Livestream'
+                                            : widget.usedStatus ==
+                                                    'Watch Playback'
+                                                ? 'Watch Playback'
+                                                : 'USE TICKET',
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -316,11 +325,13 @@ class UseTicketState extends State<UseTicket> {
           child: Container(
             foregroundDecoration: BoxDecoration(
                 backgroundBlendMode: widget.usedStatus == 'Available' ||
-                        widget.usedStatus == 'Streaming'
+                        widget.usedStatus == 'Streaming' ||
+                        widget.usedStatus == 'On Demand Video'
                     ? null
                     : BlendMode.saturation,
                 color: widget.usedStatus == 'Available' ||
-                        widget.usedStatus == 'Streaming'
+                        widget.usedStatus == 'Streaming' ||
+                        widget.usedStatus == 'On Demand Video'
                     ? null
                     : Colors.grey),
             width: MediaQuery.of(context).size.width,
