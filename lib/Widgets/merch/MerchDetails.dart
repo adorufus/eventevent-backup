@@ -1,6 +1,8 @@
 import 'package:eventevent/Models/AppState.dart';
 import 'package:eventevent/Models/MerchDetailModel.dart';
+import 'package:eventevent/Models/MerchLoveModels.dart';
 import 'package:eventevent/Redux/Actions/MerchDetailsActions.dart';
+import 'package:eventevent/Redux/Actions/MerchLoveAction.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/merch/BuyOptionSelector.dart';
 import 'package:eventevent/Widgets/merch/MerchCommentDetail.dart';
@@ -23,6 +25,10 @@ class MerchDetails extends StatefulWidget {
   @override
   _MerchDetailsState createState() => _MerchDetailsState();
 }
+
+typedef OnMerchLoveAddItem = Function(
+    String productId, bool isLoved, int loveCount);
+typedef OnMerchLoved = Function(MerchLoveModel item);
 
 class _MerchDetailsState extends State<MerchDetails> {
   int currentTab = 0;
@@ -277,12 +283,32 @@ class _MerchDetailsState extends State<MerchDetails> {
       margin: EdgeInsets.symmetric(horizontal: 13),
       child: Row(
         children: <Widget>[
-          MerchLove(
-            merchId: 0,
-            isComment: false,
-            loveCount: data.likeCount,
-            isAlreadyLoved: true,
-          ),
+          StoreConnector<MerchLoveModel, OnMerchLoveAddItem>(
+              converter: (store) =>
+                  (merchId, isLoved, loveCount) => store.dispatch(
+                        AddLove(
+                          MerchLoveModel(
+                            productId: merchId,
+                            isLoved: isLoved,
+                            loveCount: loveCount,
+                          ),
+                        ),
+                      ),
+              builder: (context, callback) {
+                callback(
+                  data.merchId,
+                  data.isLoved,
+                  data.likeCount,
+                );
+                return GestureDetector(
+                  child: MerchLove(
+                    merchId: 0,
+                    isComment: false,
+                    loveCount: data.likeCount,
+                    isAlreadyLoved: true,
+                  ),
+                );
+              }),
           SizedBox(
             width: ScreenUtil.instance.setWidth(10),
           ),

@@ -12,6 +12,7 @@ class MerchDetailModel {
   final String description;
   final int commentCount;
   final int likeCount;
+  final bool isLoved;
 
   MerchDetailModel({
     @required this.merchId,
@@ -24,6 +25,7 @@ class MerchDetailModel {
     @required this.comments,
     @required this.commentCount,
     @required this.likeCount,
+    @required this.isLoved
   });
 
   factory MerchDetailModel.fromJson(Map<String, dynamic> json) =>
@@ -37,7 +39,8 @@ class MerchDetailModel {
         description: json['description'] as String,
         comments: json['comment'],
         commentCount: json['count_comment'],
-        likeCount: json['like']
+        likeCount: json['like'],
+        isLoved: json['isLiked'],
       );
 }
 
@@ -92,7 +95,7 @@ class MerchDetailState {
   });
 
   factory MerchDetailState.initial() =>
-      MerchDetailState(error: null, loading: false, data: null);
+      MerchDetailState(error: null, loading: false, data: MerchDetailModel(commentCount: 0, comments: [], description: '', details: [], imageUrl: '', likeCount: 0, merchantName: '', merchId: '', productName: '', profileImageUrl: ''));
 
   dynamic toJson() {
     return {"error": error, "loading": loading, "data": data};

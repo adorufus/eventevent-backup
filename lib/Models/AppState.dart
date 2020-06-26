@@ -2,6 +2,7 @@ import 'package:eventevent/Models/DiscoverMerchModel.dart';
 import 'package:eventevent/Models/MerchCategoryModel.dart';
 import 'package:eventevent/Models/MerchCommentModel.dart';
 import 'package:eventevent/Models/MerchDetailModel.dart';
+import 'package:eventevent/Models/MerchLoveModels.dart';
 import 'package:eventevent/Models/PopularMerchModel.dart';
 import 'package:eventevent/Models/SpecificCategoryListModel.dart';
 import 'package:eventevent/Models/SpecificCollectionListModel.dart';
@@ -19,6 +20,7 @@ class AppState {
   final SpecificCollectionState specificCollections;
   final SpecificCategoryState specificCategories;
   final MerchCommentState merchComments;
+  final MerchLoveModel merchLoves;
 
   AppState({
     this.category,
@@ -30,6 +32,7 @@ class AppState {
     this.specificCollections,
     this.specificCategories,
     this.merchComments,
+    this.merchLoves,
   });
 
   factory AppState.initial() => AppState(
@@ -42,6 +45,7 @@ class AppState {
         specificCollections: SpecificCollectionState.initial(),
         specificCategories: SpecificCategoryState.initial(),
         merchComments: MerchCommentState.initial(),
+        merchLoves: MerchLoveModel(isLoved: false, loveCount: 0, productId: ""),
       );
 
   AppState copyWith({
@@ -54,6 +58,7 @@ class AppState {
     SpecificCollectionState specificCollections,
     SpecificCategoryState specificCategories,
     MerchCommentState merchComments,
+    MerchLoveModel merchLoves,
   }) {
     return AppState(
       banner: banner ?? this.banner,
@@ -65,6 +70,7 @@ class AppState {
       specificCollections: specificCollections ?? this.specificCollections,
       specificCategories: specificCategories ?? this.specificCategories,
       merchComments: merchComments ?? this.merchComments,
+      merchLoves: merchLoves ?? this.merchLoves,
     );
   }
 

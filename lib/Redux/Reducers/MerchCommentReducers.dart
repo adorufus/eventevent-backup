@@ -11,7 +11,7 @@ MerchCommentState merchCommentListReducer(MerchCommentState state, FSA action) {
     case REQUEST:
       newState.list.error = null;
       newState.list.loading = true;
-      newState.list.data = null;
+      newState.list.data = [];
 
       return newState;
 
@@ -35,8 +35,8 @@ MerchCommentState merchCommentListReducer(MerchCommentState state, FSA action) {
 }
 
 List<MerchCommentModel> merchCommentFromJSONStr(dynamic payload){
-  var extractedJson = json.decode(payload);
-  Iterable jsonArray = extractedJson['data'];
+  Map extractedJson = json.decode(payload);
+  Iterable jsonArray = extractedJson.containsKey('data') ? extractedJson['data'] : [];
 
   print(jsonArray.runtimeType);
   print('jsonArrayMerchComment = ' + jsonArray.toString());
