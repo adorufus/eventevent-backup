@@ -89,72 +89,72 @@ class WithdrawBankState extends State<WithdrawBank> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    return SafeArea(
-      child: Scaffold(
-        key: scaffoldKey,
-        resizeToAvoidBottomPadding: false,
-        appBar: PreferredSize(
-          preferredSize: Size(null, 100),
+    return Scaffold(
+      key: scaffoldKey,
+      resizeToAvoidBottomPadding: false,
+      appBar: PreferredSize(
+        preferredSize: Size(null, 100),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: ScreenUtil.instance.setWidth(75),
           child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: ScreenUtil.instance.setWidth(75),
+            color: Colors.white,
             child: Container(
-              color: Colors.white,
-              child: Container(
-                margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
-                child: Row(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(15.49),
-                            width: ScreenUtil.instance.setWidth(9.73),
-                            child: Image.asset(
-                              'assets/icons/icon_apps/arrow.png',
-                              fit: BoxFit.fill,
-                            ),
+              margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
+              child: Row(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        SizedBox(
+                          height: ScreenUtil.instance.setWidth(15.49),
+                          width: ScreenUtil.instance.setWidth(9.73),
+                          child: Image.asset(
+                            'assets/icons/icon_apps/arrow.png',
+                            fit: BoxFit.fill,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: MediaQuery.of(context).size.width / 2.8),
-                    Text(
-                      'Balance',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: ScreenUtil.instance.setSp(14)),
-                    )
-                  ],
-                ),
+                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width / 2.8),
+                  Text(
+                    'Balance',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: ScreenUtil.instance.setSp(14)),
+                  )
+                ],
               ),
             ),
           ),
         ),
-        bottomNavigationBar: GestureDetector(
-          onTap: () async {
-            showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (BuildContext context) {
-                  return showBottomPopup();
-                });
-          },
-          child: Container(
-            height: ScreenUtil.instance.setWidth(50),
-            color: Color(0xFFFFAA00),
-            child: Center(
-                child: Text(
-              'WITHDRAW',
-              style: TextStyle(color: Colors.white),
-            )),
-          ),
+      ),
+      bottomNavigationBar: GestureDetector(
+        onTap: () async {
+          showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (BuildContext context) {
+                return showBottomPopup();
+              });
+        },
+        child: Container(
+          height: ScreenUtil.instance.setWidth(50),
+          color: Color(0xFFFFAA00),
+          child: Center(
+              child: Text(
+            'WITHDRAW',
+            style: TextStyle(color: Colors.white),
+          )),
         ),
-        body: ListView(
+      ),
+      body: SafeArea(
+        child: ListView(
           children: <Widget>[
             DefaultTabController(
               length: 2,
@@ -707,7 +707,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                 transactionStatus = 'ADDED BALANCE';
                 transactionColor = Colors.lightGreen;
                 amountColor = eventajaGreenTeal;
-              } else if(historyList[i]['status'] == 'declined'){
+              } else if (historyList[i]['status'] == 'declined') {
                 transactionStatus = 'DECLINED';
                 transactionColor = Colors.red;
                 amountColor = Colors.red;

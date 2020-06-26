@@ -46,24 +46,6 @@ class _ListenPageState extends State<ListenPage> {
   void initState() {
     super.initState();
     ClevertapHandler.logPageView("Nearby");
-    if (!mounted) {
-      return;
-    } else {
-      fetchCurrentLocationEvent().then((response) {
-        if (response.statusCode == 200) {
-          setState(() {
-            var extractedData = json.decode(response.body);
-            nearbyEventData = extractedData['data'];
-            nearbyEventData.removeWhere((item) =>
-                item['ticket_type']['type'] == 'free_limited_seating' ||
-                item['ticket_type']['type'] == 'paid_seating' ||
-                item['ticket_type']['type'] == 'paid_seating');
-          });
-        }
-      });
-    }
-    //getLocationName();
-
     initPlatformState();
     location.onLocationChanged().listen((LocationData result) async {
       if (!mounted) return;
@@ -73,6 +55,27 @@ class _ListenPageState extends State<ListenPage> {
       });
       print(currentLocation.heading);
     });
+
+    if (!mounted) {
+      return;
+    } else {
+      fetchCurrentLocationEvent().then((response) {
+        if (response.statusCode == 200) {
+          if (mounted)
+            setState(() {
+              var extractedData = json.decode(response.body);
+              nearbyEventData = extractedData['data'];
+              nearbyEventData.removeWhere((item) =>
+                  item['ticket_type']['type'] == 'free_limited_seating' ||
+                  item['ticket_type']['type'] == 'paid_seating' ||
+                  item['ticket_type']['type'] == 'paid_seating');
+            });
+
+            print(nearbyEventData);
+        }
+      });
+    }
+    //getLocationName();
   }
 
   void _onLoading() async {
@@ -244,8 +247,8 @@ class _ListenPageState extends State<ListenPage> {
                                     ['availableTicketStatus'] ==
                                 '1') {
                               itemColor = Color(0xFF34B323);
-                              itemPriceText = nearbyEventData[i]['ticket']
-                                  ['cheapestTicket'];
+                              itemPriceText = 'Rp. ' + nearbyEventData[i]['ticket']
+                                  ['cheapestTicket'] + ',-';
                             } else {
                               if (nearbyEventData[i]['ticket']['salesStatus'] ==
                                   'comingSoon') {
@@ -287,6 +290,12 @@ class _ListenPageState extends State<ListenPage> {
                             itemColor = Color(0xFFFFAA00);
                             itemPriceText =
                                 nearbyEventData[i]['ticket_type']['name'];
+                          } else if (nearbyEventData[i]['ticket_type']
+                                  ['type'] ==
+                              'paid_live_stream') {
+                            itemColor = eventajaGreenTeal;
+                            itemPriceText = 'Rp. ' +
+                                nearbyEventData[i]['ticket']['cheapestTicket'];
                           } else if (nearbyEventData[i]['ticket_type']
                                   ['type'] ==
                               'free_live_stream') {
@@ -364,8 +373,7 @@ class _ListenPageState extends State<ListenPage> {
       if (e.code == "PERMISSION_DENIED") {
         err = 'Permission Denied';
       } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
-        err =
-            'Permission denied - please ask the user to enable location service';
+        err = 'Permission denied - please enable location service';
       }
       currentLocation = null;
     }

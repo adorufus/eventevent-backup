@@ -226,8 +226,8 @@ class _MyTicketState extends State<MyTicket> {
                             Color ticketColor;
                             String ticketStatusText;
 
-                            print(
-                                'PLAYBACK URL: ${myTicketList[i]['livestream']['playback_url']}');
+                            // print(
+                            //     'PLAYBACK URL: ${myTicketList[i]['livestream']['playback_url']}');
 
                             if (myTicketList[i]['usedStatus'] == 'available') {
                               ticketColor = eventajaGreenTeal;
