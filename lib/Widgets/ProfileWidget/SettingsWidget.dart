@@ -14,6 +14,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
@@ -599,7 +600,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
     // Future.delayed(Duration(seconds: 3));
 
-    final response = await http.post(logoutApiUrl, body: body, headers: {
+    try {
+      final response = await http.post(logoutApiUrl, body: body, headers: {
       'Authorization': "Basic YWRtaW46MTIzNA==",
       'cookie': prefs.getString('Session')
     });
@@ -628,6 +630,19 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         isLoading = false;
       });
       print(response.body);
+    }
+    } on SocketException catch (e) {
+      print(e.message);
+      print(e.address);
+      print(e.osError);
+      isLoading = false;
+      if(mounted) setState((){});
+      Flushbar(
+        animationDuration: Duration(milliseconds: 500),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+        message: 'Please check your connection',
+      ).show(context);
     }
   }
 }

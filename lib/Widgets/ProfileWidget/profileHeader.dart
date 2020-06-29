@@ -858,7 +858,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
               ticketType: userTimelineList[i].containsKey('ticket_type') ? userTimelineList[i]['ticket_type']['type'] : null,
               cheapestTicket: userTimelineList[i].containsKey('ticket') ? userTimelineList[i]['ticket']['cheapestTicket'] : null,
               location: userTimelineList[i]['locationName'],
-              eventId: userTimelineList[i]['type'] == 'event' ? userTimelineList[i]['eventID'] : null,
+              eventId: userTimelineList[i]['type'] == 'event' || userTimelineList[i]['type'] == 'love' ? userTimelineList[i]['eventID'] : null,
               impressionId:
                   userTimelineList[i]['impression']['data'].length == 0
                       ? ''

@@ -169,7 +169,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   void initState() {
     // FlutterBranchSdk.validateSDKIntegration();
     generateLink();
-    if (widget.detailData.containsKey("livestream")) {
+    if (widget.detailData.containsKey("livestream") && widget.detailData['livestream'].isNotEmpty) {
       getWowzaLivestreamState(
               widget.detailData['livestream'][0]['streaming_id'])
           .then((response) {
