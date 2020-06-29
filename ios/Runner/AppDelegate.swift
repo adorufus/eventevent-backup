@@ -12,9 +12,9 @@ import CleverTapSDK
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     // FirebaseApp.Configure()
+    CleverTap.autoIntegrate()
     GeneratedPluginRegistrant.register(with: self)
      GMSServices.provideAPIKey("AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI")
-     CleverTap.autoIntegrate()
      // CleverTapPlugin.sharedInstance().applicationDidLaunch(withOptions: launchOptions)
      if #available(iOS 10.0, *) {
        UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
