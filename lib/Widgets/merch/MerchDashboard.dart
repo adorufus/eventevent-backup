@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:eventevent/Models/AppState.dart';
 import 'package:eventevent/Models/DiscoverMerchModel.dart';
 import 'package:eventevent/Models/MerchCategoryModel.dart';
@@ -13,11 +15,15 @@ import 'package:eventevent/Redux/Actions/SpecificCategoryActions.dart';
 import 'package:eventevent/Redux/Reducers/logger.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/PopularEventWidget.dart';
+import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/Widgets/merch/CategoryItem.dart';
 import 'package:eventevent/Widgets/merch/MerchDetails.dart';
+import 'package:eventevent/Widgets/merch/MerchSearch.dart';
 import 'package:eventevent/Widgets/merch/PopularItem.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/BaseBodyWithScaffoldAndAppBar.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,10 +33,15 @@ import 'package:eventevent/Redux/Reducers/BannerReducers.dart';
 import 'package:eventevent/Widgets/merch/Banner.dart';
 import 'package:redux_api_middleware/redux_api_middleware.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'MerchItem.dart';
 import 'MerchCollection.dart';
+import 'package:http/http.dart' as http;
 
 class MerchDashboard extends StatefulWidget {
+  final isRest;
+
+  const MerchDashboard({Key key, this.isRest}) : super(key: key);
   @override
   _MerchDashboardState createState() => _MerchDashboardState();
 }
@@ -47,6 +58,26 @@ class _MerchDashboardState extends State<MerchDashboard> {
   // void handleCollectionInitialBuild(CollectionScreenProps collectionProps) {
   //   collectionProps.getCollection();
   // }
+
+  List popularPeopleData = [];
+  List discoverPeopleData = [];
+  bool isLoading = false;
+  String urlType = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchPopularPeople();
+    fetchDiscoverPeople();
+    if (widget.isRest == true) {
+      urlType = BaseApi().restUrl;
+    } else {
+      urlType = BaseApi().apiUrl;
+    }
+
+    if (mounted) setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,29 +120,32 @@ class _MerchDashboardState extends State<MerchDashboard> {
               fontSize: ScreenUtil.instance.setSp(14),
               color: Colors.black,
             )),
-            // actions: <Widget>[
-            //   GestureDetector(
-            //     onTap: () {},
-            //     child: Container(
-            //         height: ScreenUtil.instance.setWidth(35),
-            //         width: ScreenUtil.instance.setWidth(35),
-            //         decoration: BoxDecoration(
-            //             color: Colors.white,
-            //             shape: BoxShape.circle,
-            //             boxShadow: <BoxShadow>[
-            //               BoxShadow(
-            //                   color: Colors.black.withOpacity(0.1),
-            //                   offset: Offset(0, 0),
-            //                   spreadRadius: 1.5,
-            //                   blurRadius: 2)
-            //             ]),
-            //         child: Image.asset(
-            //           'assets/icons/icon_apps/search.png',
-            //           scale: 4.5,
-            //         )),
-            //   ),
-            //   SizedBox(width: ScreenUtil.instance.setWidth(8)),
-            // ],
+            actions: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MerchSearch()));
+                },
+                child: Container(
+                    height: ScreenUtil.instance.setWidth(35),
+                    width: ScreenUtil.instance.setWidth(35),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              offset: Offset(0, 0),
+                              spreadRadius: 1.5,
+                              blurRadius: 2)
+                        ]),
+                    child: Image.asset(
+                      'assets/icons/icon_apps/search.png',
+                      scale: 4.5,
+                    )),
+              ),
+              SizedBox(width: ScreenUtil.instance.setWidth(8)),
+            ],
           ),
         ),
       ),
@@ -179,6 +213,8 @@ class _MerchDashboardState extends State<MerchDashboard> {
                     popularMerchLoading == true
                         ? HomeLoadingScreen().eventLoading()
                         : merchItem(data: popularMerchData, props: props),
+                    peopleText('Popular', onNavigateSeeAll: () {}),
+                    peopleImage(data: popularPeopleData),
                     Row(children: <Widget>[
                       titleText('Discover Merch', 'Lorem Ipsum Dolor Sit Amet'),
                       Expanded(
@@ -209,6 +245,8 @@ class _MerchDashboardState extends State<MerchDashboard> {
                     discoverMerchLoading == true
                         ? HomeLoadingScreen().eventLoading()
                         : merchItem(data: discoverMerchData, props: props),
+                    peopleText('Discover', onNavigateSeeAll: () {}),
+                    peopleImage(data: discoverPeopleData),
                   ],
                 ),
               ],
@@ -307,6 +345,106 @@ class _MerchDashboardState extends State<MerchDashboard> {
     );
   }
 
+  Widget peopleText(String title, {Function onNavigateSeeAll}) {
+    return Padding(
+      padding: EdgeInsets.only(left: 13, right: 13, top: 20, bottom: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                title + ' Merchant',
+                style: TextStyle(
+                    color: eventajaBlack,
+                    fontSize: ScreenUtil.instance.setSp(19),
+                    fontWeight: FontWeight.bold),
+              ),
+              Padding(
+                  padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width / 4.5,
+              )),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: onNavigateSeeAll,
+                child: Container(
+                  height: 20,
+                  child: Center(
+                    child: Text(
+                      'See All',
+                      style: TextStyle(
+                          color: eventajaGreenTeal,
+                          fontSize: ScreenUtil.instance.setSp(12)),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: ScreenUtil.instance.setWidth(5)),
+          Text(
+              title == 'Popular'
+                  ? 'Find the most popular merchant'
+                  : 'Discover the undiscovered',
+              style: TextStyle(
+                  color: Color(0xFF868686),
+                  fontSize: ScreenUtil.instance.setSp(14))),
+        ],
+      ),
+    );
+  }
+
+  Widget peopleImage({data}) {
+    return Container(
+      height: ScreenUtil.instance.setWidth(80),
+      child: popularPeopleData == null
+          ? HomeLoadingScreen().peopleLoading()
+          : ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: data == null ? 0 : data.length,
+              itemBuilder: (BuildContext context, i) {
+                return GestureDetector(
+                  onTap: () {
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //     builder: (BuildContext context) => ProfileWidget(
+                    //           initialIndex: 0,
+                    //           userId: popularPeopleData[i]['id'],
+                    //         )));
+                  },
+                  child: new Container(
+                    padding: i == 0
+                        ? EdgeInsets.only(left: 13)
+                        : EdgeInsets.only(left: 13),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          height: ScreenUtil.instance.setWidth(40.50),
+                          width: ScreenUtil.instance.setWidth(41.50),
+                          decoration: BoxDecoration(
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                    color: Colors.black26,
+                                    offset: Offset(1.0, 1.0),
+                                    blurRadius: 3)
+                              ],
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: NetworkImage(data[i]["photo"]),
+                                fit: BoxFit.fill,
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+    );
+  }
+
   Widget collectionImage({List<MerchCollectionModel> data}) {
     return Container(
       height: ScreenUtil.instance.setWidth(90),
@@ -374,8 +512,11 @@ class _MerchDashboardState extends State<MerchDashboard> {
               print(data[i]);
               return GestureDetector(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MerchDetails(merchId: data[i].merchId)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              MerchDetails(merchId: data[i].merchId)));
                 },
                 child: MerchItem(
                   imageUrl: data[i].imageUrl,
@@ -387,6 +528,135 @@ class _MerchDashboardState extends State<MerchDashboard> {
                 ),
               );
             }));
+  }
+
+  ///Untuk Fetching gambar PopularPeople
+  Future fetchPopularPeople() async {
+    if (!mounted) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    final popularPeopleUrl = urlType +
+        '/product/seller?X-API-KEY=$API_KEY&page=1&type=popular&limit=10';
+
+    Map<String, String> headerType = {};
+
+    Map<String, String> headerProd = {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': preferences.getString('Session')
+    };
+
+    Map<String, String> headerRest = {
+      'Authorization': AUTHORIZATION_KEY,
+      'signature': SIGNATURE
+    };
+
+    setState(() {
+      if (widget.isRest == true) {
+        headerType = headerRest;
+      } else if (widget.isRest == false) {
+        headerType = headerProd;
+      }
+    });
+
+    final response = await http.get(popularPeopleUrl, headers: headerType);
+
+    print('Merch dashboard - fetch pop merchant' +
+        response.statusCode.toString());
+
+    if (response.statusCode == 200) {
+      print('fetched data');
+      if (!mounted) return;
+      setState(() {
+        var extractedData = json.decode(response.body);
+        popularPeopleData = extractedData['data'];
+
+        isLoading = false;
+      });
+    } else if (response.statusCode == 403) {
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+      });
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: response.reasonPhrase,
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context).then((val) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+        });
+    }
+  }
+
+  ///Untuk fetching gambar DiscoverPeople
+  Future fetchDiscoverPeople() async {
+    if (!mounted) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    final popularPeopleUrl = urlType +
+        '/product/seller?X-API-KEY=$API_KEY&page=1&type=discover&limit=10';
+
+    Map<String, String> headerType = {};
+
+    Map<String, String> headerProd = {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': preferences.getString('Session')
+    };
+
+    Map<String, String> headerRest = {
+      'Authorization': AUTHORIZATION_KEY,
+      'signature': SIGNATURE
+    };
+
+    setState(() {
+      if (widget.isRest == true) {
+        headerType = headerRest;
+      } else if (widget.isRest == false) {
+        headerType = headerProd;
+      }
+    });
+
+    final response = await http.get(popularPeopleUrl, headers: headerType);
+
+    print('Merch dashboard - fetch discover people ' +
+        response.statusCode.toString());
+
+    if (response.statusCode == 200) {
+      print('fetched data discoverPeople');
+      if (!mounted) return;
+      setState(() {
+        var extractedData = json.decode(response.body);
+        discoverPeopleData = extractedData['data'];
+
+        isLoading = false;
+      });
+    } else if (response.statusCode == 403) {
+      setState(() {
+        isLoading = false;
+      });
+      Flushbar(
+        flushbarPosition: FlushbarPosition.TOP,
+        message: response.reasonPhrase,
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+        animationDuration: Duration(milliseconds: 500),
+      )..show(context).then((val) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+        });
+    }
   }
 }
 

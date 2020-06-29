@@ -51,6 +51,20 @@ class _CollectionItemState extends State<CollectionItem> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width - 146,
+                  height: ScreenUtil.instance.setWidth(20),
+                  child: Text(
+                    widget.title,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: ScreenUtil.instance.setSp(16)),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textWidthBasis: TextWidthBasis.parent,
+                  ),
+                ),
+                SizedBox(height: 5,),
                 Row(
                   children: <Widget>[
                     CircleAvatar(
@@ -74,19 +88,6 @@ class _CollectionItemState extends State<CollectionItem> {
                       ),
                     ),
                   ],
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width - 146,
-                  height: ScreenUtil.instance.setWidth(20),
-                  child: Text(
-                    widget.title,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: ScreenUtil.instance.setSp(16)),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textWidthBasis: TextWidthBasis.parent,
-                  ),
                 ),
                 Expanded(
                   child: SizedBox(),

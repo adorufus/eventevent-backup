@@ -519,7 +519,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
     final _pageOptions = [
       EventCatalog(isRest: widget.isRest),
       TimelineDashboard(isRest: widget.isRest),
-      widget.isRest == true ? LoginRegisterWidget() : MerchDashboard(),
+      widget.isRest == true ? LoginRegisterWidget() : MerchDashboard(isRest: widget.isRest,),
       widget.isRest == true ? LoginRegisterWidget() : PushNotification(),
       widget.isRest == true
           ? LoginRegisterWidget()
