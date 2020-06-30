@@ -279,41 +279,27 @@ class _MerchDetailsState extends State<MerchDetails> {
   }
 
   Widget itemButton({MerchDetailModel data}) {
+    print(data.isLoved);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 13),
       child: Row(
         children: <Widget>[
-          StoreConnector<MerchLoveModel, OnMerchLoveAddItem>(
-              converter: (store) =>
-                  (merchId, isLoved, loveCount) => store.dispatch(
-                        AddLove(
-                          MerchLoveModel(
-                            productId: merchId,
-                            isLoved: isLoved,
-                            loveCount: loveCount,
-                          ),
-                        ),
-                      ),
-              builder: (context, callback) {
-                callback(
-                  data.merchId,
-                  data.isLoved,
-                  data.likeCount,
-                );
-                return GestureDetector(
-                  child: MerchLove(
-                    merchId: 0,
-                    isComment: false,
-                    loveCount: data.likeCount,
-                    isAlreadyLoved: true,
-                  ),
-                );
-              }),
+          GestureDetector(
+            onTap: (){
+              
+            },
+            child: MerchLove(
+              merchId: data.merchId,
+              isComment: false,
+              loveCount: data.likeCount,
+              isAlreadyLoved: data.isLoved,
+            ),
+          ),
           SizedBox(
             width: ScreenUtil.instance.setWidth(10),
           ),
           MerchLove(
-            merchId: 0,
+            merchId: data.merchId,
             isComment: true,
             commentCount: data.commentCount,
             isAlreadyCommented: true,

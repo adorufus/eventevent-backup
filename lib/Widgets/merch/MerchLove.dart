@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:eventevent/Widgets/merch/MerchCommentDetail.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -14,7 +15,7 @@ class MerchLove extends StatefulWidget {
   final commentCount;
   final isAlreadyCommented;
   final isAlreadyLoved;
-  final merchId;
+  final String merchId;
 
   const MerchLove({
     Key key,
@@ -42,6 +43,9 @@ class _MerchLoveState extends State<MerchLove> {
 
   @override
   void initState() {
+    print(widget.merchId);
+    print(widget.isAlreadyLoved);
+    print(widget.loveCount);
     setState(() {
       _isLoved = widget.isAlreadyLoved;
       _loveCount = widget.loveCount;
@@ -62,16 +66,27 @@ class _MerchLoveState extends State<MerchLove> {
 
     return GestureDetector(
       onTap: () {
-        if (_isLoved == false) {
-          setState(() {
-            _loveCount += 1;
-            _isLoved = true;
-            doLove();
-          });
+        if (widget.isComment == false) {
+          if (_isLoved == false) {
+            setState(() {
+              _loveCount += 1;
+              _isLoved = true;
+              doLove();
+            });
+          } else {
+            _loveCount -= 1;
+            _isLoved = false;
+            doUnlove();
+          }
         } else {
-          _loveCount -= 1;
-          _isLoved = false;
-          doUnlove();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MerchCommentDetail(
+                merchId: widget.merchId,
+              ),
+            ),
+          );
         }
       },
       child: Container(
@@ -135,9 +150,12 @@ class _MerchLoveState extends State<MerchLove> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     try {
-      Map<String, dynamic> data = {'X-API-KEY': API_KEY, 'id': widget.merchId};
+      Map<String, dynamic> data = {
+        'X-API-KEY': API_KEY,
+        'productId': widget.merchId
+      };
 
-      Response response = await dio.post('/event_love/post',
+      Response response = await dio.post('/product/like',
           options: Options(
             headers: {
               'Authorization': AUTHORIZATION_KEY,

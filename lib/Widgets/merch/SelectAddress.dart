@@ -1,8 +1,17 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:eventevent/Widgets/merch/AddAddress.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/BaseBodyWithScaffoldAndAppBar.dart';
+import 'package:eventevent/helper/ColumnBuilder.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'AddressItem.dart';
 import 'DeliveryOptions.dart';
+import 'package:http/http.dart' as http;
 
 class SelectAddress extends StatefulWidget {
   @override
@@ -10,13 +19,40 @@ class SelectAddress extends StatefulWidget {
 }
 
 class _SelectAddressState extends State<SelectAddress> {
+  List allAddressList = [];
+  int currentSelectedAddress = 0;
+
+  @override
+  void initState() {
+    getAllAddress().then((response) {
+      var extractedData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        print(extractedData);
+
+        allAddressList.addAll(extractedData['data']);
+
+        if (mounted) setState(() {});
+      } else {
+        print(extractedData);
+        Flushbar(
+          animationDuration: Duration(milliseconds: 500),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+          message: "Something went wrong",
+        ).show(context);
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseBodyWithScaffoldAndAppBar(
       title: 'Select An Address',
       bottomNavBar: GestureDetector(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => DeliveryOptions()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => DeliveryOptions()));
         },
         child: Container(
           height: ScreenUtil.instance.setWidth(50),
@@ -32,7 +68,21 @@ class _SelectAddressState extends State<SelectAddress> {
         child: ListView(
           padding: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
           children: <Widget>[
-            addAddressButton(),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddAddress(),
+                  ),
+                ).then((item) {
+                  if (item != null) {
+                    allAddressList.add(item);
+                  }
+                });
+              },
+              child: addAddressButton(),
+            ),
             Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(bottom: 9, top: 20),
@@ -43,34 +93,29 @@ class _SelectAddressState extends State<SelectAddress> {
                     fontSize: ScreenUtil.instance.setSp(14)),
               ),
             ),
-            AddressItem(),
-            SizedBox(
-              height: 12,
+            ColumnBuilder(
+              itemCount: allAddressList.length,
+              itemBuilder: (context, i) {
+                return addressItem(
+                  addressName: allAddressList[i]['title'],
+                  fullAddress: allAddressList[i]['address'],
+                  isPrimary: allAddressList[i]['utama'],
+                  index: i,
+                );
+              },
             ),
-            AddressItem(),
-            SizedBox(
-              height: 12,
-            ),
-            AddressItem(),
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: EdgeInsets.only(bottom: 9, top: 20),
-              child: Text(
-                'Notes',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: ScreenUtil.instance.setSp(14)),
-              ),
-            ),
-            Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')
           ],
         ),
       ),
     );
   }
 
-  Widget addressItem() {
+  Widget addressItem(
+      {int index, String addressName, String fullAddress, String isPrimary}) {
+    if (isPrimary == "1") {
+      // currentSelectedAddress = index;
+      // if(mounted) setState((){});
+    }
     return Container(
       padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
       width: MediaQuery.of(context).size.width,
@@ -104,7 +149,7 @@ class _SelectAddressState extends State<SelectAddress> {
               children: <Widget>[
                 Container(
                   child: Text(
-                    'Address 1',
+                    addressName,
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     maxLines: 2,
                   ),
@@ -112,7 +157,7 @@ class _SelectAddressState extends State<SelectAddress> {
                 Container(
                   width: ScreenUtil.instance.setWidth(280),
                   child: Text(
-                    'Jl Jend Gatot Subroto Kav 23 Graha BIP Lt 9,Karet Semanggi',
+                    fullAddress,
                     style: TextStyle(fontSize: 13),
                     maxLines: 2,
                   ),
@@ -122,7 +167,14 @@ class _SelectAddressState extends State<SelectAddress> {
             Expanded(
               child: Container(),
             ),
-            Radio(value: null, groupValue: null, onChanged: null)
+            Radio(
+                value: index,
+                groupValue: currentSelectedAddress,
+                onChanged: (i) {
+                  currentSelectedAddress = i;
+                  if (mounted) setState(() {});
+                  print(currentSelectedAddress);
+                })
           ],
         ),
       ),
@@ -162,5 +214,32 @@ class _SelectAddressState extends State<SelectAddress> {
         ],
       ),
     );
+  }
+
+  Future<http.Response> getAllAddress() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String url = BaseApi().apiUrl + '/address/list?X-API-KEY=$API_KEY';
+    var response;
+
+    try {
+      response = await http.get(
+        url,
+        headers: {
+          'Authorization': AUTHORIZATION_KEY,
+          'cookie': preferences.getString("Session")
+        },
+      );
+    } on SocketException catch (e) {
+      print('address: ' +
+          e.address.address +
+          ', message: ' +
+          e.message +
+          ', osError, message: ' +
+          e.osError.message +
+          ', osError, int: ' +
+          e.osError.errorCode.toString());
+    }
+
+    return response;
   }
 }

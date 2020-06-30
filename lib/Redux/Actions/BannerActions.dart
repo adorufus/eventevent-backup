@@ -22,6 +22,7 @@ RSAA getBannerRequest(String session) {
     endpoint: getBannerUrl,
     types: [LIST_BANNER_REQUEST, LIST_BANNER_SUCCESS, LIST_BANNER_FAILURE],
     headers: {'Authorization': AUTHORIZATION_KEY, 'signature': SIGNATURE},
+    // headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session}
   );
 }
 

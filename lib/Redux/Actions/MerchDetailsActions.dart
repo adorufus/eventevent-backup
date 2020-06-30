@@ -14,7 +14,7 @@ const MERCH_DETAIL_SUCCESS = 'MERCH_DETAIL_SUCCESS';
 const MERCH_DETAIL_FAILURE = 'MERCH_DETAIL_FAILURE';
 
 RSAA getMerchDetailsRequest(String session, String id) {
-  final String baseUrl = BaseApi().restUrl;
+  final String baseUrl = BaseApi().apiUrl;
   final String getMerchDetailUrl =
       baseUrl + '/product/detail?X-API-KEY=$API_KEY&productId=$id';
       print(getMerchDetailUrl);
@@ -22,7 +22,8 @@ RSAA getMerchDetailsRequest(String session, String id) {
     method: 'GET',
     endpoint: getMerchDetailUrl,
     types: [MERCH_DETAIL_REQUEST, MERCH_DETAIL_SUCCESS, MERCH_DETAIL_FAILURE],
-    headers: {'Authorization': AUTHORIZATION_KEY, 'signature': SIGNATURE},
+    // headers: {'Authorization': AUTHORIZATION_KEY, 'signature': SIGNATURE},
+    headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session},
   );
 }
 

@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MerchCommentDetail extends StatefulWidget {
-  final merchId;
+  final String merchId;
 
   const MerchCommentDetail({Key key, this.merchId}) : super(key: key);
   @override
@@ -25,6 +25,7 @@ class _MerchCommentDetailState extends State<MerchCommentDetail> {
   TextEditingController commentController = TextEditingController();
 
   void initialization(MerchCommentProps props) {
+    print('merchID: ' + widget.merchId);
     props.getCommentList(widget.merchId);
   }
 

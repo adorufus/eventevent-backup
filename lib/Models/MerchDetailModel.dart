@@ -95,7 +95,7 @@ class MerchDetailState {
   });
 
   factory MerchDetailState.initial() =>
-      MerchDetailState(error: null, loading: false, data: MerchDetailModel(commentCount: 0, comments: [], description: '', details: [], imageUrl: '', likeCount: 0, merchantName: '', merchId: '', productName: '', profileImageUrl: ''));
+      MerchDetailState(error: null, loading: false, data: MerchDetailModel(commentCount: 0, comments: [], description: '', details: [], imageUrl: '', likeCount: 0, merchantName: '', merchId: '', productName: '', profileImageUrl: '', isLoved: false));
 
   dynamic toJson() {
     return {"error": error, "loading": loading, "data": data};
