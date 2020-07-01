@@ -20,14 +20,14 @@ class _AddAddressState extends State<AddAddress> {
   List provinceList = [];
   List citiesList = [];
   List kecamatanList = [];
-  String currentValueProvince;
+  Map currentValueProvince;
   String currentProvinceId;
-  String currentValueCity;
+  Map currentValueCity;
   String currentCityId;
   String currentKecamatanId;
-  String currentValueKecamatan;
-  int currentValue;
-  String isPrimary;
+  Map currentValueKecamatan;
+  int currentValue = 0;
+  String isPrimary = "0";
 
   // TextEditingController provinceController = TextEditingController();
   // TextEditingController kecamatanController = TextEditingController();
@@ -105,13 +105,14 @@ class _AddAddressState extends State<AddAddress> {
                 items: provinceList.map((item) {
                   return DropdownMenuItem(
                     child: Text(item['name']),
-                    value: item['id'],
+                    value: item,
                   );
                 }).toList(),
-                value: currentProvinceId,
+                value: currentValueProvince != null ? currentValueProvince : null,
                 onChanged: (value) {
                   print(value);
-                  currentProvinceId = value;
+                  currentValueProvince = value;
+                  if (mounted) setState(() {});
                   getCities().then((response) {
                     print(response.statusCode);
                     print(response.body);
@@ -134,13 +135,13 @@ class _AddAddressState extends State<AddAddress> {
                 items: citiesList.map((item) {
                   return DropdownMenuItem(
                     child: Text(item['name']),
-                    value: item['id'],
+                    value: item as Map,
                   );
                 }).toList(),
-                value: currentCityId,
+                value: currentValueCity != null ? currentValueCity : null,
                 onChanged: (value) {
                   print(value);
-                  currentCityId = value;
+                  currentValueCity = value;
                   if (mounted) setState(() {});
                   getSubDistrict().then((response) {
                     print(response.statusCode);
@@ -164,12 +165,13 @@ class _AddAddressState extends State<AddAddress> {
                 items: kecamatanList.map((item) {
                   return DropdownMenuItem(
                     child: Text(item['name']),
-                    value: item['id'],
+                    value: item as Map,
                   );
                 }).toList(),
-                value: currentKecamatanId,
+                value: currentValueKecamatan != null ? currentValueKecamatan : null,
                 onChanged: (value) {
-                  currentKecamatanId = value;
+                  currentValueKecamatan = value;
+                  print(currentValueKecamatan);
                   if (mounted) setState(() {});
                 },
               ),
@@ -201,7 +203,7 @@ class _AddAddressState extends State<AddAddress> {
               TextFormField(
                 controller: titleController,
                 decoration: InputDecoration(
-                  hintText: 'Set your unique name here',
+                  hintText: 'Set your unique name here, (i.e Home, Office)',
                   labelText: 'address name',
                   alignLabelWithHint: true,
                 ),
@@ -229,11 +231,11 @@ class _AddAddressState extends State<AddAddress> {
                 ),
               ),
               SizedBox(
-                height: 16,
+                height: 20,
               ),
               Text('Set as primary address?'),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Radio(
                     groupValue: currentValue,
@@ -306,12 +308,34 @@ class _AddAddressState extends State<AddAddress> {
                 alignment: Alignment.center,
                 child: GestureDetector(
                   onTap: () {
-                    Map item = {
-                      'provinceId': currentProvinceId,
-                      'address': addressController.text,
+                    Map newAddressData = {
                       'title': titleController.text,
+                      'name': yourNameController.text,
+                      'address': addressController.text,
+                      'province_data': currentValueProvince,
+                      'city_data': currentValueCity,
+                      'kecamatan_data': currentValueKecamatan,
+                      'post_code': postalCodeController.text,
+                      'utama': isPrimary,
+                      'phone': phoneController.text
                     };
-                    Navigator.pop(context, item);
+
+                    print(newAddressData);
+
+                    print(currentValueProvince.toString() + ' ' + currentValueCity.toString() + ' ' + currentValueKecamatan.toString());
+                    createNewAddress().then((response){
+                      print(response.statusCode);
+                      print(response.body);
+
+                      var extractedData = json.decode(response.body);
+
+                      if(response.statusCode == 200){
+                        Navigator.pop(context, newAddressData);    
+                      } else {
+                        print("error");
+                      }
+                    });
+                    
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 5),
@@ -370,7 +394,7 @@ class _AddAddressState extends State<AddAddress> {
   Future<http.Response> getCities() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String url = BaseApi().apiUrl +
-        '/address/city?X-API-KEY=$API_KEY&province_id=$currentProvinceId';
+        '/address/city?X-API-KEY=$API_KEY&province_id=${currentValueProvince['id']}';
 
     var response;
 
@@ -392,7 +416,7 @@ class _AddAddressState extends State<AddAddress> {
   Future<http.Response> getSubDistrict() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String url = BaseApi().apiUrl +
-        '/address/kecamatan?X-API-KEY=$API_KEY&city_id=$currentCityId';
+        '/address/kecamatan?X-API-KEY=$API_KEY&city_id=${currentValueCity['id']}';
 
     var response;
 
@@ -425,17 +449,17 @@ class _AddAddressState extends State<AddAddress> {
       'name': yourNameController.text,
       'phone': phoneController.text,
       'address': addressController.text,
-      'province_id': currentProvinceId,
-      'province_name': currentValueProvince,
-      'city_id': currentCityId,
-      'city_name': currentValueCity,
-      'kecamatan_id': currentKecamatanId,
-      'kecamatan_name': currentValueKecamatan,
+      'province_id': currentValueProvince['id'],
+      'province_name': currentValueProvince['name'],
+      'city_id': currentValueCity['id'],
+      'city_name': currentValueCity['name'],
+      'kecamatan_id': currentValueKecamatan['id'],
+      'kecamatan_name': currentValueKecamatan['name'],
       'post_code': postalCodeController.text,
       'latitude': '',
       'longitude': '',
       'optional_address': '',
-      'utama': isPrimary
+      'utama': isPrimary,
     });
 
     return response;

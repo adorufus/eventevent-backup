@@ -77,7 +77,12 @@ class _SelectAddressState extends State<SelectAddress> {
                   ),
                 ).then((item) {
                   if (item != null) {
-                    allAddressList.add(item);
+                    if(item['utama'] == "1"){
+                      allAddressList.insert(0, item);
+                    } else 
+                    {
+                      allAddressList.add(item);
+                    }
                   }
                 });
               },
@@ -118,6 +123,7 @@ class _SelectAddressState extends State<SelectAddress> {
     }
     return Container(
       padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
+      margin: EdgeInsets.only(bottom: 15),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           color: Colors.white,
