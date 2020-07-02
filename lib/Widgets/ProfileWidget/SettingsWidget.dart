@@ -1,5 +1,6 @@
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankAccountList.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/ChangePassword.dart';
+import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/EditShippingAddressWidget.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/Feedback.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/PrivacyPolicy.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/Terms.dart';
@@ -317,6 +318,32 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         padding: EdgeInsets.only(left: 30, top: 15),
                         child: Text(
                           'Edit Profile',
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(18),
+                              color: Colors.grey[700]),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Divider(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    EditShippingAddressWidget()));
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.white,
+                        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
+                        child: Text(
+                          'Edit Shipping Address',
                           style: TextStyle(
                               fontSize: ScreenUtil.instance.setSp(18),
                               color: Colors.grey[700]),

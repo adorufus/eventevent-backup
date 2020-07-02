@@ -179,7 +179,7 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
         SizedBox(
           height: 10,
         ),
-        AddressItem()
+        AddressItem(isEditing: false,)
       ],
     );
   }

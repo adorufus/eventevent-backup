@@ -5,10 +5,11 @@ class EmptyState extends StatelessWidget {
   final reasonText;
   final isTimeout;
   final previousWidget;
+  final String buttonText;
   final Function refreshButtonCallback;
 
   const EmptyState(
-      {Key key, this.imagePath, this.reasonText, this.isTimeout = false, this.previousWidget, this.refreshButtonCallback})
+      {Key key, this.imagePath, this.reasonText, this.isTimeout = false, this.previousWidget, this.refreshButtonCallback, this.buttonText = 'Refresh'})
       : super(key: key);
 
   @override
@@ -30,7 +31,7 @@ class EmptyState extends StatelessWidget {
             ),
             SizedBox(height: 20),
             isTimeout == false ? Container() : RaisedButton(
-              child: Text('Retry'),
+              child: Text(buttonText),
               onPressed: refreshButtonCallback,
             )
           ],

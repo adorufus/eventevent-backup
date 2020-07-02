@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/BaseBodyWithScaffoldAndAppBar.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -11,6 +12,13 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddAddress extends StatefulWidget {
+  final bool isEditing;
+  final String addressId;
+  final addressData;
+
+  const AddAddress(
+      {Key key, this.isEditing = false, this.addressId, this.addressData})
+      : super(key: key);
   @override
   _AddAddressState createState() => _AddAddressState();
 }
@@ -41,6 +49,11 @@ class _AddAddressState extends State<AddAddress> {
 
   @override
   void initState() {
+    print(widget.isEditing);
+    if (widget.isEditing == true) {
+      initialization();
+    }
+
     getProvince().then((response) {
       print(response.statusCode);
       print(response.body);
@@ -55,6 +68,20 @@ class _AddAddressState extends State<AddAddress> {
       }
     });
     super.initState();
+  }
+
+  void initialization() {
+    print(widget.addressData);
+    titleController = TextEditingController(text: widget.addressData['title']);
+    addressController =
+        TextEditingController(text: widget.addressData['address']);
+    yourNameController =
+        TextEditingController(text: widget.addressData['name']);
+    phoneController = TextEditingController(text: widget.addressData['phone']);
+    postalCodeController =
+        TextEditingController(text: widget.addressData['post_code']);
+    isPrimary = widget.addressData['utama'];
+    if (mounted) setState(() {});
   }
 
   @override
@@ -98,6 +125,7 @@ class _AddAddressState extends State<AddAddress> {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 13),
           child: ListView(
+            padding: EdgeInsets.symmetric(vertical: 13),
             cacheExtent: 15,
             children: <Widget>[
               DropdownButton(
@@ -108,7 +136,8 @@ class _AddAddressState extends State<AddAddress> {
                     value: item,
                   );
                 }).toList(),
-                value: currentValueProvince != null ? currentValueProvince : null,
+                value:
+                    currentValueProvince != null ? currentValueProvince : null,
                 onChanged: (value) {
                   print(value);
                   currentValueProvince = value;
@@ -119,7 +148,12 @@ class _AddAddressState extends State<AddAddress> {
 
                     var extractedData = json.decode(response.body);
                     if (response.statusCode == 200) {
-                      citiesList.addAll(extractedData['data']);
+                      if (citiesList.isNotEmpty) {
+                        citiesList.clear();
+                        citiesList.addAll(extractedData['data']);
+                      } else {
+                        citiesList.addAll(extractedData['data']);
+                      }
                       if (mounted) setState(() {});
                     } else {
                       //TODO: handle error
@@ -149,7 +183,12 @@ class _AddAddressState extends State<AddAddress> {
 
                     var extractedData = json.decode(response.body);
                     if (response.statusCode == 200) {
-                      kecamatanList.addAll(extractedData['data']);
+                      if (kecamatanList.isNotEmpty) {
+                        kecamatanList.clear();
+                        kecamatanList.addAll(extractedData['data']);
+                      } else {
+                        kecamatanList.addAll(extractedData['data']);
+                      }
                       if (mounted) setState(() {});
                     } else {
                       //TODO: handle error
@@ -168,7 +207,9 @@ class _AddAddressState extends State<AddAddress> {
                     value: item as Map,
                   );
                 }).toList(),
-                value: currentValueKecamatan != null ? currentValueKecamatan : null,
+                value: currentValueKecamatan != null
+                    ? currentValueKecamatan
+                    : null,
                 onChanged: (value) {
                   currentValueKecamatan = value;
                   print(currentValueKecamatan);
@@ -322,20 +363,23 @@ class _AddAddressState extends State<AddAddress> {
 
                     print(newAddressData);
 
-                    print(currentValueProvince.toString() + ' ' + currentValueCity.toString() + ' ' + currentValueKecamatan.toString());
-                    createNewAddress().then((response){
+                    print(currentValueProvince.toString() +
+                        ' ' +
+                        currentValueCity.toString() +
+                        ' ' +
+                        currentValueKecamatan.toString());
+                    createNewAddress().then((response) {
                       print(response.statusCode);
                       print(response.body);
 
                       var extractedData = json.decode(response.body);
 
-                      if(response.statusCode == 200){
-                        Navigator.pop(context, newAddressData);    
+                      if (response.statusCode == 200) {
+                        Navigator.pop(context, newAddressData);
                       } else {
                         print("error");
                       }
                     });
-                    
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 5),
@@ -363,6 +407,74 @@ class _AddAddressState extends State<AddAddress> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 16,
+              ),
+              widget.isEditing == true
+                  ? Align(
+                      alignment: Alignment.center,
+                      child: GestureDetector(
+                        onTap: () {
+                          showCupertinoDialog(
+                              context: context,
+                              builder: (thisContext) {
+                                return CupertinoAlertDialog(
+                                  title: Text('Deleting Address'),
+                                  content: Text(
+                                      'Are you sure you want to delete this address?'),
+                                  actions: <Widget>[
+                                    CupertinoDialogAction(
+                                      child: Text('No'),
+                                      onPressed: () {
+                                        Navigator.pop(thisContext);
+                                      },
+                                    ),
+                                    CupertinoDialogAction(
+                                      child: Text('Yes'),
+                                      onPressed: () {
+                                        deleteAddress().then((response) {
+                                          print(response.statusCode);
+                                          print(response.body);
+
+                                          if (response.statusCode == 200) {
+                                            Navigator.pop(thisContext);
+                                            Navigator.pop(context, true);
+                                          }
+                                        });
+                                      },
+                                    )
+                                  ],
+                                );
+                              });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          height: 35,
+                          width: 150,
+                          decoration: BoxDecoration(
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                  color: Colors.red.withOpacity(0.4),
+                                  blurRadius: 2,
+                                  spreadRadius: 1.5,
+                                )
+                              ],
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Center(
+                            child: Text(
+                              'Delete',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(),
             ],
           ),
         ),
@@ -437,13 +549,19 @@ class _AddAddressState extends State<AddAddress> {
 
   Future<http.Response> createNewAddress() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
+    String endpoint = '/address/create';
 
-    String url = BaseApi().apiUrl + '/address/create';
+    if (widget.isEditing == true) {
+      endpoint = '/address/edit';
+    } else {
+      endpoint = '/address/create';
+    }
 
-    final response = await http.post(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': preferences.getString("Session")
-    }, body: {
+    String url = BaseApi().apiUrl + endpoint;
+
+    print(url);
+
+    Map bodyData = {
       'X-API-KEY': API_KEY,
       'title': titleController.text,
       'name': yourNameController.text,
@@ -460,8 +578,35 @@ class _AddAddressState extends State<AddAddress> {
       'longitude': '',
       'optional_address': '',
       'utama': isPrimary,
-    });
+    };
+
+    if (widget.isEditing == true) bodyData['addressId'] = widget.addressId;
+
+    final response = await http.post(url,
+        headers: {
+          'Authorization': AUTHORIZATION_KEY,
+          'cookie': preferences.getString("Session")
+        },
+        body: bodyData);
 
     return response;
+  }
+
+  Future<http.Response> deleteAddress() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String url = BaseApi().apiUrl +
+        '/address/delete?X-API-KEY=$API_KEY&addressId=${widget.addressId}';
+
+    try {
+      final response = http.get(url, headers: {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString("Session")
+      });
+
+      return response;
+    } on SocketException catch (e) {
+      print(e);
+      return null;
+    }
   }
 }

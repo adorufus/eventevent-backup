@@ -1,16 +1,21 @@
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddressItem extends StatelessWidget {
   final addressName;
   final fullAddress;
+  final isEditing;
 
-  const AddressItem({Key key, this.addressName, this.fullAddress}) : super(key: key);
+  const AddressItem(
+      {Key key, this.addressName, this.fullAddress, @required this.isEditing})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
+      margin: EdgeInsets.only(bottom: 10),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           color: Colors.white,
@@ -23,7 +28,7 @@ class AddressItem extends StatelessWidget {
           ]),
       child: Center(
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
@@ -42,7 +47,7 @@ class AddressItem extends StatelessWidget {
               children: <Widget>[
                 Container(
                   child: Text(
-                    'Address 1',
+                    addressName,
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     maxLines: 2,
                   ),
@@ -50,7 +55,7 @@ class AddressItem extends StatelessWidget {
                 Container(
                   width: ScreenUtil.instance.setWidth(280),
                   child: Text(
-                    'Jl Jend Gatot Subroto Kav 23 Graha BIP Lt 9,Karet Semanggi',
+                    fullAddress,
                     style: TextStyle(fontSize: 13),
                     maxLines: 2,
                   ),
@@ -60,7 +65,12 @@ class AddressItem extends StatelessWidget {
             Expanded(
               child: Container(),
             ),
-            Radio(value: null, groupValue: null, onChanged: null)
+            isEditing
+                ? Icon(
+                    Icons.arrow_forward_ios,
+                    color: eventajaGreenTeal,
+                  )
+                : Radio(value: null, groupValue: null, onChanged: null)
           ],
         ),
       ),

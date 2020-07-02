@@ -24,7 +24,7 @@ class PopularMerchModel {
           merchantName: json['seller']['username'],
           profileImageUrl: json['seller']['photo'],
           productName: json['product_name'],
-          imageUrl: json['images']['mainImage'] as String);
+          imageUrl: json['images'] == false ? '' : json['images']['mainImage'] as String);
 }
 
 class PopularMerchMiniDetails {
