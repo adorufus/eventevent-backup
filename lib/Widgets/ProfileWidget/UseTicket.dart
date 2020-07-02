@@ -273,7 +273,7 @@ class UseTicketState extends State<UseTicket> {
                   ? Colors.red
                   : Colors.orange,
           child: Center(
-            child: startDate.isAfter(DateTime.now())
+            child: widget.usedStatus == 'Streaming' && startDate.isAfter(DateTime.now())
                 ? CountDownTimer(
                     secondsRemaining: seconds,
                     useHHMMSS: true,

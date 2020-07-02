@@ -35,7 +35,7 @@ class _LivestreamPlayerState extends State<LivestreamPlayer>
     setState(() {});
     chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
-      aspectRatio: 10 / 18,
+      aspectRatio: 16 / 9,
       autoPlay: true,
       autoInitialize: true,
       looping: false,
