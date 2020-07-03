@@ -41,6 +41,7 @@ class _LivestreamPlayerState extends State<LivestreamPlayer>
       looping: false,
       
       showControls: true,
+      
       allowFullScreen: true,
       deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
 

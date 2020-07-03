@@ -80,6 +80,7 @@ class UseTicketState extends State<UseTicket> {
     final remaining = startDate.difference(DateTime.now());
     seconds = remaining.inSeconds;
     print("in seconds" + seconds.toString());
+    print('live url ' + widget.livestreamUrl);
     setState(() {});
     super.initState();
   }

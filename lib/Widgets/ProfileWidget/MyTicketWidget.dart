@@ -181,6 +181,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
 
                       return GestureDetector(
                         onTap: () {
+                          print('ticket status text: '  + ticketStatusText);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => UseTicket(
                                     ticketDetail: ticketDetailData[i],
@@ -211,7 +212,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                         ['zoom_description'] == "" ? null : ticketDetailData[i]['livestream']['zoom_description'],
                                     livestreamUrl: ticketStatusText ==
                                             'On Demand Video'
-                                        ? ticketDetailData[i].containsKey("livesteream") ? ticketDetailData[i]['livestream']['on_demand_link'] : ''
+                                        ? ticketDetailData[i].containsKey("livestream") ? ticketDetailData[i]['livestream']['on_demand_link'] : ''
                                         : ticketStatusText == "Streaming" ||
                                                 ticketStatusText ==
                                                     'Watch Playback' ||
