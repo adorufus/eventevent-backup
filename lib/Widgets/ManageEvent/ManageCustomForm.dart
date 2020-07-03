@@ -43,7 +43,7 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
         options: Options(headers: {
           'Authorization': AUTHORIZATION_KEY,
           'cookie': preferences.getString('Session')
-        },  responseType: ResponseType.plain),
+        }, responseType: ResponseType.plain),
         data: FormData.fromMap(data),
       );
 
@@ -309,10 +309,11 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                   builder: (context) => PostEventInvitePeople(
                         calledFrom: "new event",
                       )));
+        } else {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
         }
-        Navigator.pop(context);
-        Navigator.pop(context);
-        Navigator.pop(context);
       }
     } catch (e) {
       if (e is DioError) {
@@ -877,7 +878,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
             GestureDetector(
               onTap: () {
                 print(multipleFormCount > textEditingControllers.length);
-                if(multipleFormCount < textEditingControllers.length){
+                if (multipleFormCount < textEditingControllers.length) {
                   textEditingControllers.length = 0;
                 }
                 print('multiple form count' + multipleFormCount.toString());
@@ -1075,7 +1076,12 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 13),
             child: Row(
               children: <Widget>[
-                customForms[index]['isRequired'] == '1' ? Container() : Text('*', style: TextStyle(color: Colors.red,)),
+                customForms[index]['isRequired'] == '1'
+                    ? Container()
+                    : Text('*',
+                        style: TextStyle(
+                          color: Colors.red,
+                        )),
                 Text(formName),
               ],
             ),

@@ -361,7 +361,9 @@ class _TimelineItemState extends State<TimelineItem>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             isLivestream == true
-                                ? Image.asset('assets/icons/icon_apps/LivestreamTagIcon.png', scale: 25)
+                                ? Image.asset(
+                                    'assets/icons/icon_apps/LivestreamTagIcon.png',
+                                    scale: 25)
                                 : Container(),
                             Container(
                               width: 200,
@@ -692,69 +694,74 @@ class _TimelineItemState extends State<TimelineItem>
               ),
             ),
             SizedBox(height: ScreenUtil.instance.setWidth(19)),
-            Divider(),
-            SizedBox(height: ScreenUtil.instance.setWidth(16)),
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => EditPost(
-                              isVideo: postType == 'video' ? true : false,
-                              postId: id,
-                              thumbnailPath: imageUrl,
-                            ))).then((value) {
-                  setState(() {
-                    isLoading = true;
-                    doRefresh();
-                  });
-                });
-              },
-              child: Container(
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Edit',
-                          style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(16),
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF40D7FF)),
-                        ),
-                      ],
+            postType == 'event' || postType == 'love' ? Container() : Divider(),
+            postType == 'event' || postType == 'love'
+                ? Container()
+                : SizedBox(height: ScreenUtil.instance.setWidth(16)),
+            postType == 'event' || postType == 'love'
+                ? Container()
+                : GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditPost(
+                                    isVideo: postType == 'video' ? true : false,
+                                    postId: id,
+                                    thumbnailPath: imageUrl,
+                                  ))).then((value) {
+                        setState(() {
+                          isLoading = true;
+                          doRefresh();
+                        });
+                      });
+                    },
+                    child: Container(
+                      color: Colors.white,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Edit',
+                                style: TextStyle(
+                                    fontSize: ScreenUtil.instance.setSp(16),
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF40D7FF)),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            height: ScreenUtil.instance.setWidth(30),
+                            width: ScreenUtil.instance.setWidth(30),
+                            child:
+                                Image.asset('assets/icons/icon_apps/edit.png'),
+                          )
+                          // Container(
+                          //   height: ScreenUtil.instance.setWidth(44),
+                          //   width: ScreenUtil.instance.setWidth(50),
+                          //   decoration: BoxDecoration(
+                          //       image: DecorationImage(
+                          //           image: AssetImage(
+                          //               'assets/icons/page_post_media.png'),
+                          //           fit: BoxFit.fill),
+                          //       borderRadius: BorderRadius.circular(11),
+                          //       boxShadow: <BoxShadow>[
+                          //         BoxShadow(
+                          //             blurRadius: 10,
+                          //             color: Colors.grey
+                          //                 .withOpacity(0.3),
+                          //             spreadRadius: .5)
+                          //       ]),
+                          // )
+                        ],
+                      ),
                     ),
-                    Container(
-                      height: ScreenUtil.instance.setWidth(30),
-                      width: ScreenUtil.instance.setWidth(30),
-                      child: Image.asset('assets/icons/icon_apps/edit.png'),
-                    )
-                    // Container(
-                    //   height: ScreenUtil.instance.setWidth(44),
-                    //   width: ScreenUtil.instance.setWidth(50),
-                    //   decoration: BoxDecoration(
-                    //       image: DecorationImage(
-                    //           image: AssetImage(
-                    //               'assets/icons/page_post_media.png'),
-                    //           fit: BoxFit.fill),
-                    //       borderRadius: BorderRadius.circular(11),
-                    //       boxShadow: <BoxShadow>[
-                    //         BoxShadow(
-                    //             blurRadius: 10,
-                    //             color: Colors.grey
-                    //                 .withOpacity(0.3),
-                    //             spreadRadius: .5)
-                    //       ]),
-                    // )
-                  ],
-                ),
-              ),
-            )
+                  )
           ],
         ),
       ),

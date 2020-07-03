@@ -209,7 +209,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
         if(prefs.getBool('isLivestream') == true){
           ticketType.removeWhere((data) => data['id'] != '7' && data['id'] != '6');
         } else {
-          ticketType.removeWhere((data) => data['id'] == '7' && data['id'] == '6');
+          ticketType.removeWhere((data) => data['id'] == '7' || data['id'] == '6');
         }
       });
     }

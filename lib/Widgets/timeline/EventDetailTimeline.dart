@@ -594,7 +594,7 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
             SizedBox(height: ScreenUtil.instance.setWidth(19)),
             Divider(),
             SizedBox(height: ScreenUtil.instance.setWidth(16)),
-            GestureDetector(
+            postType == 'event' || postType == 'love' ? Container() : GestureDetector(
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
