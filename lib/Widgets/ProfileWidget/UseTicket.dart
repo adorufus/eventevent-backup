@@ -79,6 +79,7 @@ class UseTicketState extends State<UseTicket> {
         DateTime.parse('${widget.ticketDate} ${widget.ticketStartTime}');
     final remaining = startDate.difference(DateTime.now());
     seconds = remaining.inSeconds;
+    print("type: " + widget.usedStatus);
     print("in seconds" + seconds.toString());
     print('live url ' + widget.livestreamUrl);
     setState(() {});
@@ -119,8 +120,10 @@ class UseTicketState extends State<UseTicket> {
       bottomNavigationBar: GestureDetector(
         onTap: widget.usedStatus == 'Used'
             ? () {}
-            : startDate.isAfter(DateTime.now())
-                ? () {}
+            : startDate.isAfter(DateTime.now()) && widget.usedStatus != 'On Demand Video'
+                ? () {
+                  print("ended");
+                }
                 : widget.usedStatus == 'Streaming' ||
                         widget.usedStatus == 'On Demand Video' ||
                         widget.usedStatus == 'Watch Playback' ||
@@ -221,7 +224,9 @@ class UseTicketState extends State<UseTicket> {
                               }
                     : widget.usedStatus == 'Expired' ||
                             widget.usedStatus == 'Expired Zoom Session'
-                        ? () {}
+                        ? () {
+                          print('expired');
+                        }
                         : () {
                             scan().then((_) async {
                               SharedPreferences prefs =

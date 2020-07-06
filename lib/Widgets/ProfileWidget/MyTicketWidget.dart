@@ -141,7 +141,9 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                           'streaming') {
                         if (ticketDetailData[i].containsKey("livestream") && ticketDetailData[i]['livestream']
                                 ['on_demand_link'] !=
-                            null) {
+                            null || ticketDetailData[i]['livestream']['on_demand_embed'] != null || ticketDetailData[i]['livestream']['on_demand_embed'] != "" || ticketDetailData[i]['livestream']
+                                ['on_demand_link'] !=
+                            "") {
                           ticketColor = eventajaGreenTeal;
                           ticketStatusText = 'On Demand Video';
                         } else {
@@ -212,7 +214,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                         ['zoom_description'] == "" ? null : ticketDetailData[i]['livestream']['zoom_description'],
                                     livestreamUrl: ticketStatusText ==
                                             'On Demand Video'
-                                        ? ticketDetailData[i].containsKey("livestream") ? ticketDetailData[i]['livestream']['on_demand_link'] : ''
+                                        ? ticketDetailData[i].containsKey("livestream") ? ticketDetailData[i]['livestream']['on_demand_link'] == "" ? ticketDetailData[i]['livestream']['on_demand_embed'] : ticketDetailData[i]['livestream']['on_demand_link'] : ''
                                         : ticketStatusText == "Streaming" ||
                                                 ticketStatusText ==
                                                     'Watch Playback' ||
