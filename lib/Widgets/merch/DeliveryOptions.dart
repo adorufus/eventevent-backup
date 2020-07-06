@@ -1,16 +1,51 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:eventevent/Widgets/merch/SelectAddress.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/BaseBodyWithScaffoldAndAppBar.dart';
+import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'AddressItem.dart';
+import 'package:http/http.dart' as http;
 
 class DeliveryOptions extends StatefulWidget {
+  final addressName;
+  final fullAddress;
+
+  const DeliveryOptions({Key key, this.addressName, this.fullAddress})
+      : super(key: key);
   @override
   _DeliveryOptionsState createState() => _DeliveryOptionsState();
 }
 
 class _DeliveryOptionsState extends State<DeliveryOptions> {
+  List shippingOptionList = [];
+  String selectedShippingMethodName = '';
+  String selectedShippingMethodCode = '';
+  String selectedShippingMethodService = '';
+  int selectedShippingPrice = 0;
+
+  @override
+  void initState() {
+    getShippingOptions().then((response) {
+      print(response.statusCode);
+      print(response.body);
+
+      var extractedData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        shippingOptionList.addAll(extractedData['data']);
+      } else {
+        print(response.body);
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,8 +85,8 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
       ),
       bottomNavigationBar: GestureDetector(
         onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => SelectAddress()));
+          // Navigator.push(context,
+          //     MaterialPageRoute(builder: (context) => SelectAddress()));
         },
         child: Container(
           height: ScreenUtil.instance.setWidth(50),
@@ -83,7 +118,7 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
             SizedBox(
               height: 12,
             ),
-            sizeSection(context),
+            chooseDelivery(context),
             SizedBox(
               height: 20,
             ),
@@ -179,13 +214,16 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
         SizedBox(
           height: 10,
         ),
-        AddressItem(isEditing: false,)
+        AddressItem(
+          isEditing: false,
+          addressName: widget.addressName,
+          fullAddress: widget.fullAddress,
+        )
       ],
     );
   }
 
-  Widget sizeSection(BuildContext context) {
-
+  Widget chooseDelivery(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -198,21 +236,119 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
                   fontWeight: FontWeight.bold,
                   fontSize: 15),
             ),
-            Expanded(child: SizedBox(),),
-            Container(
+            Expanded(
+              child: SizedBox(),
+            ),
+            GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (thisContext) {
+                    return StatefulBuilder(
+                      builder: (BuildContext thisContext, StateSetter setState) => Container(
+                        color: Colors.white,
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              top: 13, left: 25, right: 25, bottom: 30),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15),
+                              )),
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 50),
+                                child: SizedBox(
+                                  height: ScreenUtil.instance.setWidth(5),
+                                  width: ScreenUtil.instance.setWidth(50),
+                                  child: Image.asset(
+                                    'assets/icons/icon_line.png',
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 35,
+                              ),
+                              ColumnBuilder(
+                                mainAxisSize: MainAxisSize.min,
+                                itemCount: shippingOptionList.length,
+                                itemBuilder: (context, i) {
+                                  return Column(
+                                    children: <Widget>[
+                                      ListTile(
+                                        onTap: () {
+                                          Navigator.pop(thisContext);
+                                          if (!mounted) return;
+                                          
+                                          setState(() {
+                                            selectedShippingMethodName =
+                                                '${shippingOptionList[i]['code'].toUpperCase()} ${shippingOptionList[i]['service']} (${shippingOptionList[i]['estimated']} days)';
+                                            selectedShippingMethodCode =
+                                                shippingOptionList[i]['code'];
+                                            selectedShippingMethodService =
+                                                shippingOptionList[i]
+                                                    ['service'];
+                                            selectedShippingPrice =
+                                                shippingOptionList[i]['price'];
+                                          });
+
+                                          
+                                        },
+                                        title: Text(shippingOptionList[i]
+                                                ['code']
+                                            .toString()
+                                            .toUpperCase()),
+                                        subtitle: Text(
+                                            '${shippingOptionList[i]['service']} (${shippingOptionList[i]['estimated']} days)'),
+                                      ),
+                                      shippingOptionList[i] ==
+                                              shippingOptionList.last
+                                          ? Container()
+                                          : SizedBox(
+                                              height: ScreenUtil.instance
+                                                  .setWidth(19)),
+                                      shippingOptionList[i] ==
+                                              shippingOptionList.last
+                                          ? Container()
+                                          : Divider(),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  elevation: 1,
+                );
+              },
+              child: Container(
                 height: 26,
                 width: 80,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(color: Colors.grey)),
-                child: Center(child: Text('Edit', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),)),
+                child: Center(
+                    child: Text(
+                  'Edit',
+                  style: TextStyle(
+                      color: Colors.grey, fontWeight: FontWeight.bold),
+                )),
               ),
+            ),
           ],
         ),
         SizedBox(
           height: 10,
         ),
-        totalSection(context, title: 'J&T Regular (2-4 hari)', price: 'Rp. 10.000')
+        totalSection(context,
+            title: selectedShippingMethodName,
+            price: 'Rp. $selectedShippingPrice')
       ],
     );
   }
@@ -237,5 +373,27 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
         ),
       ],
     );
+  }
+
+  Future<http.Response> getShippingOptions() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String currentBuyerAddressId =
+        preferences.getString("currentSelectedAddressId");
+    String thisProductSellerId = preferences.getString("sellerProductId");
+
+    String url = BaseApi().apiUrl +
+        '/address/shipping?X-API-KEY=$API_KEY&addressId=$currentBuyerAddressId&weight=2000&sellerId=$thisProductSellerId';
+
+    try {
+      final response = await http.get(url, headers: {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString("Session")
+      });
+
+      return response;
+    } on SocketException catch (e) {
+      print(e);
+      return null;
+    }
   }
 }

@@ -315,7 +315,10 @@ class _MerchDetailsState extends State<MerchDetails> {
 
   Widget priceButton({MerchDetailModel data}) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        preferences.setString("sellerProductId", data.merchantDetails.merchantId);
+        print(preferences.getString("sellerProductId"));
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => BuyOptionSelector()));
       },

@@ -13,20 +13,21 @@ class MerchDetailModel {
   final int commentCount;
   final int likeCount;
   final bool isLoved;
+  final MerchantDetails merchantDetails;
 
-  MerchDetailModel({
-    @required this.merchId,
-    @required this.imageUrl,
-    @required this.profileImageUrl,
-    @required this.details,
-    @required this.merchantName,
-    @required this.productName,
-    @required this.description,
-    @required this.comments,
-    @required this.commentCount,
-    @required this.likeCount,
-    @required this.isLoved
-  });
+  MerchDetailModel(
+      {@required this.merchId,
+      @required this.imageUrl,
+      @required this.profileImageUrl,
+      @required this.details,
+      @required this.merchantName,
+      @required this.productName,
+      @required this.description,
+      @required this.comments,
+      @required this.commentCount,
+      @required this.likeCount,
+      @required this.isLoved,
+      @required this.merchantDetails});
 
   factory MerchDetailModel.fromJson(Map<String, dynamic> json) =>
       MerchDetailModel(
@@ -41,6 +42,39 @@ class MerchDetailModel {
         commentCount: json['count_comment'],
         likeCount: json['like'],
         isLoved: json['isLiked'],
+        merchantDetails: MerchantDetails.fromJson(json['seller']),
+      );
+}
+
+class MerchantDetails {
+  final String merchantId;
+  final String merchantUserId;
+  final String provinceId;
+  final String address;
+  final String fullName;
+  final String lastName;
+  final String email;
+  final String isVerified;
+
+  MerchantDetails(
+      {this.merchantId,
+      this.merchantUserId,
+      this.provinceId,
+      this.address,
+      this.fullName,
+      this.lastName,
+      this.email,
+      this.isVerified});
+
+      factory MerchantDetails.fromJson(Map<String, dynamic> json) => MerchantDetails(
+        merchantId: json['id'],
+        merchantUserId: json['user_id'],
+        provinceId: json['province_id'],
+        address: json['address'],
+        email: json['email'],
+        fullName: json['fullName'],
+        lastName: json['lastName'],
+        isVerified: json['isVerified']
       );
 }
 
@@ -94,8 +128,21 @@ class MerchDetailState {
     this.data,
   });
 
-  factory MerchDetailState.initial() =>
-      MerchDetailState(error: null, loading: false, data: MerchDetailModel(commentCount: 0, comments: [], description: '', details: [], imageUrl: '', likeCount: 0, merchantName: '', merchId: '', productName: '', profileImageUrl: '', isLoved: false));
+  factory MerchDetailState.initial() => MerchDetailState(
+      error: null,
+      loading: false,
+      data: MerchDetailModel(
+          commentCount: 0,
+          comments: [],
+          description: '',
+          details: [],
+          imageUrl: '',
+          likeCount: 0,
+          merchantName: '',
+          merchId: '',
+          productName: '',
+          profileImageUrl: '',
+          isLoved: false));
 
   dynamic toJson() {
     return {"error": error, "loading": loading, "data": data};

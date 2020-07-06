@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/merch/AddAddress.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/BaseBodyWithScaffoldAndAppBar.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,28 +23,16 @@ class SelectAddress extends StatefulWidget {
 class _SelectAddressState extends State<SelectAddress> {
   List allAddressList = [];
   int currentSelectedAddress = 0;
+  String currentSelectedAddressName = '';
+  String currentSelectedFullAddress = '';
+  String currentSelectedAddressId = '';
+  bool isEmpty = false;
+  bool isLoading = false;
 
   @override
   void initState() {
-    getAllAddress().then((response) {
-      var extractedData = json.decode(response.body);
-      if (response.statusCode == 200) {
-        print(extractedData);
-
-        allAddressList.addAll(extractedData['data']);
-
-        if (mounted) setState(() {});
-      } else {
-        print(extractedData);
-        Flushbar(
-          animationDuration: Duration(milliseconds: 500),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3),
-          message: "Something went wrong",
-        ).show(context);
-      }
-    });
     super.initState();
+    getAddress();
   }
 
   @override
@@ -51,8 +41,25 @@ class _SelectAddressState extends State<SelectAddress> {
       title: 'Select An Address',
       bottomNavBar: GestureDetector(
         onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => DeliveryOptions()));
+          if (currentSelectedAddressName != '' &&
+              currentSelectedFullAddress != '') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DeliveryOptions(
+                  addressName: currentSelectedAddressName,
+                  fullAddress: currentSelectedFullAddress,
+                ),
+              ),
+            );
+          } else {
+            Flushbar(
+              animationDuration: Duration(milliseconds: 500),
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 3),
+              message: "Please select address first!",
+            ).show(context);
+          }
         },
         child: Container(
           height: ScreenUtil.instance.setWidth(50),
@@ -77,12 +84,16 @@ class _SelectAddressState extends State<SelectAddress> {
                   ),
                 ).then((item) {
                   if (item != null) {
-                    if(item['utama'] == "1"){
-                      allAddressList.insert(0, item);
-                    } else 
-                    {
-                      allAddressList.add(item);
+                    // if (item['utama'] == "1") {
+                    //   allAddressList.insert(0, item);
+                    // } else {
+                    //   allAddressList.add(item);
+                    // }
+                    if(allAddressList.isNotEmpty){
+                      allAddressList.clear();
                     }
+                    
+                    getAddress();
                   }
                 });
               },
@@ -98,17 +109,29 @@ class _SelectAddressState extends State<SelectAddress> {
                     fontSize: ScreenUtil.instance.setSp(14)),
               ),
             ),
-            ColumnBuilder(
-              itemCount: allAddressList.length,
-              itemBuilder: (context, i) {
-                return addressItem(
-                  addressName: allAddressList[i]['title'],
-                  fullAddress: allAddressList[i]['address'],
-                  isPrimary: allAddressList[i]['utama'],
-                  index: i,
-                );
-              },
-            ),
+            isLoading == true
+                ? Center(
+                    child: CupertinoActivityIndicator(
+                      animating: true,
+                    ),
+                  )
+                : isEmpty == true && allAddressList.isEmpty
+                    ? EmptyState(
+                        imagePath: 'assets/icons/empty_state/error.png',
+                        isTimeout: false,
+                        reasonText: 'Address is empty, please add one',
+                      )
+                    : ColumnBuilder(
+                        itemCount: allAddressList.length,
+                        itemBuilder: (context, i) {
+                          return addressItem(
+                            addressName: allAddressList[i]['title'],
+                            fullAddress: allAddressList[i]['address'],
+                            isPrimary: allAddressList[i]['utama'],
+                            index: i,
+                          );
+                        },
+                      ),
           ],
         ),
       ),
@@ -176,9 +199,20 @@ class _SelectAddressState extends State<SelectAddress> {
             Radio(
                 value: index,
                 groupValue: currentSelectedAddress,
-                onChanged: (i) {
+                autofocus: false,
+                onChanged: (i) async {
+                  SharedPreferences preferences =
+                      await SharedPreferences.getInstance();
+
                   currentSelectedAddress = i;
+                  currentSelectedAddressName = addressName;
+                  currentSelectedFullAddress = fullAddress;
+                  preferences.setString(
+                      "currentBuyerAddressId", allAddressList[i]['id']);
                   if (mounted) setState(() {});
+                  print(currentSelectedAddressName);
+                  print(currentSelectedFullAddress);
+                  print(preferences.getString('currentBuyerAddressId'));
                   print(currentSelectedAddress);
                 })
           ],
@@ -227,6 +261,9 @@ class _SelectAddressState extends State<SelectAddress> {
     String url = BaseApi().apiUrl + '/address/list?X-API-KEY=$API_KEY';
     var response;
 
+    isLoading = true;
+    if (mounted) setState(() {});
+
     try {
       response = await http.get(
         url,
@@ -236,6 +273,8 @@ class _SelectAddressState extends State<SelectAddress> {
         },
       );
     } on SocketException catch (e) {
+      isLoading = false;
+      if (mounted) setState(() {});
       print('address: ' +
           e.address.address +
           ', message: ' +
@@ -247,5 +286,41 @@ class _SelectAddressState extends State<SelectAddress> {
     }
 
     return response;
+  }
+
+  void getAddress() {
+    getAllAddress().then((response) async {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      var extractedData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        print(extractedData);
+
+        allAddressList.addAll(extractedData['data']);
+        isEmpty = false;
+        isLoading = false;
+        if (mounted) setState(() {});
+        currentSelectedAddressName = allAddressList[0]['name'];
+        currentSelectedFullAddress = allAddressList[0]['address'];
+        preferences.setString(
+            "currentSelectedAddressId", allAddressList[0]['id']);
+        print(currentSelectedAddressName);
+        print(currentSelectedFullAddress);
+        print(preferences.getString("currentSelectedAddressId"));
+      } else if (response.statusCode == 400) {
+        isEmpty = true;
+        isLoading = false;
+        if (mounted) setState(() {});
+      } else {
+        print(extractedData);
+        isLoading = false;
+        if (mounted) setState(() {});
+        Flushbar(
+          animationDuration: Duration(milliseconds: 500),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+          message: "Something went wrong",
+        ).show(context);
+      }
+    });
   }
 }
