@@ -132,7 +132,7 @@ class UseTicketState extends State<UseTicket> {
                     ? DateTime.parse(widget.ticketDetail['event']['dateEnd'])
                                 .isBefore(DateTime.now()) &&
                             widget.ticketDetail['livestream']['playback_url'] ==
-                                'not_available'
+                                'not_available' && widget.usedStatus == 'Watch Playback'
                         ? () {
                             showCupertinoDialog(
                                 context: context,
@@ -153,8 +153,7 @@ class UseTicketState extends State<UseTicket> {
                                   );
                                 });
                           }
-                        : widget.zoomId != null ||
-                                widget.zoomDesc != null
+                        : widget.usedStatus != "On Demand Video" && widget.zoomId != null || widget.zoomId != ""
                             ? () {
                                 Navigator.push(
                                   context,

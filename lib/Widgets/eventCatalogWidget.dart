@@ -598,6 +598,11 @@ class _EventCatalogState extends State<EventCatalog>
                                   itemPriceText =
                                       data[i]['ticket_type']['name'];
                                 } else if (data[i]['ticket_type']['type'] ==
+                                    'paid_live_stream') {
+                                  itemColor = eventajaGreenTeal;
+                                  itemPriceText =
+                                      'Rp. ' + data[i]['ticket']['cheapestTicket'] + ',-';
+                                } else if (data[i]['ticket_type']['type'] ==
                                     'free_live_stream') {
                                   itemColor = Color(0xFFFFAA00);
                                   itemPriceText =

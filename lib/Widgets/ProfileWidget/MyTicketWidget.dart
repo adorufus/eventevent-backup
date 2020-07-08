@@ -139,11 +139,13 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                         ticketStatusText = 'Used';
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'streaming') {
-                        if (ticketDetailData[i].containsKey("livestream") && ticketDetailData[i]['livestream']
-                                ['on_demand_link'] !=
-                            null || ticketDetailData[i]['livestream']['on_demand_embed'] != null || ticketDetailData[i]['livestream']['on_demand_embed'] != "" || ticketDetailData[i]['livestream']
-                                ['on_demand_link'] !=
-                            "") {
+                        if (ticketDetailData[i].containsKey("livestream") &&
+                                ticketDetailData[i]['livestream']
+                                        ['on_demand_link'] !=
+                                    null ||
+                            ticketDetailData[i]['livestream']
+                                    ['on_demand_link'] !=
+                                "") {
                           ticketColor = eventajaGreenTeal;
                           ticketStatusText = 'On Demand Video';
                         } else {
@@ -152,12 +154,32 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                         }
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'playback') {
-                        ticketColor = eventajaGreenTeal;
-                        ticketStatusText = 'Watch Playback';
+                        if (ticketDetailData[i].containsKey("livestream") &&
+                                ticketDetailData[i]['livestream']
+                                        ['on_demand_link'] !=
+                                    null ||
+                            ticketDetailData[i]['livestream']
+                                    ['on_demand_link'] !=
+                                "") {
+                          ticketColor = eventajaGreenTeal;
+                          ticketStatusText = 'On Demand Video';
+                        } else {
+                          ticketColor = eventajaGreenTeal;
+                          ticketStatusText = 'Watch Playback';
+                        }
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'expired') {
                         if (ticketDetailData[i].containsKey('livestream')) {
-                          if (ticketDetailData[i]['livestream']['zoom_id'] ==
+                          if (ticketDetailData[i]['livestream']
+                                      ['on_demand_embed'] !=
+                                  null ||
+                              ticketDetailData[i]['livestream']
+                                      ['on_demand_embed'] !=
+                                  "") {
+                            ticketColor = eventajaGreenTeal;
+                            ticketStatusText = 'On Demand Video';
+                          } else if (ticketDetailData[i]['livestream']
+                                  ['zoom_id'] ==
                               null) {
                             ticketColor = eventajaGreenTeal;
                             ticketStatusText = 'Playback';
@@ -183,7 +205,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
 
                       return GestureDetector(
                         onTap: () {
-                          print('ticket status text: '  + ticketStatusText);
+                          print('ticket status text: ' + ticketStatusText);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => UseTicket(
                                     ticketDetail: ticketDetailData[i],
@@ -209,12 +231,17 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                     ticketID: ticketDetailData[i]['id'],
                                     usedStatus: ticketStatusText,
                                     zoomId: ticketDetailData[i]['livestream']
-                                        ['zoom_id'] == "" ? null : ticketDetailData[i]['livestream']['zoom_id'],
+                                            ['zoom_id'],
                                     zoomDesc: ticketDetailData[i]['livestream']
-                                        ['zoom_description'] == "" ? null : ticketDetailData[i]['livestream']['zoom_description'],
-                                    livestreamUrl: ticketStatusText ==
-                                            'On Demand Video'
-                                        ? ticketDetailData[i].containsKey("livestream") ? ticketDetailData[i]['livestream']['on_demand_link'] == "" ? ticketDetailData[i]['livestream']['on_demand_embed'] : ticketDetailData[i]['livestream']['on_demand_link'] : ''
+                                            ['zoom_description'],
+                                    livestreamUrl: ticketStatusText == 'On Demand Video'
+                                        ? ticketDetailData[i].containsKey("livestream")
+                                            ? ticketDetailData[i]['livestream']['on_demand_link'] == ""
+                                                ? ticketDetailData[i]['livestream']
+                                                    ['on_demand_embed']
+                                                : ticketDetailData[i]['livestream']
+                                                    ['on_demand_link']
+                                            : ''
                                         : ticketStatusText == "Streaming" ||
                                                 ticketStatusText ==
                                                     'Watch Playback' ||
@@ -227,8 +254,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                                 ? ticketDetailData[i]
                                                     ['livestream']['playback']
                                                 : ticketDetailData[i]
-                                                        ['livestream']
-                                                    ['playback_url']
+                                                    ['livestream']['playback_url']
                                             : '',
                                   )));
                         },
