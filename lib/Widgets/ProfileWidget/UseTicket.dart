@@ -120,10 +120,11 @@ class UseTicketState extends State<UseTicket> {
       bottomNavigationBar: GestureDetector(
         onTap: widget.usedStatus == 'Used'
             ? () {}
-            : startDate.isAfter(DateTime.now()) && widget.usedStatus != 'On Demand Video'
+            : startDate.isAfter(DateTime.now()) &&
+                    widget.usedStatus != 'On Demand Video'
                 ? () {
-                  print("ended");
-                }
+                    print("ended");
+                  }
                 : widget.usedStatus == 'Streaming' ||
                         widget.usedStatus == 'On Demand Video' ||
                         widget.usedStatus == 'Watch Playback' ||
@@ -132,7 +133,8 @@ class UseTicketState extends State<UseTicket> {
                     ? DateTime.parse(widget.ticketDetail['event']['dateEnd'])
                                 .isBefore(DateTime.now()) &&
                             widget.ticketDetail['livestream']['playback_url'] ==
-                                'not_available' && widget.usedStatus == 'Watch Playback'
+                                'not_available' &&
+                            widget.usedStatus == 'Watch Playback'
                         ? () {
                             showCupertinoDialog(
                                 context: context,
@@ -153,7 +155,9 @@ class UseTicketState extends State<UseTicket> {
                                   );
                                 });
                           }
-                        : widget.usedStatus != "On Demand Video" && widget.zoomId != null || widget.zoomId != ""
+                        : widget.usedStatus != "On Demand Video" &&
+                                    widget.zoomId != null ||
+                                widget.zoomId != ""
                             ? () {
                                 Navigator.push(
                                   context,
@@ -167,65 +171,65 @@ class UseTicketState extends State<UseTicket> {
                             : () async {
                                 SharedPreferences prefs =
                                     await SharedPreferences.getInstance();
+                                print(prefs.getString("streaming_token"));
 
-                                if (prefs.containsKey('streaming_token') &&
-                                    prefs.getString('streaming_token') !=
-                                        null) {
-                                  print(prefs.getString('streaming_token'));
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => LivestreamPlayer(
-                                        wowzaLiveUrl: widget.livestreamUrl,
-                                      ),
-                                    ),
-                                  );
-                                } else {
-                                  print(prefs.getString('streaming_token'));
-                                  getWatchLivestreamToken(widget.eventId)
-                                      .then((response) async {
-                                    print('code: ' +
-                                        response.statusCode.toString() +
-                                        ' message: ' +
-                                        response.body);
-                                    var extractedData =
-                                        json.decode(response.body);
+                                // if (prefs.containsKey('streaming_token') &&
+                                //     prefs.getString('streaming_token') !=
+                                //         null) {
+                                //   print(prefs.getString('streaming_token'));
+                                //   Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //       builder: (context) => LivestreamPlayer(
+                                //         wowzaLiveUrl: widget.livestreamUrl,
+                                //       ),
+                                //     ),
+                                //   );
+                                // } else {
+                                print(prefs.getString('streaming_token'));
+                                getWatchLivestreamToken(widget.eventId)
+                                    .then((response) async {
+                                  print('code: ' +
+                                      response.statusCode.toString() +
+                                      ' message: ' +
+                                      response.body);
+                                  var extractedData =
+                                      json.decode(response.body);
 
-                                    if (response.statusCode == 200 ||
-                                        response.statusCode == 201) {
-                                      prefs.setString(
-                                          'streaming_token',
-                                          extractedData['data']
-                                              ['streaming_token']);
-                                      // getEventStreamingDetail();
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              LivestreamPlayer(
-                                            wowzaLiveUrl: widget.livestreamUrl,
-                                          ),
+                                  if (response.statusCode == 200 ||
+                                      response.statusCode == 201) {
+                                    prefs.setString(
+                                        'streaming_token',
+                                        extractedData['data']
+                                            ['streaming_token']);
+                                    // getEventStreamingDetail();
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => LivestreamPlayer(
+                                          wowzaLiveUrl: widget.livestreamUrl,
                                         ),
-                                      );
-                                    } else {
-                                      prefs.setString('streaming_token', null);
-                                      Flushbar(
-                                        animationDuration:
-                                            Duration(milliseconds: 500),
-                                        duration: Duration(seconds: 3),
-                                        backgroundColor: Colors.red,
-                                        message: 'User Have No Access!',
-                                        flushbarPosition: FlushbarPosition.TOP,
-                                      ).show(context);
-                                    }
-                                  });
-                                }
+                                      ),
+                                    );
+                                  } else {
+                                    prefs.setString('streaming_token', null);
+                                    Flushbar(
+                                      animationDuration:
+                                          Duration(milliseconds: 500),
+                                      duration: Duration(seconds: 3),
+                                      backgroundColor: Colors.red,
+                                      message: 'User Have No Access!',
+                                      flushbarPosition: FlushbarPosition.TOP,
+                                    ).show(context);
+                                  }
+                                });
+                                // }
                               }
                     : widget.usedStatus == 'Expired' ||
                             widget.usedStatus == 'Expired Zoom Session'
                         ? () {
-                          print('expired');
-                        }
+                            print('expired');
+                          }
                         : () {
                             scan().then((_) async {
                               SharedPreferences prefs =
@@ -278,7 +282,8 @@ class UseTicketState extends State<UseTicket> {
                   ? Colors.red
                   : Colors.orange,
           child: Center(
-            child: widget.usedStatus == 'Streaming' && startDate.isAfter(DateTime.now())
+            child: widget.usedStatus == 'Streaming' &&
+                    startDate.isAfter(DateTime.now())
                 ? CountDownTimer(
                     secondsRemaining: seconds,
                     useHHMMSS: true,

@@ -145,6 +145,12 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                     null ||
                             ticketDetailData[i]['livestream']
                                     ['on_demand_link'] !=
+                                "" ||
+                            ticketDetailData[i]['livestream']
+                                    ['on_demand_embed'] !=
+                                null ||
+                            ticketDetailData[i]['livestream']
+                                    ['on_demand_embed'] !=
                                 "") {
                           ticketColor = eventajaGreenTeal;
                           ticketStatusText = 'On Demand Video';
@@ -158,6 +164,12 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                 ticketDetailData[i]['livestream']
                                         ['on_demand_link'] !=
                                     null ||
+                            ticketDetailData[i]['livestream']
+                                    ['on_demand_link'] !=
+                                "" ||
+                            ticketDetailData[i]['livestream']
+                                    ['on_demand_link'] !=
+                                null ||
                             ticketDetailData[i]['livestream']
                                     ['on_demand_link'] !=
                                 "") {
@@ -175,6 +187,12 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                   null ||
                               ticketDetailData[i]['livestream']
                                       ['on_demand_embed'] !=
+                                  "" ||
+                              ticketDetailData[i]['livestream']
+                                      ['on_demand_link'] !=
+                                  null ||
+                              ticketDetailData[i]['livestream']
+                                      ['on_demand_link'] !=
                                   "") {
                             ticketColor = eventajaGreenTeal;
                             ticketStatusText = 'On Demand Video';
@@ -231,9 +249,9 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                     ticketID: ticketDetailData[i]['id'],
                                     usedStatus: ticketStatusText,
                                     zoomId: ticketDetailData[i]['livestream']
-                                            ['zoom_id'],
+                                        ['zoom_id'],
                                     zoomDesc: ticketDetailData[i]['livestream']
-                                            ['zoom_description'],
+                                        ['zoom_description'],
                                     livestreamUrl: ticketStatusText == 'On Demand Video'
                                         ? ticketDetailData[i].containsKey("livestream")
                                             ? ticketDetailData[i]['livestream']['on_demand_link'] == ""

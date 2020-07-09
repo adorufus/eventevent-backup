@@ -239,8 +239,17 @@ class _MyTicketState extends State<MyTicket> {
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'streaming') {
                               if (myTicketList[i]['livestream']
-                                      ['on_demand_link'] !=
-                                  null) {
+                                          ['on_demand_link'] !=
+                                      null ||
+                                  myTicketList[i]['livestream']
+                                          ['on_demand_link'] !=
+                                      "" ||
+                                  myTicketList[i]['livestream']
+                                          ['on_demand_embed'] !=
+                                      null ||
+                                  myTicketList[i]['livestream']
+                                          ['on_demand_embed'] !=
+                                      "") {
                                 ticketColor = eventajaGreenTeal;
                                 ticketStatusText = 'On Demand Video';
                               } else {
@@ -249,12 +258,43 @@ class _MyTicketState extends State<MyTicket> {
                               }
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'playback') {
-                              ticketColor = eventajaGreenTeal;
-                              ticketStatusText = 'Watch Playback';
+                              if (myTicketList[i]['livestream']
+                                          ['on_demand_embed'] !=
+                                      null ||
+                                  myTicketList[i]['livestream']
+                                          ['on_demand_embed'] !=
+                                      "" ||
+                                  myTicketList[i]['livestream']
+                                          ['on_demand_link'] !=
+                                      null ||
+                                  myTicketList[i]['livestream']
+                                          ['on_demand_link'] !=
+                                      "") {
+                                ticketColor = eventajaGreenTeal;
+                                ticketStatusText = 'On Demand Video';
+                              } else {
+                                ticketColor = eventajaGreenTeal;
+                                ticketStatusText = 'Watch Playback';
+                              }
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'expired') {
                               if (myTicketList[i].containsKey('livestream')) {
-                                if (myTicketList[i]['livestream']['zoom_id'] ==
+                                if (myTicketList[i]['livestream']
+                                            ['on_demand_embed'] !=
+                                        null ||
+                                    myTicketList[i]['livestream']
+                                            ['on_demand_embed'] !=
+                                        "" ||
+                                    myTicketList[i]['livestream']
+                                            ['on_demand_link'] !=
+                                        null ||
+                                    myTicketList[i]['livestream']
+                                            ['on_demand_link'] !=
+                                        "") {
+                                  ticketColor = eventajaGreenTeal;
+                                  ticketStatusText = 'On Demand Video';
+                                } else if (myTicketList[i]['livestream']
+                                        ['zoom_id'] ==
                                     null) {
                                   ticketColor = eventajaGreenTeal;
                                   ticketStatusText = 'Playback';
@@ -317,21 +357,22 @@ class _MyTicketState extends State<MyTicket> {
                                               zoomDesc: myTicketList[i]
                                                       ['livestream']
                                                   ['zoom_description'],
-                                              livestreamUrl: ticketStatusText ==
-                                                      'On Demand Video'
-                                                  ? myTicketList[i]
-                                                          ['livestream']
-                                                      ['on_demand_link']
-                                                  : ticketStatusText ==
-                                                              "Streaming" ||
+                                              livestreamUrl: ticketStatusText == 'On Demand Video'
+                                                  ? myTicketList[i].containsKey("livestream")
+                                                      ? myTicketList[i]['livestream']['on_demand_link'] == ""
+                                                          ? myTicketList[i]['livestream'][
+                                                              'on_demand_embed']
+                                                          : myTicketList[i]['livestream']
+                                                              ['on_demand_link']
+                                                      : ""
+                                                  : ticketStatusText == "Streaming" ||
                                                           ticketStatusText ==
                                                               'Watch Playback' ||
                                                           ticketStatusText ==
                                                               'Playback' ||
                                                           ticketStatusText ==
                                                               'Expired'
-                                                      ? myTicketList[i]['livestream']['playback_url'] ==
-                                                              'not_available'
+                                                      ? myTicketList[i]['livestream']['playback_url'] == 'not_available'
                                                           ? myTicketList[i]
                                                                   ['livestream']
                                                               ['playback']
