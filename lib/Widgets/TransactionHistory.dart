@@ -140,6 +140,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
                           } else if (transactionList[i]['payment']['method'] ==
                               'Virtual Account') {
                             page = WaitTransaction(
+                              isBniVa: true,
                               transactionID: transactionList[i]['id'],
                               expDate: transactionList[i]['expired_time'],
                               finalPrice: transactionList[i]['amount'],

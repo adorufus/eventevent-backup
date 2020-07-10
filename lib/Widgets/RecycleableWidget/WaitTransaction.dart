@@ -21,9 +21,10 @@ class WaitTransaction extends StatefulWidget {
   final expDate;
   final String transactionID;
   final String finalPrice;
+  final bool isBniVa;
 
   const WaitTransaction(
-      {Key key, this.expDate, this.transactionID, this.finalPrice})
+      {Key key, this.expDate, this.transactionID, this.finalPrice, this.isBniVa = false})
       : super(key: key);
 
   @override
@@ -104,7 +105,11 @@ class _WaitTransactionState extends State<WaitTransaction>
 
     setState(() {
       bank_number = bankNumber;
-      bank_code = bankCode;
+      if(widget.isBniVa == true) {
+        bank_code = 'BNI';
+      } else {
+        bank_code = bankCode;
+      }
       bank_acc = bankAcc;
     });
   }
@@ -400,7 +405,7 @@ class _WaitTransactionState extends State<WaitTransaction>
                                     ? paymentData['payment']['data_vendor']
                                         ['account_name']
                                     : paymentData['payment']['data_vendor']
-                                            ['available_banks'][0]
+                                            ['available_banks'][2]
                                         ['account_holder_name'],
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -413,7 +418,7 @@ class _WaitTransactionState extends State<WaitTransaction>
                                   paymentData['payment']['vendor'] == 'bca'
                                       ? paymentData['payment']['method']
                                       : paymentData['payment']['data_vendor']
-                                          ['available_banks'][0]['bank_code'],
+                                          ['available_banks'][2]['bank_code'],
                                   style: TextStyle(color: Colors.grey)),
                               SizedBox(
                                   height: ScreenUtil.instance.setWidth(10)),
@@ -422,7 +427,7 @@ class _WaitTransactionState extends State<WaitTransaction>
                                     ? paymentData['payment']['data_vendor']
                                         ['account_number']
                                     : paymentData['payment']['data_vendor']
-                                                ['available_banks'][0]
+                                                ['available_banks'][2]
                                             ['bank_account_number']
                                         .toString(),
                                 style: TextStyle(
