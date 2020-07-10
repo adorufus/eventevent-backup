@@ -371,7 +371,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                 ticketPrice = 'SALES ENDED';
               }
               itemColor = eventajaGreenTeal;
-              ticketPrice = detailData['ticket_type']['name'];
+              ticketPrice = 'Rp. ' + detailData['ticket']['cheapestTicket'] + ',-';
             } else if (detailData['ticket_type']['type'] == 'free_limited') {
               if (detailData['ticket']['availableTicketStatus'] == '1') {
                 itemColor = Color(0xFFFFAA00);

@@ -636,6 +636,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                   }
                 } else {
                   if (widget.ticketStat['salesStatus'] == 'endSales' ||
+                  widget.ticketStat['salesStatus'] == 'comingSoon' ||
                       widget.ticketPrice.toLowerCase() == 'canceled' ||
                       widget.ticketStat['availablewidget.ticketStatus'] ==
                           '0') {
@@ -697,6 +698,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                               ));
                         } else {
                           if (widget.ticketStat['salesStatus'] == 'endSales' ||
+                          widget.ticketStat['salesStatus'] == 'comingSoon' ||
                               widget.ticketPrice.toLowerCase() == 'canceled' ||
                               widget.ticketStat[
                                       'availablewidget.ticketStatus'] ==
@@ -718,13 +720,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                         decoration: BoxDecoration(
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: isGoing == true
+                                  color: widget.ticketStat['salesStatus'] == 'comingSoon' ? Colors.grey.withOpacity(.2) : isGoing == true
                                       ? Colors.blue.withOpacity(0.4)
                                       : widget.itemColor.withOpacity(0.4),
                                   blurRadius: 2,
                                   spreadRadius: 1.5)
                             ],
-                            color: isGoing == true
+                            color: widget.ticketStat['salesStatus'] == 'comingSoon' ? Colors.grey.withOpacity(.5) : isGoing == true
                                 ? Colors.blue
                                 : widget.itemColor,
                             borderRadius: BorderRadius.circular(15)),
@@ -1123,6 +1125,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         if (widget.ticketStat[
                                                                     'salesStatus'] ==
                                                                 'endSales' ||
+                                                                widget.ticketStat['salesStatus'] == 'comingSoon' ||
                                                             widget.ticketPrice
                                                                     .toLowerCase() ==
                                                                 'canceled' ||
@@ -1153,7 +1156,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     decoration: BoxDecoration(
                                                         boxShadow: <BoxShadow>[
                                                           BoxShadow(
-                                                              color: isGoing ==
+                                                              color: widget.ticketStat['salesStatus'] == 'comingSoon' ? Colors.grey.withOpacity(.2) : isGoing ==
                                                                       true
                                                                   ? Colors.blue
                                                                       .withOpacity(
@@ -1165,7 +1168,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                               blurRadius: 2,
                                                               spreadRadius: 1.5)
                                                         ],
-                                                        color: isGoing == true
+                                                        color: widget.ticketStat['salesStatus'] == 'comingSoon' ? Colors.grey.withOpacity(.5) : isGoing == true
                                                             ? Colors.blue
                                                             : widget.itemColor,
                                                         borderRadius:
@@ -1471,6 +1474,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                         ),
                                       ),
                                     ),
+                                    SizedBox(height: 15,),
                               detailData['ticket']['salesStatus'] ==
                                       'comingSoon'
                                   ? countdownTimer()
@@ -2416,7 +2420,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                   'free_live_stream' ||
                                                               widget.detailData['ticket_type']['type'] ==
                                                                   'paid_live_stream'
-                                                          ? widget.detailData['livestream'][0]['zoom_id'] != null
+                                                          ? widget.detailData['livestream'].isNotEmpty && widget.detailData['livestream'][0]['zoom_id'] != null
                                                               ? 80
                                                               : 50
                                                           : 20.9),
@@ -2424,7 +2428,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           widget.detailData
                                                                       .containsKey(
                                                                           'livestream') &&
-                                                                  widget.detailData['livestream']
+                                                                  widget.detailData['livestream'].isNotEmpty && widget.detailData['livestream']
                                                                               [
                                                                               0]
                                                                           [
@@ -2450,7 +2454,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                               'free_live_stream' ||
                                                                           widget.detailData['ticket_type']['type'] ==
                                                                               'paid_live_stream'
-                                                                      ? widget.detailData['livestream'][0]['zoom_id'] !=
+                                                                      ? widget.detailData['livestream'].isNotEmpty && widget.detailData['livestream'][0]['zoom_id'] !=
                                                                               null
                                                                           ? 'assets/icons/aset_icon/zoom_livestream.png'
                                                                           : 'assets/btn_ticket/live.png'
@@ -2475,7 +2479,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                 )),
                                                   widget.detailData.containsKey(
                                                               'livestream') &&
-                                                          widget.detailData[
+                                                          widget.detailData['livestream'].isNotEmpty && widget.detailData[
                                                                       'livestream'][0]
                                                                   [
                                                                   'on_demand_link'] !=
@@ -2493,7 +2497,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                       [
                                                                       'type'] ==
                                                                   'paid_live_stream'
-                                                          ? widget.detailData['livestream']
+                                                          ? widget.detailData['livestream'].isNotEmpty && widget.detailData['livestream']
                                                                           [0][
                                                                       'on_demand_link'] !=
                                                                   null

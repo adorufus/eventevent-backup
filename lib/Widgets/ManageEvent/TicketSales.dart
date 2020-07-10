@@ -278,14 +278,14 @@ class TicketSalesState extends State<TicketSales> {
                                                 Text(
                                                   ticketData[i][
                                                               'paid_ticket_type_id'] ==
-                                                          '1'
-                                                      ? (int.parse(ticketData[i]
+                                                          '1' || ticketData[i]['paid_ticket_type_id'] == '3'
+                                                      ? 'Rp. ' + (int.parse(ticketData[i]
                                                                   [
                                                                   'merchant_price']) *
                                                               int.parse(
                                                                   ticketData[i]
                                                                       ['sold']))
-                                                          .toString()
+                                                          .toString() + ',-'
                                                       : 'FREE',
                                                   textAlign: TextAlign.end,
                                                   style: TextStyle(
