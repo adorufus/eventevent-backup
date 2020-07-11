@@ -5,6 +5,7 @@ import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -24,6 +25,9 @@ var session;
 List nearbyEventData;
 
 class ListenPage extends StatefulWidget {
+  final isRest;
+
+  const ListenPage({Key key, this.isRest}) : super(key: key);
   @override
   _ListenPageState createState() => _ListenPageState();
 }
@@ -389,6 +393,24 @@ class _ListenPageState extends State<ListenPage> {
   Future<http.Response> fetchCurrentLocationEvent({int page}) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     int currentPage = 1;
+
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session')
+      };
+    }
+
     print(preferences.getString('latitude'));
     print(preferences.getString('longitude'));
     setState(() {
@@ -398,11 +420,8 @@ class _ListenPageState extends State<ListenPage> {
       }
     });
     final fetchNearbyEventApi =
-        'https://home.eventeventapp.com/api/event/nearby?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&latitude=${preferences.getString('latitude')}&longitude=${preferences.getString('longitude')}&page=$currentPage';
-    final response = await http.get(fetchNearbyEventApi, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': session
-    });
+        baseUrl + '/event/nearby?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&latitude=${preferences.getString('latitude')}&longitude=${preferences.getString('longitude')}&page=$currentPage';
+    final response = await http.get(fetchNearbyEventApi, headers: headers);
 
     print(response.body);
 

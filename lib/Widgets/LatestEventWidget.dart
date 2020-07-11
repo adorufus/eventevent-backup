@@ -16,6 +16,9 @@ import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class LatestEventWidget extends StatefulWidget {
+  final isRest;
+
+  const LatestEventWidget({Key key, this.isRest}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _LatestEventWidget();
@@ -270,6 +273,23 @@ class _LatestEventWidget extends State<LatestEventWidget> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     int currentPage = 1;
 
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session')
+      };
+    }
+
     setState(() {
       session = preferences.getString('Session');
       if (newPage != null) {
@@ -278,15 +298,12 @@ class _LatestEventWidget extends State<LatestEventWidget> {
       print(currentPage);
     });
 
-    final latestEventApi = BaseApi().apiUrl +
+    final latestEventApi = baseUrl +
         '/event/category?category=0&page=$currentPage&X-API-KEY=$API_KEY';
 
     print(latestEventApi);
 
-    final response = await http.get(latestEventApi, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': session
-    });
+    final response = await http.get(latestEventApi, headers: headers);
 
     print(response.body);
 

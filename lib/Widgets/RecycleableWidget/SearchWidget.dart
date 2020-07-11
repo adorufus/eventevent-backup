@@ -321,6 +321,7 @@ class SearchState extends State<Search> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => EventDetailLoadingScreen(
+                              isRest: widget.isRest,
                                 eventId: filteredEvents[i]['id'])));
                   },
                   child: LatestEventItem(
@@ -455,6 +456,7 @@ class SearchState extends State<Search> {
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (BuildContext context) => ProfileWidget(
+                            isRest: widget.isRest,
                                 initialIndex: 0,
                                 userId: filteredProfile[i]['id'],
                               )));

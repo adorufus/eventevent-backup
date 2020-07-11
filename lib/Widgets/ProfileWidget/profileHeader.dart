@@ -7,6 +7,8 @@ import 'package:eventevent/Widgets/ManageEvent/PublicEventList.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsWidget.dart';
 import 'package:eventevent/Widgets/ProfileWidget/editProfile.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/listviewWithAppBar.dart';
+import 'package:eventevent/Widgets/loginRegisterWidget.dart';
+import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -40,6 +42,7 @@ class ProfileHeader extends StatefulWidget {
   final String isVerified;
   final initialIndex;
   final isFollowing;
+  final isRest;
 
   const ProfileHeader(
       {Key key,
@@ -59,7 +62,8 @@ class ProfileHeader extends StatefulWidget {
       this.bio,
       this.initialIndex,
       this.isVerified,
-      this.isFollowing})
+      this.isFollowing,
+      this.isRest})
       : super(key: key);
 
   @override
@@ -102,7 +106,14 @@ class _ProfileHeaderState extends State<ProfileHeader>
           userTimelineIsLoading = false;
           userTimelineList = extractedData['data'];
         });
+      } else if (response.statusCode == 400) {
+        userTimelineList = [];
+        userTimelineIsLoading = false;
+        if (mounted) setState(() {});
       } else {
+        userTimelineIsLoading = false;
+        userTimelineList = [];
+        setState(() {});
         print('error' + extractedData.toString());
       }
     });
@@ -139,7 +150,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
             padding: EdgeInsets.symmetric(horizontal: 13),
             color: Colors.white,
             child: AppBar(
-                brightness: Brightness.light,
+              brightness: Brightness.light,
               elevation: 0,
               backgroundColor: Colors.white,
               leading: widget.currentUserId == userId
@@ -319,19 +330,24 @@ class _ProfileHeaderState extends State<ProfileHeader>
                             )
                           : GestureDetector(
                               onTap: () {
-                                print(this.isFollowed);
-                                if (this.isFollowed == false) {
-                                  FollowUnfollow().follow(widget.currentUserId);
-                                  setState(() {
-                                    this.isFollowed = true;
-                                  });
+                                if (widget.isRest == true) {
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginRegisterWidget(previousWidget: ProfileWidget(isRest: false, initialIndex: 0, userId: widget.currentUserId),)));
                                 } else {
-                                  FollowUnfollow()
-                                      .unfollow(widget.currentUserId);
+                                  print(this.isFollowed);
+                                  if (this.isFollowed == false) {
+                                    FollowUnfollow()
+                                        .follow(widget.currentUserId);
+                                    setState(() {
+                                      this.isFollowed = true;
+                                    });
+                                  } else {
+                                    FollowUnfollow()
+                                        .unfollow(widget.currentUserId);
 
-                                  setState(() {
-                                    this.isFollowed = false;
-                                  });
+                                    setState(() {
+                                      this.isFollowed = false;
+                                    });
+                                  }
                                 }
                               },
                               child: Container(
@@ -751,13 +767,17 @@ class _ProfileHeaderState extends State<ProfileHeader>
               children: <Widget>[
                 userTimelineIsLoading == true
                     ? HomeLoadingScreen().timelineLoading()
-                    : userTimelineList == null ? EmptyState(
-              imagePath: 'assets/icons/empty_state/public_timeline.png',
-                  reasonText: 'Your timeline is empty :(',
-          ) : timeline(),
+                    : userTimelineList == null || userTimelineList.isEmpty
+                        ? EmptyState(
+                            imagePath:
+                                'assets/icons/empty_state/public_timeline.png',
+                            reasonText: 'Your timeline is empty :(',
+                          )
+                        : timeline(),
                 widget.currentUserId == userId
                     ? MyTicketWidget()
                     : PublicEventList(
+                        isRest: widget.isRest,
                         type: 'going',
                         userId: widget.currentUserId,
                       )
@@ -855,10 +875,17 @@ class _ProfileHeaderState extends State<ProfileHeader>
               pictureFull: userTimelineList[i]['pictureFull'],
               type: userTimelineList[i]['type'],
               userId: userTimelineList[i]['userID'],
-              ticketType: userTimelineList[i].containsKey('ticket_type') ? userTimelineList[i]['ticket_type']['type'] : null,
-              cheapestTicket: userTimelineList[i].containsKey('ticket') ? userTimelineList[i]['ticket']['cheapestTicket'] : null,
+              ticketType: userTimelineList[i].containsKey('ticket_type')
+                  ? userTimelineList[i]['ticket_type']['type']
+                  : null,
+              cheapestTicket: userTimelineList[i].containsKey('ticket')
+                  ? userTimelineList[i]['ticket']['cheapestTicket']
+                  : null,
               location: userTimelineList[i]['locationName'],
-              eventId: userTimelineList[i]['type'] == 'event' || userTimelineList[i]['type'] == 'love' ? userTimelineList[i]['eventID'] : null,
+              eventId: userTimelineList[i]['type'] == 'event' ||
+                      userTimelineList[i]['type'] == 'love'
+                  ? userTimelineList[i]['eventID']
+                  : null,
               impressionId:
                   userTimelineList[i]['impression']['data'].length == 0
                       ? ''
@@ -1200,6 +1227,23 @@ class _ProfileHeaderState extends State<ProfileHeader>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int currentPage = 1;
 
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': prefs.getString('Session')
+      };
+    }
+
     setState(() {
       userTimelineIsLoading = true;
       if (newPage != null) {
@@ -1209,12 +1253,9 @@ class _ProfileHeaderState extends State<ProfileHeader>
       print(currentPage);
     });
 
-    String url = BaseApi().apiUrl +
+    String url = baseUrl +
         '/timeline/user?X-API-KEY=$API_KEY&page=$currentPage&userID=${widget.currentUserId}';
-    final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
-    });
+    final response = await http.get(url, headers: headers);
 
     return response;
   }

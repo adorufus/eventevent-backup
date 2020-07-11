@@ -169,7 +169,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   void initState() {
     // FlutterBranchSdk.validateSDKIntegration();
     generateLink();
-    if (widget.detailData.containsKey("livestream") && widget.detailData['livestream'].isNotEmpty) {
+    if (widget.detailData.containsKey("livestream") && widget.detailData['livestream'].isNotEmpty && widget.isRest == false) {
       getWowzaLivestreamState(
               widget.detailData['livestream'][0]['streaming_id'])
           .then((response) {
@@ -822,6 +822,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           MaterialPageRoute(
                                                               builder: (context) =>
                                                                   ProfileWidget(
+                                                                    isRest: widget.isRest,
                                                                     userId: widget
                                                                             .detailData[
                                                                         'createdByID'],
@@ -1621,12 +1622,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                         ],
                                       ),
                                     ),
-                              detailData['status'] == 'ended'
+                              detailData['status'] == 'ended' && widget.isRest == false
                                   ? SizedBox(
                                       height: ScreenUtil.instance.setWidth(20),
                                     )
                                   : Container(),
-                              detailData['status'] == 'ended'
+                              detailData['status'] == 'ended' && widget.isRest == false
                                   ? Container(
                                       // height: ScreenUtil.instance.setWidth(150),
                                       margin:

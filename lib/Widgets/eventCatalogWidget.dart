@@ -442,10 +442,14 @@ class _EventCatalogState extends State<EventCatalog>
                             ? Container()
                             : Container(
                                 child: Center(
-                                  child: ListenPage(),
+                                  child: ListenPage(
+                                    isRest: widget.isRest,
+                                  ),
                                 ),
                               ),
-                        LatestEventWidget(),
+                        LatestEventWidget(
+                          isRest: widget.isRest,
+                        ),
                       ],
                     ),
                   ),

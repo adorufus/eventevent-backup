@@ -288,6 +288,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
         ));
       } else if (payloadData['data']['type'] == 'relationship') {
         navigationHandler(ProfileWidget(
+          isRest: widget.isRest,
           userId: payloadData['data']['id'],
           initialIndex: 0,
         ));
@@ -523,6 +524,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
       widget.isRest == true
           ? LoginRegisterWidget()
           : ProfileWidget(
+            isRest: widget.isRest,
               initialIndex: 0,
               userId: currentUserId ?? widget.userId,
             ),

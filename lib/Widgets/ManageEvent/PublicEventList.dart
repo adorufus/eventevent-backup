@@ -14,10 +14,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class PublicEventList extends StatefulWidget {
+  final isRest;
   final type;
   final userId;
 
-  const PublicEventList({Key key, this.type, this.userId}) : super(key: key);
+  const PublicEventList({Key key, this.type, this.userId, this.isRest}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return PublicEventListState();
@@ -104,7 +105,7 @@ class PublicEventListState extends State<PublicEventList> {
       child: isEmpty == true
           ? EmptyState(
               emptyImage: 'assets/drawable/event_empty_state.png',
-              reasonText: 'You Have No Event Created Yet',
+              reasonText: widget.type == "going" ? "No Event Going Found :(" : 'You Have No Event Created Yet',
             )
           : publicData == null
               ? HomeLoadingScreen().myTicketLoading()
@@ -376,6 +377,23 @@ class PublicEventListState extends State<PublicEventList> {
   Future fetchMyEvent({int page}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int currentPage = 1;
+    
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': prefs.getString('Session')
+      };
+    }
 
     setState(() {
       if (page != null) {
@@ -384,16 +402,13 @@ class PublicEventListState extends State<PublicEventList> {
     });
 
     print(prefs.getString('Last User ID'));
-    String uri = BaseApi().apiUrl +
+    String uri = baseUrl +
         '/user/${widget.type}?X-API-KEY=$API_KEY&page=$currentPage&userID=${widget.userId == prefs.getString('Last User ID') ? prefs.getString('Last User ID') : widget.userId}&isPrivate=0';
     print(uri);
     print(uri);
     final response = await http.get(
       uri,
-      headers: {
-        'Authorization': AUTHORIZATION_KEY,
-        'cookie': prefs.getString('Session')
-      },
+      headers: headers,
     );
 
     return response;

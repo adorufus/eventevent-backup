@@ -81,7 +81,7 @@ class SuccessPageState extends State<SuccessPage> {
             GestureDetector(
               onTap: (){
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: ( BuildContext context) => ProfileWidget(initialIndex: 1, userId: currentUserId,)
+                  builder: ( BuildContext context) => ProfileWidget(isRest: false, initialIndex: 1, userId: currentUserId,)
                 ));
               },
               child: Container(

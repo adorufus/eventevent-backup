@@ -262,7 +262,11 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                     Align(
                       alignment: Alignment.topRight,
                       child: GestureDetector(
-                        onTap: () {
+                        onTap: () async {
+                          SharedPreferences preferences = await SharedPreferences.getInstance();
+
+                          preferences.setBool("isRest", true);
+                          
                           Navigator.push(
                               context,
                               MaterialPageRoute(

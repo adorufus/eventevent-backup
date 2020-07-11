@@ -139,37 +139,29 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                         ticketStatusText = 'Used';
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'streaming') {
-                        if (ticketDetailData[i].containsKey("livestream") &&
-                                ticketDetailData[i]['livestream']
-                                        ['on_demand_link'] !=
-                                    null ||
-                            ticketDetailData[i]['livestream']
-                                    ['on_demand_link'] !=
-                                "" ||
-                            ticketDetailData[i]['livestream']
-                                    ['on_demand_embed'] !=
-                                null ||
-                            ticketDetailData[i]['livestream']
-                                    ['on_demand_embed'] !=
-                                "") {
-                          ticketColor = eventajaGreenTeal;
-                          ticketStatusText = 'On Demand Video';
+                        if (ticketDetailData[i].containsKey("livestream")) {
+                          if (ticketDetailData[i]['livestream']
+                                      ['on_demand_link'] !=
+                                  "" ||
+                              ticketDetailData[i]['livestream']
+                                      ['on_demand_embed'] !=
+                                  "") {
+                            ticketColor = eventajaGreenTeal;
+                            ticketStatusText = 'On Demand Video';
+                          } else {
+                            ticketColor = eventajaGreenTeal;
+                            ticketStatusText = 'Streaming';
+                          }
                         } else {
                           ticketColor = eventajaGreenTeal;
-                          ticketStatusText = 'Streaming';
+                            ticketStatusText = 'Streaming';
                         }
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'playback') {
                         if (ticketDetailData[i].containsKey("livestream") &&
                                 ticketDetailData[i]['livestream']
-                                        ['on_demand_link'] !=
-                                    null ||
-                            ticketDetailData[i]['livestream']
                                     ['on_demand_link'] !=
                                 "" ||
-                            ticketDetailData[i]['livestream']
-                                    ['on_demand_link'] !=
-                                null ||
                             ticketDetailData[i]['livestream']
                                     ['on_demand_link'] !=
                                 "") {

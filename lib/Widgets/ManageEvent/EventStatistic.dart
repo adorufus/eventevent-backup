@@ -351,7 +351,7 @@ class EventStatisticState extends State<EventStatistic>{
   Future getViewers() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/analytic_event/gender?X-API-KEY=$API_KEY&event_id=${prefs.getString('NEW_EVENT_ID')}';
+    String url = BaseApi().apiUrl + '/analytic_event/gender?X-API-KEY=$API_KEY&event_id=${widget.eventId}';
 
     final response = await http.get(
         url,
@@ -386,7 +386,7 @@ class EventStatisticState extends State<EventStatistic>{
   Future getTicketStat() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/analytic_event/ticket?X-API-KEY=$API_KEY&event_id=${prefs.getString('NEW_EVENT_ID')}';
+    String url = BaseApi().apiUrl + '/analytic_event/ticket?X-API-KEY=$API_KEY&event_id=${widget.eventId}';
 
     final response = await http.get(
         url,
