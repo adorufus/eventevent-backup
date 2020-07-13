@@ -331,7 +331,17 @@ class _ProfileHeaderState extends State<ProfileHeader>
                           : GestureDetector(
                               onTap: () {
                                 if (widget.isRest == true) {
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginRegisterWidget(previousWidget: ProfileWidget(isRest: false, initialIndex: 0, userId: widget.currentUserId),)));
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              LoginRegisterWidget(
+                                                previousWidget: ProfileWidget(
+                                                    isRest: false,
+                                                    initialIndex: 0,
+                                                    userId:
+                                                        widget.currentUserId),
+                                              )));
                                 } else {
                                   print(this.isFollowed);
                                   if (this.isFollowed == false) {
@@ -408,6 +418,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         EventList(
+                                          isRest: widget.isRest,
                                       userId: widget.currentUserId,
                                       type: 'created',
                                     ),
@@ -466,6 +477,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         EventList(
+                                          isRest: widget.isRest,
                                           type: 'going',
                                           userId: widget.currentUserId,
                                         )));
@@ -726,11 +738,13 @@ class _ProfileHeaderState extends State<ProfileHeader>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Image.asset(
-                        'assets/icons/icon_apps/home.png',
+                        'assets/icons/icon_apps/latest.png',
                         scale: 4.5,
                       ),
                       SizedBox(width: ScreenUtil.instance.setWidth(10)),
-                      Text('Timeline',
+                      Text(widget.currentUserId == userId
+                              ? 'My Ticket'
+                              : 'Event Going',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: ScreenUtil.instance.setSp(12.5))),
@@ -743,14 +757,12 @@ class _ProfileHeaderState extends State<ProfileHeader>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Image.asset(
-                        'assets/icons/icon_apps/latest.png',
+                        'assets/icons/icon_apps/home.png',
                         scale: 4.5,
                       ),
                       SizedBox(width: ScreenUtil.instance.setWidth(10)),
                       Text(
-                          widget.currentUserId == userId
-                              ? 'My Ticket'
-                              : 'Event Going',
+                          'Timeline',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: ScreenUtil.instance.setSp(12.5))),
@@ -765,22 +777,22 @@ class _ProfileHeaderState extends State<ProfileHeader>
             height: MediaQuery.of(context).size.height,
             child: TabBarView(
               children: <Widget>[
-                userTimelineIsLoading == true
-                    ? HomeLoadingScreen().timelineLoading()
-                    : userTimelineList == null || userTimelineList.isEmpty
-                        ? EmptyState(
-                            imagePath:
-                                'assets/icons/empty_state/public_timeline.png',
-                            reasonText: 'Your timeline is empty :(',
-                          )
-                        : timeline(),
                 widget.currentUserId == userId
                     ? MyTicketWidget()
                     : PublicEventList(
                         isRest: widget.isRest,
                         type: 'going',
                         userId: widget.currentUserId,
-                      )
+                      ),
+                userTimelineIsLoading == true
+                    ? HomeLoadingScreen().timelineLoading()
+                    : userTimelineList == null || userTimelineList.isEmpty
+                        ? EmptyState(
+                            imagePath:
+                                'assets/icons/empty_state/public_timeline.png',
+                            reasonText: 'Timeline is empty :(',
+                          )
+                        : timeline()
               ],
             ),
           ),

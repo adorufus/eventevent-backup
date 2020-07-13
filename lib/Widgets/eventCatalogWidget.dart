@@ -1214,6 +1214,7 @@ class _EventCatalogState extends State<EventCatalog>
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => ProfileWidget(
+                          isRest: widget.isRest,
                               initialIndex: 0,
                               userId: popularPeopleData[i]['id'],
                             )));
@@ -1411,6 +1412,7 @@ class _EventCatalogState extends State<EventCatalog>
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) => ProfileWidget(
+                          isRest: widget.isRest,
                               initialIndex: 0,
                               userId: discoverPeopleData[i]['id'],
                             )));
