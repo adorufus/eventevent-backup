@@ -100,6 +100,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       'email': prefs.getString('ticket_about_email'),
       'phone': prefs.getString('ticket_about_phone'),
       'note': prefs.getString('ticket_about_aditional'),
+      'virtual_account_vendor_id': prefs.containsKey("virtual_account_vendor_id") ? prefs.getString('virtual_account_vendor_id') : null,
       'payment_method_id': prefs.getString('payment_method_id'),
       'identifier': widget.uuid.v4().toString(),
     };
@@ -170,6 +171,11 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
         print(paymentData['expired_time']);
         getPaymentData(paymentData['expired_time']);
       });
+      
+      if(prefs.containsKey("virtual_account_vendor_id")){
+        prefs.setString("virtual_account_vendor_id", null);
+      }
+
       if (widget.ticketType == 'free_limited' || widget.ticketType == 'free_live_stream') {
         Navigator.push(
             context,

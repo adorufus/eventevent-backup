@@ -84,7 +84,11 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
                   itemCount: vaList == null ? 0 : vaList.length,
                   itemBuilder: (BuildContext context, i) {
                     return GestureDetector(
-                      onTap: () {
+                      onTap: () async {
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+                        prefs.setString("virtual_account_vendor_id", vaList[i]['vendor_id']);
+                        print('va vendor id: ' + prefs.getString("virtual_account_vendor_id"));
                         if (vaList[i]['bank_code'] == 'BNI') {
                           getBankDetails(
                               vaList[i]['bank_code'],

@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
@@ -38,13 +39,16 @@ class BuyersState extends State<Buyers> {
   List buyerListExport = new List();
   bool isEmpty;
   bool isLoading = false;
+  int newPage = 0;
+  RefreshController refreshController =
+      new RefreshController(initialRefresh: false);
 
   @override
   void initState() {
     super.initState();
     print(widget.ticketID);
     // print('counter list' + Counter().counter.length.toString());
-    getBuyerList().then((response) {
+    getBuyerList(isPull: false).then((response) {
       var extractedData = json.decode(response.body);
       if (response.statusCode == 200) {
         setState(() {
@@ -66,7 +70,9 @@ class BuyersState extends State<Buyers> {
         print('gagal');
       }
     });
+  }
 
+  void buyerExport() {
     getBuyerExport().then((response) {
       var extractedData = json.decode(response.body);
       if (response.statusCode == 200) {
@@ -90,6 +96,56 @@ class BuyersState extends State<Buyers> {
         print('gagal');
       }
     });
+  }
+
+  void onLoading() async {
+    await Future.delayed(Duration(seconds: 2));
+    newPage += 1;
+
+    getBuyerList(page: newPage, isPull: true).then((response) {
+      var extractedData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        buyerList.addAll(extractedData['data']);
+
+        if (mounted) setState(() {});
+        refreshController.loadComplete();
+      } else {
+        print(response.body);
+        print('gagal');
+        refreshController.loadFailed();
+      }
+    });
+    // refreshController.loadComplete();
+  }
+
+  void onRefresh() async {
+    newPage = 0;
+
+    getBuyerList(isPull: true).then((response) {
+      var extractedData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        setState(() {
+          isLoading = false;
+        });
+        setState(() {
+          if (extractedData['desc'] == 'User not found') {
+            isEmpty = true;
+          } else {
+            isEmpty = false;
+            buyerList = extractedData['data'];
+          }
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        print(response.body);
+        print('gagal');
+      }
+    });
+
+    if (mounted) setState(() {});
+    refreshController.refreshCompleted();
   }
 
   @override
@@ -150,50 +206,56 @@ class BuyersState extends State<Buyers> {
                   imagePath: 'assets/icons/empty_state/my_ticket.png',
                   reasonText: 'There is no buyers :(',
                 )
-              : ListView.builder(
-                  padding: EdgeInsets.only(bottom: 15),
-                  itemCount: buyerList == null ? 0 : buyerList.length,
-                  itemBuilder: (BuildContext context, i) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => Invoice(
-                                  transactionID: buyerList[i]['id'],
-                                )));
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(bottom: 15),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        color: Colors.white,
-                        child: Row(
-                          children: <Widget>[
-                            Center(
-                                child: CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  buyerList[i]['user']['pictureAvatarURL']),
-                            )),
-                            SizedBox(width: ScreenUtil.instance.setWidth(50)),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(buyerList[i]['user']['fullName']),
-                                Text('@' + buyerList[i]['user']['username']),
-                                Text('Ticket quantity: ' +
-                                    buyerList[i]['quantity']),
-                              ],
-                            ),
-                            SizedBox(
-                              width: ScreenUtil.instance.setWidth(45),
-                            ),
-                            Center(
-                              child: Text('See Invoice >'),
-                            ),
-                          ],
+              : SmartRefresher(
+                  onLoading: onLoading,
+                  onRefresh: onRefresh,
+                  enablePullUp: true,
+                  controller: refreshController,
+                  child: ListView.builder(
+                    padding: EdgeInsets.only(bottom: 15),
+                    itemCount: buyerList == null ? 0 : buyerList.length,
+                    itemBuilder: (BuildContext context, i) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) => Invoice(
+                                    transactionID: buyerList[i]['id'],
+                                  )));
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 15),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          color: Colors.white,
+                          child: Row(
+                            children: <Widget>[
+                              Center(
+                                  child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    buyerList[i]['user']['pictureAvatarURL']),
+                              )),
+                              SizedBox(width: ScreenUtil.instance.setWidth(50)),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(buyerList[i]['user']['fullName']),
+                                  Text('@' + buyerList[i]['user']['username']),
+                                  Text('Ticket quantity: ' +
+                                      buyerList[i]['quantity']),
+                                ],
+                              ),
+                              SizedBox(
+                                width: ScreenUtil.instance.setWidth(45),
+                              ),
+                              Center(
+                                child: Text('See Invoice >'),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
     );
   }
@@ -315,15 +377,19 @@ class BuyersState extends State<Buyers> {
     return null;
   }
 
-  Future<http.Response> getBuyerList() async {
+  Future<http.Response> getBuyerList({int page, bool isPull = false}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentPage = 1;
 
     setState(() {
-      isLoading = true;
+      if(page != null){
+        currentPage += page;
+      }
+      isPull == false ? isLoading = true : isLoading = false;
     });
 
     String url = BaseApi().apiUrl +
-        '/tickets/user?X-API-KEY=$API_KEY&ticketID=${widget.ticketID}&page=1';
+        '/tickets/user?X-API-KEY=$API_KEY&ticketID=${widget.ticketID}&page=$currentPage';
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,

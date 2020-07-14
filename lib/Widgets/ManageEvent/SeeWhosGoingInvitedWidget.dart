@@ -23,7 +23,7 @@ class SeeWhosGoingInvitedWidget extends StatefulWidget {
 
 class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
   List peopleList = [];
-  int newPage;
+  int newPage = 0;
 
   RefreshController refreshController = RefreshController(initialRefresh: false);
 
@@ -130,7 +130,7 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
                   enablePullDown: true,
                   enablePullUp: true,
                   onLoading: _onLoading,
-                  onRefresh: () {
+                  onRefresh: () async {
                     setState(() {
                       newPage = 0;
                     });
@@ -148,6 +148,8 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
                         });
                       }
                     });
+
+                    Future.delayed(Duration(seconds: 2));
 
                     if (mounted) setState(() {});
                     refreshController.refreshCompleted();
