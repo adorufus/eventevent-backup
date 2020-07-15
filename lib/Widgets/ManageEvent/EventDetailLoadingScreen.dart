@@ -321,7 +321,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                 } else {
                   itemColor = Color(0xFF34B323);
                   ticketPrice =
-                      'Rp. ' + detailData['ticket']['cheapestTicket'] + ' ,-';
+                      'Rp. ' + detailData['ticket']['cheapestTicket'];
                 }
               } else {
                 if (detailData['ticket']['salesStatus'] == 'comingSoon') {
@@ -370,8 +370,8 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                 }
                 ticketPrice = 'SALES ENDED';
               }
-              itemColor = eventajaGreenTeal;
-              ticketPrice = 'Rp. ' + detailData['ticket']['cheapestTicket'] + ',-';
+              itemColor = Color(0xFF34B323);
+              ticketPrice = 'Rp. ' + detailData['ticket']['cheapestTicket'];
             } else if (detailData['ticket_type']['type'] == 'free_limited') {
               if (detailData['ticket']['availableTicketStatus'] == '1') {
                 itemColor = Color(0xFFFFAA00);

@@ -201,7 +201,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                               latestEventData[i]['ticket_type']['name'];
                         } else if (latestEventData[i]['ticket_type']['type'] ==
                             'paid_live_stream') {
-                          itemColor = eventajaGreenTeal;
+                          itemColor = Color(0xFF34B323);
                           itemPriceText = 'Rp. ' +
                               latestEventData[i]['ticket']['cheapestTicket'];
                         } else if (latestEventData[i]['ticket_type']['type'] ==

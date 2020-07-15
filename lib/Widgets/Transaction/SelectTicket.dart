@@ -169,7 +169,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                   ticketPrice = ticketListData[i]['paid_ticket_type']['name'];
                 } else if (ticketListData[i]['event']['ticket_type']['type'] ==
                     'paid_live_stream') {
-                  itemColor = eventajaGreenTeal;
+                  itemColor = Color(0xFF34B323);
                   ticketPrice = 'Rp. ' + ticketListData[i]['final_price'];
                 } else if (ticketListData[i]['event']['ticket_type']['type'] ==
                         'free_limited' ||
@@ -340,10 +340,8 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                       ),
                                       Container(
                                         padding: EdgeInsets.all(5),
-                                        height:
-                                            ScreenUtil.instance.setWidth(28),
-                                        width:
-                                            ScreenUtil.instance.setWidth(133),
+                                        height: ScreenUtil.instance.setWidth(32 * 1.1),
+                        width: ScreenUtil.instance.setWidth(110 * 1.1),
                                         decoration: BoxDecoration(
                                             boxShadow: <BoxShadow>[
                                               BoxShadow(
@@ -361,7 +359,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize:
-                                                  ScreenUtil.instance.setSp(14),
+                                                  ScreenUtil.instance.setSp(16),
                                               fontWeight: FontWeight.bold),
                                         )),
                                       ),
@@ -404,7 +402,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                                   ['is_single_ticket'] ==
                                               '0'
                                           ? ''
-                                          : 'Limited to one purchase only')
+                                          : 'Limited to one purchase only', style: TextStyle(color: Colors.grey),)
                                     ],
                                   ),
                                 )

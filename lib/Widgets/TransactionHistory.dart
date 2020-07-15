@@ -114,7 +114,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
                         } else if (transactionList[i]['status_transaksi'] ==
                             'expired') {
                           paymentStatusColor = Colors.red[500];
-                          paymentStatusText = 'Transaction Expired';
+                          paymentStatusText = 'Expired';
                         } else if (transactionList[i]['status_transaksi'] ==
                             'pending') {
                           paymentStatusColor = Colors.yellow[600];
@@ -228,7 +228,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
                               ticketColor: paymentStatusColor,
                               quantity: transactionList[i]['quantity'],
                               timeStart: transactionList[i]['updated_at'],
-                              price: transactionList[i]['amount'],
+                              price: transactionList[i]['amount'] == '0' ? 'Free' : 'Rp, ' + transactionList[i]['amount'],
                             ));
                       },
                     ),

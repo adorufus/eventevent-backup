@@ -185,12 +185,12 @@ class _ListenPageState extends State<ListenPage> {
                     Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      margin: EdgeInsets.only(left: 13, right: 13, top: 13),
+                      
                       width: MediaQuery.of(context).size.width,
                       height: ScreenUtil.instance.setWidth(50),
                       decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
+                          // borderRadius: BorderRadius.circular(15),
                           boxShadow: <BoxShadow>[
                             BoxShadow(
                                 blurRadius: 2,
@@ -199,7 +199,7 @@ class _ListenPageState extends State<ListenPage> {
                           ]),
                       child: Center(
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Column(
@@ -252,7 +252,7 @@ class _ListenPageState extends State<ListenPage> {
                                 '1') {
                               itemColor = Color(0xFF34B323);
                               itemPriceText = 'Rp. ' + nearbyEventData[i]['ticket']
-                                  ['cheapestTicket'] + ',-';
+                                  ['cheapestTicket'];
                             } else {
                               if (nearbyEventData[i]['ticket']['salesStatus'] ==
                                   'comingSoon') {
@@ -305,7 +305,7 @@ class _ListenPageState extends State<ListenPage> {
                               'free_live_stream') {
                             itemColor = Color(0xFFFFAA00);
                             itemPriceText =
-                                nearbyEventData[i]['ticket_type']['name'];
+                                "free";
                           } else if (nearbyEventData[i]['ticket_type']
                                       ['type'] ==
                                   'free_limited' ||

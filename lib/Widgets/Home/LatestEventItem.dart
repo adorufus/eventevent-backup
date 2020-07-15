@@ -27,7 +27,8 @@ class LatestEventItem extends StatelessWidget {
       this.itemPrice,
       this.type,
       this.isAvailable,
-      this.date, this.isHybridEvent})
+      this.date,
+      this.isHybridEvent})
       : super(key: key);
 
   @override
@@ -61,31 +62,35 @@ class LatestEventItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
           ),
+          Expanded(child: Container()),
           Container(
-            padding: EdgeInsets.only(left: 19.35, top: 15.66, right: 0),
+            padding: EdgeInsets.only(top: 15.66, right: 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                MiniDate(
-                  date: date,
-                ),
-                Expanded(
-                  child: SizedBox(),
-                ),
+                // MiniDate(
+                //   date: date,
+                // ),
+                // Expanded(
+                //   child: SizedBox(),
+                // ),
                 Container(
-                  width: MediaQuery.of(context).size.width - 146,
-                  height: ScreenUtil.instance.setWidth(20),
+                  width: 300 - 76.0,
+                  // height: ScreenUtil.instance.setWidth(20),
                   child: Text(
                     title,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: ScreenUtil.instance.setSp(15)),
-                    maxLines: 1,
+                        fontSize: ScreenUtil.instance.setSp(20)),
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textWidthBasis: TextWidthBasis.parent,
                   ),
                 ),
-                
+                SizedBox(
+                  height: 6,
+                ),
+
                 Container(
                   height: ScreenUtil.instance.setWidth(10),
                   child: Row(
@@ -110,76 +115,87 @@ class LatestEventItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 6,),
-                isHybridEvent == 'streamOnly' ? Image.asset('assets/icons/icon_apps/LivestreamTagIcon.png', scale: 25)
-                 : Container(),
-                Expanded(
-                  child: SizedBox(),
+                SizedBox(
+                  height: 6,
                 ),
-                Row(
-                  children: <Widget>[
-                    type == 'paid' ||
-                            type == 'paid_seating' ||
-                            type == 'free_limited' ||
-                            type == 'free_limited_seating'
-                        ? isAvailable == '1'
-                            ? Icon(
-                                CupertinoIcons.circle_filled,
-                                color: eventajaGreenTeal,
-                                size: 15,
-                              )
-                            : Icon(
-                                CupertinoIcons.circle_filled,
-                                color: itemPrice == 'sales_ended' || itemPrice == 'COMING SOON'
-                                    ? Colors.yellowAccent
-                                    : Colors.red,
-                                size: 15,
-                              )
-                        : Container(),
-                    type == 'paid' ||
-                            type == 'paid_seating' ||
-                            type == 'free_limited' ||
-                            type == 'free_limited_seating'
-                        ? isAvailable == '1'
-                            ? Text(
-                                'Available',
-                                style: TextStyle(
-                                    fontSize: ScreenUtil.instance.setSp(12)),
-                              )
-                            : Text(
-                                itemPrice,
-                                style: TextStyle(
-                                    fontSize: ScreenUtil.instance.setSp(12)),
-                              )
-                        : Container(),
-                  ],
-                ),
+                isHybridEvent == 'streamOnly'
+                    ? Image.asset(
+                        'assets/icons/icon_apps/LivestreamTagIcon.png',
+                        scale: 25)
+                    : Container(),
+                // Expanded(
+                //   child: SizedBox(),
+                // ),
+                // Row(
+                //   children: <Widget>[
+                //     type == 'paid' ||
+                //             type == 'paid_seating' ||
+                //             type == 'free_limited' ||
+                //             type == 'free_limited_seating'
+                //         ? isAvailable == '1'
+                //             ? Icon(
+                //                 CupertinoIcons.circle_filled,
+                //                 color: eventajaGreenTeal,
+                //                 size: 12,
+                //               )
+                //             : Icon(
+                //                 CupertinoIcons.circle_filled,
+                //                 color: itemPrice == 'sales_ended' ||
+                //                         itemPrice == 'COMING SOON'
+                //                     ? Colors.yellowAccent
+                //                     : Colors.red,
+                //                 size: 12,
+                //               )
+                //         : Container(),
+                //     type == 'paid' ||
+                //             type == 'paid_seating' ||
+                //             type == 'free_limited' ||
+                //             type == 'free_limited_seating'
+                //         ? isAvailable == '1'
+                //             ? Text(
+                //                 'Available',
+                //                 style: TextStyle(
+                //                     fontSize: ScreenUtil.instance.setSp(10)),
+                //               )
+                //             : Text(
+                //                 itemPrice,
+                //                 style: TextStyle(
+                //                     fontSize: ScreenUtil.instance.setSp(10)),
+                //               )
+                //         : Container(),
+                //   ],
+                // ),
                 Expanded(
                   child: SizedBox(),
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 5),
-                  height: ScreenUtil.instance.setWidth(28),
-                  width: ScreenUtil.instance.setWidth(133),
+                  height: ScreenUtil.instance.setWidth(32 * 1.1),
+                  width: ScreenUtil.instance.setWidth(110 * 1.1),
                   decoration: BoxDecoration(boxShadow: <BoxShadow>[
                     BoxShadow(
                         color: itemColor.withOpacity(0.4),
                         blurRadius: 2,
                         spreadRadius: 1.5)
-                  ], color: itemColor, borderRadius: BorderRadius.circular(15)),
+                  ], color: itemColor, borderRadius: BorderRadius.circular(30)),
                   child: Center(
                       child: Text(
                     itemPrice.toUpperCase(),
-                        textAlign: TextAlign.center,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: ScreenUtil.instance.setSp(14),
+                        fontSize: ScreenUtil.instance.setSp(itemPrice == "FREE LIVE STREAM" ? 10 : 16),
                         fontWeight: FontWeight.bold),
                   )),
                 ),
-                SizedBox(height: 20,)
+                SizedBox(
+                  height: 20,
+                )
               ],
             ),
+          ),
+          SizedBox(
+            width: 30,
           )
         ],
       ),

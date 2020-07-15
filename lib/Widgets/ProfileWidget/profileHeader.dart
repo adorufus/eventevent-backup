@@ -397,13 +397,14 @@ class _ProfileHeaderState extends State<ProfileHeader>
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          blurRadius: 2,
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 1.5)
-                    ]),
+                    // borderRadius: BorderRadius.circular(15),
+                    // boxShadow: <BoxShadow>[
+                    //   BoxShadow(
+                    //       blurRadius: 2,
+                    //       color: Colors.black.withOpacity(0.1),
+                    //       spreadRadius: 1.5)
+                    // ]
+                    ),
                 child: ConstrainedBox(
                   constraints: BoxConstraints.expand(),
                   child: Row(

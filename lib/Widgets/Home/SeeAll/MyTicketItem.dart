@@ -45,6 +45,7 @@ class MyTicketItem extends StatelessWidget {
             spreadRadius: 1.5)
       ], color: Colors.white, borderRadius: BorderRadius.circular(15)),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
             width: ScreenUtil.instance.setWidth(100.19),
@@ -56,21 +57,21 @@ class MyTicketItem extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 19.35, top: 15.66, right: 0),
+            padding: EdgeInsets.only(left: 19.35, top: 5, right: 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                MiniDate(
-                  date: date,
-                ),
+                // MiniDate(
+                //   date: date,
+                // ),
                 SizedBox(height: ScreenUtil.instance.setWidth(5)),
                 Container(
                   width: 200,
                   child: Text(
-                    title,
+                    ticketName,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: ScreenUtil.instance.setSp(10),
+                        fontSize: ScreenUtil.instance.setSp(14),
                         color: Color(0xFF8A8A8B)),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -79,47 +80,39 @@ class MyTicketItem extends StatelessWidget {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width - 146,
-                  height: ScreenUtil.instance.setWidth(18),
+                  // height: ScreenUtil.instance.setWidth(18),
                   child: Text(
                     ticketCode,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(15)),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(20)),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textWidthBasis: TextWidthBasis.parent,
                   ),
                 ),
-                Row(
-                  children: <Widget>[
-                    Text(
-                      timeStart + ' - ',
-                      style:
-                          TextStyle(fontSize: ScreenUtil.instance.setSp(10), color: Color(0xFF8A8A8B)),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textWidthBasis: TextWidthBasis.parent,
-                    ),
-                    Text(
-                      timeStart,
-                      style:
-                          TextStyle(fontSize: ScreenUtil.instance.setSp(10), color: Color(0xFF8A8A8B)),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textWidthBasis: TextWidthBasis.parent,
-                    ),
-                  ],
-                ),
-                SizedBox(height: ScreenUtil.instance.setWidth(5)),
-                Text(
-                    ticketName,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(10)),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textWidthBasis: TextWidthBasis.parent,
-                  ),
-                SizedBox(height: ScreenUtil.instance.setWidth(5)),
+                // Row(
+                //   children: <Widget>[
+                //     Text(
+                //       timeStart + ' - ',
+                //       style:
+                //           TextStyle(fontSize: ScreenUtil.instance.setSp(10), color: Color(0xFF8A8A8B)),
+                //       maxLines: 1,
+                //       overflow: TextOverflow.ellipsis,
+                //       textWidthBasis: TextWidthBasis.parent,
+                //     ),
+                //     Text(
+                //       timeStart,
+                //       style:
+                //           TextStyle(fontSize: ScreenUtil.instance.setSp(10), color: Color(0xFF8A8A8B)),
+                //       maxLines: 1,
+                //       overflow: TextOverflow.ellipsis,
+                //       textWidthBasis: TextWidthBasis.parent,
+                //     ),
+                //   ],
+                // ),
+                Expanded(child: Container()),
                 Container(
-                  height: ScreenUtil.instance.setWidth(28),
-                  width: ScreenUtil.instance.setWidth(133),
+                  height: ScreenUtil.instance.setWidth(32),
+                  width: ScreenUtil.instance.setWidth(110),
                   decoration: BoxDecoration(
                       boxShadow: <BoxShadow>[
                         BoxShadow(
@@ -138,6 +131,7 @@ class MyTicketItem extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   )),
                 ),
+                SizedBox(height: 25,)
               ],
             ),
           )

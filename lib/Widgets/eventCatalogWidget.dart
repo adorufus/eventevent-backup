@@ -904,7 +904,7 @@ class _EventCatalogState extends State<EventCatalog>
               Text('Categories',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: ScreenUtil.instance.setSp(19),
+                      fontSize: ScreenUtil.instance.setSp(26),
                       fontWeight: FontWeight.bold)),
             ],
           ),
@@ -925,12 +925,9 @@ class _EventCatalogState extends State<EventCatalog>
               Text('Popular Event',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: ScreenUtil.instance.setSp(19),
+                      fontSize: ScreenUtil.instance.setSp(26),
                       fontWeight: FontWeight.bold)),
-              Padding(
-                  padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width / 4.5,
-              )),
+              Expanded(child: SizedBox(),),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
@@ -945,7 +942,7 @@ class _EventCatalogState extends State<EventCatalog>
                   height: 20,
                   child: Center(
                     child: Text(
-                      'See All',
+                      'See All  >',
                       style: TextStyle(
                           color: eventajaGreenTeal,
                           fontSize: ScreenUtil.instance.setSp(12)),
@@ -1058,12 +1055,9 @@ class _EventCatalogState extends State<EventCatalog>
               Text('Discover Event',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: ScreenUtil.instance.setSp(19),
+                      fontSize: ScreenUtil.instance.setSp(26),
                       fontWeight: FontWeight.bold)),
-              Padding(
-                  padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width / 4.5,
-              )),
+              Expanded(child: SizedBox()),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
@@ -1078,7 +1072,7 @@ class _EventCatalogState extends State<EventCatalog>
                   height: 20,
                   child: Center(
                     child: Text(
-                      'See All',
+                      'See All  >',
                       style: TextStyle(
                           color: eventajaGreenTeal,
                           fontSize: ScreenUtil.instance.setSp(12)),
@@ -1157,15 +1151,12 @@ class _EventCatalogState extends State<EventCatalog>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Popular People',
+              Text('Popular Profile',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: ScreenUtil.instance.setSp(19),
+                      fontSize: ScreenUtil.instance.setSp(26),
                       fontWeight: FontWeight.bold)),
-              Padding(
-                  padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width / 4.5,
-              )),
+              Expanded(child: SizedBox()),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
@@ -1180,7 +1171,7 @@ class _EventCatalogState extends State<EventCatalog>
                   height: 20,
                   child: Center(
                     child: Text(
-                      'See All',
+                      'See All  >',
                       style: TextStyle(
                           color: eventajaGreenTeal,
                           fontSize: ScreenUtil.instance.setSp(12)),
@@ -1191,7 +1182,7 @@ class _EventCatalogState extends State<EventCatalog>
             ],
           ),
           SizedBox(height: ScreenUtil.instance.setWidth(5)),
-          Text('Find the most popular people',
+          Text('Find the most popular profile',
               style: TextStyle(
                   color: Color(0xFF868686),
                   fontSize: ScreenUtil.instance.setSp(14))),
@@ -1266,7 +1257,7 @@ class _EventCatalogState extends State<EventCatalog>
                 'Collection',
                 style: TextStyle(
                     color: eventajaBlack,
-                    fontSize: ScreenUtil.instance.setSp(19),
+                    fontSize: ScreenUtil.instance.setSp(26),
                     fontWeight: FontWeight.bold),
               ),
             ],
@@ -1355,15 +1346,12 @@ class _EventCatalogState extends State<EventCatalog>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Discover People',
+              Text('Discover Profile',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: ScreenUtil.instance.setSp(19),
+                      fontSize: ScreenUtil.instance.setSp(26),
                       fontWeight: FontWeight.bold)),
-              Padding(
-                  padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width / 4.5 - 5,
-              )),
+              Expanded(child: SizedBox()),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
@@ -1378,7 +1366,7 @@ class _EventCatalogState extends State<EventCatalog>
                   height: 20,
                   child: Center(
                     child: Text(
-                      'See All',
+                      'See All  >',
                       style: TextStyle(
                           color: eventajaGreenTeal,
                           fontSize: ScreenUtil.instance.setSp(12)),
@@ -1389,7 +1377,7 @@ class _EventCatalogState extends State<EventCatalog>
             ],
           ),
           SizedBox(height: ScreenUtil.instance.setWidth(5)),
-          Text('Find more people to follow',
+          Text('Find more profile to follow',
               style: TextStyle(
                   color: Color(0xFF868686),
                   fontSize: ScreenUtil.instance.setSp(14))),
@@ -1512,12 +1500,9 @@ class _EventCatalogState extends State<EventCatalog>
               Text('Popular Media',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: ScreenUtil.instance.setSp(19),
+                      fontSize: ScreenUtil.instance.setSp(26),
                       fontWeight: FontWeight.bold)),
-              Padding(
-                  padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width / 4.5,
-              )),
+              Expanded(child:SizedBox()),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
@@ -1531,7 +1516,7 @@ class _EventCatalogState extends State<EventCatalog>
                   height: 20,
                   child: Center(
                     child: Text(
-                      'See All',
+                      'See All  >',
                       style: TextStyle(
                           color: eventajaGreenTeal,
                           fontSize: ScreenUtil.instance.setSp(12)),
@@ -1945,12 +1930,9 @@ class _EventCatalogState extends State<EventCatalog>
               Text('Latest Video',
                   style: TextStyle(
                       color: eventajaBlack,
-                      fontSize: ScreenUtil.instance.setSp(19),
+                      fontSize: ScreenUtil.instance.setSp(26),
                       fontWeight: FontWeight.bold)),
-              Padding(
-                  padding: EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width / 4.5,
-              )),
+              Expanded(child: SizedBox()),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
@@ -1967,7 +1949,7 @@ class _EventCatalogState extends State<EventCatalog>
                   height: 20,
                   child: Center(
                     child: Text(
-                      'See All',
+                      'See All  >',
                       style: TextStyle(
                           color: eventajaGreenTeal,
                           fontSize: ScreenUtil.instance.setSp(12)),
