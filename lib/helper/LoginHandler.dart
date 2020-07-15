@@ -10,6 +10,8 @@ class LoginHandler {
       ],
     );
 
-    print(credential);
+    print('athcd: ' + credential.authorizationCode);
+    print('idtkn: ' + credential.identityToken);
+    print('usrid: ' + credential.userIdentifier);
   }
 }
