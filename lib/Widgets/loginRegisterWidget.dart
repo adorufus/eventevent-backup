@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/PrivacyPolicy.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/Terms.dart';
@@ -7,6 +8,7 @@ import 'package:eventevent/Widgets/loginWidget.dart';
 import 'package:eventevent/Widgets/registerWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/FirebaseMessagingHelper.dart';
+import 'package:eventevent/helper/LoginHandler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,6 +21,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import 'RegisterFacebook.dart';
 import 'dashboardWidget.dart';
@@ -494,6 +497,10 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                           ],
                         ),
                       ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                      child: SignInWithAppleButton(onPressed: LoginHandler.SignInWIthAppleAction, height: 35, style: SignInWithAppleButtonStyle.whiteOutlined, borderRadius: BorderRadius.circular(30),),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 15, left: 5, right: 5),
