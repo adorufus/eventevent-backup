@@ -531,7 +531,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => RegisterApple(appleData: callback['appleData']),
+                                    builder: (context) => RegisterApple(appleData: callback['appleData'], isRest: false,),
                                   ),
                                 );
                               }
