@@ -71,7 +71,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               animationDuration: Duration(milliseconds: 500),
             )..show(context);
           } else if (response.statusCode == 200) {
-            
             setState(() {
               isLoading = false;
               usernameStatus = 'avail';
@@ -93,7 +92,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     });
     _emailFocusNode.addListener(() {
       if (_emailFocusNode.hasFocus == false) {
-        
         Pattern pattern =
             r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
         RegExp regex = new RegExp(pattern);
@@ -393,6 +391,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     border: InputBorder.none),
               ),
             ),
+            Expanded(
+              child: Container(),
+            ),
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -407,77 +408,85 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     color:
                         hidePassword == true ? Colors.grey : eventajaGreenTeal,
                   )),
-            )
+            ),
+            SizedBox(
+              width: ScreenUtil.instance.setWidth(13),
+            ),
           ],
         ),
         SizedBox(height: ScreenUtil.instance.setWidth(15)),
-        ButtonTheme(
-          minWidth: ScreenUtil.instance.setWidth(500),
-          height: ScreenUtil.instance.setWidth(50),
-          child: RaisedButton(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            child: Text('Register',
-                style: TextStyle(
-                    fontSize: ScreenUtil.instance.setSp(15),
-                    color: Colors.white)),
-            color: eventajaGreenTeal,
-            onPressed: () {
-              isLoading = true;
-              Pattern pattern =
-                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-              RegExp regex = new RegExp(pattern);
-              if (_usernameController.text.length == 0 ||
-                  _usernameController.text == null ||
-                  _emailController.text.length == 0 ||
-                  _passwordController.text.length == 0) {
-                isLoading = false;
-                Flushbar(
-                  flushbarPosition: FlushbarPosition.TOP,
-                  message: 'Please check your input',
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 3),
-                  animationDuration: Duration(milliseconds: 500),
-                )..show(context);
-              } else if (!regex.hasMatch(_emailController.text)) {
-                isLoading = false;
-                Flushbar(
-                  flushbarPosition: FlushbarPosition.TOP,
-                  message: 'Invalid Email Format',
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 3),
-                  animationDuration: Duration(milliseconds: 500),
-                )..show(context);
-              } else if (_passwordController.text.length < 8) {
-                isLoading = false;
-                Flushbar(
-                  flushbarPosition: FlushbarPosition.TOP,
-                  message: 'Password at least 8 characters',
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 3),
-                  animationDuration: Duration(milliseconds: 500),
-                )..show(context);
-              } else if (usernameStatus == 'nonavail' ||
-                  emailStatus == 'nonavail') {
-                isLoading = false;
-                Flushbar(
-                  flushbarPosition: FlushbarPosition.TOP,
-                  message: 'Please check your input',
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 3),
-                  animationDuration: Duration(milliseconds: 500),
-                )..show(context);
-              } else if (usernameStatus == 'avail' && emailStatus == 'avail') {
-                isLoading = false;
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AfterRegister(
-                            username: _usernameController.text,
-                            email: _emailController.text,
-                            password: _passwordController.text)));
-              }
-            },
+        ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: ButtonTheme(
+            minWidth: ScreenUtil.instance.setWidth(500),
+            height: ScreenUtil.instance.setWidth(50),
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              child: Text('REGISTER',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: ScreenUtil.instance.setSp(15),
+                      color: Colors.white)),
+              color: eventajaGreenTeal,
+              onPressed: () {
+                isLoading = true;
+                Pattern pattern =
+                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                RegExp regex = new RegExp(pattern);
+                if (_usernameController.text.length == 0 ||
+                    _usernameController.text == null ||
+                    _emailController.text.length == 0 ||
+                    _passwordController.text.length == 0) {
+                  isLoading = false;
+                  Flushbar(
+                    flushbarPosition: FlushbarPosition.TOP,
+                    message: 'Please check your input',
+                    backgroundColor: Colors.red,
+                    duration: Duration(seconds: 3),
+                    animationDuration: Duration(milliseconds: 500),
+                  )..show(context);
+                } else if (!regex.hasMatch(_emailController.text)) {
+                  isLoading = false;
+                  Flushbar(
+                    flushbarPosition: FlushbarPosition.TOP,
+                    message: 'Invalid Email Format',
+                    backgroundColor: Colors.red,
+                    duration: Duration(seconds: 3),
+                    animationDuration: Duration(milliseconds: 500),
+                  )..show(context);
+                } else if (_passwordController.text.length < 8) {
+                  isLoading = false;
+                  Flushbar(
+                    flushbarPosition: FlushbarPosition.TOP,
+                    message: 'Password at least 8 characters',
+                    backgroundColor: Colors.red,
+                    duration: Duration(seconds: 3),
+                    animationDuration: Duration(milliseconds: 500),
+                  )..show(context);
+                } else if (usernameStatus == 'nonavail' ||
+                    emailStatus == 'nonavail') {
+                  isLoading = false;
+                  Flushbar(
+                    flushbarPosition: FlushbarPosition.TOP,
+                    message: 'Please check your input',
+                    backgroundColor: Colors.red,
+                    duration: Duration(seconds: 3),
+                    animationDuration: Duration(milliseconds: 500),
+                  )..show(context);
+                } else if (usernameStatus == 'avail' &&
+                    emailStatus == 'avail') {
+                  isLoading = false;
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AfterRegister(
+                              username: _usernameController.text,
+                              email: _emailController.text,
+                              password: _passwordController.text)));
+                }
+              },
+            ),
           ),
         ),
         SizedBox(

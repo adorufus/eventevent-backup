@@ -122,7 +122,7 @@ class SearchState extends State<Search> {
                             }
                           },
                           style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(12)),
+                              fontSize: ScreenUtil.instance.setSp(16)),
                           autofocus: true,
                           autocorrect: false,
                           decoration: InputDecoration(
@@ -255,8 +255,8 @@ class SearchState extends State<Search> {
                   if (filteredEvents[i]['ticket']['availableTicketStatus'] ==
                       '1') {
                     itemColor = Color(0xFF34B323);
-                    itemPriceText =
-                        filteredEvents[i]['ticket']['cheapestTicket'];
+                          itemPriceText = 'Rp. ' +
+                              filteredEvents[i]['ticket']['cheapestTicket'];
                   } else {
                     if (filteredEvents[i]['ticket']['salesStatus'] ==
                         'comingSoon') {
@@ -295,7 +295,7 @@ class SearchState extends State<Search> {
                   if (filteredEvents[i]['ticket']['availableTicketStatus'] ==
                       '1') {
                     itemColor = Color(0xFFFFAA00);
-                    itemPriceText = filteredEvents[i]['ticket_type']['name'];
+                    itemPriceText = "FREE";
                   } else {
                     if (filteredEvents[i]['ticket']['salesStatus'] ==
                         'comingSoon') {
@@ -330,6 +330,7 @@ class SearchState extends State<Search> {
                         ['availableTicketStatus'],
                     itemPrice: itemPriceText,
                     itemColor: itemColor,
+                    isHybridEvent: filteredEvents[i]['isHybridEvent'],
                     location: filteredEvents[i]['address'],
                     title: filteredEvents[i]['name'],
                     date: DateTime.parse(filteredEvents[i]['dateStart']),

@@ -254,7 +254,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                               ],
                               borderRadius: BorderRadius.circular(10)),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 17),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -263,6 +263,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                   height: ScreenUtil.instance.setWidth(150),
                                   width: ScreenUtil.instance.setWidth(100),
                                   decoration: BoxDecoration(
+                                    
                                       image: DecorationImage(
                                           image: ticketListData[i]
                                                       .containsKey(
@@ -276,7 +277,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                                           ['ticket_image']
                                                       ['secure_url'],
                                                 ),
-                                          fit: BoxFit.fill)),
+                                          fit: BoxFit.fill), borderRadius: BorderRadius.circular(10),),
                                 ),
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(15),
@@ -291,7 +292,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                         ticketListData[i]['ticket_name'],
                                         style: TextStyle(
                                             fontSize:
-                                                ScreenUtil.instance.setSp(15),
+                                                ScreenUtil.instance.setSp(20),
                                             fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(
@@ -352,7 +353,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                             ],
                                             color: itemColor,
                                             borderRadius:
-                                                BorderRadius.circular(15)),
+                                                BorderRadius.circular(30)),
                                         child: Center(
                                             child: Text(
                                           ticketPrice,

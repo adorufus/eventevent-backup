@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/PeopleItem.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/FollowUnfollow.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,8 +15,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ListViewWithAppBar extends StatefulWidget {
   final String title;
   final String apiURL;
+  final isRest;
 
-  const ListViewWithAppBar({Key key, @required this.title, this.apiURL})
+  const ListViewWithAppBar({Key key, @required this.title, this.apiURL, this.isRest})
       : super(key: key);
 
   @override
@@ -182,11 +184,24 @@ class _ListViewWithAppBar extends State<ListViewWithAppBar> {
 
     session = preferences.getString('Session');
 
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session')
+      };
+    }
+
     final urlApi = widget.apiURL;
-    final response = await http.get(urlApi, headers: {
-      'Authorization': 'Basic YWRtaW46MTIzNA==',
-      'cookie': session
-    });
+    final response = await http.get(urlApi, headers: headers);
 
     var extractedData = json.decode(response.body);
 

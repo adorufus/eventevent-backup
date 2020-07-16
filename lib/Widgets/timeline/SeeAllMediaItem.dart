@@ -266,25 +266,25 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
             : SmartRefresher(
                 enablePullDown: true,
                 enablePullUp: true,
-                footer: CustomFooter(
-                    builder: (BuildContext context, LoadStatus mode) {
-                  Widget body;
-                  if (mode == LoadStatus.idle) {
-                    body = Text("Load data");
-                  } else if (mode == LoadStatus.loading) {
-                    body = CupertinoActivityIndicator(radius: 20);
-                  } else if (mode == LoadStatus.failed) {
-                    body = Text("Load Failed!");
-                  } else if (mode == LoadStatus.canLoading) {
-                    body = Text('More');
-                  } else {
-                    body = Container();
-                  }
+                // footer: CustomFooter(
+                //     builder: (BuildContext context, LoadStatus mode) {
+                //   Widget body;
+                //   if (mode == LoadStatus.idle) {
+                //     body = Text("Load data");
+                //   } else if (mode == LoadStatus.loading) {
+                //     body = CupertinoActivityIndicator(radius: 20);
+                //   } else if (mode == LoadStatus.failed) {
+                //     body = Text("Load Failed!");
+                //   } else if (mode == LoadStatus.canLoading) {
+                //     body = Text('More');
+                //   } else {
+                //     body = Container();
+                //   }
 
-                  return Container(
-                      height: ScreenUtil.instance.setWidth(35),
-                      child: Center(child: body));
-                }),
+                //   return Container(
+                //       height: ScreenUtil.instance.setWidth(35),
+                //       child: Center(child: body));
+                // }),
                 controller: refreshController,
                 onRefresh: () {
                   setState(() {
@@ -377,25 +377,25 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
             : SmartRefresher(
                 enablePullDown: true,
                 enablePullUp: true,
-                footer: CustomFooter(
-                    builder: (BuildContext context, LoadStatus mode) {
-                  Widget body;
-                  if (mode == LoadStatus.idle) {
-                    body = Text("Load data");
-                  } else if (mode == LoadStatus.loading) {
-                    body = CupertinoActivityIndicator(radius: 20);
-                  } else if (mode == LoadStatus.failed) {
-                    body = Text("Load Failed!");
-                  } else if (mode == LoadStatus.canLoading) {
-                    body = Text('More');
-                  } else {
-                    body = Container();
-                  }
+                // footer: CustomFooter(
+                //     builder: (BuildContext context, LoadStatus mode) {
+                //   Widget body;
+                //   if (mode == LoadStatus.idle) {
+                //     body = Text("Load data");
+                //   } else if (mode == LoadStatus.loading) {
+                //     body = CupertinoActivityIndicator(radius: 20);
+                //   } else if (mode == LoadStatus.failed) {
+                //     body = Text("Load Failed!");
+                //   } else if (mode == LoadStatus.canLoading) {
+                //     body = Text('More');
+                //   } else {
+                //     body = Container();
+                //   }
 
-                  return Container(
-                      height: ScreenUtil.instance.setWidth(35),
-                      child: Center(child: body));
-                }),
+                //   return Container(
+                //       height: ScreenUtil.instance.setWidth(35),
+                //       child: Center(child: body));
+                // }),
                 controller: refreshController,
                 onRefresh: () {
                   setState(() {

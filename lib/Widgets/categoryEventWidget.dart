@@ -52,7 +52,7 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
                     return GestureDetector(
                       onTap: (){
                         ClevertapHandler.logCategoryView(categoryData['name']);
-                        Navigator.push(context, MaterialPageRoute(settings: RouteSettings(name: 'CategoryList'), builder: (context) => CategoryPage(categoryId: categoryData['id'],)));
+                        Navigator.push(context, MaterialPageRoute(settings: RouteSettings(name: 'CategoryList'), builder: (context) => CategoryPage(isRest: widget.isRest, categoryId: categoryData['id'],)));
                       },
                         child: SizedBox(
                             height: ScreenUtil.instance.setWidth(85),

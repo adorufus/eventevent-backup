@@ -178,7 +178,7 @@ class _WaitTransactionState extends State<WaitTransaction>
     )..init(context);
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white.withOpacity(0.9),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -223,7 +223,7 @@ class _WaitTransactionState extends State<WaitTransaction>
                             borderRadius: BorderRadius.circular(10),
                             color: eventajaGreenTeal),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             SizedBox(
@@ -257,36 +257,36 @@ class _WaitTransactionState extends State<WaitTransaction>
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
                             ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text('H',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(20))),
-                                SizedBox(
-                                  width: ScreenUtil.instance.setWidth(35),
-                                ),
-                                Text('M',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(20))),
-                                SizedBox(
-                                  width: ScreenUtil.instance.setWidth(35),
-                                ),
-                                Text('S',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(20))),
-                              ],
-                            ),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(20),
-                            ),
+                            // Row(
+                            //   crossAxisAlignment: CrossAxisAlignment.center,
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: <Widget>[
+                            //     Text('H',
+                            //         style: TextStyle(
+                            //             color: Colors.white,
+                            //             fontSize:
+                            //                 ScreenUtil.instance.setSp(20))),
+                            //     SizedBox(
+                            //       width: ScreenUtil.instance.setWidth(35),
+                            //     ),
+                            //     Text('M',
+                            //         style: TextStyle(
+                            //             color: Colors.white,
+                            //             fontSize:
+                            //                 ScreenUtil.instance.setSp(20))),
+                            //     SizedBox(
+                            //       width: ScreenUtil.instance.setWidth(35),
+                            //     ),
+                            //     Text('S',
+                            //         style: TextStyle(
+                            //             color: Colors.white,
+                            //             fontSize:
+                            //                 ScreenUtil.instance.setSp(20))),
+                            //   ],
+                            // ),
+                            // SizedBox(
+                            //   height: ScreenUtil.instance.setWidth(20),
+                            // ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -344,7 +344,7 @@ class _WaitTransactionState extends State<WaitTransaction>
                 Center(
                   child: Text(
                     'TRANSFER TO',
-                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
+                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(14)),
                   ),
                 ),
                 // Expanded(child: SizedBox(),),
@@ -372,7 +372,7 @@ class _WaitTransactionState extends State<WaitTransaction>
                           }
                         },
                         child: Container(
-                            height: ScreenUtil.instance.setWidth(130),
+                            height: ScreenUtil.instance.setWidth(100),
                             margin: EdgeInsets.all(10),
                             padding: EdgeInsets.only(
                                 left: 15, right: 7, top: 10, bottom: 10),
@@ -463,9 +463,10 @@ class _WaitTransactionState extends State<WaitTransaction>
                           return GestureDetector(
                             onTap: () {
                               print('string copied');
-                              Clipboard.setData(
-                                  ClipboardData(text: availableBanks[i]['bank_account_number']));
-                              Clipboard.getData('text/plain').then((result){
+                              Clipboard.setData(ClipboardData(
+                                  text: availableBanks[i]
+                                      ['bank_account_number']));
+                              Clipboard.getData('text/plain').then((result) {
                                 print(result.text);
                               });
                               print(Clipboard.kTextPlain);
@@ -477,12 +478,13 @@ class _WaitTransactionState extends State<WaitTransaction>
                               )..show(context);
                             },
                             child: Container(
-                              height: ScreenUtil.instance.setWidth(130),
+                              height: ScreenUtil.instance.setWidth(100),
                               margin: EdgeInsets.all(10),
                               padding: EdgeInsets.only(
                                   left: 15, right: 7, top: 10, bottom: 10),
                               decoration: BoxDecoration(
                                   color: Colors.white,
+
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(
                                         color: Colors.grey,
@@ -501,8 +503,8 @@ class _WaitTransactionState extends State<WaitTransaction>
                                       child: Image.asset(imageAssets),
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: ScreenUtil.instance.setWidth(20),
+                                  Expanded(
+                                    child: SizedBox(),
                                   ),
                                   Column(
                                       crossAxisAlignment:
@@ -513,37 +515,27 @@ class _WaitTransactionState extends State<WaitTransaction>
                                         Text(
                                           paymentData['payment']['data_vendor']
                                                   ['available_banks'][i]
-                                              ['account_holder_name'],
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize:
-                                                  ScreenUtil.instance.setSp(20),
-                                              color: Colors.black54),
-                                        ),
-                                        SizedBox(
-                                            height: ScreenUtil.instance
-                                                .setWidth(10)),
-                                        Text(
-                                            paymentData['payment']
-                                                        ['data_vendor']
-                                                    ['available_banks'][i]
-                                                ['bank_code'],
-                                            style:
-                                                TextStyle(color: Colors.grey)),
-                                        SizedBox(
-                                            height: ScreenUtil.instance
-                                                .setWidth(10)),
-                                        Text(
-                                          paymentData['payment']['data_vendor']
-                                                  ['available_banks'][i]
                                               ['bank_account_number'],
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize:
-                                                  ScreenUtil.instance.setSp(15),
+                                                  ScreenUtil.instance.setSp(28),
                                               color: Colors.black54),
                                         ),
+                                        Text(
+                                          paymentData['payment']['data_vendor']
+                                                  ['available_banks'][i]
+                                              ['account_holder_name'],
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize:
+                                                  ScreenUtil.instance.setSp(12),
+                                              color: Colors.grey),
+                                        ),
                                       ]),
+                                  Expanded(
+                                    child: SizedBox(),
+                                  ),
                                 ],
                               ),
                             ),

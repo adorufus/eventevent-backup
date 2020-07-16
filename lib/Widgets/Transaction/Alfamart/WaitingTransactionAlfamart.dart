@@ -7,7 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -71,7 +72,8 @@ class _WaitingTransactionAlfamartState
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -80,7 +82,7 @@ class _WaitingTransactionAlfamartState
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.9),
+      backgroundColor: Colors.white,
       // bottomNavigationBar: GestureDetector(
       //   onTap: (){
       //     Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SuccessPage()));
@@ -98,9 +100,16 @@ class _WaitingTransactionAlfamartState
         elevation: 1,
         leading: GestureDetector(
           onTap: () {
-
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => DashboardWidget(isRest: false, selectedPage: 3,)), ModalRoute.withName('/EventDetails'));
-            Navigator.push(context, MaterialPageRoute(builder: (context) => TransactionHistory()));
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DashboardWidget(
+                          isRest: false,
+                          selectedPage: 3,
+                        )),
+                ModalRoute.withName('/EventDetails'));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => TransactionHistory()));
           },
           child: Icon(
             Icons.close,
@@ -148,11 +157,11 @@ class _WaitingTransactionAlfamartState
                             ),
                             CountDownTimer(
                               secondsRemaining: seconds,
-                              whenTimeExpires: () {
-
-                              },
-                              countDownTimerStyle: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(38),
-                fontWeight: FontWeight.bold),
+                              whenTimeExpires: () {},
+                              countDownTimerStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil.instance.setSp(38),
+                                  fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
@@ -163,19 +172,25 @@ class _WaitingTransactionAlfamartState
                               children: <Widget>[
                                 Text('H',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20))),
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('M',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20))),
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('S',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20))),
                               ],
                             ),
                             SizedBox(
@@ -187,11 +202,13 @@ class _WaitingTransactionAlfamartState
                                 Text(
                                   'Complete payment before ',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white, fontSize: 14),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
                                 ),
                                 Text('${widget.expDate}',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 12,
+                                        color: Colors.white,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold))
                               ],
                             )
@@ -206,9 +223,10 @@ class _WaitingTransactionAlfamartState
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'PAYMENT',
-                            style:
-                                TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.black45),
+                            'AMOUNT',
+                            style: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(14),
+                                color: Colors.black45),
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
@@ -216,10 +234,10 @@ class _WaitingTransactionAlfamartState
                                 ? '-'
                                 : 'Rp. ' + paymentData['amount'],
                             style: TextStyle(
-                                fontSize: 50, fontWeight: FontWeight.bold),
+                                fontSize: 40, fontWeight: FontWeight.bold),
                           ),
-                          Divider(height: ScreenUtil.instance.setWidth(5), color: Colors.black),
-                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                          // Divider(height: ScreenUtil.instance.setWidth(5), color: Colors.black),
+                          SizedBox(height: ScreenUtil.instance.setWidth(25)),
                           Container(
                               height: ScreenUtil.instance.setWidth(50),
                               width: ScreenUtil.instance.setWidth(200),
@@ -229,20 +247,23 @@ class _WaitingTransactionAlfamartState
                           SizedBox(height: ScreenUtil.instance.setWidth(5)),
                           Text(
                             'Kode pembayaran Alfamart',
-                            style: TextStyle(color: Colors.grey, fontSize: ScreenUtil.instance.setSp(12)),
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: ScreenUtil.instance.setSp(12)),
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(paymentData['payment_vendor_code'],
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: ScreenUtil.instance.setSp(25),
+                                  fontSize: ScreenUtil.instance.setSp(30),
                                   fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ],
                   ),
                 ),
+                SizedBox(height: 40),
                 howToTab()
               ],
             ),
@@ -257,54 +278,71 @@ class _WaitingTransactionAlfamartState
         child: Column(
           children: <Widget>[
             TabBar(
-              tabs: <Widget>[Tab(text: 'BAHASA'), Tab(text: 'ENGLISH')],
+              tabs: <Widget>[
+                Tab(
+                  text: 'BAHASA',
+                ),
+                Tab(text: 'ENGLISH')
+              ],
+              labelStyle: TextStyle(fontWeight: FontWeight.bold),
             ),
             Container(
               color: Colors.white.withOpacity(0.9),
               height: MediaQuery.of(context).size.height,
               child: TabBarView(children: <Widget>[
-                ListView(children: <Widget>[
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 15, right: 15, top: 15),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(HEADER_ID,
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                          Text(
-                            ALFAMART_HOWTO_LINE1_ID +
-                                paymentData['payment_vendor_code'],
-                            style: TextStyle(fontSize: ScreenUtil.instance.setSp(14)),
-                          ),
-                          Text(ALFAMART_HOWTO_LINE2_ID)
-                        ]),
-                  )
-                ]),
+                ListView(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+                    children: <Widget>[
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 15, right: 15),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(HEADER_ID,
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10)),
+                              Text(
+                                ALFAMART_HOWTO_LINE1_ID +
+                                    paymentData['payment_vendor_code'],
+                                style: TextStyle(
+                                    fontSize: ScreenUtil.instance.setSp(14)),
+                              ),
+                              Text(ALFAMART_HOWTO_LINE2_ID)
+                            ]),
+                      )
+                    ]),
                 Padding(
                     padding: EdgeInsets.only(top: 10),
-                    child: ListView(children: <Widget>[
-                      Padding(
-                          padding:
-                              EdgeInsets.only(left: 15, right: 15, top: 15),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(HEADER_EN,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                                Text(
-                                  ALFAMART_HOWTO_LINE1_EN +
-                                      paymentData['payment_vendor_code'],
-                                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(14)),
-                                ),
-                                Text(ALFAMART_HOWTO_LINE2_EN)
-                              ]))
-                    ])),
+                    child: ListView(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        children: <Widget>[
+                          Padding(
+                              padding:
+                                  EdgeInsets.only(left: 15, right: 15, top: 15),
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(HEADER_EN,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(
+                                        height:
+                                            ScreenUtil.instance.setWidth(10)),
+                                    Text(
+                                      ALFAMART_HOWTO_LINE1_EN +
+                                          paymentData['payment_vendor_code'],
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(14)),
+                                    ),
+                                    Text(ALFAMART_HOWTO_LINE2_EN)
+                                  ]))
+                        ])),
               ]),
             )
           ],

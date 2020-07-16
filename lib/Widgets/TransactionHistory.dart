@@ -118,7 +118,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
                         } else if (transactionList[i]['status_transaksi'] ==
                             'pending') {
                           paymentStatusColor = Colors.yellow[600];
-                          paymentStatusText = 'Waiting for payment';
+                          paymentStatusText = 'Waiting';
                         }
 
                         Widget page = WaitTransaction(

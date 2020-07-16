@@ -12,6 +12,10 @@ class LoginHandler {
         AppleIDAuthorizationScopes.email,
         AppleIDAuthorizationScopes.fullName,
       ],
+      // webAuthenticationOptions: WebAuthenticationOptions(
+      //   clientId: ,
+      //   redirectUri: ,
+      // )
     );
 
     // AppleIDAuthorizationRequest(

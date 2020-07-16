@@ -205,6 +205,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
           child: Column(
             children: <Widget>[
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 28, vertical: 3),
@@ -393,7 +394,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
               ),
               Container(
                 height: ScreenUtil.instance.setWidth(60.63),
-                margin: EdgeInsets.symmetric(horizontal: 13, vertical: 28),
+                margin: EdgeInsets.symmetric(horizontal: 8, vertical: 28),
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -442,7 +443,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                         int.parse(widget.eventCreatedCount) >
                                                 999
                                             ? 14
-                                            : 17,
+                                            : 22,
                                     color: widget.eventCreatedCount == "0" ||
                                             widget.eventCreatedCount == null
                                         ? Colors.grey
@@ -499,7 +500,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                           int.parse(widget.eventCreatedCount) >
                                                   999
                                               ? 14
-                                              : 17,
+                                              : 22,
                                       color: widget.eventGoingCount == "0" ||
                                               widget.eventGoingCount == null
                                           ? Colors.grey
@@ -531,11 +532,13 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         onTap: widget.follower == '0'
                             ? () {}
                             : () {
+                              String baseUrl = widget.isRest ? BaseApi().restUrl : BaseApi().apiUrl;
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         ListViewWithAppBar(
+                                          isRest: widget.isRest,
                                           title: 'FOLLOWER',
-                                          apiURL: BaseApi().apiUrl +
+                                          apiURL: baseUrl +
                                               '/user/follower?X-API-KEY=$API_KEY&userID=${widget.currentUserId}&page=1',
                                         )));
                               },
@@ -556,7 +559,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                           int.parse(widget.eventCreatedCount) >
                                                   999
                                               ? 14
-                                              : 17,
+                                              : 22,
                                       color: widget.follower == "0" ||
                                               widget.follower == null
                                           ? Colors.grey
@@ -588,11 +591,14 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         onTap: widget.following == '0'
                             ? () {}
                             : () {
+                              String baseUrl = widget.isRest ? BaseApi().restUrl : BaseApi().apiUrl;
+
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         ListViewWithAppBar(
+                                          isRest: widget.isRest,
                                           title: 'FOLLOWING',
-                                          apiURL: BaseApi().apiUrl +
+                                          apiURL: baseUrl +
                                               '/user/following?X-API-KEY=${API_KEY}&userID=${widget.currentUserId}&page=1',
                                         )));
                               },
@@ -612,7 +618,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                           int.parse(widget.eventCreatedCount) >
                                                   999
                                               ? 14
-                                              : 17,
+                                              : 22,
                                       color: widget.following == "0" ||
                                               widget.following == null
                                           ? Colors.grey

@@ -69,6 +69,7 @@ class PaymentMethodState extends State<PaymentMethod> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 0,
@@ -86,6 +87,7 @@ class PaymentMethodState extends State<PaymentMethod> {
         title: Text('PAYMENT', style: TextStyle(color: eventajaGreenTeal)),
       ),
       body: ListView(
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 13),
         children: <Widget>[
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,9 +103,9 @@ class PaymentMethodState extends State<PaymentMethod> {
                   children: <Widget>[
                     Text('Transfer Amount'.toUpperCase(),
                         style: TextStyle(
-                            fontSize: ScreenUtil.instance.setSp(20),
+                            fontSize: ScreenUtil.instance.setSp(14),
                             color: Colors.grey)),
-                    SizedBox(height: ScreenUtil.instance.setWidth(20)),
+                    SizedBox(height: ScreenUtil.instance.setWidth(8)),
                     Text('Rp. $paymentAmount',
                         style: TextStyle(
                             fontSize: 35, fontWeight: FontWeight.bold)),
@@ -242,16 +244,16 @@ class PaymentMethodState extends State<PaymentMethod> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      paymentMethodList[i]['method'] == null
-                                          ? ''
-                                          : paymentMethodList[i]['method'],
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(left: 2, bottom: 4),
+                                  //   child: Text(
+                                  //     paymentMethodList[i]['method'] == null
+                                  //         ? ''
+                                  //         : paymentMethodList[i]['method'],
+                                  //     style: TextStyle(
+                                  //         fontWeight: FontWeight.bold),
+                                  //   ),
+                                  // ),
                                   Container(
                                     height: ScreenUtil.instance.setWidth(60),
                                     width: MediaQuery.of(context).size.width,
@@ -264,7 +266,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                               blurRadius: 5,
                                               spreadRadius: 5,
                                               color: Color(0xff8a8a8b)
-                                                  .withOpacity(.5))
+                                                  .withOpacity(.1))
                                         ],
                                         borderRadius:
                                             BorderRadius.circular(15)),

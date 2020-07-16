@@ -112,7 +112,7 @@ class MyTicketItem extends StatelessWidget {
                 Expanded(child: Container()),
                 Container(
                   height: ScreenUtil.instance.setWidth(32),
-                  width: ScreenUtil.instance.setWidth(110),
+                  width: ticketStatus == 'On Demand Video' ? ScreenUtil.instance.setWidth(140) : ScreenUtil.instance.setWidth(110),
                   decoration: BoxDecoration(
                       boxShadow: <BoxShadow>[
                         BoxShadow(
@@ -127,7 +127,7 @@ class MyTicketItem extends StatelessWidget {
                     ticketStatus.toString().toUpperCase(),
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: ScreenUtil.instance.setSp(10),
+                        fontSize: ScreenUtil.instance.setSp(14),
                         fontWeight: FontWeight.bold),
                   )),
                 ),

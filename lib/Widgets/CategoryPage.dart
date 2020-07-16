@@ -14,8 +14,9 @@ import 'package:http/http.dart' as http;
 
 class CategoryPage extends StatefulWidget {
   final categoryId;
+  final isRest;
 
-  const CategoryPage({Key key, this.categoryId}) : super(key: key);
+  const CategoryPage({Key key, this.categoryId, this.isRest}) : super(key: key);
   @override
   _CategoryPageState createState() => _CategoryPageState();
 }
@@ -133,25 +134,25 @@ class _CategoryPageState extends State<CategoryPage> {
               : SmartRefresher(
                   enablePullDown: true,
                   enablePullUp: true,
-                  footer: CustomFooter(
-                      builder: (BuildContext context, LoadStatus mode) {
-                    Widget body;
-                    if (mode == LoadStatus.idle) {
-                      body = Text("Load data");
-                    } else if (mode == LoadStatus.loading) {
-                      body = CupertinoActivityIndicator(radius: 20);
-                    } else if (mode == LoadStatus.failed) {
-                      body = Text("Load Failed!");
-                    } else if (mode == LoadStatus.canLoading) {
-                      body = Text('More');
-                    } else {
-                      body = Container();
-                    }
+                  // footer: CustomFooter(
+                  //     builder: (BuildContext context, LoadStatus mode) {
+                  //   Widget body;
+                  //   if (mode == LoadStatus.idle) {
+                  //     body = Text("Load data");
+                  //   } else if (mode == LoadStatus.loading) {
+                  //     body = CupertinoActivityIndicator(radius: 20);
+                  //   } else if (mode == LoadStatus.failed) {
+                  //     body = Text("Load Failed!");
+                  //   } else if (mode == LoadStatus.canLoading) {
+                  //     body = Text('More');
+                  //   } else {
+                  //     body = Container();
+                  //   }
 
-                    return Container(
-                        height: ScreenUtil.instance.setWidth(35),
-                        child: Center(child: body));
-                  }),
+                  //   return Container(
+                  //       height: ScreenUtil.instance.setWidth(35),
+                  //       child: Center(child: body));
+                  // }),
                   onRefresh: () {
                     setState(() {
                       newPage = 0;
@@ -267,6 +268,7 @@ class _CategoryPageState extends State<CategoryPage> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       EventDetailLoadingScreen(
+                                        isRest: widget.isRest,
                                           eventId: eventByCategoryList[i]
                                               ['id'])));
                         },
@@ -301,15 +303,29 @@ class _CategoryPageState extends State<CategoryPage> {
       }
     });
 
-    final latestEventApi = BaseApi().apiUrl +
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session')
+      };
+    }
+
+    final latestEventApi = baseUrl +
         '/event/category?X-API-KEY=$API_KEY&category=${widget.categoryId}&page=$currentPage';
 
     print(latestEventApi);
 
-    final response = await http.get(latestEventApi, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': preferences.getString('Session')
-    });
+    final response = await http.get(latestEventApi, headers: headers);
 
     print(response.body);
 

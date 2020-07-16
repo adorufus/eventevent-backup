@@ -81,7 +81,7 @@ class UseTicketState extends State<UseTicket> {
     seconds = remaining.inSeconds;
     print("type: " + widget.usedStatus);
     print("in seconds" + seconds.toString());
-    print('live url ' + widget.livestreamUrl);
+    print('live url ' + widget.livestreamUrl.toString());
     setState(() {});
     super.initState();
   }
@@ -97,6 +97,7 @@ class UseTicketState extends State<UseTicket> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       key: scaffoldKey,
       appBar: AppBar(
         brightness: Brightness.light,
@@ -350,33 +351,60 @@ class UseTicketState extends State<UseTicket> {
             child: Stack(
               children: <Widget>[
                 Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: 5,
+                            spreadRadius: 2,
+                            color: Color(0xff8a8a8b).withOpacity(.6))
+                      ],
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15))),
                   width: MediaQuery.of(context).size.width,
-                  child: Image.network(widget.ticketImage, fit: BoxFit.fill),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15)),
+                      child:
+                          Image.network(widget.ticketImage, fit: BoxFit.fill)),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     height: ScreenUtil.instance.setWidth(150),
                     width: MediaQuery.of(context).size.width,
-                    color: Colors.white,
+                    // color: Colors.white,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 5,
+                              spreadRadius: 2,
+                              color: Color(0xff8a8a8b).withOpacity(.3))
+                        ],
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15))),
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                        Text(
-                          widget.ticketDate,
-                          style: TextStyle(color: eventajaGreenTeal),
-                        ),
+                        // SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                        // Text(
+                        //   widget.ticketDate,
+                        //   style: TextStyle(color: eventajaGreenTeal),
+                        // ),
                         SizedBox(height: ScreenUtil.instance.setWidth(10)),
                         Text(widget.ticketTitle,
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
                         SizedBox(height: ScreenUtil.instance.setWidth(10)),
                         Text(widget.ticketCode,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: ScreenUtil.instance.setSp(18))),
+                                fontSize: ScreenUtil.instance.setSp(24))),
                         SizedBox(height: ScreenUtil.instance.setWidth(10)),
                         Text(
                           widget.ticketStartTime.toString() +

@@ -184,7 +184,7 @@ class PublicEventListState extends State<PublicEventList> {
                             '1') {
                           itemColor = Color(0xFF34B323);
                           itemPriceText =
-                              publicData[i]['ticket']['cheapestTicket'];
+                              'Rp. ' + publicData[i]['ticket']['cheapestTicket'];
                         } else {
                           if (publicData[i]['ticket']['salesStatus'] ==
                               'comingSoon') {
@@ -211,6 +211,10 @@ class PublicEventListState extends State<PublicEventList> {
                         itemColor = Color(0xFF652D90);
                         itemPriceText = publicData[i]['ticket_type']['name'];
                       } else if (publicData[i]['ticket_type']['type'] ==
+                          'ots') {
+                        itemColor = Color(0xFF652D90);
+                        itemPriceText = "On The Spot";
+                      } else if (publicData[i]['ticket_type']['type'] ==
                           'free') {
                         itemColor = Color(0xFFFFAA00);
                         itemPriceText = publicData[i]['ticket_type']['name'];
@@ -225,7 +229,7 @@ class PublicEventListState extends State<PublicEventList> {
                       } else if (publicData[i]['ticket_type']['type'] ==
                           'paid_live_stream') {
                         itemColor = eventajaGreenTeal;
-                        itemPriceText = publicData[i]['ticket_type']['name'];
+                        itemPriceText = 'Rp. ' + publicData[i]['ticket_type']['name'];
                       } else if (publicData[i]['ticket_type']['type'] ==
                               'free_limited' ||
                           publicData[i]['ticket_type']['type'] ==
@@ -262,6 +266,7 @@ class PublicEventListState extends State<PublicEventList> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       EventDetailLoadingScreen(
+                                        isRest: widget.isRest,
                                           eventId: widget.type == 'going'
                                               ? publicData[i]['eventID']
                                               : publicData[i]['id'])));

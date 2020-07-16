@@ -306,22 +306,22 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                     FractionallySizedBox(
                       widthFactor: ScreenUtil.instance.setWidth(.8),
                       child: Container(
-                          width: ScreenUtil.instance.setWidth(306.93),
-                          height: ScreenUtil.instance.setHeight(229.50),
+                          width: ScreenUtil.instance.setWidth(350),
+                          height: ScreenUtil.instance.setWidth(240),
                           child: Image.asset(
                             'assets/icons/icon_apps/illustrasi.png',
-                            fit: BoxFit.fill,
+                            fit: BoxFit.scaleDown,
                           )),
                     ),
                     Expanded(
                       child: SizedBox(),
                     ),
-                    Center(
-                      child: Text('DAFTAR DAN MULAI',
-                          style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(10.0),
-                              color: Colors.grey)),
-                    ),
+                    // Center(
+                    //   child: Text('DAFTAR DAN MULAI',
+                    //       style: TextStyle(
+                    //           fontSize: ScreenUtil.instance.setSp(10.0),
+                    //           color: Colors.grey)),
+                    // ),
                     Container(
                       margin: EdgeInsets.symmetric(
                           vertical: ScreenUtil.instance.setWidth(10),
@@ -344,7 +344,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                             },
                             child: Container(
                               width: ScreenUtil.instance.setWidth(160.41),
-                              height: ScreenUtil.instance.setHeight(37.02),
+                              height: ScreenUtil.instance.setHeight(44),
                               decoration: BoxDecoration(
                                   color: eventajaGreenTeal,
                                   borderRadius: BorderRadius.circular(
@@ -361,7 +361,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                   'LOGIN',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(12),
+                                      fontSize: ScreenUtil.instance.setSp(14),
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -378,7 +378,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                             },
                             child: Container(
                               width: ScreenUtil.instance.setWidth(160.41),
-                              height: ScreenUtil.instance.setHeight(37.02),
+                              height: ScreenUtil.instance.setHeight(44),
                               decoration: BoxDecoration(
                                   color: eventajaGreenTeal,
                                   borderRadius: BorderRadius.circular(
@@ -395,7 +395,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                   'REGISTER',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(12),
+                                      fontSize: ScreenUtil.instance.setSp(14),
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -412,7 +412,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         margin: EdgeInsets.symmetric(
                             horizontal: ScreenUtil.instance.setWidth(26)),
                         width: MediaQuery.of(context).size.width,
-                        height: ScreenUtil.instance.setHeight(37.02),
+                        height: ScreenUtil.instance.setHeight(44),
                         decoration: BoxDecoration(
                             color: Color(0xFF4C64B5),
                             borderRadius: BorderRadius.circular(180),
@@ -440,7 +440,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                   'LOGIN WITH FACEBOOK',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(12),
+                                      fontSize: ScreenUtil.instance.setSp(14),
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -464,7 +464,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         margin: EdgeInsets.symmetric(
                             horizontal: ScreenUtil.instance.setWidth(26)),
                         width: MediaQuery.of(context).size.width,
-                        height: ScreenUtil.instance.setHeight(37.02),
+                        height: ScreenUtil.instance.setHeight(44),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(180),
@@ -491,7 +491,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                 child: Text(
                                   'LOGIN WITH GOOGLE',
                                   style: TextStyle(
-                                      fontSize: ScreenUtil.instance.setSp(12),
+                                      fontSize: ScreenUtil.instance.setSp(14),
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -500,9 +500,9 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         ),
                       ),
                     ),
-                    Padding(
+                    Platform.isAndroid ? Container() : Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 15),
+                          horizontal: 25, vertical: 15),
                       child: SignInWithAppleButton(
                         onPressed: () async {
                           SharedPreferences prefs =
@@ -538,7 +538,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                             }
                           });
                         },
-                        height: 35,
+                        height: 44,
                         style: SignInWithAppleButtonStyle.whiteOutlined,
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -591,7 +591,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                       ),
                     ),
                     SizedBox(
-                      height: ScreenUtil.instance.setWidth(50),
+                      height: ScreenUtil.instance.setWidth(30),
                     )
                   ],
                 ),

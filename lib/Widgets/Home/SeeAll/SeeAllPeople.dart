@@ -14,8 +14,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SeeAllPeople extends StatefulWidget {
   final initialIndex;
+  final isRest;
 
-  const SeeAllPeople({Key key, this.initialIndex}) : super(key: key);
+  const SeeAllPeople({Key key, this.initialIndex, this.isRest}) : super(key: key);
 
   @override
   _SeeAllPeopleState createState() => _SeeAllPeopleState();
@@ -114,9 +115,8 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
         body: DefaultTabController(
           initialIndex: widget.initialIndex,
           length: 2,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
+          child: ListView(
+            physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
               Container(
                 color: Colors.white,
@@ -253,25 +253,51 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
   Future<http.Response> popularPeopleData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final catalogApiUrl = BaseApi().apiUrl +
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': prefs.getString('Session')
+      };
+    }
+
+    final catalogApiUrl = baseUrl +
         '/user/popular?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&page=1&total=20';
-    final response = await http.get(catalogApiUrl, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': prefs.getString('Session')
-    });
+    final response = await http.get(catalogApiUrl, headers: headers);
 
     return response;
   }
 
   Future<http.Response> discoverPeopleData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+String baseUrl = '';
+    Map<String, String> headers;
 
-    final catalogApiUrl = BaseApi().apiUrl +
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': prefs.getString('Session')
+      };
+    }
+    final catalogApiUrl = baseUrl +
         '/user/discover?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&page=1&total=20';
-    final response = await http.get(catalogApiUrl, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': prefs.getString('Session')
-    });
+    final response = await http.get(catalogApiUrl, headers: headers);
 
     return response;
   }

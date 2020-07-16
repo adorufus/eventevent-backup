@@ -360,7 +360,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                 ticketPrice = 'SALES ENDED';
               }
               itemColor = Color(0xFFFFAA00);
-              ticketPrice = detailData['ticket_type']['name'];
+              ticketPrice = "FREE";
             } else if (detailData['ticket_type']['type'] ==
                 'paid_live_stream') {
               if (detailData['ticket']['salesStatus'] == 'endSales') {

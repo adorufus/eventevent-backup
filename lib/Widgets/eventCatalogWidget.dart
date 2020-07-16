@@ -935,6 +935,7 @@ class _EventCatalogState extends State<EventCatalog>
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => SeeAllItem(
+                            isRest: widget.isRest,
                                 initialIndex: 0,
                               )));
                 },
@@ -1025,7 +1026,7 @@ class _EventCatalogState extends State<EventCatalog>
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(data[i]["address"],
-                                overflow: TextOverflow.ellipsis),
+                                overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.grey),),
                             Container(
                               height: ScreenUtil.instance.setWidth(40),
                               width: ScreenUtil.instance.setWidth(150),
@@ -1065,6 +1066,7 @@ class _EventCatalogState extends State<EventCatalog>
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => SeeAllItem(
+                            isRest:  widget.isRest,
                                 initialIndex: 1,
                               )));
                 },
@@ -1164,6 +1166,7 @@ class _EventCatalogState extends State<EventCatalog>
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => SeeAllPeople(
+                            isRest: widget.isRest,
                                 initialIndex: 0,
                               )));
                 },
@@ -1285,6 +1288,7 @@ class _EventCatalogState extends State<EventCatalog>
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => CollectionPage(
+                          isRest: widget.isRest,
                               headerImage: collectionData[i]['image'],
                               categoryId: collectionData[i]['id'],
                               collectionName: collectionData[i]['name'],
@@ -1360,6 +1364,7 @@ class _EventCatalogState extends State<EventCatalog>
                       MaterialPageRoute(
                           builder: (BuildContext context) => SeeAllPeople(
                                 initialIndex: 1,
+                                isRest: widget.isRest,
                               )));
                 },
                 child: Container(

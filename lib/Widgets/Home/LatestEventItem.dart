@@ -87,11 +87,13 @@ class LatestEventItem extends StatelessWidget {
                     textWidthBasis: TextWidthBasis.parent,
                   ),
                 ),
-                SizedBox(
+                isHybridEvent == 'streamOnly'
+                    ? Container() : SizedBox(
                   height: 6,
                 ),
 
-                Container(
+                isHybridEvent == 'streamOnly'
+                    ? Container() : Container(
                   height: ScreenUtil.instance.setWidth(10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,

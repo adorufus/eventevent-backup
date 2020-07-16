@@ -96,25 +96,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
               : SmartRefresher(
                   enablePullDown: true,
                   enablePullUp: true,
-                  footer: CustomFooter(
-                      builder: (BuildContext context, LoadStatus mode) {
-                    Widget body;
-                    if (mode == LoadStatus.idle) {
-                      body = Text("Load data");
-                    } else if (mode == LoadStatus.loading) {
-                      body = CupertinoActivityIndicator(radius: 20);
-                    } else if (mode == LoadStatus.failed) {
-                      body = Text("Load Failed!");
-                    } else if (mode == LoadStatus.canLoading) {
-                      body = Text('More');
-                    } else {
-                      body = Container();
-                    }
-
-                    return Container(
-                        height: ScreenUtil.instance.setWidth(35),
-                        child: Center(child: body));
-                  }),
+                  
                   controller: refreshController,
                   onRefresh: () {
                     setState(() {
@@ -208,7 +190,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                             'free_live_stream') {
                           itemColor = Color(0xFFFFAA00);
                           itemPriceText =
-                              latestEventData[i]['ticket_type']['name'];
+                              "FREE";
                         } else if (latestEventData[i]['ticket_type']['type'] ==
                                 'free_limited' ||
                             latestEventData[i]['ticket_type']['type'] ==
@@ -246,6 +228,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       EventDetailLoadingScreen(
+                                        isRest: widget.isRest,
                                           eventId: latestEventData[i]['id'])));
                         },
                         child: new LatestEventItem(

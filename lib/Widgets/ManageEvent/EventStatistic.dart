@@ -89,8 +89,8 @@ class EventStatisticState extends State<EventStatistic>{
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text('EVENT NAME', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[500]),),
-                Text(eventName.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18)),)
+                Text('EVENT NAME', style: TextStyle(fontSize: ScreenUtil.instance.setSp(14), color: Colors.grey[500]),),
+                Text(eventName.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(28)),)
               ],
             ),
             SizedBox(height: ScreenUtil.instance.setWidth(25),),
@@ -105,9 +105,8 @@ class EventStatisticState extends State<EventStatistic>{
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      height: ScreenUtil.instance.setWidth(35),
-                      width: ScreenUtil.instance.setWidth(50),
-                      child: Image.asset('assets/icons/butt_eye.png', fit: BoxFit.fill,),
+                      
+                      child: Image.asset('assets/icons/butt_eye.png', fit: BoxFit.fill, scale: 15,),
                     ),
                     SizedBox(
                       height: ScreenUtil.instance.setWidth(15),
@@ -129,12 +128,11 @@ class EventStatisticState extends State<EventStatistic>{
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      height: ScreenUtil.instance.setWidth(30),
-                      width: ScreenUtil.instance.setWidth(30),
-                      child: Image.asset('assets/icons/butt_love_ijo.png', fit: BoxFit.fill,),
+                      
+                      child: Image.asset('assets/icons/butt_love_ijo.png', fit: BoxFit.fill, scale: 20,),
                     ),
                     SizedBox(
-                      height: ScreenUtil.instance.setWidth(15),
+                      height: ScreenUtil.instance.setWidth(12),
                     ),
                     Text(
                       lovers,
@@ -153,12 +151,11 @@ class EventStatisticState extends State<EventStatistic>{
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      height: ScreenUtil.instance.setWidth(30),
-                      width: ScreenUtil.instance.setWidth(30),
-                      child: Image.asset('assets/icons/butt_share.png', fit: BoxFit.fill,),
+                      
+                      child: Image.asset('assets/icons/butt_share.png', fit: BoxFit.fill, scale: 20,),
                     ),
                     SizedBox(
-                      height: ScreenUtil.instance.setWidth(15),
+                      height: ScreenUtil.instance.setWidth(12),
                     ),
                     Text(
                       sharedData['total_shared'] == null ? '-' : sharedData['total_shared'].toString(),
@@ -201,8 +198,8 @@ class EventStatisticState extends State<EventStatistic>{
                 Column(
                   children: <Widget>[
                     SizedBox(
-                      height: ScreenUtil.instance.setWidth(80),
-                      width: ScreenUtil.instance.setWidth(45),
+                      height: ScreenUtil.instance.setWidth(40),
+                      width: ScreenUtil.instance.setWidth(22),
                       child: Image.asset('assets/icons/butt_cowo.png', color: eventajaGreenTeal,)
                     ),
                     SizedBox(
@@ -214,8 +211,8 @@ class EventStatisticState extends State<EventStatistic>{
                 Column(
                   children: <Widget>[
                     SizedBox(
-                        height: ScreenUtil.instance.setWidth(80),
-                        width: ScreenUtil.instance.setWidth(45),
+                        height: ScreenUtil.instance.setWidth(40),
+                        width: ScreenUtil.instance.setWidth(22),
                         child: Image.asset('assets/icons/butt_cewe.png', color: eventajaGreenTeal,)
                     ),
                     SizedBox(
@@ -230,8 +227,8 @@ class EventStatisticState extends State<EventStatistic>{
                   children: <Widget>[
                     SizedBox(
                       child: SizedBox(
-                          height: ScreenUtil.instance.setWidth(50),
-                          width: ScreenUtil.instance.setWidth(25),
+                          height: ScreenUtil.instance.setWidth(25),
+                          width: ScreenUtil.instance.setWidth(15),
                           child: Image.asset('assets/icons/butt_gender_apakah_ini.png', color: Colors.grey,)
                       ),
                     ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/PostEvent/CreateTicketName.dart';
 import 'package:eventevent/Widgets/PostEvent/FinishPostEvent.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
@@ -100,7 +101,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       'email': prefs.getString('ticket_about_email'),
       'phone': prefs.getString('ticket_about_phone'),
       'note': prefs.getString('ticket_about_aditional'),
-      'virtual_account_vendor_id': prefs.containsKey("virtual_account_vendor_id") ? prefs.getString('virtual_account_vendor_id') : null,
+      'virtual_account_vendor_id': prefs.containsKey("virtual_account_vendor_id") ? prefs.getString('virtual_account_vendor_id') : "",
       'payment_method_id': prefs.getString('payment_method_id'),
       'identifier': widget.uuid.v4().toString(),
     };
@@ -446,10 +447,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                     ),
                   ),
                 )
-              : CupertinoActivityIndicator(
-                  radius: 15,
-                  animating: true,
-                ),
+              : HomeLoadingScreen().myTicketLoading(),
         ),
       ),
     );

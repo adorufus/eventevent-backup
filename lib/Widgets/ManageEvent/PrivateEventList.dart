@@ -185,8 +185,7 @@ class PrivateEventListState extends State<PrivateEventList> {
                           } else {
                             itemColor = Color(0xFF34B323);
                             itemPriceText = 'Rp. ' +
-                                privateData[i]['ticket']['cheapestTicket'] +
-                                ' ,-';
+                                privateData[i]['ticket']['cheapestTicket'];
                           }
                         } else {
                           if (privateData[i]['ticket']['salesStatus'] ==
@@ -212,7 +211,11 @@ class PrivateEventListState extends State<PrivateEventList> {
                       } else if (privateData[i]['ticket_type']['type'] ==
                           'on_the_spot') {
                         itemColor = Color(0xFF652D90);
-                        itemPriceText = privateData[i]['ticket_type']['name'];
+                        itemPriceText = "On The Spot";
+                      } else if (privateData[i]['ticket_type']['type'] ==
+                          'ots') {
+                        itemColor = Color(0xFF652D90);
+                        itemPriceText = "On The Spot";
                       } else if (privateData[i]['ticket_type']['type'] ==
                           'free') {
                         itemColor = Color(0xFFFFAA00);
@@ -221,14 +224,15 @@ class PrivateEventListState extends State<PrivateEventList> {
                           'free') {
                         itemColor = Color(0xFFFFAA00);
                         itemPriceText = privateData[i]['ticket_type']['name'];
-                      }else if (privateData[i]['ticket_type']['type'] ==
+                      } else if (privateData[i]['ticket_type']['type'] ==
                           'free_live_stream') {
                         itemColor = Color(0xFFFFAA00);
                         itemPriceText = "FREE";
                       } else if (privateData[i]['ticket_type']['type'] ==
                           'paid_live_stream') {
-                        itemColor = eventajaGreenTeal;
-                        itemPriceText = privateData[i]['ticket_type']['name'];
+                        itemColor = Color(0xFF34B323);
+                        itemPriceText =
+                            'Rp. ' + privateData[i]['ticket']['cheapestTicket'];
                       } else if (privateData[i]['ticket_type']['type'] ==
                           'free_limited') {
                         if (privateData[i]['ticket']['availableTicketStatus'] ==
@@ -269,6 +273,7 @@ class PrivateEventListState extends State<PrivateEventList> {
                           title: privateData[i]['name'],
                           location: privateData[i]['address'],
                           itemColor: itemColor,
+                          isHybridEvent: privateData[i]['isHybridEvent'],
                           itemPrice: itemPriceText,
                           type: privateData[i]['ticket_type']['type'],
                           date: DateTime.parse(privateData[i]['dateStart']),

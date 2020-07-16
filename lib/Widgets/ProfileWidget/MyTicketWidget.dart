@@ -240,10 +240,12 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                         ['name'],
                                     ticketID: ticketDetailData[i]['id'],
                                     usedStatus: ticketStatusText,
-                                    zoomId: ticketDetailData[i]['livestream']
-                                        ['zoom_id'],
-                                    zoomDesc: ticketDetailData[i]['livestream']
-                                        ['zoom_description'],
+                                    zoomId: ticketDetailData[i].containsKey("livestream") ? ticketDetailData[i]['livestream']
+                                        ['zoom_id'] == null ? "" : ticketDetailData[i]['livestream']
+                                        ['zoom_id'] : "",
+                                    zoomDesc: ticketDetailData[i].containsKey("livestream") ? ticketDetailData[i]['livestream']
+                                        ['zoom_description'] == null ? "" : ticketDetailData[i]['livestream']
+                                        ['zoom_description'] : "",
                                     livestreamUrl: ticketStatusText == 'On Demand Video'
                                         ? ticketDetailData[i].containsKey("livestream")
                                             ? ticketDetailData[i]['livestream']['on_demand_link'] == ""

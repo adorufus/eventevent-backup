@@ -425,11 +425,21 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     SizedBox(width: ScreenUtil.instance.setWidth(15)),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => PostEventInvitePeople(
-                                  calledFrom: "other event",
-                                  eventId: widget.id,
-                                )));
+                        if (widget.isRest) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => LoginRegisterWidget(
+                                  previousWidget: 'EventDetailsWidgetRest',
+                                  eventId: widget.id),
+                            ),
+                          );
+                        } else {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => PostEventInvitePeople(
+                                    calledFrom: "other event",
+                                    eventId: widget.id,
+                                  )));
+                        }
                       },
                       child: Icon(
                         Icons.person_add,
@@ -677,50 +687,64 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     ),
                     GestureDetector(
                       onTap: () {
-                        if (widget.ticketStat['salesStatus'] == null) {
-                        } else if (widget.ticketType['type'] == 'free') {
-                          showCupertinoDialog(
-                              context: context,
-                              builder: (BuildContext context) => SuccessPage());
-                        } else if (widget.ticketType['type'] == 'no_ticket') {
-                          print('no ticket');
-                          showDialog(
-                              context: context,
-                              child: new CupertinoAlertDialog(
-                                title: new Text("Dialog Title"),
-                                content: new Text("This is my content"),
-                                actions: <Widget>[
-                                  CupertinoDialogAction(
-                                    isDefaultAction: true,
-                                    child: Text("Yes"),
-                                  ),
-                                  CupertinoDialogAction(
-                                    child: Text("No"),
-                                  )
-                                ],
-                              ));
+                        if (widget.isRest == true) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => LoginRegisterWidget(
+                                  previousWidget: 'EventDetailsWidgetRest',
+                                  eventId: widget.id)));
                         } else {
-                          if (widget.ticketStat['salesStatus'] == 'endSales' ||
-                              widget.ticketStat['salesStatus'] ==
-                                  'comingSoon' ||
-                              widget.ticketPrice.toLowerCase() == 'canceled' ||
-                              widget.ticketStat[
-                                      'availablewidget.ticketStatus'] ==
-                                  '0') {
-                            return;
-                          } else {
-                            Navigator.of(context).push(MaterialPageRoute(
+                          if (widget.ticketStat['salesStatus'] == null) {
+                          } else if (widget.ticketType['type'] == 'free') {
+                            showCupertinoDialog(
+                                context: context,
                                 builder: (BuildContext context) =>
-                                    SelectTicketWidget(
-                                      eventID: detailData['id'],
-                                      eventDate: detailData['dateStart'],
-                                    )));
+                                    SuccessPage());
+                          } else if (widget.ticketType['type'] == 'no_ticket') {
+                            print('no ticket');
+                            showDialog(
+                                context: context,
+                                child: new CupertinoAlertDialog(
+                                  title: new Text("Dialog Title"),
+                                  content: new Text("This is my content"),
+                                  actions: <Widget>[
+                                    CupertinoDialogAction(
+                                      isDefaultAction: true,
+                                      child: Text("Yes"),
+                                    ),
+                                    CupertinoDialogAction(
+                                      child: Text("No"),
+                                    )
+                                  ],
+                                ));
+                          } else {
+                            if (widget.ticketStat['salesStatus'] ==
+                                    'endSales' ||
+                                widget
+                                        .ticketStat['salesStatus'] ==
+                                    'comingSoon' ||
+                                widget.ticketPrice.toLowerCase() ==
+                                    'canceled' ||
+                                widget.ticketStat[
+                                        'availablewidget.ticketStatus'] ==
+                                    '0') {
+                              return;
+                            } else {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      SelectTicketWidget(
+                                        eventID: detailData['id'],
+                                        eventDate: detailData['dateStart'],
+                                      )));
+                            }
                           }
                         }
                       },
                       child: Container(
                         height: ScreenUtil.instance.setWidth(32 * 1.1),
-                        width: ScreenUtil.instance.setWidth(widget.ticketStat['salesStatus'] == "comingSoon" ? 135 : 110 * 1.1),
+                        width: ScreenUtil.instance.setWidth(
+                            widget.ticketStat['salesStatus'] == "comingSoon"
+                                ? 135
+                                : 110 * 1.1),
                         decoration: BoxDecoration(
                             boxShadow: <BoxShadow>[
                               BoxShadow(
@@ -743,6 +767,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                         child: Center(
                             child: Text(
                           isGoing == true ? 'Going!' : widget.ticketPrice,
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: ScreenUtil.instance.setSp(16),
@@ -1172,7 +1197,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     height: ScreenUtil.instance
                                                         .setWidth(32 * 1.1),
                                                     width: ScreenUtil.instance
-                                                        .setWidth(widget.ticketStat['salesStatus'] == "comingSoon" ? 135 : 110 * 1.1),
+                                                        .setWidth(widget.ticketStat[
+                                                                    'salesStatus'] ==
+                                                                "comingSoon"
+                                                            ? 135
+                                                            : 110 * 1.1),
                                                     decoration: BoxDecoration(
                                                         boxShadow: <BoxShadow>[
                                                           BoxShadow(
@@ -1401,7 +1430,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       child: Text(
                                                         'See All >',
                                                         style: TextStyle(
-                                                          fontSize: 11,
+                                                            fontSize: 11,
                                                             color:
                                                                 eventajaGreenTeal),
                                                       ),
@@ -1539,6 +1568,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         MaterialPageRoute(
                                                             builder: (context) =>
                                                                 SeeWhosGoingInvitedWidget(
+                                                                  isRest: widget
+                                                                      .isRest,
                                                                   eventId: widget
                                                                           .detailData[
                                                                       'id'],

@@ -1,3 +1,4 @@
+
 import 'dart:collection';
 import 'dart:convert';
 
@@ -115,6 +116,7 @@ class _TransactionFormState extends State<TransactionForm> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       bottomNavigationBar: GestureDetector(
         onTap: () {
           saveInput();
@@ -229,7 +231,7 @@ class _TransactionFormState extends State<TransactionForm> {
       body: formData == null
           ? HomeLoadingScreen().myTicketLoading()
           : Container(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.grey.withOpacity(0.05),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: ListView(

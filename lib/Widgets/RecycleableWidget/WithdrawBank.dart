@@ -90,6 +90,7 @@ class WithdrawBankState extends State<WithdrawBank> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       key: scaffoldKey,
       resizeToAvoidBottomPadding: false,
       appBar: PreferredSize(
@@ -366,11 +367,11 @@ class WithdrawBankState extends State<WithdrawBank> {
             shrinkWrap: true,
             children: <Widget>[
               Container(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   padding:
                       EdgeInsets.only(left: 13, right: 13, bottom: 6, top: 20),
                   child: Text(
-                    'Balance:',
+                    'Available Balance:',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: ScreenUtil.instance.setSp(14)),
@@ -381,17 +382,18 @@ class WithdrawBankState extends State<WithdrawBank> {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          blurRadius: 2,
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 1.5)
-                    ]),
+                    // boxShadow: <BoxShadow>[
+                    //   BoxShadow(
+                    //       blurRadius: 2,
+                    //       color: Colors.black.withOpacity(0.1),
+                    //       spreadRadius: 1.5)
+                    // ]
+                    ),
                 child: Center(
-                    child: Text('Rp. ${balanceData['amount']},-',
+                    child: Text('Rp. ${balanceData['amount']}',
                         style: TextStyle(
                             color: eventajaGreenTeal,
-                            fontSize: ScreenUtil.instance.setSp(20),
+                            fontSize: ScreenUtil.instance.setSp(35),
                             fontWeight: FontWeight.bold))),
               ),
               SizedBox(
