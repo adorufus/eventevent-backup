@@ -164,7 +164,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ),
               ),
             ),
-            Expanded(child: Container(),),
+            Expanded(
+              child: Container(),
+            ),
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -181,8 +183,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                   )),
             ),
             SizedBox(
-          width: ScreenUtil.instance.setWidth(13),
-        ),
+              width: ScreenUtil.instance.setWidth(13),
+            ),
           ],
         ),
         SizedBox(
@@ -232,7 +234,8 @@ class _LoginWidgetState extends State<LoginWidget> {
         GestureDetector(
           child: Text(
             'Forgot Your Password?',
-            style: TextStyle(color: Colors.grey, fontSize: ScreenUtil.instance.setSp(15)),
+            style: TextStyle(
+                color: Colors.grey, fontSize: ScreenUtil.instance.setSp(15)),
           ),
           onTap: () {
             Navigator.push(
@@ -337,49 +340,53 @@ class _LoginWidgetState extends State<LoginWidget> {
             ),
           ),
         ),
-        Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 15),
-                      child: SignInWithAppleButton(
-                        onPressed: () async {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          LoginHandler.processAppleLogin().then((callback) {
-                            var extractedData =
-                                json.decode(callback['response'].body);
+        Platform.isAndroid
+            ? Container()
+            : Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                child: SignInWithAppleButton(
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    LoginHandler.processAppleLogin().then((callback) {
+                      var extractedData =
+                          json.decode(callback['response'].body);
 
-                            if (callback['response'].statusCode == 201 ||
-                                callback['response'].statusCode == 200) {
-                              prefs.setString('Session',
-                                  callback['response'].headers['set-cookie']);
-                              prefs.setString(
-                                  'Last User ID', extractedData['data']['id']);
-                              prefs.setBool('isUsingGoogle', false);
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          DashboardWidget(
-                                            isRest: false,
-                                          )));
-                            } else if (callback['response'].statusCode == 400) {
-                              if (extractedData['desc'] ==
-                                  "User is not register") {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => RegisterApple(appleData: callback['appleData'], isRest: false,),
-                                  ),
-                                );
-                              }
-                            }
-                          });
-                        },
-                        height: 44,
-                        style: SignInWithAppleButtonStyle.whiteOutlined,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
+                      if (callback['response'].statusCode == 201 ||
+                          callback['response'].statusCode == 200) {
+                        prefs.setString('Session',
+                            callback['response'].headers['set-cookie']);
+                        prefs.setString(
+                            'Last User ID', extractedData['data']['id']);
+                        prefs.setBool('isUsingGoogle', false);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    DashboardWidget(
+                                      isRest: false,
+                                    )));
+                      } else if (callback['response'].statusCode == 400) {
+                        if (extractedData['desc'] == "User is not register") {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RegisterApple(
+                                appleData: callback['appleData'],
+                                isRest: false,
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                    });
+                  },
+                  height: 44,
+                  style: SignInWithAppleButtonStyle.whiteOutlined,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
       ],
     );
   }
@@ -451,8 +458,18 @@ class _LoginWidgetState extends State<LoginWidget> {
       prefs.setString('UserPicture', extractedData['data']['pictureAvatarURL']);
       prefs.setString('UserFirstname', extractedData['data']['fullName']);
       prefs.setString('UserUsername', extractedData['data']['username']);
-      
-      ClevertapHandler.pushUserProfile(extractedData['data']['fullName'], extractedData['data']['lastName'], extractedData['data']['email'], extractedData['data']['pictureNormalURL'], extractedData['data']['birthday'] == null ? '-' : extractedData['data']['birthday'], extractedData['data']['username'], extractedData['data']['gender'], extractedData['data']['phone']);
+
+      ClevertapHandler.pushUserProfile(
+          extractedData['data']['fullName'],
+          extractedData['data']['lastName'],
+          extractedData['data']['email'],
+          extractedData['data']['pictureNormalURL'],
+          extractedData['data']['birthday'] == null
+              ? '-'
+              : extractedData['data']['birthday'],
+          extractedData['data']['username'],
+          extractedData['data']['gender'],
+          extractedData['data']['phone']);
 
       getProfileDetail(extractedData['data']['id']).then((response) {
         var profileData = json.decode(response.body);
@@ -682,7 +699,6 @@ class _LoginWidgetState extends State<LoginWidget> {
     ///Jika statusCode == 200 maka lanjutkan proses dan alihkan ke halaman berikutnya
 
     if (response.statusCode == 200) {
-      
       print('apiHelper-line41:' + cookies);
       print('username: ' + prefs.getString('Last Username').toString());
       print('id: ' + prefs.getString('Last User ID').toString());
@@ -711,8 +727,6 @@ class _LoginWidgetState extends State<LoginWidget> {
           print(prefs.getString('UserUsername'));
         });
       });
-
-
 
       ClevertapHandler.pushUserProfile(
           extractedData['data']['fullName'],
