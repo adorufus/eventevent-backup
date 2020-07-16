@@ -240,6 +240,12 @@ class RegisterAppleState extends State<RegisterApple> {
     print(phoneController.text);
     // print()
 
+    if(currentValue == 0){
+      gender = 'Male';
+    } else {
+      gender = 'Female';
+    }
+
     final response = await http.post(
       url,
       headers: {
