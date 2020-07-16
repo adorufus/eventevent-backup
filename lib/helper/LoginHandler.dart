@@ -13,6 +13,13 @@ class LoginHandler {
       ],
     );
 
+    AppleIDAuthorizationRequest(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ]
+    );
+
     print('athcd: ' + credential.authorizationCode);
     print('idtkn: ' + credential.identityToken);
     print('usrid: ' + credential.userIdentifier);
