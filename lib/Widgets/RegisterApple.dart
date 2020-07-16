@@ -18,8 +18,9 @@ import 'dart:io' show File, Platform;
 
 class RegisterApple extends StatefulWidget {
   final Map<String, dynamic> appleData;
+  final bool isRest;
 
-  const RegisterApple({Key key, this.appleData}) : super(key: key);
+  const RegisterApple({Key key, this.appleData, this.isRest}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return RegisterAppleState();
@@ -271,7 +272,7 @@ class RegisterAppleState extends State<RegisterApple> {
       ClevertapHandler.pushUserProfile(responseJson['data']['fullName'], responseJson['data']['lastName'], responseJson['data']['email'], responseJson['data']['pictureNormalURL'], responseJson['data']['birthday'] == null ? '-' : responseJson['data']['birthday'], responseJson['data']['username'], responseJson['data']['gender'], responseJson['data']['phone']);
       preferences.setString('Session', response.headers['set-cookie']);
       SharedPrefs().saveCurrentSession(responseJson);
-      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => DashboardWidget()));
+      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => DashboardWidget(isRest: widget.isRest,)));
       return Register.fromJson(responseJson);
     }
     else{
