@@ -9,7 +9,7 @@ class LoginHandler {
     final credential = await SignInWithApple.getAppleIDCredential(
       scopes: [
         AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName
+        AppleIDAuthorizationScopes.fullName,
       ],
     );
 
@@ -22,11 +22,14 @@ class LoginHandler {
 
     return {
       'id_token': credential.identityToken,
-      'user_id': credential.userIdentifier
+      'user_id': credential.userIdentifier,
+      'first_name': credential.givenName,
+      'last_name': credential.familyName,
+      'email': credential.email
     };
   }
 
-  static Future<http.Response> processAppleLogin() async {
+  static Future<Map<dynamic, dynamic>> processAppleLogin() async {
     String baseUrl = BaseApi().apiUrl + "/signin/apple";
     Map<String, dynamic> appleData;
 
@@ -49,6 +52,13 @@ class LoginHandler {
     print(response.statusCode);
     print(response.body);
 
-    return response;
+    return {
+      'response': response,
+      'appleData': appleData
+    };
+  }
+
+  static Future<http.Response> proccessAppleRegister() {
+
   }
 }

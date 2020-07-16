@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/PrivacyPolicy.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/Terms.dart';
+import 'package:eventevent/Widgets/RegisterApple.dart';
 import 'package:eventevent/Widgets/RegisterGoogle.dart';
 import 'package:eventevent/Widgets/loginWidget.dart';
 import 'package:eventevent/Widgets/registerWidget.dart';
@@ -266,10 +267,11 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                       alignment: Alignment.topRight,
                       child: GestureDetector(
                         onTap: () async {
-                          SharedPreferences preferences = await SharedPreferences.getInstance();
+                          SharedPreferences preferences =
+                              await SharedPreferences.getInstance();
 
                           preferences.setBool("isRest", true);
-                          
+
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -499,8 +501,47 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child: SignInWithAppleButton(onPressed: LoginHandler.processAppleLogin, height: 35, style: SignInWithAppleButtonStyle.whiteOutlined, borderRadius: BorderRadius.circular(30),),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 15),
+                      child: SignInWithAppleButton(
+                        onPressed: () async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          LoginHandler.processAppleLogin().then((callback) {
+                            var extractedData =
+                                json.decode(callback['response'].data);
+
+                            if (callback['response'].statusCode == 201 ||
+                                callback['response'].statusCode == 200) {
+                              prefs.setString('Session',
+                                  callback['response'].headers['set-cookie']);
+                              prefs.setString(
+                                  'Last User ID', extractedData['data']['id']);
+                              prefs.setBool('isUsingGoogle', false);
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          DashboardWidget(
+                                            isRest: false,
+                                          )));
+                            } else if (callback['response'].statusCode == 400) {
+                              if (extractedData['desc'] ==
+                                  "User is not register") {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RegisterApple(appleData: callback['appleData']),
+                                  ),
+                                );
+                              }
+                            }
+                          });
+                        },
+                        height: 35,
+                        style: SignInWithAppleButtonStyle.whiteOutlined,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 15, left: 5, right: 5),
