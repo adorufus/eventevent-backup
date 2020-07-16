@@ -62,6 +62,9 @@ class _SplashScreenState extends State<SplashScreen> {
               '/LoginRegister') {
             sendAnalytics('LoginRegister');
             Navigator.pushReplacementNamed(context, '/LoginRegister');
+          } else {
+            sendAnalytics('LoginRegister');
+            Navigator.pushReplacementNamed(context, '/LoginRegister');
           }
         }
       } else {

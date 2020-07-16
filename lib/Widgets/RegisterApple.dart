@@ -233,6 +233,12 @@ class RegisterAppleState extends State<RegisterApple> {
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String url = BaseApi().apiUrl + '/signup/register';
+    print(widget.appleData);
+    print(passwordController.text);
+    print(gender);
+    print(usernameController.text);
+    print(phoneController.text);
+    // print()
 
     final response = await http.post(
       url,
@@ -248,7 +254,7 @@ class RegisterAppleState extends State<RegisterApple> {
         'username': usernameController.text,
         'phone': phoneController.text,
         'isLoginFacebook': '0',
-        'photo': profilePictureURI,
+        'photo': profilePictureURI == null ? gender == 'Male' ? 'assets/drawable/avatar-male.png' : 'assets/drawable/avatar-female.png' : profilePictureURI,
         'lastName': widget.appleData['last_name'],
         'register_device': Platform.isIOS ? 'IOS' : 'android'
       }
