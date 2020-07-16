@@ -46,6 +46,9 @@ class LoginHandler {
       }
     );
 
+    print(response.statusCode);
+    print(response.body);
+
     return response;
   }
 }
