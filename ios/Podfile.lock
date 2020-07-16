@@ -20,6 +20,8 @@ PODS:
     - Flutter
   - Crashlytics (3.13.4):
     - Fabric (~> 1.10.2)
+  - device_info (0.0.1):
+    - Flutter
   - Fabric (1.10.2)
   - FBSDKCoreKit (4.39.1):
     - Bolts (~> 1.9)
@@ -237,6 +239,8 @@ PODS:
     - Flutter
   - shared_preferences_web (0.0.1):
     - Flutter
+  - sign_in_with_apple (0.0.1):
+    - Flutter
   - sqflite (0.0.1):
     - Flutter
     - FMDB (~> 2.7.2)
@@ -270,6 +274,7 @@ DEPENDENCIES:
   - camera (from `.symlinks/plugins/camera/ios`)
   - camera_with_rtmp (from `.symlinks/plugins/camera_with_rtmp/ios`)
   - clevertap_plugin (from `.symlinks/plugins/clevertap_plugin/ios`)
+  - device_info (from `.symlinks/plugins/device_info/ios`)
   - FBSDKCoreKit (~> 4.39.1)
   - FBSDKLoginKit (~> 4.39.1)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
@@ -308,6 +313,7 @@ DEPENDENCIES:
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - shared_preferences_macos (from `.symlinks/plugins/shared_preferences_macos/ios`)
   - shared_preferences_web (from `.symlinks/plugins/shared_preferences_web/ios`)
+  - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - thumbnails (from `.symlinks/plugins/thumbnails/ios`)
   - torch_compat (from `.symlinks/plugins/torch_compat/ios`)
@@ -364,6 +370,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/camera_with_rtmp/ios"
   clevertap_plugin:
     :path: ".symlinks/plugins/clevertap_plugin/ios"
+  device_info:
+    :path: ".symlinks/plugins/device_info/ios"
   firebase_analytics:
     :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_auth:
@@ -436,6 +444,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_macos/ios"
   shared_preferences_web:
     :path: ".symlinks/plugins/shared_preferences_web/ios"
+  sign_in_with_apple:
+    :path: ".symlinks/plugins/sign_in_with_apple/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   thumbnails:
@@ -469,6 +479,7 @@ SPEC CHECKSUMS:
   CleverTap-iOS-SDK: 1513db126149ca523b25fdcf3121a4204709c733
   clevertap_plugin: ce10a1dd8ffd391e484f40feb071669de92e553c
   Crashlytics: 2dfd686bcb918dc10ee0e76f7f853fe42c7bd552
+  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   FBSDKCoreKit: f442aa96179cc9b382bb4abeb7e340a47cca8f91
   FBSDKLoginKit: c3079d9a4db27c492287b1eed7a4272b28cf8a59
@@ -533,6 +544,7 @@ SPEC CHECKSUMS:
   shared_preferences: 430726339841afefe5142b9c1f50cb6bd7793e01
   shared_preferences_macos: f3f29b71ccbb56bf40c9dd6396c9acf15e214087
   shared_preferences_web: 141cce0c3ed1a1c5bf2a0e44f52d31eeb66e5ea9
+  sign_in_with_apple: f5efd49818ad83e1bc09652be8fde56a615c4d16
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
   thumbnails: bb4f4e9bb4b51c8ae4e6ad9a2fa81373f9b634ad
   TOCropViewController: e9da34f484aedd4e5d5a8ab230ba217cfe16c729
