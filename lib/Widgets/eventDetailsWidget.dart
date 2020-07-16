@@ -1261,6 +1261,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       width: ScreenUtil.instance.setWidth(10),
                                     ),
                                     GestureDetector(
+                                      behavior: prefix0.HitTestBehavior.opaque,
                                       onTap: () {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(

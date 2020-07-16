@@ -332,6 +332,7 @@ class _AfterRegisterState extends State<AfterRegister> {
             'birthDay': birthDay,
             'phone': phoneNumber,
             'gender': gender,
+            'register_device': Platform.isIOS ? 'iOS' : 'Android',
             'photo': croppedProfilePicture == null
                 ? '$gender.jpg'
                 : await MultipartFile.fromFile(croppedProfilePicture.path,

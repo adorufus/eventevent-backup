@@ -500,7 +500,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child: SignInWithAppleButton(onPressed: LoginHandler.SignInWIthAppleAction, height: 35, style: SignInWithAppleButtonStyle.whiteOutlined, borderRadius: BorderRadius.circular(30),),
+                      child: SignInWithAppleButton(onPressed: LoginHandler.processAppleLogin, height: 35, style: SignInWithAppleButtonStyle.whiteOutlined, borderRadius: BorderRadius.circular(30),),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 15, left: 5, right: 5),
