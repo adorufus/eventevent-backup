@@ -120,13 +120,13 @@ class RegisterAppleState extends State<RegisterApple> {
         SizedBox(height: ScreenUtil.instance.setWidth(10),),
         GestureDetector(
           onTap: (){
-
+            getImage();
           },
           child: Column(
             children: <Widget>[
               CircleAvatar(
                 radius: 80,
-                backgroundImage: profilePictureURI == null ? AssetImage('assets/grey-fade.jpg') : FileImage(
+                backgroundImage: profilePictureURI == null ? AssetImage( currentValue == 1 ? 'assets/drawable/avatar-female.png' : 'assets/drawable/avatar-male.png') : FileImage(
                   profilePictureURI
                 ),
               ),
