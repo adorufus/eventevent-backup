@@ -8,6 +8,7 @@ import 'package:eventevent/Widgets/openMedia.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/WebView.dart';
+import 'package:eventevent/helper/WebViewLivestream.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
 import 'package:eventevent/livestream/LivestreamPlayer.dart';
@@ -157,7 +158,6 @@ class UseTicketState extends State<UseTicket> {
                                 });
                           }
                         : widget.usedStatus != "On Demand Video" &&
-                                    widget.zoomId != null ||
                                 widget.zoomId != ""
                             ? () {
                                 Navigator.push(
@@ -174,6 +174,10 @@ class UseTicketState extends State<UseTicket> {
                                     await SharedPreferences.getInstance();
                                 print(prefs.getString("streaming_token"));
 
+
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewLivestream(url: widget.ticketDetail['livestream']['link_streaming'],)));
+
+                                ///TODO: used
                                 // if (prefs.containsKey('streaming_token') &&
                                 //     prefs.getString('streaming_token') !=
                                 //         null) {
@@ -187,43 +191,43 @@ class UseTicketState extends State<UseTicket> {
                                 //     ),
                                 //   );
                                 // } else {
-                                print(prefs.getString('streaming_token'));
-                                getWatchLivestreamToken(widget.eventId)
-                                    .then((response) async {
-                                  print('code: ' +
-                                      response.statusCode.toString() +
-                                      ' message: ' +
-                                      response.body);
-                                  var extractedData =
-                                      json.decode(response.body);
+                                // print(prefs.getString('streaming_token'));
+                                // getWatchLivestreamToken(widget.eventId)
+                                //     .then((response) async {
+                                //   print('code: ' +
+                                //       response.statusCode.toString() +
+                                //       ' message: ' +
+                                //       response.body);
+                                //   var extractedData =
+                                //       json.decode(response.body);
 
-                                  if (response.statusCode == 200 ||
-                                      response.statusCode == 201) {
-                                    prefs.setString(
-                                        'streaming_token',
-                                        extractedData['data']
-                                            ['streaming_token']);
-                                    // getEventStreamingDetail();
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => LivestreamPlayer(
-                                          wowzaLiveUrl: widget.livestreamUrl,
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    prefs.setString('streaming_token', null);
-                                    Flushbar(
-                                      animationDuration:
-                                          Duration(milliseconds: 500),
-                                      duration: Duration(seconds: 3),
-                                      backgroundColor: Colors.red,
-                                      message: 'User Have No Access!',
-                                      flushbarPosition: FlushbarPosition.TOP,
-                                    ).show(context);
-                                  }
-                                });
+                                //   if (response.statusCode == 200 ||
+                                //       response.statusCode == 201) {
+                                //     prefs.setString(
+                                //         'streaming_token',
+                                //         extractedData['data']
+                                //             ['streaming_token']);
+                                //     // getEventStreamingDetail();
+                                //     Navigator.push(
+                                //       context,
+                                //       MaterialPageRoute(
+                                //         builder: (context) => LivestreamPlayer(
+                                //           wowzaLiveUrl: widget.livestreamUrl,
+                                //         ),
+                                //       ),
+                                //     );
+                                //   } else {
+                                //     prefs.setString('streaming_token', null);
+                                //     Flushbar(
+                                //       animationDuration:
+                                //           Duration(milliseconds: 500),
+                                //       duration: Duration(seconds: 3),
+                                //       backgroundColor: Colors.red,
+                                //       message: 'User Have No Access!',
+                                //       flushbarPosition: FlushbarPosition.TOP,
+                                //     ).show(context);
+                                //   }
+                                // });
                                 // }
                               }
                     : widget.usedStatus == 'Expired' ||
@@ -311,9 +315,7 @@ class UseTicketState extends State<UseTicket> {
                                     : widget.usedStatus == 'On Demand Video'
                                         ? 'Watch On Demand Video'
                                         : widget.usedStatus == 'Streaming'
-                                            ? widget.zoomId != null ||
-                                                    widget.zoomId != "" ||
-                                                    widget.zoomDesc != null ||
+                                            ? widget.zoomId != "" ||
                                                     widget.zoomDesc != ""
                                                 ? 'Get Zoom Link Here'
                                                 : 'Watch Livestream'
@@ -364,7 +366,7 @@ class UseTicketState extends State<UseTicket> {
                           topRight: Radius.circular(15))),
                   width: MediaQuery.of(context).size.width,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.only(
+                      borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(15),
                           topRight: Radius.circular(15)),
                       child:
@@ -399,7 +401,9 @@ class UseTicketState extends State<UseTicket> {
                         // ),
                         SizedBox(height: ScreenUtil.instance.setWidth(10)),
                         Text(widget.ticketTitle,
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey)),
                         SizedBox(height: ScreenUtil.instance.setWidth(10)),
                         Text(widget.ticketCode,
                             style: TextStyle(

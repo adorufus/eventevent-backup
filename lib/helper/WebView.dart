@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -89,6 +90,7 @@ class WebViewTestState extends State<WebViewTest> {
               isLoading = false;
             });
           },
+          // gestureRecognizers: <OneSequenceGestureRecognizer>[].toSet(),
           javascriptChannels: <JavascriptChannel>[].toSet(),
           onWebViewCreated: (WebViewController controller) {
             _controller.complete(controller);

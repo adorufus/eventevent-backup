@@ -169,9 +169,11 @@ class TransactionHistoryState extends State<TransactionHistory> {
                             );
                           } else if (transactionList[i]['payment']['method'] ==
                               'OVO') {
+                            print(transactionList[i]['payment']['data_vendor']
+                                ['payment_url']);
                             page = WebViewTest(
                               url: transactionList[i]['payment']['data_vendor']
-                                  ['invoice_url'],
+                                  ['payment_url'],
                             );
                           } else if (transactionList[i]['payment']['method'] ==
                               'Credit Card') {
@@ -228,7 +230,9 @@ class TransactionHistoryState extends State<TransactionHistory> {
                               ticketColor: paymentStatusColor,
                               quantity: transactionList[i]['quantity'],
                               timeStart: transactionList[i]['updated_at'],
-                              price: transactionList[i]['amount'] == '0' ? 'Free' : 'Rp, ' + transactionList[i]['amount'],
+                              price: transactionList[i]['amount'] == '0'
+                                  ? 'Free'
+                                  : 'Rp, ' + transactionList[i]['amount'],
                             ));
                       },
                     ),

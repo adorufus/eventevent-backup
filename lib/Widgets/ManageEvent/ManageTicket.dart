@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/AddNewTicket.dart';
 import 'package:eventevent/Widgets/ManageEvent/EditTicketDetail.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -61,11 +62,7 @@ class ManageTicketState extends State<ManageTicket> {
             Text('MANAGE TICKETS', style: TextStyle(color: eventajaGreenTeal)),
       ),
       body: ticketList == null
-          ? Container(
-              child: Center(
-                child: CupertinoActivityIndicator(radius: 20),
-              ),
-            )
+          ? HomeLoadingScreen().myTicketLoading()
           : Container(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,

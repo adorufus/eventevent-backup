@@ -2982,106 +2982,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              detailData['comment'][i]['userID'] ==
-                                      currentUserId
-                                  ? Container(
-                                      height: 50,
-                                      width: 50,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          showCupertinoDialog(
-                                            context: context,
-                                            builder: (thisContext) {
-                                              return CupertinoAlertDialog(
-                                                title: Text('Notice'),
-                                                content: Text(
-                                                  'Do you want to delete this comment?',
-                                                ),
-                                                actions: <Widget>[
-                                                  CupertinoDialogAction(
-                                                    child: Text('No'),
-                                                    onPressed: () {
-                                                      Navigator.of(
-                                                        thisContext,
-                                                      ).pop();
-                                                    },
-                                                  ),
-                                                  CupertinoDialogAction(
-                                                    child: Text('Yes'),
-                                                    onPressed: () {
-                                                      Navigator.of(
-                                                        thisContext,
-                                                      ).pop();
-                                                      deleteComment(
-                                                        detailData['comment'][i]
-                                                            ['id'],
-                                                      ).then(
-                                                        (response) {
-                                                          if (response.statusCode ==
-                                                                  200 ||
-                                                              response.statusCode ==
-                                                                  201) {
-                                                            print(
-                                                                response.body);
-                                                            isLoading = false;
-                                                            detailData[
-                                                                    'comment']
-                                                                .removeAt(i);
-                                                          } else {
-                                                            print(
-                                                                response.body);
-                                                            isLoading = false;
-                                                            Flushbar(
-                                                              backgroundColor:
-                                                                  Colors.red,
-                                                              flushbarPosition:
-                                                                  FlushbarPosition
-                                                                      .TOP,
-                                                              animationDuration:
-                                                                  Duration(
-                                                                      milliseconds:
-                                                                          500),
-                                                              duration:
-                                                                  Duration(
-                                                                      seconds:
-                                                                          3),
-                                                              message:
-                                                                  response.body,
-                                                            ).show(context);
-                                                          }
-                                                        },
-                                                      ).catchError((err) {
-                                                        isLoading = false;
-                                                        Flushbar(
-                                                                backgroundColor:
-                                                                    Colors.red,
-                                                                flushbarPosition:
-                                                                    FlushbarPosition
-                                                                        .TOP,
-                                                                animationDuration:
-                                                                    Duration(
-                                                                        milliseconds:
-                                                                            500),
-                                                                duration:
-                                                                    Duration(
-                                                                        seconds:
-                                                                            3),
-                                                                message: err
-                                                                    .toString())
-                                                            .show(context);
-                                                      });
-                                                    },
-                                                  )
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Icon(Icons.delete,
-                                            color: Colors.red),
-                                      ),
-                                    )
-                                  : Container(width: 100),
                               Text(
                                 detailData['comment'][i]['fullName'] +
                                     '' +
@@ -3091,11 +2991,104 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     fontWeight: FontWeight.bold),
                               ),
                               Container(
-                                  width: 255,
+                                  width: 210,
                                   child: Text(
                                       detailData['comment'][i]['response'])),
                             ],
-                          )
+                          ),
+                          Expanded(child: Container()),
+                          detailData['comment'][i]['userID'] == currentUserId
+                              ? Container(
+                                  height: 50,
+                                  width: 50,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showCupertinoDialog(
+                                        context: context,
+                                        builder: (thisContext) {
+                                          return CupertinoAlertDialog(
+                                            title: Text('Notice'),
+                                            content: Text(
+                                              'Do you want to delete this comment?',
+                                            ),
+                                            actions: <Widget>[
+                                              CupertinoDialogAction(
+                                                child: Text('No'),
+                                                onPressed: () {
+                                                  Navigator.of(
+                                                    thisContext,
+                                                  ).pop();
+                                                },
+                                              ),
+                                              CupertinoDialogAction(
+                                                child: Text('Yes'),
+                                                onPressed: () {
+                                                  Navigator.of(
+                                                    thisContext,
+                                                  ).pop();
+                                                  deleteComment(
+                                                    detailData['comment'][i]
+                                                        ['id'],
+                                                  ).then(
+                                                    (response) {
+                                                      if (response.statusCode ==
+                                                              200 ||
+                                                          response.statusCode ==
+                                                              201) {
+                                                        print(response.body);
+                                                        isLoading = false;
+                                                        detailData['comment']
+                                                            .removeAt(i);
+                                                      } else {
+                                                        print(response.body);
+                                                        isLoading = false;
+                                                        Flushbar(
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                          flushbarPosition:
+                                                              FlushbarPosition
+                                                                  .TOP,
+                                                          animationDuration:
+                                                              Duration(
+                                                                  milliseconds:
+                                                                      500),
+                                                          duration: Duration(
+                                                              seconds: 3),
+                                                          message:
+                                                              response.body,
+                                                        ).show(context);
+                                                      }
+                                                    },
+                                                  ).catchError((err) {
+                                                    isLoading = false;
+                                                    Flushbar(
+                                                            backgroundColor:
+                                                                Colors.red,
+                                                            flushbarPosition:
+                                                                FlushbarPosition
+                                                                    .TOP,
+                                                            animationDuration:
+                                                                Duration(
+                                                                    milliseconds:
+                                                                        500),
+                                                            duration: Duration(
+                                                                seconds: 3),
+                                                            message:
+                                                                err.toString())
+                                                        .show(context);
+                                                  });
+                                                },
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child:
+                                        Icon(Icons.close, color: Colors.grey.withOpacity(.5)),
+                                  ),
+                                )
+                              : Container(width: 100),
                         ],
                       ),
                     );

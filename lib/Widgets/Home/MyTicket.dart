@@ -238,15 +238,10 @@ class _MyTicketState extends State<MyTicket> {
                               ticketStatusText = 'Used';
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'streaming') {
-                              if (myTicketList[i]['livestream']
-                                          ['on_demand_link'] !=
-                                      null ||
+                              if (
                                   myTicketList[i]['livestream']
                                           ['on_demand_link'] !=
                                       "" ||
-                                  myTicketList[i]['livestream']
-                                          ['on_demand_embed'] !=
-                                      null ||
                                   myTicketList[i]['livestream']
                                           ['on_demand_embed'] !=
                                       "") {
@@ -258,15 +253,11 @@ class _MyTicketState extends State<MyTicket> {
                               }
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'playback') {
-                              if (myTicketList[i]['livestream']
-                                          ['on_demand_embed'] !=
-                                      null ||
+                              if (
                                   myTicketList[i]['livestream']
                                           ['on_demand_embed'] !=
                                       "" ||
-                                  myTicketList[i]['livestream']
-                                          ['on_demand_link'] !=
-                                      null ||
+                                  
                                   myTicketList[i]['livestream']
                                           ['on_demand_link'] !=
                                       "") {
@@ -279,15 +270,10 @@ class _MyTicketState extends State<MyTicket> {
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'expired') {
                               if (myTicketList[i].containsKey('livestream')) {
-                                if (myTicketList[i]['livestream']
-                                            ['on_demand_embed'] !=
-                                        null ||
+                                if (
                                     myTicketList[i]['livestream']
                                             ['on_demand_embed'] !=
                                         "" ||
-                                    myTicketList[i]['livestream']
-                                            ['on_demand_link'] !=
-                                        null ||
                                     myTicketList[i]['livestream']
                                             ['on_demand_link'] !=
                                         "") {
