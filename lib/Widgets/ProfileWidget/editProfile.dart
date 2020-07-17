@@ -638,6 +638,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
 
     final userProfileAPI = '/user/update_profile';
     print(userProfileAPI);
+    print("edited email: " + emailController.text);
 
     try {
       Response response = await dio.post(
@@ -655,6 +656,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
             'shortBio': shortBioController.text,
             'birthDay': birthDateController.text,
             'website': websiteController.text,
+            'email': emailController.text,
             'username': usernameController.text,
             'photo': croppedProfilePicture == null
                 ? ''

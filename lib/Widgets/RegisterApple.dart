@@ -6,7 +6,9 @@ import 'package:eventevent/helper/API/registerModel.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
 import 'package:flushbar/flushbar.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,13 +30,23 @@ class RegisterApple extends StatefulWidget {
 }
 
 class RegisterAppleState extends State<RegisterApple> {
-
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   var usernameController = new TextEditingController();
   var phoneController = new TextEditingController();
   var passwordController = new TextEditingController();
   var birthdateController = new TextEditingController();
+
+  String MIN_DATETIME = '1685-05-12';
+  String MAX_DATETIME = '2020-11-25';
+  String INIT_DATETIME = '${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}';
+
+  DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
+  List<DateTimePickerLocale> _locales = DateTimePickerLocale.values;
+
+  String _format = 'yyyy-MMMM-dd';
+
+  DateTime _dateTime;
 
   File profilePictureURI;
   File croppedProfilePicture;
@@ -74,9 +86,10 @@ class RegisterAppleState extends State<RegisterApple> {
 
     setState(() {});
   }
-  
+
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -88,9 +101,9 @@ class RegisterAppleState extends State<RegisterApple> {
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        brightness: Brightness.light,
-        elevation: 0,
-        backgroundColor: Colors.white,
+          brightness: Brightness.light,
+          elevation: 0,
+          backgroundColor: Colors.white,
           leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);
@@ -101,13 +114,13 @@ class RegisterAppleState extends State<RegisterApple> {
             ),
           ),
           centerTitle: true,
-          title: Text('COMPLETE YOUR PROFILE', style: TextStyle(color: eventajaGreenTeal))),
+          title: Text('COMPLETE YOUR PROFILE',
+              style: TextStyle(color: eventajaGreenTeal))),
       body: ListView(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: registerFbWidget()
-          )
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: registerFbWidget())
         ],
       ),
     );
@@ -118,41 +131,58 @@ class RegisterAppleState extends State<RegisterApple> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        SizedBox(height: ScreenUtil.instance.setWidth(10),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(10),
+        ),
         GestureDetector(
-          onTap: (){
-            getImage();
-          },
-          child: Column(
-            children: <Widget>[
+            onTap: () {
+              getImage();
+            },
+            child: Column(children: <Widget>[
               CircleAvatar(
                 radius: 80,
-                backgroundImage: profilePictureURI == null ? AssetImage( currentValue == 1 ? 'assets/drawable/avatar-female.png' : 'assets/drawable/avatar-male.png') : FileImage(
-                  profilePictureURI
-                ),
+                backgroundImage: profilePictureURI == null
+                    ? AssetImage(currentValue == 1
+                        ? 'assets/drawable/avatar-female.png'
+                        : 'assets/drawable/avatar-male.png')
+                    : FileImage(profilePictureURI),
               ),
-              SizedBox(height: ScreenUtil.instance.setWidth(10),),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(10),
+              ),
               Text('Tap to change / edit photo')
-            ]
-          )
+            ])),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
         TextFormField(
           controller: usernameController,
           decoration: InputDecoration(
             hintText: 'Username',
-            icon: Image.asset('assets/drawable/username.png', scale: 2,),
+            icon: Image.asset(
+              'assets/drawable/username.png',
+              scale: 2,
+            ),
           ),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         TextFormField(
           controller: birthdateController,
+          onTap: (){
+            showDatePicker();
+          },
           decoration: InputDecoration(
-            hintText: 'Birth Date',
-            icon: Image.asset('assets/drawable/cake.png', scale: 5,)
-          ),
+              hintText: 'Birth Date',
+              icon: Image.asset(
+                'assets/drawable/cake.png',
+                scale: 5,
+              )),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -178,60 +208,75 @@ class RegisterAppleState extends State<RegisterApple> {
             Text('Other')
           ],
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         TextFormField(
           controller: phoneController,
           decoration: InputDecoration(
             hintText: '(Phone, e.g. 0818123456)',
-            icon: Icon(CupertinoIcons.phone_solid, color: Colors.grey, size: 25,),
-
+            icon: Icon(
+              CupertinoIcons.phone_solid,
+              color: Colors.grey,
+              size: 25,
+            ),
           ),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         TextFormField(
           controller: passwordController,
           autocorrect: false,
           textCapitalization: TextCapitalization.none,
           obscureText: isPasswordObsecure,
           decoration: InputDecoration(
-            hintText: 'Password',
-            icon: Image.asset('assets/drawable/password.png', scale: 2.5,),
-            suffixIcon: GestureDetector(
-              onTap: (){
-                setState(() {
-                  isPasswordObsecure = !isPasswordObsecure;
-                });
-                print(isPasswordObsecure.toString());
-              },
-              child: Image.asset('assets/drawable/show-password.png', scale: 3,),
-            )
-          ),
+              hintText: 'Password',
+              icon: Image.asset(
+                'assets/drawable/password.png',
+                scale: 2.5,
+              ),
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isPasswordObsecure = !isPasswordObsecure;
+                  });
+                  print(isPasswordObsecure.toString());
+                },
+                child: Image.asset(
+                  'assets/drawable/show-password.png',
+                  scale: 3,
+                ),
+              )),
         ),
-        SizedBox(height: ScreenUtil.instance.setWidth(15),),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         GestureDetector(
-          onTap: (){
+          onTap: () {
             postRegister();
           },
-                  child: Container(
+          child: Container(
             height: ScreenUtil.instance.setWidth(50),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: eventajaGreenTeal,
-              borderRadius: BorderRadius.circular(30)
-            ),
+                color: eventajaGreenTeal,
+                borderRadius: BorderRadius.circular(30)),
             child: Center(
-              child: Text('DONE', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18) ,color: Colors.white, fontWeight: FontWeight.bold),)
-            ),
+                child: Text(
+              'DONE',
+              style: TextStyle(
+                  fontSize: ScreenUtil.instance.setSp(18),
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            )),
           ),
         )
       ],
     );
   }
 
-  
-
-  Future<Register> postRegister() async{
-
+  Future<Register> postRegister() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String url = BaseApi().apiUrl + '/signup/register';
     print(widget.appleData);
@@ -241,41 +286,56 @@ class RegisterAppleState extends State<RegisterApple> {
     print(phoneController.text);
     // print()
 
-    if(currentValue == 0){
+    if (currentValue == 0) {
       gender = 'Male';
     } else {
       gender = 'Female';
     }
 
-    final response = await http.post(
-      url,
-      headers: {
-        'Authorization': AUTHORIZATION_KEY
-      },
-      body: {
-        'X-API-KEY': API_KEY,
-        'email': widget.appleData['email'],
-        'password': passwordController.text,
-        'fullName': widget.appleData['first_name'] + ' ' + widget.appleData['last_name'],
-        'gender': gender,
-        'username': usernameController.text,
-        'phone': phoneController.text,
-        'isLoginFacebook': '0',
-        'photo': profilePictureURI == null ? gender == 'Male' ? 'assets/drawable/avatar-male.png' : 'assets/drawable/avatar-female.png' : profilePictureURI,
-        'lastName': widget.appleData['last_name'],
-        'register_device': Platform.isIOS ? 'IOS' : 'android'
-      }
-    );
+    final response = await http.post(url, headers: {
+      'Authorization': AUTHORIZATION_KEY
+    }, body: {
+      'X-API-KEY': API_KEY,
+      'email': widget.appleData['email'],
+      'password': passwordController.text,
+      'fullName':
+          widget.appleData['first_name'] + ' ' + widget.appleData['last_name'],
+      'gender': gender,
+      'username': usernameController.text,
+      'phone': phoneController.text,
+      'isLoginFacebook': '0',
+      'photo': profilePictureURI == null
+          ? gender == 'Male'
+              ? 'assets/drawable/avatar-male.png'
+              : 'assets/drawable/avatar-female.png'
+          : profilePictureURI,
+      'lastName': widget.appleData['last_name'],
+      'register_device': Platform.isIOS ? 'IOS' : 'android'
+    });
 
-    if(response.statusCode == 201){
+    if (response.statusCode == 201) {
       final responseJson = json.decode(response.body);
-      ClevertapHandler.pushUserProfile(responseJson['data']['fullName'], responseJson['data']['lastName'], responseJson['data']['email'], responseJson['data']['pictureNormalURL'], responseJson['data']['birthday'] == null ? '-' : responseJson['data']['birthday'], responseJson['data']['username'], responseJson['data']['gender'], responseJson['data']['phone']);
+      ClevertapHandler.pushUserProfile(
+          responseJson['data']['fullName'],
+          responseJson['data']['lastName'],
+          responseJson['data']['email'],
+          responseJson['data']['pictureNormalURL'],
+          responseJson['data']['birthday'] == null
+              ? '-'
+              : responseJson['data']['birthday'],
+          responseJson['data']['username'],
+          responseJson['data']['gender'],
+          responseJson['data']['phone']);
       preferences.setString('Session', response.headers['set-cookie']);
       SharedPrefs().saveCurrentSession(responseJson);
-      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => DashboardWidget(isRest: widget.isRest,)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => DashboardWidget(
+                    isRest: widget.isRest,
+                  )));
       return Register.fromJson(responseJson);
-    }
-    else{
+    } else {
       final responseJson = json.decode(response.body);
       print(responseJson['desc']);
       Flushbar(
@@ -286,5 +346,40 @@ class RegisterAppleState extends State<RegisterApple> {
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
     }
+  }
+
+  void showDatePicker() {
+    DatePicker.showDatePicker(context,
+        pickerTheme: DateTimePickerTheme(
+            showTitle: true,
+            confirm: Text(
+              'Done',
+              style: TextStyle(color: eventajaGreenTeal),
+            ),
+            cancel: Text(
+              'Cancel',
+              style: TextStyle(color: Colors.red),
+            )),
+        minDateTime: DateTime.parse(MIN_DATETIME),
+        maxDateTime: DateTime.parse(MAX_DATETIME),
+        initialDateTime: _dateTime,
+        dateFormat: _format,
+        locale: _locale,
+        onClose: () => {},
+        onCancel: () => {},
+        onChange: (dateTime, List<int> index) {
+          setState(() {
+            _dateTime = dateTime;
+            birthdateController.text =
+                '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+          });
+        },
+        onConfirm: (dateTime, List<int> index) {
+          setState(() {
+            _dateTime = dateTime;
+            birthdateController.text =
+                '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+          });
+        });
   }
 }
