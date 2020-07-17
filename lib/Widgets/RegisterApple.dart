@@ -302,6 +302,7 @@ class RegisterAppleState extends State<RegisterApple> {
           widget.appleData['first_name'] + ' ' + widget.appleData['last_name'],
       'gender': gender,
       'username': usernameController.text,
+      'birthDay': birthdateController.text,
       'phone': phoneController.text,
       'isLoginFacebook': '0',
       'photo': profilePictureURI == null
