@@ -254,7 +254,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                               ],
                               borderRadius: BorderRadius.circular(10)),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 17),
+                            padding: const EdgeInsets.only(left: 11),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -263,24 +263,23 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                   height: ScreenUtil.instance.setWidth(150),
                                   width: ScreenUtil.instance.setWidth(100),
                                   decoration: BoxDecoration(
-                                    
-                                      image: DecorationImage(
-                                          image: ticketListData[i]
-                                                      .containsKey(
-                                                          'ticket_image')
-                                                      .toString() ==
-                                                  'false'
-                                              ? AssetImage(
-                                                  'assets/grey-fade.jpg')
-                                              : NetworkImage(
-                                                  ticketListData[i]
-                                                          ['ticket_image']
-                                                      ['secure_url'],
-                                                ),
-                                          fit: BoxFit.fill), borderRadius: BorderRadius.circular(10),),
+                                    image: DecorationImage(
+                                        image: ticketListData[i]
+                                                    .containsKey('ticket_image')
+                                                    .toString() ==
+                                                'false'
+                                            ? AssetImage('assets/grey-fade.jpg')
+                                            : NetworkImage(
+                                                ticketListData[i]
+                                                        ['ticket_image']
+                                                    ['secure_url'],
+                                              ),
+                                        fit: BoxFit.fill),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                 ),
                                 SizedBox(
-                                  width: ScreenUtil.instance.setWidth(15),
+                                  width: ScreenUtil.instance.setWidth(9),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 15),
@@ -319,30 +318,15 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                         ],
                                       ),
                                       SizedBox(
-                                        height: ScreenUtil.instance.setWidth(9),
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                180,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.arrow_forward_ios,
-                                              size: 20,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: ScreenUtil.instance.setWidth(9),
+                                        height:
+                                            ScreenUtil.instance.setWidth(13),
                                       ),
                                       Container(
                                         padding: EdgeInsets.all(5),
-                                        height: ScreenUtil.instance.setWidth(32 * 1.1),
-                        width: ScreenUtil.instance.setWidth(110 * 1.1),
+                                        height: ScreenUtil.instance
+                                            .setWidth(32 * 1.1),
+                                        width: ScreenUtil.instance
+                                            .setWidth(110 * 1.1),
                                         decoration: BoxDecoration(
                                             boxShadow: <BoxShadow>[
                                               BoxShadow(
@@ -365,53 +349,70 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                         )),
                                       ),
                                       SizedBox(
-                                        height: ScreenUtil.instance.setWidth(6),
+                                        height: ScreenUtil.instance.setWidth(3),
                                       ),
                                       ticketListData[i]
                                                   ['show_remaining_ticket'] ==
                                               '0'
                                           ? Container()
-                                          : Flexible(
-                                              child: Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width -
-                                                    180,
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    Center(
-                                                      child: Text(
-                                                          'Ticket(s) left: ${(int.parse(ticketListData[i]['quantity']) - int.parse(ticketListData[i]['sold']))} / ${ticketListData[i]['quantity']}',
-                                                          style: TextStyle(
-                                                              fontSize:
-                                                                  ScreenUtil
-                                                                      .instance
-                                                                      .setSp(
-                                                                          15),
-                                                              color:
-                                                                  Colors.grey),
-                                                          textAlign:
-                                                              TextAlign.center),
-                                                    ),
-                                                  ],
-                                                ),
+                                          : Container(
+                                              margin: EdgeInsets.only(left: 12),
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  180,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Center(
+                                                    child: Text(
+                                                        'Ticket(s) left: ${(int.parse(ticketListData[i]['quantity']) - int.parse(ticketListData[i]['sold']))} / ${ticketListData[i]['quantity']}',
+                                                        style: TextStyle(
+                                                            fontSize: ScreenUtil
+                                                                .instance
+                                                                .setSp(12),
+                                                            color: Colors.grey),
+                                                        textAlign:
+                                                            TextAlign.center),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                      Text(ticketListData[i]
-                                                  ['is_single_ticket'] ==
-                                              '0'
-                                          ? ''
-                                          : 'Limited to one purchase only', style: TextStyle(color: Colors.grey),)
+                                      Expanded(
+                                        child: Container(),
+                                      ),
+                                      Text(
+                                        ticketListData[i]['is_single_ticket'] ==
+                                                '0'
+                                            ? ''
+                                            : 'Limited to one purchase only',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      SizedBox(height: 12)
                                     ],
                                   ),
-                                )
+                                ),
+                                Container(
+                                    child: Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 20,
+                                )),
                               ],
                             ),
                           )),
-                      ticketListData[i]['is_single_ticket'] == '1' &&
-                              ticketListData[i]['user_have_ticket'] == '1'
+                      DateTime.parse(ticketListData[i]['sales_end_date'])
+                    .isBefore(DateTime.now()) ? Container(
+                              height: ScreenUtil.instance.setWidth(170),
+                              width: MediaQuery.of(context).size.width,
+                              margin:
+                                  EdgeInsets.only(left: 20, right: 5, top: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(.8),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ) : ticketListData[i]['is_single_ticket'] == '1' &&
+                              ticketListData[i]['user_have_ticket'] == '1' 
                           ? Container(
                               height: ScreenUtil.instance.setWidth(170),
                               width: MediaQuery.of(context).size.width,

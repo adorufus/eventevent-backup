@@ -196,7 +196,7 @@ class _EditTicketState extends State<EditTicket> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: imageUri == null
-                                      ? widget.ticketDetail
+                                      ? !widget.ticketDetail
                                               .containsKey('ticket_image')
                                           ? Image.asset('assets/grey-fade.jpg')
                                           : Image.network(
@@ -230,6 +230,7 @@ class _EditTicketState extends State<EditTicket> {
                                     padding: EdgeInsets.only(left: 10),
                                     child: TextFormField(
                                       controller: ticketQuantityController,
+                                      keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
                                           fillColor: Colors.white,
                                           filled: true,
@@ -281,6 +282,7 @@ class _EditTicketState extends State<EditTicket> {
                                                 fontWeight: FontWeight.bold))
                                         : TextFormField(
                                             controller: priceController,
+                                            keyboardType: TextInputType.number,
                                             decoration: InputDecoration(
                                                 fillColor: Colors.white,
                                                 filled: true,
@@ -338,6 +340,7 @@ class _EditTicketState extends State<EditTicket> {
                                         padding: EdgeInsets.only(left: 10),
                                         child: TextFormField(
                                           controller: minTicketController,
+                                          keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
                                               fillColor: Colors.white,
                                               filled: true,
@@ -374,6 +377,7 @@ class _EditTicketState extends State<EditTicket> {
                                         padding: EdgeInsets.only(left: 10),
                                         child: TextFormField(
                                           controller: maxTicketController,
+                                          keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
                                               fillColor: Colors.white,
                                               filled: true,

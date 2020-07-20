@@ -412,7 +412,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                           builder: (thisContext, setState) =>
                               CupertinoAlertDialog(
                             title: Text('Oops'),
-                            content: Text('Do you want to log out?'),
+                            content: Text('Do you want to log out?', textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,),
                             actions: <Widget>[
                               CupertinoDialogAction(
                                 child: Text('No'),

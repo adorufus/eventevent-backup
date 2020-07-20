@@ -351,106 +351,110 @@ class TimelineDashboardState extends State<TimelineDashboard>
                     },
                   )
                 : SafeArea(
-                    child: DefaultTabController(
-                      initialIndex: 0,
-                      length: 2,
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            color: Colors.white,
-                            child: TabBar(
-                              controller: thisTabController,
-                              onTap: (index) {
-                                if (index == 0) {
-                                  ClevertapHandler.logPageView(
-                                      "E-Media Timeline");
-                                } else {
-                                  ClevertapHandler.logPageView(
-                                      "Timeline");
-                                }
-                              },
-                              tabs: <Widget>[
-                                Tab(
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Image.asset(
-                                        'assets/icons/icon_apps/home.png',
-                                        scale: 4.5,
-                                      ),
-                                      SizedBox(
-                                          width:
-                                              ScreenUtil.instance.setWidth(8)),
-                                      Text('Home',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: ScreenUtil.instance
-                                                  .setSp(12.5))),
-                                    ],
-                                  ),
-                                ),
-                                Tab(
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Image.asset(
-                                        'assets/icons/icon_apps/public_timeline.png',
-                                        scale: 4.5,
-                                      ),
-                                      SizedBox(
-                                          width:
-                                              ScreenUtil.instance.setWidth(8)),
-                                      Text('Public Timeline',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: ScreenUtil.instance
-                                                  .setSp(12.5))),
-                                    ],
-                                  ),
-                                )
-                              ],
-                              unselectedLabelColor: Colors.grey,
-                            ),
-                          ),
-                          Flexible(
-                            child: Container(
-                              height: ScreenUtil.instance.setHeight(
-                                  MediaQuery.of(context).size.height - 50),
-                              child: Stack(
-                                children: <Widget>[
-                                  TabBarView(
-                                    children: <Widget>[
-                                      emedia(),
-                                      widget.isRest == true
-                                          ? LoginRegisterWidget()
-                                          : UserTimelineItem(
-                                              currentUserId: currentUserId,
-                                              timelineType: 'timeline',
-                                            )
-                                    ],
-                                  ),
-                                  Positioned(
-                                      child: isLoading == true
-                                          ? Container(
-                                              child: Center(
-                                                  child:
-                                                      CupertinoActivityIndicator(
-                                                          radius: 20)),
-                                              color:
-                                                  Colors.black.withOpacity(0.5),
-                                            )
-                                          : Container())
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                    child: emedia()
+                    // DefaultTabController(
+                    //   initialIndex: 0,
+                    //   length: 2,
+                    //   child: Column(
+                    //     children: <Widget>[
+                    //       Container(
+                    //         color: Colors.white,
+                    //         child: TabBar(
+                    //           controller: thisTabController,
+                    //           onTap: (index) {
+                    //             if (index == 0) {
+                    //               ClevertapHandler.logPageView(
+                    //                   "E-Media Timeline");
+                    //             } else {
+                    //               ClevertapHandler.logPageView(
+                    //                   "Timeline");
+                    //             }
+
+                    //             thisTabController.index = index;
+                    //             if(mounted) setState((){});
+                    //           },
+                    //           tabs: <Widget>[
+                    //             Tab(
+                    //               child: Row(
+                    //                 crossAxisAlignment:
+                    //                     CrossAxisAlignment.center,
+                    //                 mainAxisAlignment: MainAxisAlignment.center,
+                    //                 children: <Widget>[
+                    //                   Image.asset(
+                    //                     'assets/icons/icon_apps/home.png',
+                    //                     scale: 4.5,
+                    //                   ),
+                    //                   SizedBox(
+                    //                       width:
+                    //                           ScreenUtil.instance.setWidth(8)),
+                    //                   Text('Home',
+                    //                       style: TextStyle(
+                    //                           fontWeight: FontWeight.bold,
+                    //                           fontSize: ScreenUtil.instance
+                    //                               .setSp(12.5))),
+                    //                 ],
+                    //               ),
+                    //             ),
+                    //             Tab(
+                    //               child: Row(
+                    //                 crossAxisAlignment:
+                    //                     CrossAxisAlignment.center,
+                    //                 mainAxisAlignment: MainAxisAlignment.center,
+                    //                 children: <Widget>[
+                    //                   Image.asset(
+                    //                     'assets/icons/icon_apps/public_timeline.png',
+                    //                     scale: 4.5,
+                    //                   ),
+                    //                   SizedBox(
+                    //                       width:
+                    //                           ScreenUtil.instance.setWidth(8)),
+                    //                   Text('Public Timeline',
+                    //                       style: TextStyle(
+                    //                           fontWeight: FontWeight.bold,
+                    //                           fontSize: ScreenUtil.instance
+                    //                               .setSp(12.5))),
+                    //                 ],
+                    //               ),
+                    //             )
+                    //           ],
+                    //           unselectedLabelColor: Colors.grey,
+                    //         ),
+                    //       ),
+                    //       Flexible(
+                    //         child: Container(
+                    //           height: ScreenUtil.instance.setHeight(
+                    //               MediaQuery.of(context).size.height - 50),
+                    //           child: Stack(
+                    //             children: <Widget>[
+                    //               TabBarView(
+                    //                 children: <Widget>[
+                    //                   emedia(),
+                    //                   widget.isRest == true
+                    //                       ? LoginRegisterWidget()
+                    //                       : UserTimelineItem(
+                    //                           currentUserId: currentUserId,
+                    //                           timelineType: 'timeline',
+                    //                         )
+                    //                 ],
+                    //               ),
+                    //               Positioned(
+                    //                   child: isLoading == true
+                    //                       ? Container(
+                    //                           child: Center(
+                    //                               child:
+                    //                                   CupertinoActivityIndicator(
+                    //                                       radius: 20)),
+                    //                           color:
+                    //                               Colors.black.withOpacity(0.5),
+                    //                         )
+                    //                       : Container())
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
                   ),
           );
   }

@@ -499,6 +499,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
             : Stack(
                 children: <Widget>[
                   Container(
+                    height: MediaQuery.of(context).size.height,
                     color: Colors.white,
                     child: ListView(
                       shrinkWrap: true,

@@ -397,7 +397,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> with WidgetsB
                                 return CupertinoAlertDialog(
                                   title: Text('Warning'),
                                   content:
-                                      Text('Do you want to stop broadcasting?'),
+                                      Text('Do you want to stop broadcasting?', textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,),
                                   actions: <Widget>[
                                     CupertinoDialogAction(
                                       child: Text('No'),

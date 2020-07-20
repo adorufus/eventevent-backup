@@ -99,7 +99,7 @@ class BankOptionsState extends State<BankOptions> {
                 builder: (context) {
                   return CupertinoAlertDialog(
                     title: Text('Warning'),
-                    content: Text('Delete this bank account?'),
+                    content: Text('Delete this bank account?',textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,),
                     actions: <Widget>[
                       CupertinoDialogAction(
                         child: Text('No'),

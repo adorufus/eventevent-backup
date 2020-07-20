@@ -43,10 +43,11 @@ class PaymentMethodState extends State<PaymentMethod> {
     print(paymentAmount);
   }
 
-  savePaymentInfo(String fee, String methodID, {String paymentCode}) async {
+  savePaymentInfo(String fee, String methodID, {String paymentCode, int percentFee = 0}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     prefs.setString('ticket_fee', fee);
+    prefs.setInt('percent_fee', percentFee);
     prefs.setString('payment_method_id', methodID);
     prefs.setString('payment_code', paymentCode);
   }
@@ -185,7 +186,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                   );
                                 } else if (paymentMethodList[i]['id'] == '4') {
                                   savePaymentInfo(paymentMethodList[i]['fee'],
-                                      paymentMethodList[i]['id']);
+                                      paymentMethodList[i]['id'], percentFee: int.parse(paymentMethodList[i]['percent_fee']));
                                   print('payment method used: ' +
                                       paymentMethodList[i]['id']);
                                   Navigator.push(
@@ -193,6 +194,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           TicketReview(
+                                            ticketType: 'gopay',
                                         isCustomForm: widget.isCustomForm,
                                         customFormId: widget.customFormId,
                                         customFormList: widget.answerList,
@@ -202,13 +204,15 @@ class PaymentMethodState extends State<PaymentMethod> {
                                 }
                               } else if (paymentMethodList[i]['id'] == '9') {
                                 savePaymentInfo(paymentMethodList[i]['fee'],
-                                    paymentMethodList[i]['id']);
+                                    paymentMethodList[i]['id'], percentFee: int.parse(paymentMethodList[i]['percent_fee']));
                                 print('payment method used: ' +
                                     paymentMethodList[i]['id']);
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (context) => widget.customFormId == null || widget.answerList == null ? TicketReview(
-                                        isCustomForm: widget.isCustomForm
+                                        isCustomForm: widget.isCustomForm,
+                                        ticketType: 'ovo',
                                       ) : TicketReview(
+                                        ticketType: 'ovo',
                                         customFormId: widget.customFormId,
                                         isCustomForm: widget.isCustomForm,
                                         customFormList: widget.answerList

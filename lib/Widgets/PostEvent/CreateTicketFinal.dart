@@ -44,6 +44,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
   String desc;
   String ticketPaidBy = 'owner';
   int _curValue = 0;
+  int fee;
 
   bool isLoading = false;
 
@@ -66,6 +67,13 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
       desc = prefs.getString('SETUP_TICKET_DESCRIPTION');
       ticketTypeId = prefs.getString('NEW_EVENT_TICKET_TYPE_ID');
       imageFile = new File(imageUri);
+
+      fee = (int.parse(price) * 3) ~/ 100;
+
+      if (fee < 5000) {
+        fee = 5000;
+      }
+
     });
   }
 
@@ -473,7 +481,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         child: SizedBox(),
                       ),
                       Text(
-                        '- Rp. ' + '5,000',
+                        '- Rp. ' + fee.toString(),
                         style: TextStyle(color: Colors.red),
                       ),
                       SizedBox(
@@ -508,7 +516,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         child: SizedBox(),
                       ),
                       Text(
-                        'Rp. ' + (int.parse(price) - 5000).toString(),
+                        'Rp. ' + (int.parse(price) - fee).toString(),
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontSize: ScreenUtil.instance.setSp(18),
@@ -588,7 +596,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                                 child: Text(
-                              'Rp. ' + (int.parse(price) + 5000).toString(),
+                              'Rp. ' + (int.parse(price) + fee).toString(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil.instance.setSp(14),
@@ -665,7 +673,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         child: SizedBox(),
                       ),
                       Text(
-                        '+ Rp. ' + '5,000',
+                        '+ Rp. ' + fee.toString(),
                         style: TextStyle(color: Colors.grey),
                       ),
                       SizedBox(
@@ -779,13 +787,13 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
     if (_curValue == 0) {
       setState(() {
         ticketPaidBy = 'owner';
-        finalPrice = price;
+        finalPrice = (int.parse(price) - fee).toString();
         merchantPrice = price;
       });
     } else if (_curValue == 1) {
       setState(() {
         ticketPaidBy = 'attandee';
-        finalPrice = (int.parse(price) + 5000).toString();
+        finalPrice = (int.parse(price) + fee).toString();
         merchantPrice = price;
       });
     } else if (_curValue == 2) {

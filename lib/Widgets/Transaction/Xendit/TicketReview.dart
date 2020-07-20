@@ -82,6 +82,7 @@ class _TicketReviewState extends State<TicketReview> {
     var ticketAmount = preferences.getString('ticket_many');
     var ticketPrice = preferences.getString('ticket_price_total');
     var ticketFee = preferences.getString('ticket_fee');
+    var ticketPercentFee = preferences.getInt('percent_fee');
 
     setState(() {
       thisEventName = eventName;
@@ -97,6 +98,11 @@ class _TicketReviewState extends State<TicketReview> {
         thisTicketFee = '0';
         pajak = 0;
         total = 0;
+      } else if(widget.ticketType == 'gopay') {
+        thisTicketFee = ((int.parse(thisTicketPrice) * ticketPercentFee) ~/ 100).toString();
+        pajak = int.parse(thisTicketFee);
+        total = int.parse(thisTicketPrice) + pajak;
+        print(total);
       } else {
         thisTicketFee = ticketFee;
         pajak = int.parse(thisTicketFee);

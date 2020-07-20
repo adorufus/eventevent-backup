@@ -539,7 +539,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                           isRest: widget.isRest,
                                           title: 'FOLLOWER',
                                           apiURL: baseUrl +
-                                              '/user/follower?X-API-KEY=$API_KEY&userID=${widget.currentUserId}&page=1',
+                                              '/user/follower?X-API-KEY=$API_KEY&userID=${widget.currentUserId}',
                                         )));
                               },
                         child: Padding(
@@ -599,7 +599,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                           isRest: widget.isRest,
                                           title: 'FOLLOWING',
                                           apiURL: baseUrl +
-                                              '/user/following?X-API-KEY=${API_KEY}&userID=${widget.currentUserId}&page=1',
+                                              '/user/following?X-API-KEY=${API_KEY}&userID=${widget.currentUserId}',
                                         )));
                               },
                         child: Padding(

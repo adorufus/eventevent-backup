@@ -433,10 +433,9 @@ class PaymentBcaState extends State<PaymentBCA> {
         imageUriBank = paymentData['payment']['data_vendor']['icon'];
         _dDay = DateTime.parse(paymentData['expired_time']);
 
-        int firstPrice = int.parse(paymentData['amount_detail']['total_price']);
-        int uniqueCode =
-            int.parse(paymentData['amount_detail']['unique_amount']);
-        finalAmount = (firstPrice + uniqueCode).toString();
+        int firstPrice = int.parse(paymentData['amount_detail']['final_amount']);
+        
+        finalAmount = (firstPrice).toString();
 
         firstAmount = finalAmount.substring(0, finalAmount.length - 3);
         uniqueAmount =

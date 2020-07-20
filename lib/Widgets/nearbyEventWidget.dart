@@ -185,12 +185,13 @@ class _ListenPageState extends State<ListenPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 SizedBox(
                                     height: ScreenUtil.instance.setWidth(3)),
                                 Container(
-                                  height: ScreenUtil.instance.setWidth(10),
-                                  width: ScreenUtil.instance.setWidth(10),
+                                  height: ScreenUtil.instance.setWidth(20),
+                                  width: ScreenUtil.instance.setWidth(20),
                                   child: Image.asset(
                                       'assets/icons/icon_apps/location.png'),
                                 ),
@@ -279,7 +280,7 @@ class _ListenPageState extends State<ListenPage> {
                           } else if (nearbyEventData[i]['ticket_type']
                                   ['type'] ==
                               'paid_live_stream') {
-                            itemColor = eventajaGreenTeal;
+                            itemColor = Color(0xFF34B323);
                             itemPriceText = 'Rp. ' +
                                 nearbyEventData[i]['ticket']['cheapestTicket'];
                           } else if (nearbyEventData[i]['ticket_type']

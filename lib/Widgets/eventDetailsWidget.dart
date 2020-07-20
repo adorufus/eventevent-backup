@@ -1418,6 +1418,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           MaterialPageRoute(
                                                               builder: (context) =>
                                                                   SeeWhosGoingInvitedWidget(
+                                                                    isRest: widget.isRest,
                                                                     eventId: widget
                                                                             .detailData[
                                                                         'id'],
@@ -1466,6 +1467,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                   context) =>
                                                               ProfileWidget(
                                                             initialIndex: 0,
+                                                            isRest: widget.isRest,
                                                             userId: widget
                                                                         .detailData[
                                                                     'invited'][
@@ -1615,6 +1617,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             builder: (BuildContext
                                                                     context) =>
                                                                 ProfileWidget(
+                                                                  isRest: widget.isRest,
                                                                   initialIndex:
                                                                       0,
                                                                   userId: detailData[
@@ -2309,6 +2312,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         title: Text('Notice'),
                                                         content: Text(
                                                           'You uploaded on demand video',
+                                                          textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,
                                                         ),
                                                         actions: <Widget>[
                                                           CupertinoDialogAction(
@@ -2335,6 +2339,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         title: Text('Notice'),
                                                         content: Text(
                                                           'please start broadcast using zoom link you provide to your attandees',
+                                                          textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,
                                                         ),
                                                         actions: <Widget>[
                                                           CupertinoDialogAction(
@@ -2361,6 +2366,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                 Text('Notice'),
                                                             content: Text(
                                                               'Please broadcast 5 minutes before the event start',
+                                                              textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,
                                                             ),
                                                             actions: <Widget>[
                                                               CupertinoDialogAction(
@@ -2895,7 +2901,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             SizedBox(
               height: ScreenUtil.instance.setWidth(18),
             ),
-            Container(
+            detailData['isHybridEvent'] ==
+                                                                            'streamOnly' ? Container() : Container(
               margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(13),
@@ -3009,7 +3016,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           return CupertinoAlertDialog(
                                             title: Text('Notice'),
                                             content: Text(
-                                              'Do you want to delete this comment?',
+                                              'Do you want to delete this comment?',textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,
                                             ),
                                             actions: <Widget>[
                                               CupertinoDialogAction(

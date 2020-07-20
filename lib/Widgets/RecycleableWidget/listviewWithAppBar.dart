@@ -7,9 +7,11 @@ import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/FollowUnfollow.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ListViewWithAppBar extends StatefulWidget {
@@ -17,7 +19,8 @@ class ListViewWithAppBar extends StatefulWidget {
   final String apiURL;
   final isRest;
 
-  const ListViewWithAppBar({Key key, @required this.title, this.apiURL, this.isRest})
+  const ListViewWithAppBar(
+      {Key key, @required this.title, this.apiURL, this.isRest})
       : super(key: key);
 
   @override
@@ -36,17 +39,87 @@ class _ListViewWithAppBar extends State<ListViewWithAppBar> {
   String isApproved;
   String imageURI;
   bool isEmpty = false;
+  int newPage = 0;
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
 
   List profileData;
 
   @override
   void initState() {
     super.initState();
-    getItemFromAPI();
+    getItemFromAPI().then((response) {
+      var extractedData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          if (extractedData['data'].length == 0) {
+            isEmpty = true;
+          } else {
+            isEmpty = false;
+            profileData = extractedData['data'];
+          }
+        });
+      }
+    });
+  }
+
+  void onLoading() async {
+    newPage += 1;
+
+    getItemFromAPI(page: newPage).then((response) {
+      var extractedData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          if (extractedData['data'].length == 0) {
+            //null
+            refreshController.loadNoData();
+          } else {
+            isEmpty = false;
+            profileData.addAll(extractedData['data']);
+            refreshController.loadComplete();
+            if (mounted) setState(() {});
+          }
+        });
+      } else {
+        refreshController.loadFailed();
+      }
+    });
+
+    await Future.delayed(Duration(seconds: 3));
+  }
+
+  void onRefresh() async {
+    newPage = 0;
+
+    getItemFromAPI().then((response) {
+      var extractedData = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          if (extractedData['data'].length == 0) {
+            isEmpty = true;
+            refreshController.refreshToIdle();
+          } else {
+            isEmpty = false;
+            profileData = extractedData['data'];
+            refreshController.refreshCompleted();
+            if (mounted) setState(() {});
+          }
+        });
+      } else {
+        refreshController.refreshFailed();
+      }
+    });
+
+    await Future.delayed(Duration(seconds: 3));
+    
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -81,119 +154,130 @@ class _ListViewWithAppBar extends State<ListViewWithAppBar> {
                   emptyImage: 'assets/drawable/profile_empty_state.png',
                   reasonText: 'You Have No Friends Yet',
                 )
-              : ListView.builder(
-                  itemCount: profileData == null ? 0 : profileData.length,
-                  itemBuilder: (context, i) {
-                    return GestureDetector(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => ProfileWidget(
-                              initialIndex: 0,
-                              userId: profileData[i]['id'],
-                            )));
-                      },
-                      child: PeopleItem(
-                        image: profileData[i]['photo'],
-                        username: profileData[i]['username'],
-                        isVerified: profileData[i]['isVerified'],
-                        title: profileData[i]['fullName'],
-                        topPadding: i == 0 ? 13.0 : 0.0,
-                        userId: profileData[i]['id'],
-                        isFollowing: profileData[i]['isFollowed'],
-                      ),
-                    );
-                    // return Container(
-                    //   height: ScreenUtil.instance.setWidth(100),
-                    //   width: MediaQuery.of(context).size.width,
-                    //   color: Colors.white,
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                    //     child: Row(
-                    //       mainAxisAlignment: MainAxisAlignment.start,
-                    //       crossAxisAlignment: CrossAxisAlignment.center,
-                    //       children: <Widget>[
-                    //         Container(
-                    //           height: ScreenUtil.instance.setWidth(200),
-                    //           width: ScreenUtil.instance.setWidth(60),
-                    //           decoration: BoxDecoration(
-                    //               color: Colors.white,
-                    //               boxShadow: <BoxShadow>[
-                    //                 BoxShadow(
-                    //                     offset: Offset(1, 1),
-                    //                     color: Colors.grey,
-                    //                     blurRadius: 2)
-                    //               ],
-                    //               shape: BoxShape.circle,
-                    //               image: DecorationImage(
-                    //                   image: NetworkImage(profileData[i]['photo']),
-                    //                   fit: BoxFit.fill)),
-                    //         ),
-                    //         SizedBox(
-                    //           width: ScreenUtil.instance.setWidth(15),
-                    //         ),
-                    //         Column(
-                    //           mainAxisAlignment: MainAxisAlignment.start,
-                    //           crossAxisAlignment: CrossAxisAlignment.start,
-                    //           children: <Widget>[
-                    //             Text(
-                    //               profileData[i]['fullName'] == null
-                    //                   ? 'loading'
-                    //                   : profileData[i]['fullName'],
-                    //               style: TextStyle(
-                    //                   fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(20)),
-                    //             ),
-                    //             SizedBox(
-                    //               height: ScreenUtil.instance.setWidth(10),
-                    //             ),
-                    //             Text(
-                    //               profileData[i]['username'] == null
-                    //                   ? 'loading'
-                    //                   : '@' + profileData[i]['username'],
-                    //               style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.grey),
-                    //             )
-                    //           ],
-                    //         ),
-                    //         SizedBox(
-                    //           width: MediaQuery.of(context).size.width / 5,
-                    //         ),
-                    //         GestureDetector(
-                    //           onTap: profileData[i]['isFollowed'] == '0' ? (){
-                    //             FollowUnfollow().follow(profileData[i]['id']);
-                    //           } : (){
-                    //             FollowUnfollow().unfollow(profileData[i]['id']);
-                    //           } ,
-                    //           child: Container(
-                    //             height: ScreenUtil.instance.setWidth(50),
-                    //             height: ScreenUtil.instance.setWidth(100),
-                    //             child: Image.asset(profileData[i]['isFollowed'] == '0'
-                    //                 ? 'assets/icons/btn_follow.png'
-                    //                 : 'assets/icons/btn_following.png'),
-                    //           ),
-                    //         )
-                    //       ],
-                    //     ),
-                    //   ),
-                    // );
-                  },
+              : SmartRefresher(
+                  controller: refreshController,
+                  onLoading: onLoading,
+                  onRefresh: onRefresh,
+                  enablePullUp: true,
+                  child: ListView.builder(
+                    itemCount: profileData == null ? 0 : profileData.length,
+                    itemBuilder: (context, i) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) => ProfileWidget(
+                                    initialIndex: 0,
+                                    userId: profileData[i]['id'],
+                                  )));
+                        },
+                        child: PeopleItem(
+                          image: profileData[i]['photo'],
+                          username: profileData[i]['username'],
+                          isVerified: profileData[i]['isVerified'],
+                          title: profileData[i]['fullName'],
+                          topPadding: i == 0 ? 13.0 : 0.0,
+                          userId: profileData[i]['id'],
+                          isFollowing: profileData[i]['isFollowed'],
+                        ),
+                      );
+                      // return Container(
+                      //   height: ScreenUtil.instance.setWidth(100),
+                      //   width: MediaQuery.of(context).size.width,
+                      //   color: Colors.white,
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.start,
+                      //       crossAxisAlignment: CrossAxisAlignment.center,
+                      //       children: <Widget>[
+                      //         Container(
+                      //           height: ScreenUtil.instance.setWidth(200),
+                      //           width: ScreenUtil.instance.setWidth(60),
+                      //           decoration: BoxDecoration(
+                      //               color: Colors.white,
+                      //               boxShadow: <BoxShadow>[
+                      //                 BoxShadow(
+                      //                     offset: Offset(1, 1),
+                      //                     color: Colors.grey,
+                      //                     blurRadius: 2)
+                      //               ],
+                      //               shape: BoxShape.circle,
+                      //               image: DecorationImage(
+                      //                   image: NetworkImage(profileData[i]['photo']),
+                      //                   fit: BoxFit.fill)),
+                      //         ),
+                      //         SizedBox(
+                      //           width: ScreenUtil.instance.setWidth(15),
+                      //         ),
+                      //         Column(
+                      //           mainAxisAlignment: MainAxisAlignment.start,
+                      //           crossAxisAlignment: CrossAxisAlignment.start,
+                      //           children: <Widget>[
+                      //             Text(
+                      //               profileData[i]['fullName'] == null
+                      //                   ? 'loading'
+                      //                   : profileData[i]['fullName'],
+                      //               style: TextStyle(
+                      //                   fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(20)),
+                      //             ),
+                      //             SizedBox(
+                      //               height: ScreenUtil.instance.setWidth(10),
+                      //             ),
+                      //             Text(
+                      //               profileData[i]['username'] == null
+                      //                   ? 'loading'
+                      //                   : '@' + profileData[i]['username'],
+                      //               style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.grey),
+                      //             )
+                      //           ],
+                      //         ),
+                      //         SizedBox(
+                      //           width: MediaQuery.of(context).size.width / 5,
+                      //         ),
+                      //         GestureDetector(
+                      //           onTap: profileData[i]['isFollowed'] == '0' ? (){
+                      //             FollowUnfollow().follow(profileData[i]['id']);
+                      //           } : (){
+                      //             FollowUnfollow().unfollow(profileData[i]['id']);
+                      //           } ,
+                      //           child: Container(
+                      //             height: ScreenUtil.instance.setWidth(50),
+                      //             height: ScreenUtil.instance.setWidth(100),
+                      //             child: Image.asset(profileData[i]['isFollowed'] == '0'
+                      //                 ? 'assets/icons/btn_follow.png'
+                      //                 : 'assets/icons/btn_following.png'),
+                      //           ),
+                      //         )
+                      //       ],
+                      //     ),
+                      //   ),
+                      // );
+                    },
+                  ),
                 ),
     );
   }
 
-  Future getItemFromAPI() async {
+  Future<http.Response> getItemFromAPI({int page}) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
+    int currentPage = 1;
+
+    if (page != null) {
+      currentPage += page;
+    }
+
+    if (mounted) setState(() {});
 
     session = preferences.getString('Session');
 
     Map<String, String> headers;
 
     if (widget.isRest) {
-      
       headers = {
         'Authorization': AUTHORIZATION_KEY,
         'signature': SIGNATURE,
       };
     } else {
-      
       headers = {
         'Authorization': AUTHORIZATION_KEY,
         'cookie': preferences.getString('Session')
@@ -201,19 +285,9 @@ class _ListViewWithAppBar extends State<ListViewWithAppBar> {
     }
 
     final urlApi = widget.apiURL;
-    final response = await http.get(urlApi, headers: headers);
+    final response =
+        await http.get(urlApi + '&page=$currentPage', headers: headers);
 
-    var extractedData = json.decode(response.body);
-
-    if (response.statusCode == 200) {
-      setState(() {
-        if (extractedData['data'].length == 0) {
-          isEmpty = true;
-        } else {
-          isEmpty = false;
-          profileData = extractedData['data'];
-        }
-      });
-    }
+    return response;
   }
 }

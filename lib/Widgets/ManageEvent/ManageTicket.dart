@@ -16,7 +16,8 @@ class ManageTicket extends StatefulWidget {
   final String eventID;
   final isLivestream;
 
-  const ManageTicket({Key key, this.eventID, @required this.isLivestream}) : super(key: key);
+  const ManageTicket({Key key, this.eventID, @required this.isLivestream})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -64,192 +65,223 @@ class ManageTicketState extends State<ManageTicket> {
       body: ticketList == null
           ? HomeLoadingScreen().myTicketLoading()
           : Container(
+              color: Colors.white,
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: ListView(
                 children: <Widget>[
-                  ColumnBuilder(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    itemCount: ticketList == null ? 0 : ticketList.length,
-                    itemBuilder: (BuildContext context, i) {
-                      Color itemColor;
-                      String itemPriceText;
-                      ticketList.removeWhere((item) =>
-                          item['event']['ticket_type']['type'] ==
-                          'free_limited_seating');
-                      if (ticketList[i]['event']['ticket_type']['type'] ==
-                              'paid' ||
-                          ticketList[i]['event']['ticket_type']['type'] ==
-                              'paid_seating') {
-                        itemColor = Color(0xFF34B323);
-                        itemPriceText =
-                            'Rp. ' + ticketList[i]['final_price'] + ',-';
-                      } else if (ticketList[i]['event']['ticket_type']
-                              ['type'] ==
-                          'no_ticket') {
-                        itemColor = Color(0xFF652D90);
-                        itemPriceText = 'NO TICKET';
-                      } else if (ticketList[i]['event']['ticket_type']
-                              ['type'] ==
-                          'on_the_spot') {
-                        itemColor = Color(0xFF652D90);
-                        itemPriceText =
-                            ticketList[i]['event']['ticket_type']['name'];
-                      } else if (ticketList[i]['event']['ticket_type']
-                              ['type'] ==
-                          'free') {
-                        itemColor = Color(0xFFFFAA00);
-                        itemPriceText =
-                            ticketList[i]['event']['ticket_type']['name'];
-                      } else if (ticketList[i]['event']['ticket_type']
-                              ['type'] ==
-                          'free') {
-                        itemColor = Color(0xFFFFAA00);
-                        itemPriceText =
-                            ticketList[i]['event']['ticket_type']['name'];
-                      } else if (ticketList[i]['paid_ticket_type']
-                              ['type'] ==
-                          'paid_live_stream') {
-                        itemColor = eventajaGreenTeal;
-                        itemPriceText = 'Rp. ' + ticketList[i]['final_price'];
-                      } else if (ticketList[i]['paid_ticket_type']
-                              ['type'] ==
-                          'free_live_stream') {
-                        itemColor = Color(0xFFFFAA00);
-                        itemPriceText =
-                            ticketList[i]['event']['ticket_type']['name'];
-                      } else if (ticketList[i]['event']['ticket_type']
-                                  ['type'] ==
-                              'free_limited' ||
-                          ticketList[i]['event']['ticket_type']['type'] ==
-                              'free_limited_seating') {
-                        itemColor = Color(0xFFFFAA00);
-                        itemPriceText =
-                            ticketList[i]['event']['ticket_type']['name'];
-                      }
+                  Container(
+                    color: Colors.white,
+                    child: ColumnBuilder(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      itemCount: ticketList == null ? 0 : ticketList.length,
+                      itemBuilder: (BuildContext context, i) {
+                        Color itemColor;
+                        String itemPriceText;
+                        ticketList.removeWhere((item) =>
+                            item['event']['ticket_type']['type'] ==
+                            'free_limited_seating');
+                        if (ticketList[i]['event']['ticket_type']['type'] ==
+                                'paid' ||
+                            ticketList[i]['event']['ticket_type']['type'] ==
+                                'paid_seating') {
+                          itemColor = Color(0xFF34B323);
+                          itemPriceText =
+                              'Rp. ' + ticketList[i]['final_price'];
+                        } else if (ticketList[i]['event']['ticket_type']
+                                ['type'] ==
+                            'no_ticket') {
+                          itemColor = Color(0xFF652D90);
+                          itemPriceText = 'NO TICKET';
+                        } else if (ticketList[i]['event']['ticket_type']
+                                ['type'] ==
+                            'on_the_spot') {
+                          itemColor = Color(0xFF652D90);
+                          itemPriceText =
+                              ticketList[i]['event']['ticket_type']['name'];
+                        } else if (ticketList[i]['event']['ticket_type']
+                                ['type'] ==
+                            'free') {
+                          itemColor = Color(0xFFFFAA00);
+                          itemPriceText =
+                              ticketList[i]['event']['ticket_type']['name'];
+                        } else if (ticketList[i]['event']['ticket_type']
+                                ['type'] ==
+                            'free') {
+                          itemColor = Color(0xFFFFAA00);
+                          itemPriceText =
+                              ticketList[i]['event']['ticket_type']['name'];
+                        } else if (ticketList[i]['paid_ticket_type']['type'] ==
+                            'paid_live_stream') {
+                          itemColor = itemColor = Color(0xFF34B323);
+                          itemPriceText = 'Rp. ' + ticketList[i]['final_price'];
+                        } else if (ticketList[i]['paid_ticket_type']['type'] ==
+                            'free_live_stream') {
+                          itemColor = Color(0xFFFFAA00);
+                          itemPriceText =
+                              ticketList[i]['event']['ticket_type']['name'];
+                        } else if (ticketList[i]['event']['ticket_type']
+                                    ['type'] ==
+                                'free_limited' ||
+                            ticketList[i]['event']['ticket_type']['type'] ==
+                                'free_limited_seating') {
+                          itemColor = Color(0xFFFFAA00);
+                          itemPriceText =
+                              ticketList[i]['event']['ticket_type']['name'];
+                        }
 
-                      print(ticketID);
-                      return GestureDetector(
-                        onTap: () async {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          prefs.setString('Previous Widget', 'AddNewTicket');
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditTicketDetail(
-                                        ticketTitle: ticketList[i]
-                                            ['ticket_name'],
-                                        ticketImage: ticketList[i]
-                                            ['ticket_image']['secure_url'],
-                                        ticketQuantity: ticketList[i]
-                                            ['quantity'],
-                                        ticketDescription: ticketList[i]
-                                            ['descriptions'],
-                                        ticketSalesStartDate: ticketList[i]
-                                            ['sales_start_date'],
-                                        ticketSalesEndDate: ticketList[i]
-                                            ['sales_end_date'],
-                                        eventStartDate: ticketList[i]['event']
-                                            ['dateStart'],
-                                        eventEndDate: ticketList[i]['event']
-                                            ['dateEnd'],
-                                        eventStartTime: ticketList[i]['event']
-                                            ['timeStart'],
-                                        eventEndTime: ticketList[i]['event']
-                                            ['timeEnd'],
-                                        ticketDetail: ticketList[i],
-                                      )));
-                        },
-                        child: Container(
-                          height: ScreenUtil.instance.setWidth(200),
-                          width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(150),
-                                width: ScreenUtil.instance.setWidth(100),
-                                child: Image.network(
-                                  ticketList[i]['ticket_image']['secure_url'],
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                              SizedBox(width: ScreenUtil.instance.setWidth(20)),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                        print(ticketID);
+                        return GestureDetector(
+                          onTap: () async {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setString('Previous Widget', 'AddNewTicket');
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditTicketDetail(
+                                          ticketTitle: ticketList[i]
+                                              ['ticket_name'],
+                                          ticketImage: ticketList[i]
+                                              ['ticket_image']['secure_url'],
+                                          ticketQuantity: ticketList[i]
+                                              ['quantity'],
+                                          ticketDescription: ticketList[i]
+                                              ['descriptions'],
+                                          ticketSalesStartDate: ticketList[i]
+                                              ['sales_start_date'],
+                                          ticketSalesEndDate: ticketList[i]
+                                              ['sales_end_date'],
+                                          eventStartDate: ticketList[i]['event']
+                                              ['dateStart'],
+                                          eventEndDate: ticketList[i]['event']
+                                              ['dateEnd'],
+                                          eventStartTime: ticketList[i]['event']
+                                              ['timeStart'],
+                                          eventEndTime: ticketList[i]['event']
+                                              ['timeEnd'],
+                                          ticketDetail: ticketList[i],
+                                        )));
+                          },
+                          child: Container(
+                            height: ScreenUtil.instance.setWidth(170),
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(
+                                left: 14, right: 14, bottom: 10),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      blurRadius: 2,
+                                      spreadRadius: 5,
+                                      color: Color(0xff8a8a8b).withOpacity(0.2))
+                                ],
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 11),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  Text(
-                                    ticketList[i]['ticket_name'],
-                                    style: TextStyle(
-                                        fontSize: ScreenUtil.instance.setSp(18),
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          'Available',
-                                          style: TextStyle(
-                                              color: Colors.grey[300],
-                                              fontSize: ScreenUtil.instance
-                                                  .setSp(18)),
-                                        )
-                                      ]),
                                   Container(
-                                    margin: EdgeInsets.symmetric(vertical: 5),
-                                    height: ScreenUtil.instance.setWidth(28),
-                                    width: ScreenUtil.instance.setWidth(133),
+                                    height: ScreenUtil.instance.setWidth(150),
+                                    width: ScreenUtil.instance.setWidth(100),
                                     decoration: BoxDecoration(
-                                      boxShadow: <BoxShadow>[
-                                        BoxShadow(
-                                            color: itemColor.withOpacity(0.4),
-                                            blurRadius: 2,
-                                            spreadRadius: 1.5)
-                                      ],
-                                      color: itemColor,
-                                      borderRadius: BorderRadius.circular(15),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: ticketList[i]
-                                                    ['paid_ticket_type_id'] ==
-                                                '2' ||
-                                            ticketList[i]
-                                                    ['paid_ticket_type_id'] ==
-                                                '7'
-                                        ? Container()
-                                        : Center(
-                                            child: Text(
-                                            itemPriceText,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          )),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        ticketList[i]['ticket_image']
+                                            ['secure_url'],
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
                                   ),
-                                  Text(
-                                      'Ticket(s) left: ${(int.parse(ticketList[i]['quantity']) - int.parse(ticketList[i]['sold']))} / ${ticketList[i]['quantity']}')
+                                  SizedBox(
+                                      width: ScreenUtil.instance.setWidth(9)),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        ticketList[i]['ticket_name'],
+                                        style: TextStyle(
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(20),
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                        height: 30,
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.all(5),
+                                        height: ScreenUtil.instance
+                                            .setWidth(32 * 1.1),
+                                        width: ScreenUtil.instance
+                                            .setWidth(110 * 1.1),
+                                        decoration: BoxDecoration(
+                                          boxShadow: <BoxShadow>[
+                                            BoxShadow(
+                                                color:
+                                                    itemColor.withOpacity(0.4),
+                                                blurRadius: 2,
+                                                spreadRadius: 1.5)
+                                          ],
+                                          color: itemColor,
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                        ),
+                                        child: ticketList[i][
+                                                        'paid_ticket_type_id'] ==
+                                                    '2' ||
+                                                ticketList[i][
+                                                        'paid_ticket_type_id'] ==
+                                                    '7'
+                                            ? Container()
+                                            : Center(
+                                                child: Text(
+                                                itemPriceText,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )),
+                                      ),
+                                      SizedBox(
+                                        height: ScreenUtil.instance.setWidth(3),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(left: 12),
+                                        child: Text(
+                                            'Ticket(s) left: ${(int.parse(ticketList[i]['quantity']) - int.parse(ticketList[i]['sold']))} / ${ticketList[i]['quantity']}',
+                                            style: TextStyle(
+                                                fontSize:
+                                                    ScreenUtil.instance.setSp(12),
+                                                color: Colors.grey),
+                                            textAlign: TextAlign.center),
+                                      )
+                                    ],
+                                  ),
+
+                                  // SizedBox(
+                                  //     width: ScreenUtil.instance.setWidth(20)),
+                                  Expanded(child: Container()),
+                                  Icon(
+                                    Icons.navigate_next,
+                                    color: Colors.black,
+                                    size: 30,
+                                  ),
+                                  SizedBox(width: 12,)
                                 ],
                               ),
-                              SizedBox(width: ScreenUtil.instance.setWidth(20)),
-                              Icon(
-                                Icons.navigate_next,
-                                color: Colors.black,
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                   GestureDetector(
                     onTap: () async {
@@ -260,7 +292,9 @@ class ManageTicketState extends State<ManageTicket> {
                       print(prefs.getInt('NEW_EVENT_ID'));
                       prefs.setString('Previous Widget', 'AddNewTicket');
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) => AddNewTicket(isLivestream: widget.isLivestream,)));
+                          builder: (BuildContext context) => AddNewTicket(
+                                isLivestream: widget.isLivestream,
+                              )));
                     },
                     child: Container(
                       color: Colors.white,
@@ -270,11 +304,13 @@ class ManageTicketState extends State<ManageTicket> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(
-                            Icons.add_circle_outline,
-                            size: 80,
-                            color: Colors.grey[300],
-                          ),
+                          Image.asset('assets/drawable/add.png', scale: 2),
+                          // Icon(
+                          //   Icons.add_circle_outline,
+                          //   size: 80,
+                          //   color: Colors.grey[300],
+                          // ),
+                          SizedBox(height: 10),
                           Text(
                             'Add Ticket',
                             style: TextStyle(

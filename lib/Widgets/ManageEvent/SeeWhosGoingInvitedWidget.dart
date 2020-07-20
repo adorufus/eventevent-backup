@@ -101,7 +101,7 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
                       ],
                     ),
                   ),
-                  SizedBox(width: MediaQuery.of(context).size.width / 2.8),
+                  SizedBox(width: MediaQuery.of(context).size.width / 3),
                   Text(
                     'All ${widget.peopleType} people',
                     style: TextStyle(
@@ -172,6 +172,7 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => ProfileWidget(
+                                isRest: widget.isRest,
                                     initialIndex: 0,
                                     userId: peopleList[i]['id'],
                                   )));
