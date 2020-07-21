@@ -441,14 +441,14 @@ class _AfterRegisterState extends State<AfterRegister> {
           setState(() {
             _dateTime = dateTime;
             birthdateController.text =
-                '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+                '${_dateTime.year}/${_dateTime.month}/${_dateTime.day}';
           });
         },
         onConfirm: (dateTime, List<int> index) {
           setState(() {
             _dateTime = dateTime;
             birthdateController.text =
-                '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+                '${_dateTime.year}/${_dateTime.month}/${_dateTime.day}';
           });
         });
   }

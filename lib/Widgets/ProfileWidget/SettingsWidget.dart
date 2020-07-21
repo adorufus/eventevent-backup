@@ -16,6 +16,7 @@ import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -42,7 +43,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   getInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      appVersion = appVersion + '${Platform.isAndroid ? '3.1.4' : '3.1.4'}';
+      appVersion = appVersion + '${Platform.isAndroid ? '3.2.1' : '3.2.1'}';
     });
 
     print(appVersion);
@@ -610,6 +611,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
     if (prefs.getBool('isUsingGoogle') == true) {
       googleSignIn.signOut();
+    } else if(prefs.getBool('isUsingFacebook') == true){
+      FacebookLogin().logOut();
     }
 
     String deviceType = Platform.isIOS ? 'iOS' : 'Android';

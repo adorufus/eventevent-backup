@@ -201,20 +201,20 @@ class RegisterFacebookState extends State<RegisterFacebook> {
       profilePictureURI = preferences.getString('REGIS_FB_PHOTO');
       birthDate = preferences.getString('REGIS_FB_BIRTH_DATE');
       birthdateController.text = birthDate;
-      if(currentValue != null){
-        if(preferences.getString('REGIS_FB_GENDER') == 'male'){
-          currentValue = 0;
-          gender = 'Male';
-        }
-        else if(preferences.getString('REGIS_FB_GENDER') == 'female'){
-          currentValue = 1;
-          gender = 'Female';
-        }
-        else{
-          currentValue = 2;
-          gender = 'Other';
-        }
-      }
+      // if(currentValue != null){
+      //   if(preferences.getString('REGIS_FB_GENDER') == 'male'){
+      //     currentValue = 0;
+      //     gender = 'Male';
+      //   }
+      //   else if(preferences.getString('REGIS_FB_GENDER') == 'female'){
+      //     currentValue = 1;
+      //     gender = 'Female';
+      //   }
+      //   else{
+      //     currentValue = 2;
+      //     gender = 'Other';
+      //   }
+      // }
     });
     print(profilePictureURI);
   }
@@ -223,6 +223,14 @@ class RegisterFacebookState extends State<RegisterFacebook> {
 
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String url = BaseApi().apiUrl + '/signup/register';
+
+    if(currentValue == 0){
+      gender = 'Male';
+    } else if (currentValue == 1){
+      gender = 'Female';
+    } else if(currentValue == 2){
+      gender = 'Other';
+    }
 
     final response = await http.post(
       url,

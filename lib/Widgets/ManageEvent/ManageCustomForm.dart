@@ -194,9 +194,10 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
                   height: ScreenUtil.instance.setWidth(10),
                 ),
               ),
-              SizedBox(
-                height: ScreenUtil.instance.setWidth(150),
-              ),
+              // SizedBox(
+              //   height: ScreenUtil.instance.setWidth(150),
+              // ),
+              Image.asset('assets/drawable/use_custom_form.png'),
               Padding(
                   padding: const EdgeInsets.only(right: 29, left: 20),
                   child: Row(

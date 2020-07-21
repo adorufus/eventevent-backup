@@ -277,6 +277,9 @@ flutter:
     - assets/drawable/flashlight.png
     - assets/drawable/bni.png
     - assets/drawable/bri.png
+    - assets/drawable/use_custom_form.png
+    - assets/drawable/single_ticket_purchase.png
+    - assets/drawable/show_remaining_ticket.png
     - assets/drawable/btn.png
     - assets/drawable/facebook.png
     - assets/drawable/google.png

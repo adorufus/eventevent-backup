@@ -48,23 +48,28 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
   String googleTokenID;
 
   void initiateFacebookLogin() async {
-    var facebookLogin = FacebookLogin();
+    SharedPreferences prefs = await SharedPreferences.getInstance();   var facebookLogin = FacebookLogin();
+    facebookLogin.loginBehavior = FacebookLoginBehavior.webViewOnly;
     var facebookLoginResult = await facebookLogin.logInWithReadPermissions(
-        ['email', 'public_profile', 'user_friends', 'user_gender']);
+        ['email', 'public_profile']);
+        // 'user_friends', 'user_gender'
 
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.loggedIn:
         print(facebookLoginResult.accessToken.token);
         goLoginFb(facebookLoginResult.accessToken.token);
         onLoginStatusChanged(true);
+        prefs.setBool('isUsingFacebook', true);
         break;
       case FacebookLoginStatus.cancelledByUser:
         print("CancelledByUser");
         onLoginStatusChanged(false);
+        prefs.setBool('isUsingFacebook', false);
         break;
       case FacebookLoginStatus.error:
         print("Error");
         onLoginStatusChanged(false);
+        prefs.setBool('isUsingFacebook', false);
         break;
     }
   }
@@ -95,6 +100,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
       }
     });
     prefs.setBool('isUsingGoogle', true);
+    prefs.setBool('isUsingFacebook', false);
     prefs.setString('REGIS_GOOGLE_PHOTO', user.photoUrl);
     prefs.setString('REGIS_GOOGLE_PHONE', user.phoneNumber);
     prefs.setString('REGIS_GOOGLE_NAME', user.displayName);
@@ -190,7 +196,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
           prefs.setString('REGIS_FB_PHOTO',
               "https://graph.facebook.com/" + id + "/picture?type=large");
           prefs.setString('REGIS_FB_BIRTH_DATE', graphData['birthday']);
-          prefs.setString('REGIS_FB_GENDER', graphData['gender']);
+          // prefs.setString('REGIS_FB_GENDER', graphData['gender']);
           prefs.setString('REGIS_FB_EMAIL', graphData['email']);
           prefs.setString('REGIS_FB_FULLNAME', graphData['name']);
           prefs.setString('REGIS_FB_FIRST_NAME', graphData['first_name']);
@@ -331,7 +337,10 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           GestureDetector(
-                            onTap: () {
+                            onTap: () async{
+                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              prefs.setBool('isUsingFacebook', false);
+
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -369,7 +378,9 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                           ),
                           SizedBox(width: ScreenUtil.instance.setWidth(20)),
                           GestureDetector(
-                            onTap: () {
+                            onTap: () async {
+                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              prefs.setBool('isUsingFacebook', false);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
