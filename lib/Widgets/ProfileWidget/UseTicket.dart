@@ -145,7 +145,9 @@ class UseTicketState extends State<UseTicket> {
                                     title: Text('Notice'),
                                     content: Text(
                                       'playback not available yet, it my takes 1-2 hours for playback to be available',
-                                      textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,
+                                      textScaleFactor: 1.2,
+                                      textWidthBasis:
+                                          TextWidthBasis.longestLine,
                                     ),
                                     actions: <Widget>[
                                       CupertinoDialogAction(
@@ -159,7 +161,7 @@ class UseTicketState extends State<UseTicket> {
                                 });
                           }
                         : widget.usedStatus != "On Demand Video" &&
-                                widget.zoomId != ""
+                                    widget.zoomId != ""
                             ? () {
                                 Navigator.push(
                                   context,
@@ -175,8 +177,14 @@ class UseTicketState extends State<UseTicket> {
                                     await SharedPreferences.getInstance();
                                 print(prefs.getString("streaming_token"));
 
-
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewLivestream(url: widget.ticketDetail['livestream']['link_streaming'],)));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => WebViewLivestream(
+                                              url: widget.ticketDetail[
+                                                      'livestream']
+                                                  ['link_streaming'],
+                                            )));
 
                                 ///TODO: used
                                 // if (prefs.containsKey('streaming_token') &&
@@ -237,46 +245,59 @@ class UseTicketState extends State<UseTicket> {
                             print('expired');
                           }
                         : () {
-                            scan().then((_) async {
-                              SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              String url = BaseApi().apiUrl + '/tickets/verify';
-
-                              final response = await http.post(url, headers: {
-                                'Authorization': AUTHORIZATION_KEY,
-                                'cookie': prefs.getString('Session')
-                              }, body: {
-                                'X-API-KEY': API_KEY,
-                                'qrData': _scanBarcode,
-                                'ticketID': widget.ticketID
-                              });
-
-                              var extractedData = json.decode(response.body);
-
-                              if (response.statusCode == 200 ||
-                                  response.statusCode == 201) {
-                                print(extractedData['desc']);
-                                Navigator.push(
+                            widget.zoomId != ""
+                                ? Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            UseTicketSuccess(
-                                              eventName: 'test',
-                                            )));
-                              } else {
-                                Flushbar(
-                                  flushbarPosition: FlushbarPosition.TOP,
-                                  message: extractedData['desc'] ??
-                                      extractedData['error'],
-                                  backgroundColor: Colors.red,
-                                  duration: Duration(seconds: 3),
-                                  animationDuration:
-                                      Duration(milliseconds: 500),
-                                )..show(context);
-                              }
+                                      builder: (context) => ZoomTicketPage(
+                                          zoomLink: widget.zoomId,
+                                          zoomDesc: widget.zoomDesc),
+                                    ),
+                                  )
+                                : scan().then((_) async {
+                                    SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    String url =
+                                        BaseApi().apiUrl + '/tickets/verify';
 
-                              //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsWidget()));
-                            });
+                                    final response = await http.post(url,
+                                        headers: {
+                                          'Authorization': AUTHORIZATION_KEY,
+                                          'cookie': prefs.getString('Session')
+                                        },
+                                        body: {
+                                          'X-API-KEY': API_KEY,
+                                          'qrData': _scanBarcode,
+                                          'ticketID': widget.ticketID
+                                        });
+
+                                    var extractedData =
+                                        json.decode(response.body);
+
+                                    if (response.statusCode == 200 ||
+                                        response.statusCode == 201) {
+                                      print(extractedData['desc']);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  UseTicketSuccess(
+                                                    eventName: 'test',
+                                                  )));
+                                    } else {
+                                      Flushbar(
+                                        flushbarPosition: FlushbarPosition.TOP,
+                                        message: extractedData['desc'] ??
+                                            extractedData['error'],
+                                        backgroundColor: Colors.red,
+                                        duration: Duration(seconds: 3),
+                                        animationDuration:
+                                            Duration(milliseconds: 500),
+                                      )..show(context);
+                                    }
+
+                                    //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsWidget()));
+                                  });
 //          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ScanBarcode()));
                           },
         child: Container(
@@ -302,7 +323,9 @@ class UseTicketState extends State<UseTicket> {
                   )
                 : Text(
                     widget.usedStatus == 'Used'
-                        ? 'USED'
+                        ? widget.zoomId != null || widget.zoomId != ""
+                            ? 'Get Zoom Link Here'
+                            : 'USED'
                         : widget.usedStatus == 'Expired'
                             ? !widget.ticketDetail.containsKey('livestream')
                                 ? 'EXPIRED'
@@ -323,7 +346,10 @@ class UseTicketState extends State<UseTicket> {
                                             : widget.usedStatus ==
                                                     'Watch Playback'
                                                 ? 'Watch Playback'
-                                                : 'USE TICKET',
+                                                : widget.zoomId != null ||
+                                                        widget.zoomId != ""
+                                                    ? 'Get Zoom Link Here'
+                                                    : 'USE TICKET',
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -340,12 +366,16 @@ class UseTicketState extends State<UseTicket> {
             foregroundDecoration: BoxDecoration(
                 backgroundBlendMode: widget.usedStatus == 'Available' ||
                         widget.usedStatus == 'Streaming' ||
-                        widget.usedStatus == 'On Demand Video'
+                        widget.usedStatus == 'On Demand Video' ||
+                        widget.zoomId != null ||
+                        widget.zoomId != ""
                     ? null
                     : BlendMode.saturation,
                 color: widget.usedStatus == 'Available' ||
                         widget.usedStatus == 'Streaming' ||
-                        widget.usedStatus == 'On Demand Video'
+                        widget.usedStatus == 'On Demand Video' ||
+                        widget.zoomId != null ||
+                        widget.zoomId != ""
                     ? null
                     : Colors.grey),
             width: MediaQuery.of(context).size.width,

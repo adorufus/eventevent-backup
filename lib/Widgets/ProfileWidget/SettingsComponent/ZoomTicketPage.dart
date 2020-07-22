@@ -56,6 +56,7 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
           padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset('assets/icons/aset_icon/zoom_livestream.png', scale: 2
                 ,),
@@ -67,6 +68,7 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
                 children: <Widget>[
                   Text('Zoom ID: ', style: TextStyle(fontSize: 15),),
                   GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: () {
                       launch('https://zoom.us/j/' + widget.zoomLink, enableJavaScript: true);
                     },

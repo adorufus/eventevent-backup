@@ -52,7 +52,7 @@ class UseTicketSuccessState extends State<UseTicketSuccess> {
             GestureDetector(
               onTap: (){
                 Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                  builder: ( BuildContext context) => ProfileWidget(initialIndex: 1,)
+                  builder: ( BuildContext context) => ProfileWidget(initialIndex: 0,)
                 ), ModalRoute.withName('/Dashboard'));
               },
               child: Container(

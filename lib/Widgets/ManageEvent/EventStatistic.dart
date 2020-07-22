@@ -235,7 +235,7 @@ class EventStatisticState extends State<EventStatistic>{
                     SizedBox(
                       height: ScreenUtil.instance.setWidth(25)
                     ),
-                    Text(totalUnspecified, style: TextStyle(fontWeight: FontWeight.bold))
+                    Text(totalUnspecified == null ? "" : totalUnspecified, style: TextStyle(fontWeight: FontWeight.bold))
                   ],
                 )
               ],
@@ -299,7 +299,10 @@ class EventStatisticState extends State<EventStatistic>{
   Future getShared() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/analytic_event/shared?X-API-KEY=$API_KEY&event_id=${prefs.getString('NEW_EVENT_ID')}';
+    print(prefs.getInt('NEW_EVENT_ID'));
+
+    String url = BaseApi().apiUrl + '/analytic_event/shared?X-API-KEY=$API_KEY&event_id=${prefs.getInt('NEW_EVENT_ID')}';
+    print(url);
 
     final response = await http.get(
         url,

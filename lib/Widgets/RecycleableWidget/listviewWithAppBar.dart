@@ -166,6 +166,7 @@ class _ListViewWithAppBar extends State<ListViewWithAppBar> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => ProfileWidget(
+                                isRest: widget.isRest,
                                     initialIndex: 0,
                                     userId: profileData[i]['id'],
                                   )));

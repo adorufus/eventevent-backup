@@ -37,14 +37,16 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
   String price;
   String finalPrice;
   String merchantPrice;
-  String startDate;
-  String endDate;
-  String startTime;
-  String endTime;
-  String desc;
+  String startDate = "";
+  String endDate = "";
+  String startTime = "";
+  String endTime = "";
+  String desc = "";
   String ticketPaidBy = 'owner';
   int _curValue = 0;
   int fee;
+
+  SharedPreferences prefs;
 
   bool isLoading = false;
 
@@ -53,28 +55,26 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
   Dio dio = new Dio(BaseOptions(
       connectTimeout: 15000, baseUrl: BaseApi().apiUrl, receiveTimeout: 15000));
 
-  getData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future getData() async {
+    prefs = await SharedPreferences.getInstance();
 
-    setState(() {
-      imageUri = prefs.getString('SETUP_TICKET_POSTER');
-      ticketQuantity = prefs.getString('SETUP_TICKET_QTY');
-      price = prefs.getString('SETUP_TICKET_PRICE');
-      startDate = prefs.getString('SETUP_TICKET_START_DATE');
-      endDate = prefs.getString('SETUP_TICKET_END_DATE');
-      startTime = prefs.getString('SETUP_TICKET_START_TIME');
-      endTime = prefs.getString('SETUP_TICKET_END_TIME');
-      desc = prefs.getString('SETUP_TICKET_DESCRIPTION');
-      ticketTypeId = prefs.getString('NEW_EVENT_TICKET_TYPE_ID');
-      imageFile = new File(imageUri);
+    imageUri = prefs.getString('SETUP_TICKET_POSTER');
+    ticketQuantity = prefs.getString('SETUP_TICKET_QTY');
+    price = prefs.getString('SETUP_TICKET_PRICE');
+    startDate = prefs.getString('SETUP_TICKET_START_DATE');
+    endDate = prefs.getString('SETUP_TICKET_END_DATE');
+    startTime = prefs.getString('SETUP_TICKET_START_TIME');
+    endTime = prefs.getString('SETUP_TICKET_END_TIME');
+    desc = prefs.getString('SETUP_TICKET_DESCRIPTION');
+    ticketTypeId = prefs.getString('NEW_EVENT_TICKET_TYPE_ID');
+    imageFile = new File(imageUri);
 
-      fee = (int.parse(price) * 3) ~/ 100;
+    fee = (int.parse(price) * 3) ~/ 100;
 
-      if (fee < 5000) {
-        fee = 5000;
-      }
-
-    });
+    if (fee < 5000) {
+      fee = 5000;
+    }
+    if (mounted) setState(() {});
   }
 
   @override
@@ -784,24 +784,30 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (_curValue == 0) {
-      setState(() {
-        ticketPaidBy = 'owner';
-        finalPrice = (int.parse(price) - fee).toString();
-        merchantPrice = price;
-      });
-    } else if (_curValue == 1) {
-      setState(() {
-        ticketPaidBy = 'attandee';
-        finalPrice = (int.parse(price) + fee).toString();
-        merchantPrice = price;
-      });
-    } else if (_curValue == 2) {
-      setState(() {
-        ticketPaidBy = 'op1';
-        finalPrice = (int.parse(price) + 10000).toString();
-        merchantPrice = price;
-      });
+    if (ticketTypeId == '2' ||
+        ticketTypeId == '5' ||
+        ticketTypeId == '7' ||
+        ticketTypeId == '10') {
+    } else {
+      if (_curValue == 0) {
+        setState(() {
+          ticketPaidBy = 'owner';
+          finalPrice = (int.parse(price) - fee).toString();
+          merchantPrice = price;
+        });
+      } else if (_curValue == 1) {
+        setState(() {
+          ticketPaidBy = 'attandee';
+          finalPrice = (int.parse(price) + fee).toString();
+          merchantPrice = price;
+        });
+      } else if (_curValue == 2) {
+        setState(() {
+          ticketPaidBy = 'op1';
+          finalPrice = (int.parse(price) + 10000).toString();
+          merchantPrice = price;
+        });
+      }
     }
 
     try {
