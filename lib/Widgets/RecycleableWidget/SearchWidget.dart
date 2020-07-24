@@ -677,6 +677,7 @@ class SearchState extends State<Search> {
     final response = await http.get(url, headers: headers);
 
     print(response.statusCode);
+    print(response.body);
 
     var extractedData = json.decode(response.body);
     List resultData = extractedData['data'];
