@@ -25,7 +25,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/ZoomTicketPage.dart';
 
 class MyInAppBrowser extends InAppBrowser {
-
   @override
   Future onLoadStart(String url) async {
     print("\n\nStarted $url\n\n");
@@ -45,11 +44,9 @@ class MyInAppBrowser extends InAppBrowser {
   void onExit() {
     print("\n\nBrowser closed!\n\n");
   }
-
 }
 
 class MyChromeSafariBrowser extends ChromeSafariBrowser {
-
   MyChromeSafariBrowser(browserFallback) : super(bFallback: browserFallback);
 
   @override
@@ -84,7 +81,6 @@ class UseTicket extends StatefulWidget {
   final zoomDesc;
   final playbackUrl;
   final Map ticketDetail;
-  
 
   const UseTicket({
     Key key,
@@ -112,7 +108,8 @@ class UseTicket extends StatefulWidget {
 }
 
 class UseTicketState extends State<UseTicket> {
-  final ChromeSafariBrowser browser = new MyChromeSafariBrowser(new MyInAppBrowser());
+  final ChromeSafariBrowser browser =
+      new MyChromeSafariBrowser(new MyInAppBrowser());
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   String _scanBarcode = '';
@@ -174,182 +171,187 @@ class UseTicketState extends State<UseTicket> {
                 ? () {
                     print("ended");
                   }
-                : !widget.ticketDetail.containsKey("livestream") ? (){} :  widget.usedStatus == 'Streaming' ||
-                        widget.usedStatus == 'On Demand Video' ||
-                        widget.usedStatus == 'Watch Playback' ||
-                        widget.usedStatus == 'Playback' ||
-                        widget.usedStatus == 'Expired'
-                    ? DateTime.parse(widget.ticketDetail['event']['dateEnd'])
-                                .isBefore(DateTime.now()) &&
-                            widget.ticketDetail['livestream']['playback_url'] ==
-                                'not_available' &&
-                            widget.usedStatus == 'Watch Playback'
-                        ? () {
-                            showCupertinoDialog(
-                                context: context,
-                                builder: (thisContext) {
-                                  return CupertinoAlertDialog(
-                                    title: Text('Notice'),
-                                    content: Text(
-                                      'playback not available yet, it my takes 1-2 hours for playback to be available',
-                                      textScaleFactor: 1.2,
-                                      textWidthBasis:
-                                          TextWidthBasis.longestLine,
-                                    ),
-                                    actions: <Widget>[
-                                      CupertinoDialogAction(
-                                        child: Text('Close'),
-                                        onPressed: () {
-                                          Navigator.of(thisContext).pop();
-                                        },
-                                      )
-                                    ],
-                                  );
-                                });
-                          }
-                        : widget.usedStatus != "On Demand Video" &&
-                                    widget.zoomId != ""
+                : !widget.ticketDetail.containsKey("livestream")
+                    ? () {}
+                    : widget.usedStatus == 'Streaming' ||
+                            widget.usedStatus == 'On Demand Video' ||
+                            widget.usedStatus == 'Watch Playback' ||
+                            widget.usedStatus == 'Playback' ||
+                            widget.usedStatus == 'Expired'
+                        ? DateTime.parse(
+                                        widget.ticketDetail['event']['dateEnd'])
+                                    .isBefore(DateTime.now()) &&
+                                widget.ticketDetail['livestream']
+                                        ['playback_url'] ==
+                                    'not_available' &&
+                                widget.usedStatus == 'Watch Playback'
                             ? () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ZoomTicketPage(
-                                        zoomLink: widget.zoomId,
-                                        zoomDesc: widget.zoomDesc),
-                                  ),
-                                );
+                                showCupertinoDialog(
+                                    context: context,
+                                    builder: (thisContext) {
+                                      return CupertinoAlertDialog(
+                                        title: Text('Notice'),
+                                        content: Text(
+                                          'playback not available yet, it my takes 1-2 hours for playback to be available',
+                                          textScaleFactor: 1.2,
+                                          textWidthBasis:
+                                              TextWidthBasis.longestLine,
+                                        ),
+                                        actions: <Widget>[
+                                          CupertinoDialogAction(
+                                            child: Text('Close'),
+                                            onPressed: () {
+                                              Navigator.of(thisContext).pop();
+                                            },
+                                          )
+                                        ],
+                                      );
+                                    });
                               }
-                            : () async {
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                print(prefs.getString("streaming_token"));
-                                browser.open(url: widget.ticketDetail['livestream']['link_streaming']);
-
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => 
-                                //         // WebViewLivestream(
-                                //         //       url: widget.ticketDetail[
-                                //         //               'livestream']
-                                //         //           ['link_streaming'],
-                                //         //     )
-                                //             ));
-
-                                ///TODO: used
-                                // if (prefs.containsKey('streaming_token') &&
-                                //     prefs.getString('streaming_token') !=
-                                //         null) {
-                                //   print(prefs.getString('streaming_token'));
-                                //   Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //       builder: (context) => LivestreamPlayer(
-                                //         wowzaLiveUrl: widget.livestreamUrl,
-                                //       ),
-                                //     ),
-                                //   );
-                                // } else {
-                                // print(prefs.getString('streaming_token'));
-                                // getWatchLivestreamToken(widget.eventId)
-                                //     .then((response) async {
-                                //   print('code: ' +
-                                //       response.statusCode.toString() +
-                                //       ' message: ' +
-                                //       response.body);
-                                //   var extractedData =
-                                //       json.decode(response.body);
-
-                                //   if (response.statusCode == 200 ||
-                                //       response.statusCode == 201) {
-                                //     prefs.setString(
-                                //         'streaming_token',
-                                //         extractedData['data']
-                                //             ['streaming_token']);
-                                //     // getEventStreamingDetail();
-                                //     Navigator.push(
-                                //       context,
-                                //       MaterialPageRoute(
-                                //         builder: (context) => LivestreamPlayer(
-                                //           wowzaLiveUrl: widget.livestreamUrl,
-                                //         ),
-                                //       ),
-                                //     );
-                                //   } else {
-                                //     prefs.setString('streaming_token', null);
-                                //     Flushbar(
-                                //       animationDuration:
-                                //           Duration(milliseconds: 500),
-                                //       duration: Duration(seconds: 3),
-                                //       backgroundColor: Colors.red,
-                                //       message: 'User Have No Access!',
-                                //       flushbarPosition: FlushbarPosition.TOP,
-                                //     ).show(context);
-                                //   }
-                                // });
-                                // }
-                              }
-                    : widget.usedStatus == 'Expired' ||
-                            widget.usedStatus == 'Expired Zoom Session'
-                        ? () {
-                            print('expired');
-                          }
-                        : () {
-                            widget.zoomId != ""
-                                ? Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ZoomTicketPage(
-                                          zoomLink: widget.zoomId,
-                                          zoomDesc: widget.zoomDesc),
-                                    ),
-                                  )
-                                : scan().then((_) async {
+                            : widget.usedStatus != "On Demand Video" &&
+                                    widget.zoomId != ""
+                                ? () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ZoomTicketPage(
+                                            zoomLink: widget.zoomId,
+                                            zoomDesc: widget.zoomDesc),
+                                      ),
+                                    );
+                                  }
+                                : () async {
                                     SharedPreferences prefs =
                                         await SharedPreferences.getInstance();
-                                    String url =
-                                        BaseApi().apiUrl + '/tickets/verify';
+                                    print(prefs.getString("streaming_token"));
+                                    // browser.open(url: widget.ticketDetail['livestream']['link_streaming'], options: ChromeSafariBrowserClassOptions(android: AndroidChromeCustomTabsOptions(showTitle: false)));
 
-                                    final response = await http.post(url,
-                                        headers: {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => WebViewLivestream(
+                                          url: widget.ticketDetail['livestream']
+                                              ['link_streaming'],
+                                        ),
+                                      ),
+                                    );
+
+                                    ///TODO: used
+                                    // if (prefs.containsKey('streaming_token') &&
+                                    //     prefs.getString('streaming_token') !=
+                                    //         null) {
+                                    //   print(prefs.getString('streaming_token'));
+                                    //   Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //       builder: (context) => LivestreamPlayer(
+                                    //         wowzaLiveUrl: widget.livestreamUrl,
+                                    //       ),
+                                    //     ),
+                                    //   );
+                                    // } else {
+                                    // print(prefs.getString('streaming_token'));
+                                    // getWatchLivestreamToken(widget.eventId)
+                                    //     .then((response) async {
+                                    //   print('code: ' +
+                                    //       response.statusCode.toString() +
+                                    //       ' message: ' +
+                                    //       response.body);
+                                    //   var extractedData =
+                                    //       json.decode(response.body);
+
+                                    //   if (response.statusCode == 200 ||
+                                    //       response.statusCode == 201) {
+                                    //     prefs.setString(
+                                    //         'streaming_token',
+                                    //         extractedData['data']
+                                    //             ['streaming_token']);
+                                    //     // getEventStreamingDetail();
+                                    //     Navigator.push(
+                                    //       context,
+                                    //       MaterialPageRoute(
+                                    //         builder: (context) => LivestreamPlayer(
+                                    //           wowzaLiveUrl: widget.livestreamUrl,
+                                    //         ),
+                                    //       ),
+                                    //     );
+                                    //   } else {
+                                    //     prefs.setString('streaming_token', null);
+                                    //     Flushbar(
+                                    //       animationDuration:
+                                    //           Duration(milliseconds: 500),
+                                    //       duration: Duration(seconds: 3),
+                                    //       backgroundColor: Colors.red,
+                                    //       message: 'User Have No Access!',
+                                    //       flushbarPosition: FlushbarPosition.TOP,
+                                    //     ).show(context);
+                                    //   }
+                                    // });
+                                    // }
+                                  }
+                        : widget.usedStatus == 'Expired' ||
+                                widget.usedStatus == 'Expired Zoom Session'
+                            ? () {
+                                print('expired');
+                              }
+                            : () {
+                                widget.zoomId != ""
+                                    ? Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ZoomTicketPage(
+                                              zoomLink: widget.zoomId,
+                                              zoomDesc: widget.zoomDesc),
+                                        ),
+                                      )
+                                    : scan().then((_) async {
+                                        SharedPreferences prefs =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        String url = BaseApi().apiUrl +
+                                            '/tickets/verify';
+
+                                        final response = await http
+                                            .post(url, headers: {
                                           'Authorization': AUTHORIZATION_KEY,
                                           'cookie': prefs.getString('Session')
-                                        },
-                                        body: {
+                                        }, body: {
                                           'X-API-KEY': API_KEY,
                                           'qrData': _scanBarcode,
                                           'ticketID': widget.ticketID
                                         });
 
-                                    var extractedData =
-                                        json.decode(response.body);
+                                        var extractedData =
+                                            json.decode(response.body);
 
-                                    if (response.statusCode == 200 ||
-                                        response.statusCode == 201) {
-                                      print(extractedData['desc']);
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  UseTicketSuccess(
-                                                    eventName: 'test',
-                                                  )));
-                                    } else {
-                                      Flushbar(
-                                        flushbarPosition: FlushbarPosition.TOP,
-                                        message: extractedData['desc'] ??
-                                            extractedData['error'],
-                                        backgroundColor: Colors.red,
-                                        duration: Duration(seconds: 3),
-                                        animationDuration:
-                                            Duration(milliseconds: 500),
-                                      )..show(context);
-                                    }
+                                        if (response.statusCode == 200 ||
+                                            response.statusCode == 201) {
+                                          print(extractedData['desc']);
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          UseTicketSuccess(
+                                                            eventName: 'test',
+                                                          )));
+                                        } else {
+                                          Flushbar(
+                                            flushbarPosition:
+                                                FlushbarPosition.TOP,
+                                            message: extractedData['desc'] ??
+                                                extractedData['error'],
+                                            backgroundColor: Colors.red,
+                                            duration: Duration(seconds: 3),
+                                            animationDuration:
+                                                Duration(milliseconds: 500),
+                                          )..show(context);
+                                        }
 
-                                    //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsWidget()));
-                                  });
+                                        //Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => SettingsWidget()));
+                                      });
 //          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ScanBarcode()));
-                          },
+                              },
         child: Container(
           height: ScreenUtil.instance.setWidth(50),
           color: widget.usedStatus == 'Used'
