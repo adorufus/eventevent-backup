@@ -470,7 +470,7 @@ class SearchState extends State<Search> {
     setState(() {
       peopleNewPage = 0;
     });
-    _getProfile().then((response) {
+    _getProfile().then((response) async{
       var extractedData = json.decode(response.body);
       List resultData = extractedData['data'];
       List tempList = new List();
@@ -484,9 +484,16 @@ class SearchState extends State<Search> {
 
         profile = tempList;
         filteredProfile = profile;
+        await Future.delayed(Duration(seconds: 3));
+        if(mounted) setState((){});
+        peopleSearchRefreshController.refreshCompleted();
+
       } else if (response.statusCode == 400) {
         isLoading = false;
         notFound = true;
+        
+        if(mounted) setState((){});
+        peopleSearchRefreshController.refreshFailed();
       }
     });
   }
@@ -515,6 +522,7 @@ class SearchState extends State<Search> {
                 controller: peopleSearchRefreshController,
                 onLoading: peopleOnLoad,
                 onRefresh: peopleOnRefresh,
+                enablePullUp: true,
                 child: ListView.builder(
                   itemCount:
                       filteredProfile == null ? 0 : filteredProfile.length,
