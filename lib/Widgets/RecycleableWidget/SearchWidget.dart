@@ -45,7 +45,7 @@ class SearchState extends State<Search> {
 
   bool isLoading = false;
 
-  RefreshController peopleSearchRefreshController;
+  RefreshController peopleSearchRefreshController = new RefreshController(initialRefresh: false);
   RefreshController eventSearchRefreshController;
 
   @override
