@@ -441,7 +441,7 @@ class SearchState extends State<Search> {
       peopleNewPage += 1;
     });
 
-    _getProfile(page: peopleNewPage).then((response) async {
+    _getProfile(page: peopleNewPage, isLoadData: true).then((response) async {
       var extractedData = json.decode(response.body);
       List resultData = extractedData['data'];
       List tempList = new List();
@@ -617,11 +617,13 @@ class SearchState extends State<Search> {
               );
   }
 
-  Future<http.Response> _getProfile({int page}) async {
+  Future<http.Response> _getProfile({int page, bool isLoadData = false}) async {
     int currentPage = 1;
 
     setState(() {
-      isLoading = true;
+      if(isLoadData == false){
+        isLoading = true;
+      }
       if (page != null) {
         currentPage += page;
       }
