@@ -28,9 +28,11 @@ class PostEventInvitePeople extends StatefulWidget {
 }
 
 class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
-  List data;
+  List data = [];
   List<String> invitedPeople = new List<String>();
   List tempInvitedPeople = [];
+
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -94,7 +96,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
             )
           ],
         ),
-        body: data == null
+        body: isLoading == true
             ? HomeLoadingScreen().followListLoading()
             : Container(
                 color: Colors.white,
@@ -286,6 +288,9 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
 
   Future fetchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    isLoading = true;
+    if(mounted) setState((){});
+
     String url = BaseApi().apiUrl +
         '/user/follower?X-API-KEY=$API_KEY&userID=${prefs.getString('Last User ID')}&page=1';
     var extractedData;
@@ -304,9 +309,14 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
     });
 
     if (response.statusCode == 200) {
-      setState(() {
+      
+      if(mounted) setState(() {
+        isLoading = false;
         data = extractedData['data'];
       });
+    } else {
+      isLoading = false;
+      if(mounted) setState((){});
     }
   }
 }

@@ -15,6 +15,7 @@ import 'package:eventevent/livestream/LivestreamPlayer.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -22,6 +23,50 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/ZoomTicketPage.dart';
+
+class MyInAppBrowser extends InAppBrowser {
+
+  @override
+  Future onLoadStart(String url) async {
+    print("\n\nStarted $url\n\n");
+  }
+
+  @override
+  Future onLoadStop(String url) async {
+    print("\n\nStopped $url\n\n");
+  }
+
+  @override
+  void onLoadError(String url, int code, String message) {
+    print("\n\nCan't load $url.. Error: $message\n\n");
+  }
+
+  @override
+  void onExit() {
+    print("\n\nBrowser closed!\n\n");
+  }
+
+}
+
+class MyChromeSafariBrowser extends ChromeSafariBrowser {
+
+  MyChromeSafariBrowser(browserFallback) : super(bFallback: browserFallback);
+
+  @override
+  void onOpened() {
+    print("ChromeSafari browser opened");
+  }
+
+  @override
+  void onCompletedInitialLoad() {
+    print("ChromeSafari browser initial load completed");
+  }
+
+  @override
+  void onClosed() {
+    print("ChromeSafari browser closed");
+  }
+}
 
 class UseTicket extends StatefulWidget {
   final ticketTitle;
@@ -39,6 +84,7 @@ class UseTicket extends StatefulWidget {
   final zoomDesc;
   final playbackUrl;
   final Map ticketDetail;
+  
 
   const UseTicket({
     Key key,
@@ -66,6 +112,7 @@ class UseTicket extends StatefulWidget {
 }
 
 class UseTicketState extends State<UseTicket> {
+  final ChromeSafariBrowser browser = new MyChromeSafariBrowser(new MyInAppBrowser());
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   String _scanBarcode = '';
@@ -127,7 +174,7 @@ class UseTicketState extends State<UseTicket> {
                 ? () {
                     print("ended");
                   }
-                : widget.usedStatus == 'Streaming' ||
+                : !widget.ticketDetail.containsKey("livestream") ? (){} :  widget.usedStatus == 'Streaming' ||
                         widget.usedStatus == 'On Demand Video' ||
                         widget.usedStatus == 'Watch Playback' ||
                         widget.usedStatus == 'Playback' ||
@@ -176,15 +223,18 @@ class UseTicketState extends State<UseTicket> {
                                 SharedPreferences prefs =
                                     await SharedPreferences.getInstance();
                                 print(prefs.getString("streaming_token"));
+                                browser.open(url: widget.ticketDetail['livestream']['link_streaming']);
 
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => WebViewLivestream(
-                                              url: widget.ticketDetail[
-                                                      'livestream']
-                                                  ['link_streaming'],
-                                            )));
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => 
+                                //         // WebViewLivestream(
+                                //         //       url: widget.ticketDetail[
+                                //         //               'livestream']
+                                //         //           ['link_streaming'],
+                                //         //     )
+                                //             ));
 
                                 ///TODO: used
                                 // if (prefs.containsKey('streaming_token') &&

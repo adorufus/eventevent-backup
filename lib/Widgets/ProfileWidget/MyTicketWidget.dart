@@ -240,7 +240,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                             ticketColor = eventajaGreenTeal;
                             ticketStatusText = 'On Demand Video';
                           } else if (ticketDetailData[i]['livestream']
-                                  ['streamin_type'] ==
+                                  ['streaming_type'] ==
                               'zoom') {
                             ticketColor = Color(0xFF8E1E2D);
                             ticketStatusText = 'ZOOM';
@@ -331,12 +331,12 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                             : ticketDetailData[i]['livestream']
                                                 ['on_demand_link']
                                         : ''
-                                    : ticketStatusText == "Streaming" ||
+                                    : !ticketDetailData[i].containsKey("livestream") ? '' : ticketStatusText == "Streaming" ||
                                             ticketStatusText ==
                                                 'Watch Playback' ||
                                             ticketStatusText == 'Playback' ||
                                             ticketStatusText == 'Expired'
-                                        ? ticketDetailData[i]['livestream']
+                                        ? !ticketDetailData[i].containsKey("livestream") ? '' : ticketDetailData[i]['livestream']
                                                     ['playback_url'] ==
                                                 'not_available'
                                             ? ticketDetailData[i]['livestream']

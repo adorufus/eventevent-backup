@@ -402,8 +402,9 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
         Navigator.pop(context, extractedError['desc']);
       }
       if (e is FileSystemException) {
-        // print(e.message);
-        Navigator.pop(context);
+        print(e.message);
+        print(e.osError);
+        Navigator.pop(context, e.message);
       }
       if (e is NoSuchMethodError) {
         print(e.stackTrace);

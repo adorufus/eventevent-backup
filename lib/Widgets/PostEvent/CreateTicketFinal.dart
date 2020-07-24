@@ -34,7 +34,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
   String imageUri;
   String ticketQuantity;
   String ticketTypeId;
-  String price;
+  String price = '0';
   String finalPrice;
   String merchantPrice;
   String startDate = "";
@@ -44,7 +44,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
   String desc = "";
   String ticketPaidBy = 'owner';
   int _curValue = 0;
-  int fee;
+  int fee = 0;
 
   SharedPreferences prefs;
 
@@ -56,6 +56,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
       connectTimeout: 15000, baseUrl: BaseApi().apiUrl, receiveTimeout: 15000));
 
   Future getData() async {
+    print('get data');
     prefs = await SharedPreferences.getInstance();
 
     imageUri = prefs.getString('SETUP_TICKET_POSTER');
@@ -74,13 +75,20 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
     if (fee < 5000) {
       fee = 5000;
     }
-    if (mounted) setState(() {});
+
+    setState(() {});
   }
 
   @override
   void initState() {
-    super.initState();
     getData();
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(CreateTicketFinal oldWidget) {
+    getData();
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -183,7 +191,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                   width: ScreenUtil.instance.setWidth(150),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8),
-                                    child: Image.file(File(imageUri),
+                                    child: Image.file(File(imageUri == null ? '' : imageUri),
                                         fit: BoxFit.fill),
                                   ),
                                 ),
@@ -210,7 +218,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                             ScreenUtil.instance.setWidth(170),
                                         height:
                                             ScreenUtil.instance.setWidth(40),
-                                        child: Text(ticketQuantity)),
+                                        child: Text(ticketQuantity == null ? '' : ticketQuantity)),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(7)),
@@ -404,7 +412,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                                 child: Text(
-                              'Rp. ' + price,
+                              'Rp. ' + price == null ? '' : price,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil.instance.setSp(14),
