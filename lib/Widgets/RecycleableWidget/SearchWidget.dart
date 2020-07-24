@@ -450,6 +450,7 @@ class SearchState extends State<Search> {
         isLoading = false;
         notFound = false;
         for (int i = 0; i < resultData.length; i++) {
+          // tempList.removeWhere((data) => data['username'] == filteredProfile)
           tempList.add(resultData[i]);
         }
 
