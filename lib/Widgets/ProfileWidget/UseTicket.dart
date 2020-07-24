@@ -171,9 +171,8 @@ class UseTicketState extends State<UseTicket> {
                 ? () {
                     print("ended");
                   }
-                : !widget.ticketDetail.containsKey("livestream")
-                    ? () {}
-                    : widget.usedStatus == 'Streaming' ||
+                : widget.ticketDetail.containsKey("livestream")
+                    && widget.usedStatus == 'Streaming' ||
                             widget.usedStatus == 'On Demand Video' ||
                             widget.usedStatus == 'Watch Playback' ||
                             widget.usedStatus == 'Playback' ||
@@ -398,7 +397,7 @@ class UseTicketState extends State<UseTicket> {
                                             : widget.usedStatus ==
                                                     'Watch Playback'
                                                 ? 'Watch Playback'
-                                                : widget.zoomId != null ||
+                                                : widget.ticketDetail.containsKey('livestream') && widget.zoomId != null ||
                                                         widget.zoomId != ""
                                                     ? 'Get Zoom Link Here'
                                                     : 'USE TICKET',

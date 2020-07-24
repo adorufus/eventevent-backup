@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/PeopleSearch.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -192,14 +193,21 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
                             },
                           )
                         : Container(),
-                    Text(
+                    data.isEmpty ? Container() : Text(
                       'Recommended From Following',
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: eventajaBlack),
                     ),
-                    ColumnBuilder(
+                    data.isEmpty ? Center(
+                      heightFactor: 2,
+                      child: EmptyState(
+                        imagePath: 'assets/icons/empty_state/profile.png',
+                        isTimeout: false,
+                        reasonText: 'You\'re not following anyone',
+                      ),
+                    ) : ColumnBuilder(
                       itemCount: data.length == null ? 0 : data.length,
                       itemBuilder: (context, i) {
                         return ListTile(

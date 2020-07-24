@@ -650,7 +650,7 @@ class SearchState extends State<Search> {
     }
 
     String url = baseUrl +
-        '/user/search?X-API-KEY=$API_KEY&people=${searchController.text}&page=$page';
+        '/user/search?X-API-KEY=$API_KEY&people=${searchController.text}&page=$currentPage';
 
     final response = await http.get(url, headers: headers);
 
