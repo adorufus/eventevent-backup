@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dio/dio.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -43,6 +44,9 @@ class SearchState extends State<Search> {
   bool notFound = false;
 
   bool isLoading = false;
+
+  RefreshController peopleSearchRefreshController;
+  RefreshController eventSearchRefreshController;
 
   @override
   Widget build(BuildContext context) {
@@ -255,8 +259,8 @@ class SearchState extends State<Search> {
                   if (filteredEvents[i]['ticket']['availableTicketStatus'] ==
                       '1') {
                     itemColor = Color(0xFF34B323);
-                          itemPriceText = 'Rp. ' +
-                              filteredEvents[i]['ticket']['cheapestTicket'];
+                    itemPriceText =
+                        'Rp. ' + filteredEvents[i]['ticket']['cheapestTicket'];
                   } else {
                     if (filteredEvents[i]['ticket']['salesStatus'] ==
                         'comingSoon') {
@@ -321,7 +325,7 @@ class SearchState extends State<Search> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => EventDetailLoadingScreen(
-                              isRest: widget.isRest,
+                                isRest: widget.isRest,
                                 eventId: filteredEvents[i]['id'])));
                   },
                   child: LatestEventItem(
@@ -430,6 +434,63 @@ class SearchState extends State<Search> {
     }
   }
 
+  int peopleNewPage = 0;
+
+  void peopleOnLoad() async {
+    setState(() {
+      peopleNewPage += 1;
+    });
+
+    _getProfile(page: peopleNewPage).then((response) async {
+      var extractedData = json.decode(response.body);
+      List resultData = extractedData['data'];
+      List tempList = new List();
+
+      if (response.statusCode == 200) {
+        isLoading = false;
+        notFound = false;
+        for (int i = 0; i < resultData.length; i++) {
+          tempList.add(resultData[i]);
+        }
+
+        profile = tempList;
+        filteredProfile.addAll(profile);
+
+        await Future.delayed(Duration(seconds: 3));
+        if (mounted) setState(() {});
+        peopleSearchRefreshController.loadComplete();
+      } else if (response.statusCode == 400) {
+        if (mounted) setState(() {});
+        peopleSearchRefreshController.loadFailed();
+      }
+    });
+  }
+
+  void peopleOnRefresh() async {
+    setState(() {
+      peopleNewPage = 0;
+    });
+    _getProfile().then((response) {
+      var extractedData = json.decode(response.body);
+      List resultData = extractedData['data'];
+      List tempList = new List();
+
+      if (response.statusCode == 200) {
+        isLoading = false;
+        notFound = false;
+        for (int i = 0; i < resultData.length; i++) {
+          tempList.add(resultData[i]);
+        }
+
+        profile = tempList;
+        filteredProfile = profile;
+      } else if (response.statusCode == 400) {
+        isLoading = false;
+        notFound = true;
+      }
+    });
+  }
+
   Widget _buildListProfile() {
     if (!_searchText.isEmpty) {
       List tempList = new List();
@@ -450,100 +511,112 @@ class SearchState extends State<Search> {
                 imagePath: 'assets/icons/empty_state/profile.png',
                 reasonText: 'No result for: \n ${searchController.text}',
               )
-            : ListView.builder(
-                itemCount: filteredProfile == null ? 0 : filteredProfile.length,
-                itemBuilder: (BuildContext context, i) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) => ProfileWidget(
-                            isRest: widget.isRest,
-                                initialIndex: 0,
-                                userId: filteredProfile[i]['id'],
-                              )));
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border:
-                            Border(bottom: BorderSide(color: Colors.grey[300])),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          CircleAvatar(
-                            radius: 25,
-                            backgroundImage:
-                                NetworkImage(filteredProfile[i]['photo']),
-                            backgroundColor: Colors.grey,
-                          ),
-                          SizedBox(width: ScreenUtil.instance.setWidth(20)),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    filteredProfile[i]['isVerified'] == '0'
-                                        ? Container()
-                                        : CircleAvatar(
-                                            backgroundImage: AssetImage(
-                                                'assets/icons/icon_apps/verif.png'),
-                                            radius: 10,
-                                          ),
-                                    SizedBox(
-                                      width: ScreenUtil.instance.setWidth(3),
-                                    ),
-                                    Container(
-                                      width: ScreenUtil.instance.setWidth(150),
-                                      child: Text(
-                                        filteredProfile[i]['fullName'] == null
-                                            ? filteredProfile[i]['username']
-                                            : filteredProfile[i]['fullName'],
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                        overflow: TextOverflow.ellipsis,
+            : SmartRefresher(
+                controller: peopleSearchRefreshController,
+                onLoading: peopleOnLoad,
+                onRefresh: peopleOnRefresh,
+                child: ListView.builder(
+                  itemCount:
+                      filteredProfile == null ? 0 : filteredProfile.length,
+                  itemBuilder: (BuildContext context, i) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => ProfileWidget(
+                                  isRest: widget.isRest,
+                                  initialIndex: 0,
+                                  userId: filteredProfile[i]['id'],
+                                )));
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border(
+                              bottom: BorderSide(color: Colors.grey[300])),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            CircleAvatar(
+                              radius: 25,
+                              backgroundImage:
+                                  NetworkImage(filteredProfile[i]['photo']),
+                              backgroundColor: Colors.grey,
+                            ),
+                            SizedBox(width: ScreenUtil.instance.setWidth(20)),
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      filteredProfile[i]['isVerified'] == '0'
+                                          ? Container()
+                                          : CircleAvatar(
+                                              backgroundImage: AssetImage(
+                                                  'assets/icons/icon_apps/verif.png'),
+                                              radius: 10,
+                                            ),
+                                      SizedBox(
+                                        width: ScreenUtil.instance.setWidth(3),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(15),
-                                ),
-                                Container(
-                                  width: ScreenUtil.instance.setWidth(150),
-                                  child: Text(filteredProfile[i]['username'],
-                                      style: TextStyle(color: Colors.grey),
-                                      overflow: TextOverflow.ellipsis),
-                                ),
-                                SizedBox(
-                                  height: ScreenUtil.instance.setWidth(15),
-                                ),
-                              ]),
-                          Expanded(
-                            child: SizedBox(),
-                          ),
-                          Container(
-                              margin: EdgeInsets.only(right: 20),
-                              height: ScreenUtil.instance.setWidth(30),
-                              width: ScreenUtil.instance.setWidth(80),
-                              child: Image.asset(
-                                'assets/icons/btn_follow.png',
-                                fit: BoxFit.cover,
-                              ))
-                        ],
+                                      Container(
+                                        width:
+                                            ScreenUtil.instance.setWidth(150),
+                                        child: Text(
+                                          filteredProfile[i]['fullName'] == null
+                                              ? filteredProfile[i]['username']
+                                              : filteredProfile[i]['fullName'],
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: ScreenUtil.instance.setWidth(15),
+                                  ),
+                                  Container(
+                                    width: ScreenUtil.instance.setWidth(150),
+                                    child: Text(filteredProfile[i]['username'],
+                                        style: TextStyle(color: Colors.grey),
+                                        overflow: TextOverflow.ellipsis),
+                                  ),
+                                  SizedBox(
+                                    height: ScreenUtil.instance.setWidth(15),
+                                  ),
+                                ]),
+                            Expanded(
+                              child: SizedBox(),
+                            ),
+                            Container(
+                                margin: EdgeInsets.only(right: 20),
+                                height: ScreenUtil.instance.setWidth(30),
+                                width: ScreenUtil.instance.setWidth(80),
+                                child: Image.asset(
+                                  'assets/icons/btn_follow.png',
+                                  fit: BoxFit.cover,
+                                ))
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               );
   }
 
-  Future<http.Response> _getProfile() async {
+  Future<http.Response> _getProfile({int page}) async {
+    int currentPage = 1;
+
     setState(() {
       isLoading = true;
+      if (page != null) {
+        currentPage += page;
+      }
     });
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -565,9 +638,8 @@ class SearchState extends State<Search> {
       };
     }
 
-    
     String url = baseUrl +
-        '/user/search?X-API-KEY=$API_KEY&people=${searchController.text}&page=1';
+        '/user/search?X-API-KEY=$API_KEY&people=${searchController.text}&page=$page';
 
     final response = await http.get(url, headers: headers);
 
