@@ -89,7 +89,7 @@ class _TransactionFormState extends State<TransactionForm> {
   @override
   void initState() {
     super.initState();
-    
+
     getFormData();
     getCustomForm();
 
@@ -175,7 +175,7 @@ class _TransactionFormState extends State<TransactionForm> {
               emailController.text == '' ||
               phoneController.text == null ||
               phoneController.text == '' ||
-              isRequiredEmpty == true && isEmailMatch == true) {
+              isRequiredEmpty == true) {
             Flushbar(
               animationDuration: Duration(milliseconds: 500),
               backgroundColor: Colors.red,
@@ -183,6 +183,14 @@ class _TransactionFormState extends State<TransactionForm> {
               message: 'Please check again your input',
               flushbarPosition: FlushbarPosition.TOP,
             ).show(context);
+          } else if (isEmailMatch == false) {
+            Flushbar(
+              flushbarPosition: FlushbarPosition.TOP,
+              message: 'Email validation not match',
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 3),
+              animationDuration: Duration(milliseconds: 500),
+            )..show(context);
           } else {
             Navigator.of(context).push(
               MaterialPageRoute(

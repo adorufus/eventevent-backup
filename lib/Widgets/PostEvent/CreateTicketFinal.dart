@@ -857,7 +857,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '7' ||
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
             ? '0'
-            : finalPrice,
+            : ticketPaidBy == 'owner' ? price : finalPrice,
         'paid_ticket_type_id': prefs.getString('SETUP_TICKET_PAID_TICKET_TYPE'),
         'merchant_price': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
