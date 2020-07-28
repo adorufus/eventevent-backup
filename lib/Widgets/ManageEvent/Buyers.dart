@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:eventevent/Widgets/EmptyState.dart';
-import 'package:eventevent/Widgets/ManageEvent/exportCounter.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:csv/csv.dart';
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/Invoice.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -11,13 +10,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:csv/csv.dart';
-import 'package:share/share.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:share_extend/share_extend.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Buyers extends StatefulWidget {
   final ticketID;
@@ -39,7 +36,11 @@ class BuyersState extends State<Buyers> {
   List buyerListExport = new List();
   bool isEmpty;
   bool isLoading = false;
+  bool isExportDataLoading = false;
   int newPage = 0;
+  List<int> bytes = [];
+  int total = 0;
+  int received = 0;
   RefreshController refreshController =
       new RefreshController(initialRefresh: false);
 
@@ -75,6 +76,7 @@ class BuyersState extends State<Buyers> {
   void buyerExport() {
     getBuyerExport().then((response) {
       var extractedData = json.decode(response.body);
+
       if (response.statusCode == 200) {
         setState(() {
           isLoading = false;
@@ -82,15 +84,18 @@ class BuyersState extends State<Buyers> {
         setState(() {
           if (extractedData['desc'] == 'User not found') {
             isEmpty = true;
+            isExportDataLoading = false;
           } else {
             isEmpty = false;
             buyerListExport = extractedData['data'];
+            exportCSV();
           }
         });
         print('Buyer List Export: ' + buyerListExport.length.toString());
       } else {
         setState(() {
           isLoading = false;
+          isExportDataLoading = false;
         });
         print(response.body);
         print('gagal');
@@ -149,9 +154,17 @@ class BuyersState extends State<Buyers> {
   }
 
   @override
+  void dispose() {
+    // http.Client().close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
+
+    print("Received: " + ((received / total) * 100).toString() + '/ 100%');
 
     ScreenUtil.instance = ScreenUtil(
       width: defaultScreenWidth,
@@ -185,7 +198,7 @@ class BuyersState extends State<Buyers> {
                   padding: EdgeInsets.only(right: 13),
                   child: GestureDetector(
                     onTap: () {
-                      exportCSV();
+                      buyerExport();
                     },
                     child: Center(
                       child: Text('Export',
@@ -203,59 +216,85 @@ class BuyersState extends State<Buyers> {
             )
           : isEmpty == true
               ? EmptyState(
-                  imagePath: 'assets/icons/empty_state/my_ticket.png',
+                  imagePath:
+                      'assets/icons             /empty_state/my_ticket.png',
                   reasonText: 'There is no buyers :(',
                 )
-              : SmartRefresher(
-                  onLoading: onLoading,
-                  onRefresh: onRefresh,
-                  enablePullUp: true,
-                  controller: refreshController,
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(bottom: 15),
-                    itemCount: buyerList == null ? 0 : buyerList.length,
-                    itemBuilder: (BuildContext context, i) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => Invoice(
-                                    transactionID: buyerList[i]['id'],
-                                  )));
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: 15),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          color: Colors.white,
-                          child: Row(
-                            children: <Widget>[
-                              Center(
-                                  child: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    buyerList[i]['user']['pictureAvatarURL']),
-                              )),
-                              SizedBox(width: ScreenUtil.instance.setWidth(50)),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+              : Stack(
+                  children: <Widget>[
+                    SmartRefresher(
+                      onLoading: onLoading,
+                      onRefresh: onRefresh,
+                      enablePullUp: true,
+                      controller: refreshController,
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(bottom: 15),
+                        itemCount: buyerList == null ? 0 : buyerList.length,
+                        itemBuilder: (BuildContext context, i) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) => Invoice(
+                                        transactionID: buyerList[i]['id'],
+                                      )));
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 15),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
+                              color: Colors.white,
+                              child: Row(
                                 children: <Widget>[
-                                  Text(buyerList[i]['user']['fullName']),
-                                  Text('@' + buyerList[i]['user']['username']),
-                                  Text('Ticket quantity: ' +
-                                      buyerList[i]['quantity']),
+                                  Center(
+                                      child: CircleAvatar(
+                                    backgroundImage: NetworkImage(buyerList[i]
+                                        ['user']['pictureAvatarURL']),
+                                  )),
+                                  SizedBox(
+                                      width: ScreenUtil.instance.setWidth(50)),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(buyerList[i]['user']['fullName']),
+                                      Text('@' +
+                                          buyerList[i]['user']['username']),
+                                      Text('Ticket quantity: ' +
+                                          buyerList[i]['quantity']),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: ScreenUtil.instance.setWidth(45),
+                                  ),
+                                  Center(
+                                    child: Text('See Invoice >'),
+                                  ),
                                 ],
                               ),
-                              SizedBox(
-                                width: ScreenUtil.instance.setWidth(45),
-                              ),
-                              Center(
-                                child: Text('See Invoice >'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    isExportDataLoading == true
+                        ? Container(
+                          color: Colors.grey.withOpacity(.8),
+                            height: MediaQuery.of(context).size.height,
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                CupertinoActivityIndicator(
+                                  animating: true,
+                                ),
+                                SizedBox(height: 12,),
+                                Text('Please wait, this might take a while...')
+                              ],
+                            ),
+                          )
+                        : Container(),
+                  ],
                 ),
     );
   }
@@ -334,7 +373,7 @@ class BuyersState extends State<Buyers> {
     String dir;
 
     if (Platform.isAndroid) {
-      dir = (await getExternalStorageDirectory()).absolute.path +
+      dir = (await getApplicationDocumentsDirectory()).absolute.path +
           '/report_${widget.ticketName}';
     } else if (Platform.isIOS) {
       dir = (await getLibraryDirectory()).absolute.path +
@@ -350,6 +389,8 @@ class BuyersState extends State<Buyers> {
     f.writeAsString(csv);
 
     print('saved');
+    isExportDataLoading = false;
+    if (mounted) setState(() {});
     // Share.file(path: f.path, mimeType: ShareType.TYPE_FILE, title: 'text');
     ShareExtend.share(f.path, "file");
   }
@@ -357,7 +398,7 @@ class BuyersState extends State<Buyers> {
   Future<http.Response> getBuyerExport() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      isLoading = true;
+      isExportDataLoading = true;
     });
 
     String url = BaseApi().apiUrl +
@@ -366,8 +407,19 @@ class BuyersState extends State<Buyers> {
     try {
       final response = await http.get(url, headers: {
         'Authorization': AUTHORIZATION_KEY,
-        'cookie': prefs.getString('Session')
+        'cookie': prefs.getString('Session'),
       });
+
+      if (mounted) {
+        setState(() {
+          total = response.contentLength;
+          bytes.addAll(response.bodyBytes);
+          received += response.bodyBytes.length;
+
+          print(
+              "Received: " + ((received / total) * 100).toString() + '/ 100%');
+        });
+      }
 
       return response;
     } catch (e) {
@@ -382,7 +434,7 @@ class BuyersState extends State<Buyers> {
     int currentPage = 1;
 
     setState(() {
-      if(page != null){
+      if (page != null) {
         currentPage += page;
       }
       isPull == false ? isLoading = true : isLoading = false;

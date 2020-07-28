@@ -272,6 +272,7 @@ flutter:
     - assets/icons/icon_line.png
     - assets/icons/Icon_finish_create_event.png
     - assets/drawable/bca.png
+    - assets/drawable/eventevent-regis.png
     - assets/drawable/add.png
     - assets/drawable/avatar-male.png
     - assets/drawable/avatar-female.png

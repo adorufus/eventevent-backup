@@ -268,7 +268,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
               Container(
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                    SizedBox(height: ScreenUtil.instance.setWidth(20)),
                     Align(
                       alignment: Alignment.topRight,
                       child: GestureDetector(
@@ -299,13 +299,6 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                       padding: EdgeInsets.only(
                           top: ScreenUtil.instance.setWidth(50)),
                     ),
-                    Hero(
-                      tag: 'eventeventlogo',
-                      child: Image.asset(
-                        'assets/icons/logo_company.png',
-                        scale: 4,
-                      ),
-                    ),
                     Expanded(
                       child: SizedBox(),
                     ),
@@ -313,9 +306,9 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                       widthFactor: ScreenUtil.instance.setWidth(.8),
                       child: Container(
                           width: ScreenUtil.instance.setWidth(350),
-                          height: ScreenUtil.instance.setWidth(240),
+                          height: ScreenUtil.instance.setWidth(350),
                           child: Image.asset(
-                            'assets/icons/icon_apps/illustrasi.png',
+                            'assets/drawable/eventevent-regis.png',
                             fit: BoxFit.scaleDown,
                           )),
                     ),

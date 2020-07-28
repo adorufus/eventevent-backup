@@ -25,13 +25,18 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   var _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailValidationController =
+      TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   FocusNode _usernameFocusNode = FocusNode();
   FocusNode _emailFocusNode = FocusNode();
+  FocusNode _emailValidationNode = FocusNode();
 
   bool hidePassword = true;
+  bool isEmailMatch = false;
   Widget validationEmailIcon;
+  Widget reEnterEmailIcon;
   Widget validationUsernameIcon;
   String usernameStatus = '';
   String emailStatus = '';
@@ -156,6 +161,84 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             }
           });
         }
+      }
+    });
+
+    _emailValidationNode.addListener(() {
+      if (_emailValidationNode.hasFocus == false) {
+        Flushbar(
+          flushbarPosition: FlushbarPosition.TOP,
+          message: 'Checking Email...',
+          backgroundColor: Colors.grey,
+          duration: Duration(seconds: 3),
+          animationDuration: Duration(milliseconds: 500),
+        )..show(context);
+
+        checkEmail(_emailValidationController.text).then((response) {
+          var extractedData = json.decode(response.body);
+
+          if (extractedData['status'] == 'NOK') {
+            isLoading = false;
+            setState(() {
+              emailStatus = 'nonavail';
+              validationEmailIcon = Icon(
+                Icons.close,
+                color: Colors.red,
+              );
+            });
+            Flushbar(
+              flushbarPosition: FlushbarPosition.TOP,
+              message: extractedData['desc'],
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 3),
+              animationDuration: Duration(milliseconds: 500),
+            )..show(context);
+          } else if (response.statusCode == 200) {
+            // isLoading = false;
+            setState(() {
+              if (_emailController.text == "" ||
+                  _emailController.text == null) {
+                validationEmailIcon = Icon(
+                  Icons.close,
+                  color: Colors.red,
+                );
+
+                Flushbar(
+                  flushbarPosition: FlushbarPosition.TOP,
+                  message: 'Please input your email above',
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 6),
+                  animationDuration: Duration(milliseconds: 500),
+                )..show(context);
+              } else {
+                if (_emailValidationController.text == _emailController.text) {
+                  reEnterEmailIcon = Icon(
+                    Icons.check,
+                    color: Colors.green,
+                  );
+                  isEmailMatch = true;
+                  emailStatus = 'avail';
+                  if (mounted) setState(() {});
+                } else {
+                  reEnterEmailIcon = Icon(
+                    Icons.close,
+                    color: Colors.red,
+                  );
+                  isEmailMatch = false;
+                  if (mounted) setState(() {});
+                }
+              }
+            });
+
+            Flushbar(
+              flushbarPosition: FlushbarPosition.TOP,
+              message: 'Email available',
+              backgroundColor: eventajaGreenTeal,
+              duration: Duration(seconds: 2),
+              animationDuration: Duration(milliseconds: 500),
+            )..show(context);
+          }
+        });
       }
     });
     super.initState();
@@ -375,6 +458,96 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         SizedBox(
           height: ScreenUtil.instance.setWidth(15),
         ),
+        TextFormField(
+          controller: _emailValidationController,
+          keyboardType: TextInputType.text,
+          autofocus: false,
+          focusNode: _emailValidationNode,
+          onFieldSubmitted: (i) async {
+            Flushbar(
+              flushbarPosition: FlushbarPosition.TOP,
+              message: 'Checking Email...',
+              backgroundColor: Colors.grey,
+              duration: Duration(seconds: 3),
+              animationDuration: Duration(milliseconds: 500),
+            )..show(context);
+
+            checkEmail(i).then((response) {
+              var extractedData = json.decode(response.body);
+
+              if (extractedData['status'] == 'NOK') {
+                isLoading = false;
+                setState(() {
+                  emailStatus = 'nonavail';
+                  validationEmailIcon = Icon(
+                    Icons.close,
+                    color: Colors.red,
+                  );
+                });
+                Flushbar(
+                  flushbarPosition: FlushbarPosition.TOP,
+                  message: extractedData['desc'],
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 3),
+                  animationDuration: Duration(milliseconds: 500),
+                )..show(context);
+              } else if (response.statusCode == 200) {
+                // isLoading = false;
+                setState(() {
+                  if (_emailController.text == "" ||
+                      _emailController.text == null) {
+                    validationEmailIcon = Icon(
+                      Icons.close,
+                      color: Colors.red,
+                    );
+
+                    Flushbar(
+                      flushbarPosition: FlushbarPosition.TOP,
+                      message: 'Please input your email above',
+                      backgroundColor: Colors.red,
+                      duration: Duration(seconds: 6),
+                      animationDuration: Duration(milliseconds: 500),
+                    )..show(context);
+                  } else {
+                    if (i == _emailController.text) {
+                      reEnterEmailIcon = Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      );
+                      isEmailMatch = true;
+                      emailStatus = 'avail';
+                      if (mounted) setState(() {});
+                    } else {
+                      reEnterEmailIcon = Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      );
+                      isEmailMatch = false;
+                      if (mounted) setState(() {});
+                    }
+                  }
+                });
+
+                Flushbar(
+                  flushbarPosition: FlushbarPosition.TOP,
+                  message: 'Email available',
+                  backgroundColor: eventajaGreenTeal,
+                  duration: Duration(seconds: 2),
+                  animationDuration: Duration(milliseconds: 500),
+                )..show(context);
+              }
+            });
+          },
+          decoration: InputDecoration(
+              fillColor: Colors.white,
+              filled: true,
+              hintText: 'Re-enter Your Email',
+              border: InputBorder.none,
+              suffixIcon: reEnterEmailIcon),
+        ),
+        SizedBox(
+          height: ScreenUtil.instance.setWidth(15),
+        ),
         Row(
           children: <Widget>[
             Container(
@@ -474,8 +647,17 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     duration: Duration(seconds: 3),
                     animationDuration: Duration(milliseconds: 500),
                   )..show(context);
+                } else if (isEmailMatch == false) {
+                  Flushbar(
+                    flushbarPosition: FlushbarPosition.TOP,
+                    message: 'Email validation not match',
+                    backgroundColor: Colors.red,
+                    duration: Duration(seconds: 3),
+                    animationDuration: Duration(milliseconds: 500),
+                  )..show(context);
                 } else if (usernameStatus == 'avail' &&
-                    emailStatus == 'avail') {
+                    emailStatus == 'avail' &&
+                    isEmailMatch == true) {
                   isLoading = false;
                   Navigator.push(
                       context,
