@@ -437,8 +437,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
     await flutterLocalNotificationsPlugin.show(
         0,
-        message['notification']['title'],
-        message['notification']['body'],
+        Platform.isIOS ? message['aps']['alert']['title'] : message['notification']['title'],
+        Platform.isIOS ? message['aps']['alert']['body'] : message['notification']['body'],
         platformChannelSpecifics,
         payload: json.encode(message));
 
