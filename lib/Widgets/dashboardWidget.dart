@@ -481,8 +481,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
             print('onResume: $message');
             return;
           },
-          onBackgroundMessage:
-              Platform.isIOS ? null : myBackgroundMessageHandler);
+          onBackgroundMessage: myBackgroundMessageHandler);
     } on PlatformException catch (e) {
       print(e.message + ' ' + e.code);
     }

@@ -166,12 +166,14 @@ class UseTicketState extends State<UseTicket> {
       bottomNavigationBar: GestureDetector(
         onTap: widget.usedStatus == 'Used'
             ? () {}
-            : startDate.isAfter(DateTime.now()) &&
-                    widget.usedStatus != 'On Demand Video'
-                ? () {
-                    print("ended");
-                  }
-                : widget.ticketDetail.containsKey("livestream")
+            : 
+            // startDate.isAfter(DateTime.now()) &&
+            //         widget.usedStatus != 'On Demand Video'
+            //     ? () {
+            //         print("ended");
+            //       }
+            //     : 
+                widget.ticketDetail.containsKey("livestream")
                     && widget.usedStatus == 'Streaming' ||
                             widget.usedStatus == 'On Demand Video' ||
                             widget.usedStatus == 'Watch Playback' ||
@@ -360,19 +362,7 @@ class UseTicketState extends State<UseTicket> {
                   ? Colors.red
                   : Colors.orange,
           child: Center(
-            child: widget.usedStatus == 'Streaming' &&
-                    startDate.isAfter(DateTime.now())
-                ? CountDownTimer(
-                    secondsRemaining: seconds,
-                    useHHMMSS: true,
-                    whenTimeExpires: () {},
-                    countDownTimerStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: ScreenUtil.instance.setSp(20),
-                        fontWeight: FontWeight.bold),
-                    isDay: false,
-                  )
-                : Text(
+            child: Text(
                     widget.usedStatus == 'Used'
                         ? widget.zoomId != null || widget.zoomId != ""
                             ? 'Get Zoom Link Here'
