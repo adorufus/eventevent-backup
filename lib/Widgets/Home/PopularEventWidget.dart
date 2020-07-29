@@ -142,7 +142,7 @@ class PopularEventWidget extends StatelessWidget {
         isHybridEvent == 'streamOnly' ? Positioned(
           bottom: ScreenUtil.instance.setWidth(100),
           right: ScreenUtil.instance.setWidth(10),
-          child: Image.asset('assets/icons/icon_apps/LivestreamTagIcon.png', scale: 20)
+          child: Image.asset('assets/icons/icon_apps/LivestreamTagIcon.png', scale: 26)
         ): Container()
       ],
     );
