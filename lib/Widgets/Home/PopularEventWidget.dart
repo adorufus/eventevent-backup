@@ -133,7 +133,7 @@ class PopularEventWidget extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: ScreenUtil.instance.setWidth(220),
+          top: ScreenUtil.instance.setWidth(250),
           left: ScreenUtil.instance.setWidth(21),
           child: MiniDate(
             date: date,
