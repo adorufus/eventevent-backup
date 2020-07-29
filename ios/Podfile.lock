@@ -116,6 +116,8 @@ PODS:
     - FBSDKCoreKit (= 4.39.1)
     - FBSDKLoginKit (= 4.39.1)
     - Flutter
+  - flutter_inappwebview (0.0.1):
+    - Flutter
   - flutter_keyboard_visibility (0.7.0):
     - Flutter
   - flutter_local_notifications (0.0.1):
@@ -277,6 +279,7 @@ DEPENDENCIES:
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - FBSDKCoreKit (~> 4.39.1)
   - FBSDKLoginKit (~> 4.39.1)
+  - Firebase/Messaging
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_auth_web (from `.symlinks/plugins/firebase_auth_web/ios`)
@@ -288,6 +291,7 @@ DEPENDENCIES:
   - flutter_barcode_scanner (from `.symlinks/plugins/flutter_barcode_scanner/ios`)
   - flutter_branch_sdk (from `.symlinks/plugins/flutter_branch_sdk/ios`)
   - flutter_facebook_login (from `.symlinks/plugins/flutter_facebook_login/ios`)
+  - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_money_formatter (from `.symlinks/plugins/flutter_money_formatter/ios`)
@@ -394,6 +398,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_branch_sdk/ios"
   flutter_facebook_login:
     :path: ".symlinks/plugins/flutter_facebook_login/ios"
+  flutter_inappwebview:
+    :path: ".symlinks/plugins/flutter_inappwebview/ios"
   flutter_keyboard_visibility:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
   flutter_local_notifications:
@@ -490,7 +496,7 @@ SPEC CHECKSUMS:
   firebase_core: 0c84455537bed6d6b5b8c2dd611ff1fbb1ea5cbd
   firebase_core_web: d501d8b946b60c8af265428ce483b0fff5ad52d1
   firebase_crashlytics: 0066966d67fee22065fdcf1c9703a97c4fdbae2e
-  firebase_messaging: cffb57ce40958c6204f03fb0c81713e4cd1e240c
+  firebase_messaging: 21344b3b3a7d9d325d63a70e3750c0c798fe1e03
   FirebaseAnalytics: f68b9f3f1241385129ae0a83b63627fc420c05e5
   FirebaseAnalyticsInterop: d48b6ab67bcf016a05e55b71fc39c61c0cb6b7f3
   FirebaseAuth: 831577b184ecaba38bc886768c1c22a450cc44e3
@@ -504,6 +510,7 @@ SPEC CHECKSUMS:
   flutter_barcode_scanner: b3d8246e13f26f9a1ed686c4e7e4cd0893d58eb4
   flutter_branch_sdk: 9aad83816f3cedfb05926d936f5f771e2baf9200
   flutter_facebook_login: be61e24a4b7d621515353c6b4583d1981bdaa3d6
+  flutter_inappwebview: 3dc12d4269541dd686873c4074eab85085e56b1a
   flutter_keyboard_visibility: 6195387fb6d8f46e5cd6dda4a4154e41f800f545
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   flutter_money_formatter: d0d18ddc5be333fad8d09964d741b59fa11a91dc
@@ -559,6 +566,6 @@ SPEC CHECKSUMS:
   wakelock: 0d4a70faf8950410735e3f61fb15d517c8a6efc4
   webview_flutter: db3aba222b23e4dc432e0c5882834123dc50ff9f
 
-PODFILE CHECKSUM: f8a0226f8c438acd8d440c95d894abe93561d619
+PODFILE CHECKSUM: 99fe11fa3c5d2398b76d7edc6602532d05dfd269
 
 COCOAPODS: 1.6.1

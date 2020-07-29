@@ -133,14 +133,14 @@ class PopularEventWidget extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: ScreenUtil.instance.setWidth(250),
+          top: ScreenUtil.instance.setWidth(220),
           left: ScreenUtil.instance.setWidth(21),
           child: MiniDate(
             date: date,
           ),
         ),
         isHybridEvent == 'streamOnly' ? Positioned(
-          bottom: ScreenUtil.instance.setWidth(100),
+          bottom: ScreenUtil.instance.setWidth(94),
           right: ScreenUtil.instance.setWidth(10),
           child: Image.asset('assets/icons/icon_apps/LivestreamTagIcon.png', scale: 26)
         ): Container()
