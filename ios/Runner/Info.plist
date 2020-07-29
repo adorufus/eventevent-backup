@@ -50,6 +50,8 @@
 	<string>482210258650577</string>
 	<key>FacebookDisplayName</key>
 	<string>EventEvent</string>
+	<key>FirebaseScreenReportingEnabled</key>
+	<true/>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
