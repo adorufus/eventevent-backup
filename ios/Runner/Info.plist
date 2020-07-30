@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -46,14 +46,18 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CleverTapAccoutID</key>
+	<string>R97-7Z8-R95Z</string>
+	<key>CleverTapToken</key>
+	<string>b1a-ac2</string>
 	<key>FacebookAppID</key>
 	<string>482210258650577</string>
 	<key>FacebookDisplayName</key>
 	<string>EventEvent</string>
-	<key>FirebaseScreenReportingEnabled</key>
-	<true/>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
+	<key>FirebaseScreenReportingEnabled</key>
+	<true/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>itms</string>
@@ -120,10 +124,6 @@
 	<string>key_live_ijCwqgMyqksKHN0YEnvjJiocuzi2ciR4</string>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
-	<key>CleverTapAccoutID</key>
-	<string>R97-7Z8-R95Z</string>
-	<key>CleverTapToken</key>
-	<string>b1a-ac2</string>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>Allow to acces media library, so you can choose your photo or video and upload it to EventEvent, maybe for event additional information, or for your timeline.</string>
 </dict>
