@@ -82,9 +82,9 @@ class ManageTicketState extends State<ManageTicket> {
                         ticketList.removeWhere((item) =>
                             item['event']['ticket_type']['type'] ==
                             'free_limited_seating');
-                        if (ticketList[i]['event']['ticket_type']['type'] ==
+                        if (ticketList[i]['paid_ticket_type']['type'] ==
                                 'paid' ||
-                            ticketList[i]['event']['ticket_type']['type'] ==
+                            ticketList[i]['paid_ticket_type']['type'] ==
                                 'paid_seating') {
                           itemColor = Color(0xFF34B323);
                           itemPriceText =

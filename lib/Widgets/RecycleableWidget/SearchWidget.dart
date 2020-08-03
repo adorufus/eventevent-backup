@@ -34,6 +34,7 @@ class SearchState extends State<Search> {
   final dio = new Dio();
 
   String _searchText = "";
+  int currentTab = 0;
 
   List events = new List();
   List profile = new List();
@@ -41,11 +42,14 @@ class SearchState extends State<Search> {
   List filteredEvents = new List();
   List filteredProfile = new List();
 
-  bool notFound = false;
+  bool isEventNotFound = false;
+  bool isPeopleNotFound = false;
 
-  bool isLoading = false;
+  bool isEventLoading = false;
+  bool isPeopleLoading = false;
 
-  RefreshController peopleSearchRefreshController = new RefreshController(initialRefresh: false);
+  RefreshController peopleSearchRefreshController =
+      new RefreshController(initialRefresh: false);
   RefreshController eventSearchRefreshController;
 
   @override
@@ -103,26 +107,38 @@ class SearchState extends State<Search> {
                           onFieldSubmitted: (value) {
                             if (value != null) {
                               ClevertapHandler.handleSearch(value);
-                              _getEvents();
-                              _getProfile().then((response) {
-                                var extractedData = json.decode(response.body);
-                                List resultData = extractedData['data'];
-                                List tempList = new List();
+                              switch (currentTab) {
+                                case 0:
+                                  _getEvents();
+                                  break;
+                                case 1:
+                                  _getProfile().then((response) {
+                                    var extractedData =
+                                        json.decode(response.body);
+                                    List resultData = extractedData['data'];
+                                    List tempList = new List();
 
-                                if (response.statusCode == 200) {
-                                  isLoading = false;
-                                  notFound = false;
-                                  for (int i = 0; i < resultData.length; i++) {
-                                    tempList.add(resultData[i]);
-                                  }
+                                    if (response.statusCode == 200) {
+                                      isPeopleLoading = false;
+                                      isPeopleNotFound = false;
+                                      for (int i = 0;
+                                          i < resultData.length;
+                                          i++) {
+                                        tempList.add(resultData[i]);
+                                      }
 
-                                  profile = tempList;
-                                  filteredProfile = profile;
-                                } else if (response.statusCode == 400) {
-                                  isLoading = false;
-                                  notFound = true;
-                                }
-                              });
+                                      profile = tempList;
+                                      filteredProfile = profile;
+                                      if (mounted) setState(() {});
+                                    } else if (response.statusCode == 400) {
+                                      isPeopleLoading = false;
+                                      isPeopleNotFound = true;
+                                    }
+                                  });
+                                  break;
+                                default:
+                                  print(currentTab);
+                              }
                             }
                           },
                           style: TextStyle(
@@ -184,13 +200,17 @@ class SearchState extends State<Search> {
             children: <Widget>[
               DefaultTabController(
                 length: 2,
-                initialIndex: 0,
+                initialIndex: currentTab,
                 child: Container(
                   child: Column(
                     children: <Widget>[
                       Container(
                         color: Colors.white,
                         child: TabBar(
+                          onTap: (i) {
+                            currentTab = i;
+                            if (mounted) setState(() {});
+                          },
                           unselectedLabelColor: Colors.grey,
                           labelStyle: TextStyle(
                               fontSize: ScreenUtil.instance.setSp(12.5),
@@ -209,7 +229,7 @@ class SearchState extends State<Search> {
                           height: MediaQuery.of(context).size.height / 1.3,
                           child: TabBarView(
                             children: <Widget>[
-                              notFound == true
+                              isEventNotFound == true
                                   ? EmptyState(
                                       imagePath:
                                           'assets/icons/empty_state/profile.png',
@@ -217,7 +237,14 @@ class SearchState extends State<Search> {
                                           'No result for: \n ${searchController.text}',
                                     )
                                   : _buildList(),
-                              _buildListProfile()
+                              isPeopleNotFound == true
+                                  ? EmptyState(
+                                      imagePath:
+                                          'assets/icons/empty_state/profile.png',
+                                      reasonText:
+                                          'No result for: \n ${searchController.text} :(',
+                                    )
+                                  : _buildListProfile()
                             ],
                           ))
                     ],
@@ -243,7 +270,7 @@ class SearchState extends State<Search> {
       }
       filteredEvents = tempList;
 
-      return isLoading == true
+      return isEventLoading == true
           ? HomeLoadingScreen().myTicketLoading()
           : ListView.builder(
               itemCount: events == null ? 0 : filteredEvents.length,
@@ -447,8 +474,8 @@ class SearchState extends State<Search> {
       List tempList = new List();
 
       if (response.statusCode == 200) {
-        isLoading = false;
-        notFound = false;
+        isEventLoading = false;
+        isEventNotFound = false;
         for (int i = 0; i < resultData.length; i++) {
           // tempList.removeWhere((data) => data['username'] == filteredProfile)
           tempList.add(resultData[i]);
@@ -471,14 +498,14 @@ class SearchState extends State<Search> {
     setState(() {
       peopleNewPage = 0;
     });
-    _getProfile().then((response) async{
+    _getProfile().then((response) async {
       var extractedData = json.decode(response.body);
       List resultData = extractedData['data'];
       List tempList = new List();
 
       if (response.statusCode == 200) {
-        isLoading = false;
-        notFound = false;
+        isEventLoading = false;
+        isEventNotFound = false;
         for (int i = 0; i < resultData.length; i++) {
           tempList.add(resultData[i]);
         }
@@ -486,14 +513,13 @@ class SearchState extends State<Search> {
         profile = tempList;
         filteredProfile = profile;
         await Future.delayed(Duration(seconds: 3));
-        if(mounted) setState((){});
+        if (mounted) setState(() {});
         peopleSearchRefreshController.refreshCompleted();
-
       } else if (response.statusCode == 400) {
-        isLoading = false;
-        notFound = true;
-        
-        if(mounted) setState((){});
+        isEventLoading = false;
+        isEventNotFound = true;
+
+        if (mounted) setState(() {});
         peopleSearchRefreshController.refreshFailed();
       }
     });
@@ -512,14 +538,9 @@ class SearchState extends State<Search> {
       filteredProfile = tempList;
     }
 
-    return isLoading == true
+    return isPeopleLoading == true
         ? HomeLoadingScreen().followListLoading()
-        : filteredProfile.length < 1
-            ? EmptyState(
-                imagePath: 'assets/icons/empty_state/profile.png',
-                reasonText: 'No result for: \n ${searchController.text}',
-              )
-            : SmartRefresher(
+        : SmartRefresher(
                 controller: peopleSearchRefreshController,
                 onLoading: peopleOnLoad,
                 onRefresh: peopleOnRefresh,
@@ -622,8 +643,8 @@ class SearchState extends State<Search> {
     int currentPage = 1;
 
     setState(() {
-      if(isLoadData == false){
-        isLoading = true;
+      if (isLoadData == false) {
+        isPeopleLoading = true;
       }
       if (page != null) {
         currentPage += page;
@@ -661,7 +682,7 @@ class SearchState extends State<Search> {
 
   Future _getEvents() async {
     setState(() {
-      isLoading = true;
+      isEventLoading = true;
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -696,8 +717,8 @@ class SearchState extends State<Search> {
 
     if (response.statusCode == 200) {
       setState(() {
-        isLoading = false;
-        notFound = false;
+        isEventLoading = false;
+        isEventNotFound = false;
       });
       for (int i = 0; i < resultData.length; i++) {
         tempList.add(resultData[i]);
@@ -709,8 +730,8 @@ class SearchState extends State<Search> {
       });
     } else if (response.statusCode == 400) {
       setState(() {
-        isLoading = false;
-        notFound = true;
+        isEventLoading = false;
+        isEventNotFound = true;
       });
     }
   }
