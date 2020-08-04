@@ -182,6 +182,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           //   ],
           // ),
           ListView(
+            padding: EdgeInsets.symmetric(vertical: 13),
             children: <Widget>[
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 25),
@@ -208,7 +209,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, bottom: 10, top: 10),
+                        padding: EdgeInsets.only(left: 30, bottom: 15, top: 15),
                         child: Text(
                           'Rate EventEvent on App Store / Google Play',
                           style: TextStyle(
@@ -238,6 +239,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 color: Colors.white,
+                padding: EdgeInsets.symmetric(vertical: 12),
                 child: Column(
                   children: <Widget>[
                     GestureDetector(
@@ -251,7 +253,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, top: 15),
+                        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Bank Account',
                           style: TextStyle(
@@ -306,6 +308,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               ),
               Container(
                 width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.symmetric(vertical: 12),
                 color: Colors.white,
                 child: Column(
                   children: <Widget>[
@@ -320,7 +323,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, top: 15),
+                        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Edit Profile',
                           style: TextStyle(
@@ -389,7 +392,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
+                        padding: EdgeInsets.only(left: 30, top: 15, bottom: 15),
                         child: Text(
                           'Give us feedback',
                           style: TextStyle(
@@ -443,7 +446,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   color: Colors.white,
-                  padding: EdgeInsets.only(left: 30, bottom: 10, top: 10),
+                  padding: EdgeInsets.only(left: 30, bottom: 15, top: 15),
                   child: Text(
                     'Log Out',
                     style: TextStyle(
@@ -470,6 +473,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 color: Colors.white,
+                padding: EdgeInsets.symmetric(vertical: 12),
                 child: Column(
                   children: <Widget>[
                     GestureDetector(
@@ -482,7 +486,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, top: 15),
+                        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Terms',
                           style: TextStyle(

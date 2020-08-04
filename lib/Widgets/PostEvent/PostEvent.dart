@@ -36,6 +36,7 @@ class PostEventState extends State<PostEvent> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         resizeToAvoidBottomPadding: false,
+        backgroundColor: Colors.white,
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
@@ -172,6 +173,7 @@ class PostEvent2State extends State<PostEvent2> {
     )..init(context);
     return Scaffold(
         key: thisScaffold,
+        backgroundColor: Colors.white,
         appBar: AppBar(
           brightness: Brightness.light,
           backgroundColor: Colors.white,
@@ -263,7 +265,7 @@ class PostEvent2State extends State<PostEvent2> {
                           navigateToNextStep();
                         },
                         child: Container(
-                            height: ScreenUtil.instance.setWidth(70),
+                            height: ScreenUtil.instance.setWidth(75),
                             width: ScreenUtil.instance.setWidth(320),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -311,17 +313,18 @@ class PostEvent2State extends State<PostEvent2> {
                                   ],
                                 ),
                                 SizedBox(
-                                  width: ScreenUtil.instance.setWidth(20),
+                                  width: ScreenUtil.instance.setWidth(40),
                                 ),
-                                isPrivateChecked == null ||
-                                        isPrivateChecked == true
-                                    ? Container()
-                                    : SizedBox(
-                                        height:
-                                            ScreenUtil.instance.setWidth(20),
-                                        width: ScreenUtil.instance.setWidth(20),
-                                        child: Image.asset(
-                                            'assets/icons/checklist_green.png'))
+                                Icon(Icons.arrow_forward_ios,color: Colors.grey,)
+                                // isPrivateChecked == null ||
+                                //         isPrivateChecked == true
+                                //     ? Container()
+                                //     : SizedBox(
+                                //         height:
+                                //             ScreenUtil.instance.setWidth(20),
+                                //         width: ScreenUtil.instance.setWidth(20),
+                                //         child: Image.asset(
+                                //             'assets/icons/checklist_green.png'))
                               ],
                             )),
                       ),
@@ -337,7 +340,7 @@ class PostEvent2State extends State<PostEvent2> {
                           navigateToNextStep();
                         },
                         child: Container(
-                            height: ScreenUtil.instance.setWidth(70),
+                            height: ScreenUtil.instance.setWidth(75),
                             width: ScreenUtil.instance.setWidth(320),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -385,17 +388,18 @@ class PostEvent2State extends State<PostEvent2> {
                                   ],
                                 ),
                                 SizedBox(
-                                  width: ScreenUtil.instance.setWidth(20),
+                                  width: ScreenUtil.instance.setWidth(40),
                                 ),
-                                isPrivateChecked == null ||
-                                        isPrivateChecked == false
-                                    ? Container()
-                                    : SizedBox(
-                                        height:
-                                            ScreenUtil.instance.setWidth(20),
-                                        width: ScreenUtil.instance.setWidth(20),
-                                        child: Image.asset(
-                                            'assets/icons/checklist_green.png'))
+                                Icon(Icons.arrow_forward_ios,color: Colors.grey,)
+                                // isPrivateChecked == null ||
+                                //         isPrivateChecked == false
+                                //     ? Container()
+                                //     : SizedBox(
+                                //         height:
+                                //             ScreenUtil.instance.setWidth(20),
+                                //         width: ScreenUtil.instance.setWidth(20),
+                                //         child: Image.asset(
+                                //             'assets/icons/checklist_green.png'))
                               ],
                             )),
                       )

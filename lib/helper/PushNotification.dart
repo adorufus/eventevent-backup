@@ -449,7 +449,7 @@ class PushNotificationState extends State<PushNotification> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset('assets/icons/icon_apps/announcement.png', scale: 3),
+            Image.asset('assets/icons/icon_apps/announcement.png', scale: 5),
             SizedBox(width: 15),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -523,7 +523,7 @@ class PushNotificationState extends State<PushNotification> {
             Container(
                 height: ScreenUtil.instance.setWidth(25),
                 width: ScreenUtil.instance.setWidth(25),
-                child: Image.asset('assets/icons/icon_apps/announcement.png')),
+                child: Image.asset('assets/icons/icon_apps/announcement.png', scale: 3)),
             SizedBox(width: 15),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,

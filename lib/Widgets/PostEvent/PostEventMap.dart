@@ -44,10 +44,10 @@ class PostEventMapState extends State<PostEventMap> {
         builder: (context) => PlacePicker(
             'AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI',
             displayLocation: LatLng(
-                currentLocation.latitude == null
+                currentLocation == null
                     ? -6.1753924
                     : currentLocation.latitude,
-                currentLocation.longitude == null
+                currentLocation == null
                     ? 106.8249641
                     : currentLocation.longitude))));
 
@@ -74,7 +74,7 @@ class PostEventMapState extends State<PostEventMap> {
     try {
       currentLocation = await location.getLocation();
       err = "";
-      setState((){});
+      setState(() {});
     } on PlatformException catch (e) {
       print(e.message + ' ' + e.code);
       if (e.code == "PERMISSION_DENIED") {
@@ -124,27 +124,34 @@ class PostEventMapState extends State<PostEventMap> {
       width: MediaQuery.of(context).size.width,
       child: Stack(alignment: Alignment.topCenter, children: <Widget>[
         GestureDetector(
-            onTap: () {
-              showPlacePicker();
-            },
-            child: placeName == ''
-                ? Container(
-                    height: 200,
-                    width: 600,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/map_bw.jpg'),
-                            fit: BoxFit.cover,
-                            colorFilter: ColorFilter.mode(
-                                Colors.black.withOpacity(.2),
-                                BlendMode.dstATop))),
-                  )
-                : mapProvider),
-        Center(
-          child: SizedBox(
-            height: ScreenUtil.instance.setWidth(50),
-            width: ScreenUtil.instance.setWidth(50),
-            child: Image.asset('assets/icons/location-transparent.png'),
+          onTap: () {
+            showPlacePicker();
+          },
+          child: placeName == ''
+              ? Container(
+                  height: 200,
+                  width: 600,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('assets/map_bw.jpg'),
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                              Colors.black.withOpacity(.2),
+                              BlendMode.dstATop))),
+                )
+              : mapProvider,
+          behavior: HitTestBehavior.opaque,
+        ),
+        GestureDetector(
+          onTap: () {
+            showPlacePicker();
+          },
+          child: Center(
+            child: SizedBox(
+              height: ScreenUtil.instance.setWidth(50),
+              width: ScreenUtil.instance.setWidth(50),
+              child: Image.asset('assets/icons/location-transparent.png'),
+            ),
           ),
         )
       ]),

@@ -34,7 +34,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
   String imageUri;
   String ticketQuantity;
   String ticketTypeId;
-  String price = '0';
+  String price;
   String finalPrice;
   String merchantPrice;
   String startDate = "";
@@ -55,33 +55,37 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
   Dio dio = new Dio(BaseOptions(
       connectTimeout: 15000, baseUrl: BaseApi().apiUrl, receiveTimeout: 15000));
 
-  Future getData() async {
+  void getData() async {
     print('get data');
     prefs = await SharedPreferences.getInstance();
 
-    imageUri = prefs.getString('SETUP_TICKET_POSTER');
-    ticketQuantity = prefs.getString('SETUP_TICKET_QTY');
-    price = prefs.getString('SETUP_TICKET_PRICE');
-    startDate = prefs.getString('SETUP_TICKET_START_DATE');
-    endDate = prefs.getString('SETUP_TICKET_END_DATE');
-    startTime = prefs.getString('SETUP_TICKET_START_TIME');
-    endTime = prefs.getString('SETUP_TICKET_END_TIME');
-    desc = prefs.getString('SETUP_TICKET_DESCRIPTION');
-    ticketTypeId = prefs.getString('NEW_EVENT_TICKET_TYPE_ID');
-    imageFile = new File(imageUri);
-
-    fee = (int.parse(price) * 3) ~/ 100;
-
-    if (fee < 5000) {
-      fee = 5000;
-    }
-
-    setState(() {});
+    setState(() {
+      imageUri = prefs.getString('SETUP_TICKET_POSTER');
+      ticketQuantity = prefs.getString('SETUP_TICKET_QTY');
+      price = prefs.getString('SETUP_TICKET_PRICE');
+      startDate = prefs.getString('SETUP_TICKET_START_DATE');
+      endDate = prefs.getString('SETUP_TICKET_END_DATE');
+      startTime = prefs.getString('SETUP_TICKET_START_TIME');
+      endTime = prefs.getString('SETUP_TICKET_END_TIME');
+      desc = prefs.getString('SETUP_TICKET_DESCRIPTION');
+      ticketTypeId = prefs.getString('NEW_EVENT_TICKET_TYPE_ID');
+      imageFile = new File(imageUri);
+    });
   }
 
   @override
   void initState() {
     getData();
+
+    if (price != null) {
+      fee = (int.parse(price) * 3) ~/ 100;
+
+      if (fee < 5000) {
+        fee = 5000;
+      }
+    }
+
+    setState(() {});
     super.initState();
   }
 
@@ -191,7 +195,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                   width: ScreenUtil.instance.setWidth(150),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8),
-                                    child: Image.file(File(imageUri == null ? '' : imageUri),
+                                    child: Image.file(
+                                        File(imageUri == null ? '' : imageUri),
                                         fit: BoxFit.fill),
                                   ),
                                 ),
@@ -218,7 +223,9 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                             ScreenUtil.instance.setWidth(170),
                                         height:
                                             ScreenUtil.instance.setWidth(40),
-                                        child: Text(ticketQuantity == null ? '' : ticketQuantity)),
+                                        child: Text(ticketQuantity == null
+                                            ? ''
+                                            : ticketQuantity)),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(7)),

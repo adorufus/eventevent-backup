@@ -63,6 +63,7 @@ class AddNewTicketState extends State<AddNewTicket> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 13),
               children: <Widget>[
                 widget.isLivestream == true
                     ? Container()
@@ -140,13 +141,13 @@ class AddNewTicketState extends State<AddNewTicket> {
                               )
                             ],
                             color: Color(0xFFFFAA00),
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(30),
                           ),
                           child: Center(
                             child: Text(
-                              'FREE LIVE STREAM',
+                              'FREE',
                               style: TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 16,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -181,14 +182,14 @@ class AddNewTicketState extends State<AddNewTicket> {
                                   blurRadius: 2,
                                   spreadRadius: 1.5)
                             ],
-                            color: eventajaGreenTeal,
-                            borderRadius: BorderRadius.circular(15),
+                            color: Color(0xFF34B323),
+                            borderRadius: BorderRadius.circular(30),
                           ),
                           child: Center(
                               child: Text(
-                            'PAID LIVE STREAM',
+                            'PAID',
                             style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 16,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           )),

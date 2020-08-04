@@ -804,19 +804,20 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                             refreshController.refreshCompleted();
                           },
                           child: ListView(
+                            padding: EdgeInsets.symmetric(horizontal: 11),
                             shrinkWrap: true,
                             children: <Widget>[
                               Container(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 11, vertical: 13),
+                                    horizontal: 0, vertical: 13),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
                                       width: ScreenUtil.instance
-                                          .setWidth(122.86 * 1.3),
+                                          .setWidth(122.86 * 1.6),
                                       height: ScreenUtil.instance
-                                          .setWidth(184.06 * 1.3),
+                                          .setWidth(184.06 * 1.6),
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(12),
@@ -835,9 +836,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       .detailData['photo']),
                                               fit: BoxFit.fill)),
                                     ),
+                                    // Expanded(child: SizedBox()),
                                     Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 13),
+                                        margin: EdgeInsets.only(left: 10),
                                         child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
@@ -885,7 +886,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             image: DecorationImage(
                                                                 image: NetworkImage(widget
                                                                     .creatorImageUri
-                                                                    .toString()))),
+                                                                    .toString()), fit: BoxFit.cover)),
                                                       ),
                                                     ),
                                                   ),
@@ -956,7 +957,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       .setWidth(10)),
                                               Container(
                                                 width: ScreenUtil.instance
-                                                    .setWidth(180),
+                                                    .setWidth(150),
                                                 child: Text(
                                                   widget.dateTime,
                                                   style: TextStyle(
@@ -999,21 +1000,20 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         ? 15
                                                         : 35),
                                                 width: ScreenUtil.instance
-                                                    .setWidth(180),
-                                                child: Text(
-                                                  detailData['name'] == null
+                                                    .setWidth(170),
+                                                child: MarqueeWidget(
+                                                  text: detailData['name'] == null
                                                       ? '-'
                                                       : widget
                                                           .detailData['name']
                                                           .toUpperCase(),
-                                                  style: TextStyle(
+                                                  scrollAxis: Axis.horizontal,
+                                                  textStyle: TextStyle(
                                                       fontSize: ScreenUtil
                                                           .instance
                                                           .setSp(15),
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: eventajaBlack),
-                                                  maxLines: 2,
+                                                          fontWeight: FontWeight.bold),
+                                                  ratioOfBlankToScreen: .05,
                                                 ),
                                               ),
                                               SizedBox(
@@ -1054,7 +1054,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                               .setWidth(16),
                                                           width: ScreenUtil
                                                               .instance
-                                                              .setWidth(170),
+                                                              .setWidth(150),
                                                           child: MarqueeWidget(
                                                             text: detailData[
                                                                         'address'] ==
@@ -1418,7 +1418,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           MaterialPageRoute(
                                                               builder: (context) =>
                                                                   SeeWhosGoingInvitedWidget(
-                                                                    isRest: widget.isRest,
+                                                                    isRest: widget
+                                                                        .isRest,
                                                                     eventId: widget
                                                                             .detailData[
                                                                         'id'],
@@ -1467,7 +1468,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                   context) =>
                                                               ProfileWidget(
                                                             initialIndex: 0,
-                                                            isRest: widget.isRest,
+                                                            isRest:
+                                                                widget.isRest,
                                                             userId: widget
                                                                         .detailData[
                                                                     'invited'][
@@ -1617,7 +1619,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             builder: (BuildContext
                                                                     context) =>
                                                                 ProfileWidget(
-                                                                  isRest: widget.isRest,
+                                                                  isRest: widget
+                                                                      .isRest,
                                                                   initialIndex:
                                                                       0,
                                                                   userId: detailData[
@@ -2312,7 +2315,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         title: Text('Notice'),
                                                         content: Text(
                                                           'You uploaded on demand video',
-                                                          textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,
+                                                          textScaleFactor: 1.2,
+                                                          textWidthBasis:
+                                                              TextWidthBasis
+                                                                  .longestLine,
                                                         ),
                                                         actions: <Widget>[
                                                           CupertinoDialogAction(
@@ -2339,7 +2345,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         title: Text('Notice'),
                                                         content: Text(
                                                           'please start broadcast using zoom link you provide to your attandees',
-                                                          textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,
+                                                          textScaleFactor: 1.2,
+                                                          textWidthBasis:
+                                                              TextWidthBasis
+                                                                  .longestLine,
                                                         ),
                                                         actions: <Widget>[
                                                           CupertinoDialogAction(
@@ -2366,7 +2375,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                 Text('Notice'),
                                                             content: Text(
                                                               'Please broadcast 5 minutes before the event start',
-                                                              textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,
+                                                              textScaleFactor:
+                                                                  1.2,
+                                                              textWidthBasis:
+                                                                  TextWidthBasis
+                                                                      .longestLine,
                                                             ),
                                                             actions: <Widget>[
                                                               CupertinoDialogAction(
@@ -2901,22 +2914,23 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             SizedBox(
               height: ScreenUtil.instance.setWidth(18),
             ),
-            detailData['isHybridEvent'] ==
-                                                                            'streamOnly' ? Container() : Container(
-              margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(13),
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 5,
-                        spreadRadius: 1.5,
-                        color: Color(0xff8a8a8b).withOpacity(.2))
-                  ],
-                  color: Colors.white),
-              child: Column(
-                children: <Widget>[showMap()],
-              ),
-            )
+            detailData['isHybridEvent'] == 'streamOnly'
+                ? Container()
+                : Container(
+                    margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(13),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 5,
+                              spreadRadius: 1.5,
+                              color: Color(0xff8a8a8b).withOpacity(.2))
+                        ],
+                        color: Colors.white),
+                    child: Column(
+                      children: <Widget>[showMap()],
+                    ),
+                  )
           ],
         ),
       );
@@ -3016,7 +3030,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           return CupertinoAlertDialog(
                                             title: Text('Notice'),
                                             content: Text(
-                                              'Do you want to delete this comment?',textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,
+                                              'Do you want to delete this comment?',
+                                              textScaleFactor: 1.2,
+                                              textWidthBasis:
+                                                  TextWidthBasis.longestLine,
                                             ),
                                             actions: <Widget>[
                                               CupertinoDialogAction(
@@ -3091,8 +3108,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                         },
                                       );
                                     },
-                                    child:
-                                        Icon(Icons.close, color: Colors.grey.withOpacity(.5)),
+                                    child: Icon(Icons.close,
+                                        color: Colors.grey.withOpacity(.5)),
                                   ),
                                 )
                               : Container(width: 100),

@@ -152,6 +152,7 @@ class _MediaDetailsState extends State<MediaDetails> {
     )..init(context);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(
@@ -389,7 +390,7 @@ class _MediaDetailsState extends State<MediaDetails> {
                 widget.isVideo == true
                     ? videoType()
                     : Container(
-                        height: ScreenUtil.instance.setWidth(200),
+                        height: ScreenUtil.instance.setWidth(300),
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                             color: Color(0xff8a8a8b),

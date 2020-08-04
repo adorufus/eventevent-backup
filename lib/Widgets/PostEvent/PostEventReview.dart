@@ -612,10 +612,25 @@ class PostEventReviewState extends State<PostEventReview> {
                                 borderSide:
                                     BorderSide(color: Colors.transparent))),
                       ),
-                      SizedBox(
-                        height: ScreenUtil.instance.setWidth(15),
-                      ),
-                      showMap()
+                      // SizedBox(
+                      //   height: ScreenUtil.instance.setWidth(15),
+                      // ),
+                      // Container(
+                      //   margin:
+                      //       EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+                      //   decoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.circular(13),
+                      //       boxShadow: [
+                      //         BoxShadow(
+                      //             blurRadius: 5,
+                      //             spreadRadius: 1.5,
+                      //             color: Color(0xff8a8a8b).withOpacity(.2))
+                      //       ],
+                      //       color: Colors.white),
+                      //   child: Column(
+                      //     children: <Widget>[showMap()],
+                      //   ),
+                      // )
                     ],
                   ),
                 ),
@@ -737,25 +752,10 @@ class PostEventReviewState extends State<PostEventReview> {
     );
 
     return Container(
-      height: ScreenUtil.instance.setWidth(300),
       width: MediaQuery.of(context).size.width,
-      child: Stack(alignment: Alignment.bottomCenter, children: <Widget>[
-        Positioned(
-          left: 15,
-          child: GestureDetector(
-              onTap: () {
-                showPlacePicker();
-              },
-              child: mapProvider),
-        ),
-        Center(
-          child: SizedBox(
-            height: ScreenUtil.instance.setWidth(50),
-            width: ScreenUtil.instance.setWidth(50),
-            child: Image.asset('assets/icons/location-transparent.png'),
-          ),
-        )
-      ]),
+      height: ScreenUtil.instance.setWidth(200),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
+      child: mapProvider,
     );
   }
 

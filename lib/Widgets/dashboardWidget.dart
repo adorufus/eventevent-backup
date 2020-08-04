@@ -254,7 +254,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                           image: DecorationImage(
                               image:
                                   NetworkImage(extractedData['data']['photo']),
-                              fit: BoxFit.fill)),
+                              fit: BoxFit.cover)),
                       child: GestureDetector(
                           onTap: () {
                             Navigator.pop(context);
@@ -919,23 +919,24 @@ class _DashboardWidgetState extends State<DashboardWidget>
         builder: (thisContext) {
           return Dialog(
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             backgroundColor: Colors.white,
             child: Container(
-              width: ScreenUtil.instance.setWidth(290),
+              width: ScreenUtil.instance.setWidth(400),
               height: ScreenUtil.instance.setWidth(250),
               padding:
                   EdgeInsets.only(left: 16, right: 12, top: 16, bottom: 16),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text('Choose Livestream Platform',
+                  textAlign: TextAlign.center,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                   SizedBox(height: 11),
                   Divider(),
-                  SizedBox(height: 11),
+                  SizedBox(height: 30),
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () async {

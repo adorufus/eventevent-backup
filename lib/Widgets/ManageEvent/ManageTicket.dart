@@ -137,6 +137,8 @@ class ManageTicketState extends State<ManageTicket> {
                             SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
                             prefs.setString('Previous Widget', 'AddNewTicket');
+
+                            
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
