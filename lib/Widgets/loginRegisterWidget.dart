@@ -45,7 +45,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
 
   void initiateFacebookLogin() async {
     var facebookLogin = FacebookLogin();
-    var facebookLoginResult = await facebookLogin.logIn(
+    var facebookLoginResult = await facebookLogin.logInWithReadPermissions(
         ['email', 'public_profile', 'user_friends', 'user_gender']);
 
     switch (facebookLoginResult.status) {

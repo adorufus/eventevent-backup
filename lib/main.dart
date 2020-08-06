@@ -65,14 +65,14 @@ Future<Null> main() async {
   //   print('code: ${e.code} message: ${e.description}');
   // }
 
-  Map<Permission, PermissionStatus> permissions =
-      await [Permission.location, Permission.storage].request();
-  PermissionStatus checkPermission = permissions[Permission.storage];
+  // Map<Permission, PermissionStatus> permissions =
+  //     await [Permission.location, Permission.storage].request();
+  // PermissionStatus checkPermission = permissions[Permission.storage];
 
-  print(checkPermission.toString());
+  // print(checkPermission.toString());
 
-  if (checkPermission == PermissionStatus.granted) {}
-  File storage = File(Platform.isIOS ? (await getLibraryDirectory()).absolute.path + '/appstate.json' : (await getExternalStorageDirectory()).absolute.path + '/appstate.json');
+  // if (checkPermission == PermissionStatus.granted) {}
+  // File storage = File(Platform.isIOS ? (await getLibraryDirectory()).absolute.path + '/appstate.json' : (await getExternalStorageDirectory()).absolute.path + '/appstate.json');
   // final persistor = Persistor<AppState>(
   //     storage: FileStorage(storage),
   //     serializer: JsonSerializer<AppState>(AppState.fromJson));
