@@ -425,7 +425,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
         channelShowBadge: true,
         importance: Importance.High,
         priority: Priority.High);
-
     var iosPlatformChannelSpecifics =
         new IOSNotificationDetails(presentBadge: true, presentSound: true);
     var platformChannelSpecifics = new NotificationDetails(
@@ -441,6 +440,9 @@ class _DashboardWidgetState extends State<DashboardWidget>
         Platform.isIOS ? message['aps']['alert']['body'] : message['notification']['body'],
         platformChannelSpecifics,
         payload: json.encode(message));
+
+    
+        
 
     // flutterLocalNotificationsPlugin.didReceiveLocalNotificationCallback();
   }
@@ -582,72 +584,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                         ))),
                                 SizedBox(
                                     height: ScreenUtil.instance.setWidth(35)),
-                                // GestureDetector(
-                                //   onTap: () {
-                                //     // imageCaputreCamera();
-                                //     Navigator.of(context)
-                                //         .pushNamed('/CustomCamera');
-                                //   },
-                                //   child: Container(
-                                //     color: Colors.white,
-                                //     child: Row(
-                                //       mainAxisAlignment:
-                                //           MainAxisAlignment.spaceBetween,
-                                //       mainAxisSize: MainAxisSize.max,
-                                //       children: <Widget>[
-                                //         Column(
-                                //           crossAxisAlignment:
-                                //               CrossAxisAlignment.start,
-                                //           children: <Widget>[
-                                //             Text(
-                                //               'Post Media',
-                                //               style: TextStyle(
-                                //                   fontSize: ScreenUtil
-                                //                       .instance
-                                //                       .setSp(16),
-                                //                   fontWeight:
-                                //                       FontWeight.bold),
-                                //             ),
-                                //             SizedBox(
-                                //                 height: ScreenUtil.instance
-                                //                     .setWidth(4)),
-                                //             Text(
-                                //                 'Share your excitement to the others ',
-                                //                 style: TextStyle(
-                                //                   fontSize: ScreenUtil
-                                //                       .instance
-                                //                       .setSp(10),
-                                //                 ))
-                                //           ],
-                                //         ),
-                                //         Container(
-                                //           height: ScreenUtil.instance
-                                //               .setWidth(44),
-                                //           width: ScreenUtil.instance
-                                //               .setWidth(50),
-                                //           decoration: BoxDecoration(
-                                //             image: DecorationImage(
-                                //                 image: AssetImage(
-                                //                     'assets/icons/page_post_media.png'),
-                                //                 fit: BoxFit.fill),
-                                //             borderRadius:
-                                //                 BorderRadius.circular(11),
-                                //             boxShadow: <BoxShadow>[
-                                //               BoxShadow(
-                                //                   blurRadius: 10,
-                                //                   color: Colors.grey
-                                //                       .withOpacity(0.3),
-                                //                   spreadRadius: .5)
-                                //             ],
-                                //           ),
-                                //         )
-                                //       ],
-                                //     ),
-                                //   ),
-                                // ),
-                                // SizedBox(
-                                //     height: ScreenUtil.instance.setWidth(19)),
-                                // Divider(),
                                 SizedBox(
                                     height: ScreenUtil.instance.setWidth(16)),
                                 GestureDetector(

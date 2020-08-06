@@ -84,10 +84,10 @@ class _RunAppState extends State<RunApp> {
   void initState() {
     super.initState();
     initPlatformState();
-    CleverTapPlugin.setDebugLevel(3);
-    CleverTapPlugin.createNotificationChannel("com.eventevent.android", "Eventevent clevertap", "for clevertap notification", 3, true);
-    CleverTapPlugin.registerForPush();
-    var initialUrl = CleverTapPlugin.getInitialUrl();
+    // CleverTapPlugin.setDebugLevel(3);
+    // CleverTapPlugin.createNotificationChannel("com.eventevent.android", "Eventevent clevertap", "for clevertap notification", 3, true);
+    // CleverTapPlugin.registerForPush();
+    // var initialUrl = CleverTapPlugin.getInitialUrl();
   }
 
   Future<void> initPlatformState() async {

@@ -449,7 +449,7 @@ class PushNotificationState extends State<PushNotification> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset('assets/icons/icon_apps/announcement.png', scale: 5),
+            Image.asset('assets/icons/icon_apps/announcement.png', scale: 6),
             SizedBox(width: 15),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -523,7 +523,7 @@ class PushNotificationState extends State<PushNotification> {
             Container(
                 height: ScreenUtil.instance.setWidth(25),
                 width: ScreenUtil.instance.setWidth(25),
-                child: Image.asset('assets/icons/icon_apps/announcement.png', scale: 3)),
+                child: Image.asset('assets/icons/icon_apps/announcement.png', scale: 5)),
             SizedBox(width: 15),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -677,7 +677,7 @@ class PushNotificationState extends State<PushNotification> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Image.asset('assets/icons/icon_apps/announcement.png', scale: 5),
+            Image.asset('assets/icons/icon_apps/announcement.png', scale:6),
             SizedBox(width: 15),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -797,15 +797,17 @@ class PushNotificationState extends State<PushNotification> {
     if (notificationData[index]['type'] == 'reminder_event') {
       navigationHandler(EventDetailLoadingScreen(
         eventId: notificationData[index]['id'],
+        isRest: false,
       ));
     } else if (notificationData[index]['type'] == 'relationship') {
       navigationHandler(ProfileWidget(
         userId: notificationData[index]['id'],
         initialIndex: 0,
+        isRest: false,
       ));
     } else if (notificationData[index]['type'] == 'live_stream_cancel') {
       navigationHandler(
-          EventDetailLoadingScreen(eventId: notificationData[index]['id']));
+          EventDetailLoadingScreen(eventId: notificationData[index]['id'], isRest: false,));
     } else if (notificationData[index]['type'] == 'photo_comment') {
       navigationHandler(UserMediaDetail(
         postID: notificationData[index]['id'],
@@ -879,13 +881,13 @@ class PushNotificationState extends State<PushNotification> {
       ));
     } else if (notificationData[index]['type'] == 'eventgoingstatus') {
       navigationHandler(
-          EventDetailLoadingScreen(eventId: notificationData[index]['id']));
+          EventDetailLoadingScreen(eventId: notificationData[index]['id'], isRest: false,));
     } else if (notificationData[index]['type'] == 'eventdetail_comment') {
       navigationHandler(
-          EventDetailLoadingScreen(eventId: notificationData[index]['id']));
+          EventDetailLoadingScreen(eventId: notificationData[index]['id'], isRest: false,));
     } else if (notificationData[index]['type'] == 'eventdetail_love') {
       navigationHandler(
-          EventDetailLoadingScreen(eventId: notificationData[index]['id']));
+          EventDetailLoadingScreen(eventId: notificationData[index]['id'], isRest: false,));
     } else if (notificationData[index]['type'] == 'photo_impression') {
       navigationHandler(UserMediaDetail(
         postID: notificationData[index]['id'],
@@ -893,14 +895,12 @@ class PushNotificationState extends State<PushNotification> {
       ));
     } else if (notificationData[index]['type'] == 'event') {
       navigationHandler(
-          EventDetailLoadingScreen(eventId: notificationData[index]['id']));
+          EventDetailLoadingScreen(eventId: notificationData[index]['id'], isRest: false,));
     } else if (notificationData[index]['type'] == 'eventinvite') {
       navigationHandler(
-          EventDetailLoadingScreen(eventId: notificationData[index]['id']));
+          EventDetailLoadingScreen(eventId: notificationData[index]['id'], isRest: false,));
     } else if (notificationData[index]['type'] == 'reminder_qr') {
-      navigationHandler(ShowQr(
-        qrUrl: notificationData[index][''],
-      ));
+      navigationHandler(EventDetailLoadingScreen(eventId: notificationData[index]['id'], isRest: false,));
     }
   }
 
