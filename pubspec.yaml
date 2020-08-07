@@ -97,6 +97,7 @@ dependencies:
   mid_flutter: ^0.0.1
   sqflite: any
   rive: any
+  # animations: ^1.1.2
   screenshot: ^0.1.1
   flutter_credit_card:
   share: ^0.6.3+5
@@ -124,6 +125,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.7.4
+  vector_math: ^2.0.8
 
 flutter_icons:
   image_path_android: "assets/icon_fix_eventevent.png"

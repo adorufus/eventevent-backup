@@ -253,7 +253,14 @@ class _RunAppState extends State<RunApp> {
           fontFamily: 'Proxima',
           primarySwatch: eventajaGreen,
           brightness: Brightness.light,
-          backgroundColor: Colors.white),
+          backgroundColor: Colors.white).copyWith(
+            pageTransitionsTheme: PageTransitionsTheme(
+              builders: <TargetPlatform, PageTransitionsBuilder>{
+                TargetPlatform.android: ZoomPageTransitionsBuilder(),
+                TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+              }
+            )
+          ),
       // home: CrashlyticsTester(),
       home: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(

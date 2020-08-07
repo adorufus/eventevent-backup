@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+// import 'package:animations/animations.dart';
 import 'package:eventevent/Database/Database.dart';
 import 'package:eventevent/Database/Models/EventBannerModel.dart';
 import 'package:eventevent/Models/BannerModels.dart';
@@ -71,6 +72,8 @@ class _EventCatalogState extends State<EventCatalog>
   TimelineDashboardState timelineState = new TimelineDashboardState();
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
+  // ContainerTransitionType _transitionType = ContainerTransitionType.fade;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   ///Variable untuk insialisasi Value awal
   List data;
@@ -642,7 +645,8 @@ class _EventCatalogState extends State<EventCatalog>
                                 }
                               }
 
-                              return GestureDetector(
+                              return 
+                              GestureDetector(
                                 onTap: () {
                                   Navigator.push(
                                       context,
@@ -652,7 +656,8 @@ class _EventCatalogState extends State<EventCatalog>
                                                   isRest: widget.isRest,
                                                   eventId: data[i]['id'])));
                                 },
-                                child: PopularEventWidget(
+                                child: 
+                                PopularEventWidget(
                                   imageUrl: data[i]['picture'],
                                   title: data[i]["name"],
                                   isHybridEvent: data[i]['isHybridEvent'],
