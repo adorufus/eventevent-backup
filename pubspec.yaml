@@ -97,7 +97,7 @@ dependencies:
   mid_flutter: ^0.0.1
   sqflite: any
   rive: any
-  # animations: ^1.1.2
+  animations: ^1.1.2
   screenshot: ^0.1.1
   flutter_credit_card:
   share: ^0.6.3+5
