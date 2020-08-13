@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:eventevent/Widgets/merch/SelectAddress.dart';
+import 'package:eventevent/Widgets/merch/transactionUtilities/ShippingOptionLists.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/BaseBodyWithScaffoldAndAppBar.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,20 +31,37 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
   String selectedShippingMethodService = '';
   int selectedShippingPrice = 0;
 
+  bool shippingMethodSelected = false;
+
+  String productName = '';
+  int productPrice = 0;
+  String productImage = '';
+  int accumulatedPrice = 0;
+  int howMuch = 0;
+
+  SharedPreferences preferences;
+
+  // @override
+  // void initState() {
+  //   initializeValue();
+  //   super.initState();
+  // }
+
+  void initializeValue() async {
+    preferences = await SharedPreferences.getInstance();
+
+    productName = preferences.getString("productName");
+    productPrice = preferences.getInt("accumulatedPrice");
+    productImage = preferences.getString("productImage");
+    howMuch = preferences.getInt("productQuantity");
+    accumulatedPrice = productPrice;
+
+    if (mounted) setState(() {});
+  }
+
   @override
   void initState() {
-    getShippingOptions().then((response) {
-      print(response.statusCode);
-      print(response.body);
-
-      var extractedData = json.decode(response.body);
-
-      if (response.statusCode == 200) {
-        shippingOptionList.addAll(extractedData['data']);
-      } else {
-        print(response.body);
-      }
-    });
+    initializeValue();
     super.initState();
   }
 
@@ -71,7 +90,7 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
                   alignment: Alignment.centerLeft,
                 ),
               ),
-              title: Text('Lorem Ipsum'),
+              title: Text('Transaction Details'),
               centerTitle: true,
               textTheme: TextTheme(
                   title: TextStyle(
@@ -87,6 +106,15 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
         onTap: () {
           // Navigator.push(context,
           //     MaterialPageRoute(builder: (context) => SelectAddress()));
+          if (shippingMethodSelected == false) {
+            Flushbar(
+              message: "Please Select Shipping Method",
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 3),
+              flushbarPosition: FlushbarPosition.TOP,
+              animationDuration: Duration(milliseconds: 500),
+            ).show(context);
+          }
         },
         child: Container(
           height: ScreenUtil.instance.setWidth(50),
@@ -126,7 +154,8 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
             SizedBox(
               height: 12,
             ),
-            totalSection(context, title: 'Subtotal:', price: 'Rp. 410.000'),
+            totalSection(context,
+                title: 'Subtotal:', price: 'Rp. $accumulatedPrice'),
           ],
         ),
       ),
@@ -141,7 +170,13 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
           height: 120,
           width: 120,
           decoration: BoxDecoration(
-              color: Color(0xfffec97c),
+              color: Colors.grey,
+              image: DecorationImage(
+                image: NetworkImage(
+                  productImage,
+                ),
+                fit: BoxFit.cover,
+              ),
               borderRadius: BorderRadius.circular(10)),
         ),
         SizedBox(
@@ -155,7 +190,7 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
               Container(
                 width: 197,
                 child: Text(
-                  'Tas dari rotan',
+                  '$productName',
                   style: TextStyle(
                     color: eventajaBlack,
                     fontSize: 16,
@@ -179,7 +214,7 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
                     width: 15,
                   ),
                   Text(
-                    '(2)',
+                    '($howMuch)',
                     style: TextStyle(
                         color: eventajaGreenTeal,
                         fontWeight: FontWeight.bold,
@@ -189,7 +224,7 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
               ),
               Expanded(child: SizedBox()),
               Text(
-                'Rp. 400.000',
+                'Rp. $productPrice',
                 style: TextStyle(
                     color: eventajaGreenTeal,
                     fontWeight: FontWeight.bold,
@@ -241,91 +276,27 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
             ),
             GestureDetector(
               onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (thisContext) {
-                    return StatefulBuilder(
-                      builder: (BuildContext thisContext, StateSetter setState) => Container(
-                        color: Colors.white,
-                        child: Container(
-                          padding: EdgeInsets.only(
-                              top: 13, left: 25, right: 25, bottom: 30),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15),
-                              )),
-                          child: Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 50),
-                                child: SizedBox(
-                                  height: ScreenUtil.instance.setWidth(5),
-                                  width: ScreenUtil.instance.setWidth(50),
-                                  child: Image.asset(
-                                    'assets/icons/icon_line.png',
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 35,
-                              ),
-                              ColumnBuilder(
-                                mainAxisSize: MainAxisSize.min,
-                                itemCount: shippingOptionList.length,
-                                itemBuilder: (context, i) {
-                                  return Column(
-                                    children: <Widget>[
-                                      ListTile(
-                                        onTap: () {
-                                          Navigator.pop(thisContext);
-                                          if (!mounted) return;
-                                          
-                                          setState(() {
-                                            selectedShippingMethodName =
-                                                '${shippingOptionList[i]['code'].toUpperCase()} ${shippingOptionList[i]['service']} (${shippingOptionList[i]['estimated']} days)';
-                                            selectedShippingMethodCode =
-                                                shippingOptionList[i]['code'];
-                                            selectedShippingMethodService =
-                                                shippingOptionList[i]
-                                                    ['service'];
-                                            selectedShippingPrice =
-                                                shippingOptionList[i]['price'];
-                                          });
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ShippingOptionLists()))
+                    .then((value) {
+                  if (value != null) {
+                    selectedShippingMethodName = value['shippingMethodName'];
+                    selectedShippingMethodCode = value['shippingMethodCode'];
+                    selectedShippingMethodService =
+                        value['shippingMethodService'];
+                    selectedShippingPrice = value['shippingPrice'];
 
-                                          
-                                        },
-                                        title: Text(shippingOptionList[i]
-                                                ['code']
-                                            .toString()
-                                            .toUpperCase()),
-                                        subtitle: Text(
-                                            '${shippingOptionList[i]['service']} (${shippingOptionList[i]['estimated']} days)'),
-                                      ),
-                                      shippingOptionList[i] ==
-                                              shippingOptionList.last
-                                          ? Container()
-                                          : SizedBox(
-                                              height: ScreenUtil.instance
-                                                  .setWidth(19)),
-                                      shippingOptionList[i] ==
-                                              shippingOptionList.last
-                                          ? Container()
-                                          : Divider(),
-                                    ],
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  elevation: 1,
-                );
+                    accumulatedPrice = productPrice + selectedShippingPrice;
+
+                    shippingMethodSelected = true;
+
+                    if (mounted) setState(() {});
+                  } else {
+                    shippingMethodSelected = false;
+                  }
+                });
               },
               child: Container(
                 height: 26,
@@ -373,27 +344,5 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
         ),
       ],
     );
-  }
-
-  Future<http.Response> getShippingOptions() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    String currentBuyerAddressId =
-        preferences.getString("currentSelectedAddressId");
-    String thisProductSellerId = preferences.getString("sellerProductId");
-
-    String url = BaseApi().apiUrl +
-        '/address/shipping?X-API-KEY=$API_KEY&addressId=$currentBuyerAddressId&weight=2000&sellerId=$thisProductSellerId';
-
-    try {
-      final response = await http.get(url, headers: {
-        'Authorization': AUTHORIZATION_KEY,
-        'cookie': preferences.getString("Session")
-      });
-
-      return response;
-    } on SocketException catch (e) {
-      print(e);
-      return null;
-    }
   }
 }

@@ -318,9 +318,16 @@ class _MerchDetailsState extends State<MerchDetails> {
       onTap: () async {
         SharedPreferences preferences = await SharedPreferences.getInstance();
         preferences.setString("sellerProductId", data.merchantDetails.merchantId);
+        preferences.setString("productId", data.merchId);
+        preferences.setString("productName", data.productName);
+        preferences.setString("productPrice", data.details[0]['basic_price']);
+        preferences.setString("productImage", data.imageUrl);
+
         print(preferences.getString("sellerProductId"));
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => BuyOptionSelector()));
+            MaterialPageRoute(builder: (context) => BuyOptionSelector(
+              
+            ),),);
       },
       child: Container(
         height: ScreenUtil.instance.setWidth(28),

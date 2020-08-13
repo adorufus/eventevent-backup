@@ -89,10 +89,10 @@ class _SelectAddressState extends State<SelectAddress> {
                     // } else {
                     //   allAddressList.add(item);
                     // }
-                    if(allAddressList.isNotEmpty){
+                    if (allAddressList.isNotEmpty) {
                       allAddressList.clear();
                     }
-                    
+
                     getAddress();
                   }
                 });
@@ -242,12 +242,16 @@ class _SelectAddressState extends State<SelectAddress> {
             Icons.add_circle_outline,
             size: 30,
           ),
-          SizedBox(width: MediaQuery.of(context).size.width / 5 - 10),
-          Container(
-            child: Text(
-              'ADD ADDRESS',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+          // SizedBox(width: MediaQuery.of(context).size.width / 5 - 10),
+          Flexible(
+            child: Center(
+              child: Container(
+                child: Text(
+                  'ADD ADDRESS',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ),

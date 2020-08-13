@@ -3,13 +3,40 @@ import 'package:eventevent/helper/BaseBodyWithScaffoldAndAppBar.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BuyOptionSelector extends StatefulWidget {
+
   @override
   _BuyOptionSelectorState createState() => _BuyOptionSelectorState();
 }
 
 class _BuyOptionSelectorState extends State<BuyOptionSelector> {
+  String productName = '';
+  String productPrice = '';
+  String productImage = '';
+  int accumulatedPrice = 0;
+  int howMuch = 1;
+
+  SharedPreferences preferences;
+
+  @override
+  void initState() {
+    initializeValue();
+    super.initState();
+  }
+
+  void initializeValue() async {
+    preferences = await SharedPreferences.getInstance();
+    
+    productName = preferences.getString("productName");
+    productPrice = preferences.getString("productPrice");
+    productImage = preferences.getString("productImage");
+    accumulatedPrice = int.parse(productPrice);
+
+    if(mounted) setState((){});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +76,9 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
       ),
       bottomNavigationBar: GestureDetector(
         onTap: (){
+          preferences.setInt('accumulatedPrice', accumulatedPrice);
+          preferences.setInt('productQuantity', howMuch);
+          
           Navigator.push(
             context, MaterialPageRoute(builder: (context) => SelectAddress())
           );
@@ -106,7 +136,11 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
           height: 120,
           width: 120,
           decoration: BoxDecoration(
-              color: Color(0xfffec97c),
+              color: Colors.grey,
+              image: DecorationImage(
+                image: NetworkImage(productImage, ),
+                fit: BoxFit.cover
+              ),
               borderRadius: BorderRadius.circular(10)),
         ),
         SizedBox(
@@ -118,7 +152,7 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
             Container(
               width: 197,
               child: Text(
-                'Tas dari rotan',
+                productName,
                 style: TextStyle(
                   color: eventajaBlack,
                   fontSize: 16,
@@ -127,7 +161,7 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
               ),
             ),
             Text(
-              'Rp. 200.000',
+              'Rp. $productPrice',
               style: TextStyle(
                   color: eventajaGreenTeal,
                   fontWeight: FontWeight.bold,
@@ -155,22 +189,39 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
               border: Border.all(color: eventajaGreenTeal)),
           child: Row(
             children: <Widget>[
-              Icon(
-                Icons.remove_circle,
-                color: Colors.red,
-                size: 30,
+              GestureDetector(
+                onTap: (){
+                  if(howMuch > 1){
+                    howMuch -= 1;
+                    accumulatedPrice = accumulatedPrice - int.parse(productPrice);
+                  }
+
+                  if(mounted) setState((){});
+                },
+                              child: Icon(
+                  Icons.remove_circle,
+                  color: Colors.red,
+                  size: 30,
+                ),
               ),
               Expanded(
                 child: SizedBox(),
               ),
-              Text('2'),
+              Text('$howMuch'),
               Expanded(
                 child: SizedBox(),
               ),
-              Icon(
-                Icons.add_circle,
-                color: eventajaGreenTeal,
-                size: 30,
+              GestureDetector(
+                onTap: (){
+                  howMuch += 1;
+                  accumulatedPrice = int.parse(productPrice) * howMuch;
+                  if(mounted) setState((){});
+                },
+                              child: Icon(
+                  Icons.add_circle,
+                  color: eventajaGreenTeal,
+                  size: 30,
+                ),
               )
             ],
           ),
@@ -271,7 +322,7 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
           child: SizedBox(),
         ),
         Text(
-          'Rp. 400.000',
+          'Rp. $accumulatedPrice',
           style: TextStyle(
               color: eventajaGreenTeal, fontWeight: FontWeight.bold, fontSize: 15),
         ),
