@@ -126,6 +126,10 @@ class _ShippingOptionListsState extends State<ShippingOptionLists> {
     String currentBuyerAddressId =
         preferences.getString("currentSelectedAddressId");
     String thisProductSellerId = preferences.getString("sellerProductId");
+    if (mounted) setState(() {});
+
+    print(currentBuyerAddressId);
+    print(thisProductSellerId);
 
     String url = BaseApi().apiUrl +
         '/address/shipping?X-API-KEY=$API_KEY&addressId=$currentBuyerAddressId&weight=2000&sellerId=$thisProductSellerId';

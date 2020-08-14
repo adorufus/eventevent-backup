@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:eventevent/Widgets/Transaction/PaymentMethod.dart';
+import 'package:eventevent/Widgets/merch/MerchPaymentMethod.dart';
 import 'package:eventevent/Widgets/merch/SelectAddress.dart';
 import 'package:eventevent/Widgets/merch/transactionUtilities/ShippingOptionLists.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -40,12 +42,6 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
   int howMuch = 0;
 
   SharedPreferences preferences;
-
-  // @override
-  // void initState() {
-  //   initializeValue();
-  //   super.initState();
-  // }
 
   void initializeValue() async {
     preferences = await SharedPreferences.getInstance();
@@ -104,8 +100,17 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
       ),
       bottomNavigationBar: GestureDetector(
         onTap: () {
-          // Navigator.push(context,
-          //     MaterialPageRoute(builder: (context) => SelectAddress()));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MerchPaymentMethod(
+                shippingName: selectedShippingMethodName,
+                shippingCode: selectedShippingMethodCode,
+                shippingService: selectedShippingMethodService,
+                price: accumulatedPrice,
+              ),
+            ),
+          );
           if (shippingMethodSelected == false) {
             Flushbar(
               message: "Please Select Shipping Method",

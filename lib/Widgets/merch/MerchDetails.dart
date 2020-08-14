@@ -322,6 +322,7 @@ class _MerchDetailsState extends State<MerchDetails> {
         preferences.setString("productName", data.productName);
         preferences.setString("productPrice", data.details[0]['basic_price']);
         preferences.setString("productImage", data.imageUrl);
+        preferences.setString("productDetailsId", data.details[0]['id']);
 
         print(preferences.getString("sellerProductId"));
         Navigator.push(context,
