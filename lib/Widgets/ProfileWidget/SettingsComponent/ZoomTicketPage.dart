@@ -1,4 +1,6 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -58,25 +60,45 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset('assets/icons/aset_icon/zoom_livestream.png', scale: 2
-                ,),
+              Image.asset(
+                'assets/icons/aset_icon/zoom_livestream.png',
+                scale: 2,
+              ),
               SizedBox(
                 height: 15,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('Zoom ID: ', style: TextStyle(fontSize: 15),),
+                  Text(
+                    'Zoom ID: ',
+                    style: TextStyle(fontSize: 15),
+                  ),
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      launch('https://zoom.us/j/' + widget.zoomLink, enableJavaScript: true);
+                      launch('https://zoom.us/j/' + widget.zoomLink,
+                          enableJavaScript: true);
                     },
                     child: Text(
                       '${widget.zoomLink}',
                       style: TextStyle(color: Colors.blue, fontSize: 15),
                     ),
-                  )
+                  ),
+                  SizedBox(width: 5),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: (){
+                      Clipboard.setData(ClipboardData(text: widget.zoomLink));
+                      print(Clipboard.getData('text/plain'));
+                      Flushbar(
+                        flushbarPosition: FlushbarPosition.TOP,
+                        message: 'Zoom ID Coppied!',
+                        duration: Duration(seconds: 3),
+                        animationDuration: Duration(milliseconds: 500),
+                      )..show(context);
+                    },
+                    child: Icon(Icons.content_copy, size: 14))
                 ],
               ),
               SizedBox(
@@ -85,8 +107,14 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('Zoom Description: ', style: TextStyle(fontSize: 15),),
-                  Text('${widget.zoomDesc}', style: TextStyle(fontSize: 15),),
+                  Text(
+                    'Zoom Description: ',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  Text(
+                    '${widget.zoomDesc}',
+                    style: TextStyle(fontSize: 15),
+                  ),
                 ],
               ),
             ],

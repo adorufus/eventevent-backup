@@ -57,7 +57,7 @@ class MyTicketItem extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 19.35, top: 5, right: 0),
+            padding: EdgeInsets.only(left: 13, top: 5, right: 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
