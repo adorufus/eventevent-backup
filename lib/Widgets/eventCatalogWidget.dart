@@ -243,7 +243,7 @@ class _EventCatalogState extends State<EventCatalog>
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: CachedNetworkImage(
-                          imageUrl: bannerData["image_avatar"],
+                          imageUrl: bannerData["image"].toString().replaceAll("\n", ""),
                           fit: BoxFit.cover,
                           placeholder: (context, url) => Container()),
                     ),
@@ -1998,7 +1998,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 username: latestMediaVideo[i]['creator']
                                     ['username'],
                                 imageUri: latestMediaVideo[i]
-                                    ['thumbnail_timeline'],
+                                    ['thumbnail_timeline'].toString().replaceAll("\n", ""),
                                 mediaTitle: latestMediaVideo[i]['title'],
                                 autoFocus: false,
                                 mediaId: latestMediaVideo[i]['id'],
@@ -2008,7 +2008,7 @@ class _EventCatalogState extends State<EventCatalog>
                   isRest: widget.isRest,
                   isVideo: true,
                   isLiked: latestMediaVideo[i]['is_loved'],
-                  image: latestMediaVideo[i]['thumbnail_timeline'],
+                  image: latestMediaVideo[i]['thumbnail_timeline'].toString().replaceAll("\n", ""),
                   title: latestMediaVideo[i]['title'],
                   username: latestMediaVideo[i]['creator']['username'],
                   userImage: latestMediaVideo[i]['creator']['photo'],

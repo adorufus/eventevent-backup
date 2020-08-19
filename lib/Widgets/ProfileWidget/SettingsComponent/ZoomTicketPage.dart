@@ -111,12 +111,12 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
                     'Zoom Description: ',
                     style: TextStyle(fontSize: 15),
                   ),
-                  Text(
+                ],
+              ),
+              Text(
                     '${widget.zoomDesc}',
                     style: TextStyle(fontSize: 15),
                   ),
-                ],
-              ),
             ],
           ),
         ),

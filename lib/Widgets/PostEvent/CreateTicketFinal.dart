@@ -52,8 +52,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
 
   File imageFile;
 
-  Dio dio = new Dio(BaseOptions(
-      connectTimeout: 15000, baseUrl: BaseApi().apiUrl, receiveTimeout: 15000));
+  Dio dio = new Dio(BaseOptions(baseUrl: BaseApi().apiUrl));
 
   void getData() async {
     print('get data');

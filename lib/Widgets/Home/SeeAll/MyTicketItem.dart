@@ -47,92 +47,104 @@ class MyTicketItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            width: ScreenUtil.instance.setWidth(100.19),
-            decoration: BoxDecoration(
-              image:
-                  DecorationImage(image: image == '' ? AssetImage('assets/grey-fade.jpg') : NetworkImage(image), fit: BoxFit.fill),
-              color: Color(0xFFB5B5B5),
-              borderRadius: BorderRadius.circular(15),
+          Flexible(
+            flex: 1,
+                      child: Container(
+              width: ScreenUtil.instance.setWidth(100.19),
+              decoration: BoxDecoration(
+                image:
+                    DecorationImage(image: image == '' ? AssetImage('assets/grey-fade.jpg') : NetworkImage(image), fit: BoxFit.fill),
+                color: Color(0xFFB5B5B5),
+                borderRadius: BorderRadius.circular(15),
+              ),
             ),
           ),
-          Container(
-            padding: EdgeInsets.only(left: 13, top: 5, right: 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                // MiniDate(
-                //   date: date,
-                // ),
-                SizedBox(height: ScreenUtil.instance.setWidth(5)),
-                Container(
-                  width: 200,
-                  child: Text(
-                    ticketName,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: ScreenUtil.instance.setSp(14),
-                        color: Color(0xFF8A8A8B)),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textWidthBasis: TextWidthBasis.parent,
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width - 146,
-                  // height: ScreenUtil.instance.setWidth(18),
-                  child: Text(
-                    ticketCode,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(20)),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textWidthBasis: TextWidthBasis.parent,
-                  ),
-                ),
-                // Row(
-                //   children: <Widget>[
-                //     Text(
-                //       timeStart + ' - ',
-                //       style:
-                //           TextStyle(fontSize: ScreenUtil.instance.setSp(10), color: Color(0xFF8A8A8B)),
-                //       maxLines: 1,
-                //       overflow: TextOverflow.ellipsis,
-                //       textWidthBasis: TextWidthBasis.parent,
-                //     ),
-                //     Text(
-                //       timeStart,
-                //       style:
-                //           TextStyle(fontSize: ScreenUtil.instance.setSp(10), color: Color(0xFF8A8A8B)),
-                //       maxLines: 1,
-                //       overflow: TextOverflow.ellipsis,
-                //       textWidthBasis: TextWidthBasis.parent,
-                //     ),
-                //   ],
-                // ),
-                Expanded(child: Container()),
-                Container(
-                  height: ScreenUtil.instance.setWidth(32),
-                  width: ticketStatus == 'On Demand Video' ? ScreenUtil.instance.setWidth(140) : ScreenUtil.instance.setWidth(110),
-                  decoration: BoxDecoration(
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: ticketColor.withOpacity(0.4),
-                            blurRadius: 2,
-                            spreadRadius: 1.5)
-                      ],
-                      color: ticketColor,
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Center(
+          Flexible(
+            flex: 3,
+                      child: Container(
+              padding: EdgeInsets.only(left: 13, top: 5, right: 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // MiniDate(
+                  //   date: date,
+                  // ),
+                  SizedBox(height: ScreenUtil.instance.setWidth(5)),
+                  Flexible(
+                    flex: 1,
+                                      child: Container(
+                      width: 500,
                       child: Text(
-                    ticketStatus.toString().toUpperCase(),
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: ScreenUtil.instance.setSp(14),
-                        fontWeight: FontWeight.bold),
-                  )),
-                ),
-                SizedBox(height: 25,)
-              ],
+                        ticketName,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: ScreenUtil.instance.setSp(14),
+                            color: Color(0xFF8A8A8B)),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textWidthBasis: TextWidthBasis.parent,
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 2,
+                                      child: Container(
+                      width: 500,
+                      // height: ScreenUtil.instance.setWidth(18),
+                      child: Text(
+                        ticketCode,
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(20)),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textWidthBasis: TextWidthBasis.parent,
+                      ),
+                    ),
+                  ),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Text(
+                  //       timeStart + ' - ',
+                  //       style:
+                  //           TextStyle(fontSize: ScreenUtil.instance.setSp(10), color: Color(0xFF8A8A8B)),
+                  //       maxLines: 1,
+                  //       overflow: TextOverflow.ellipsis,
+                  //       textWidthBasis: TextWidthBasis.parent,
+                  //     ),
+                  //     Text(
+                  //       timeStart,
+                  //       style:
+                  //           TextStyle(fontSize: ScreenUtil.instance.setSp(10), color: Color(0xFF8A8A8B)),
+                  //       maxLines: 1,
+                  //       overflow: TextOverflow.ellipsis,
+                  //       textWidthBasis: TextWidthBasis.parent,
+                  //     ),
+                  //   ],
+                  // ),
+                  Expanded(child: Container()),
+                  Container(
+                    height: ScreenUtil.instance.setWidth(32),
+                    width: ticketStatus == 'On Demand Video' ? ScreenUtil.instance.setWidth(140) : ScreenUtil.instance.setWidth(110),
+                    decoration: BoxDecoration(
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: ticketColor.withOpacity(0.4),
+                              blurRadius: 2,
+                              spreadRadius: 1.5)
+                        ],
+                        color: ticketColor,
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Center(
+                        child: Text(
+                      ticketStatus.toString().toUpperCase(),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenUtil.instance.setSp(14),
+                          fontWeight: FontWeight.bold),
+                    )),
+                  ),
+                  SizedBox(height: 25,)
+                ],
+              ),
             ),
           )
         ],

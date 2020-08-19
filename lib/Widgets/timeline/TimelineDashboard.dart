@@ -920,7 +920,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                 imageCount: 'img' + i.toString(),
                                 username: latestMediaPhoto[i]['creator']
                                     ['username'],
-                                imageUri: latestMediaPhoto[i]['banner_avatar'],
+                                imageUri: latestMediaPhoto[i]['banner_avatar'].toString().replaceAll("\n", ""),
                                 mediaTitle: latestMediaPhoto[i]['title'],
                                 autoFocus: false,
                                 mediaId: latestMediaPhoto[i]['id'],
@@ -931,7 +931,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                   isRest: widget.isRest,
                   isVideo: false,
                   isLiked: latestMediaPhoto[i]['is_loved'],
-                  image: latestMediaPhoto[i]['banner_timeline'],
+                  image: latestMediaPhoto[i]['banner_timeline'].toString().replaceAll("\n", ""),
                   mediaId: latestMediaPhoto[i]['id'],
                   title: latestMediaPhoto[i]['title'],
                   username: latestMediaPhoto[i]['creator']['username'],
@@ -1016,7 +1016,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                   username: popularMediaVideo[i]['creator']
                                       ['username'],
                                   imageUri: popularMediaVideo[i]
-                                      ['thumbnail_timeline'],
+                                      ['thumbnail_timeline'].toString().replaceAll("\n", ""),
                                   mediaTitle: popularMediaVideo[i]['title'],
                                   autoFocus: false,
                                   mediaId: popularMediaVideo[i]['id'],
@@ -1028,7 +1028,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                     videoUrl: popularMediaVideo[i]['video'],
                     youtube: popularMediaVideo[i]['youtube'],
                     isVideo: true,
-                    image: popularMediaVideo[i]['thumbnail_avatar'],
+                    image: popularMediaVideo[i]['thumbnail_avatar'].toString().replaceAll("\n", ""),
                     title: popularMediaVideo[i]['title'],
                     username: popularMediaVideo[i]['creator']['username'],
                     userPicture: popularMediaVideo[i]['creator']['photo'],
@@ -1110,7 +1110,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                 username: latestMediaVideo[i]['creator']
                                     ['username'],
                                 imageUri: latestMediaVideo[i]
-                                    ['thumbnail_timeline'],
+                                    ['thumbnail_timeline'].toString().replaceAll("\n", ""),
                                 mediaTitle: latestMediaVideo[i]['title'],
                                 autoFocus: false,
                                 mediaId: latestMediaVideo[i]['id'],
@@ -1123,7 +1123,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                   youtube: latestMediaVideo[i]['youtube'] ?? '/',
                   videoUrl: latestMediaVideo[i]['video'] ?? '/',
                   mediaId: latestMediaVideo[i]['id'],
-                  image: latestMediaVideo[i]['thumbnail_timeline'],
+                  image: latestMediaVideo[i]['thumbnail_timeline'].toString().replaceAll("\n", ""),
                   title: latestMediaVideo[i]['title'],
                   username: latestMediaVideo[i]['creator']['username'],
                   userImage: latestMediaVideo[i]['creator']['photo'],
