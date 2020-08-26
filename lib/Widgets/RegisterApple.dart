@@ -174,7 +174,7 @@ class RegisterAppleState extends State<RegisterApple> {
             showDatePicker();
           },
           decoration: InputDecoration(
-              hintText: 'Birth Date',
+              hintText: 'Birth Date (Optional)',
               icon: Image.asset(
                 'assets/drawable/cake.png',
                 scale: 5,
@@ -183,38 +183,38 @@ class RegisterAppleState extends State<RegisterApple> {
         SizedBox(
           height: ScreenUtil.instance.setWidth(15),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Radio(
-              groupValue: currentValue,
-              onChanged: (int i) => setState(() => currentValue = i),
-              value: 0,
-            ),
-            Text('Male'),
-            SizedBox(width: ScreenUtil.instance.setWidth(30)),
-            Radio(
-              groupValue: currentValue,
-              onChanged: (int i) => setState(() => currentValue = i),
-              value: 1,
-            ),
-            Text('Female'),
-            SizedBox(width: ScreenUtil.instance.setWidth(30)),
-            Radio(
-              groupValue: currentValue,
-              onChanged: (int i) => setState(() => currentValue = i),
-              value: 2,
-            ),
-            Text('Other')
-          ],
-        ),
-        SizedBox(
-          height: ScreenUtil.instance.setWidth(15),
-        ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: <Widget>[
+        //     Radio(
+        //       groupValue: currentValue,
+        //       onChanged: (int i) => setState(() => currentValue = i),
+        //       value: 0,
+        //     ),
+        //     Text('Male'),
+        //     SizedBox(width: ScreenUtil.instance.setWidth(30)),
+        //     Radio(
+        //       groupValue: currentValue,
+        //       onChanged: (int i) => setState(() => currentValue = i),
+        //       value: 1,
+        //     ),
+        //     Text('Female'),
+        //     SizedBox(width: ScreenUtil.instance.setWidth(30)),
+        //     Radio(
+        //       groupValue: currentValue,
+        //       onChanged: (int i) => setState(() => currentValue = i),
+        //       value: 2,
+        //     ),
+        //     Text('Other')
+        //   ],
+        // ),
+        // SizedBox(
+        //   height: ScreenUtil.instance.setWidth(15),
+        // ),
         TextFormField(
           controller: phoneController,
           decoration: InputDecoration(
-            hintText: '(Phone, e.g. 0818123456)',
+            hintText: 'Phone, e.g. 0818123456 (Optional)',
             icon: Icon(
               CupertinoIcons.phone_solid,
               color: Colors.grey,
@@ -300,7 +300,7 @@ class RegisterAppleState extends State<RegisterApple> {
       'password': passwordController.text,
       'fullName':
           widget.appleData['first_name'] + ' ' + widget.appleData['last_name'],
-      'gender': gender,
+      'gender': 'other',
       'username': usernameController.text,
       'birthDay': birthdateController.text,
       'phone': phoneController.text,
