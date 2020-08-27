@@ -519,6 +519,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                 callback['response'].statusCode == 200) {
                               prefs.setString('Session',
                                   callback['response'].headers['set-cookie']);
+                                  print("Cookie set" + prefs.getString('Session'));
                               prefs.setString(
                                   'Last User ID', extractedData['data']['id']);
                               prefs.setBool('isUsingGoogle', false);
@@ -540,6 +541,8 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                 );
                               }
                             }
+                          }).catchError((e){
+                            print(e);
                           });
                         },
                         height: 44,
