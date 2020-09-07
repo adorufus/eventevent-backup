@@ -333,7 +333,8 @@ class RegisterAppleState extends State<RegisterApple> {
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => DashboardWidget(
-                    isRest: widget.isRest,
+                    isRest: false,
+                    
                   )));
       return Register.fromJson(responseJson);
     } else {

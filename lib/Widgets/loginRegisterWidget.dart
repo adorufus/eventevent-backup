@@ -10,6 +10,7 @@ import 'package:eventevent/Widgets/registerWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/FirebaseMessagingHelper.dart';
 import 'package:eventevent/helper/LoginHandler.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -543,6 +544,13 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                             }
                           }).catchError((e){
                             print(e);
+                            Flushbar(
+                              animationDuration: Duration(milliseconds: 500),
+                              duration: Duration(seconds: 3),
+                              backgroundColor: Colors.red,
+                              flushbarPosition: FlushbarPosition.TOP,
+                              message: e.toString(),
+                            ).show(context);
                           });
                         },
                         height: 44,

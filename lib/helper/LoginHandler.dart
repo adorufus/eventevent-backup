@@ -6,7 +6,7 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginHandler {
-  static Future<Map<String, dynamic>> SignInWIthAppleAction() async {
+  static Future<Map<String, dynamic>> signInWIthAppleAction() async {
     final credential = await SignInWithApple.getAppleIDCredential(
       scopes: [
         AppleIDAuthorizationScopes.email,
@@ -48,7 +48,7 @@ class LoginHandler {
     String baseUrl = BaseApi().apiUrl + "/signin/apple";
     Map<String, dynamic> appleData;
 
-    await SignInWIthAppleAction().then((data) => appleData = data);
+    await signInWIthAppleAction().then((data) => appleData = data);
 
     print('apple data' + appleData.toString());
 

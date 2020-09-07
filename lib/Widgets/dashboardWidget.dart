@@ -831,7 +831,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
   Future<http.Response> getPopup() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/announcement?X-API-KEY=$API_KEY';
+    String url = BaseApi().apiUrl + '/announcement?X-API-KEY=$API_KEY&type=mobile';
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,
