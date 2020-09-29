@@ -279,9 +279,10 @@ class TicketSalesState extends State<TicketSales> {
                                         height:
                                             ScreenUtil.instance.setWidth(100),
                                         width: ScreenUtil.instance.setWidth(70),
-                                        child: Image.network(
-                                          ticketData[i]['ticket_image']
-                                              ['secure_url'],
+                                        child: Image.asset("assets/grey-fade.jpg",
+                                        // Image.network(
+                                        //   ticketData[i]['event']
+                                        //       ['pictureTimelinePath'],
                                           fit: BoxFit.fill,
                                         ),
                                       ),
