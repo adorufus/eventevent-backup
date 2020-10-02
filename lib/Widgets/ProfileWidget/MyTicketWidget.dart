@@ -220,6 +220,9 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                         if (ticketDetailData[i].containsKey("livestream")) {
                           ticketColor = eventajaGreenTeal;
                           ticketStatusText = 'Playback';
+                        } else {
+                          ticketColor = eventajaGreenTeal;
+                          ticketStatusText = 'Playback';
                         }
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'expired') {
@@ -354,7 +357,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                           .toString() ==
                                       'false' ||
                                   ticketDetailData[i]['ticket_image'] == false
-                              ? ''
+                              ? 'assets/grey-fade.jpg'
                               : ticketDetailData[i]['ticket_image']
                                           .runtimeType
                                           .toString() ==

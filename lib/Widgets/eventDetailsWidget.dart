@@ -2845,7 +2845,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       'extension'] ==
                                                   'image/jpeg' ||
                                               additional['extension'] ==
-                                                  'image/png'
+                                                  'image/png' || additional['file_name'].toString().contains(".jpg") || additional['file_name'].toString().contains(".png")
                                           ? PhotoView(
                                               imageProvider: NetworkImage(
                                                   additional['posterPathFull']),
@@ -2892,7 +2892,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       child: additional['extension'] ==
                                                   'image/jpeg' ||
                                               additional['extension'] ==
-                                                  'image/png'
+                                                  'image/png' || additional['file_name'].toString().contains(".jpg") || additional['file_name'].toString().contains(".png")
                                           ? Container()
                                           : Icon(
                                               Icons.play_circle_filled,
