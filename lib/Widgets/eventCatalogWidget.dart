@@ -111,7 +111,7 @@ class _EventCatalogState extends State<EventCatalog>
     WidgetsBinding.instance.addObserver(this);
     super.initState();
 
-    ClevertapHandler.logPageView("Home");
+    //ClevertapHandler.logPageView("Home");
 
     if (!mounted) {
       return;

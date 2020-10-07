@@ -186,13 +186,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
     setState(() {
       detailData = widget.detailData;
-      ClevertapHandler.handleEventDetail(
-          detailData['name'],
-          detailData['creatorName'],
-          detailData['dateStart'],
-          detailData['dateEnd'],
-          detailData['isPrivate'],
-          detailData['category']['data']);
+      // ClevertapHandler.handleEventDetail(
+      //     detailData['name'],
+      //     detailData['creatorName'],
+      //     detailData['dateStart'],
+      //     detailData['dateEnd'],
+      //     detailData['isPrivate'],
+      //     detailData['category']['data']);
     });
 
     if (detailData["isGoing"] == '1') {

@@ -65,11 +65,11 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   void initializeClevertap() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    if(widget.userId == preferences.getString("Last User ID")){
-      ClevertapHandler.logPageView("Self-Profile");
-    } else {
-      ClevertapHandler.handleViewUserProfile(username, widget.userId);
-    }
+    // if(widget.userId == preferences.getString("Last User ID")){
+    //   ClevertapHandler.logPageView("Self-Profile");
+    // } else {
+    //   ClevertapHandler.handleViewUserProfile(username, widget.userId);
+    // }
   }
 
   @override

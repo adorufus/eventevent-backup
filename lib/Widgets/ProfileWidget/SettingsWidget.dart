@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:clevertap_plugin/clevertap_plugin.dart';
+// import 'package:clevertap_plugin/clevertap_plugin.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankAccountList.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/ChangePassword.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/Feedback.dart';
@@ -622,7 +622,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     String deviceType = Platform.isIOS ? 'iOS' : 'Android';
 
     if (response.statusCode == 200) {
-      ClevertapHandler.removeUserProfile(deviceType);
+      // ClevertapHandler.removeUserProfile(deviceType);
       setState(() {
         isLoading = false;
       });

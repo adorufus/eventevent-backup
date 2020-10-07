@@ -255,7 +255,7 @@ class RegisterFacebookState extends State<RegisterFacebook> {
 
     if(response.statusCode == 201){
       final responseJson = json.decode(response.body);
-      ClevertapHandler.pushUserProfile(responseJson['data']['fullName'], responseJson['data']['lastName'], responseJson['data']['email'], responseJson['data']['pictureNormalURL'], responseJson['data']['birthday'] == null ? '-' : responseJson['data']['birthday'], responseJson['data']['username'], responseJson['data']['gender'], responseJson['data']['phone']);
+      //ClevertapHandler.pushUserProfile(responseJson['data']['fullName'], responseJson['data']['lastName'], responseJson['data']['email'], responseJson['data']['pictureNormalURL'], responseJson['data']['birthday'] == null ? '-' : responseJson['data']['birthday'], responseJson['data']['username'], responseJson['data']['gender'], responseJson['data']['phone']);
       preferences.setString('Session', response.headers['set-cookie']);
       SharedPrefs().saveCurrentSession(responseJson);
       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => DashboardWidget(isRest: false,)));

@@ -51,7 +51,7 @@ class PushNotificationState extends State<PushNotification> {
   @override
   void initState() {
     super.initState();
-    ClevertapHandler.logPageView("Notification");
+    // ClevertapHandler.logPageView("Notification");
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     var initializationSettingsAndroid =
         new AndroidInitializationSettings('app_icon');
