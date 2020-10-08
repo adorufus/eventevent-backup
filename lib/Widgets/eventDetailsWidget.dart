@@ -251,7 +251,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       });
     } else {
       controllerUrl.sink
-          .add('Error: ${response.errorCode} - ${response.errorDescription}');
+          .add('Error: ${response.errorCode} - ${response.errorMessage}');
     }
   }
 
