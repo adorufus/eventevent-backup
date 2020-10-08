@@ -22,20 +22,20 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
-  http: ^0.12.0+2
+  cupertino_icons: ^1.0.0
+  http: ^0.12.2
   shared_preferences:
-  dio: ^3.0.9
+  dio: ^3.0.10
   flutter_placeholder_textlines:
-  shimmer: ^1.0.1
+  shimmer: ^1.1.1
   flutter_statusbarcolor: ^0.2.3
   path_provider:
   carousel_pro: ^1.0.0
   carousel_slider: ^1.3.0
-  flutter_branch_sdk: ^0.1.3
+  flutter_branch_sdk: ^1.2.0
   video_thumbnail: ^0.2.0
   mime:
-  device_info: ^0.4.2+4
+  device_info: ^0.4.2+8
   photo_view: ^0.9.1
   sign_in_with_apple: ^2.5.1
   rate_my_app: ^0.5.0+3
@@ -101,7 +101,7 @@ dependencies:
   screenshot: ^0.1.1
   flutter_credit_card:
   share: ^0.6.3+5
-  camera: ^0.5.7+4
+  camera: ^0.5.8+7
   page_indicator:
   flutter_playout: ^1.0.35
   web_socket_channel: ^1.1.0
