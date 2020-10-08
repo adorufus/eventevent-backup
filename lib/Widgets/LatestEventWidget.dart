@@ -34,7 +34,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
   int newPage = 0;
 
   void _onLoading() async {
-    ClevertapHandler.logPageView("Latest");
+    //ClevertapHandler.logPageView("Latest");
     await Future.delayed(Duration(milliseconds: 2000));
     setState(() {
       newPage += 1;

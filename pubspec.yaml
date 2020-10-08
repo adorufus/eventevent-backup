@@ -70,7 +70,7 @@ dependencies:
   googleapis_auth: any
   torch_compat: ^1.0.2
   native_device_orientation:
-  clevertap_plugin: 1.1.4
+  # clevertap_plugin: ^1.1.4
   firebase_messaging: ^6.0.16
   firebase_analytics: ^5.0.2
   webview_flutter: ^0.3.15+1

@@ -49,7 +49,7 @@ class _ListenPageState extends State<ListenPage> {
   @override
   void initState() {
     super.initState();
-    ClevertapHandler.logPageView("Nearby");
+    //ClevertapHandler.logPageView("Nearby");
     initPlatformState();
     location.onLocationChanged().listen((LocationData result) async {
       if (!mounted) return;

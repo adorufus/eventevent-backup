@@ -106,7 +106,7 @@ class SearchState extends State<Search> {
                           textInputAction: TextInputAction.search,
                           onFieldSubmitted: (value) {
                             if (value != null) {
-                              ClevertapHandler.handleSearch(value);
+                              //ClevertapHandler.handleSearch(value);
                               switch (currentTab) {
                                 case 0:
                                   _getEvents();

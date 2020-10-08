@@ -366,7 +366,7 @@ class _AfterRegisterState extends State<AfterRegister> {
           prefs.setString('Session', response.headers['set-cookie'].first);
         });
 
-        ClevertapHandler.pushUserProfile(responseJson['data']['fullName'], responseJson['data']['lastName'], responseJson['data']['email'], responseJson['data']['pictureNormalURL'], responseJson['data']['birthday'] == null ? '-' : responseJson['data']['birthday'], responseJson['data']['username'], responseJson['data']['gender'], responseJson['data']['phone']);
+        //ClevertapHandler.pushUserProfile(responseJson['data']['fullName'], responseJson['data']['lastName'], responseJson['data']['email'], responseJson['data']['pictureNormalURL'], responseJson['data']['birthday'] == null ? '-' : responseJson['data']['birthday'], responseJson['data']['username'], responseJson['data']['gender'], responseJson['data']['phone']);
 
         SharedPrefs().saveCurrentSession(responseJson);
         Navigator.pushReplacement(

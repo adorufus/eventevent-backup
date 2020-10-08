@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:clevertap_plugin/clevertap_plugin.dart';
+// import 'package:clevertap_plugin/clevertap_plugin.dart';
 import 'package:eventevent/Providers/EventListProviders.dart';
 import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
@@ -74,7 +74,7 @@ class _RunAppState extends State<RunApp> {
   Widget homeScreenWidget = LoginRegisterWidget();
   
 
-  CleverTapPlugin _clevertapPlugin;
+  // CleverTapPlugin _clevertapPlugin;
   var inboxInitialized = false;
   var optOut = false;
   var offLine = false;
@@ -94,23 +94,23 @@ class _RunAppState extends State<RunApp> {
     if(!mounted) return;
   }
 
-  void activateClevertapHandler() {
-    _clevertapPlugin = new CleverTapPlugin();
-    _clevertapPlugin.setCleverTapPushAmpPayloadReceivedHandler(pushAmpPayloadReceived);
-    _clevertapPlugin.setCleverTapInAppNotificationDismissedHandler(inAppNotificationDismissed);
-    _clevertapPlugin.setCleverTapProfileDidInitializeHandler(profileDidInitialize);
-    _clevertapPlugin.setCleverTapProfileSyncHandler(profileDidUpdate);
-    _clevertapPlugin.setCleverTapInboxDidInitializeHandler(inboxDidInitialize);
-    _clevertapPlugin.setCleverTapInboxMessagesDidUpdateHandler(inboxMessagesDidUpdate);
-    _clevertapPlugin.setCleverTapExperimentsDidUpdateHandler(ctExperimentsUpdated);
-    _clevertapPlugin.setCleverTapDisplayUnitsLoadedHandler(onDisplayUnitsLoaded);
-    _clevertapPlugin.setCleverTapInAppNotificationButtonClickedHandler(inAppNotificationButtonClicked);
-    _clevertapPlugin.setCleverTapInboxNotificationButtonClickedHandler(inboxNotificationButtonClicked);
-    _clevertapPlugin.setCleverTapFeatureFlagUpdatedHandler(featureFlagsUpdated);
-    _clevertapPlugin.setCleverTapProductConfigInitializedHandler(productConfigInitialized);
-    _clevertapPlugin.setCleverTapProductConfigFetchedHandler(productConfigFetched);
-    _clevertapPlugin.setCleverTapProductConfigActivatedHandler(productConfigActivated);
-  }
+  // void activateClevertapHandler() {
+  //   _clevertapPlugin = new CleverTapPlugin();
+  //   _clevertapPlugin.setCleverTapPushAmpPayloadReceivedHandler(pushAmpPayloadReceived);
+  //   _clevertapPlugin.setCleverTapInAppNotificationDismissedHandler(inAppNotificationDismissed);
+  //   _clevertapPlugin.setCleverTapProfileDidInitializeHandler(profileDidInitialize);
+  //   _clevertapPlugin.setCleverTapProfileSyncHandler(profileDidUpdate);
+  //   _clevertapPlugin.setCleverTapInboxDidInitializeHandler(inboxDidInitialize);
+  //   _clevertapPlugin.setCleverTapInboxMessagesDidUpdateHandler(inboxMessagesDidUpdate);
+  //   _clevertapPlugin.setCleverTapExperimentsDidUpdateHandler(ctExperimentsUpdated);
+  //   _clevertapPlugin.setCleverTapDisplayUnitsLoadedHandler(onDisplayUnitsLoaded);
+  //   _clevertapPlugin.setCleverTapInAppNotificationButtonClickedHandler(inAppNotificationButtonClicked);
+  //   _clevertapPlugin.setCleverTapInboxNotificationButtonClickedHandler(inboxNotificationButtonClicked);
+  //   _clevertapPlugin.setCleverTapFeatureFlagUpdatedHandler(featureFlagsUpdated);
+  //   _clevertapPlugin.setCleverTapProductConfigInitializedHandler(productConfigInitialized);
+  //   _clevertapPlugin.setCleverTapProductConfigFetchedHandler(productConfigFetched);
+  //   _clevertapPlugin.setCleverTapProductConfigActivatedHandler(productConfigActivated);
+  // }
 
   void inAppNotificationDismissed(Map<String,dynamic> map){
     this.setState((){
@@ -149,96 +149,96 @@ class _RunAppState extends State<RunApp> {
     });
   }
 
-  void inboxMessagesDidUpdate(){
-    this.setState(() async {
-      print("inboxMessagesDidUpdate called");
-      int unread = await CleverTapPlugin.getInboxMessageUnreadCount();
-      int total = await CleverTapPlugin.getInboxMessageCount();
-      print("Unread count = "+unread.toString());
-      print("Total count = "+total.toString());
-    });
-  }
+  // void inboxMessagesDidUpdate(){
+  //   this.setState(() async {
+  //     print("inboxMessagesDidUpdate called");
+  //     int unread = await CleverTapPlugin.getInboxMessageUnreadCount();
+  //     int total = await CleverTapPlugin.getInboxMessageCount();
+  //     print("Unread count = "+unread.toString());
+  //     print("Total count = "+total.toString());
+  //   });
+  // }
 
-  void ctExperimentsUpdated(){
-    this.setState(() async {
-      print("CTExperimentsUpdated called");
-      bool booleanVar = await CleverTapPlugin.getBooleanVariable("boolVar", false);
-      print("Boolean var = " + booleanVar.toString());
-      double doubleVar = await CleverTapPlugin.getDoubleVariable("doubleVar", 9.99);
-      print("Double var = " + doubleVar.toString());
-      int integerVar = await CleverTapPlugin.getIntegerVariable("integerVar", 999);
-      print("Integer var = "+integerVar.toString());
-      String stringVar = await CleverTapPlugin.getStringVariable("stringVar", "defaultString");
-      print("String var = "+stringVar.toString());
-      List<dynamic> boolList = await CleverTapPlugin.getListOfBooleanVariable("boolListVar", null);
-      print("List of bool = "+boolList.toString());
-      List<dynamic> doubleList = await CleverTapPlugin.getListOfDoubleVariable("doubleListVar", null);
-      print("List of double = "+doubleList.toString());
-      List<dynamic> intList = await CleverTapPlugin.getListOfIntegerVariable("integerListVar", null);
-      print("Integer List = "+intList.toString());
-      List<dynamic> stringList = await CleverTapPlugin.getListOfStringVariable("stringListVar", null);
-      print("String List = "+stringList.toString());
-//      Map<String,bool> boolMap = await CleverTapPlugin.getMapOfBooleanVariable("boolMapVar", null);
-//      print("Map of bool = "+boolMap.toString());
-//      Map<String,double> doubleMap = await CleverTapPlugin.getMapOfDoubleVariable("doubleMapVar", null);
-//      print("Map of double = "+doubleMap.toString());
-//      Map<String,int> intMap = await CleverTapPlugin.getMapOfIntegerVariable("integerMapVar", null);
-//      print("Map of int = "+boolMap.toString());
-//      Map<String,String> strMap = await CleverTapPlugin.getMapOfStringVariable("stringMapVar", null);
-//      print("Map of string = "+strMap.toString());
-    });
-  }
+//   void ctExperimentsUpdated(){
+//     this.setState(() async {
+//       print("CTExperimentsUpdated called");
+//       bool booleanVar = await CleverTapPlugin.getBooleanVariable("boolVar", false);
+//       print("Boolean var = " + booleanVar.toString());
+//       double doubleVar = await CleverTapPlugin.getDoubleVariable("doubleVar", 9.99);
+//       print("Double var = " + doubleVar.toString());
+//       int integerVar = await CleverTapPlugin.getIntegerVariable("integerVar", 999);
+//       print("Integer var = "+integerVar.toString());
+//       String stringVar = await CleverTapPlugin.getStringVariable("stringVar", "defaultString");
+//       print("String var = "+stringVar.toString());
+//       List<dynamic> boolList = await CleverTapPlugin.getListOfBooleanVariable("boolListVar", null);
+//       print("List of bool = "+boolList.toString());
+//       List<dynamic> doubleList = await CleverTapPlugin.getListOfDoubleVariable("doubleListVar", null);
+//       print("List of double = "+doubleList.toString());
+//       List<dynamic> intList = await CleverTapPlugin.getListOfIntegerVariable("integerListVar", null);
+//       print("Integer List = "+intList.toString());
+//       List<dynamic> stringList = await CleverTapPlugin.getListOfStringVariable("stringListVar", null);
+//       print("String List = "+stringList.toString());
+// //      Map<String,bool> boolMap = await CleverTapPlugin.getMapOfBooleanVariable("boolMapVar", null);
+// //      print("Map of bool = "+boolMap.toString());
+// //      Map<String,double> doubleMap = await CleverTapPlugin.getMapOfDoubleVariable("doubleMapVar", null);
+// //      print("Map of double = "+doubleMap.toString());
+// //      Map<String,int> intMap = await CleverTapPlugin.getMapOfIntegerVariable("integerMapVar", null);
+// //      print("Map of int = "+boolMap.toString());
+// //      Map<String,String> strMap = await CleverTapPlugin.getMapOfStringVariable("stringMapVar", null);
+// //      print("Map of string = "+strMap.toString());
+//     });
+//   }
 
-  void onDisplayUnitsLoaded(List<dynamic> displayUnits){
-    this.setState(() async {
-      List displayUnits = await CleverTapPlugin.getAllDisplayUnits();
-      print("Display Units = "+ displayUnits.toString());
-    });
-  }
+  // void onDisplayUnitsLoaded(List<dynamic> displayUnits){
+  //   this.setState(() async {
+  //     List displayUnits = await CleverTapPlugin.getAllDisplayUnits();
+  //     print("Display Units = "+ displayUnits.toString());
+  //   });
+  // }
 
-  void featureFlagsUpdated(){
-    print("Feature Flags Updated");
-    this.setState(() async {
-      bool booleanVar = await CleverTapPlugin.getFeatureFlag("BoolKey", false);
-      print("Feature flag = " + booleanVar.toString());
-    });
-  }
+  // void featureFlagsUpdated(){
+  //   print("Feature Flags Updated");
+  //   this.setState(() async {
+  //     bool booleanVar = await CleverTapPlugin.getFeatureFlag("BoolKey", false);
+  //     print("Feature flag = " + booleanVar.toString());
+  //   });
+  // }
 
-  void productConfigInitialized(){
-    print("Product Config Initialized");
-    this.setState(() async {
-      await CleverTapPlugin.fetch();
-    });
-  }
+  // void productConfigInitialized(){
+  //   print("Product Config Initialized");
+  //   this.setState(() async {
+  //     await CleverTapPlugin.fetch();
+  //   });
+  // }
 
-  void productConfigFetched(){
-    print("Product Config Fetched");
-    this.setState(() async {
-      await CleverTapPlugin.activate();
-    });
+  // void productConfigFetched(){
+  //   print("Product Config Fetched");
+  //   this.setState(() async {
+  //     await CleverTapPlugin.activate();
+  //   });
 
-  }
+  // }
 
-  void productConfigActivated(){
-    print("Product Config Activated");
-    this.setState(() async {
-      String stringvar = await CleverTapPlugin.getProductConfigString("StringKey");
-      print("PC String = " + stringvar.toString());
-      int intvar = await CleverTapPlugin.getProductConfigLong("IntKey");
-      print("PC int = " + intvar.toString());
-      double doublevar = await CleverTapPlugin.getProductConfigDouble("DoubleKey");
-      print("PC double = " + doublevar.toString());
-    });
-  }
+  // void productConfigActivated(){
+  //   print("Product Config Activated");
+  //   this.setState(() async {
+  //     String stringvar = await CleverTapPlugin.getProductConfigString("StringKey");
+  //     print("PC String = " + stringvar.toString());
+  //     int intvar = await CleverTapPlugin.getProductConfigLong("IntKey");
+  //     print("PC int = " + intvar.toString());
+  //     double doublevar = await CleverTapPlugin.getProductConfigDouble("DoubleKey");
+  //     print("PC double = " + doublevar.toString());
+  //   });
+  // }
 
-  void pushAmpPayloadReceived(Map<String,dynamic> map){
-    print("pushAmpPayloadReceived called");
-    this.setState(() async {
-      var data = jsonEncode(map);
-      print("JSON = "+data.toString());
-      CleverTapPlugin.createNotification(data);
-    });
-  }
+  // void pushAmpPayloadReceived(Map<String,dynamic> map){
+  //   print("pushAmpPayloadReceived called");
+  //   this.setState(() async {
+  //     var data = jsonEncode(map);
+  //     print("JSON = "+data.toString());
+  //     CleverTapPlugin.createNotification(data);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

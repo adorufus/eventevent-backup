@@ -460,17 +460,17 @@ class _LoginWidgetState extends State<LoginWidget> {
       prefs.setString('UserFirstname', extractedData['data']['fullName']);
       prefs.setString('UserUsername', extractedData['data']['username']);
 
-      ClevertapHandler.pushUserProfile(
-          extractedData['data']['fullName'],
-          extractedData['data']['lastName'],
-          extractedData['data']['email'],
-          extractedData['data']['pictureNormalURL'],
-          extractedData['data']['birthday'] == null
-              ? '-'
-              : extractedData['data']['birthday'],
-          extractedData['data']['username'],
-          extractedData['data']['gender'],
-          extractedData['data']['phone']);
+      // ClevertapHandler.pushUserProfile(
+      //     extractedData['data']['fullName'],
+      //     extractedData['data']['lastName'],
+      //     extractedData['data']['email'],
+      //     extractedData['data']['pictureNormalURL'],
+      //     extractedData['data']['birthday'] == null
+      //         ? '-'
+      //         : extractedData['data']['birthday'],
+      //     extractedData['data']['username'],
+      //     extractedData['data']['gender'],
+      //     extractedData['data']['phone']);
 
       getProfileDetail(extractedData['data']['id']).then((response) {
         var profileData = json.decode(response.body);
@@ -737,15 +737,15 @@ class _LoginWidgetState extends State<LoginWidget> {
         });
       });
 
-      ClevertapHandler.pushUserProfile(
-          extractedData['data']['fullName'],
-          "",
-          extractedData['data']['email'],
-          extractedData['data']['pictureNormalURL'],
-          extractedData['data']['birthday'],
-          extractedData['data']['username'],
-          extractedData['data']['gender'],
-          extractedData['data']['phone']);
+      // ClevertapHandler.pushUserProfile(
+      //     extractedData['data']['fullName'],
+      //     "",
+      //     extractedData['data']['email'],
+      //     extractedData['data']['pictureNormalURL'],
+      //     extractedData['data']['birthday'],
+      //     extractedData['data']['username'],
+      //     extractedData['data']['gender'],
+      //     extractedData['data']['phone']);
 
       SharedPrefs().saveCurrentSession(responseJson);
 
