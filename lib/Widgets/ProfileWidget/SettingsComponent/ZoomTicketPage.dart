@@ -15,6 +15,23 @@ class ZoomTicketPage extends StatefulWidget {
 }
 
 class _ZoomTicketPageState extends State<ZoomTicketPage> {
+
+  void launchZoomPage(url) async {
+    if(await canLaunch(url)){
+      launch(url);
+    } else {
+      throw 'cannot open the url';
+    }
+  }
+
+  String formattedId = "";
+
+  @override
+  void initState(){
+    formattedId = widget.zoomLink.toString().replaceAll(" ", "");
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,8 +94,13 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      launch('https://zoom.us/j/' + widget.zoomLink,
-                          enableJavaScript: true);
+                      
+                      launchZoomPage('https://zoom.us/j/$formattedId');
+                      // try {
+                      //   launch('https://zoom.us/j/' + widget.zoomLink, forceSafariVC: true);
+                      // } catch (e){
+                      //   throw 'error' + e.toString();
+                      // }
                     },
                     child: Text(
                       '${widget.zoomLink}',
@@ -89,11 +111,11 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: (){
-                      Clipboard.setData(ClipboardData(text: widget.zoomLink));
+                      Clipboard.setData(ClipboardData(text: 'https://zoom.us/j/$formattedId'));
                       print(Clipboard.getData('text/plain'));
                       Flushbar(
                         flushbarPosition: FlushbarPosition.TOP,
-                        message: 'Zoom ID Coppied!',
+                        message: 'Zoom URL Coppied!',
                         duration: Duration(seconds: 3),
                         animationDuration: Duration(milliseconds: 500),
                       )..show(context);
@@ -113,13 +135,10 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
                   ),
                 ],
               ),
-              Flexible(
-                child:  Center(
-                  child: Text(
+              Text(
                         '${widget.zoomDesc}',
                         style: TextStyle(fontSize: 15),
-                      ),
-                ),
+                      
               ),
             ],
           ),
