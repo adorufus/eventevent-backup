@@ -346,9 +346,9 @@ class _SeeAllItemState extends State<SeeAllItem> {
                       itemPriceText = "FREE";
                     } else if (popularEventList[i]['ticket_type']['type'] ==
                         'paid_live_stream') {
-                      itemColor = eventajaGreenTeal;
+                      itemColor = Color(0xFF34B323);
                       itemPriceText =
-                          'Rp. ' + popularEventList[i]['ticket_type']['name'];
+                          'Rp. ' + popularEventList[i]['ticket']['cheapestTicket'];
                     } else if (popularEventList[i]['ticket_type']['type'] ==
                         'free_limited') {
                       if (popularEventList[i]['ticket']
