@@ -30,7 +30,8 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
             builder: (context, props) {
               List<DiscoverMerchModel> discoverMerchData = props.listDiscoverResponse.data;
 
-              return Flexible(
+              return Container(
+                height: 100,
                 child: ListView.builder(
                   itemCount: discoverMerchData.length <= 0 ? 0 : discoverMerchData.length,
                   scrollDirection: Axis.horizontal,
