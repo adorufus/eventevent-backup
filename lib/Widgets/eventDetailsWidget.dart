@@ -8,6 +8,7 @@ import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
+import 'package:eventevent/Widgets/merch/EmerchRecommendation.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
@@ -2677,6 +2678,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             SizedBox(
               height: ScreenUtil.instance.setWidth(18),
             ),
+            EmerchRecommendation(),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
               decoration: BoxDecoration(

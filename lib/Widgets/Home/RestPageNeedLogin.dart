@@ -39,7 +39,7 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
 
   void initiateFacebookLogin() async {
     var facebookLogin = FacebookLogin();
-    var facebookLoginResult = await facebookLogin.logIn(
+    var facebookLoginResult = await facebookLogin.loginWithPublishPermissions(
         ['email', 'public_profile', 'user_friends', 'user_gender']);
 
     switch (facebookLoginResult.status) {
