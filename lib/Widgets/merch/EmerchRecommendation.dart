@@ -30,26 +30,28 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
             builder: (context, props) {
               List<DiscoverMerchModel> discoverMerchData = props.listDiscoverResponse.data;
 
-              return ListView.builder(
-                itemCount: discoverMerchData.length <= 0 ? 0 : discoverMerchData.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, i){
-                  return Container(
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          height: 200,
-                          width: 200,
-                          child: Image.network(discoverMerchData[i].imageUrl),
-                        ),
-                        SizedBox(height: 10),
-                        Text(discoverMerchData[i].productName),
-                        SizedBox(height: 10,),
-                        Text(discoverMerchData[i].details[0]['basic_price']),
-                      ],
-                    ),
-                  );
-                },
+              return Flexible(
+                child: ListView.builder(
+                  itemCount: discoverMerchData.length <= 0 ? 0 : discoverMerchData.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, i){
+                    return Container(
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            height: 200,
+                            width: 200,
+                            child: Image.network(discoverMerchData[i].imageUrl),
+                          ),
+                          SizedBox(height: 10),
+                          Text(discoverMerchData[i].productName),
+                          SizedBox(height: 10,),
+                          Text(discoverMerchData[i].details[0]['basic_price']),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               );
             }
           )
