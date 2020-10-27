@@ -18,6 +18,7 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
 
   @override
   Widget build(BuildContext context) {
+    print("debug emerch");
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
