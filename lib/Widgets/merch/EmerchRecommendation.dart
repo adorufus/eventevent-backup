@@ -23,7 +23,10 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('EMERCH', style: TextStyle(fontWeight: FontWeight.bold, color: eventajaGreenTeal),),
+          Padding(
+            padding: const EdgeInsets.only(left: 13),
+            child: Text('EMERCH', style: TextStyle(fontWeight: FontWeight.bold, color: eventajaGreenTeal),),
+          ),
           StoreConnector<AppState, AppScreenProps>(
             converter: (store) => mapStateToProps(store),
             onInitialBuild: (props) => handleInitialBuild(props),
@@ -32,6 +35,16 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
 
               return Container(
                 height: 300,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      spreadRadius: 1.2,
+                      blurRadius: .5,
+                      color: Colors.black12
+                    ),
+                  ]
+                ),
                 child: ListView.builder(
                   itemCount: discoverMerchData.length <= 0 ? 0 : discoverMerchData.length,
                   scrollDirection: Axis.horizontal,
