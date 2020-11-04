@@ -18,27 +18,30 @@ RSAA getDiscoverMerchRequest(String session, bool isInRecommendation, List<Strin
   String myString = '';
   List<String> myList = [];
   String id = '';
-  if(isInRecommendation) {
-    for(var id in categoryId){
-      if(id == categoryId.last){
-        myString = "categoryId[]=$id";
-      } else {
-        myString = "categoryId[]=$id&";
-      }
-      myList.add(myString);
 
-      print (myList);
+  for(var id in categoryId){
+    if(id == categoryId.last){
+      myString = "categoryId[]=$id";
+    } else {
+      myString = "categoryId[]=$id&";
     }
+    myList.add(myString);
 
-    for(var catId in myList){
-      id = id + catId;
-    }
-
-    getDiscoverMerchUrl = baseUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10&$id';
-    print("discover merch with category url: " + getDiscoverMerchUrl);
-  } else {
-    getDiscoverMerchUrl = baseUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10';
+    print (myList);
   }
+
+  for(var catId in myList){
+    id = id + catId;
+  }
+
+  // if(isInRecommendation) {
+  //
+  //
+  //   getDiscoverMerchUrl = baseUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10&$id';
+  //   print("discover merch with category url: " + getDiscoverMerchUrl);
+  // } else {
+  getDiscoverMerchUrl = baseUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10$id';
+  // }
   return RSAA(
     method: 'GET',
     endpoint: getDiscoverMerchUrl,
