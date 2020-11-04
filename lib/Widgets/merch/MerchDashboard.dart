@@ -151,7 +151,7 @@ class _MerchDashboardState extends State<MerchDashboard> {
       ),
       body: SafeArea(
         child: StoreConnector<AppState, AppScreenProps>(
-          converter: (store) => mapStateToProps(store),
+          converter: (store) => mapStateToProps(store, isInRecommendation: false),
           onInitialBuild: (props) => handleInitialBuild(props),
           builder: (context, props) {
             List<MerchBannerModel> bannerData = props.listResponse.data;
@@ -700,7 +700,7 @@ class AppScreenProps {
 //       getCollection: () => store.dispatch(getCollection()));
 // }
 
-AppScreenProps mapStateToProps(Store<AppState> store) {
+AppScreenProps mapStateToProps(Store<AppState> store, {@required bool isInRecommendation, List<String> categoryIds}) {
   return AppScreenProps(
     listResponse: store.state.banner.list,
     listCollectionResponse: store.state.collections.list,
@@ -710,7 +710,7 @@ AppScreenProps mapStateToProps(Store<AppState> store) {
     getCollection: () => store.dispatch(getCollection()),
     getBanner: () => store.dispatch(getBanners()),
     getPopularMerch: () => store.dispatch(getPopularMerch()),
-    getDiscoverMerch: () => store.dispatch(getDiscoverMerch()),
+    getDiscoverMerch: () => store.dispatch(getDiscoverMerch(isInRecommendation: isInRecommendation, categoryId: categoryIds)),
     getCategoryList: () => store.dispatch(getCategory()),
     getSpecificCategoryList: (String id) =>
         store.dispatch(getSpecificCategory(id)),

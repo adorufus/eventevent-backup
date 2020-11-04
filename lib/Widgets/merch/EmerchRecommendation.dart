@@ -9,6 +9,10 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmerchRecommendation extends StatefulWidget {
+  final List<String> categoryIds;
+
+  const EmerchRecommendation({Key key, this.categoryIds}) : super(key: key);
+
   @override
   _EmerchRecommendationState createState() => _EmerchRecommendationState();
 }
@@ -43,7 +47,7 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
             )
           ),
           StoreConnector<AppState, appProps.AppScreenProps>(
-              converter: (store) => appProps.mapStateToProps(store),
+              converter: (store) => appProps.mapStateToProps(store, isInRecommendation: true, categoryIds: widget.categoryIds),
               onInitialBuild: (props) => handleInitialBuild(props),
               builder: (context, props) {
                 List<DiscoverMerchModel> discoverMerchData =

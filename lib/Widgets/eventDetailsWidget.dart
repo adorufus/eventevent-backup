@@ -2562,6 +2562,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   }
 
   Widget tabItem() {
+    List<String> categoryIds = [];
+    for(var categoryId in detailData['category']['data']){
+      categoryIds.addAll(categoryId['id']);
+    }
+
     if (currentTab == 0) {
       return Container(
         color: Color(0xff8a8a8b).withOpacity(.05),
@@ -2679,7 +2684,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             SizedBox(
               height: ScreenUtil.instance.setWidth(18),
             ),
-            EmerchRecommendation(),
+            EmerchRecommendation(
+              categoryIds: categoryIds,
+            ),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
               decoration: BoxDecoration(
