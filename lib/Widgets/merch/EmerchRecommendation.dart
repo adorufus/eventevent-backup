@@ -11,6 +11,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class EmerchRecommendation extends StatefulWidget {
   final List<String> categoryIds;
 
@@ -105,7 +107,7 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
   }
 
   Future<http.Response> getRecommendedMerchByCategory() async {
-
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     String myString = '';
     List<String> myList = [];
     String id = '';
@@ -125,13 +127,14 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
       id = id + catId;
     }
 
-    String url = BaseApi().apiUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10$id';
+    String url = BaseApi().apiUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10&$id';
     print('merch recommended url: ' + url);
 
     var response = await http.get(
       url,
       headers: {
-        'Authorization': AUTHORIZATION_KEY
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString("Session")
       }
     );
 
