@@ -98,10 +98,10 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
                           imageUrl: discoverMerchList[i]['images']['mainImage'],
                           price: "Rp. " +
                               discoverMerchList[i]['details'][0]['basic_price'],
-                          title: discoverMerchList[i].productName,
+                          title: discoverMerchList[i]['productName'],
                           color: Color(0xFF34B323),
-                          merchantName: discoverMerchList[i].merchantName,
-                          profilePictUrl: discoverMerchList[i].profileImageUrl,
+                          merchantName: discoverMerchList[i]['seller']['username'],
+                          profilePictUrl: discoverMerchList[i]['seller']['photo'],
                         ),
                       );
                     },
