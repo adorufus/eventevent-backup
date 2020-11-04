@@ -326,7 +326,7 @@ class _MerchDashboardState extends State<MerchDashboard> {
                     child: SizedBox(),
                   ),
                   Image.network(
-                    data.imageUrl,
+                    data.imageUrl == null ? "" : data.imageUrl,
                     scale: 6,
                   ),
                   Expanded(
@@ -521,7 +521,7 @@ class _MerchDashboardState extends State<MerchDashboard> {
                 child: MerchItem(
                   imageUrl: data[i].imageUrl,
                   title: data[i].productName,
-                  color: eventajaGreenTeal,
+                  color: Color(0xFF34B323),
                   profilePictUrl: data[i].profileImageUrl,
                   price: 'Rp. ' + data[i].details[0]['basic_price'],
                   merchantName: data[i].merchantName,

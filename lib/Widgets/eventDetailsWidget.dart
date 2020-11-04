@@ -356,6 +356,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             color: Colors.white,
             child: Center(child: CupertinoActivityIndicator(radius: 20)))
         : Scaffold(
+          backgroundColor: Colors.white,
             appBar: PreferredSize(
               preferredSize: Size(null, 100),
               child: Container(

@@ -91,18 +91,18 @@ class MerchItem extends StatelessWidget {
                           title,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(15),
+                              fontSize: ScreenUtil.instance.setSp(24),
                               fontWeight: FontWeight.bold),
                         )),
                   ],
                 ),
               ),
-              SizedBox(height: ScreenUtil.instance.setWidth(11)),
+              SizedBox(height: ScreenUtil.instance.setWidth(5)),
               Flexible(
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    height: ScreenUtil.instance.setWidth(28),
+                    height: ScreenUtil.instance.setWidth(40),
                     decoration: BoxDecoration(boxShadow: <BoxShadow>[
                       BoxShadow(
                           color: color.withOpacity(0.4),
@@ -114,7 +114,7 @@ class MerchItem extends StatelessWidget {
                       price.toUpperCase(),
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: ScreenUtil.instance.setSp(14),
+                          fontSize: ScreenUtil.instance.setSp(22),
                           fontWeight: FontWeight.bold),
                     )),
                   ),
