@@ -17,6 +17,7 @@ RSAA getDiscoverMerchRequest(String session, bool isInRecommendation, List<Strin
   String getDiscoverMerchUrl;
   String myString = '';
   List<String> myList = [];
+  String id = '';
   if(isInRecommendation) {
     for(var id in categoryId){
       if(id == categoryId.last){
@@ -30,9 +31,11 @@ RSAA getDiscoverMerchRequest(String session, bool isInRecommendation, List<Strin
     }
 
     for(var catId in myList){
-      getDiscoverMerchUrl = baseUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10&' + catId;
-      print("discover merch with category url: " + getDiscoverMerchUrl);
+      id = id + catId;
     }
+
+    getDiscoverMerchUrl = baseUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10&$id';
+    print("discover merch with category url: " + getDiscoverMerchUrl);
   } else {
     getDiscoverMerchUrl = baseUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10';
   }
