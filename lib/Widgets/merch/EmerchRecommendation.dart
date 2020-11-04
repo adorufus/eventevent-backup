@@ -25,6 +25,7 @@ class EmerchRecommendation extends StatefulWidget {
 class _EmerchRecommendationState extends State<EmerchRecommendation> {
 
   List discoverMerchList = [];
+  String status = '';
 
   @override
   void initState() {
@@ -41,6 +42,11 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
         setState(() {
 
         });
+      } else {
+        status = extractedData['desc'];
+        setState(() {
+
+        });
       }
     });
     super.initState();
@@ -49,7 +55,7 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
   @override
   Widget build(BuildContext context) {
     // print("debug emerch");
-    return Container(
+    return status == 'Product not found' ? Container() : Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
