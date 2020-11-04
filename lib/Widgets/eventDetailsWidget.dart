@@ -2564,7 +2564,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   Widget tabItem() {
     List<String> categoryIds = [];
     for(var categoryId in detailData['category']['data']){
-      categoryIds.addAll(categoryId['id']);
+      categoryIds.add(categoryId['id']);
     }
 
     if (currentTab == 0) {
