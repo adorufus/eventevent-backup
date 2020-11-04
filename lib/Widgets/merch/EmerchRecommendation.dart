@@ -44,6 +44,23 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
         });
       } else {
         status = extractedData['desc'];
+        if(status == 'Product not found'){
+          getRecommendedMerchByCategory(retryAfterCategoryNotFound: true).then((response){
+            print('status code' + response.statusCode.toString());
+            print('response body' + response.body);
+
+            var extractedData = json.decode(response.body);
+
+            if(response.statusCode == 200){
+              discoverMerchList.addAll(extractedData['data']);
+              print('discoverMerchList: ' + discoverMerchList.toString());
+
+              setState(() {
+
+              });
+            }
+          });
+        }
         setState(() {
 
         });
