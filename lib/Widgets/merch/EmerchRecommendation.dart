@@ -27,8 +27,8 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
   @override
   void initState() {
     getRecommendedMerchByCategory().then((response){
-      print(response.statusCode);
-      print(response.body);
+      print('status code' + response.statusCode.toString());
+      print('response body' + response.body);
 
       var extractedData = json.decode(response.body);
 
