@@ -31,6 +31,7 @@ RSAA getDiscoverMerchRequest(String session, bool isInRecommendation, List<Strin
 
     for(var catId in myList){
       getDiscoverMerchUrl = baseUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10&$catId';
+      print("discover merch with category url: " + getDiscoverMerchUrl);
     }
   } else {
     getDiscoverMerchUrl = baseUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10';
