@@ -710,7 +710,7 @@ AppScreenProps mapStateToProps(Store<AppState> store, {@required bool isInRecomm
     getCollection: () => store.dispatch(getCollection()),
     getBanner: () => store.dispatch(getBanners()),
     getPopularMerch: () => store.dispatch(getPopularMerch()),
-    getDiscoverMerch: () => store.dispatch(getDiscoverMerch(isInRecommendation: isInRecommendation, categoryId: categoryIds)),
+    getDiscoverMerch: () => store.dispatch(getDiscoverMerch()),
     getCategoryList: () => store.dispatch(getCategory()),
     getSpecificCategoryList: (String id) =>
         store.dispatch(getSpecificCategory(id)),
