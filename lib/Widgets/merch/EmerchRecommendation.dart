@@ -35,6 +35,10 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
       if(response.statusCode == 200){
         discoverMerchList.addAll(extractedData['data']);
         print('discoverMerchList: ' + discoverMerchList.toString());
+
+        setState(() {
+
+        });
       }
     });
     super.initState();
