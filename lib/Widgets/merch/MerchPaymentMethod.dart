@@ -270,7 +270,7 @@ class MerchPaymentMethodState extends State<MerchPaymentMethod> {
     print('product id: ' + preferences.getString('productId'));
     print('product detail id: ' + preferences.getString('productDetailsId'));
     print('currentBuyerAddressId: ' + preferences.getString('currentBuyerAddressId'));
-    print('product quantity: ' + preferences.getString('productQuantity'));
+    print('product quantity: ' + preferences.getInt('productQuantity').toString());
     print('shipping name: ' + widget.shippingName);
     print('shipping code: ' + widget.shippingCode);
     print('shipping Service: ' + widget.shippingService);
