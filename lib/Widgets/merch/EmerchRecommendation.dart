@@ -115,11 +115,12 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
     );
   }
 
-  Future<http.Response> getRecommendedMerchByCategory() async {
+  Future<http.Response> getRecommendedMerchByCategory({bool retryAfterCategoryNotFound = false}) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String myString = '';
     List<String> myList = [];
     String id = '';
+    String url = '';
 
     for(var id in widget.categoryIds){
       if(id == widget.categoryIds.last){
@@ -136,7 +137,13 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
       id = id + catId;
     }
 
-    String url = BaseApi().apiUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10&$id';
+    if(retryAfterCategoryNotFound == true){
+      url = BaseApi().apiUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10';
+    } else {
+      url = BaseApi().apiUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10&$id';
+    }
+
+
     print('merch recommended url: ' + url);
 
     var response = await http.get(
