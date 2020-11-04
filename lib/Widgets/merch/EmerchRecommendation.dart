@@ -90,14 +90,14 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MerchDetails(
-                                  merchId: discoverMerchList[i].merchId),
+                                  merchId: discoverMerchList[i]['product_id']),
                             ),
                           );
                         },
                         child: MerchItem(
-                          imageUrl: discoverMerchList[i].imageUrl,
+                          imageUrl: discoverMerchList[i]['images']['mainImage'],
                           price: "Rp. " +
-                              discoverMerchList[i].details[0]['basic_price'],
+                              discoverMerchList[i]['details'][0]['basic_price'],
                           title: discoverMerchList[i].productName,
                           color: Color(0xFF34B323),
                           merchantName: discoverMerchList[i].merchantName,
