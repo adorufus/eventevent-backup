@@ -3,10 +3,13 @@ import 'package:eventevent/Models/DiscoverMerchModel.dart';
 import 'package:eventevent/Widgets/merch/MerchDashboard.dart' as appProps;
 import 'package:eventevent/Widgets/merch/MerchDetails.dart';
 import 'package:eventevent/Widgets/merch/MerchItem.dart';
+import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class EmerchRecommendation extends StatefulWidget {
   final List<String> categoryIds;
@@ -18,8 +21,23 @@ class EmerchRecommendation extends StatefulWidget {
 }
 
 class _EmerchRecommendationState extends State<EmerchRecommendation> {
-  void handleInitialBuild(appProps.AppScreenProps props) {
-    props.getDiscoverMerch();
+
+  List discoverMerchList = [];
+
+  @override
+  void initState() {
+    getRecommendedMerchByCategory().then((response){
+      print(response.statusCode);
+      print(response.body);
+
+      var extractedData = json.decode(response.body);
+
+      if(response.statusCode == 200){
+        discoverMerchList.addAll(extractedData['data']);
+        print('discoverMerchList: ' + discoverMerchList.toString());
+      }
+    });
+    super.initState();
   }
 
   @override
@@ -46,19 +64,12 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
               ],
             )
           ),
-          StoreConnector<AppState, appProps.AppScreenProps>(
-              converter: (store) => appProps.mapStateToProps(store, isInRecommendation: true, categoryIds: widget.categoryIds),
-              onInitialBuild: (props) => handleInitialBuild(props),
-              builder: (context, props) {
-                List<DiscoverMerchModel> discoverMerchData =
-                    props.listDiscoverResponse.data;
-
-                return Container(
+          Container(
                   height: 300,
                   child: ListView.builder(
-                    itemCount: discoverMerchData.length <= 0 || discoverMerchData == null
+                    itemCount: discoverMerchList.length <= 0 || discoverMerchList == null
                         ? 0
-                        : discoverMerchData.length,
+                        : discoverMerchList.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, i) {
                       return GestureDetector(
@@ -67,26 +78,60 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MerchDetails(
-                                  merchId: discoverMerchData[i].merchId),
+                                  merchId: discoverMerchList[i].merchId),
                             ),
                           );
                         },
                         child: MerchItem(
-                          imageUrl: discoverMerchData[i].imageUrl,
+                          imageUrl: discoverMerchList[i].imageUrl,
                           price: "Rp. " +
-                              discoverMerchData[i].details[0]['basic_price'],
-                          title: discoverMerchData[i].productName,
+                              discoverMerchList[i].details[0]['basic_price'],
+                          title: discoverMerchList[i].productName,
                           color: Color(0xFF34B323),
-                          merchantName: discoverMerchData[i].merchantName,
-                          profilePictUrl: discoverMerchData[i].profileImageUrl,
+                          merchantName: discoverMerchList[i].merchantName,
+                          profilePictUrl: discoverMerchList[i].profileImageUrl,
                         ),
                       );
                     },
                   ),
-                );
-              })
+                ),
         ],
       ),
     );
+  }
+
+  Future<http.Response> getRecommendedMerchByCategory() async {
+
+    String myString = '';
+    List<String> myList = [];
+    String id = '';
+
+    for(var id in widget.categoryIds){
+      if(id == widget.categoryIds.last){
+        myString = "categoryId[]=$id";
+      } else {
+        myString = "categoryId[]=$id&";
+      }
+      myList.add(myString);
+
+      print (myList);
+    }
+
+    for(var catId in myList){
+      id = id + catId;
+    }
+
+    String url = BaseApi().apiUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10$id';
+    print('merch recommended url: ' + url);
+
+    var response = await http.get(
+      url,
+      headers: {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE
+      }
+    );
+
+    return response;
   }
 }

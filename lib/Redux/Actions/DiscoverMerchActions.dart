@@ -12,27 +12,9 @@ const LIST_DISCOVERMERCH_REQUEST = 'LIST_DISCOVERMERCH_REQUEST';
 const LIST_DISCOVERMERCH_SUCCESS = 'LIST_DISCOVERMERCH_SUCCESS';
 const LIST_DISCOVERMERCH_FAILURE = 'LIST_DISCOVERMERCH_FAILURE';
 
-RSAA getDiscoverMerchRequest(String session, bool isInRecommendation, List<String> categoryId) {
+RSAA getDiscoverMerchRequest(String session) {
   final String baseUrl = BaseApi().restUrl;
   String getDiscoverMerchUrl;
-  String myString = '';
-  List<String> myList = [];
-  String id = '';
-
-  for(var id in categoryId){
-    if(id == categoryId.last){
-      myString = "categoryId[]=$id";
-    } else {
-      myString = "categoryId[]=$id&";
-    }
-    myList.add(myString);
-
-    print (myList);
-  }
-
-  for(var catId in myList){
-    id = id + catId;
-  }
 
   // if(isInRecommendation) {
   //
@@ -40,7 +22,7 @@ RSAA getDiscoverMerchRequest(String session, bool isInRecommendation, List<Strin
   //   getDiscoverMerchUrl = baseUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10&$id';
   //   print("discover merch with category url: " + getDiscoverMerchUrl);
   // } else {
-  getDiscoverMerchUrl = baseUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10$id';
+  getDiscoverMerchUrl = baseUrl + '/product/list?X-API-KEY=$API_KEY&page=1&type=discover&limit=10';
   // }
   return RSAA(
     method: 'GET',
@@ -54,14 +36,12 @@ RSAA getDiscoverMerchRequest(String session, bool isInRecommendation, List<Strin
   );
 }
 
-ThunkAction<AppState> getDiscoverMerch({bool isInRecommendation, List<String> categoryId}) => (Store<AppState> store) async {
+ThunkAction<AppState> getDiscoverMerch() => (Store<AppState> store) async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
 
       return store.dispatch(
         getDiscoverMerchRequest(
           preferences.getString('Session'),
-          isInRecommendation,
-          categoryId
         ),
       );
     };
