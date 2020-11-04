@@ -267,6 +267,14 @@ class MerchPaymentMethodState extends State<MerchPaymentMethod> {
     isProcessingTransaction = true;
     if (mounted) setState(() {});
 
+    print('product id: ' + preferences.getString('productId'));
+    print('product detail id: ' + preferences.getString('productDetailsId'));
+    print('currentBuyerAddressId: ' + preferences.getString('currentBuyerAddressId'));
+    print('product quantity: ' + preferences.getString('productQuantity'));
+    print('shipping name: ' + widget.shippingName);
+    print('shipping code: ' + widget.shippingCode);
+    print('shipping Service: ' + widget.shippingService);
+
     try {
       final response = await http.post(url, body: {
         'X-API-KEY': API_KEY,
