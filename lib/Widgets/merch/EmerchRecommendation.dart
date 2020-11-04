@@ -55,7 +55,7 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
   @override
   Widget build(BuildContext context) {
     // print("debug emerch");
-    return status == 'Product not found' ? Container() : Container(
+    return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -76,7 +76,10 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
               ],
             )
           ),
-          Container(
+          status == 'Product not found' ? Container(
+            height: 100,
+            child: Center(child: Text('No Product Found In This Category :('))
+          ) : Container(
                   height: 300,
                   child: ListView.builder(
                     itemCount: discoverMerchList.length <= 0 || discoverMerchList == null
@@ -98,7 +101,7 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
                           imageUrl: discoverMerchList[i]['images']['mainImage'],
                           price: "Rp. " +
                               discoverMerchList[i]['details'][0]['basic_price'],
-                          title: discoverMerchList[i]['productName'],
+                          title: discoverMerchList[i]['product_name'],
                           color: Color(0xFF34B323),
                           merchantName: discoverMerchList[i]['seller']['username'],
                           profilePictUrl: discoverMerchList[i]['seller']['photo'],
