@@ -56,7 +56,7 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
                 return Container(
                   height: 300,
                   child: ListView.builder(
-                    itemCount: discoverMerchData.length <= 0
+                    itemCount: discoverMerchData.length <= 0 || discoverMerchData == null
                         ? 0
                         : discoverMerchData.length,
                     scrollDirection: Axis.horizontal,
