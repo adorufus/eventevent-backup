@@ -131,8 +131,7 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
     var response = await http.get(
       url,
       headers: {
-        'Authorization': AUTHORIZATION_KEY,
-        'signature': SIGNATURE
+        'Authorization': AUTHORIZATION_KEY
       }
     );
 
