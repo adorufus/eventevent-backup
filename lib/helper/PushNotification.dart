@@ -7,6 +7,7 @@ import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/Widgets/TransactionHistory.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
+import 'package:eventevent/Widgets/merch/TransactionHistoryList.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/Widgets/timeline/LovedOnYourFollowingDetails.dart';
 import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
@@ -335,6 +336,56 @@ class PushNotificationState extends State<PushNotification> {
                         width: 25,
                       ),
                       Text('Payment Status',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: ScreenUtil.instance.setSp(13))),
+                      Expanded(
+                        child: SizedBox(),
+                      ),
+                      Icon(
+                        Icons.navigate_next,
+                        size: 25,
+                        color: eventajaGreenTeal,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: ScreenUtil.instance.setWidth(9)),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              TransactionHisdtoryList()));
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 13),
+                  padding: EdgeInsets.all(13),
+                  height: ScreenUtil.instance.setWidth(60),
+                  decoration: BoxDecoration(
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 2,
+                            spreadRadius: 1.5)
+                      ],
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: ScreenUtil.instance.setWidth(25),
+                        height: ScreenUtil.instance.setWidth(25),
+                        child: Image.asset(
+                            'assets/icons/icon_apps/paymentstatus.png'),
+                      ),
+                      SizedBox(
+                        width: 25,
+                      ),
+                      Text('Order Status',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: ScreenUtil.instance.setSp(13))),
