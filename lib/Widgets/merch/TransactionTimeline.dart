@@ -31,7 +31,7 @@ class _TransactionTimelineState extends State<TransactionTimeline> {
     preferences = await SharedPreferences.getInstance();
 
     productName = preferences.getString("productName");
-    subtotal = widget.transactionData['grandtotal'].toString();
+    subtotal = widget.transactionData['subtotal'].toString();
     productImage = preferences.getString("productImage");
     orderStatus = widget.transactionData['order_status'];
     subtotal = widget.transactionData['subtotal'].toString();
@@ -216,13 +216,19 @@ class _TransactionTimelineState extends State<TransactionTimeline> {
                   children: <Widget>[
                     Icon(
                       Icons.account_balance_wallet,
-                      color: Colors.grey,
+                      color: orderStatus == 'waiting_payment'
+                          ? eventajaGreenTeal
+                          : Colors.grey,
                       size: 40,
                     ),
                     Text(
-                      'Wating For \nPayment',
+                      'Waiting For \nPayment',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 10),
+                      style: TextStyle(
+                          fontSize: 10,
+                          color: orderStatus == 'waiting_payment'
+                              ? eventajaGreenTeal
+                              : Colors.grey),
                     )
                   ],
                 ),
@@ -268,13 +274,17 @@ class _TransactionTimelineState extends State<TransactionTimeline> {
                   children: <Widget>[
                     Icon(
                       Icons.local_shipping,
-                      color: Colors.grey,
+                      color: orderStatus == 'sent'
+                              ? eventajaGreenTeal
+                              : Colors.grey,
                       size: 40,
                     ),
                     Text(
                       'Shipping \nProccess',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 10),
+                      style: TextStyle(fontSize: 10, color: orderStatus == 'finish'
+                              ? eventajaGreenTeal
+                              : Colors.grey),
                     )
                   ],
                 ),
@@ -290,13 +300,17 @@ class _TransactionTimelineState extends State<TransactionTimeline> {
                   children: <Widget>[
                     Icon(
                       Icons.pin_drop,
-                      color: Colors.grey,
+                      color: orderStatus == 'finish'
+                              ? eventajaGreenTeal
+                              : Colors.grey,
                       size: 40,
                     ),
                     Text(
                       'Finish',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 10),
+                      style: TextStyle(fontSize: 10, color: orderStatus == 'finish'
+                              ? eventajaGreenTeal
+                              : Colors.grey),
                     )
                   ],
                 ),

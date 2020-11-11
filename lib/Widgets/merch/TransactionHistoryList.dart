@@ -4,21 +4,23 @@ import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Transaction/ExpiredPage.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
+import 'package:eventevent/Widgets/merch/TransactionTimeline.dart';
 import 'package:eventevent/Widgets/notification/TransactionHistoryItem.dart';
+import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TransactionHisdtoryList extends StatefulWidget {
+class TransactionHistoryList extends StatefulWidget {
   @override
-  _TransactionHisdtoryListState createState() =>
-      _TransactionHisdtoryListState();
+  _TransactionHistoryListState createState() => _TransactionHistoryListState();
 }
 
-class _TransactionHisdtoryListState extends State<TransactionHisdtoryList> {
+class _TransactionHistoryListState extends State<TransactionHistoryList> {
   List transactionList = [];
   String paymentStatusText = '';
   Color paymentStatusColor;
@@ -27,18 +29,19 @@ class _TransactionHisdtoryListState extends State<TransactionHisdtoryList> {
 
   @override
   void initState() {
-    getMerchTransactionList().then((response){
+    getMerchTransactionList().then((response) {
       print("Status code: " + response.statusCode.toString());
       print("Response Body: " + response.body);
 
       var extractedData = json.decode(response.body);
 
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         transactionList.addAll(extractedData['data']);
+        isLoading = false;
+        if (mounted) setState(() {});
       } else {
         print("error with response: " + response.body);
       }
-
     });
     super.initState();
   }
@@ -109,8 +112,7 @@ class _TransactionHisdtoryListState extends State<TransactionHisdtoryList> {
                           ? 0
                           : transactionList.length,
                       itemBuilder: (BuildContext context, i) {
-                        if (transactionList[i]['order_status'] ==
-                            'finish') {
+                        if (transactionList[i]['order_status'] == 'finish') {
                           paymentStatusColor = eventajaGreenTeal;
                           paymentStatusText = 'Finished';
                         } else if (transactionList[i]['order_status'] ==
@@ -121,10 +123,13 @@ class _TransactionHisdtoryListState extends State<TransactionHisdtoryList> {
                             'waiting_payment') {
                           paymentStatusColor = Colors.yellow[600];
                           paymentStatusText = 'Waiting for payment';
+                        } else {
+                          paymentStatusColor = Colors.grey;
+                          paymentStatusText = 'Not Specified';
                         }
 
                         return GestureDetector(
-                            onTap: () {
+                            onTap: () async {
                               // if (transactionList[i]['status_transaksi'] ==
                               //     'pending') {
                               //   // Navigator.push(
@@ -152,9 +157,43 @@ class _TransactionHisdtoryListState extends State<TransactionHisdtoryList> {
                               //           builder: (BuildContext context) =>
                               //               ExpiredPage()));
                               // }
+
+                              SharedPreferences preferences = await SharedPreferences.getInstance();
+
+                              preferences.setString("productName", transactionList[i]['product']['product_name']);
+                              preferences.setString("productImage", transactionList[i]['product']['images']);
+
+                              getMerchTransactionDetail(
+                                      transactionList[i]['id'], false)
+                                  .then((response) {
+                                print(response.statusCode);
+                                print(response.body);
+
+                                var extractedData = json.decode(response.body);
+
+                                if (response.statusCode == 200) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => TransactionTimeline(
+                                        transactionData: extractedData['data'],
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  Flushbar(
+                                    animationDuration: Duration(milliseconds: 500),
+                                    backgroundColor: Colors.red,
+                                    flushbarPosition: FlushbarPosition.TOP,
+                                    duration: Duration(seconds: 2),
+                                    message: "Something went wrong :(",                                    
+                                  ).show(context);
+                                }
+                              });
                             },
                             child: TransactionHistoryItem(
-                              image: transactionList[i]['product']['images'] == false
+                              image: transactionList[i]['product']['images'] ==
+                                      false
                                   ? ''
                                   : transactionList[i]['product']['images'],
                               ticketCode: transactionList[i]
@@ -163,7 +202,8 @@ class _TransactionHisdtoryListState extends State<TransactionHisdtoryList> {
                                   ['product_name'],
                               ticketStatus: paymentStatusText,
                               ticketColor: paymentStatusColor,
-                              quantity: transactionList[i]['product']['quantity'],
+                              quantity: transactionList[i]['product']
+                                  ['quantity'],
                               timeStart: transactionList[i]['created_at'],
                               price: transactionList[i]['grandtotal'],
                             ));
@@ -177,18 +217,15 @@ class _TransactionHisdtoryListState extends State<TransactionHisdtoryList> {
   Future<http.Response> getMerchTransactionList() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String url = BaseApi().apiUrl +
-        'transaction/list_transaction?X-API-KEY=$API_KEY&order_status=waiting_payment&page=1&limit=10';
+        '/transaction/list_transaction?X-API-KEY=$API_KEY&order_status=waiting_payment&page=1&limit=10';
 
     isLoading = true;
-    if(mounted) setState((){});
+    if (mounted) setState(() {});
 
-    final response = await http.get(
-      url,
-      headers: {
-        'Authorization': AUTHORIZATION_KEY,
-        'cookie': preferences.getString("Session"),
-      }
-    );
+    final response = await http.get(url, headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': preferences.getString("Session"),
+    });
 
     return response;
   }

@@ -358,7 +358,7 @@ class PushNotificationState extends State<PushNotification> {
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              TransactionHisdtoryList()));
+                              TransactionHistoryList()));
                 },
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 13),

@@ -93,10 +93,7 @@ class _EmerchRecommendationState extends State<EmerchRecommendation> {
               ],
             )
           ),
-          status == 'Product not found' ? Container(
-            height: 100,
-            child: Center(child: Text('No Product Found In This Category :('))
-          ) : Container(
+          Container(
                   height: 300,
                   child: ListView.builder(
                     itemCount: discoverMerchList.length <= 0 || discoverMerchList == null

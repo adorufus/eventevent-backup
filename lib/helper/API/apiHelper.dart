@@ -72,3 +72,19 @@ Future<http.Response> getEventStreamingDetail(String token) async{
 
   return response;
 }
+
+Future<http.Response> getMerchTransactionDetail(String transactionId, bool isSeller) async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  String url = BaseApi().apiUrl + '/transaction/detail_transaction?X-API-KEY=$API_KEY&transaction_id=$transactionId${isSeller == true ? '&is_seller=true' : ''}';
+
+  print(url);
+  final response = await http.get(
+    url,
+    headers: {
+      'Authorization': AUTHORIZATION_KEY,
+      'cookie': preferences.getString("Session")
+    }
+  );
+
+  return response;
+}
