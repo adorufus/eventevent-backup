@@ -15,6 +15,7 @@ import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -22,6 +23,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class ProcessingPayment extends StatefulWidget {
   //if the loading from payment
@@ -41,7 +43,10 @@ class ProcessingPayment extends StatefulWidget {
   final index;
   final context;
 
-  const ProcessingPayment(
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver obeserver = FirebaseAnalyticsObserver(analytics: analytics); 
+
+  ProcessingPayment(
       {Key key,
       this.uuid,
       this.isCustomForm,
@@ -62,7 +67,10 @@ class ProcessingPayment extends StatefulWidget {
 }
 
 class _ProcessingPaymentState extends State<ProcessingPayment> {
+
   bool isLoading = false;
+
+  
 
   Map<String, dynamic> paymentData;
   String expDate;
@@ -178,11 +186,26 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       }
 
       if (widget.ticketType == 'free_limited' || widget.ticketType == 'free_live_stream') {
+        await ProcessingPayment.analytics.logEvent(name: 'purchase', parameters: <String, dynamic>{
+          'transaction_id': paymentData['transaction_code'],
+          'value': 0,
+          'currency': "IDR",
+          'items': paymentData['ticket']['final_price']
+        }).then((value){
+          print("Jalan");
+          
+        });
+        
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (BuildContext context) => SuccessPage(invoiceNumber: paymentData['transaction_code'])));
       } else if (paymentData['payment_method_id'] == '1') {
+        await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
+          'value': paymentData['ticket']['final_price'],
+          'currency': "IDR",
+          'items': paymentData['ticket']['ticket_name']
+        });
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -191,6 +214,11 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                       expDate: paymentData['expired_time'],
                     )));
       } else if (paymentData['payment_method_id'] == '4') {
+        await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
+          'value': paymentData['ticket']['final_price'],
+          'currency': "IDR",
+          'items': paymentData['ticket']['ticket_name']
+        });
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => WaitingGopay(
@@ -202,6 +230,11 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                   )),
         );
       } else if (paymentData['payment_method_id'] == '2') {
+        await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
+          'value': paymentData['ticket']['final_price'],
+          'currency': "IDR",
+          'items': paymentData['ticket']['ticket_name']
+        });
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => WaitTransaction(
@@ -210,6 +243,11 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                   finalPrice: widget.total.toString())),
         );
       } else if (paymentData['payment_method_id'] == '3') {
+        await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
+          'value': paymentData['ticket']['final_price'],
+          'currency': "IDR",
+          'items': paymentData['ticket']['ticket_name']
+        });
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => WaitingTransactionAlfamart(
@@ -218,7 +256,12 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                   )),
         );
       } else if (paymentData['payment_method_id'] == '5') {
-//        launch(paymentData['payment']['data_vendor']['payment_url']);
+        //        launch(paymentData['payment']['data_vendor']['payment_url']);
+        await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
+          'value': paymentData['ticket']['final_price'],
+          'currency': "IDR",
+          'items': paymentData['ticket']['ticket_name']
+        });
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -226,11 +269,21 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                       url: paymentData['payment']['data_vendor']['payment_url'],
                     )));
       } else if (paymentData['payment_method_id'] == '9') {
+        await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
+          'value': paymentData['ticket']['final_price'],
+          'currency': "IDR",
+          'items': paymentData['ticket']['ticket_name']
+        });
         Navigator.of(context).push(MaterialPageRoute(
             builder: (BuildContext context) => WebViewTest(
                   url: paymentData['payment']['data_vendor']['invoice_url'],
                 )));
       } else if (paymentData['payment_method_id'] == '7') {
+        await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
+          'value': paymentData['ticket']['final_price'],
+          'currency': "IDR",
+          'items': paymentData['ticket']['ticket_name']
+        });
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => PaymentBCA(
