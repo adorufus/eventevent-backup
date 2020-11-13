@@ -2,6 +2,7 @@ import 'package:eventevent/Widgets/Home/MiniDate.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'PopularEventWidget.dart';
 
@@ -31,6 +32,8 @@ class LatestEventItem extends StatelessWidget {
       this.isHybridEvent})
       : super(key: key);
 
+  String price = 'Rp. ';
+
   @override
   Widget build(BuildContext context) {
     double defaultScreenWidth = 400.0;
@@ -41,6 +44,15 @@ class LatestEventItem extends StatelessWidget {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
+
+    MoneyFormatterOutput fo;
+    RegExp pricesRegex = new RegExp(r"^[0-9]*");
+
+    if(pricesRegex.hasMatch(itemPrice)){
+      itemPrice.replaceAll("Rp. ", "");
+      print(itemPrice);
+    }
+
     // print(MediaQuery.of(context).size.width);
     return Container(
       margin: EdgeInsets.only(left: 13, right: 13, top: 13),
