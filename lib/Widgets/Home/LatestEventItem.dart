@@ -32,7 +32,7 @@ class LatestEventItem extends StatelessWidget {
       this.isHybridEvent})
       : super(key: key);
 
-  String price = 'Rp. ';
+  
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +45,7 @@ class LatestEventItem extends StatelessWidget {
       allowFontScaling: true,
     )..init(context);
 
+    String price = 'Rp. ';
     MoneyFormatterOutput fo;
     RegExp pricesRegex = new RegExp(r"^[0-9]*");
 
