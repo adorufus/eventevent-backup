@@ -51,7 +51,7 @@ class LatestEventItem extends StatelessWidget {
 
     if(pricesRegex.hasMatch(itemPrice)){
       itemPrice.replaceAll("Rp. ", "");
-      print(itemPrice);
+      print("regex price: " + itemPrice);
     }
 
     // print(MediaQuery.of(context).size.width);
