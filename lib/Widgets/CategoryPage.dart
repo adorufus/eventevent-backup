@@ -186,7 +186,9 @@ class _CategoryPageState extends State<CategoryPage> {
                       if (eventByCategoryList[i]['ticket_type']['type'] ==
                               'paid' ||
                           eventByCategoryList[i]['ticket_type']['type'] ==
-                              'paid_seating') {
+                              'paid_seating' || eventByCategoryList[i]['ticket_type']
+                              ['type'] ==
+                          'paid_live_stream') {
                         if (eventByCategoryList[i]['ticket']
                                 ['availableTicketStatus'] ==
                             '1') {
