@@ -45,15 +45,15 @@ class LatestEventItem extends StatelessWidget {
       allowFontScaling: true,
     )..init(context);
 
-    String price = 'Rp. ';
-    MoneyFormatterOutput fo;
-    RegExp pricesRegex = new RegExp(r"^[0-9]*$");
+    // String price = 'Rp. ';
+    // MoneyFormatterOutput fo;
+    // RegExp pricesRegex = new RegExp(r"^[0-9]*$");
 
-    print(pricesRegex.pattern);
+    // print(pricesRegex.pattern);
 
-    if(itemPrice.contains("Rp.,-")){
-      print("prices: " + itemPrice);
-    }
+    // if(itemPrice.contains("Rp.,-")){
+    //   print("prices: " + itemPrice);
+    // }
 
     // print(MediaQuery.of(context).size.width);
     return Container(

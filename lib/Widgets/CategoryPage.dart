@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -81,7 +82,7 @@ class _CategoryPageState extends State<CategoryPage> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: PreferredSize(
@@ -190,8 +191,13 @@ class _CategoryPageState extends State<CategoryPage> {
                                 ['availableTicketStatus'] ==
                             '1') {
                           itemColor = Color(0xFF34B323);
-                          itemPriceText = 'Rp. ' + eventByCategoryList[i]['ticket']
-                              ['cheapestTicket'] + ',-';
+                          itemPriceText = 'Rp. ' +
+                              formatPrice(
+                                price: eventByCategoryList[i]['ticket']
+                                        ['cheapestTicket']
+                                    .toString(),
+                              ) +
+                              ',-';
                         } else {
                           if (eventByCategoryList[i]['ticket']['salesStatus'] ==
                               'comingSoon') {
@@ -268,7 +274,7 @@ class _CategoryPageState extends State<CategoryPage> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       EventDetailLoadingScreen(
-                                        isRest: widget.isRest,
+                                          isRest: widget.isRest,
                                           eventId: eventByCategoryList[i]
                                               ['id'])));
                         },
