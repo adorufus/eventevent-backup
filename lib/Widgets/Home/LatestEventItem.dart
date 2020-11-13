@@ -49,7 +49,9 @@ class LatestEventItem extends StatelessWidget {
     MoneyFormatterOutput fo;
     RegExp pricesRegex = new RegExp(r"^[0-9]*");
 
-    if(pricesRegex.hasMatch(itemPrice)){
+    
+
+    if(itemPrice.contains(pricesRegex.pattern)){
       itemPrice.replaceAll("Rp. ", "");
       print("regex price: " + itemPrice);
     }
