@@ -1322,7 +1322,7 @@ class _EventCatalogState extends State<EventCatalog>
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(5),
                             child: CachedNetworkImage(
-                              imageUrl: collectionData[i]['image_small'],
+                              imageUrl: collectionData[i]['image_medium'],
                               placeholder: (context, url) => Container(
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(5),
