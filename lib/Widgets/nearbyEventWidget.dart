@@ -10,6 +10,7 @@ import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:location/location.dart';
@@ -75,7 +76,7 @@ class _ListenPageState extends State<ListenPage> {
                   item['ticket_type']['type'] == 'paid_seating');
             });
 
-            print(nearbyEventData);
+          print(nearbyEventData);
         }
       });
     }
@@ -140,7 +141,6 @@ class _ListenPageState extends State<ListenPage> {
               : SmartRefresher(
                   enablePullDown: true,
                   enablePullUp: true,
-                  
                   controller: refreshController,
                   onRefresh: () {
                     setState(() {
@@ -167,11 +167,9 @@ class _ListenPageState extends State<ListenPage> {
                     Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      
                       width: MediaQuery.of(context).size.width,
                       height: ScreenUtil.instance.setWidth(50),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
+                      decoration: BoxDecoration(color: Colors.white,
                           // borderRadius: BorderRadius.circular(15),
                           boxShadow: <BoxShadow>[
                             BoxShadow(
@@ -227,15 +225,19 @@ class _ListenPageState extends State<ListenPage> {
                           itemPriceText = 'Going!';
                         } else {
                           if (nearbyEventData[i]['ticket_type']['type'] ==
-                                  'paid' ||
+                                  'paid' || nearbyEventData[i]['ticket_type']['type'] == 'paid_live_stream' ||
                               nearbyEventData[i]['ticket_type']['type'] ==
                                   'paid_seating') {
                             if (nearbyEventData[i]['ticket']
                                     ['availableTicketStatus'] ==
                                 '1') {
                               itemColor = Color(0xFF34B323);
-                              itemPriceText = 'Rp. ' + nearbyEventData[i]['ticket']
-                                  ['cheapestTicket'];
+                              itemPriceText = 'Rp. ' +
+                                  formatPrice(
+                                    price: nearbyEventData[i]['ticket']
+                                            ['cheapestTicket']
+                                        .toString(),
+                                  );
                             } else {
                               if (nearbyEventData[i]['ticket']['salesStatus'] ==
                                   'comingSoon') {
@@ -287,8 +289,7 @@ class _ListenPageState extends State<ListenPage> {
                                   ['type'] ==
                               'free_live_stream') {
                             itemColor = Color(0xFFFFAA00);
-                            itemPriceText =
-                                "free";
+                            itemPriceText = "free";
                           } else if (nearbyEventData[i]['ticket_type']
                                       ['type'] ==
                                   'free_limited' ||
@@ -327,7 +328,7 @@ class _ListenPageState extends State<ListenPage> {
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         EventDetailLoadingScreen(
-                                          isRest: widget.isRest,
+                                            isRest: widget.isRest,
                                             eventId: nearbyEventData[i]
                                                 ['id'])));
                           },
@@ -403,8 +404,8 @@ class _ListenPageState extends State<ListenPage> {
         currentPage += page;
       }
     });
-    final fetchNearbyEventApi =
-        baseUrl + '/event/nearby?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&latitude=${preferences.getString('latitude')}&longitude=${preferences.getString('longitude')}&page=$currentPage';
+    final fetchNearbyEventApi = baseUrl +
+        '/event/nearby?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&latitude=${preferences.getString('latitude')}&longitude=${preferences.getString('longitude')}&page=$currentPage';
     final response = await http.get(fetchNearbyEventApi, headers: headers);
 
     print(response.body);

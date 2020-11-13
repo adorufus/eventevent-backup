@@ -5,6 +5,7 @@ import 'package:eventevent/Widgets/ManageEvent/AddNewTicket.dart';
 import 'package:eventevent/Widgets/ManageEvent/EditTicketDetail.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +89,9 @@ class ManageTicketState extends State<ManageTicket> {
                                 'paid_seating') {
                           itemColor = Color(0xFF34B323);
                           itemPriceText =
-                              'Rp. ' + ticketList[i]['final_price'];
+                              'Rp. ' + formatPrice(
+                              price: ticketList[i]['final_price']
+                                  .toString(),);
                         } else if (ticketList[i]['event']['ticket_type']
                                 ['type'] ==
                             'no_ticket') {
@@ -115,7 +118,9 @@ class ManageTicketState extends State<ManageTicket> {
                         } else if (ticketList[i]['paid_ticket_type']['type'] ==
                             'paid_live_stream') {
                           itemColor = itemColor = Color(0xFF34B323);
-                          itemPriceText = 'Rp. ' + ticketList[i]['final_price'];
+                          itemPriceText = 'Rp. ' + formatPrice(
+                              price: ticketList[i]['final_price']
+                                  .toString(),);
                         } else if (ticketList[i]['paid_ticket_type']['type'] ==
                             'free_live_stream') {
                           itemColor = Color(0xFFFFAA00);

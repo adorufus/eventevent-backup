@@ -10,6 +10,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -287,7 +288,10 @@ class SearchState extends State<Search> {
                       '1') {
                     itemColor = Color(0xFF34B323);
                     itemPriceText =
-                        'Rp. ' + filteredEvents[i]['ticket']['cheapestTicket'];
+                        'Rp. ' + formatPrice(
+                              price: filteredEvents[i]['ticket']
+                                      ['cheapestTicket']
+                                  .toString(),);
                   } else {
                     if (filteredEvents[i]['ticket']['salesStatus'] ==
                         'comingSoon') {

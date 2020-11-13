@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
@@ -184,7 +185,10 @@ class PublicEventListState extends State<PublicEventList> {
                             '1') {
                           itemColor = Color(0xFF34B323);
                           itemPriceText =
-                              'Rp. ' + publicData[i]['ticket']['cheapestTicket'];
+                              'Rp. ' + formatPrice(
+                              price: publicData[i]['ticket']
+                                      ['cheapestTicket']
+                                  .toString(),);
                         } else {
                           if (publicData[i]['ticket']['salesStatus'] ==
                               'comingSoon') {

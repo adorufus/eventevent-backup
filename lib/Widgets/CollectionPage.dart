@@ -8,6 +8,7 @@ import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,7 +24,11 @@ class CollectionPage extends StatefulWidget {
   final isRest;
 
   const CollectionPage(
-      {Key key, this.categoryId, this.collectionName, this.headerImage, this.isRest})
+      {Key key,
+      this.categoryId,
+      this.collectionName,
+      this.headerImage,
+      this.isRest})
       : super(key: key);
   @override
   _CollectionPageState createState() => _CollectionPageState();
@@ -314,7 +319,7 @@ class _CollectionPageState extends State<CollectionPage> {
 
                                 if (eventByCategoryList[i]['ticket_type']
                                             ['type'] ==
-                                        'paid' ||
+                                        'paid' || eventByCategoryList[i]['ticket_type']['type'] == "paid_live_stream" ||
                                     eventByCategoryList[i]['ticket_type']
                                             ['type'] ==
                                         'paid_seating') {
@@ -322,8 +327,13 @@ class _CollectionPageState extends State<CollectionPage> {
                                           ['availableTicketStatus'] ==
                                       '1') {
                                     itemColor = Color(0xFF34B323);
-                                    itemPriceText = 'Rp. ' + eventByCategoryList[i]
-                                        ['ticket']['cheapestTicket'] + ',-';
+                                    itemPriceText = 'Rp. ' +
+                                        formatPrice(
+                                          price: eventByCategoryList[i]
+                                                  ['ticket']['cheapestTicket']
+                                              .toString(),
+                                        ) +
+                                        ',-';
                                   } else {
                                     if (eventByCategoryList[i]['ticket']
                                             ['salesStatus'] ==
@@ -406,7 +416,7 @@ class _CollectionPageState extends State<CollectionPage> {
                                                 name: 'EventDetails'),
                                             builder: (BuildContext context) =>
                                                 EventDetailLoadingScreen(
-                                                  isRest: widget.isRest,
+                                                    isRest: widget.isRest,
                                                     eventId:
                                                         eventByCategoryList[i]
                                                             ['id'])));

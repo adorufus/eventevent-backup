@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
@@ -175,7 +176,9 @@ class PrivateEventListState extends State<PrivateEventList> {
 
                       if (privateData[i]['ticket_type']['type'] == 'paid' ||
                           privateData[i]['ticket_type']['type'] ==
-                              'paid_seating') {
+                              'paid_seating' ||
+                          privateData[i]['ticket_type']['type'] ==
+                              'paid_live_stream') {
                         if (privateData[i]['ticket']['availableTicketStatus'] ==
                             '1') {
                           if (privateData[i]['ticket']['cheapestTicket'] ==
@@ -185,7 +188,11 @@ class PrivateEventListState extends State<PrivateEventList> {
                           } else {
                             itemColor = Color(0xFF34B323);
                             itemPriceText = 'Rp. ' +
-                                privateData[i]['ticket']['cheapestTicket'];
+                                formatPrice(
+                                  price: privateData[i]['ticket']
+                                          ['cheapestTicket']
+                                      .toString(),
+                                );
                           }
                         } else {
                           if (privateData[i]['ticket']['salesStatus'] ==

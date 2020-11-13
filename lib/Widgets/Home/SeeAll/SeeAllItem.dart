@@ -6,6 +6,7 @@ import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
@@ -296,13 +297,17 @@ class _SeeAllItemState extends State<SeeAllItem> {
 
                     if (popularEventList[i]['ticket_type']['type'] == 'paid' ||
                         popularEventList[i]['ticket_type']['type'] ==
-                            'paid_seating') {
+                            'paid_seating' || popularEventList[i]['ticket_type']['type'] == 'paid_live_stream') {
                       if (popularEventList[i]['ticket']
                               ['availableTicketStatus'] ==
                           '1') {
                         itemColor = Color(0xFF34B323);
                         itemPriceText = 'Rp. ' +
-                            popularEventList[i]['ticket']['cheapestTicket'];
+                            formatPrice(
+                              price: popularEventList[i]['ticket']
+                                      ['cheapestTicket']
+                                  .toString(),
+                            );
                       } else {
                         if (popularEventList[i]['ticket']['salesStatus'] ==
                             'comingSoon') {
@@ -347,8 +352,8 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     } else if (popularEventList[i]['ticket_type']['type'] ==
                         'paid_live_stream') {
                       itemColor = Color(0xFF34B323);
-                      itemPriceText =
-                          'Rp. ' + popularEventList[i]['ticket']['cheapestTicket'];
+                      itemPriceText = 'Rp. ' +
+                          popularEventList[i]['ticket']['cheapestTicket'];
                     } else if (popularEventList[i]['ticket_type']['type'] ==
                         'free_limited') {
                       if (popularEventList[i]['ticket']
@@ -383,7 +388,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     EventDetailLoadingScreen(
-                                      isRest: widget.isRest,
+                                        isRest: widget.isRest,
                                         eventId: popularEventList[i]['id'])));
                       },
                       child: new LatestEventItem(
@@ -510,13 +515,12 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     } else if (discoverEventList[i]['ticket_type']['type'] ==
                         'free_live_stream') {
                       itemColor = Color(0xFFFFAA00);
-                      itemPriceText =
-                          "FREE";
+                      itemPriceText = "FREE";
                     } else if (discoverEventList[i]['ticket_type']['type'] ==
                         'paid_live_stream') {
                       itemColor = Color(0xFF34B323);
-                      itemPriceText =
-                          'Rp. ' + discoverEventList[i]['ticket']['cheapestTicket'];
+                      itemPriceText = 'Rp. ' +
+                          discoverEventList[i]['ticket']['cheapestTicket'];
                     } else if (discoverEventList[i]['ticket_type']['type'] ==
                         'free_limited') {
                       if (discoverEventList[i]['ticket']
@@ -552,7 +556,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     EventDetailLoadingScreen(
-                                      isRest: widget.isRest,
+                                        isRest: widget.isRest,
                                         eventId: discoverEventList[i]['id'])));
                       },
                       child: new LatestEventItem(
