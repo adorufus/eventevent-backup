@@ -573,7 +573,8 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                                 'eventevent fee will be paid by your \ncustomers, please see details.',
                                 maxLines: 2,
                                 textAlign: TextAlign.left,
-                                style: TextStyle(fontSize: 11),
+                                style:
+                                    TextStyle(fontSize: 12, color: Colors.grey),
                                 softWrap: true,
                               ))
                         ],
