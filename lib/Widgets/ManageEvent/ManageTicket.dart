@@ -150,8 +150,9 @@ class ManageTicketState extends State<ManageTicket> {
                                     builder: (context) => EditTicketDetail(
                                           ticketTitle: ticketList[i]
                                               ['ticket_name'],
-                                          ticketImage: ticketList[i]
-                                              ['ticket_image']['secure_url'],
+                                          ticketImage: ticketList[i].containsKey("ticket_image") ? ticketList[i]
+                                              ['ticket_image']['secure_url'] : ticketList[i]
+                                              ['event']['pictureAvatarPath'],
                                           ticketQuantity: ticketList[i]
                                               ['quantity'],
                                           ticketDescription: ticketList[i]
@@ -200,8 +201,9 @@ class ManageTicketState extends State<ManageTicket> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
                                       child: Image.network(
-                                        ticketList[i]['ticket_image']
-                                            ['secure_url'],
+                                        ticketList[i].containsKey("ticket_image") ? ticketList[i]
+                                              ['ticket_image']['secure_url'] : ticketList[i]
+                                              ['event']['pictureAvatarPath'],
                                         fit: BoxFit.fill,
                                       ),
                                     ),
