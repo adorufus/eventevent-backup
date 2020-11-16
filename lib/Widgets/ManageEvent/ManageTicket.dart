@@ -215,12 +215,15 @@ class ManageTicketState extends State<ManageTicket> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Text(
-                                        ticketList[i]['ticket_name'],
-                                        style: TextStyle(
-                                            fontSize:
-                                                ScreenUtil.instance.setSp(20),
-                                            fontWeight: FontWeight.bold),
+                                      Container(
+                                        width: 200,
+                                        child: Text(
+                                          ticketList[i]['ticket_name'],
+                                          style: TextStyle(
+                                              fontSize:
+                                                  ScreenUtil.instance.setSp(20),
+                                              fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                       SizedBox(
                                         height: 30,
