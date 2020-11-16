@@ -115,13 +115,13 @@ class ManageTicketState extends State<ManageTicket> {
                           itemColor = Color(0xFFFFAA00);
                           itemPriceText =
                               ticketList[i]['event']['ticket_type']['name'];
-                        } else if (ticketList[i]['paid_ticket_type']['ticket_type'] ==
+                        } else if (ticketList[i]['paid_ticket_type']['ticket_type']['type'] ==
                             'paid_live_stream') {
                           itemColor = itemColor = Color(0xFF34B323);
                           itemPriceText = 'Rp. ' + formatPrice(
                               price: ticketList[i]['final_price']
                                   .toString(),);
-                        } else if (ticketList[i]['event']['paid_ticket_type']['ticket_type'] ==
+                        } else if (ticketList[i]['event']['paid_ticket_type']['ticket_type']['type'] ==
                             'free_live_stream') {
                           itemColor = Color(0xFFFFAA00);
                           itemPriceText =
