@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       if (preferences.containsKey("Session")) {
         if (preferences.getString('LastScreenRoute') == null) {
-          sendAnalytics('LoginRegister');
+          sendAnalytics('login_register');
           Navigator.of(context).pushReplacementNamed('/LoginRegister');
         } else {
           if (preferences.getString('LastScreenRoute') == "/Dashboard" &&

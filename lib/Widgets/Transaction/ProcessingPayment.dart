@@ -190,7 +190,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
           'transaction_id': paymentData['transaction_code'],
           'value': 0,
           'currency': "IDR",
-          'items': paymentData['ticket']['final_price']
+          'items': paymentData['ticket']['ticket_name']
         }).then((value){
           print("Jalan");
           
