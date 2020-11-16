@@ -121,7 +121,7 @@ class ManageTicketState extends State<ManageTicket> {
                           itemPriceText = 'Rp. ' + formatPrice(
                               price: ticketList[i]['final_price']
                                   .toString(),);
-                        } else if (ticketList[i]['paid_ticket_type']['type'] ==
+                        } else if (ticketList[i]['event']['paid_ticket_type']['type'] ==
                             'free_live_stream') {
                           itemColor = Color(0xFFFFAA00);
                           itemPriceText =
