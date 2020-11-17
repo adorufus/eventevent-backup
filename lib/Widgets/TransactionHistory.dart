@@ -8,6 +8,7 @@ import 'package:eventevent/Widgets/Transaction/BCA/InputBankData.dart';
 import 'package:eventevent/Widgets/Transaction/CC.dart';
 import 'package:eventevent/Widgets/Transaction/ExpiredPage.dart';
 import 'package:eventevent/Widgets/Transaction/GOPAY/WaitingGopay.dart';
+import 'package:eventevent/Widgets/Transaction/ProcessingPayment.dart';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/Widgets/notification/TransactionHistoryItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -264,11 +265,26 @@ class TransactionHistoryState extends State<TransactionHistory> {
 
         transactionList = extractedData['data'];
         print(transactionList);
+
+        for (var i = 0; i < transactionList.length; i++) {
+          if (transactionList[i]['status_transaksi'] == 'completed') {
+            logEventPurchase(transactionList, i);
+          }
+        }
       });
     } else {
       setState(() {
         isLoading = false;
       });
     }
+  }
+
+  Future<void> logEventPurchase(List paymentData, int index) async {
+    await ProcessingPayment.analytics.logEvent(name: 'purchase', parameters: <String, dynamic>{
+          'transaction_id': paymentData[index]['transaction_code'],
+          'value': paymentData[index]['amount_detail']['total_price'],
+          'currency': "IDR",
+          'items': paymentData[index]['ticket']['ticket_name']
+        });
   }
 }
