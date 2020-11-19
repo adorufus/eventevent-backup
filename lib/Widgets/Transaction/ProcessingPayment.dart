@@ -44,7 +44,8 @@ class ProcessingPayment extends StatefulWidget {
   final context;
 
   static FirebaseAnalytics analytics = FirebaseAnalytics();
-  static FirebaseAnalyticsObserver obeserver = FirebaseAnalyticsObserver(analytics: analytics); 
+  static FirebaseAnalyticsObserver obeserver =
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   ProcessingPayment(
       {Key key,
@@ -67,10 +68,7 @@ class ProcessingPayment extends StatefulWidget {
 }
 
 class _ProcessingPaymentState extends State<ProcessingPayment> {
-
   bool isLoading = false;
-
-  
 
   Map<String, dynamic> paymentData;
   String expDate;
@@ -109,7 +107,10 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       'email': prefs.getString('ticket_about_email'),
       'phone': prefs.getString('ticket_about_phone'),
       'note': prefs.getString('ticket_about_aditional'),
-      'virtual_account_vendor_id': prefs.containsKey("virtual_account_vendor_id") ? prefs.getString('virtual_account_vendor_id') : "",
+      'virtual_account_vendor_id':
+          prefs.containsKey("virtual_account_vendor_id")
+              ? prefs.getString('virtual_account_vendor_id')
+              : "",
       'payment_method_id': prefs.getString('payment_method_id'),
       'identifier': widget.uuid.v4().toString(),
     };
@@ -158,7 +159,10 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
 
     final response = await http.post(purchaseUri,
         headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session},
-        body: widget.ticketType == 'free_limited' || widget.ticketType == 'free_live_stream' ? bodyFreeLimit : body);
+        body: widget.ticketType == 'free_limited' ||
+                widget.ticketType == 'free_live_stream'
+            ? bodyFreeLimit
+            : body);
 
     var length = response.contentLength;
     var recieved = 0;
@@ -180,31 +184,46 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
         print(paymentData['expired_time']);
         getPaymentData(paymentData['expired_time']);
       });
-      
-      if(prefs.containsKey("virtual_account_vendor_id")){
+
+      if (prefs.containsKey("virtual_account_vendor_id")) {
         prefs.setString("virtual_account_vendor_id", null);
       }
 
-      if (widget.ticketType == 'free_limited' || widget.ticketType == 'free_live_stream') {
-        await ProcessingPayment.analytics.logEvent(name: 'purchase', parameters: <String, dynamic>{
+      if (widget.ticketType == 'free_limited' ||
+          widget.ticketType == 'free_live_stream') {
+        await ProcessingPayment.analytics
+            .logEvent(name: 'purchase', parameters: <String, dynamic>{
           'transaction_id': paymentData['transaction_code'],
           'value': 0,
           'currency': "IDR",
           'items': paymentData['ticket']['ticket_name']
-        }).then((value){
+        }).then((value) {
           print("Jalan");
-          
         });
-        
+
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (BuildContext context) => SuccessPage(invoiceNumber: paymentData['transaction_code'])));
+                builder: (BuildContext context) => SuccessPage(
+                    invoiceNumber: paymentData['transaction_code'])));
       } else if (paymentData['payment_method_id'] == '1') {
-        await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
-          'value': paymentData['ticket']['final_price'],
-          'currency': "IDR",
-          'items': paymentData['ticket']['ticket_name']
+        await ProcessingPayment.analytics
+            .logEvent(name: 'addToCart', parameters: <String, dynamic>{
+          'ecommerce': {
+            'currencyCode': 'IDR',
+            'add': {
+              // 'add' actionFieldObject measures.
+              'products': [
+                {
+                  //  adding a product to a shopping cart.
+                  'name': paymentData['ticket']['ticket_name'],
+                  'id': paymentData['id'],
+                  'price': paymentData['ticket']['final_price'],
+                  'quantity': paymentData['quantity']
+                }
+              ],
+            }
+          }
         });
         Navigator.push(
             context,
@@ -214,11 +233,14 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                       expDate: paymentData['expired_time'],
                     )));
       } else if (paymentData['payment_method_id'] == '4') {
-        await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
-          'value': paymentData['ticket']['final_price'],
-          'currency': "IDR",
-          'items': paymentData['ticket']['ticket_name']
-        });
+        await ProcessingPayment.analytics.logEvent(
+          name: 'add_to_cart',
+          parameters: <String, dynamic>{
+            'value': paymentData['ticket']['final_price'],
+            'currency': "IDR",
+            'items': paymentData['ticket']['ticket_name'],
+          },
+        );
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => WaitingGopay(
@@ -230,7 +252,8 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                   )),
         );
       } else if (paymentData['payment_method_id'] == '2') {
-        await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
+        await ProcessingPayment.analytics
+            .logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
           'value': paymentData['ticket']['final_price'],
           'currency': "IDR",
           'items': paymentData['ticket']['ticket_name']
@@ -243,7 +266,8 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                   finalPrice: widget.total.toString())),
         );
       } else if (paymentData['payment_method_id'] == '3') {
-        await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
+        await ProcessingPayment.analytics
+            .logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
           'value': paymentData['ticket']['final_price'],
           'currency': "IDR",
           'items': paymentData['ticket']['ticket_name']
@@ -257,7 +281,8 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
         );
       } else if (paymentData['payment_method_id'] == '5') {
         //        launch(paymentData['payment']['data_vendor']['payment_url']);
-        await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
+        await ProcessingPayment.analytics
+            .logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
           'value': paymentData['ticket']['final_price'],
           'currency': "IDR",
           'items': paymentData['ticket']['ticket_name']
@@ -269,7 +294,8 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                       url: paymentData['payment']['data_vendor']['payment_url'],
                     )));
       } else if (paymentData['payment_method_id'] == '9') {
-        await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
+        await ProcessingPayment.analytics
+            .logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
           'value': paymentData['ticket']['final_price'],
           'currency': "IDR",
           'items': paymentData['ticket']['ticket_name']
@@ -279,7 +305,8 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                   url: paymentData['payment']['data_vendor']['invoice_url'],
                 )));
       } else if (paymentData['payment_method_id'] == '7') {
-        await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
+        await ProcessingPayment.analytics
+            .logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
           'value': paymentData['ticket']['final_price'],
           'currency': "IDR",
           'items': paymentData['ticket']['ticket_name']
@@ -305,26 +332,25 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
     List<File> additionalMediaFiles = [];
     File additionalVideo;
 
-    
-
     try {
       if (prefs.getString('POST_EVENT_ADDITIONAL_VIDEO') != null &&
-        prefs.getString('POST_EVENT_ADDITIONAL_VIDEO').isNotEmpty) {
-      setState(() {
-        additionalVideo = File(prefs.getString('POST_EVENT_ADDITIONAL_VIDEO'));
-        print('additional video' + additionalVideo.path);
-      });
-    }
-
-    setState(() {
-      for (var i = 0; i < widget.additionalMedia.length; i++) {
-        additionalMediaFiles.add(File(widget.additionalMedia[i]));
+          prefs.getString('POST_EVENT_ADDITIONAL_VIDEO').isNotEmpty) {
+        setState(() {
+          additionalVideo =
+              File(prefs.getString('POST_EVENT_ADDITIONAL_VIDEO'));
+          print('additional video' + additionalVideo.path);
+        });
       }
 
-      print(additionalMediaFiles);
-    });
+      setState(() {
+        for (var i = 0; i < widget.additionalMedia.length; i++) {
+          additionalMediaFiles.add(File(widget.additionalMedia[i]));
+        }
 
-    print(lookupMimeType(widget.imageFile.path));
+        print(additionalMediaFiles);
+      });
+
+      print(lookupMimeType(widget.imageFile.path));
 
       Map<String, dynamic> body = {
         'X-API-KEY': API_KEY,
@@ -350,13 +376,14 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
             : await MultipartFile.fromFile(additionalVideo.path,
                 filename: "eventevent-video-${DateTime.now().toString()}.mp4",
                 contentType: MediaType("video", "mp4")),
-        'photo': await MultipartFile.fromFile(
-            widget.imageFile.path, filename: "eventevent-${DateTime.now().toString()}.jpg",
+        'photo': await MultipartFile.fromFile(widget.imageFile.path,
+            filename: "eventevent-${DateTime.now().toString()}.jpg",
             contentType: MediaType("image", "jpg")),
       };
 
       for (int i = 0; i < additionalMediaFiles.length; i++) {
-        body['additionalPhoto[$i]'] = await MultipartFile.fromFile(additionalMediaFiles[i].path,
+        body['additionalPhoto[$i]'] = await MultipartFile.fromFile(
+            additionalMediaFiles[i].path,
             filename: "eventevent-additionalFile[$i]-${DateTime.now()}.jpg",
             contentType: MediaType("image", "jpg"));
       }
@@ -440,8 +467,8 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
               });
               Navigator.of(context).push(CupertinoPageRoute(
                   builder: (context) => PostEventInvitePeople(
-                    calledFrom: "new event",
-                  )));
+                        calledFrom: "new event",
+                      )));
             }
           }
         }
