@@ -207,24 +207,21 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                 builder: (BuildContext context) => SuccessPage(
                     invoiceNumber: paymentData['transaction_code'])));
       } else if (paymentData['payment_method_id'] == '1') {
-        await ProcessingPayment.analytics
-            .logEvent(name: 'addToCart', parameters: <String, dynamic>{
-          'ecommerce': {
-            'currencyCode': 'IDR',
-            'add': {
-              // 'add' actionFieldObject measures.
-              'products': [
-                {
-                  //  adding a product to a shopping cart.
-                  'name': paymentData['ticket']['ticket_name'],
-                  'id': paymentData['id'],
-                  'price': paymentData['ticket']['final_price'],
-                  'quantity': paymentData['quantity']
-                }
-              ],
-            }
-          }
-        });
+        await ProcessingPayment.analytics.logAddToCart(
+          itemId: paymentData['id'],
+          itemName: paymentData['ticket']['ticket_name'],
+          itemCategory: 'ticket',
+          quantity: int.parse(
+            paymentData['quantity'],
+          ),
+          price: double.parse(paymentData['ticket']['final_price']),
+          currency: "IDR",
+        );
+        // await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
+        //   'value': paymentData['ticket']['final_price'],
+        //   'currency': "IDR",
+        //   'items': paymentData['ticket']['ticket_name']
+        // });
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -233,13 +230,15 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                       expDate: paymentData['expired_time'],
                     )));
       } else if (paymentData['payment_method_id'] == '4') {
-        await ProcessingPayment.analytics.logEvent(
-          name: 'add_to_cart',
-          parameters: <String, dynamic>{
-            'value': paymentData['ticket']['final_price'],
-            'currency': "IDR",
-            'items': paymentData['ticket']['ticket_name'],
-          },
+        await ProcessingPayment.analytics.logAddToCart(
+          itemId: paymentData['id'],
+          itemName: paymentData['ticket']['ticket_name'],
+          itemCategory: 'ticket',
+          quantity: int.parse(
+            paymentData['quantity'],
+          ),
+          price: double.parse(paymentData['ticket']['final_price']),
+          currency: "IDR",
         );
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -252,12 +251,16 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                   )),
         );
       } else if (paymentData['payment_method_id'] == '2') {
-        await ProcessingPayment.analytics
-            .logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
-          'value': paymentData['ticket']['final_price'],
-          'currency': "IDR",
-          'items': paymentData['ticket']['ticket_name']
-        });
+        await ProcessingPayment.analytics.logAddToCart(
+          itemId: paymentData['id'],
+          itemName: paymentData['ticket']['ticket_name'],
+          itemCategory: 'ticket',
+          quantity: int.parse(
+            paymentData['quantity'],
+          ),
+          price: double.parse(paymentData['ticket']['final_price']),
+          currency: "IDR",
+        );
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => WaitTransaction(
@@ -266,12 +269,16 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                   finalPrice: widget.total.toString())),
         );
       } else if (paymentData['payment_method_id'] == '3') {
-        await ProcessingPayment.analytics
-            .logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
-          'value': paymentData['ticket']['final_price'],
-          'currency': "IDR",
-          'items': paymentData['ticket']['ticket_name']
-        });
+        await ProcessingPayment.analytics.logAddToCart(
+          itemId: paymentData['id'],
+          itemName: paymentData['ticket']['ticket_name'],
+          itemCategory: 'ticket',
+          quantity: int.parse(
+            paymentData['quantity'],
+          ),
+          price: double.parse(paymentData['ticket']['final_price']),
+          currency: "IDR",
+        );
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => WaitingTransactionAlfamart(
@@ -281,12 +288,16 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
         );
       } else if (paymentData['payment_method_id'] == '5') {
         //        launch(paymentData['payment']['data_vendor']['payment_url']);
-        await ProcessingPayment.analytics
-            .logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
-          'value': paymentData['ticket']['final_price'],
-          'currency': "IDR",
-          'items': paymentData['ticket']['ticket_name']
-        });
+       await ProcessingPayment.analytics.logAddToCart(
+          itemId: paymentData['id'],
+          itemName: paymentData['ticket']['ticket_name'],
+          itemCategory: 'ticket',
+          quantity: int.parse(
+            paymentData['quantity'],
+          ),
+          price: double.parse(paymentData['ticket']['final_price']),
+          currency: "IDR",
+        );
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -294,23 +305,31 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                       url: paymentData['payment']['data_vendor']['payment_url'],
                     )));
       } else if (paymentData['payment_method_id'] == '9') {
-        await ProcessingPayment.analytics
-            .logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
-          'value': paymentData['ticket']['final_price'],
-          'currency': "IDR",
-          'items': paymentData['ticket']['ticket_name']
-        });
+       await ProcessingPayment.analytics.logAddToCart(
+          itemId: paymentData['id'],
+          itemName: paymentData['ticket']['ticket_name'],
+          itemCategory: 'ticket',
+          quantity: int.parse(
+            paymentData['quantity'],
+          ),
+          price: double.parse(paymentData['ticket']['final_price']),
+          currency: "IDR",
+        );
         Navigator.of(context).push(MaterialPageRoute(
             builder: (BuildContext context) => WebViewTest(
                   url: paymentData['payment']['data_vendor']['invoice_url'],
                 )));
       } else if (paymentData['payment_method_id'] == '7') {
-        await ProcessingPayment.analytics
-            .logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
-          'value': paymentData['ticket']['final_price'],
-          'currency': "IDR",
-          'items': paymentData['ticket']['ticket_name']
-        });
+        await ProcessingPayment.analytics.logAddToCart(
+          itemId: paymentData['id'],
+          itemName: paymentData['ticket']['ticket_name'],
+          itemCategory: 'ticket',
+          quantity: int.parse(
+            paymentData['quantity'],
+          ),
+          price: double.parse(paymentData['ticket']['final_price']),
+          currency: "IDR",
+        );
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => PaymentBCA(
