@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
+  auto_orientation:
+    dependency: "direct main"
+    description:
+      name: auto_orientation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.6"
   auto_size_text:
     dependency: "direct main"
     description:
@@ -562,6 +569,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.6"
+  media_info:
+    dependency: "direct main"
+    description:
+      name: media_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.4"
   meta:
     dependency: transitive
     description:

@@ -142,7 +142,8 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                   children: <Widget>[
                     Padding(
                       padding: additionalMediaPhoto.length < 1
-                          ? EdgeInsets.all(0) : EdgeInsets.only(right: 10),
+                          ? EdgeInsets.all(0)
+                          : EdgeInsets.only(right: 10),
                       child: additionalMediaPhoto.length < 1
                           ? Container()
                           : Container(
@@ -166,7 +167,8 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                     ),
                     Padding(
                       padding: additionalMediaPhoto.length < 2
-                          ? EdgeInsets.all(0) : const EdgeInsets.only(right: 10),
+                          ? EdgeInsets.all(0)
+                          : const EdgeInsets.only(right: 10),
                       child: additionalMediaPhoto.length < 2
                           ? Container()
                           : Container(
@@ -190,7 +192,8 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                     ),
                     Padding(
                       padding: additionalMediaPhoto.length < 3
-                          ? EdgeInsets.all(0) : const EdgeInsets.only(right: 10),
+                          ? EdgeInsets.all(0)
+                          : const EdgeInsets.only(right: 10),
                       child: additionalMediaPhoto.length < 3
                           ? Container()
                           : Container(
@@ -214,7 +217,8 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                     ),
                     Padding(
                       padding: additionalMediaPhoto.length < 4
-                          ? EdgeInsets.all(0) : const EdgeInsets.only(right: 10),
+                          ? EdgeInsets.all(0)
+                          : const EdgeInsets.only(right: 10),
                       child: additionalMediaPhoto.length < 4
                           ? Container()
                           : Container(
@@ -398,6 +402,16 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
   cropImage(File galleryFile) async {
     File croppedImage = await ImageCropper.cropImage(
         sourcePath: galleryFile.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio16x9,
+          CropAspectRatioPreset.ratio7x5,
+          CropAspectRatioPreset.ratio5x4,
+          CropAspectRatioPreset.ratio5x3,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio3x2
+        ],
         aspectRatio: CropAspectRatio(
           ratioX: 2.0,
           ratioY: 3.0,
