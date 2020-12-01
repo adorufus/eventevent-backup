@@ -8,6 +8,7 @@ import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -320,8 +321,11 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                   ticketPrice = 'Free Limited';
                 } else {
                   itemColor = Color(0xFF34B323);
-                  ticketPrice =
-                      'Rp. ' + detailData['ticket']['cheapestTicket'];
+                  ticketPrice = 'Rp. ' +
+                      formatPrice(
+                        price:
+                            detailData['ticket']['cheapestTicket'].toString(),
+                      );
                 }
               } else {
                 if (detailData['ticket']['salesStatus'] == 'comingSoon') {
@@ -371,7 +375,10 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                 ticketPrice = 'SALES ENDED';
               }
               itemColor = Color(0xFF34B323);
-              ticketPrice = 'Rp. ' + detailData['ticket']['cheapestTicket'];
+              ticketPrice = 'Rp. ' +
+                  formatPrice(
+                    price: detailData['ticket']['cheapestTicket'].toString(),
+                  );
             } else if (detailData['ticket_type']['type'] == 'free_limited') {
               if (detailData['ticket']['availableTicketStatus'] == '1') {
                 itemColor = Color(0xFFFFAA00);
