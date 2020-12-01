@@ -886,7 +886,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             image: DecorationImage(
                                                                 image: NetworkImage(widget
                                                                     .creatorImageUri
-                                                                    .toString()), fit: BoxFit.cover)),
+                                                                    .toString()),
+                                                                fit: BoxFit
+                                                                    .cover)),
                                                       ),
                                                     ),
                                                   ),
@@ -1002,7 +1004,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 width: ScreenUtil.instance
                                                     .setWidth(170),
                                                 child: MarqueeWidget(
-                                                  text: detailData['name'] == null
+                                                  text: detailData['name'] ==
+                                                          null
                                                       ? '-'
                                                       : widget
                                                           .detailData['name']
@@ -1012,7 +1015,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       fontSize: ScreenUtil
                                                           .instance
                                                           .setSp(15),
-                                                          fontWeight: FontWeight.bold),
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                   ratioOfBlankToScreen: .05,
                                                 ),
                                               ),
@@ -2845,12 +2849,22 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       'extension'] ==
                                                   'image/jpeg' ||
                                               additional['extension'] ==
-                                                  'image/png' || additional['file_name'].toString().contains(".jpg") || additional['file_name'].toString().contains(".png")
+                                                  'image/png' ||
+                                              additional['file_name']
+                                                  .toString()
+                                                  .contains(".jpg") ||
+                                              additional['file_name']
+                                                  .toString()
+                                                  .contains(".png")
                                           ? PhotoView(
                                               imageProvider: NetworkImage(
                                                   additional['posterPathFull']),
                                             )
                                           : MediaPlayer(
+                                              videoHeight:
+                                                  additional['pictureHeight'],
+                                              videoWidth:
+                                                  additional['pictureWidth'],
                                               videoUri:
                                                   additional['posterPathFull']),
                                     ),
@@ -2889,16 +2903,23 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           fit: BoxFit.fill),
                                       borderRadius: BorderRadius.circular(15)),
                                   child: Center(
-                                      child: additional['extension'] ==
-                                                  'image/jpeg' ||
-                                              additional['extension'] ==
-                                                  'image/png' || additional['file_name'].toString().contains(".jpg") || additional['file_name'].toString().contains(".png")
-                                          ? Container()
-                                          : Icon(
-                                              Icons.play_circle_filled,
-                                              color: Colors.white,
-                                              size: 50,
-                                            )),
+                                      child:
+                                          additional['extension'] ==
+                                                      'image/jpeg' ||
+                                                  additional['extension'] ==
+                                                      'image/png' ||
+                                                  additional['file_name']
+                                                      .toString()
+                                                      .contains(".jpg") ||
+                                                  additional['file_name']
+                                                      .toString()
+                                                      .contains(".png")
+                                              ? Container()
+                                              : Icon(
+                                                  Icons.play_circle_filled,
+                                                  color: Colors.white,
+                                                  size: 50,
+                                                )),
                                 ),
                               );
                             }).toList(),
