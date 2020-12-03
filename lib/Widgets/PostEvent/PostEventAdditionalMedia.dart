@@ -137,15 +137,14 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                 height: ScreenUtil.instance.setWidth(200),
                 width: MediaQuery.of(context).size.width,
                 child: ListView(
-                  padding: EdgeInsets.only(left: 5, right: 5),
+                  padding:
+                      EdgeInsets.only(left: 10, right: 5, top: 5, bottom: 5),
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
                     Padding(
-                      padding: additionalMediaPhoto.length < 1
-                          ? EdgeInsets.all(0)
-                          : EdgeInsets.only(right: 10),
+                      padding: EdgeInsets.only(right: 10),
                       child: additionalMediaPhoto.length < 1
-                          ? Container()
+                          ? newImageContainer(0)
                           : Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
@@ -166,11 +165,9 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                             ),
                     ),
                     Padding(
-                      padding: additionalMediaPhoto.length < 2
-                          ? EdgeInsets.all(0)
-                          : const EdgeInsets.only(right: 10),
+                      padding: const EdgeInsets.only(right: 10),
                       child: additionalMediaPhoto.length < 2
-                          ? Container()
+                          ? newImageContainer(1)
                           : Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
@@ -191,11 +188,9 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                             ),
                     ),
                     Padding(
-                      padding: additionalMediaPhoto.length < 3
-                          ? EdgeInsets.all(0)
-                          : const EdgeInsets.only(right: 10),
+                      padding: const EdgeInsets.only(right: 10),
                       child: additionalMediaPhoto.length < 3
-                          ? Container()
+                          ? newImageContainer(2)
                           : Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
@@ -216,11 +211,9 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                             ),
                     ),
                     Padding(
-                      padding: additionalMediaPhoto.length < 4
-                          ? EdgeInsets.all(0)
-                          : const EdgeInsets.only(right: 10),
+                      padding: const EdgeInsets.only(right: 10),
                       child: additionalMediaPhoto.length < 4
-                          ? Container()
+                          ? newImageContainer(3)
                           : Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
@@ -243,7 +236,7 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: additionalMediaPhoto.length < 5
-                          ? Container()
+                          ? newImageContainer(4)
                           : Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
@@ -260,37 +253,6 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                               ),
                             ),
                     ),
-                    additionalMediaList.length < 5
-                        ? GestureDetector(
-                            onTap: () {
-                              _showDialog();
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: AssetImage('assets/grey-fade.jpg'),
-                                      fit: BoxFit.fill),
-                                  borderRadius: BorderRadius.circular(15),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        spreadRadius: 1.5,
-                                        color:
-                                            Color(0xff8a8a8b).withOpacity(.2),
-                                        blurRadius: 2)
-                                  ]),
-                              height: ScreenUtil.instance.setWidth(200),
-                              width: ScreenUtil.instance.setWidth(150),
-                              child: Center(
-                                child: SizedBox(
-                                  height: ScreenUtil.instance.setWidth(50),
-                                  width: ScreenUtil.instance.setWidth(50),
-                                  child: Image.asset(
-                                      'assets/bottom-bar/new-something-white.png'),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container(),
                   ],
                 ),
               )
@@ -299,14 +261,53 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
         ));
   }
 
-  void _showDialog() {
+  Widget newImageContainer(int index) {
+    return GestureDetector(
+      onTap: () {
+        _showDialog(index);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/grey-fade.jpg'), fit: BoxFit.fill),
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                  spreadRadius: 1.5,
+                  color: Color(0xff8a8a8b).withOpacity(.2),
+                  blurRadius: 2)
+            ]),
+        height: ScreenUtil.instance.setWidth(200),
+        width: ScreenUtil.instance.setWidth(150),
+        child: Center(
+          child: SizedBox(
+            height: ScreenUtil.instance.setWidth(50),
+            width: ScreenUtil.instance.setWidth(50),
+            child: index == 0
+                ? Icon(
+                    Icons.video_call,
+                    size: 50,
+                    color: Colors.grey[400],
+                  )
+                : Icon(
+                    Icons.add_a_photo,
+                    size: 50,
+                    color: Colors.grey[400],
+                  ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showDialog(int index) {
     showModalBottomSheet<void>(
         context: context,
         builder: (BuildContext context) {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              additionalMediaList.length == 4
+              index == 0
                   ? Container()
                   : ListTile(
                       leading: new Icon(Icons.photo_library),
@@ -316,7 +317,7 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                         Navigator.pop(context);
                       },
                     ),
-              additionalMediaList.length != 4
+              index != 0
                   ? Container()
                   : ListTile(
                       leading: new Icon(Icons.videocam),
@@ -326,7 +327,7 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                         Navigator.pop(context);
                       },
                     ),
-              additionalMediaList.length == 4
+              index == 0
                   ? Container()
                   : ListTile(
                       leading: new Icon(Icons.camera_alt),

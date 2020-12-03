@@ -32,6 +32,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
 
   bool isLoading = false;
   bool isEmpty = false;
+  String ticketStatus = 'available';
 
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
@@ -168,6 +169,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                           ticketColor = eventajaGreenTeal;
                           ticketStatusText = 'Available';
                         }
+                        ticketStatus = 'available';
                       } else if (ticketDetailData[i]['usedStatus'] == 'used') {
                         if (ticketDetailData[i].containsKey("livestream")) {
                           if (ticketDetailData[i]['livestream']
@@ -189,6 +191,8 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                           ticketColor = Color(0xFF652D90);
                           ticketStatusText = 'Used';
                         }
+
+                        ticketStatus = 'used';
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'streaming') {
                         if (ticketDetailData[i].containsKey("livestream")) {
@@ -215,6 +219,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                             ticketStatusText = 'On Demand Video';
                           }
                         }
+                        ticketStatus = 'streaming';
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'playback') {
                         if (ticketDetailData[i].containsKey("livestream")) {
@@ -224,6 +229,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                           ticketColor = eventajaGreenTeal;
                           ticketStatusText = 'Playback';
                         }
+                        ticketStatus = 'playback';
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'expired') {
                         if (ticketDetailData[i].containsKey('livestream')) {
@@ -266,10 +272,13 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                           ticketColor = Color(0xFF8E1E2D);
                           ticketStatusText = 'Expired';
                         }
+
+                        ticketStatus = 'expired';
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'refund') {
                         ticketColor = Colors.blue;
                         ticketStatusText = 'Refund';
+                        ticketStatus = 'refund';
                       }
 
                       // print('status text ' + ticketStatusText);
@@ -283,18 +292,15 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                       return GestureDetector(
                         onTap: () {
                           print('ticket status text: ' + ticketStatusText);
+                          print('status text: ' + ticketStatus);
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (BuildContext context) => UseTicket(
                                 ticketDetail: ticketDetailData[i],
+                                status: ticketStatus,
                                 eventId: ticketDetailData[i]['event_id'],
                                 ticketTitle: ticketDetailData[i]['ticket']
                                     ['ticket_name'],
-                                ticketImage:
-                                    ticketDetailData[i]['ticket_image'] == false
-                                        ? 'assets/grey-fade.jpg'
-                                        : ticketDetailData[i]['ticket_image']
-                                            ['url'],
                                 ticketCode: ticketDetailData[i]['ticket_code'],
                                 ticketDate: ticketDetailData[i]['event']
                                     ['dateStart'],
@@ -304,8 +310,8 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                     ['timeEnd'],
                                 ticketDesc: ticketDetailData[i]['event']
                                     ['name'],
-                                ticketID: ticketDetailData[i]['id'],
-                                usedStatus: ticketStatusText,
+                                ticketID: ticketDetailData[i]['paid_ticket_id'],
+                                usedStatusName: ticketStatusText,
                                 zoomId: ticketDetailData[i]
                                         .containsKey("livestream")
                                     ? ticketDetailData[i]['livestream']
@@ -326,27 +332,29 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                     : "",
                                 livestreamUrl: ticketStatusText == 'On Demand Video'
                                     ? ticketDetailData[i].containsKey("livestream")
-                                        ? ticketDetailData[i]['livestream']
-                                                    ['on_demand_link'] ==
-                                                ""
+                                        ? ticketDetailData[i]['livestream']['on_demand_link'] == ""
                                             ? ticketDetailData[i]['livestream']
                                                 ['on_demand_embed']
                                             : ticketDetailData[i]['livestream']
                                                 ['on_demand_link']
                                         : ''
-                                    : !ticketDetailData[i].containsKey("livestream") ? '' : ticketStatusText == "Streaming" ||
-                                            ticketStatusText ==
-                                                'Watch Playback' ||
-                                            ticketStatusText == 'Playback' ||
-                                            ticketStatusText == 'Expired'
-                                        ? !ticketDetailData[i].containsKey("livestream") ? '' : ticketDetailData[i]['livestream']
-                                                    ['playback_url'] ==
-                                                'not_available'
-                                            ? ticketDetailData[i]['livestream']
-                                                ['playback']
-                                            : ticketDetailData[i]['livestream']
-                                                ['playback_url']
-                                        : '',
+                                    : !ticketDetailData[i].containsKey("livestream")
+                                        ? ''
+                                        : ticketStatusText == "Streaming" ||
+                                                ticketStatusText ==
+                                                    'Watch Playback' ||
+                                                ticketStatusText ==
+                                                    'Playback' ||
+                                                ticketStatusText == 'Expired'
+                                            ? !ticketDetailData[i].containsKey("livestream")
+                                                ? ''
+                                                : ticketDetailData[i]['livestream']['playback_url'] == 'not_available'
+                                                    ? ticketDetailData[i]
+                                                            ['livestream']
+                                                        ['playback']
+                                                    : ticketDetailData[i]
+                                                        ['livestream']['playback_url']
+                                            : '',
                               ),
                             ),
                           );

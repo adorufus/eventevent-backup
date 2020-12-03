@@ -289,7 +289,8 @@ class MyTicketSearchState extends State<MyTicketSearch> {
                                     ticketDesc: filteredEvents[i]['event']
                                         ['name'],
                                     ticketID: filteredEvents[i]['id'],
-                                    usedStatus: ticketStatusText.toUpperCase(),
+                                    usedStatusName:
+                                        ticketStatusText.toUpperCase(),
                                   )));
                     },
                     child: MyTicketItem(

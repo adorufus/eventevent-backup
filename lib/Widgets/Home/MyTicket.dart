@@ -450,7 +450,7 @@ class _MyTicketState extends State<MyTicket> {
                                                                       ['playback']
                                                                   : myTicketList[i]['livestream']['playback_url']
                                                           : '',
-                                              usedStatus: ticketStatusText,
+                                              usedStatusName: ticketStatusText,
                                             )));
                               },
                               child: Container(
