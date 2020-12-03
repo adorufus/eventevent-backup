@@ -321,7 +321,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                   ticketPrice = 'Free Limited';
                 } else {
                   itemColor = Color(0xFF34B323);
-                  ticketPrice = 'Rp. ' +
+                  ticketPrice = 'Rp' +
                       formatPrice(
                         price:
                             detailData['ticket']['cheapestTicket'].toString(),
@@ -375,7 +375,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                 ticketPrice = 'SALES ENDED';
               }
               itemColor = Color(0xFF34B323);
-              ticketPrice = 'Rp. ' +
+              ticketPrice = 'Rp' +
                   formatPrice(
                     price: detailData['ticket']['cheapestTicket'].toString(),
                   );
