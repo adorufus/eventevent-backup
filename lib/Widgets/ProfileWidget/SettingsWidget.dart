@@ -43,7 +43,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   getInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      appVersion = appVersion + '${Platform.isAndroid ? '3.2.4' : '3.2.4'}';
+      appVersion = appVersion + '${Platform.isAndroid ? '3.3.1' : '3.3.1'}';
     });
 
     print(appVersion);
@@ -416,7 +416,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                           builder: (thisContext, setState) =>
                               CupertinoAlertDialog(
                             title: Text('Oops'),
-                            content: Text('Do you want to log out?', textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,),
+                            content: Text(
+                              'Do you want to log out?',
+                              textScaleFactor: 1.2,
+                              textWidthBasis: TextWidthBasis.longestLine,
+                            ),
                             actions: <Widget>[
                               CupertinoDialogAction(
                                 child: Text('No'),
@@ -607,43 +611,43 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
     try {
       final response = await http.post(logoutApiUrl, body: body, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': prefs.getString('Session')
-    });
-
-    print(response.statusCode);
-
-    if (prefs.getBool('isUsingGoogle') == true) {
-      googleSignIn.signOut();
-    } else if(prefs.getBool('isUsingFacebook') == true){
-      FacebookLogin().logOut();
-    }
-
-    String deviceType = Platform.isIOS ? 'iOS' : 'Android';
-
-    if (response.statusCode == 200) {
-      // ClevertapHandler.removeUserProfile(deviceType);
-      setState(() {
-        isLoading = false;
+        'Authorization': "Basic YWRtaW46MTIzNA==",
+        'cookie': prefs.getString('Session')
       });
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => LoginRegisterWidget()),
-          (Route<dynamic> route) => false);
-      prefs.clear();
-      print(prefs.getKeys());
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-      print(response.body);
-    }
+
+      print(response.statusCode);
+
+      if (prefs.getBool('isUsingGoogle') == true) {
+        googleSignIn.signOut();
+      } else if (prefs.getBool('isUsingFacebook') == true) {
+        FacebookLogin().logOut();
+      }
+
+      String deviceType = Platform.isIOS ? 'iOS' : 'Android';
+
+      if (response.statusCode == 200) {
+        // ClevertapHandler.removeUserProfile(deviceType);
+        setState(() {
+          isLoading = false;
+        });
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => LoginRegisterWidget()),
+            (Route<dynamic> route) => false);
+        prefs.clear();
+        print(prefs.getKeys());
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        print(response.body);
+      }
     } on SocketException catch (e) {
       print(e.message);
       print(e.address);
       print(e.osError);
       isLoading = false;
-      if(mounted) setState((){});
+      if (mounted) setState(() {});
       Flushbar(
         animationDuration: Duration(milliseconds: 500),
         backgroundColor: Colors.red,
