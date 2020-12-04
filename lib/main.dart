@@ -49,12 +49,12 @@ Future<Null> main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.white, statusBarIconBrightness: Brightness.light));
   // try{
-    cameras = await availableCameras();
+  cameras = await availableCameras();
   // } on CameraException catch (e){
   //   print('code: ${e.code} message: ${e.description}');
   // }
 
-  runZoned((){
+  runZoned(() {
     runApp(new RunApp());
   }, onError: Crashlytics.instance.recordError);
 }
@@ -72,7 +72,6 @@ class RunApp extends StatefulWidget {
 
 class _RunAppState extends State<RunApp> {
   Widget homeScreenWidget = LoginRegisterWidget();
-  
 
   // CleverTapPlugin _clevertapPlugin;
   var inboxInitialized = false;
@@ -91,7 +90,7 @@ class _RunAppState extends State<RunApp> {
   }
 
   Future<void> initPlatformState() async {
-    if(!mounted) return;
+    if (!mounted) return;
   }
 
   // void activateClevertapHandler() {
@@ -112,38 +111,38 @@ class _RunAppState extends State<RunApp> {
   //   _clevertapPlugin.setCleverTapProductConfigActivatedHandler(productConfigActivated);
   // }
 
-  void inAppNotificationDismissed(Map<String,dynamic> map){
-    this.setState((){
+  void inAppNotificationDismissed(Map<String, dynamic> map) {
+    this.setState(() {
       print("inAppNotificationDismissed called");
     });
   }
 
-  void inAppNotificationButtonClicked(Map<String,dynamic> map){
-    this.setState((){
+  void inAppNotificationButtonClicked(Map<String, dynamic> map) {
+    this.setState(() {
       print("inAppNotificationButtonClicked called = ${map.toString()}");
     });
   }
 
-  void inboxNotificationButtonClicked(Map<String,dynamic> map){
-    this.setState((){
+  void inboxNotificationButtonClicked(Map<String, dynamic> map) {
+    this.setState(() {
       print("inboxNotificationButtonClicked called = ${map.toString()}");
     });
   }
 
-  void profileDidInitialize(){
-    this.setState((){
+  void profileDidInitialize() {
+    this.setState(() {
       print("profileDidInitialize called");
     });
   }
 
-  void profileDidUpdate(Map<String,dynamic> map){
-    this.setState((){
+  void profileDidUpdate(Map<String, dynamic> map) {
+    this.setState(() {
       print("profileDidUpdate called");
     });
   }
 
-  void inboxDidInitialize(){
-    this.setState((){
+  void inboxDidInitialize() {
+    this.setState(() {
       print("inboxDidInitialize called");
       inboxInitialized = true;
     });
@@ -309,7 +308,7 @@ class _RunAppState extends State<RunApp> {
             value: SystemUiOverlayStyle(
                 statusBarColor: Colors.white,
                 statusBarIconBrightness: Brightness.light),
-            child: CustomCamera(cameras)), 
+            child: CustomCamera(cameras)),
       },
     );
   }

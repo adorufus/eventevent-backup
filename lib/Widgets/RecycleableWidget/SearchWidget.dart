@@ -287,11 +287,11 @@ class SearchState extends State<Search> {
                   if (filteredEvents[i]['ticket']['availableTicketStatus'] ==
                       '1') {
                     itemColor = Color(0xFF34B323);
-                    itemPriceText =
-                        'Rp. ' + formatPrice(
-                              price: filteredEvents[i]['ticket']
-                                      ['cheapestTicket']
-                                  .toString(),);
+                    itemPriceText = 'Rp' +
+                        formatPrice(
+                          price: filteredEvents[i]['ticket']['cheapestTicket']
+                              .toString(),
+                        );
                   } else {
                     if (filteredEvents[i]['ticket']['salesStatus'] ==
                         'comingSoon') {
@@ -545,102 +545,100 @@ class SearchState extends State<Search> {
     return isPeopleLoading == true
         ? HomeLoadingScreen().followListLoading()
         : SmartRefresher(
-                controller: peopleSearchRefreshController,
-                onLoading: peopleOnLoad,
-                onRefresh: peopleOnRefresh,
-                enablePullUp: true,
-                child: ListView.builder(
-                  itemCount:
-                      filteredProfile == null ? 0 : filteredProfile.length,
-                  itemBuilder: (BuildContext context, i) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) => ProfileWidget(
-                                  isRest: widget.isRest,
-                                  initialIndex: 0,
-                                  userId: filteredProfile[i]['id'],
-                                )));
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border(
-                              bottom: BorderSide(color: Colors.grey[300])),
+            controller: peopleSearchRefreshController,
+            onLoading: peopleOnLoad,
+            onRefresh: peopleOnRefresh,
+            enablePullUp: true,
+            child: ListView.builder(
+              itemCount: filteredProfile == null ? 0 : filteredProfile.length,
+              itemBuilder: (BuildContext context, i) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => ProfileWidget(
+                              isRest: widget.isRest,
+                              initialIndex: 0,
+                              userId: filteredProfile[i]['id'],
+                            )));
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border:
+                          Border(bottom: BorderSide(color: Colors.grey[300])),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 25,
+                          backgroundImage:
+                              NetworkImage(filteredProfile[i]['photo']),
+                          backgroundColor: Colors.grey,
                         ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                              radius: 25,
-                              backgroundImage:
-                                  NetworkImage(filteredProfile[i]['photo']),
-                              backgroundColor: Colors.grey,
-                            ),
-                            SizedBox(width: ScreenUtil.instance.setWidth(20)),
-                            Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
+                        SizedBox(width: ScreenUtil.instance.setWidth(20)),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Row(
                                 children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      filteredProfile[i]['isVerified'] == '0'
-                                          ? Container()
-                                          : CircleAvatar(
-                                              backgroundImage: AssetImage(
-                                                  'assets/icons/icon_apps/verif.png'),
-                                              radius: 10,
-                                            ),
-                                      SizedBox(
-                                        width: ScreenUtil.instance.setWidth(3),
-                                      ),
-                                      Container(
-                                        width:
-                                            ScreenUtil.instance.setWidth(150),
-                                        child: Text(
-                                          filteredProfile[i]['fullName'] == null
-                                              ? filteredProfile[i]['username']
-                                              : filteredProfile[i]['fullName'],
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                          overflow: TextOverflow.ellipsis,
+                                  filteredProfile[i]['isVerified'] == '0'
+                                      ? Container()
+                                      : CircleAvatar(
+                                          backgroundImage: AssetImage(
+                                              'assets/icons/icon_apps/verif.png'),
+                                          radius: 10,
                                         ),
-                                      ),
-                                    ],
-                                  ),
                                   SizedBox(
-                                    height: ScreenUtil.instance.setWidth(15),
+                                    width: ScreenUtil.instance.setWidth(3),
                                   ),
                                   Container(
                                     width: ScreenUtil.instance.setWidth(150),
-                                    child: Text(filteredProfile[i]['username'],
-                                        style: TextStyle(color: Colors.grey),
-                                        overflow: TextOverflow.ellipsis),
+                                    child: Text(
+                                      filteredProfile[i]['fullName'] == null
+                                          ? filteredProfile[i]['username']
+                                          : filteredProfile[i]['fullName'],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
-                                  SizedBox(
-                                    height: ScreenUtil.instance.setWidth(15),
-                                  ),
-                                ]),
-                            Expanded(
-                              child: SizedBox(),
-                            ),
-                            Container(
-                                margin: EdgeInsets.only(right: 20),
-                                height: ScreenUtil.instance.setWidth(30),
-                                width: ScreenUtil.instance.setWidth(80),
-                                child: Image.asset(
-                                  'assets/icons/btn_follow.png',
-                                  fit: BoxFit.cover,
-                                ))
-                          ],
+                                ],
+                              ),
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(15),
+                              ),
+                              Container(
+                                width: ScreenUtil.instance.setWidth(150),
+                                child: Text(filteredProfile[i]['username'],
+                                    style: TextStyle(color: Colors.grey),
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(15),
+                              ),
+                            ]),
+                        Expanded(
+                          child: SizedBox(),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              );
+                        Container(
+                            margin: EdgeInsets.only(right: 20),
+                            height: ScreenUtil.instance.setWidth(30),
+                            width: ScreenUtil.instance.setWidth(80),
+                            child: Image.asset(
+                              'assets/icons/btn_follow.png',
+                              fit: BoxFit.cover,
+                            ))
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
   }
 
   Future<http.Response> _getProfile({int page, bool isLoadData = false}) async {

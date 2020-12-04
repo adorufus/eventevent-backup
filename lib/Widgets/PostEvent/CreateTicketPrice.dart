@@ -1,7 +1,11 @@
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'CreateTicketStartDate.dart';
@@ -18,7 +22,8 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
   var thisScaffold = new GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -33,10 +38,13 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
           backgroundColor: Colors.white,
           elevation: 0,
           leading: GestureDetector(
-            onTap: (){
+            onTap: () {
               Navigator.pop(context);
             },
-            child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal,),
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: eventajaGreenTeal,
+            ),
           ),
           centerTitle: true,
           title: Text(
@@ -53,7 +61,9 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -96,8 +106,8 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 50, left: 35),
-                child: TextFormField(
-                  onFieldSubmitted: (value) {
+                child: TextField(
+                  onSubmitted: (value) {
                     navigateToNextStep();
                   },
                   controller: textController,
@@ -105,6 +115,19 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
                   autofocus: false,
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
+                  // inputFormatters: [
+                  //   // WhitelistingTextInputFormatter.digitsOnly,
+                  //   // TextFieldFormatPrice(),
+                  // ],
+                  onChanged: (string) {
+                    string = NumberFormat.decimalPattern().format(
+                      int.parse(string.replaceAll(',', '')),
+                    );
+                    textController.value = TextEditingValue(
+                      text: string,
+                      selection: TextSelection.collapsed(offset: string.length),
+                    );
+                  },
                   decoration: InputDecoration(
                     hintText: 'enter your ticket price',
                   ),
@@ -115,9 +138,11 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
         ));
   }
 
-  navigateToNextStep() async{
+  navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (textController.text == null || textController.text == '' || textController.text == ' ') {
+    if (textController.text == null ||
+        textController.text == '' ||
+        textController.text == ' ') {
       Flushbar(
         flushbarPosition: FlushbarPosition.TOP,
         message: 'Input ticket price!',
@@ -126,10 +151,13 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
     } else {
-      prefs.setString('SETUP_TICKET_PRICE', textController.text);
+      prefs.setString(
+          'SETUP_TICKET_PRICE', textController.text.replaceAll(",", ""));
       print(prefs.getString('SETUP_TICKET_PRICE'));
-      Navigator.push(context,
-          CupertinoPageRoute(builder: (BuildContext context) => CreateTicketStartDate()));
+      Navigator.push(
+          context,
+          CupertinoPageRoute(
+              builder: (BuildContext context) => CreateTicketStartDate()));
     }
   }
 }

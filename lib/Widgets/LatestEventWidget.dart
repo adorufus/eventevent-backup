@@ -8,6 +8,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -96,7 +97,6 @@ class _LatestEventWidget extends State<LatestEventWidget> {
               : SmartRefresher(
                   enablePullDown: true,
                   enablePullUp: true,
-                  
                   controller: refreshController,
                   onRefresh: () {
                     setState(() {
@@ -136,14 +136,19 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                         if (latestEventData[i]['ticket_type']['type'] ==
                                 'paid' ||
                             latestEventData[i]['ticket_type']['type'] ==
-                                'paid_seating') {
+                                'paid_seating' ||
+                            latestEventData[i]['ticket_type']['type'] ==
+                                'paid_live_stream') {
                           if (latestEventData[i]['ticket']
                                   ['availableTicketStatus'] ==
                               '1') {
                             itemColor = Color(0xFF34B323);
-                            itemPriceText = 'Rp. ' +
-                                latestEventData[i]['ticket']['cheapestTicket'] +
-                                ',-';
+                            itemPriceText = 'Rp' +
+                                formatPrice(
+                                  price: latestEventData[i]['ticket']
+                                          ['cheapestTicket']
+                                      .toString(),
+                                );
                           } else {
                             if (latestEventData[i]['ticket']['salesStatus'] ==
                                 'comingSoon') {
@@ -182,15 +187,9 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                           itemPriceText =
                               latestEventData[i]['ticket_type']['name'];
                         } else if (latestEventData[i]['ticket_type']['type'] ==
-                            'paid_live_stream') {
-                          itemColor = Color(0xFF34B323);
-                          itemPriceText = 'Rp. ' +
-                              latestEventData[i]['ticket']['cheapestTicket'];
-                        } else if (latestEventData[i]['ticket_type']['type'] ==
                             'free_live_stream') {
                           itemColor = Color(0xFFFFAA00);
-                          itemPriceText =
-                              "FREE";
+                          itemPriceText = "FREE";
                         } else if (latestEventData[i]['ticket_type']['type'] ==
                                 'free_limited' ||
                             latestEventData[i]['ticket_type']['type'] ==
@@ -228,7 +227,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       EventDetailLoadingScreen(
-                                        isRest: widget.isRest,
+                                          isRest: widget.isRest,
                                           eventId: latestEventData[i]['id'])));
                         },
                         child: new LatestEventItem(

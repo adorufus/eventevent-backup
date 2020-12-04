@@ -8,6 +8,7 @@ import 'package:eventevent/Widgets/RecycleableWidget/WithdrawConfirmation.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -251,7 +252,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                   alignment: Alignment.topCenter,
                   child: Text(
                       'Available Balance For Withdraw: ' +
-                          '\nRp. ${balanceData['amount']},-',
+                          '\nRp. ${formatPrice(price: balanceData['amount'].toString())},-',
                       style: TextStyle(color: eventajaGreenTeal),
                       textAlign: TextAlign.center)),
               SizedBox(height: ScreenUtil.instance.setWidth(26)),
@@ -380,17 +381,18 @@ class WithdrawBankState extends State<WithdrawBank> {
                 margin: EdgeInsets.symmetric(horizontal: 13),
                 height: ScreenUtil.instance.setWidth(80),
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    // boxShadow: <BoxShadow>[
-                    //   BoxShadow(
-                    //       blurRadius: 2,
-                    //       color: Colors.black.withOpacity(0.1),
-                    //       spreadRadius: 1.5)
-                    // ]
-                    ),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  // boxShadow: <BoxShadow>[
+                  //   BoxShadow(
+                  //       blurRadius: 2,
+                  //       color: Colors.black.withOpacity(0.1),
+                  //       spreadRadius: 1.5)
+                  // ]
+                ),
                 child: Center(
-                    child: Text('Rp. ${balanceData['amount']}',
+                    child: Text(
+                        'Rp. ${formatPrice(price: balanceData['amount'].toString())}',
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontSize: ScreenUtil.instance.setSp(35),
