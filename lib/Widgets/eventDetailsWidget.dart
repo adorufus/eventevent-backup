@@ -5,7 +5,7 @@ import 'package:eventevent/Widgets/EventDetailComment.dart';
 import 'package:eventevent/Widgets/EventDetailItems/FeedbackLogic.dart';
 import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
 import 'package:eventevent/Widgets/ManageEvent/LivestreamBroadcastWidget.dart';
-import 'package:eventevent/Widgets/ManageEvent/LivestreamBroadcastWidgetAndroid.dart';
+// import 'package:eventevent/Widgets/ManageEvent/LivestreamBroadcastWidgetAndroid.dart';
 import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
@@ -14,6 +14,8 @@ import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -160,17 +162,16 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   List timelineList = [];
   String currentUserId = "";
 
-  
-
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
     // FlutterBranchSdk.validateSDKIntegration();
-    
     generateLink();
-    if (widget.detailData.containsKey("livestream")) {
+    if (widget.detailData.containsKey("livestream") &&
+        widget.detailData['livestream'].isNotEmpty &&
+        widget.isRest == false) {
       getWowzaLivestreamState(
               widget.detailData['livestream'][0]['streaming_id'])
           .then((response) {
@@ -185,6 +186,13 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
     setState(() {
       detailData = widget.detailData;
+      // ClevertapHandler.handleEventDetail(
+      //     detailData['name'],
+      //     detailData['creatorName'],
+      //     detailData['dateStart'],
+      //     detailData['dateEnd'],
+      //     detailData['isPrivate'],
+      //     detailData['category']['data']);
     });
 
     if (detailData["isGoing"] == '1') {
@@ -394,7 +402,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (BuildContext context) => EventStatistic(),
+                            builder: (BuildContext context) => EventStatistic(
+                              eventId: widget.id,
+                            ),
                           ),
                         );
                       },
@@ -412,22 +422,32 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   size: 30,
                                 ),
                     ),
-                    SizedBox(width: ScreenUtil.instance.setWidth(8)),
+                    SizedBox(width: ScreenUtil.instance.setWidth(15)),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => PostEventInvitePeople(
-                                  calledFrom: "other event",
-                                  eventId: widget.id,
-                                )));
+                        if (widget.isRest) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => LoginRegisterWidget(
+                                  previousWidget: 'EventDetailsWidgetRest',
+                                  eventId: widget.id),
+                            ),
+                          );
+                        } else {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => PostEventInvitePeople(
+                                    calledFrom: "other event",
+                                    eventId: widget.id,
+                                  )));
+                        }
                       },
                       child: Icon(
                         Icons.person_add,
                         color: eventajaGreenTeal,
-                        size: 30,
+                        size: 25,
                       ),
                     ),
-                    SizedBox(width: ScreenUtil.instance.setWidth(8)),
+                    SizedBox(width: ScreenUtil.instance.setWidth(15)),
                     GestureDetector(
                       onTap: () {
                         ShareExtend.share(generatedLink, 'text');
@@ -435,10 +455,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                       child: Icon(
                         Icons.share,
                         color: eventajaGreenTeal,
-                        size: 30,
+                        size: 25,
                       ),
                     ),
-                    SizedBox(width: ScreenUtil.instance.setWidth(8)),
+                    SizedBox(width: ScreenUtil.instance.setWidth(15)),
                     GestureDetector(
                       onTap: () {
                         showCupertinoModalPopup(
@@ -609,9 +629,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                       child: Icon(
                         Icons.more_vert,
                         color: eventajaGreenTeal,
-                        size: 30,
+                        size: 25,
                       ),
                     ),
+                    SizedBox(width: 15),
                   ],
                 ),
               ),
@@ -628,6 +649,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                   }
                 } else {
                   if (widget.ticketStat['salesStatus'] == 'endSales' ||
+                      widget.ticketStat['salesStatus'] == 'comingSoon' ||
                       widget.ticketPrice.toLowerCase() == 'canceled' ||
                       widget.ticketStat['availablewidget.ticketStatus'] ==
                           '0') {
@@ -656,8 +678,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                   children: <Widget>[
                     Text('Get Your Tickets now!',
                         style: TextStyle(
-                          fontSize: 12,
-                          color: Color(0xff231f20),
+                          fontSize: 16,
+                          color: Colors.orange,
                           fontWeight: FontWeight.bold,
                         )),
                     Expanded(
@@ -665,67 +687,90 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     ),
                     GestureDetector(
                       onTap: () {
-                        if (widget.ticketStat['salesStatus'] == null) {
-                        } else if (widget.ticketType['type'] == 'free') {
-                          showCupertinoDialog(
-                              context: context,
-                              builder: (BuildContext context) => SuccessPage());
-                        } else if (widget.ticketType['type'] == 'no_ticket') {
-                          print('no ticket');
-                          showDialog(
-                              context: context,
-                              child: new CupertinoAlertDialog(
-                                title: new Text("Dialog Title"),
-                                content: new Text("This is my content"),
-                                actions: <Widget>[
-                                  CupertinoDialogAction(
-                                    isDefaultAction: true,
-                                    child: Text("Yes"),
-                                  ),
-                                  CupertinoDialogAction(
-                                    child: Text("No"),
-                                  )
-                                ],
-                              ));
+                        if (widget.isRest == true) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => LoginRegisterWidget(
+                                  previousWidget: 'EventDetailsWidgetRest',
+                                  eventId: widget.id)));
                         } else {
-                          if (widget.ticketStat['salesStatus'] == 'endSales' ||
-                              widget.ticketPrice.toLowerCase() == 'canceled' ||
-                              widget.ticketStat[
-                                      'availablewidget.ticketStatus'] ==
-                                  '0') {
-                            return;
-                          } else {
-                            Navigator.of(context).push(MaterialPageRoute(
+                          if (widget.ticketStat['salesStatus'] == null) {
+                          } else if (widget.ticketType['type'] == 'free') {
+                            showCupertinoDialog(
+                                context: context,
                                 builder: (BuildContext context) =>
-                                    SelectTicketWidget(
-                                      eventID: detailData['id'],
-                                      eventDate: detailData['dateStart'],
-                                    )));
+                                    SuccessPage());
+                          } else if (widget.ticketType['type'] == 'no_ticket') {
+                            print('no ticket');
+                            showDialog(
+                                context: context,
+                                child: new CupertinoAlertDialog(
+                                  title: new Text("Dialog Title"),
+                                  content: new Text("This is my content"),
+                                  actions: <Widget>[
+                                    CupertinoDialogAction(
+                                      isDefaultAction: true,
+                                      child: Text("Yes"),
+                                    ),
+                                    CupertinoDialogAction(
+                                      child: Text("No"),
+                                    )
+                                  ],
+                                ));
+                          } else {
+                            if (widget.ticketStat['salesStatus'] ==
+                                    'endSales' ||
+                                widget
+                                        .ticketStat['salesStatus'] ==
+                                    'comingSoon' ||
+                                widget.ticketPrice.toLowerCase() ==
+                                    'canceled' ||
+                                widget.ticketStat[
+                                        'availablewidget.ticketStatus'] ==
+                                    '0') {
+                              return;
+                            } else {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      SelectTicketWidget(
+                                        eventID: detailData['id'],
+                                        eventDate: detailData['dateStart'],
+                                      )));
+                            }
                           }
                         }
                       },
                       child: Container(
-                        height: ScreenUtil.instance.setWidth(28 * 1.1),
-                        width: ScreenUtil.instance.setWidth(133 * 1.1),
+                        height: ScreenUtil.instance.setWidth(32 * 1.1),
+                        width: ScreenUtil.instance.setWidth(
+                            widget.ticketStat['salesStatus'] == "comingSoon"
+                                ? 135
+                                : 110 * 1.1),
                         decoration: BoxDecoration(
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: isGoing == true
-                                      ? Colors.blue.withOpacity(0.4)
-                                      : widget.itemColor.withOpacity(0.4),
+                                  color: widget.ticketStat['salesStatus'] ==
+                                          'comingSoon'
+                                      ? Color(0xFF34B323).withOpacity(.2)
+                                      : isGoing == true
+                                          ? Colors.blue.withOpacity(0.4)
+                                          : widget.itemColor.withOpacity(0.4),
                                   blurRadius: 2,
                                   spreadRadius: 1.5)
                             ],
-                            color: isGoing == true
-                                ? Colors.blue
-                                : widget.itemColor,
-                            borderRadius: BorderRadius.circular(15)),
+                            color:
+                                widget.ticketStat['salesStatus'] == 'comingSoon'
+                                    ? Color(0xFF34B323).withOpacity(.5)
+                                    : isGoing == true
+                                        ? Colors.blue
+                                        : widget.itemColor,
+                            borderRadius: BorderRadius.circular(30)),
                         child: Center(
                             child: Text(
                           isGoing == true ? 'Going!' : widget.ticketPrice,
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: ScreenUtil.instance.setSp(14),
+                              fontSize: ScreenUtil.instance.setSp(16),
                               fontWeight: FontWeight.bold),
                         )),
                       ),
@@ -759,19 +804,20 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                             refreshController.refreshCompleted();
                           },
                           child: ListView(
+                            padding: EdgeInsets.symmetric(horizontal: 11),
                             shrinkWrap: true,
                             children: <Widget>[
                               Container(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 11, vertical: 13),
+                                    horizontal: 0, vertical: 13),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
                                       width: ScreenUtil.instance
-                                          .setWidth(122.86 * 1.3),
+                                          .setWidth(122.86 * 1.6),
                                       height: ScreenUtil.instance
-                                          .setWidth(184.06 * 1.3),
+                                          .setWidth(184.06 * 1.6),
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(12),
@@ -790,9 +836,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       .detailData['photo']),
                                               fit: BoxFit.fill)),
                                     ),
+                                    // Expanded(child: SizedBox()),
                                     Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 13),
+                                        margin: EdgeInsets.only(left: 10),
                                         child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
@@ -812,6 +858,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           MaterialPageRoute(
                                                               builder: (context) =>
                                                                   ProfileWidget(
+                                                                    isRest: widget
+                                                                        .isRest,
                                                                     userId: widget
                                                                             .detailData[
                                                                         'createdByID'],
@@ -838,7 +886,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             image: DecorationImage(
                                                                 image: NetworkImage(widget
                                                                     .creatorImageUri
-                                                                    .toString()))),
+                                                                    .toString()),
+                                                                fit: BoxFit
+                                                                    .cover)),
                                                       ),
                                                     ),
                                                   ),
@@ -909,7 +959,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       .setWidth(10)),
                                               Container(
                                                 width: ScreenUtil.instance
-                                                    .setWidth(180),
+                                                    .setWidth(150),
                                                 child: Text(
                                                   widget.dateTime,
                                                   style: TextStyle(
@@ -922,59 +972,57 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               ),
                                               SizedBox(
                                                 height: ScreenUtil.instance
-                                                    .setWidth(10),
+                                                    .setWidth(5),
                                               ),
                                               detailData['isHybridEvent'] ==
                                                       'streamOnly'
                                                   ? Row(
                                                       children: <Widget>[
                                                         Image.asset(
-                                                            'assets/icons/icon_apps/LivestreamTagIcon.png',
+                                                            'assets/online-event.png',
                                                             scale: 25),
-                                                        SizedBox(
-                                                          width: 8,
-                                                        ),
-                                                        Text(
-                                                          'Livestream Event',
-                                                          style: TextStyle(
-                                                              color: Colors.red,
-                                                              fontSize: 13),
-                                                        )
                                                       ],
                                                     )
                                                   : Container(),
-                                              SizedBox(
-                                                height: ScreenUtil.instance
-                                                    .setWidth(10),
-                                              ),
+                                              detailData['isHybridEvent'] ==
+                                                      'streamOnly'
+                                                  ? SizedBox(
+                                                      height: ScreenUtil
+                                                          .instance
+                                                          .setWidth(10),
+                                                    )
+                                                  : Container(),
                                               Container(
-                                                  height: ScreenUtil.instance
-                                                      .setWidth(widget
-                                                                  .detailData[
-                                                                      'name']
-                                                                  .length <
-                                                              30
-                                                          ? 15
-                                                          : 35),
-                                                  width: ScreenUtil.instance
-                                                      .setWidth(180),
-                                                  child: Text(
-                                                    detailData['name'] == null
-                                                        ? '-'
-                                                        : widget
-                                                            .detailData['name']
-                                                            .toUpperCase(),
-                                                    style: TextStyle(
-                                                        fontSize: ScreenUtil
-                                                            .instance
-                                                            .setSp(15),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.grey),
-                                                  )),
+                                                height: ScreenUtil.instance
+                                                    .setWidth(widget
+                                                                .detailData[
+                                                                    'name']
+                                                                .length <
+                                                            30
+                                                        ? 15
+                                                        : 35),
+                                                width: ScreenUtil.instance
+                                                    .setWidth(170),
+                                                child: MarqueeWidget(
+                                                  text: detailData['name'] ==
+                                                          null
+                                                      ? '-'
+                                                      : widget
+                                                          .detailData['name']
+                                                          .toUpperCase(),
+                                                  scrollAxis: Axis.horizontal,
+                                                  textStyle: TextStyle(
+                                                      fontSize: ScreenUtil
+                                                          .instance
+                                                          .setSp(15),
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  ratioOfBlankToScreen: .05,
+                                                ),
+                                              ),
                                               SizedBox(
                                                   height: ScreenUtil.instance
-                                                      .setWidth(17)),
+                                                      .setWidth(5)),
                                               Row(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
@@ -1010,7 +1058,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                               .setWidth(16),
                                                           width: ScreenUtil
                                                               .instance
-                                                              .setWidth(170),
+                                                              .setWidth(150),
                                                           child: MarqueeWidget(
                                                             text: detailData[
                                                                         'address'] ==
@@ -1027,7 +1075,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                         .setSp(
                                                                             11)),
                                                             ratioOfBlankToScreen:
-                                                                .1,
+                                                                .05,
                                                           ),
                                                         )
                                                 ],
@@ -1064,7 +1112,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               ),
                                               SizedBox(
                                                 height: ScreenUtil.instance
-                                                    .setWidth(15),
+                                                    .setWidth(30),
                                               ),
                                               StatefulBuilder(
                                                 builder: (context, setState) =>
@@ -1124,6 +1172,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         if (widget.ticketStat[
                                                                     'salesStatus'] ==
                                                                 'endSales' ||
+                                                            widget.ticketStat[
+                                                                    'salesStatus'] ==
+                                                                'comingSoon' ||
                                                             widget.ticketPrice
                                                                     .toLowerCase() ==
                                                                 'canceled' ||
@@ -1148,30 +1199,47 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   },
                                                   child: Container(
                                                     height: ScreenUtil.instance
-                                                        .setWidth(28 * 1.1),
+                                                        .setWidth(32 * 1.1),
                                                     width: ScreenUtil.instance
-                                                        .setWidth(133 * 1.1),
+                                                        .setWidth(widget.ticketStat[
+                                                                    'salesStatus'] ==
+                                                                "comingSoon"
+                                                            ? 135
+                                                            : 110 * 1.1),
                                                     decoration: BoxDecoration(
                                                         boxShadow: <BoxShadow>[
                                                           BoxShadow(
-                                                              color: isGoing ==
-                                                                      true
-                                                                  ? Colors.blue
+                                                              color: widget.ticketStat[
+                                                                          'salesStatus'] ==
+                                                                      'comingSoon'
+                                                                  ? Color(0xFF34B323)
                                                                       .withOpacity(
-                                                                          0.4)
-                                                                  : widget
-                                                                      .itemColor
-                                                                      .withOpacity(
-                                                                          0.4),
+                                                                          .2)
+                                                                  : isGoing ==
+                                                                          true
+                                                                      ? Colors
+                                                                          .blue
+                                                                          .withOpacity(
+                                                                              0.4)
+                                                                      : widget
+                                                                          .itemColor
+                                                                          .withOpacity(
+                                                                              0.4),
                                                               blurRadius: 2,
                                                               spreadRadius: 1.5)
                                                         ],
-                                                        color: isGoing == true
-                                                            ? Colors.blue
-                                                            : widget.itemColor,
+                                                        color: widget.ticketStat[
+                                                                    'salesStatus'] ==
+                                                                'comingSoon'
+                                                            ? Color(0xFF34B323)
+                                                                .withOpacity(.5)
+                                                            : isGoing == true
+                                                                ? Colors.blue
+                                                                : widget
+                                                                    .itemColor,
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(15)),
+                                                                .circular(30)),
                                                     child: Center(
                                                         child: Text(
                                                       isGoing == true
@@ -1181,7 +1249,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           color: Colors.white,
                                                           fontSize: ScreenUtil
                                                               .instance
-                                                              .setSp(14),
+                                                              .setSp(16),
                                                           fontWeight:
                                                               FontWeight.bold),
                                                     )),
@@ -1226,6 +1294,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       width: ScreenUtil.instance.setWidth(10),
                                     ),
                                     GestureDetector(
+                                      behavior: prefix0.HitTestBehavior.opaque,
                                       onTap: () {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
@@ -1266,11 +1335,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                         height:
                                             ScreenUtil.instance.setWidth(33),
                                         width: ScreenUtil.instance.setWidth(33),
-                                        child: Image.asset(widget.phoneNumber ==
-                                                    null ||
-                                                widget.phoneNumber == ""
-                                            ? 'assets/icons/btn_phone.png'
-                                            : 'assets/icons/btn_phone_active.png'),
+                                        child: Image.asset(
+                                          widget.phoneNumber == null ||
+                                                  widget.phoneNumber == ""
+                                              ? 'assets/icons/btn_phone.png'
+                                              : 'assets/icons/btn_phone_active.png',
+                                        ),
                                       ),
                                     ),
                                     GestureDetector(
@@ -1352,6 +1422,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           MaterialPageRoute(
                                                               builder: (context) =>
                                                                   SeeWhosGoingInvitedWidget(
+                                                                    isRest: widget
+                                                                        .isRest,
                                                                     eventId: widget
                                                                             .detailData[
                                                                         'id'],
@@ -1360,10 +1432,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                   )));
                                                     },
                                                     child: Container(
-                                                      height: 30,
+                                                      height: 10,
                                                       child: Text(
                                                         'See All >',
                                                         style: TextStyle(
+                                                            fontSize: 11,
                                                             color:
                                                                 eventajaGreenTeal),
                                                       ),
@@ -1374,10 +1447,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             ),
                                             SizedBox(
                                                 height: ScreenUtil.instance
-                                                    .setWidth(10)),
+                                                    .setWidth(2)),
                                             Container(
                                               height: ScreenUtil.instance
-                                                  .setWidth(30),
+                                                  .setWidth(50),
                                               width: MediaQuery.of(context)
                                                   .size
                                                   .width,
@@ -1390,78 +1463,69 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     : invitedUserList.length,
                                                 itemBuilder:
                                                     (BuildContext context, i) {
-                                                  return Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 13),
-                                                    child: GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.of(context)
-                                                            .push(
-                                                          MaterialPageRoute(
-                                                            builder: (BuildContext
-                                                                    context) =>
-                                                                ProfileWidget(
-                                                              initialIndex: 0,
-                                                              userId: widget
-                                                                          .detailData[
-                                                                      'invited']
-                                                                  [
-                                                                  'data'][i]['id'],
-                                                            ),
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                          builder: (BuildContext
+                                                                  context) =>
+                                                              ProfileWidget(
+                                                            initialIndex: 0,
+                                                            isRest:
+                                                                widget.isRest,
+                                                            userId: widget
+                                                                        .detailData[
+                                                                    'invited'][
+                                                                'data'][i]['id'],
                                                           ),
-                                                        );
-                                                      },
-                                                      child: Container(
-                                                        constraints: BoxConstraints(
-                                                            maxHeight:
-                                                                ScreenUtil
-                                                                    .instance
-                                                                    .setWidth(
-                                                                        30),
-                                                            maxWidth: ScreenUtil
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 10),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: <Widget>[
+                                                          Container(
+                                                            height: ScreenUtil
                                                                 .instance
-                                                                .setWidth(30),
-                                                            minHeight:
-                                                                ScreenUtil
-                                                                    .instance
-                                                                    .setWidth(
-                                                                        30),
-                                                            minWidth: ScreenUtil
+                                                                .setWidth(35),
+                                                            width: ScreenUtil
                                                                 .instance
-                                                                .setWidth(30)),
-                                                        height: ScreenUtil
-                                                            .instance
-                                                            .setWidth(30),
-                                                        width: ScreenUtil
-                                                            .instance
-                                                            .setWidth(30),
-                                                        decoration: BoxDecoration(
-                                                            boxShadow: <
-                                                                BoxShadow>[
-                                                              BoxShadow(
-                                                                  color: Colors
-                                                                      .black26,
-                                                                  offset:
-                                                                      Offset(
+                                                                .setWidth(35),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                    boxShadow: <
+                                                                        BoxShadow>[
+                                                                  BoxShadow(
+                                                                      color: Colors
+                                                                          .black26,
+                                                                      offset: Offset(
                                                                           1.0,
                                                                           1.0),
-                                                                  blurRadius: 3)
-                                                            ],
-                                                            shape:
-                                                                BoxShape.circle,
-                                                            image: DecorationImage(
-                                                                image: invitedUserList[i]
-                                                                            [
-                                                                            'photo'] ==
-                                                                        null
-                                                                    ? AssetImage(
-                                                                        'assets/grey-fade.jpg')
-                                                                    : NetworkImage(
-                                                                        invitedUserList[i]
-                                                                            [
-                                                                            'photo']),
-                                                                fit: BoxFit
-                                                                    .fill)),
+                                                                      blurRadius:
+                                                                          3)
+                                                                ],
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                    image:
+                                                                        DecorationImage(
+                                                                      image: CachedNetworkImageProvider(
+                                                                          invitedUserList[i]
+                                                                              [
+                                                                              'photo']),
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    )),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
                                                   );
@@ -1472,6 +1536,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                         ),
                                       ),
                                     ),
+                              SizedBox(
+                                height: 0,
+                              ),
                               detailData['ticket']['salesStatus'] ==
                                       'comingSoon'
                                   ? countdownTimer()
@@ -1481,7 +1548,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                   ? Container()
                                   : Container(
                                       margin: EdgeInsets.symmetric(
-                                          horizontal: 0, vertical: 13),
+                                          horizontal: 0, vertical: 20),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -1509,6 +1576,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         MaterialPageRoute(
                                                             builder: (context) =>
                                                                 SeeWhosGoingInvitedWidget(
+                                                                  isRest: widget
+                                                                      .isRest,
                                                                   eventId: widget
                                                                           .detailData[
                                                                       'id'],
@@ -1517,10 +1586,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                 )));
                                                   },
                                                   child: Container(
-                                                    height: 30,
+                                                    height: 10,
                                                     child: Text(
                                                       'See All >',
                                                       style: TextStyle(
+                                                          fontSize: 11,
                                                           color:
                                                               eventajaGreenTeal),
                                                     ),
@@ -1531,7 +1601,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           ),
                                           SizedBox(
                                               height: ScreenUtil.instance
-                                                  .setWidth(10)),
+                                                  .setWidth(2)),
                                           Container(
                                             height: ScreenUtil.instance
                                                 .setWidth(50),
@@ -1553,6 +1623,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             builder: (BuildContext
                                                                     context) =>
                                                                 ProfileWidget(
+                                                                  isRest: widget
+                                                                      .isRest,
                                                                   initialIndex:
                                                                       0,
                                                                   userId: detailData[
@@ -1577,10 +1649,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         Container(
                                                           height: ScreenUtil
                                                               .instance
-                                                              .setWidth(30),
+                                                              .setWidth(35),
                                                           width: ScreenUtil
                                                               .instance
-                                                              .setWidth(30),
+                                                              .setWidth(35),
                                                           decoration:
                                                               BoxDecoration(
                                                                   boxShadow: <
@@ -1605,7 +1677,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                         [
                                                                         'photo']),
                                                                     fit: BoxFit
-                                                                        .fill,
+                                                                        .cover,
                                                                   )),
                                                         ),
                                                       ],
@@ -1618,12 +1690,14 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                         ],
                                       ),
                                     ),
-                              detailData['status'] == 'ended'
+                              detailData['status'] == 'ended' &&
+                                      widget.isRest == false
                                   ? SizedBox(
                                       height: ScreenUtil.instance.setWidth(20),
                                     )
                                   : Container(),
-                              detailData['status'] == 'ended'
+                              detailData['status'] == 'ended' &&
+                                      widget.isRest == false
                                   ? Container(
                                       // height: ScreenUtil.instance.setWidth(150),
                                       margin:
@@ -1647,22 +1721,50 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                         MaterialPageRoute(
                                                             builder: (context) =>
                                                                 ReviewDetails(
-                                                                  eventId: widget
-                                                                          .detailData[
-                                                                      'id'],
-                                                                  eventName: widget
-                                                                          .detailData[
-                                                                      'name'],
-                                                                  goodReview: widget
-                                                                              .detailData[
-                                                                          'event_review']
-                                                                      [
-                                                                      'percent_review']['good'],
-                                                                  badReview: widget
-                                                                              .detailData[
-                                                                          'event_review']
-                                                                      [
-                                                                      'percent_review']['bad'],
+                                                                  eventId: detailData !=
+                                                                              null ||
+                                                                          !detailData
+                                                                              .isEmpty
+                                                                      ? detailData[
+                                                                          'id']
+                                                                      : widget.detailData[
+                                                                          'id'],
+                                                                  eventName: detailData !=
+                                                                              null ||
+                                                                          !detailData
+                                                                              .isEmpty
+                                                                      ? detailData[
+                                                                          'name']
+                                                                      : widget.detailData[
+                                                                          'name'],
+                                                                  goodReview: detailData !=
+                                                                              null ||
+                                                                          !detailData
+                                                                              .isEmpty
+                                                                      ? detailData['event_review']
+                                                                              [
+                                                                              'percent_review']
+                                                                          [
+                                                                          'good']
+                                                                      : widget.detailData['event_review']
+                                                                              [
+                                                                              'percent_review']
+                                                                          [
+                                                                          'good'],
+                                                                  badReview: detailData !=
+                                                                              null ||
+                                                                          !detailData
+                                                                              .isEmpty
+                                                                      ? detailData['event_review']
+                                                                              [
+                                                                              'percent_review']
+                                                                          [
+                                                                          'bad']
+                                                                      : widget.detailData['event_review']
+                                                                              [
+                                                                              'percent_review']
+                                                                          [
+                                                                          'bad'],
                                                                 )));
                                                   },
                                                   child: Text('See All >',
@@ -1690,11 +1792,20 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       .setWidth(10),
                                                   progressColor:
                                                       eventajaGreenTeal,
-                                                  percent: int.parse(widget
-                                                                      .detailData[
-                                                                  'event_review']
-                                                              ['percent_review']
-                                                          ['good']) /
+                                                  percent: int.parse(detailData !=
+                                                                  null ||
+                                                              !detailData
+                                                                  .isEmpty
+                                                          ? detailData[
+                                                                      'event_review']
+                                                                  [
+                                                                  'percent_review']
+                                                              ['good']
+                                                          : widget.detailData[
+                                                                      'event_review']
+                                                                  [
+                                                                  'percent_review']
+                                                              ['good']) /
                                                       100,
                                                 ),
                                               ),
@@ -1702,10 +1813,16 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 width: ScreenUtil.instance
                                                     .setWidth(40),
                                                 child: Text(
-                                                  (detailData['event_review']
+                                                  (detailData != null ||
+                                                          !detailData.isEmpty
+                                                      ? detailData['event_review']
                                                               ['percent_review']
-                                                          ['good'] +
-                                                      '%'),
+                                                          ['good']
+                                                      : detailData['event_review']
+                                                                  [
+                                                                  'percent_review']
+                                                              ['good'] +
+                                                          '%'),
                                                   style: TextStyle(
                                                       color: eventajaGreenTeal,
                                                       fontWeight:
@@ -1730,11 +1847,20 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       .instance
                                                       .setWidth(10),
                                                   progressColor: Colors.red,
-                                                  percent: int.parse(widget
-                                                                      .detailData[
-                                                                  'event_review']
-                                                              ['percent_review']
-                                                          ['bad']) /
+                                                  percent: int.parse(detailData !=
+                                                                  null ||
+                                                              !detailData
+                                                                  .isEmpty
+                                                          ? detailData[
+                                                                      'event_review']
+                                                                  [
+                                                                  'percent_review']
+                                                              ['bad']
+                                                          : widget.detailData[
+                                                                      'event_review']
+                                                                  [
+                                                                  'percent_review']
+                                                              ['bad']) /
                                                       100,
                                                 ),
                                               ),
@@ -1742,10 +1868,18 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 width: ScreenUtil.instance
                                                     .setWidth(40),
                                                 child: Text(
-                                                  detailData['event_review']
+                                                  detailData != null ||
+                                                          !detailData.isEmpty
+                                                      ? detailData[
+                                                                  'event_review']
                                                               ['percent_review']
-                                                          ['bad'] +
-                                                      '%',
+                                                          ['bad']
+                                                      : widget.detailData[
+                                                                      'event_review']
+                                                                  [
+                                                                  'percent_review']
+                                                              ['bad'] +
+                                                          '%',
                                                   style: TextStyle(
                                                       color: Colors.red,
                                                       fontWeight:
@@ -1969,8 +2103,16 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                               (response) {
                                                                             if (response.statusCode == 201 ||
                                                                                 response.statusCode == 200) {
-                                                                              getEventDetailsSpecificInfo();
-                                                                              isLoading = false;
+                                                                              getEventDetailsSpecificInfo().then((response) {
+                                                                                print(response.statusCode);
+                                                                                var extractedData = json.decode(response.body);
+                                                                                if (response.statusCode == 200) {
+                                                                                  setState(() {
+                                                                                    detailData = extractedData['data'];
+                                                                                    isLoading = false;
+                                                                                  });
+                                                                                }
+                                                                              });
                                                                             } else {
                                                                               isLoading = false;
                                                                               print(response.body);
@@ -2106,11 +2248,18 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                               saveId(detailData['id']);
                                               Navigator.of(context).push(
                                                   MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          ManageTicket(
-                                                            eventID: widget.id,
-                                                          )));
+                                                      builder:
+                                                          (BuildContext
+                                                                  context) =>
+                                                              ManageTicket(
+                                                                isLivestream:
+                                                                    detailData['isHybridEvent'] ==
+                                                                            'streamOnly'
+                                                                        ? true
+                                                                        : false,
+                                                                eventID:
+                                                                    widget.id,
+                                                              )));
                                             },
                                             child: SizedBox(
                                               height: ScreenUtil.instance
@@ -2150,35 +2299,75 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           GestureDetector(
                                             onTap: () async {
                                               if (widget.detailData[
-                                                      'ticket_type']['type'] ==
-                                                  'free_live_stream') {
+                                                              'ticket_type']
+                                                          ['type'] ==
+                                                      'free_live_stream' ||
+                                                  widget.detailData[
+                                                              'ticket_type']
+                                                          ['type'] ==
+                                                      'paid_live_stream') {
                                                 print('isLivestream');
 
                                                 if (widget.detailData[
                                                             'livestream'][0]
+                                                        ['on_demand_link'] !=
+                                                    null) {
+                                                  showCupertinoDialog(
+                                                    context: context,
+                                                    builder: (thisContext) {
+                                                      return CupertinoAlertDialog(
+                                                        title: Text('Notice'),
+                                                        content: Text(
+                                                          'You uploaded on demand video',
+                                                          textScaleFactor: 1.2,
+                                                          textWidthBasis:
+                                                              TextWidthBasis
+                                                                  .longestLine,
+                                                        ),
+                                                        actions: <Widget>[
+                                                          CupertinoDialogAction(
+                                                            child:
+                                                                Text('Close'),
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      thisContext)
+                                                                  .pop();
+                                                            },
+                                                          )
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                } else if (widget.detailData[
+                                                            'livestream'][0]
                                                         ['zoom_id'] !=
                                                     null) {
                                                   showCupertinoDialog(
-                                                      context: context,
-                                                      builder: (thisContext) {
-                                                        return CupertinoAlertDialog(
-                                                          title: Text('Notice'),
-                                                          content: Text(
-                                                            'please start broadcast using zoom link you provide to your attandees',
-                                                          ),
-                                                          actions: <Widget>[
-                                                            CupertinoDialogAction(
-                                                              child:
-                                                                  Text('Close'),
-                                                              onPressed: () {
-                                                                Navigator.of(
-                                                                        thisContext)
-                                                                    .pop();
-                                                              },
-                                                            )
-                                                          ],
-                                                        );
-                                                      });
+                                                    context: context,
+                                                    builder: (thisContext) {
+                                                      return CupertinoAlertDialog(
+                                                        title: Text('Notice'),
+                                                        content: Text(
+                                                          'please start broadcast using zoom link you provide to your attandees',
+                                                          textScaleFactor: 1.2,
+                                                          textWidthBasis:
+                                                              TextWidthBasis
+                                                                  .longestLine,
+                                                        ),
+                                                        actions: <Widget>[
+                                                          CupertinoDialogAction(
+                                                            child:
+                                                                Text('Close'),
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      thisContext)
+                                                                  .pop();
+                                                            },
+                                                          )
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
                                                 } else {
                                                   if (streamingState ==
                                                       'stopped') {
@@ -2190,6 +2379,11 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                 Text('Notice'),
                                                             content: Text(
                                                               'Please broadcast 5 minutes before the event start',
+                                                              textScaleFactor:
+                                                                  1.2,
+                                                              textWidthBasis:
+                                                                  TextWidthBasis
+                                                                      .longestLine,
                                                             ),
                                                             actions: <Widget>[
                                                               CupertinoDialogAction(
@@ -2306,59 +2500,103 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     MainAxisAlignment.center,
                                                 children: <Widget>[
                                                   SizedBox(
-                                                      width: ScreenUtil.instance.setWidth(widget
-                                                                          .detailData[
-                                                                      'ticket_type']
-                                                                  ['type'] ==
-                                                              'free_live_stream'
-                                                          ? widget.detailData[
-                                                                          'livestream'][0]
-                                                                      [
-                                                                      'zoom_id'] !=
-                                                                  null
-                                                              ? 80
-                                                              : 50
-                                                          : 20.9),
-                                                      child: Image.asset(
-                                                        widget.detailData[
-                                                                        'ticket_type']
-                                                                    ['type'] ==
-                                                                'free_live_stream'
-                                                            ? widget.detailData[
-                                                                            'livestream'][0]
-                                                                        [
-                                                                        'zoom_id'] !=
-                                                                    null
-                                                                ? 'assets/icons/aset_icon/zoom_livestream.png'
-                                                                : 'assets/btn_ticket/live.png'
-                                                            : 'assets/icons/icon_apps/qr.png',
-                                                        fit: BoxFit.fill,
-                                                        colorBlendMode:
-                                                            BlendMode.srcATop,
-                                                        color: widget.detailData[
-                                                                        'ticket_type']
-                                                                    ['type'] ==
-                                                                'free_live_stream'
-                                                            ? streamingState ==
-                                                                    'stopped'
-                                                                ? Colors.white
-                                                                    .withOpacity(
-                                                                        .9)
-                                                                : Colors
-                                                                    .transparent
-                                                            : Colors
-                                                                .transparent,
-                                                      )),
-                                                  SizedBox(
-                                                    height: ScreenUtil.instance
-                                                        .setWidth(15),
-                                                  ),
+                                                      width: ScreenUtil.instance.setWidth(
+                                                          widget.detailData['ticket_type']['type'] == 'free_live_stream' ||
+                                                                  widget.detailData['ticket_type']['type'] ==
+                                                                      'paid_live_stream'
+                                                              ? widget.detailData['livestream'].isNotEmpty &&
+                                                                      widget.detailData['livestream'][0]['zoom_id'] !=
+                                                                          null
+                                                                  ? 80
+                                                                  : 50
+                                                              : 20.9),
+                                                      child:
+                                                          widget.detailData
+                                                                      .containsKey(
+                                                                          'livestream') &&
+                                                                  widget
+                                                                      .detailData[
+                                                                          'livestream']
+                                                                      .isNotEmpty &&
+                                                                  widget.detailData['livestream']
+                                                                              [0]
+                                                                          ['on_demand_link'] !=
+                                                                      null
+                                                              ? Text(
+                                                                  'On Demand Video',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  maxLines: 2,
+                                                                )
+                                                              : Image.asset(
+                                                                  widget.detailData['ticket_type']['type'] ==
+                                                                              'free_live_stream' ||
+                                                                          widget.detailData['ticket_type']['type'] ==
+                                                                              'paid_live_stream'
+                                                                      ? widget.detailData['livestream'].isNotEmpty &&
+                                                                              widget.detailData['livestream'][0]['zoom_id'] != null
+                                                                          ? 'assets/icons/aset_icon/zoom_livestream.png'
+                                                                          : 'assets/btn_ticket/live.png'
+                                                                      : 'assets/icons/icon_apps/qr.png',
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                  colorBlendMode:
+                                                                      BlendMode
+                                                                          .srcATop,
+                                                                  color: widget.detailData['ticket_type']['type'] ==
+                                                                              'free_live_stream' ||
+                                                                          widget.detailData['ticket_type']['type'] ==
+                                                                              'paid_live_stream'
+                                                                      ? streamingState ==
+                                                                              'stopped'
+                                                                          ? Colors.white.withOpacity(
+                                                                              .9)
+                                                                          : Colors
+                                                                              .transparent
+                                                                      : Colors
+                                                                          .transparent,
+                                                                )),
+                                                  widget.detailData.containsKey(
+                                                              'livestream') &&
+                                                          widget
+                                                              .detailData[
+                                                                  'livestream']
+                                                              .isNotEmpty &&
+                                                          widget.detailData[
+                                                                      'livestream'][0]
+                                                                  [
+                                                                  'on_demand_link'] !=
+                                                              null
+                                                      ? Container()
+                                                      : SizedBox(
+                                                          height: ScreenUtil
+                                                              .instance
+                                                              .setWidth(15),
+                                                        ),
                                                   Text(
-                                                      widget.detailData[
-                                                                      'ticket_type']
-                                                                  ['type'] ==
-                                                              'free_live_stream'
-                                                          ? 'NOW !'
+                                                      widget.detailData['ticket_type']['type'] ==
+                                                                  'free_live_stream' ||
+                                                              widget.detailData['ticket_type']
+                                                                      [
+                                                                      'type'] ==
+                                                                  'paid_live_stream'
+                                                          ? widget
+                                                                      .detailData[
+                                                                          'livestream']
+                                                                      .isNotEmpty &&
+                                                                  widget.detailData['livestream'][0]['on_demand_link'] !=
+                                                                      null
+                                                              ? ''
+                                                              : 'NOW !'
                                                           : 'SHOW QR CODE',
                                                       style: TextStyle(
                                                           color:
@@ -2611,12 +2849,22 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       'extension'] ==
                                                   'image/jpeg' ||
                                               additional['extension'] ==
-                                                  'image/png'
+                                                  'image/png' ||
+                                              additional['file_name']
+                                                  .toString()
+                                                  .contains(".jpg") ||
+                                              additional['file_name']
+                                                  .toString()
+                                                  .contains(".png")
                                           ? PhotoView(
                                               imageProvider: NetworkImage(
                                                   additional['posterPathFull']),
                                             )
                                           : MediaPlayer(
+                                              videoHeight:
+                                                  additional['pictureHeight'],
+                                              videoWidth:
+                                                  additional['pictureWidth'],
                                               videoUri:
                                                   additional['posterPathFull']),
                                     ),
@@ -2631,7 +2879,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       'pictureHeight']) >
                                                   double.parse(additional[
                                                       'pictureWidth'])
-                                              ? 184.06 * 1.3
+                                              ? 250 * 1.3
                                               : double.parse(additional[
                                                       'pictureHeight']) /
                                                   1.5),
@@ -2642,7 +2890,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       'pictureWidth']) <
                                                   double.parse(additional[
                                                       'pictureHeight'])
-                                              ? 122.86 * 1.3
+                                              ? 165 * 1.3
                                               : double.parse(additional[
                                                       'pictureWidth']) /
                                                   1.5),
@@ -2650,20 +2898,28 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                       color: Color(0xff8a8a8b),
                                       image: DecorationImage(
                                           image: NetworkImage(
-                                              additional['posterPathThumb']),
+                                            additional['posterPathThumb'],
+                                          ),
                                           fit: BoxFit.fill),
                                       borderRadius: BorderRadius.circular(15)),
                                   child: Center(
-                                      child: additional['extension'] ==
-                                                  'image/jpeg' ||
-                                              additional['extension'] ==
-                                                  'image/png'
-                                          ? Container()
-                                          : Icon(
-                                              Icons.play_circle_filled,
-                                              color: Colors.white,
-                                              size: 50,
-                                            )),
+                                      child:
+                                          additional['extension'] ==
+                                                      'image/jpeg' ||
+                                                  additional['extension'] ==
+                                                      'image/png' ||
+                                                  additional['file_name']
+                                                      .toString()
+                                                      .contains(".jpg") ||
+                                                  additional['file_name']
+                                                      .toString()
+                                                      .contains(".png")
+                                              ? Container()
+                                              : Icon(
+                                                  Icons.play_circle_filled,
+                                                  color: Colors.white,
+                                                  size: 50,
+                                                )),
                                 ),
                               );
                             }).toList(),
@@ -2679,21 +2935,23 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             SizedBox(
               height: ScreenUtil.instance.setWidth(18),
             ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(13),
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 5,
-                        spreadRadius: 1.5,
-                        color: Color(0xff8a8a8b).withOpacity(.2))
-                  ],
-                  color: Colors.white),
-              child: Column(
-                children: <Widget>[showMap()],
-              ),
-            )
+            detailData['isHybridEvent'] == 'streamOnly'
+                ? Container()
+                : Container(
+                    margin: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(13),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 5,
+                              spreadRadius: 1.5,
+                              color: Color(0xff8a8a8b).withOpacity(.2))
+                        ],
+                        color: Colors.white),
+                    child: Column(
+                      children: <Widget>[showMap()],
+                    ),
+                  )
           ],
         ),
       );
@@ -2735,6 +2993,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               ),
             ),
           ),
+          SizedBox(
+            height: 30,
+          ),
           detailData['comment'].length == 0
               ? Container(
                   height: 15,
@@ -2746,18 +3007,135 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                       ? 0
                       : detailData['comment'].length,
                   itemBuilder: (context, i) {
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(detailData['comment'][i]['photo']),
+                    List commentList = detailData['comment'];
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 25, left: 13, right: 13),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          CircleAvatar(
+                            radius: 18,
+                            backgroundImage:
+                                NetworkImage(detailData['comment'][i]['photo']),
+                          ),
+                          SizedBox(
+                            width: 12,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                detailData['comment'][i]['fullName'] +
+                                    '' +
+                                    ': ',
+                                style: TextStyle(
+                                    fontSize: ScreenUtil.instance.setSp(14),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Container(
+                                  width: 210,
+                                  child: Text(
+                                      detailData['comment'][i]['response'])),
+                            ],
+                          ),
+                          Expanded(child: Container()),
+                          detailData['comment'][i]['userID'] == currentUserId
+                              ? Container(
+                                  height: 50,
+                                  width: 50,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showCupertinoDialog(
+                                        context: context,
+                                        builder: (thisContext) {
+                                          return CupertinoAlertDialog(
+                                            title: Text('Notice'),
+                                            content: Text(
+                                              'Do you want to delete this comment?',
+                                              textScaleFactor: 1.2,
+                                              textWidthBasis:
+                                                  TextWidthBasis.longestLine,
+                                            ),
+                                            actions: <Widget>[
+                                              CupertinoDialogAction(
+                                                child: Text('No'),
+                                                onPressed: () {
+                                                  Navigator.of(
+                                                    thisContext,
+                                                  ).pop();
+                                                },
+                                              ),
+                                              CupertinoDialogAction(
+                                                child: Text('Yes'),
+                                                onPressed: () {
+                                                  Navigator.of(
+                                                    thisContext,
+                                                  ).pop();
+                                                  deleteComment(
+                                                    detailData['comment'][i]
+                                                        ['id'],
+                                                  ).then(
+                                                    (response) {
+                                                      if (response.statusCode ==
+                                                              200 ||
+                                                          response.statusCode ==
+                                                              201) {
+                                                        print(response.body);
+                                                        isLoading = false;
+                                                        detailData['comment']
+                                                            .removeAt(i);
+                                                      } else {
+                                                        print(response.body);
+                                                        isLoading = false;
+                                                        Flushbar(
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                          flushbarPosition:
+                                                              FlushbarPosition
+                                                                  .TOP,
+                                                          animationDuration:
+                                                              Duration(
+                                                                  milliseconds:
+                                                                      500),
+                                                          duration: Duration(
+                                                              seconds: 3),
+                                                          message:
+                                                              response.body,
+                                                        ).show(context);
+                                                      }
+                                                    },
+                                                  ).catchError((err) {
+                                                    isLoading = false;
+                                                    Flushbar(
+                                                            backgroundColor:
+                                                                Colors.red,
+                                                            flushbarPosition:
+                                                                FlushbarPosition
+                                                                    .TOP,
+                                                            animationDuration:
+                                                                Duration(
+                                                                    milliseconds:
+                                                                        500),
+                                                            duration: Duration(
+                                                                seconds: 3),
+                                                            message:
+                                                                err.toString())
+                                                        .show(context);
+                                                  });
+                                                },
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Icon(Icons.close,
+                                        color: Colors.grey.withOpacity(.5)),
+                                  ),
+                                )
+                              : Container(width: 100),
+                        ],
                       ),
-                      title: Text(
-                        detailData['comment'][i]['fullName'] + '' + ': ',
-                        style: TextStyle(
-                            fontSize: ScreenUtil.instance.setSp(12),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(detailData['comment'][i]['response']),
                     );
                   },
                 )
@@ -2775,6 +3153,25 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       color: color ?? Theme.of(context).dividerColor,
       width: width,
     );
+  }
+
+  Future<http.Response> deleteComment(String commentId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    isLoading = true;
+    if (mounted) {
+      setState(() {});
+    }
+
+    String url = BaseApi().apiUrl + '/eventdetail_comment/delete';
+
+    final response = await http.delete(url, headers: {
+      'cookie': prefs.getString('Session'),
+      'Authorization': AUTHORIZATION_KEY,
+      'X-API-KEY': API_KEY,
+      'id': commentId
+    });
+
+    return response;
   }
 
   Widget countdownTimer() {
@@ -2806,7 +3203,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
           Text(countdownAsString,
               style: TextStyle(
                   color: eventajaGreenTeal,
-                  fontSize: ScreenUtil.instance.setSp(18),
+                  fontSize: ScreenUtil.instance.setSp(32),
                   fontWeight: FontWeight.bold)),
         ],
       )),

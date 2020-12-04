@@ -165,8 +165,8 @@ class PostEvent7State extends State<PostEvent7> {
                                 onCategorySelected();
                               },
                               leading:
-                                  Image.network(categoryEventData[i]['logo']),
-                              subtitle: Text(categoryEventData[i]['name']),
+                                  Image.network(categoryEventData[i]['logo'], scale: 15,),
+                              title: Text(categoryEventData[i]['name'], style: TextStyle(fontWeight: FontWeight.bold),),
                               trailing: myListName
                                       .contains(categoryEventData[i]['name'])
                                   ? Container(

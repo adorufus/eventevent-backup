@@ -13,6 +13,7 @@ import 'package:eventevent/Widgets/timeline/SeeAllMediaItem.dart';
 import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
 import 'package:eventevent/Widgets/timeline/popularMediaItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
@@ -37,7 +38,7 @@ class TimelineDashboard extends StatefulWidget {
 }
 
 class TimelineDashboardState extends State<TimelineDashboard>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   List mediaData = [];
   List popularMediaVideo;
   List latestMediaPhoto = [];
@@ -56,6 +57,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
   int likeCount = 0;
 
   GlobalKey modalBottomSheetKey = new GlobalKey();
+
+  TabController thisTabController;
 
   void getDetail() {
     getPopularMediaPhoto().then((response) {
@@ -191,9 +194,16 @@ class TimelineDashboardState extends State<TimelineDashboard>
   @override
   void initState() {
     super.initState();
+    thisTabController = TabController(initialIndex: 0, vsync: this, length: 2);
+
+    thisTabController.addListener(handleSelectedTab);
     WidgetsBinding.instance.addObserver(this);
     getUserData();
     getDetail();
+  }
+
+  void handleSelectedTab() {
+    print(thisTabController.index);
   }
 
   @override
@@ -341,96 +351,110 @@ class TimelineDashboardState extends State<TimelineDashboard>
                     },
                   )
                 : SafeArea(
-                    child: DefaultTabController(
-                      initialIndex: 0,
-                      length: 2,
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            color: Colors.white,
-                            child: TabBar(
-                              tabs: <Widget>[
-                                Tab(
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Image.asset(
-                                        'assets/icons/icon_apps/home.png',
-                                        scale: 4.5,
-                                      ),
-                                      SizedBox(
-                                          width:
-                                              ScreenUtil.instance.setWidth(8)),
-                                      Text('Home',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: ScreenUtil.instance
-                                                  .setSp(12.5))),
-                                    ],
-                                  ),
-                                ),
-                                Tab(
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Image.asset(
-                                        'assets/icons/icon_apps/public_timeline.png',
-                                        scale: 4.5,
-                                      ),
-                                      SizedBox(
-                                          width:
-                                              ScreenUtil.instance.setWidth(8)),
-                                      Text('Public Timeline',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: ScreenUtil.instance
-                                                  .setSp(12.5))),
-                                    ],
-                                  ),
-                                )
-                              ],
-                              unselectedLabelColor: Colors.grey,
-                            ),
-                          ),
-                          Flexible(
-                            child: Container(
-                              height: ScreenUtil.instance.setHeight(
-                                  MediaQuery.of(context).size.height - 50),
-                              child: Stack(
-                                children: <Widget>[
-                                  TabBarView(
-                                    children: <Widget>[
-                                      emedia(),
-                                      widget.isRest == true
-                                          ? LoginRegisterWidget()
-                                          : UserTimelineItem(
-                                              currentUserId: currentUserId,
-                                              timelineType: 'timeline',
-                                            )
-                                    ],
-                                  ),
-                                  Positioned(
-                                      child: isLoading == true
-                                          ? Container(
-                                              child: Center(
-                                                  child:
-                                                      CupertinoActivityIndicator(
-                                                          radius: 20)),
-                                              color:
-                                                  Colors.black.withOpacity(0.5),
-                                            )
-                                          : Container())
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                    child: emedia()
+                    // DefaultTabController(
+                    //   initialIndex: 0,
+                    //   length: 2,
+                    //   child: Column(
+                    //     children: <Widget>[
+                    //       Container(
+                    //         color: Colors.white,
+                    //         child: TabBar(
+                    //           controller: thisTabController,
+                    //           onTap: (index) {
+                    //             if (index == 0) {
+                    //               ClevertapHandler.logPageView(
+                    //                   "E-Media Timeline");
+                    //             } else {
+                    //               ClevertapHandler.logPageView(
+                    //                   "Timeline");
+                    //             }
+
+                    //             thisTabController.index = index;
+                    //             if(mounted) setState((){});
+                    //           },
+                    //           tabs: <Widget>[
+                    //             Tab(
+                    //               child: Row(
+                    //                 crossAxisAlignment:
+                    //                     CrossAxisAlignment.center,
+                    //                 mainAxisAlignment: MainAxisAlignment.center,
+                    //                 children: <Widget>[
+                    //                   Image.asset(
+                    //                     'assets/icons/icon_apps/home.png',
+                    //                     scale: 4.5,
+                    //                   ),
+                    //                   SizedBox(
+                    //                       width:
+                    //                           ScreenUtil.instance.setWidth(8)),
+                    //                   Text('Home',
+                    //                       style: TextStyle(
+                    //                           fontWeight: FontWeight.bold,
+                    //                           fontSize: ScreenUtil.instance
+                    //                               .setSp(12.5))),
+                    //                 ],
+                    //               ),
+                    //             ),
+                    //             Tab(
+                    //               child: Row(
+                    //                 crossAxisAlignment:
+                    //                     CrossAxisAlignment.center,
+                    //                 mainAxisAlignment: MainAxisAlignment.center,
+                    //                 children: <Widget>[
+                    //                   Image.asset(
+                    //                     'assets/icons/icon_apps/public_timeline.png',
+                    //                     scale: 4.5,
+                    //                   ),
+                    //                   SizedBox(
+                    //                       width:
+                    //                           ScreenUtil.instance.setWidth(8)),
+                    //                   Text('Public Timeline',
+                    //                       style: TextStyle(
+                    //                           fontWeight: FontWeight.bold,
+                    //                           fontSize: ScreenUtil.instance
+                    //                               .setSp(12.5))),
+                    //                 ],
+                    //               ),
+                    //             )
+                    //           ],
+                    //           unselectedLabelColor: Colors.grey,
+                    //         ),
+                    //       ),
+                    //       Flexible(
+                    //         child: Container(
+                    //           height: ScreenUtil.instance.setHeight(
+                    //               MediaQuery.of(context).size.height - 50),
+                    //           child: Stack(
+                    //             children: <Widget>[
+                    //               TabBarView(
+                    //                 children: <Widget>[
+                    //                   emedia(),
+                    //                   widget.isRest == true
+                    //                       ? LoginRegisterWidget()
+                    //                       : UserTimelineItem(
+                    //                           currentUserId: currentUserId,
+                    //                           timelineType: 'timeline',
+                    //                         )
+                    //                 ],
+                    //               ),
+                    //               Positioned(
+                    //                   child: isLoading == true
+                    //                       ? Container(
+                    //                           child: Center(
+                    //                               child:
+                    //                                   CupertinoActivityIndicator(
+                    //                                       radius: 20)),
+                    //                           color:
+                    //                               Colors.black.withOpacity(0.5),
+                    //                         )
+                    //                       : Container())
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
                   ),
           );
   }
@@ -896,7 +920,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                 imageCount: 'img' + i.toString(),
                                 username: latestMediaPhoto[i]['creator']
                                     ['username'],
-                                imageUri: latestMediaPhoto[i]['banner_avatar'],
+                                imageUri: latestMediaPhoto[i]['banner_avatar'].toString().replaceAll("\n", ""),
                                 mediaTitle: latestMediaPhoto[i]['title'],
                                 autoFocus: false,
                                 mediaId: latestMediaPhoto[i]['id'],
@@ -907,7 +931,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                   isRest: widget.isRest,
                   isVideo: false,
                   isLiked: latestMediaPhoto[i]['is_loved'],
-                  image: latestMediaPhoto[i]['banner_timeline'],
+                  image: latestMediaPhoto[i]['banner_timeline'].toString().replaceAll("\n", ""),
                   mediaId: latestMediaPhoto[i]['id'],
                   title: latestMediaPhoto[i]['title'],
                   username: latestMediaPhoto[i]['creator']['username'],
@@ -992,7 +1016,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                   username: popularMediaVideo[i]['creator']
                                       ['username'],
                                   imageUri: popularMediaVideo[i]
-                                      ['thumbnail_timeline'],
+                                      ['thumbnail_timeline'].toString().replaceAll("\n", ""),
                                   mediaTitle: popularMediaVideo[i]['title'],
                                   autoFocus: false,
                                   mediaId: popularMediaVideo[i]['id'],
@@ -1004,7 +1028,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                     videoUrl: popularMediaVideo[i]['video'],
                     youtube: popularMediaVideo[i]['youtube'],
                     isVideo: true,
-                    image: popularMediaVideo[i]['thumbnail_avatar'],
+                    image: popularMediaVideo[i]['thumbnail_avatar'].toString().replaceAll("\n", ""),
                     title: popularMediaVideo[i]['title'],
                     username: popularMediaVideo[i]['creator']['username'],
                     userPicture: popularMediaVideo[i]['creator']['photo'],
@@ -1086,7 +1110,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                 username: latestMediaVideo[i]['creator']
                                     ['username'],
                                 imageUri: latestMediaVideo[i]
-                                    ['thumbnail_timeline'],
+                                    ['thumbnail_timeline'].toString().replaceAll("\n", ""),
                                 mediaTitle: latestMediaVideo[i]['title'],
                                 autoFocus: false,
                                 mediaId: latestMediaVideo[i]['id'],
@@ -1099,7 +1123,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                   youtube: latestMediaVideo[i]['youtube'] ?? '/',
                   videoUrl: latestMediaVideo[i]['video'] ?? '/',
                   mediaId: latestMediaVideo[i]['id'],
-                  image: latestMediaVideo[i]['thumbnail_timeline'],
+                  image: latestMediaVideo[i]['thumbnail_timeline'].toString().replaceAll("\n", ""),
                   title: latestMediaVideo[i]['title'],
                   username: latestMediaVideo[i]['creator']['username'],
                   userImage: latestMediaVideo[i]['creator']['photo'],

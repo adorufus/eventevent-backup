@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -10,6 +11,9 @@ import 'package:pie_chart/pie_chart.dart';
 import 'package:http/http.dart' as http;
 
 class EventStatistic extends StatefulWidget{
+  final eventId;
+
+  const EventStatistic({Key key, this.eventId}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     
@@ -78,15 +82,15 @@ class EventStatisticState extends State<EventStatistic>{
         centerTitle: true,
         title: Text('EVENT STATISTIC', style: TextStyle(color: eventajaGreenTeal),),
       ),
-      body: sharedData == null || ticketData == null || checkinData == null || dataMap == null ? EventDetailLoadingScreen() : Container(
+      body: sharedData == null || ticketData == null || checkinData == null || dataMap == null ? HomeLoadingScreen().eventStatisticLoading(context) : Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: ListView(
           children: <Widget>[
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text('EVENT NAME', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey[500]),),
-                Text(eventName.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18)),)
+                Text('EVENT NAME', style: TextStyle(fontSize: ScreenUtil.instance.setSp(14), color: Colors.grey[500]),),
+                Text(eventName.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(28)),)
               ],
             ),
             SizedBox(height: ScreenUtil.instance.setWidth(25),),
@@ -101,9 +105,8 @@ class EventStatisticState extends State<EventStatistic>{
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      height: ScreenUtil.instance.setWidth(35),
-                      width: ScreenUtil.instance.setWidth(50),
-                      child: Image.asset('assets/icons/butt_eye.png', fit: BoxFit.fill,),
+                      
+                      child: Image.asset('assets/icons/butt_eye.png', fit: BoxFit.fill, scale: 15,),
                     ),
                     SizedBox(
                       height: ScreenUtil.instance.setWidth(15),
@@ -125,12 +128,11 @@ class EventStatisticState extends State<EventStatistic>{
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      height: ScreenUtil.instance.setWidth(30),
-                      width: ScreenUtil.instance.setWidth(30),
-                      child: Image.asset('assets/icons/butt_love_ijo.png', fit: BoxFit.fill,),
+                      
+                      child: Image.asset('assets/icons/butt_love_ijo.png', fit: BoxFit.fill, scale: 20,),
                     ),
                     SizedBox(
-                      height: ScreenUtil.instance.setWidth(15),
+                      height: ScreenUtil.instance.setWidth(12),
                     ),
                     Text(
                       lovers,
@@ -149,12 +151,11 @@ class EventStatisticState extends State<EventStatistic>{
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      height: ScreenUtil.instance.setWidth(30),
-                      width: ScreenUtil.instance.setWidth(30),
-                      child: Image.asset('assets/icons/butt_share.png', fit: BoxFit.fill,),
+                      
+                      child: Image.asset('assets/icons/butt_share.png', fit: BoxFit.fill, scale: 20,),
                     ),
                     SizedBox(
-                      height: ScreenUtil.instance.setWidth(15),
+                      height: ScreenUtil.instance.setWidth(12),
                     ),
                     Text(
                       sharedData['total_shared'] == null ? '-' : sharedData['total_shared'].toString(),
@@ -197,27 +198,27 @@ class EventStatisticState extends State<EventStatistic>{
                 Column(
                   children: <Widget>[
                     SizedBox(
-                      height: ScreenUtil.instance.setWidth(80),
-                      width: ScreenUtil.instance.setWidth(45),
+                      height: ScreenUtil.instance.setWidth(40),
+                      width: ScreenUtil.instance.setWidth(22),
                       child: Image.asset('assets/icons/butt_cowo.png', color: eventajaGreenTeal,)
                     ),
                     SizedBox(
                       height: ScreenUtil.instance.setWidth(10),
                     ),
-                    Text(totalMale, style: TextStyle(fontWeight: FontWeight.bold))
+                    Text(totalMale == null ? '0%' : totalMale, style: TextStyle(fontWeight: FontWeight.bold))
                   ],
                 ),
                 Column(
                   children: <Widget>[
                     SizedBox(
-                        height: ScreenUtil.instance.setWidth(80),
-                        width: ScreenUtil.instance.setWidth(45),
+                        height: ScreenUtil.instance.setWidth(40),
+                        width: ScreenUtil.instance.setWidth(22),
                         child: Image.asset('assets/icons/butt_cewe.png', color: eventajaGreenTeal,)
                     ),
                     SizedBox(
                       height: ScreenUtil.instance.setWidth(10),
                     ),
-                    Text(totalFemale, style: TextStyle(fontWeight: FontWeight.bold))
+                    Text(totalFemale == null ? '0%' : totalFemale, style: TextStyle(fontWeight: FontWeight.bold))
                   ],
                 ),
                 Column(
@@ -226,15 +227,15 @@ class EventStatisticState extends State<EventStatistic>{
                   children: <Widget>[
                     SizedBox(
                       child: SizedBox(
-                          height: ScreenUtil.instance.setWidth(50),
-                          width: ScreenUtil.instance.setWidth(25),
+                          height: ScreenUtil.instance.setWidth(25),
+                          width: ScreenUtil.instance.setWidth(15),
                           child: Image.asset('assets/icons/butt_gender_apakah_ini.png', color: Colors.grey,)
                       ),
                     ),
                     SizedBox(
                       height: ScreenUtil.instance.setWidth(25)
                     ),
-                    Text(totalUnspecified, style: TextStyle(fontWeight: FontWeight.bold))
+                    Text(totalUnspecified == null ? "" : totalUnspecified, style: TextStyle(fontWeight: FontWeight.bold))
                   ],
                 )
               ],
@@ -298,7 +299,10 @@ class EventStatisticState extends State<EventStatistic>{
   Future getShared() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/analytic_event/shared?X-API-KEY=$API_KEY&event_id=${prefs.getString('NEW_EVENT_ID')}';
+    print(prefs.getInt('NEW_EVENT_ID'));
+
+    String url = BaseApi().apiUrl + '/analytic_event/shared?X-API-KEY=$API_KEY&event_id=${prefs.getInt('NEW_EVENT_ID')}';
+    print(url);
 
     final response = await http.get(
         url,
@@ -323,7 +327,7 @@ class EventStatisticState extends State<EventStatistic>{
   Future getCheckedIn() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/analytic_event/checkin?X-API-KEY=$API_KEY&event_id=${prefs.getString('NEW_EVENT_ID')}';
+    String url = BaseApi().apiUrl + '/analytic_event/checkin?X-API-KEY=$API_KEY&event_id=${widget.eventId}';
 
     final response = await http.get(
         url,
@@ -348,7 +352,7 @@ class EventStatisticState extends State<EventStatistic>{
   Future getViewers() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/analytic_event/gender?X-API-KEY=$API_KEY&event_id=${prefs.getString('NEW_EVENT_ID')}';
+    String url = BaseApi().apiUrl + '/analytic_event/gender?X-API-KEY=$API_KEY&event_id=${widget.eventId}';
 
     final response = await http.get(
         url,
@@ -383,7 +387,7 @@ class EventStatisticState extends State<EventStatistic>{
   Future getTicketStat() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/analytic_event/ticket?X-API-KEY=$API_KEY&event_id=${prefs.getString('NEW_EVENT_ID')}';
+    String url = BaseApi().apiUrl + '/analytic_event/ticket?X-API-KEY=$API_KEY&event_id=${widget.eventId}';
 
     final response = await http.get(
         url,

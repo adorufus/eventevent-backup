@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:eventevent/Widgets/TransactionHistory.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
+import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:quiver/async.dart';
@@ -21,9 +22,14 @@ class WaitTransaction extends StatefulWidget {
   final expDate;
   final String transactionID;
   final String finalPrice;
+  final bool isBniVa;
 
   const WaitTransaction(
-      {Key key, this.expDate, this.transactionID, this.finalPrice})
+      {Key key,
+      this.expDate,
+      this.transactionID,
+      this.finalPrice,
+      this.isBniVa = false})
       : super(key: key);
 
   @override
@@ -104,7 +110,11 @@ class _WaitTransactionState extends State<WaitTransaction>
 
     setState(() {
       bank_number = bankNumber;
-      bank_code = bankCode;
+      if (widget.isBniVa == true) {
+        bank_code = 'BNI';
+      } else {
+        bank_code = bankCode;
+      }
       bank_acc = bankAcc;
     });
   }
@@ -150,7 +160,6 @@ class _WaitTransactionState extends State<WaitTransaction>
 
     print(timertick);
   }
-  
 
   @override
   void dispose() {
@@ -169,7 +178,7 @@ class _WaitTransactionState extends State<WaitTransaction>
     )..init(context);
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white.withOpacity(0.9),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -214,7 +223,7 @@ class _WaitTransactionState extends State<WaitTransaction>
                             borderRadius: BorderRadius.circular(10),
                             color: eventajaGreenTeal),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             SizedBox(
@@ -248,36 +257,36 @@ class _WaitTransactionState extends State<WaitTransaction>
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
                             ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text('H',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(20))),
-                                SizedBox(
-                                  width: ScreenUtil.instance.setWidth(35),
-                                ),
-                                Text('M',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(20))),
-                                SizedBox(
-                                  width: ScreenUtil.instance.setWidth(35),
-                                ),
-                                Text('S',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(20))),
-                              ],
-                            ),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(20),
-                            ),
+                            // Row(
+                            //   crossAxisAlignment: CrossAxisAlignment.center,
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: <Widget>[
+                            //     Text('H',
+                            //         style: TextStyle(
+                            //             color: Colors.white,
+                            //             fontSize:
+                            //                 ScreenUtil.instance.setSp(20))),
+                            //     SizedBox(
+                            //       width: ScreenUtil.instance.setWidth(35),
+                            //     ),
+                            //     Text('M',
+                            //         style: TextStyle(
+                            //             color: Colors.white,
+                            //             fontSize:
+                            //                 ScreenUtil.instance.setSp(20))),
+                            //     SizedBox(
+                            //       width: ScreenUtil.instance.setWidth(35),
+                            //     ),
+                            //     Text('S',
+                            //         style: TextStyle(
+                            //             color: Colors.white,
+                            //             fontSize:
+                            //                 ScreenUtil.instance.setSp(20))),
+                            //   ],
+                            // ),
+                            // SizedBox(
+                            //   height: ScreenUtil.instance.setWidth(20),
+                            // ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -335,106 +344,204 @@ class _WaitTransactionState extends State<WaitTransaction>
                 Center(
                   child: Text(
                     'TRANSFER TO',
-                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
+                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(14)),
                   ),
                 ),
                 // Expanded(child: SizedBox(),),
-                GestureDetector(
-                  onTap: () {
-                    if (paymentData['payment_method_id'] == '2') {
-                      print('string copied');
-                      Clipboard.setData(ClipboardData(text: bank_number));
-                      print(Clipboard.getData('text/plain'));
-                      Flushbar(
-                        flushbarPosition: FlushbarPosition.TOP,
-                        message: 'Text Coppied!',
-                        duration: Duration(seconds: 3),
-                        animationDuration: Duration(milliseconds: 500),
-                      )..show(context);
-                    } else if (paymentData['payment_method_id'] == '9') {
-                      String url =
-                          paymentData['payment']['data_vendor']['payment_url'];
-                      launch(url,
-                          forceSafariVC: true,
-                          enableJavaScript: true,
-                          forceWebView: true,
-                          statusBarBrightness: Brightness.light);
-                    }
-                  },
-                  child: Container(
-                    height: ScreenUtil.instance.setWidth(130),
-                    margin: EdgeInsets.all(10),
-                    padding: EdgeInsets.only(
-                        left: 15, right: 7, top: 10, bottom: 10),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 1,
-                              offset: Offset(1, 1))
-                        ],
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: SizedBox(
-                            height: ScreenUtil.instance.setWidth(60),
-                            child: Image.asset(bank_code.toLowerCase() == 'bni'
-                                ? 'assets/drawable/bni.png'
-                                : 'assets/drawable/bri.png'),
-                          ),
-                        ),
-                        SizedBox(
-                          width: ScreenUtil.instance.setWidth(20),
-                        ),
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                paymentData['payment']['vendor'] == 'bca'
-                                    ? paymentData['payment']['data_vendor']
-                                        ['account_name']
-                                    : paymentData['payment']['data_vendor']
-                                            ['available_banks'][0]
-                                        ['account_holder_name'],
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: ScreenUtil.instance.setSp(20),
-                                    color: Colors.black54),
+                paymentData['payment']['vendor'] != 'xendit'
+                    ? GestureDetector(
+                        onTap: () {
+                          if (paymentData['payment_method_id'] == '2') {
+                            print('string copied');
+                            Clipboard.setData(ClipboardData(text: bank_number));
+                            print(Clipboard.getData('text/plain'));
+                            Flushbar(
+                              flushbarPosition: FlushbarPosition.TOP,
+                              message: 'Text Coppied!',
+                              duration: Duration(seconds: 3),
+                              animationDuration: Duration(milliseconds: 500),
+                            )..show(context);
+                          } else if (paymentData['payment_method_id'] == '9') {
+                            String url = paymentData['payment']['data_vendor']
+                                ['payment_url'];
+                            launch(url,
+                                forceSafariVC: true,
+                                enableJavaScript: true,
+                                forceWebView: true,
+                                statusBarBrightness: Brightness.light);
+                          }
+                        },
+                        child: Container(
+                            height: ScreenUtil.instance.setWidth(100),
+                            margin: EdgeInsets.all(10),
+                            padding: EdgeInsets.only(
+                                left: 15, right: 7, top: 10, bottom: 10),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                      color: Colors.grey,
+                                      blurRadius: 1,
+                                      offset: Offset(1, 1))
+                                ],
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: SizedBox(
+                                    height: ScreenUtil.instance.setWidth(60),
+                                    child: Image.asset(
+                                        bank_code.toLowerCase() == 'bni'
+                                            ? 'assets/drawable/bni.png'
+                                            : 'assets/drawable/bri.png'),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: ScreenUtil.instance.setWidth(20),
+                                ),
+                                Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        paymentData['payment']['data_vendor']
+                                            ['account_name'],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(20),
+                                            color: Colors.black54),
+                                      ),
+                                      SizedBox(
+                                          height:
+                                              ScreenUtil.instance.setWidth(10)),
+                                      Text(paymentData['payment']['method'],
+                                          style: TextStyle(color: Colors.grey)),
+                                      SizedBox(
+                                          height:
+                                              ScreenUtil.instance.setWidth(10)),
+                                      Text(
+                                        paymentData['payment']['data_vendor']
+                                            ['account_number'],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(15),
+                                            color: Colors.black54),
+                                      ),
+                                    ])
+                              ],
+                            )),
+                      )
+                    : ColumnBuilder(
+                        itemCount: paymentData['payment']['data_vendor']
+                                ['available_banks']
+                            .length,
+                        itemBuilder: (context, i) {
+                          List availableBanks = paymentData['payment']
+                              ['data_vendor']['available_banks'];
+                          String imageAssets = '';
+
+                          if (availableBanks[i]['bank_code'] == "BNI") {
+                            imageAssets = 'assets/drawable/bni.png';
+                          } else if (availableBanks[i]['bank_code'] == "BRI") {
+                            imageAssets = 'assets/drawable/bri.png';
+                          } else if (availableBanks[i]['bank_code'] ==
+                              "MANDIRI") {
+                            imageAssets = 'assets/drawable/mandiri.png';
+                          } else if (availableBanks[i]['bank_code'] ==
+                              "PERMATA") {
+                            imageAssets = 'assets/drawable/permata.png';
+                          }
+
+                          // if(mounted) setState((){});
+
+                          return GestureDetector(
+                            onTap: () {
+                              print('string copied');
+                              Clipboard.setData(ClipboardData(
+                                  text: availableBanks[i]
+                                      ['bank_account_number']));
+                              Clipboard.getData('text/plain').then((result) {
+                                print(result.text);
+                              });
+                              print(Clipboard.kTextPlain);
+                              Flushbar(
+                                flushbarPosition: FlushbarPosition.TOP,
+                                message: 'Text Coppied!',
+                                duration: Duration(seconds: 3),
+                                animationDuration: Duration(milliseconds: 500),
+                              )..show(context);
+                            },
+                            child: Container(
+                              height: ScreenUtil.instance.setWidth(100),
+                              margin: EdgeInsets.all(10),
+                              padding: EdgeInsets.only(
+                                  left: 15, right: 7, top: 10, bottom: 10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                        color: Colors.grey,
+                                        blurRadius: 1,
+                                        offset: Offset(1, 1))
+                                  ],
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: SizedBox(
+                                      height: ScreenUtil.instance.setWidth(60),
+                                      child: Image.asset(imageAssets),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: SizedBox(),
+                                  ),
+                                  Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          paymentData['payment']['data_vendor']
+                                                  ['available_banks'][i]
+                                              ['bank_account_number'],
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize:
+                                                  ScreenUtil.instance.setSp(28),
+                                              color: Colors.black54),
+                                        ),
+                                        Text(
+                                          paymentData['payment']['data_vendor']
+                                                  ['available_banks'][i]
+                                              ['account_holder_name'],
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize:
+                                                  ScreenUtil.instance.setSp(12),
+                                              color: Colors.grey),
+                                        ),
+                                      ]),
+                                  Expanded(
+                                    child: SizedBox(),
+                                  ),
+                                ],
                               ),
-                              SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10)),
-                              Text(
-                                  paymentData['payment']['vendor'] == 'bca'
-                                      ? paymentData['payment']['method']
-                                      : paymentData['payment']['data_vendor']
-                                          ['available_banks'][0]['bank_code'],
-                                  style: TextStyle(color: Colors.grey)),
-                              SizedBox(
-                                  height: ScreenUtil.instance.setWidth(10)),
-                              Text(
-                                paymentData['payment']['vendor'] == 'bca'
-                                    ? paymentData['payment']['data_vendor']
-                                        ['account_number']
-                                    : paymentData['payment']['data_vendor']
-                                                ['available_banks'][0]
-                                            ['bank_account_number']
-                                        .toString(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: ScreenUtil.instance.setSp(15),
-                                    color: Colors.black54),
-                              ),
-                            ])
-                      ],
-                    ),
-                  ),
-                ),
+                            ),
+                          );
+                        },
+                      ),
               ],
             ),
     );

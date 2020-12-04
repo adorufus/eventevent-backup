@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/PeopleSearch.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -28,9 +29,11 @@ class PostEventInvitePeople extends StatefulWidget {
 }
 
 class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
-  List data;
+  List data = [];
   List<String> invitedPeople = new List<String>();
   List tempInvitedPeople = [];
+
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -94,7 +97,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
             )
           ],
         ),
-        body: data == null
+        body: isLoading == true
             ? HomeLoadingScreen().followListLoading()
             : Container(
                 color: Colors.white,
@@ -190,14 +193,21 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
                             },
                           )
                         : Container(),
-                    Text(
+                    data.isEmpty ? Container() : Text(
                       'Recommended From Following',
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: eventajaBlack),
                     ),
-                    ColumnBuilder(
+                    data.isEmpty ? Center(
+                      heightFactor: 2,
+                      child: EmptyState(
+                        imagePath: 'assets/icons/empty_state/profile.png',
+                        isTimeout: false,
+                        reasonText: 'You\'re not following anyone',
+                      ),
+                    ) : ColumnBuilder(
                       itemCount: data.length == null ? 0 : data.length,
                       itemBuilder: (context, i) {
                         return ListTile(
@@ -286,6 +296,9 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
 
   Future fetchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    isLoading = true;
+    if(mounted) setState((){});
+
     String url = BaseApi().apiUrl +
         '/user/follower?X-API-KEY=$API_KEY&userID=${prefs.getString('Last User ID')}&page=1';
     var extractedData;
@@ -296,7 +309,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
           'cookie': prefs.getString('Session')
         }));
 
-    print(prefs.getInt('NEW_EVENT_ID').toString());
+    // print(prefs.getInt('NEW_EVENT_ID').toString());
     print(response.statusCode);
     print(response.body);
     setState(() {
@@ -304,9 +317,14 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
     });
 
     if (response.statusCode == 200) {
-      setState(() {
+      
+      if(mounted) setState(() {
+        isLoading = false;
         data = extractedData['data'];
       });
+    } else {
+      isLoading = false;
+      if(mounted) setState((){});
     }
   }
 }

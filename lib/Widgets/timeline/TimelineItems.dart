@@ -15,6 +15,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:eventevent/helper/ClevertapHandler.dart';
 
 
 class UserTimelineItem extends StatefulWidget {
@@ -47,6 +48,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
     String urlType = 'timeline';
 
     setState(() {
+      // ClevertapHandler.logPageView("Timeline");
       if(isFromLoad == false){
         isLoading = true;
       }
@@ -238,8 +240,10 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
               picture: timelineList[i]['picture'],
               pictureFull: timelineList[i]['pictureFull'],
               type: timelineList[i]['type'],
+              cheapestTicket: timelineList[i].containsKey('ticket') ? timelineList[i]['ticket']['cheapestTicket'] : null,
               userId: timelineList[i]['userID'],
               location: timelineList[i]['locationName'],
+              ticketType: timelineList[i].containsKey('ticket_type') ? timelineList[i]['ticket_type']['type'] : null,
               impressionId: timelineList[i]['impression']['data'].length == 0 ? '' : impressionData['id'],
               loveCount: timelineList[i]['impression']['data'].length,
               isLoved: timelineList[i]['impression']['data'].length == 0 ? false : impressionData.containsValue(widget.currentUserId) == true ? true : false,
@@ -334,7 +338,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
             SizedBox(height: ScreenUtil.instance.setWidth(19)),
             Divider(),
             SizedBox(height: ScreenUtil.instance.setWidth(16)),
-            GestureDetector(
+            postType == 'event' || postType == 'love' ? Container() : GestureDetector(
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(

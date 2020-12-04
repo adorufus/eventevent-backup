@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
@@ -82,8 +83,9 @@ class _AfterRegisterState extends State<AfterRegister> {
 
   Future cropImage(File image) async {
     File croppedImage = await ImageCropper.cropImage(
+      cropStyle: CropStyle.rectangle,
       sourcePath: image.path,
-      aspectRatio: CropAspectRatio(ratioX: 2.0, ratioY: 3.0),
+      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
       maxHeight: 512,
       maxWidth: 512,
     );
@@ -330,6 +332,7 @@ class _AfterRegisterState extends State<AfterRegister> {
             'birthDay': birthDay,
             'phone': phoneNumber,
             'gender': gender,
+            'register_device': Platform.isIOS ? 'iOS' : 'Android',
             'photo': croppedProfilePicture == null
                 ? '$gender.jpg'
                 : await MultipartFile.fromFile(croppedProfilePicture.path,
@@ -362,6 +365,8 @@ class _AfterRegisterState extends State<AfterRegister> {
         setState(() {
           prefs.setString('Session', response.headers['set-cookie'].first);
         });
+
+        //ClevertapHandler.pushUserProfile(responseJson['data']['fullName'], responseJson['data']['lastName'], responseJson['data']['email'], responseJson['data']['pictureNormalURL'], responseJson['data']['birthday'] == null ? '-' : responseJson['data']['birthday'], responseJson['data']['username'], responseJson['data']['gender'], responseJson['data']['phone']);
 
         SharedPrefs().saveCurrentSession(responseJson);
         Navigator.pushReplacement(
@@ -436,14 +441,14 @@ class _AfterRegisterState extends State<AfterRegister> {
           setState(() {
             _dateTime = dateTime;
             birthdateController.text =
-                '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+                '${_dateTime.year}/${_dateTime.month}/${_dateTime.day}';
           });
         },
         onConfirm: (dateTime, List<int> index) {
           setState(() {
             _dateTime = dateTime;
             birthdateController.text =
-                '${_dateTime.day}/${_dateTime.month}/${_dateTime.year}';
+                '${_dateTime.year}/${_dateTime.month}/${_dateTime.day}';
           });
         });
   }

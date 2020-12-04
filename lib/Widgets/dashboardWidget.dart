@@ -60,11 +60,17 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
   if (message.containsKey('data')) {
     // Handle data message
     final dynamic data = message['data'];
+
+    print(data);
+
+    return data;
   }
 
   if (message.containsKey('notification')) {
     // Handle notification message
     final dynamic notification = message['notification'];
+    print(notification);
+    return notification;
   }
 
   // Or do other work.
@@ -248,7 +254,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                           image: DecorationImage(
                               image:
                                   NetworkImage(extractedData['data']['photo']),
-                              fit: BoxFit.fill)),
+                              fit: BoxFit.cover)),
                       child: GestureDetector(
                           onTap: () {
                             Navigator.pop(context);
@@ -288,6 +294,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
         ));
       } else if (payloadData['data']['type'] == 'relationship') {
         navigationHandler(ProfileWidget(
+          isRest: widget.isRest,
           userId: payloadData['data']['id'],
           initialIndex: 0,
         ));
@@ -418,7 +425,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
         channelShowBadge: true,
         importance: Importance.High,
         priority: Priority.High);
-
     var iosPlatformChannelSpecifics =
         new IOSNotificationDetails(presentBadge: true, presentSound: true);
     var platformChannelSpecifics = new NotificationDetails(
@@ -430,10 +436,13 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
     await flutterLocalNotificationsPlugin.show(
         0,
-        message['notification']['title'],
-        message['notification']['body'],
+        Platform.isIOS ? message['aps']['alert']['title'] : message['notification']['title'],
+        Platform.isIOS ? message['aps']['alert']['body'] : message['notification']['body'],
         platformChannelSpecifics,
         payload: json.encode(message));
+
+    
+        
 
     // flutterLocalNotificationsPlugin.didReceiveLocalNotificationCallback();
   }
@@ -474,8 +483,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
             print('onResume: $message');
             return;
           },
-          onBackgroundMessage:
-              Platform.isIOS ? null : myBackgroundMessageHandler);
+          onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler);
     } on PlatformException catch (e) {
       print(e.message + ' ' + e.code);
     }
@@ -523,6 +531,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
       widget.isRest == true
           ? LoginRegisterWidget()
           : ProfileWidget(
+              isRest: widget.isRest,
               initialIndex: 0,
               userId: currentUserId ?? widget.userId,
             ),
@@ -552,252 +561,175 @@ class _DashboardWidgetState extends State<DashboardWidget>
                         context: context,
                         builder: (context) {
                           return Container(
-                            color: Colors.white,
-                            child: Container(
-                              padding: EdgeInsets.only(
-                                  top: 13, left: 25, right: 25, bottom: 30),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    topRight: Radius.circular(15),
-                                  )),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 50),
-                                      child: SizedBox(
+                            padding: EdgeInsets.only(
+                                top: 13, left: 25, right: 25, bottom: 30),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15),
+                                )),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 50),
+                                    child: SizedBox(
+                                        height: ScreenUtil.instance.setWidth(5),
+                                        width: ScreenUtil.instance.setWidth(50),
+                                        child: Image.asset(
+                                          'assets/icons/icon_line.png',
+                                          fit: BoxFit.fill,
+                                        ))),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(35)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(16)),
+                                GestureDetector(
+                                  onTap: () async {
+                                    SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+
+                                    prefs.setBool('isLivestream', false);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            settings: RouteSettings(
+                                                name: 'PostEvent'),
+                                            builder: (BuildContext context) =>
+                                                PostEvent()));
+                                  },
+                                  child: Container(
+                                    color: Colors.white,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              'New Event',
+                                              style: TextStyle(
+                                                  fontSize: ScreenUtil.instance
+                                                      .setSp(16),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(
+                                                height: ScreenUtil.instance
+                                                    .setWidth(5)),
+                                            Text(
+                                              'Create & sell your own event',
+                                              style: TextStyle(
+                                                fontSize: ScreenUtil.instance
+                                                    .setSp(10),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Container(
                                           height:
-                                              ScreenUtil.instance.setWidth(5),
+                                              ScreenUtil.instance.setWidth(44),
                                           width:
                                               ScreenUtil.instance.setWidth(50),
-                                          child: Image.asset(
-                                            'assets/icons/icon_line.png',
-                                            fit: BoxFit.fill,
-                                          ))),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(35)),
-                                  GestureDetector(
-                                    onTap: () {
-                                      // imageCaputreCamera();
-                                      Navigator.of(context)
-                                          .pushNamed('/CustomCamera');
-                                    },
-                                    child: Container(
-                                      color: Colors.white,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                'Post Media',
-                                                style: TextStyle(
-                                                    fontSize: ScreenUtil
-                                                        .instance
-                                                        .setSp(16),
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              SizedBox(
-                                                  height: ScreenUtil.instance
-                                                      .setWidth(4)),
-                                              Text(
-                                                  'Share your excitement to the others ',
-                                                  style: TextStyle(
-                                                    fontSize: ScreenUtil
-                                                        .instance
-                                                        .setSp(10),
-                                                  ))
-                                            ],
-                                          ),
-                                          Container(
-                                            height: ScreenUtil.instance
-                                                .setWidth(44),
-                                            width: ScreenUtil.instance
-                                                .setWidth(50),
-                                            decoration: BoxDecoration(
+                                          decoration: BoxDecoration(
                                               image: DecorationImage(
                                                   image: AssetImage(
-                                                      'assets/icons/page_post_media.png'),
+                                                      'assets/icons/page_post_event.png'),
                                                   fit: BoxFit.fill),
-                                              borderRadius:
-                                                  BorderRadius.circular(11),
+                                              borderRadius: BorderRadius.circular(11),
                                               boxShadow: <BoxShadow>[
                                                 BoxShadow(
                                                     blurRadius: 10,
                                                     color: Colors.grey
                                                         .withOpacity(0.3),
                                                     spreadRadius: .5)
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                              ]),
+                                        )
+                                      ],
                                     ),
                                   ),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(19)),
-                                  Divider(),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(16)),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      SharedPreferences prefs =
-                                          await SharedPreferences.getInstance();
+                                ),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(19)),
+                                Divider(),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(16)),
+                                GestureDetector(
+                                  onTap: () async {
+                                    SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
 
-                                      prefs.setBool('isLivestream', false);
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              settings: RouteSettings(
-                                                  name: 'PostEvent'),
-                                              builder: (BuildContext context) =>
-                                                  PostEvent()));
-                                    },
-                                    child: Container(
-                                      color: Colors.white,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                'New Event',
-                                                style: TextStyle(
-                                                    fontSize: ScreenUtil
-                                                        .instance
-                                                        .setSp(16),
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              SizedBox(
-                                                  height: ScreenUtil.instance
-                                                      .setWidth(5)),
-                                              Text(
-                                                'Create & sell your own event',
+                                    prefs.setBool('isLivestream', true);
+                                    // imageCaputreCamera();
+                                    Navigator.pop(context);
+                                    livestreamSelectDialog(context);
+                                  },
+                                  child: Container(
+                                    color: Colors.white,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              'New Livestream Event',
+                                              style: TextStyle(
+                                                  fontSize: ScreenUtil.instance
+                                                      .setSp(16),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(
+                                                height: ScreenUtil.instance
+                                                    .setWidth(4)),
+                                            Text(
+                                                'Create your livestream event ',
                                                 style: TextStyle(
                                                   fontSize: ScreenUtil.instance
                                                       .setSp(10),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          Container(
-                                            height: ScreenUtil.instance
-                                                .setWidth(44),
-                                            width: ScreenUtil.instance
-                                                .setWidth(50),
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: AssetImage(
-                                                        'assets/icons/page_post_event.png'),
-                                                    fit: BoxFit.fill),
-                                                borderRadius: BorderRadius.circular(11),
-                                                boxShadow: <BoxShadow>[
-                                                  BoxShadow(
-                                                      blurRadius: 10,
-                                                      color: Colors.grey
-                                                          .withOpacity(0.3),
-                                                      spreadRadius: .5)
-                                                ]),
-                                          )
-                                        ],
-                                      ),
+                                                ))
+                                          ],
+                                        ),
+                                        Container(
+                                          height:
+                                              ScreenUtil.instance.setWidth(44),
+                                          width:
+                                              ScreenUtil.instance.setWidth(50),
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/icons/post_livestream.png'),
+                                                  fit: BoxFit.fill),
+                                              borderRadius: BorderRadius.circular(11),
+                                              boxShadow: <BoxShadow>[
+                                                BoxShadow(
+                                                    blurRadius: 10,
+                                                    color: Colors.grey
+                                                        .withOpacity(0.3),
+                                                    spreadRadius: .5)
+                                              ]),
+                                        )
+                                      ],
                                     ),
                                   ),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(19)),
-                                  Divider(),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(16)),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      SharedPreferences prefs =
-                                          await SharedPreferences.getInstance();
-
-                                      prefs.setBool('isLivestream', true);
-                                      // imageCaputreCamera();
-                                      Navigator.pop(context);
-                                      livestreamSelectDialog(context);
-                                    },
-                                    child: Container(
-                                      color: Colors.white,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                'New Livestream Event',
-                                                style: TextStyle(
-                                                    fontSize: ScreenUtil
-                                                        .instance
-                                                        .setSp(16),
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              SizedBox(
-                                                  height: ScreenUtil.instance
-                                                      .setWidth(4)),
-                                              Text(
-                                                  'Create your livestream event ',
-                                                  style: TextStyle(
-                                                    fontSize: ScreenUtil
-                                                        .instance
-                                                        .setSp(10),
-                                                  ))
-                                            ],
-                                          ),
-                                          Container(
-                                            height: ScreenUtil.instance
-                                                .setWidth(44),
-                                            width: ScreenUtil.instance
-                                                .setWidth(50),
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: AssetImage(
-                                                        'assets/icons/post_livestream.png'),
-                                                    fit: BoxFit.fill),
-                                                borderRadius: BorderRadius.circular(11),
-                                                boxShadow: <BoxShadow>[
-                                                  BoxShadow(
-                                                      blurRadius: 10,
-                                                      color: Colors.grey
-                                                          .withOpacity(0.3),
-                                                      spreadRadius: .5)
-                                                ]),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                      height: ScreenUtil.instance.setWidth(19)),
-                                  Divider(),
-                                ],
-                              ),
+                                ),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(19)),
+                                Divider(),
+                              ],
                             ),
                           );
                         },
                         elevation: 1,
                       );
-                    }
-                    else {
+                    } else {
                       _selectedPage = index;
                     }
                   });
@@ -899,7 +831,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
   Future<http.Response> getPopup() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/announcement?X-API-KEY=$API_KEY';
+    String url = BaseApi().apiUrl + '/announcement?X-API-KEY=$API_KEY&type=mobile';
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,
@@ -923,23 +855,24 @@ class _DashboardWidgetState extends State<DashboardWidget>
         builder: (thisContext) {
           return Dialog(
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             backgroundColor: Colors.white,
             child: Container(
-              width: ScreenUtil.instance.setWidth(290),
+              width: ScreenUtil.instance.setWidth(400),
               height: ScreenUtil.instance.setWidth(250),
               padding:
                   EdgeInsets.only(left: 16, right: 12, top: 16, bottom: 16),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text('Choose Livestream Platform',
+                  textAlign: TextAlign.center,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                   SizedBox(height: 11),
                   Divider(),
-                  SizedBox(height: 11),
+                  SizedBox(height: 30),
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () async {

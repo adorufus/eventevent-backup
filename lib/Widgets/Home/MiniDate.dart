@@ -79,6 +79,7 @@ class _MiniDateState extends State<MiniDate> {
           child: Align(
               alignment: Alignment.center,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
                     date,

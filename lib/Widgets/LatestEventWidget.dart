@@ -5,6 +5,7 @@ import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,9 @@ import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class LatestEventWidget extends StatefulWidget {
+  final isRest;
+
+  const LatestEventWidget({Key key, this.isRest}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _LatestEventWidget();
@@ -30,6 +34,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
   int newPage = 0;
 
   void _onLoading() async {
+    //ClevertapHandler.logPageView("Latest");
     await Future.delayed(Duration(milliseconds: 2000));
     setState(() {
       newPage += 1;
@@ -91,25 +96,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
               : SmartRefresher(
                   enablePullDown: true,
                   enablePullUp: true,
-                  footer: CustomFooter(
-                      builder: (BuildContext context, LoadStatus mode) {
-                    Widget body;
-                    if (mode == LoadStatus.idle) {
-                      body = Text("Load data");
-                    } else if (mode == LoadStatus.loading) {
-                      body = CupertinoActivityIndicator(radius: 20);
-                    } else if (mode == LoadStatus.failed) {
-                      body = Text("Load Failed!");
-                    } else if (mode == LoadStatus.canLoading) {
-                      body = Text('More');
-                    } else {
-                      body = Container();
-                    }
-
-                    return Container(
-                        height: ScreenUtil.instance.setWidth(35),
-                        child: Center(child: body));
-                  }),
+                  
                   controller: refreshController,
                   onRefresh: () {
                     setState(() {
@@ -194,19 +181,16 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                           itemColor = Color(0xFFFFAA00);
                           itemPriceText =
                               latestEventData[i]['ticket_type']['name'];
-                        }else if (latestEventData[i]['ticket_type']
-                        ['type'] ==
+                        } else if (latestEventData[i]['ticket_type']['type'] ==
                             'paid_live_stream') {
-                          itemColor = eventajaGreenTeal;
-                          itemPriceText =
-                          'Rp. ' + latestEventData[i]['ticket']['cheapestTicket'];
-                        }
-                        else if (latestEventData[i]['ticket_type']
-                                ['type'] ==
+                          itemColor = Color(0xFF34B323);
+                          itemPriceText = 'Rp. ' +
+                              latestEventData[i]['ticket']['cheapestTicket'];
+                        } else if (latestEventData[i]['ticket_type']['type'] ==
                             'free_live_stream') {
                           itemColor = Color(0xFFFFAA00);
                           itemPriceText =
-                              latestEventData[i]['ticket_type']['name'];
+                              "FREE";
                         } else if (latestEventData[i]['ticket_type']['type'] ==
                                 'free_limited' ||
                             latestEventData[i]['ticket_type']['type'] ==
@@ -244,6 +228,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       EventDetailLoadingScreen(
+                                        isRest: widget.isRest,
                                           eventId: latestEventData[i]['id'])));
                         },
                         child: new LatestEventItem(
@@ -271,6 +256,23 @@ class _LatestEventWidget extends State<LatestEventWidget> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     int currentPage = 1;
 
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session')
+      };
+    }
+
     setState(() {
       session = preferences.getString('Session');
       if (newPage != null) {
@@ -279,15 +281,12 @@ class _LatestEventWidget extends State<LatestEventWidget> {
       print(currentPage);
     });
 
-    final latestEventApi = BaseApi().apiUrl +
+    final latestEventApi = baseUrl +
         '/event/category?category=0&page=$currentPage&X-API-KEY=$API_KEY';
 
     print(latestEventApi);
 
-    final response = await http.get(latestEventApi, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': session
-    });
+    final response = await http.get(latestEventApi, headers: headers);
 
     print(response.body);
 

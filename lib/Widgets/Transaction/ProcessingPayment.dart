@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/PostEvent/CreateTicketName.dart';
 import 'package:eventevent/Widgets/PostEvent/FinishPostEvent.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
@@ -14,6 +15,7 @@ import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -21,6 +23,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class ProcessingPayment extends StatefulWidget {
   //if the loading from payment
@@ -40,7 +43,11 @@ class ProcessingPayment extends StatefulWidget {
   final index;
   final context;
 
-  const ProcessingPayment(
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver obeserver =
+      FirebaseAnalyticsObserver(analytics: analytics);
+
+  ProcessingPayment(
       {Key key,
       this.uuid,
       this.isCustomForm,
@@ -100,6 +107,10 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       'email': prefs.getString('ticket_about_email'),
       'phone': prefs.getString('ticket_about_phone'),
       'note': prefs.getString('ticket_about_aditional'),
+      'virtual_account_vendor_id':
+          prefs.containsKey("virtual_account_vendor_id")
+              ? prefs.getString('virtual_account_vendor_id')
+              : "",
       'payment_method_id': prefs.getString('payment_method_id'),
       'identifier': widget.uuid.v4().toString(),
     };
@@ -148,7 +159,10 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
 
     final response = await http.post(purchaseUri,
         headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session},
-        body: widget.ticketType == 'free_limited' || widget.ticketType == 'free_live_stream' ? bodyFreeLimit : body);
+        body: widget.ticketType == 'free_limited' ||
+                widget.ticketType == 'free_live_stream'
+            ? bodyFreeLimit
+            : body);
 
     var length = response.contentLength;
     var recieved = 0;
@@ -170,12 +184,44 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
         print(paymentData['expired_time']);
         getPaymentData(paymentData['expired_time']);
       });
-      if (widget.ticketType == 'free_limited' || widget.ticketType == 'free_live_stream') {
+
+      if (prefs.containsKey("virtual_account_vendor_id")) {
+        prefs.setString("virtual_account_vendor_id", null);
+      }
+
+      if (widget.ticketType == 'free_limited' ||
+          widget.ticketType == 'free_live_stream') {
+        await ProcessingPayment.analytics
+            .logEvent(name: 'purchase', parameters: <String, dynamic>{
+          'transaction_id': paymentData['transaction_code'],
+          'value': 0,
+          'currency': "IDR",
+          'items': paymentData['ticket']['ticket_name']
+        }).then((value) {
+          print("Jalan");
+        });
+
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (BuildContext context) => SuccessPage(invoiceNumber: paymentData['transaction_code'])));
+                builder: (BuildContext context) => SuccessPage(
+                    invoiceNumber: paymentData['transaction_code'])));
       } else if (paymentData['payment_method_id'] == '1') {
+        await ProcessingPayment.analytics.logAddToCart(
+          itemId: paymentData['id'],
+          itemName: paymentData['ticket']['ticket_name'],
+          itemCategory: 'ticket',
+          quantity: int.parse(
+            paymentData['quantity'],
+          ),
+          price: double.parse(paymentData['ticket']['final_price']),
+          currency: "IDR",
+        );
+        // await ProcessingPayment.analytics.logEvent(name: 'add_to_cart', parameters: <String, dynamic>{
+        //   'value': paymentData['ticket']['final_price'],
+        //   'currency': "IDR",
+        //   'items': paymentData['ticket']['ticket_name']
+        // });
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -184,6 +230,16 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                       expDate: paymentData['expired_time'],
                     )));
       } else if (paymentData['payment_method_id'] == '4') {
+        await ProcessingPayment.analytics.logAddToCart(
+          itemId: paymentData['id'],
+          itemName: paymentData['ticket']['ticket_name'],
+          itemCategory: 'ticket',
+          quantity: int.parse(
+            paymentData['quantity'],
+          ),
+          price: double.parse(paymentData['ticket']['final_price']),
+          currency: "IDR",
+        );
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => WaitingGopay(
@@ -195,6 +251,16 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                   )),
         );
       } else if (paymentData['payment_method_id'] == '2') {
+        await ProcessingPayment.analytics.logAddToCart(
+          itemId: paymentData['id'],
+          itemName: paymentData['ticket']['ticket_name'],
+          itemCategory: 'ticket',
+          quantity: int.parse(
+            paymentData['quantity'],
+          ),
+          price: double.parse(paymentData['ticket']['final_price']),
+          currency: "IDR",
+        );
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => WaitTransaction(
@@ -203,6 +269,16 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                   finalPrice: widget.total.toString())),
         );
       } else if (paymentData['payment_method_id'] == '3') {
+        await ProcessingPayment.analytics.logAddToCart(
+          itemId: paymentData['id'],
+          itemName: paymentData['ticket']['ticket_name'],
+          itemCategory: 'ticket',
+          quantity: int.parse(
+            paymentData['quantity'],
+          ),
+          price: double.parse(paymentData['ticket']['final_price']),
+          currency: "IDR",
+        );
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => WaitingTransactionAlfamart(
@@ -211,7 +287,17 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                   )),
         );
       } else if (paymentData['payment_method_id'] == '5') {
-//        launch(paymentData['payment']['data_vendor']['payment_url']);
+        //        launch(paymentData['payment']['data_vendor']['payment_url']);
+       await ProcessingPayment.analytics.logAddToCart(
+          itemId: paymentData['id'],
+          itemName: paymentData['ticket']['ticket_name'],
+          itemCategory: 'ticket',
+          quantity: int.parse(
+            paymentData['quantity'],
+          ),
+          price: double.parse(paymentData['ticket']['final_price']),
+          currency: "IDR",
+        );
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -219,11 +305,31 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                       url: paymentData['payment']['data_vendor']['payment_url'],
                     )));
       } else if (paymentData['payment_method_id'] == '9') {
+       await ProcessingPayment.analytics.logAddToCart(
+          itemId: paymentData['id'],
+          itemName: paymentData['ticket']['ticket_name'],
+          itemCategory: 'ticket',
+          quantity: int.parse(
+            paymentData['quantity'],
+          ),
+          price: double.parse(paymentData['ticket']['final_price']),
+          currency: "IDR",
+        );
         Navigator.of(context).push(MaterialPageRoute(
             builder: (BuildContext context) => WebViewTest(
                   url: paymentData['payment']['data_vendor']['invoice_url'],
                 )));
       } else if (paymentData['payment_method_id'] == '7') {
+        await ProcessingPayment.analytics.logAddToCart(
+          itemId: paymentData['id'],
+          itemName: paymentData['ticket']['ticket_name'],
+          itemCategory: 'ticket',
+          quantity: int.parse(
+            paymentData['quantity'],
+          ),
+          price: double.parse(paymentData['ticket']['final_price']),
+          currency: "IDR",
+        );
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) => PaymentBCA(
@@ -245,26 +351,25 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
     List<File> additionalMediaFiles = [];
     File additionalVideo;
 
-    
-
     try {
       if (prefs.getString('POST_EVENT_ADDITIONAL_VIDEO') != null &&
-        prefs.getString('POST_EVENT_ADDITIONAL_VIDEO').isNotEmpty) {
-      setState(() {
-        additionalVideo = File(prefs.getString('POST_EVENT_ADDITIONAL_VIDEO'));
-        print('additional video' + additionalVideo.path);
-      });
-    }
-
-    setState(() {
-      for (var i = 0; i < widget.additionalMedia.length; i++) {
-        additionalMediaFiles.add(File(widget.additionalMedia[i]));
+          prefs.getString('POST_EVENT_ADDITIONAL_VIDEO').isNotEmpty) {
+        setState(() {
+          additionalVideo =
+              File(prefs.getString('POST_EVENT_ADDITIONAL_VIDEO'));
+          print('additional video' + additionalVideo.path);
+        });
       }
 
-      print(additionalMediaFiles);
-    });
+      setState(() {
+        for (var i = 0; i < widget.additionalMedia.length; i++) {
+          additionalMediaFiles.add(File(widget.additionalMedia[i]));
+        }
 
-    print(lookupMimeType(widget.imageFile.path));
+        print(additionalMediaFiles);
+      });
+
+      print(lookupMimeType(widget.imageFile.path));
 
       Map<String, dynamic> body = {
         'X-API-KEY': API_KEY,
@@ -290,13 +395,14 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
             : await MultipartFile.fromFile(additionalVideo.path,
                 filename: "eventevent-video-${DateTime.now().toString()}.mp4",
                 contentType: MediaType("video", "mp4")),
-        'photo': await MultipartFile.fromFile(
-            widget.imageFile.path, filename: "eventevent-${DateTime.now().toString()}.jpg",
+        'photo': await MultipartFile.fromFile(widget.imageFile.path,
+            filename: "eventevent-${DateTime.now().toString()}.jpg",
             contentType: MediaType("image", "jpg")),
       };
 
       for (int i = 0; i < additionalMediaFiles.length; i++) {
-        body['additionalPhoto[$i]'] = await MultipartFile.fromFile(additionalMediaFiles[i].path,
+        body['additionalPhoto[$i]'] = await MultipartFile.fromFile(
+            additionalMediaFiles[i].path,
             filename: "eventevent-additionalFile[$i]-${DateTime.now()}.jpg",
             contentType: MediaType("image", "jpg"));
       }
@@ -380,8 +486,8 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
               });
               Navigator.of(context).push(CupertinoPageRoute(
                   builder: (context) => PostEventInvitePeople(
-                    calledFrom: "new event",
-                  )));
+                        calledFrom: "new event",
+                      )));
             }
           }
         }
@@ -395,8 +501,9 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
         Navigator.pop(context, extractedError['desc']);
       }
       if (e is FileSystemException) {
-        // print(e.message);
-        Navigator.pop(context);
+        print(e.message);
+        print(e.osError);
+        Navigator.pop(context, e.message);
       }
       if (e is NoSuchMethodError) {
         print(e.stackTrace);
@@ -440,10 +547,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                     ),
                   ),
                 )
-              : CupertinoActivityIndicator(
-                  radius: 15,
-                  animating: true,
-                ),
+              : HomeLoadingScreen().myTicketLoading(),
         ),
       ),
     );

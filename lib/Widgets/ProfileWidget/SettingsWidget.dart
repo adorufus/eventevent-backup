@@ -1,3 +1,6 @@
+import 'dart:io';
+
+// import 'package:clevertap_plugin/clevertap_plugin.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankAccountList.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/ChangePassword.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/Feedback.dart';
@@ -8,9 +11,12 @@ import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -37,7 +43,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   getInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      appVersion = appVersion + '3.0.4';
+      appVersion = appVersion + '${Platform.isAndroid ? '3.2.4' : '3.2.4'}';
     });
 
     print(appVersion);
@@ -176,6 +182,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           //   ],
           // ),
           ListView(
+            padding: EdgeInsets.symmetric(vertical: 13),
             children: <Widget>[
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 25),
@@ -202,7 +209,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, bottom: 10, top: 10),
+                        padding: EdgeInsets.only(left: 30, bottom: 15, top: 15),
                         child: Text(
                           'Rate EventEvent on App Store / Google Play',
                           style: TextStyle(
@@ -232,6 +239,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 color: Colors.white,
+                padding: EdgeInsets.symmetric(vertical: 12),
                 child: Column(
                   children: <Widget>[
                     GestureDetector(
@@ -245,7 +253,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, top: 15),
+                        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Bank Account',
                           style: TextStyle(
@@ -300,6 +308,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               ),
               Container(
                 width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.symmetric(vertical: 12),
                 color: Colors.white,
                 child: Column(
                   children: <Widget>[
@@ -314,7 +323,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, top: 15),
+                        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Edit Profile',
                           style: TextStyle(
@@ -383,7 +392,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
+                        padding: EdgeInsets.only(left: 30, top: 15, bottom: 15),
                         child: Text(
                           'Give us feedback',
                           style: TextStyle(
@@ -407,7 +416,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                           builder: (thisContext, setState) =>
                               CupertinoAlertDialog(
                             title: Text('Oops'),
-                            content: Text('Do you want to log out?'),
+                            content: Text('Do you want to log out?', textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,),
                             actions: <Widget>[
                               CupertinoDialogAction(
                                 child: Text('No'),
@@ -437,7 +446,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   color: Colors.white,
-                  padding: EdgeInsets.only(left: 30, bottom: 10, top: 10),
+                  padding: EdgeInsets.only(left: 30, bottom: 15, top: 15),
                   child: Text(
                     'Log Out',
                     style: TextStyle(
@@ -464,6 +473,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 color: Colors.white,
+                padding: EdgeInsets.symmetric(vertical: 12),
                 child: Column(
                   children: <Widget>[
                     GestureDetector(
@@ -476,7 +486,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         color: Colors.white,
-                        padding: EdgeInsets.only(left: 30, top: 15),
+                        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Terms',
                           style: TextStyle(
@@ -581,10 +591,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
     Map<String, String> body = {
       'X-API-KEY': apiKey,
-      'streaming_token': prefs.containsKey('streaming_key') && prefs.getString('streaming_key') != null ? prefs.getString('streaming_key') : ''
+      'streaming_token': prefs.containsKey('streaming_key') &&
+              prefs.getString('streaming_key') != null
+          ? prefs.getString('streaming_key')
+          : ''
     };
-
-    
 
     setState(() {
       isLoading = true;
@@ -594,7 +605,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
     // Future.delayed(Duration(seconds: 3));
 
-    final response = await http.post(logoutApiUrl, body: body, headers: {
+    try {
+      final response = await http.post(logoutApiUrl, body: body, headers: {
       'Authorization': "Basic YWRtaW46MTIzNA==",
       'cookie': prefs.getString('Session')
     });
@@ -603,9 +615,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
 
     if (prefs.getBool('isUsingGoogle') == true) {
       googleSignIn.signOut();
+    } else if(prefs.getBool('isUsingFacebook') == true){
+      FacebookLogin().logOut();
     }
 
+    String deviceType = Platform.isIOS ? 'iOS' : 'Android';
+
     if (response.statusCode == 200) {
+      // ClevertapHandler.removeUserProfile(deviceType);
       setState(() {
         isLoading = false;
       });
@@ -620,6 +637,19 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         isLoading = false;
       });
       print(response.body);
+    }
+    } on SocketException catch (e) {
+      print(e.message);
+      print(e.address);
+      print(e.osError);
+      isLoading = false;
+      if(mounted) setState((){});
+      Flushbar(
+        animationDuration: Duration(milliseconds: 500),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+        message: 'Please check your connection',
+      ).show(context);
     }
   }
 }

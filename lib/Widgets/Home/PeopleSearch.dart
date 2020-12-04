@@ -2,19 +2,20 @@ import 'dart:convert';
 
 import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
-import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
-import 'package:eventevent/Widgets/Home/SeeAll/MyTicketItem.dart';
-import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
-import 'package:eventevent/Widgets/ProfileWidget/UseTicket.dart';
-import 'package:eventevent/Widgets/eventDetailsWidget.dart';
-import 'package:eventevent/Widgets/profileWidget.dart';
+// import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
+// import 'package:eventevent/Widgets/Home/SeeAll/MyTicketItem.dart';
+// import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
+// import 'package:eventevent/Widgets/ProfileWidget/UseTicket.dart';
+// import 'package:eventevent/Widgets/eventDetailsWidget.dart';
+// import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:eventevent/helper/ColumnBuilder.dart';
+// import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:dio/dio.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,7 +28,8 @@ class PeopleSearch extends StatefulWidget {
 
 class PeopleSearchState extends State<PeopleSearch> {
   TextEditingController searchController = new TextEditingController();
-
+  RefreshController peopleSearchRefreshController =
+      new RefreshController(initialRefresh: false);
   final dio = new Dio();
 
   String _searchText = "";
@@ -183,6 +185,71 @@ class PeopleSearchState extends State<PeopleSearch> {
     );
   }
 
+  int peopleNewPage = 0;
+
+  void peopleOnLoad() async {
+    setState(() {
+      peopleNewPage += 1;
+    });
+
+    _getProfile(page: peopleNewPage, isLoadData: true).then((response) async {
+      var extractedData = json.decode(response.body);
+      List resultData = extractedData['data'];
+      List tempList = new List();
+
+      if (response.statusCode == 200) {
+        isLoading = false;
+        notFound = false;
+        for (int i = 0; i < resultData.length; i++) {
+          // tempList.removeWhere((data) => data['username'] == filteredProfile)
+          tempList.add(resultData[i]);
+        }
+
+        profile = tempList;
+        filteredProfile.addAll(profile);
+
+        await Future.delayed(Duration(seconds: 3));
+        if (mounted) setState(() {});
+        peopleSearchRefreshController.loadComplete();
+      } else if (response.statusCode == 400) {
+        if (mounted) setState(() {});
+        peopleSearchRefreshController.loadFailed();
+      }
+    });
+  }
+
+  void peopleOnRefresh() async {
+    setState(() {
+      peopleNewPage = 0;
+    });
+    _getProfile().then((response) async{
+      var extractedData = json.decode(response.body);
+      List resultData = extractedData['data'];
+      List tempList = new List();
+
+      if (response.statusCode == 200) {
+        isLoading = false;
+        notFound = false;
+        for (int i = 0; i < resultData.length; i++) {
+          tempList.add(resultData[i]);
+        }
+
+        profile = tempList;
+        filteredProfile = profile;
+        await Future.delayed(Duration(seconds: 3));
+        if(mounted) setState((){});
+        peopleSearchRefreshController.refreshCompleted();
+
+      } else if (response.statusCode == 400) {
+        isLoading = false;
+        notFound = true;
+        
+        if(mounted) setState((){});
+        peopleSearchRefreshController.refreshFailed();
+      }
+    });
+  }
+
   Widget _buildList() {
     if (!(_searchText.isEmpty)) {
       List tempList = new List();
@@ -197,31 +264,38 @@ class PeopleSearchState extends State<PeopleSearch> {
 
       return isLoading == true
           ? HomeLoadingScreen().myTicketLoading()
-          : ListView.builder(
-              itemCount: filteredProfile == null ? 0 : filteredProfile.length,
-              itemBuilder: (BuildContext context, i) {
-                return ListTile(
-                  onTap: () {
-                    saveData(i);
-                  },
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(filteredProfile[i]['photo']),
-                  ),
-                  title: Text(
-                    filteredProfile[i]['fullName'],
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text('@' + filteredProfile[i]['username']),
-                  trailing: Icon(
-                    Icons.check,
-                    color: invitedPeople.contains(filteredProfile[i]['id'])
-                        ? eventajaGreenTeal
-                        : Colors.grey,
-                  ),
-                );
-              },
+          : SmartRefresher(
+              controller: peopleSearchRefreshController,
+              onLoading: peopleOnLoad,
+              onRefresh: peopleOnRefresh,
+              enablePullUp: true,
+              child: ListView.builder(
+                itemCount: filteredProfile == null ? 0 : filteredProfile.length,
+                itemBuilder: (BuildContext context, i) {
+                  return ListTile(
+                    onTap: () {
+                      saveData(i);
+                    },
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                    leading: CircleAvatar(
+                      backgroundImage:
+                          NetworkImage(filteredProfile[i]['photo']),
+                    ),
+                    title: Text(
+                      filteredProfile[i]['fullName'],
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text('@' + filteredProfile[i]['username']),
+                    trailing: Icon(
+                      Icons.check,
+                      color: invitedPeople.contains(filteredProfile[i]['id'])
+                          ? eventajaGreenTeal
+                          : Colors.grey,
+                    ),
+                  );
+                },
+              ),
             );
     } else {
       return Container();
@@ -246,13 +320,20 @@ class PeopleSearchState extends State<PeopleSearch> {
     });
   }
 
-  Future<http.Response> _getProfile() async {
+  Future<http.Response> _getProfile({int page, bool isLoadData = false}) async {
+    int currentPage = 1;
+
     setState(() {
-      isLoading = true;
+      if(isLoadData == false){
+        isLoading = true;
+      }
+      if (page != null) {
+        currentPage += page;
+      }
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String url = BaseApi().apiUrl +
-        '/user/search?X-API-KEY=$API_KEY&people=${searchController.text}&page=1';
+        '/user/search?X-API-KEY=$API_KEY&people=${searchController.text}&page=$currentPage';
 
     final response = await http.get(url, headers: {
       'Authorization': AUTHORIZATION_KEY,

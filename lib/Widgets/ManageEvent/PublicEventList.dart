@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +15,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class PublicEventList extends StatefulWidget {
+  final isRest;
   final type;
   final userId;
 
-  const PublicEventList({Key key, this.type, this.userId}) : super(key: key);
+  const PublicEventList({Key key, this.type, this.userId, this.isRest}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return PublicEventListState();
@@ -104,7 +106,7 @@ class PublicEventListState extends State<PublicEventList> {
       child: isEmpty == true
           ? EmptyState(
               emptyImage: 'assets/drawable/event_empty_state.png',
-              reasonText: 'You Have No Event Created Yet',
+              reasonText: widget.type == "going" ? "No Event Going Found :(" : 'You Have No Event Created Yet',
             )
           : publicData == null
               ? HomeLoadingScreen().myTicketLoading()
@@ -183,7 +185,10 @@ class PublicEventListState extends State<PublicEventList> {
                             '1') {
                           itemColor = Color(0xFF34B323);
                           itemPriceText =
-                              publicData[i]['ticket']['cheapestTicket'];
+                              'Rp. ' + formatPrice(
+                              price: publicData[i]['ticket']
+                                      ['cheapestTicket']
+                                  .toString(),);
                         } else {
                           if (publicData[i]['ticket']['salesStatus'] ==
                               'comingSoon') {
@@ -210,6 +215,10 @@ class PublicEventListState extends State<PublicEventList> {
                         itemColor = Color(0xFF652D90);
                         itemPriceText = publicData[i]['ticket_type']['name'];
                       } else if (publicData[i]['ticket_type']['type'] ==
+                          'ots') {
+                        itemColor = Color(0xFF652D90);
+                        itemPriceText = "On The Spot";
+                      } else if (publicData[i]['ticket_type']['type'] ==
                           'free') {
                         itemColor = Color(0xFFFFAA00);
                         itemPriceText = publicData[i]['ticket_type']['name'];
@@ -220,11 +229,11 @@ class PublicEventListState extends State<PublicEventList> {
                       } else if (publicData[i]['ticket_type']['type'] ==
                           'free_live_stream') {
                         itemColor = Color(0xFFFFAA00);
-                        itemPriceText = publicData[i]['ticket_type']['name'];
+                        itemPriceText = "FREE";
                       } else if (publicData[i]['ticket_type']['type'] ==
                           'paid_live_stream') {
                         itemColor = eventajaGreenTeal;
-                        itemPriceText = publicData[i]['ticket_type']['name'];
+                        itemPriceText = 'Rp. ' + publicData[i]['ticket_type']['name'];
                       } else if (publicData[i]['ticket_type']['type'] ==
                               'free_limited' ||
                           publicData[i]['ticket_type']['type'] ==
@@ -261,6 +270,7 @@ class PublicEventListState extends State<PublicEventList> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       EventDetailLoadingScreen(
+                                        isRest: widget.isRest,
                                           eventId: widget.type == 'going'
                                               ? publicData[i]['eventID']
                                               : publicData[i]['id'])));
@@ -376,6 +386,23 @@ class PublicEventListState extends State<PublicEventList> {
   Future fetchMyEvent({int page}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int currentPage = 1;
+    
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': prefs.getString('Session')
+      };
+    }
 
     setState(() {
       if (page != null) {
@@ -384,16 +411,13 @@ class PublicEventListState extends State<PublicEventList> {
     });
 
     print(prefs.getString('Last User ID'));
-    String uri = BaseApi().apiUrl +
+    String uri = baseUrl +
         '/user/${widget.type}?X-API-KEY=$API_KEY&page=$currentPage&userID=${widget.userId == prefs.getString('Last User ID') ? prefs.getString('Last User ID') : widget.userId}&isPrivate=0';
     print(uri);
     print(uri);
     final response = await http.get(
       uri,
-      headers: {
-        'Authorization': AUTHORIZATION_KEY,
-        'cookie': prefs.getString('Session')
-      },
+      headers: headers,
     );
 
     return response;

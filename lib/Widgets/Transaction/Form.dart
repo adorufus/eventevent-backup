@@ -37,15 +37,19 @@ class _TransactionFormState extends State<TransactionForm> {
   String lastname;
   String email;
   String phone;
+  Widget validationEmailIcon;
+  FocusNode emailValidationNode = new FocusNode();
 
   bool isRequired;
   bool isRequiredEmpty = false;
+  bool isEmailMatch = false;
 
-  TextEditingController firstnameController;
-  TextEditingController lastnameController;
-  TextEditingController emailController;
-  TextEditingController phoneController;
-  TextEditingController aditionalNotesController;
+  TextEditingController firstnameController = TextEditingController();
+  TextEditingController lastnameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController _emailValidationController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController aditionalNotesController = TextEditingController();
 
   Future getFormData() async {
     var cookie;
@@ -85,13 +89,29 @@ class _TransactionFormState extends State<TransactionForm> {
   @override
   void initState() {
     super.initState();
+
     getFormData();
     getCustomForm();
-    firstnameController = TextEditingController();
-    lastnameController = TextEditingController();
-    emailController = TextEditingController();
-    phoneController = TextEditingController();
-    aditionalNotesController = TextEditingController();
+
+    emailValidationNode.addListener(() {
+      if (emailValidationNode.hasFocus == false) {
+        if (_emailValidationController.text == emailController.text) {
+          validationEmailIcon = Icon(
+            Icons.check,
+            color: Colors.green,
+          );
+          isEmailMatch = true;
+          if (mounted) setState(() {});
+        } else {
+          validationEmailIcon = Icon(
+            Icons.close,
+            color: Colors.red,
+          );
+          isEmailMatch = false;
+          if (mounted) setState(() {});
+        }
+      }
+    });
   }
 
   List<TextEditingController> customFormControllers = [];
@@ -115,6 +135,7 @@ class _TransactionFormState extends State<TransactionForm> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       bottomNavigationBar: GestureDetector(
         onTap: () {
           saveInput();
@@ -162,11 +183,20 @@ class _TransactionFormState extends State<TransactionForm> {
               message: 'Please check again your input',
               flushbarPosition: FlushbarPosition.TOP,
             ).show(context);
+          } else if (isEmailMatch == false) {
+            Flushbar(
+              flushbarPosition: FlushbarPosition.TOP,
+              message: 'Email validation not match',
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 3),
+              animationDuration: Duration(milliseconds: 500),
+            )..show(context);
           } else {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return widget.ticketType == 'free_limited' || widget.ticketType == 'free_live_stream'
+                  return widget.ticketType == 'free_limited' ||
+                          widget.ticketType == 'free_live_stream'
                       ? customFormList == null
                           ? TicketReview(
                               ticketType: widget.ticketType,
@@ -229,7 +259,7 @@ class _TransactionFormState extends State<TransactionForm> {
       body: formData == null
           ? HomeLoadingScreen().myTicketLoading()
           : Container(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.grey.withOpacity(0.05),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: ListView(
@@ -316,6 +346,38 @@ class _TransactionFormState extends State<TransactionForm> {
                         ],
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil.instance.setWidth(30),
+                  ),
+                  TextFormField(
+                    controller: _emailValidationController,
+                    keyboardType: TextInputType.text,
+                    autofocus: false,
+                    onFieldSubmitted: (i) async {
+                      if (i == emailController.text) {
+                        validationEmailIcon = Icon(
+                          Icons.check,
+                          color: Colors.green,
+                        );
+                        isEmailMatch = true;
+                        if (mounted) setState(() {});
+                      } else {
+                        validationEmailIcon = Icon(
+                          Icons.close,
+                          color: Colors.red,
+                        );
+                        isEmailMatch = false;
+                        if (mounted) setState(() {});
+                      }
+                    },
+                    focusNode: emailValidationNode,
+                    decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        hintText: 'Re-enter Your Email',
+                        border: InputBorder.none,
+                        suffixIcon: validationEmailIcon),
                   ),
                   SizedBox(
                     height: ScreenUtil.instance.setWidth(30),

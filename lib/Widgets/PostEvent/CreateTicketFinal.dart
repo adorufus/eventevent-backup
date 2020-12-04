@@ -37,23 +37,26 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
   String price;
   String finalPrice;
   String merchantPrice;
-  String startDate;
-  String endDate;
-  String startTime;
-  String endTime;
-  String desc;
+  String startDate = "";
+  String endDate = "";
+  String startTime = "";
+  String endTime = "";
+  String desc = "";
   String ticketPaidBy = 'owner';
   int _curValue = 0;
+  int fee = 0;
+
+  SharedPreferences prefs;
 
   bool isLoading = false;
 
   File imageFile;
 
-  Dio dio = new Dio(BaseOptions(
-      connectTimeout: 15000, baseUrl: BaseApi().apiUrl, receiveTimeout: 15000));
+  Dio dio = new Dio(BaseOptions(baseUrl: BaseApi().apiUrl));
 
-  getData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  void getData() async {
+    print('get data');
+    prefs = await SharedPreferences.getInstance();
 
     setState(() {
       imageUri = prefs.getString('SETUP_TICKET_POSTER');
@@ -71,8 +74,24 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
 
   @override
   void initState() {
-    super.initState();
     getData();
+
+    if (price != null) {
+      fee = (int.parse(price) * 3) ~/ 100;
+
+      if (fee < 5000) {
+        fee = 5000;
+      }
+    }
+
+    setState(() {});
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(CreateTicketFinal oldWidget) {
+    getData();
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -175,7 +194,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                   width: ScreenUtil.instance.setWidth(150),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8),
-                                    child: Image.file(File(imageUri),
+                                    child: Image.file(
+                                        File(imageUri == null ? '' : imageUri),
                                         fit: BoxFit.fill),
                                   ),
                                 ),
@@ -202,7 +222,9 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                             ScreenUtil.instance.setWidth(170),
                                         height:
                                             ScreenUtil.instance.setWidth(40),
-                                        child: Text(ticketQuantity)),
+                                        child: Text(ticketQuantity == null
+                                            ? ''
+                                            : ticketQuantity)),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(7)),
@@ -396,7 +418,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                                 child: Text(
-                              'Rp. ' + price,
+                              'Rp. ' + price == null ? '' : price,
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil.instance.setSp(14),
@@ -473,7 +495,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         child: SizedBox(),
                       ),
                       Text(
-                        '- Rp. ' + '5,000',
+                        '- Rp. ' + fee.toString(),
                         style: TextStyle(color: Colors.red),
                       ),
                       SizedBox(
@@ -508,7 +530,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         child: SizedBox(),
                       ),
                       Text(
-                        'Rp. ' + (int.parse(price) - 5000).toString(),
+                        'Rp. ' + (int.parse(price) - fee).toString(),
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontSize: ScreenUtil.instance.setSp(18),
@@ -588,7 +610,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                                 child: Text(
-                              'Rp. ' + (int.parse(price) + 5000).toString(),
+                              'Rp. ' + (int.parse(price) + fee).toString(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil.instance.setSp(14),
@@ -665,7 +687,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         child: SizedBox(),
                       ),
                       Text(
-                        '+ Rp. ' + '5,000',
+                        '+ Rp. ' + fee.toString(),
                         style: TextStyle(color: Colors.grey),
                       ),
                       SizedBox(
@@ -776,24 +798,30 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (_curValue == 0) {
-      setState(() {
-        ticketPaidBy = 'owner';
-        finalPrice = price;
-        merchantPrice = price;
-      });
-    } else if (_curValue == 1) {
-      setState(() {
-        ticketPaidBy = 'attandee';
-        finalPrice = (int.parse(price) + 5000).toString();
-        merchantPrice = price;
-      });
-    } else if (_curValue == 2) {
-      setState(() {
-        ticketPaidBy = 'op1';
-        finalPrice = (int.parse(price) + 10000).toString();
-        merchantPrice = price;
-      });
+    if (ticketTypeId == '2' ||
+        ticketTypeId == '5' ||
+        ticketTypeId == '7' ||
+        ticketTypeId == '10') {
+    } else {
+      if (_curValue == 0) {
+        setState(() {
+          ticketPaidBy = 'owner';
+          finalPrice = (int.parse(price) - fee).toString();
+          merchantPrice = price;
+        });
+      } else if (_curValue == 1) {
+        setState(() {
+          ticketPaidBy = 'attandee';
+          finalPrice = (int.parse(price) + fee).toString();
+          merchantPrice = price;
+        });
+      } else if (_curValue == 2) {
+        setState(() {
+          ticketPaidBy = 'op1';
+          finalPrice = (int.parse(price) + 10000).toString();
+          merchantPrice = price;
+        });
+      }
     }
 
     try {
@@ -835,7 +863,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '7' ||
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
             ? '0'
-            : finalPrice,
+            : ticketPaidBy == 'owner' ? price : finalPrice,
         'paid_ticket_type_id': prefs.getString('SETUP_TICKET_PAID_TICKET_TYPE'),
         'merchant_price': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||

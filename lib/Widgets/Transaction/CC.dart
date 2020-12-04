@@ -88,11 +88,7 @@ class CreditCardInputState extends State<CreditCardInput> {
     setState(() {
       isMakePayment = true;
     });
-
-    
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -104,193 +100,200 @@ class CreditCardInputState extends State<CreditCardInput> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    return Scaffold(
-      bottomNavigationBar: GestureDetector(
-        onTap: () async {
-          checkMidtransCC();
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewTest(url: paymentData['payment']['data_vendor']['payment_url'])));
-        },
-        child: Container(
-            height: ScreenUtil.instance.setWidth(50),
-            color: Colors.orange,
-            child: Center(
-              child: Text(
-                'CONFIRM',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: ScreenUtil.instance.setSp(20)),
-              ),
-            )),
-      ),
-      appBar: AppBar(
-        brightness: Brightness.light,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DashboardWidget(
-                          isRest: false,
-                          selectedPage: 3,
-                        )),
-                ModalRoute.withName('/EventDetails'));
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => TransactionHistory()));
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
+      child: Scaffold(
+        bottomNavigationBar: GestureDetector(
+          onTap: () async {
+            checkMidtransCC();
+            // Navigator.push(context, MaterialPageRoute(builder: (context) => WebViewTest(url: paymentData['payment']['data_vendor']['payment_url'])));
           },
-          child: Icon(
-            Icons.close,
-            color: eventajaGreenTeal,
+          child: Container(
+              height: ScreenUtil.instance.setWidth(50),
+              color: Colors.orange,
+              child: Center(
+                child: Text(
+                  'CONFIRM',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: ScreenUtil.instance.setSp(20)),
+                ),
+              )),
+        ),
+        appBar: AppBar(
+          brightness: Brightness.light,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DashboardWidget(
+                            isRest: false,
+                            selectedPage: 3,
+                          )),
+                  ModalRoute.withName('/EventDetails'));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TransactionHistory()));
+            },
+            child: Icon(
+              Icons.close,
+              color: eventajaGreenTeal,
+            ),
           ),
         ),
-      ),
-      body: paymentData == null
-          ? Container()
-          : ListView(
-              children: <Widget>[
-                Container(
-                  height: ScreenUtil.instance.setWidth(380),
-                  color: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: ScreenUtil.instance.setWidth(200),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: eventajaGreenTeal),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(20),
-                            ),
-                            Text('Complete Payment In',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: ScreenUtil.instance.setSp(14),
-                                    fontWeight: FontWeight.bold)),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(20),
-                            ),
-                            CountDownTimer(
-                              secondsRemaining: seconds,
-                              whenTimeExpires: () {},
-                              countDownTimerStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil.instance.setSp(38),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(20),
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text('H',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(20))),
-                                SizedBox(
-                                  width: ScreenUtil.instance.setWidth(35),
-                                ),
-                                Text('M',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(20))),
-                                SizedBox(
-                                  width: ScreenUtil.instance.setWidth(35),
-                                ),
-                                Text('S',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(20))),
-                              ],
-                            ),
-                            SizedBox(
-                              height: ScreenUtil.instance.setWidth(20),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Complete payment before ',
-                                  textAlign: TextAlign.center,
+        body: paymentData == null
+            ? Container()
+            : ListView(
+                children: <Widget>[
+                  Container(
+                    height: ScreenUtil.instance.setWidth(380),
+                    color: Colors.white,
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: ScreenUtil.instance.setWidth(200),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: eventajaGreenTeal),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(20),
+                              ),
+                              Text('Complete Payment In',
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                ),
-                                Text('${widget.expDate}',
+                                      color: Colors.white,
+                                      fontSize: ScreenUtil.instance.setSp(14),
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(20),
+                              ),
+                              CountDownTimer(
+                                secondsRemaining: seconds,
+                                whenTimeExpires: () {},
+                                countDownTimerStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil.instance.setSp(38),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(20),
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text('H',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(20))),
+                                  SizedBox(
+                                    width: ScreenUtil.instance.setWidth(35),
+                                  ),
+                                  Text('M',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(20))),
+                                  SizedBox(
+                                    width: ScreenUtil.instance.setWidth(35),
+                                  ),
+                                  Text('S',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(20))),
+                                ],
+                              ),
+                              SizedBox(
+                                height: ScreenUtil.instance.setWidth(20),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'Complete payment before ',
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold))
-                              ],
+                                        color: Colors.white, fontSize: 14),
+                                  ),
+                                  Text('${widget.expDate}',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold))
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: ScreenUtil.instance.setWidth(20),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'TRANSFER AMOUNT',
+                              style: TextStyle(
+                                  fontSize: ScreenUtil.instance.setSp(20),
+                                  color: Colors.black45),
+                            ),
+                            SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                            Text(
+                              'Rp. ' +
+                                  paymentData['amount_detail']['final_amount'],
+                              style: TextStyle(
+                                  fontSize: 50, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                            Text(
+                              'Eventevent will automatically check your payment. It may take up to 1 hour to process',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: ScreenUtil.instance.setSp(12)),
+                              textAlign: TextAlign.center,
                             )
                           ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: ScreenUtil.instance.setWidth(20),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'TRANSFER AMOUNT',
-                            style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(20),
-                                color: Colors.black45),
-                          ),
-                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                          Text(
-                            'Rp. ' +
-                                paymentData['amount_detail']['final_amount'],
-                            style: TextStyle(
-                                fontSize: 50, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                          Text(
-                            'Eventevent will automatically check your payment. It may take up to 1 hour to process',
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: ScreenUtil.instance.setSp(12)),
-                            textAlign: TextAlign.center,
-                          )
-                        ],
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: ScreenUtil.instance.setWidth(5)),
-                CreditCardWidget(
-                  cardNumber: cardNumber,
-                  cardHolderName: cardHolderName,
-                  expiryDate: expiryDate,
-                  cvvCode: cvvCode,
-                  showBackView: isShowBackView,
-                  height: 175,
-                  width: MediaQuery.of(context).size.width,
-                  animationDuration: Duration(milliseconds: 100),
-                ),
-                CreditCardForm(
-                  themeColor: eventajaGreenTeal,
-                  onCreditCardModelChange: onCreditCardModelChange,
-                ),
-                Container(),
-                Container(),
-                Container()
-              ],
-            ),
+                  SizedBox(height: ScreenUtil.instance.setWidth(5)),
+                  CreditCardWidget(
+                    cardNumber: cardNumber,
+                    cardHolderName: cardHolderName,
+                    expiryDate: expiryDate,
+                    cvvCode: cvvCode,
+                    showBackView: isShowBackView,
+                    height: 175,
+                    width: MediaQuery.of(context).size.width,
+                    animationDuration: Duration(milliseconds: 100),
+                  ),
+                  CreditCardForm(
+                    themeColor: eventajaGreenTeal,
+                    onCreditCardModelChange: onCreditCardModelChange,
+                  ),
+                  Container(),
+                  Container(),
+                  Container()
+                ],
+              ),
+      ),
     );
   }
 
@@ -309,11 +312,11 @@ class CreditCardInputState extends State<CreditCardInput> {
 
     if (response.statusCode == 200) {
       print(response.body);
-      if(extractedData['status_code'] == '200'){
+      if (extractedData['status_code'] == '200') {
         midtransCC3DS(extractedData['token_id']);
       } else {
-        for(int i = 0; i < extractedData['validation_messages'].length; i++){
-           var error = extractedData['validation_messages'].toString();
+        for (int i = 0; i < extractedData['validation_messages'].length; i++) {
+          var error = extractedData['validation_messages'].toString();
           print(error);
           Flushbar(
             animationDuration: Duration(milliseconds: 500),
@@ -324,7 +327,6 @@ class CreditCardInputState extends State<CreditCardInput> {
           ).show(context);
         }
       }
-
     }
   }
 

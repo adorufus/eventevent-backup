@@ -43,7 +43,7 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
         options: Options(headers: {
           'Authorization': AUTHORIZATION_KEY,
           'cookie': preferences.getString('Session')
-        },  responseType: ResponseType.plain),
+        }, responseType: ResponseType.plain),
         data: FormData.fromMap(data),
       );
 
@@ -195,21 +195,29 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
                 ),
               ),
               SizedBox(
-                height: ScreenUtil.instance.setWidth(150),
+                height: ScreenUtil.instance.setWidth(50),
+              ),
+              Image.asset('assets/drawable/use_custom_form.png', scale: 3,colorBlendMode: BlendMode.dstIn, color: Colors.white.withOpacity(.5),),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(12),
+              ),
+              Text('Do you want to use custom form for this event?', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey),),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(30),
               ),
               Padding(
                   padding: const EdgeInsets.only(right: 29, left: 20),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Radio(
                         groupValue: __curValue,
                         onChanged: (int i) => setState(() => __curValue = i),
                         value: 1,
                       ),
-                      Text('Yes'),
+                      Text('Yes', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),),
                       SizedBox(
-                        width: ScreenUtil.instance.setWidth(25),
+                        width: ScreenUtil.instance.setWidth(80),
                       ),
                       Radio(
                         groupValue: __curValue,
@@ -219,7 +227,7 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
                         }),
                         value: 0,
                       ),
-                      Text('No')
+                      Text('No', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26))
                     ],
                   ))
             ],
@@ -309,10 +317,11 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                   builder: (context) => PostEventInvitePeople(
                         calledFrom: "new event",
                       )));
+        } else {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
         }
-        Navigator.pop(context);
-        Navigator.pop(context);
-        Navigator.pop(context);
       }
     } catch (e) {
       if (e is DioError) {
@@ -877,7 +886,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
             GestureDetector(
               onTap: () {
                 print(multipleFormCount > textEditingControllers.length);
-                if(multipleFormCount < textEditingControllers.length){
+                if (multipleFormCount < textEditingControllers.length) {
                   textEditingControllers.length = 0;
                 }
                 print('multiple form count' + multipleFormCount.toString());
@@ -1075,7 +1084,12 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 13),
             child: Row(
               children: <Widget>[
-                customForms[index]['isRequired'] == '1' ? Container() : Text('*', style: TextStyle(color: Colors.red,)),
+                customForms[index]['isRequired'] == '1'
+                    ? Container()
+                    : Text('*',
+                        style: TextStyle(
+                          color: Colors.red,
+                        )),
                 Text(formName),
               ],
             ),

@@ -42,7 +42,7 @@ class SuccessPageState extends State<SuccessPage> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.95),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1,
@@ -60,7 +60,7 @@ class SuccessPageState extends State<SuccessPage> {
         width: MediaQuery.of(context).size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
               height: ScreenUtil.instance.setWidth(200),
@@ -81,21 +81,22 @@ class SuccessPageState extends State<SuccessPage> {
             GestureDetector(
               onTap: (){
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: ( BuildContext context) => ProfileWidget(initialIndex: 1, userId: currentUserId,)
+                  builder: ( BuildContext context) => ProfileWidget(isRest: false, initialIndex: 0, userId: currentUserId,)
                 ));
               },
               child: Container(
                 height: ScreenUtil.instance.setWidth(50),
                 width: ScreenUtil.instance.setWidth(300),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(38),
                   color: eventajaGreenTeal,
                 ),
                 child: Center(
                   child: Text('VIEW MY TICKETS', style: TextStyle(color: Colors.white, fontSize: ScreenUtil.instance.setSp(18)),),
                 ),
               ),
-            )
+            ),
+            SizedBox(height: 200,)
           ],
         ),
       ),

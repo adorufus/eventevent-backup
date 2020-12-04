@@ -1,12 +1,16 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/PrivacyPolicy.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/Terms.dart';
+import 'package:eventevent/Widgets/RegisterApple.dart';
 import 'package:eventevent/Widgets/RegisterGoogle.dart';
 import 'package:eventevent/Widgets/loginWidget.dart';
 import 'package:eventevent/Widgets/registerWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/FirebaseMessagingHelper.dart';
+import 'package:eventevent/helper/LoginHandler.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,6 +23,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import 'RegisterFacebook.dart';
 import 'dashboardWidget.dart';
@@ -44,23 +49,28 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
   String googleTokenID;
 
   void initiateFacebookLogin() async {
-    var facebookLogin = FacebookLogin();
+    SharedPreferences prefs = await SharedPreferences.getInstance();   var facebookLogin = FacebookLogin();
+    facebookLogin.loginBehavior = FacebookLoginBehavior.webViewOnly;
     var facebookLoginResult = await facebookLogin.logInWithReadPermissions(
-        ['email', 'public_profile', 'user_friends', 'user_gender']);
+        ['email', 'public_profile']);
+        // 'user_friends', 'user_gender'
 
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.loggedIn:
         print(facebookLoginResult.accessToken.token);
         goLoginFb(facebookLoginResult.accessToken.token);
         onLoginStatusChanged(true);
+        prefs.setBool('isUsingFacebook', true);
         break;
       case FacebookLoginStatus.cancelledByUser:
         print("CancelledByUser");
         onLoginStatusChanged(false);
+        prefs.setBool('isUsingFacebook', false);
         break;
       case FacebookLoginStatus.error:
         print("Error");
         onLoginStatusChanged(false);
+        prefs.setBool('isUsingFacebook', false);
         break;
     }
   }
@@ -91,6 +101,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
       }
     });
     prefs.setBool('isUsingGoogle', true);
+    prefs.setBool('isUsingFacebook', false);
     prefs.setString('REGIS_GOOGLE_PHOTO', user.photoUrl);
     prefs.setString('REGIS_GOOGLE_PHONE', user.phoneNumber);
     prefs.setString('REGIS_GOOGLE_NAME', user.displayName);
@@ -186,7 +197,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
           prefs.setString('REGIS_FB_PHOTO',
               "https://graph.facebook.com/" + id + "/picture?type=large");
           prefs.setString('REGIS_FB_BIRTH_DATE', graphData['birthday']);
-          prefs.setString('REGIS_FB_GENDER', graphData['gender']);
+          // prefs.setString('REGIS_FB_GENDER', graphData['gender']);
           prefs.setString('REGIS_FB_EMAIL', graphData['email']);
           prefs.setString('REGIS_FB_FULLNAME', graphData['name']);
           prefs.setString('REGIS_FB_FIRST_NAME', graphData['first_name']);
@@ -258,11 +269,16 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
               Container(
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                    SizedBox(height: ScreenUtil.instance.setWidth(20)),
                     Align(
                       alignment: Alignment.topRight,
                       child: GestureDetector(
-                        onTap: () {
+                        onTap: () async {
+                          SharedPreferences preferences =
+                              await SharedPreferences.getInstance();
+
+                          preferences.setBool("isRest", true);
+
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -284,35 +300,28 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                       padding: EdgeInsets.only(
                           top: ScreenUtil.instance.setWidth(50)),
                     ),
-                    Hero(
-                      tag: 'eventeventlogo',
-                      child: Image.asset(
-                        'assets/icons/logo_company.png',
-                        scale: 4,
-                      ),
-                    ),
                     Expanded(
                       child: SizedBox(),
                     ),
                     FractionallySizedBox(
                       widthFactor: ScreenUtil.instance.setWidth(.8),
                       child: Container(
-                          width: ScreenUtil.instance.setWidth(306.93),
-                          height: ScreenUtil.instance.setHeight(229.50),
+                          width: ScreenUtil.instance.setWidth(350),
+                          height: ScreenUtil.instance.setWidth(350),
                           child: Image.asset(
-                            'assets/icons/icon_apps/illustrasi.png',
-                            fit: BoxFit.fill,
+                            'assets/drawable/eventevent-regis.png',
+                            fit: BoxFit.scaleDown,
                           )),
                     ),
                     Expanded(
                       child: SizedBox(),
                     ),
-                    Center(
-                      child: Text('DAFTAR DAN MULAI',
-                          style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(10.0),
-                              color: Colors.grey)),
-                    ),
+                    // Center(
+                    //   child: Text('DAFTAR DAN MULAI',
+                    //       style: TextStyle(
+                    //           fontSize: ScreenUtil.instance.setSp(10.0),
+                    //           color: Colors.grey)),
+                    // ),
                     Container(
                       margin: EdgeInsets.symmetric(
                           vertical: ScreenUtil.instance.setWidth(10),
@@ -322,7 +331,10 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           GestureDetector(
-                            onTap: () {
+                            onTap: () async{
+                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              prefs.setBool('isUsingFacebook', false);
+
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -335,7 +347,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                             },
                             child: Container(
                               width: ScreenUtil.instance.setWidth(160.41),
-                              height: ScreenUtil.instance.setHeight(37.02),
+                              height: ScreenUtil.instance.setHeight(44),
                               decoration: BoxDecoration(
                                   color: eventajaGreenTeal,
                                   borderRadius: BorderRadius.circular(
@@ -352,7 +364,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                   'LOGIN',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(12),
+                                      fontSize: ScreenUtil.instance.setSp(14),
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -360,7 +372,9 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                           ),
                           SizedBox(width: ScreenUtil.instance.setWidth(20)),
                           GestureDetector(
-                            onTap: () {
+                            onTap: () async {
+                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              prefs.setBool('isUsingFacebook', false);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -369,7 +383,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                             },
                             child: Container(
                               width: ScreenUtil.instance.setWidth(160.41),
-                              height: ScreenUtil.instance.setHeight(37.02),
+                              height: ScreenUtil.instance.setHeight(44),
                               decoration: BoxDecoration(
                                   color: eventajaGreenTeal,
                                   borderRadius: BorderRadius.circular(
@@ -386,7 +400,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                   'REGISTER',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(12),
+                                      fontSize: ScreenUtil.instance.setSp(14),
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -403,7 +417,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         margin: EdgeInsets.symmetric(
                             horizontal: ScreenUtil.instance.setWidth(26)),
                         width: MediaQuery.of(context).size.width,
-                        height: ScreenUtil.instance.setHeight(37.02),
+                        height: ScreenUtil.instance.setHeight(44),
                         decoration: BoxDecoration(
                             color: Color(0xFF4C64B5),
                             borderRadius: BorderRadius.circular(180),
@@ -431,7 +445,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                   'LOGIN WITH FACEBOOK',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: ScreenUtil.instance.setSp(12),
+                                      fontSize: ScreenUtil.instance.setSp(14),
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -455,7 +469,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         margin: EdgeInsets.symmetric(
                             horizontal: ScreenUtil.instance.setWidth(26)),
                         width: MediaQuery.of(context).size.width,
-                        height: ScreenUtil.instance.setHeight(37.02),
+                        height: ScreenUtil.instance.setHeight(44),
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(180),
@@ -482,13 +496,66 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                 child: Text(
                                   'LOGIN WITH GOOGLE',
                                   style: TextStyle(
-                                      fontSize: ScreenUtil.instance.setSp(12),
+                                      fontSize: ScreenUtil.instance.setSp(14),
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),
                           ],
                         ),
+                      ),
+                    ),
+                    Platform.isAndroid ? Container() : Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25, vertical: 15),
+                      child: SignInWithAppleButton(
+                        onPressed: () async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          LoginHandler.processAppleLogin().then((callback) {
+                            var extractedData =
+                                json.decode(callback['response'].body);
+
+                            if (callback['response'].statusCode == 201 ||
+                                callback['response'].statusCode == 200) {
+                              prefs.setString('Session',
+                                  callback['response'].headers['set-cookie']);
+                                  print("Cookie set" + prefs.getString('Session'));
+                              prefs.setString(
+                                  'Last User ID', extractedData['data']['id']);
+                              prefs.setBool('isUsingGoogle', false);
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          DashboardWidget(
+                                            isRest: false,
+                                          )));
+                            } else if (callback['response'].statusCode == 400) {
+                              if (extractedData['desc'] ==
+                                  "User is not register") {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RegisterApple(appleData: callback['appleData'], isRest: false,),
+                                  ),
+                                );
+                              }
+                            }
+                          }).catchError((e){
+                            print(e);
+                            Flushbar(
+                              animationDuration: Duration(milliseconds: 500),
+                              duration: Duration(seconds: 3),
+                              backgroundColor: Colors.red,
+                              flushbarPosition: FlushbarPosition.TOP,
+                              message: e.toString(),
+                            ).show(context);
+                          });
+                        },
+                        height: 44,
+                        style: SignInWithAppleButtonStyle.whiteOutlined,
+                        borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                     Padding(
@@ -539,7 +606,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                       ),
                     ),
                     SizedBox(
-                      height: ScreenUtil.instance.setWidth(50),
+                      height: ScreenUtil.instance.setWidth(30),
                     )
                   ],
                 ),

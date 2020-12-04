@@ -39,6 +39,7 @@ Future<http.Response> getWowzaLivestreamState(String streamingId) async {
 
 Future<http.Response> getWatchLivestreamToken(String eventId) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  print(eventId);
 
   String url = BaseApi().apiUrl + '/signin/login?=';
 

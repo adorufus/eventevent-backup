@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+
 class CountDownTimer extends StatefulWidget {
   const CountDownTimer({
     Key key,
     int secondsRemaining,
     this.countDownTimerStyle,
     this.whenTimeExpires,
-    this.countDownFormatter, this.isDay,
+    this.countDownFormatter,
+    this.isDay,
+    this.useHHMMSS,
   })  : secondsRemaining = secondsRemaining,
         super(key: key);
 
@@ -14,6 +17,7 @@ class CountDownTimer extends StatefulWidget {
   final Function countDownFormatter;
   final TextStyle countDownTimerStyle;
   final bool isDay;
+  final bool useHHMMSS;
 
   State createState() => new _CountDownTimerState();
 }
@@ -34,7 +38,12 @@ class _CountDownTimerState extends State<CountDownTimer>
 
   String formatHHMMSS(int seconds) {
     int days = (seconds / 86400).truncate();
-    int hours = (seconds / 3600).truncate();
+    int hours;
+    if (widget.isDay == true) {
+      hours = (seconds / 3600).truncate();
+    } else {
+      hours = (seconds / 3600).truncate();
+    }
     seconds = (seconds % 3600).truncate();
     int minutes = (seconds / 60).truncate();
 
@@ -43,11 +52,19 @@ class _CountDownTimerState extends State<CountDownTimer>
     String minutesStr = (minutes).toString().padLeft(2, '0');
     String secondsStr = (seconds % 60).toString().padLeft(2, '0');
 
-    if(widget.isDay == true){
-      return "$daysStr : $hoursStr : $minutesStr : $secondsStr";
+    if (widget.useHHMMSS == true) {
+      if (widget.isDay == true) {
+        return "$daysStr D : $hoursStr H : $minutesStr M : $secondsStr S";
+      } else {
+        return "$hoursStr H : $minutesStr M : $secondsStr S";
+      }
+    } else {
+      if (widget.isDay == true) {
+        return "$daysStr : $hoursStr : $minutesStr : $secondsStr";
+      } else {
+        return "$hoursStr : $minutesStr : $secondsStr";
+      }
     }
-
-    return "$hoursStr : $minutesStr : $secondsStr";
   }
 
   @override
@@ -60,16 +77,16 @@ class _CountDownTimerState extends State<CountDownTimer>
     );
     _controller.reverse(from: widget.secondsRemaining.toDouble());
     _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed || status == AnimationStatus.dismissed) {
+      if (status == AnimationStatus.completed ||
+          status == AnimationStatus.dismissed) {
         widget.whenTimeExpires();
       }
     });
   }
 
   @override
-  void didChangeDependencies(){
+  void didChangeDependencies() {
     super.didChangeDependencies();
-    
   }
 
   @override

@@ -13,8 +13,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SeeWhosGoingInvitedWidget extends StatefulWidget {
   final eventId;
   final peopleType;
+  final isRest;
 
-  const SeeWhosGoingInvitedWidget({Key key, this.eventId, this.peopleType})
+  const SeeWhosGoingInvitedWidget({Key key, this.eventId, this.peopleType, this.isRest})
       : super(key: key);
   @override
   _SeeWhosGoingInvitedWidgetState createState() =>
@@ -23,7 +24,7 @@ class SeeWhosGoingInvitedWidget extends StatefulWidget {
 
 class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
   List peopleList = [];
-  int newPage;
+  int newPage = 0;
 
   RefreshController refreshController = RefreshController(initialRefresh: false);
 
@@ -100,7 +101,7 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
                       ],
                     ),
                   ),
-                  SizedBox(width: MediaQuery.of(context).size.width / 2.8),
+                  SizedBox(width: MediaQuery.of(context).size.width / 3),
                   Text(
                     'All ${widget.peopleType} people',
                     style: TextStyle(
@@ -130,7 +131,7 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
                   enablePullDown: true,
                   enablePullUp: true,
                   onLoading: _onLoading,
-                  onRefresh: () {
+                  onRefresh: () async {
                     setState(() {
                       newPage = 0;
                     });
@@ -149,28 +150,12 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
                       }
                     });
 
+                    Future.delayed(Duration(seconds: 2));
+
                     if (mounted) setState(() {});
                     refreshController.refreshCompleted();
                   },
-                  footer: CustomFooter(
-                      builder: (BuildContext context, LoadStatus mode) {
-                    Widget body;
-                    if (mode == LoadStatus.idle) {
-                      body = Text("Load data");
-                    } else if (mode == LoadStatus.loading) {
-                      body = CupertinoActivityIndicator(radius: 20);
-                    } else if (mode == LoadStatus.failed) {
-                      body = Text("Load Failed!");
-                    } else if (mode == LoadStatus.canLoading) {
-                      body = Text('More');
-                    } else {
-                      body = Container();
-                    }
-
-                    return Container(
-                        height: ScreenUtil.instance.setWidth(35),
-                        child: Center(child: body));
-                  }),
+                  
                   child: ListView.builder(
                     itemCount: peopleList == null ? 0 : peopleList.length,
                     itemBuilder: (BuildContext context, i) {
@@ -187,6 +172,7 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => ProfileWidget(
+                                isRest: widget.isRest,
                                     initialIndex: 0,
                                     userId: peopleList[i]['id'],
                                   )));
@@ -227,13 +213,27 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
       }
     });
 
-    String url = BaseApi().apiUrl +
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session')
+      };
+    }
+
+    String url = baseUrl +
         '/event/${widget.peopleType}?X-API-KEY=$API_KEY&page=$currentPage&$eventIdType=${widget.eventId}';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': preferences.getString('Session')
-    });
+    final response = await http.get(url, headers: headers);
 
     return response;
   }

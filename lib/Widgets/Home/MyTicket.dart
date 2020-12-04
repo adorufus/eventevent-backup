@@ -226,34 +226,128 @@ class _MyTicketState extends State<MyTicket> {
                             Color ticketColor;
                             String ticketStatusText;
 
-                            print(
-                                'PLAYBACK URL: ${myTicketList[i]['livestream']['playback_url']}');
+                            // print(
+                            //     'PLAYBACK URL: ${myTicketList[i]['livestream']['playback_url']}');
 
                             if (myTicketList[i]['usedStatus'] == 'available') {
-                              ticketColor = eventajaGreenTeal;
-                              ticketStatusText = 'Available';
+                              if (myTicketList[i].containsKey("livestream")) {
+                                if (myTicketList[i]['livestream']
+                                        ['streaming_type'] ==
+                                    "zoom") {
+                                  ticketColor = Colors.blue;
+                                  ticketStatusText = 'ZOOM';
+                                } else if (myTicketList[i]['livestream']
+                                        ['streaming_type'] ==
+                                    "wowza") {
+                                  ticketColor = eventajaGreenTeal;
+                                  ticketStatusText = 'Streaming';
+                                } else if (myTicketList[i]['livestream']
+                                            ['streaming_type'] ==
+                                        "on demand" ||
+                                    myTicketList[i]['livestream']
+                                            ['on_demand_link'] !=
+                                        null ||
+                                    myTicketList[i]['livestream']
+                                            ['on_demand_link'] !=
+                                        "") {
+                                  ticketColor = eventajaGreenTeal;
+                                  ticketStatusText = 'On Demand Video';
+                                }
+                              } else {
+                                ticketColor = eventajaGreenTeal;
+                                ticketStatusText = 'Available';
+                              }
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'used') {
-                              ticketColor = Color(0xFF652D90);
-                              ticketStatusText = 'Used';
+                              if (myTicketList[i].containsKey("livestream")) {
+                                if (myTicketList[i]['livestream']
+                                        ['streaming_type'] ==
+                                    "zoom") {
+                                  ticketColor = Colors.blue;
+                                  ticketStatusText = 'ZOOM';
+                                } else if (myTicketList[i]['livestream']
+                                            ['streaming_type'] ==
+                                        null &&
+                                    myTicketList[i]['livestream']
+                                            ['link_streaming'] !=
+                                        null) {
+                                  //playback
+                                  ticketColor = eventajaGreenTeal;
+                                  ticketStatusText = 'Playback';
+                                }
+                              } else {
+                                ticketColor = Color(0xFF652D90);
+                                ticketStatusText = 'Used';
+                              }
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'streaming') {
-                              ticketColor = eventajaGreenTeal;
-                              ticketStatusText = 'Streaming';
+                              if (myTicketList[i].containsKey("livestream")) {
+                                if (myTicketList[i]['livestream']
+                                        ['streaming_type'] ==
+                                    "zoom") {
+                                  ticketColor = Colors.blue;
+                                  ticketStatusText = 'ZOOM';
+                                } else if (myTicketList[i]['livestream']
+                                        ['streaming_type'] ==
+                                    "wowza") {
+                                  ticketColor = eventajaGreenTeal;
+                                  ticketStatusText = 'Streaming';
+                                } else if (myTicketList[i]['livestream']
+                                            ['streaming_type'] ==
+                                        "on demand" ||
+                                    myTicketList[i]['livestream']
+                                            ['on_demand_link'] !=
+                                        null ||
+                                    myTicketList[i]['livestream']
+                                            ['on_demand_link'] !=
+                                        "") {
+                                  ticketColor = eventajaGreenTeal;
+                                  ticketStatusText = 'On Demand Video';
+                                }
+                              }
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'playback') {
-                              ticketColor = eventajaGreenTeal;
-                              ticketStatusText = 'Watch Playback';
+                              if (myTicketList[i].containsKey("livestream")) {
+                                ticketColor = eventajaGreenTeal;
+                                ticketStatusText = 'Playback';
+                              }
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'expired') {
                               if (myTicketList[i].containsKey('livestream')) {
-                                if (myTicketList[i]['livestream']['zoom_id'] ==
-                                    null) {
+                                if (myTicketList[i]['livestream']
+                                        ['streaming_type'] ==
+                                    "on demand") {
+                                  if (myTicketList[i]['livestream']
+                                              ['on_demand_link'] !=
+                                          null ||
+                                      myTicketList[i]['livestream']
+                                              ['on_demand_link'] !=
+                                          "") {
+                                    ticketColor = eventajaGreenTeal;
+                                    ticketStatusText = 'On Demand Video';
+                                  }
+
+                                  ticketColor = eventajaGreenTeal;
+                                  ticketStatusText = 'On Demand Video';
+                                } else if (myTicketList[i]['livestream']
+                                        ['streaming_type'] ==
+                                    'zoom') {
+                                  ticketColor = Color(0xFF8E1E2D);
+                                  ticketStatusText = 'ZOOM';
+                                } else if (myTicketList[i]['livestream']
+                                        ['streaming_type'] ==
+                                    'wowza') {
                                   ticketColor = eventajaGreenTeal;
                                   ticketStatusText = 'Playback';
-                                } else {
-                                  ticketColor = Color(0xFF8E1E2D);
-                                  ticketStatusText = 'Expired Zoom Session';
+                                } else if (myTicketList[i]['livestream']
+                                        ['streaming_type'] ==
+                                    null) {
+                                  if (myTicketList[i]['livestream']
+                                          ['link_streaming'] !=
+                                      null) {
+                                    ticketColor = eventajaGreenTeal;
+                                    ticketStatusText = 'Streaming';
+                                  }
                                 }
                               } else {
                                 ticketColor = Color(0xFF8E1E2D);
@@ -263,11 +357,9 @@ class _MyTicketState extends State<MyTicket> {
                                 'refund') {
                               ticketColor = Colors.blue;
                               ticketStatusText = 'Refund';
-                            } else if (myTicketList[i]['on_demand_link'] !=
-                                null) {
-                              ticketColor = eventajaGreenTeal;
-                              ticketStatusText = 'On Demand Video';
                             }
+
+                            print('ticketStatusText');
 
                             print(myTicketList[i]
                                 .containsKey('ticket_image')
@@ -295,7 +387,11 @@ class _MyTicketState extends State<MyTicket> {
                                               ticketTitle: myTicketList[i]
                                                   ['ticket']['ticket_name'],
                                               ticketImage: myTicketList[i]
-                                                  ['ticket_image']['url'],
+                                                          ['ticket_image'] ==
+                                                      false
+                                                  ? 'assets/grey-fade.jpg'
+                                                  : myTicketList[i]
+                                                      ['ticket_image']['url'],
                                               ticketCode: myTicketList[i]
                                                   ['ticket_code'],
                                               ticketDate: myTicketList[i]
@@ -308,33 +404,53 @@ class _MyTicketState extends State<MyTicket> {
                                                   ['event']['name'],
                                               ticketID: myTicketList[i]['id'],
                                               zoomId: myTicketList[i]
-                                                  ['livestream']['zoom_id'],
-                                              zoomDesc: myTicketList[i]
-                                                      ['livestream']
-                                                  ['zoom_description'],
-                                              livestreamUrl: ticketStatusText ==
-                                                      'On Demand Video'
+                                                      .containsKey("livestream")
                                                   ? myTicketList[i]
-                                                      ['on_demand_link']
-                                                  : ticketStatusText ==
-                                                              "Streaming" ||
-                                                          ticketStatusText ==
-                                                              'Watch Playback' ||
-                                                          ticketStatusText ==
-                                                              'Playback' ||
-                                                          ticketStatusText ==
-                                                              'Expired'
-                                                      ? myTicketList[i]['livestream'][
-                                                                  'playback_url'] ==
-                                                              'not_available'
-                                                          ? myTicketList[i]
                                                                   ['livestream']
-                                                              ['playback']
-                                                          : myTicketList[i]
+                                                              ['zoom_id'] ==
+                                                          null
+                                                      ? ""
+                                                      : myTicketList[i]
+                                                              ['livestream']
+                                                          ['zoom_id']
+                                                  : "",
+                                              zoomDesc: myTicketList[i]
+                                                      .containsKey("livestream")
+                                                  ? myTicketList[i]
                                                                   ['livestream']
-                                                              ['playback_url']
-                                                      : '',
-                                              usedStatus: ticketStatusText,
+                                                              [
+                                                              'zoom_description'] ==
+                                                          null
+                                                      ? ""
+                                                      : myTicketList[i]
+                                                              ['livestream']
+                                                          ['zoom_description']
+                                                  : "",
+                                              livestreamUrl: ticketStatusText == 'On Demand Video'
+                                                  ? myTicketList[i].containsKey("livestream")
+                                                      ? myTicketList[i]['livestream']['on_demand_link'] == ""
+                                                          ? myTicketList[i]['livestream'][
+                                                              'on_demand_embed']
+                                                          : myTicketList[i]['livestream']
+                                                              ['on_demand_link']
+                                                      : ''
+                                                  : !myTicketList[i].containsKey("livestream")
+                                                      ? ''
+                                                      : ticketStatusText == "Streaming" ||
+                                                              ticketStatusText ==
+                                                                  'Watch Playback' ||
+                                                              ticketStatusText ==
+                                                                  'Playback' ||
+                                                              ticketStatusText ==
+                                                                  'Expired'
+                                                          ? !myTicketList[i].containsKey("livestream")
+                                                              ? ''
+                                                              : myTicketList[i]['livestream']['playback_url'] == 'not_available'
+                                                                  ? myTicketList[i]['livestream']
+                                                                      ['playback']
+                                                                  : myTicketList[i]['livestream']['playback_url']
+                                                          : '',
+                                              usedStatusName: ticketStatusText,
                                             )));
                               },
                               child: Container(

@@ -32,6 +32,8 @@ class TimelineItem extends StatefulWidget {
   final commentTotalRows;
   final String impressionId;
   final String location;
+  final ticketType;
+  final cheapestTicket;
 
   const TimelineItem(
       {Key key,
@@ -51,7 +53,10 @@ class TimelineItem extends StatefulWidget {
       this.isLoved,
       this.impressionId,
       this.dateTime,
-      this.location, this.eventId})
+      this.location,
+      this.eventId,
+      this.ticketType,
+      this.cheapestTicket})
       : super(key: key);
 
   @override
@@ -63,7 +68,10 @@ class _TimelineItemState extends State<TimelineItem>
   List timelineList = [];
   bool isLoading = false;
   bool _isLoved;
+  bool isLivestream = false;
   String dateUploaded = 'now';
+  String ticketPrice = '';
+  Color ticketColor = eventajaGreenTeal;
 
   int _loveCount = 0;
 
@@ -73,6 +81,32 @@ class _TimelineItemState extends State<TimelineItem>
   @override
   void initState() {
     setState(() {
+      if (widget.ticketType == 'free_live_stream') {
+        ticketPrice = 'Free Live Stream';
+        ticketColor = Color(0xFFFFAA00);
+        isLivestream = true;
+      } else if (widget.ticketType == 'paid_live_stream') {
+        ticketPrice = 'Rp. ${widget.cheapestTicket}';
+        ticketColor = eventajaGreenTeal;
+        isLivestream = true;
+      } else if (widget.ticketType == 'paid' ||
+          widget.ticketType == 'paid_seating') {
+        ticketPrice = 'Rp. ${widget.cheapestTicket}';
+        ticketColor = eventajaGreenTeal;
+      } else if (widget.ticketType == 'free_limited') {
+        ticketPrice = 'Free Limited';
+        ticketColor = Color(0xFFFFAA00);
+      } else if (widget.ticketType == 'free') {
+        ticketPrice = 'Free';
+        ticketColor = Color(0xFFFFAA00);
+      } else if (widget.ticketType == 'no_ticket') {
+        ticketPrice = 'No Ticket';
+        ticketColor = Color(0xFF652D90);
+      } else if (widget.ticketType == 'on_the_spot') {
+        ticketPrice = 'On The Spot';
+        ticketColor = Color(0xFF652D90);
+      }
+
       print(widget.dateTime.toString());
       var diff = DateTime.now().difference(widget.dateTime);
       if (diff.inSeconds < 59) {
@@ -205,10 +239,10 @@ class _TimelineItemState extends State<TimelineItem>
                           : 0),
                   widget.type == 'video' ||
                           widget.type == 'photo' ||
-                          widget.type == 'event' ||
                           widget.type == 'eventgoing' ||
                           widget.id != null &&
                               widget.type != 'love' &&
+                              widget.type != 'event' &&
                               widget.type != 'relationship' &&
                               widget.type != 'combined_relationship'
                       ? GestureDetector(
@@ -230,7 +264,13 @@ class _TimelineItemState extends State<TimelineItem>
                                           )));
                             } else if (widget.type == 'event' ||
                                 widget.type == 'eventgoing') {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => EventDetailLoadingScreen(eventId: widget.eventId,)));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          EventDetailLoadingScreen(
+                                            eventId: widget.eventId,
+                                          )));
                             } else {
                               Navigator.push(
                                   context,
@@ -265,123 +305,178 @@ class _TimelineItemState extends State<TimelineItem>
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      widget.type == 'love'
-                          ? Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        spreadRadius: 3,
-                                        blurRadius: 5,
-                                        color:
-                                            Color(0xff8a8a8b).withOpacity(.5))
-                                  ],
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                        widget.type == 'video'
-                                            ? widget.picture
-                                            : widget.pictureFull,
-                                      ),
-                                      fit: BoxFit.cover)),
-                              height: ScreenUtil.instance.setWidth(100),
-                              width: ScreenUtil.instance.setWidth(66),
-                              child: Center(
-                                child: widget.type == 'video'
-                                    ? Icon(
-                                        Icons.play_circle_filled,
-                                        size: 80,
-                                        color: Colors.white,
-                                      )
-                                    : Container(),
+                      widget.type == 'love' || widget.type == 'event'
+                          ? GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        EventDetailLoadingScreen(
+                                      isRest: false,
+                                      eventId: widget.eventId,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          spreadRadius: 3,
+                                          blurRadius: 5,
+                                          color:
+                                              Color(0xff8a8a8b).withOpacity(.5))
+                                    ],
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                          widget.type == 'video'
+                                              ? widget.picture
+                                              : widget.pictureFull,
+                                        ),
+                                        fit: BoxFit.cover)),
+                                height: ScreenUtil.instance.setWidth(100),
+                                width: ScreenUtil.instance.setWidth(66),
+                                child: Center(
+                                  child: widget.type == 'video'
+                                      ? Icon(
+                                          Icons.play_circle_filled,
+                                          size: 80,
+                                          color: Colors.white,
+                                        )
+                                      : Container(),
+                                ),
                               ),
                             )
                           : Container(),
-                      widget.type == 'love'
+                      widget.type == 'love' || widget.type == 'event'
                           ? Expanded(
                               child: SizedBox(),
                             )
                           : Container(),
                       Container(
-                          margin: EdgeInsets.only(top: 0),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        margin: EdgeInsets.only(top: 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            isLivestream == true
+                                ? Image.asset(
+                                    'assets/icons/icon_apps/LivestreamTagIcon.png',
+                                    scale: 25)
+                                : Container(),
+                            Container(
+                              width: 200,
+                              child: Text(
+                                widget.type == 'love' || widget.type == 'event'
+                                    ? widget.name
+                                    : widget.fullName,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: ScreenUtil.instance.setSp(15)),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            SizedBox(height: ScreenUtil.instance.setWidth(8)),
+                            Row(
                               children: <Widget>[
-                                Container(
-                                  width: 200,
-                                  child: Text(
-                                    widget.type == 'love'
-                                        ? widget.name
-                                        : widget.fullName,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(15)),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                SizedBox(
-                                    height: ScreenUtil.instance.setWidth(8)),
-                                Row(
-                                  children: <Widget>[
-                                    widget.type == 'video' ||
-                                            widget.type == 'photo'
-                                        ? Container(
-                                            width: ScreenUtil.instance
-                                                .setWidth(360 - 70.0),
-                                            child: Text(
-                                                widget.name == null
-                                                    ? ''
-                                                    : widget.name,
-                                                maxLines: 10,
-                                                style: TextStyle(
-                                                    color: Color(0xFF8A8A8B))),
-                                          )
-                                        : Container(
-                                            width: ScreenUtil.instance.setWidth(
-                                                widget.type != 'love'
-                                                    ? 150
-                                                    : 250),
-                                            child: Text(
-                                              widget.location == null
-                                                  ? ''
-                                                  : widget.location == null
-                                                      ? widget.name
-                                                      : widget.location,
-                                              maxLines: 1,
-                                              style: TextStyle(
-                                                  color: Color(0xFF8A8A8B)),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          )
-                                  ],
-                                )
-                              ])),
+                                widget.type == 'video' || widget.type == 'photo'
+                                    ? Container(
+                                        width: ScreenUtil.instance
+                                            .setWidth(360 - 70.0),
+                                        child: Text(
+                                            widget.name == null
+                                                ? ''
+                                                : widget.name,
+                                            maxLines: 10,
+                                            style: TextStyle(
+                                                color: Color(0xFF8A8A8B))),
+                                      )
+                                    : Container(
+                                        width: ScreenUtil.instance.setWidth(
+                                            widget.type != 'love' ||
+                                                    widget.type != 'event'
+                                                ? 150
+                                                : 250),
+                                        child: Text(
+                                          widget.location == null
+                                              ? ''
+                                              : widget.location == null
+                                                  ? widget.name
+                                                  : widget.location,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Color(0xFF8A8A8B)),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      )
+                              ],
+                            ),
+                            SizedBox(height: 15),
+                            widget.type == 'event'
+                                ? GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              EventDetailLoadingScreen(
+                                            isRest: false,
+                                            eventId: widget.eventId,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 5),
+                                      height: ScreenUtil.instance.setWidth(28),
+                                      width: ScreenUtil.instance.setWidth(133),
+                                      decoration: BoxDecoration(
+                                          boxShadow: <BoxShadow>[
+                                            BoxShadow(
+                                                color: ticketColor
+                                                    .withOpacity(0.4),
+                                                blurRadius: 2,
+                                                spreadRadius: 1.5)
+                                          ],
+                                          color: ticketColor,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Center(
+                                          child: Text(
+                                        ticketPrice.toUpperCase(),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(14),
+                                            fontWeight: FontWeight.bold),
+                                      )),
+                                    ),
+                                  )
+                                : Container()
+                          ],
+                        ),
+                      ),
                       Expanded(
                         child: SizedBox(),
                       ),
                       // Container(
                       //   child: Image.asset('assets/btn_ticket/free-limited.png', scale: 7,),)
-                      widget.type == 'event'
+                      widget.type == 'eventgoing'
                           ? Container(
                               child: Image.asset(
-                                'assets/btn_ticket/free-limited.png',
+                                'assets/btn_ticket/going.png',
                                 scale: 7,
                               ),
                             )
-                          : widget.type == 'eventgoing'
-                              ? Container(
-                                  child: Image.asset(
-                                    'assets/btn_ticket/going.png',
-                                    scale: 7,
-                                  ),
+                          : widget.type == 'relationship'
+                              ? CircleAvatar(
+                                  backgroundColor: Color(0xff8a8a8b),
+                                  backgroundImage: NetworkImage(widget.picture),
                                 )
-                              : widget.type == 'relationship'
-                                  ? CircleAvatar(
-                                      backgroundColor: Color(0xff8a8a8b),
-                                      backgroundImage:
-                                          NetworkImage(widget.picture),
-                                    )
-                                  : Container()
+                              : Container()
                     ],
                   )
                 ],
@@ -599,69 +694,74 @@ class _TimelineItemState extends State<TimelineItem>
               ),
             ),
             SizedBox(height: ScreenUtil.instance.setWidth(19)),
-            Divider(),
-            SizedBox(height: ScreenUtil.instance.setWidth(16)),
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => EditPost(
-                              isVideo: postType == 'video' ? true : false,
-                              postId: id,
-                              thumbnailPath: imageUrl,
-                            ))).then((value) {
-                  setState(() {
-                    isLoading = true;
-                    doRefresh();
-                  });
-                });
-              },
-              child: Container(
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Edit',
-                          style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(16),
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF40D7FF)),
-                        ),
-                      ],
+            postType == 'event' || postType == 'love' ? Container() : Divider(),
+            postType == 'event' || postType == 'love'
+                ? Container()
+                : SizedBox(height: ScreenUtil.instance.setWidth(16)),
+            postType == 'event' || postType == 'love'
+                ? Container()
+                : GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditPost(
+                                    isVideo: postType == 'video' ? true : false,
+                                    postId: id,
+                                    thumbnailPath: imageUrl,
+                                  ))).then((value) {
+                        setState(() {
+                          isLoading = true;
+                          doRefresh();
+                        });
+                      });
+                    },
+                    child: Container(
+                      color: Colors.white,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Edit',
+                                style: TextStyle(
+                                    fontSize: ScreenUtil.instance.setSp(16),
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF40D7FF)),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            height: ScreenUtil.instance.setWidth(30),
+                            width: ScreenUtil.instance.setWidth(30),
+                            child:
+                                Image.asset('assets/icons/icon_apps/edit.png'),
+                          )
+                          // Container(
+                          //   height: ScreenUtil.instance.setWidth(44),
+                          //   width: ScreenUtil.instance.setWidth(50),
+                          //   decoration: BoxDecoration(
+                          //       image: DecorationImage(
+                          //           image: AssetImage(
+                          //               'assets/icons/page_post_media.png'),
+                          //           fit: BoxFit.fill),
+                          //       borderRadius: BorderRadius.circular(11),
+                          //       boxShadow: <BoxShadow>[
+                          //         BoxShadow(
+                          //             blurRadius: 10,
+                          //             color: Colors.grey
+                          //                 .withOpacity(0.3),
+                          //             spreadRadius: .5)
+                          //       ]),
+                          // )
+                        ],
+                      ),
                     ),
-                    Container(
-                      height: ScreenUtil.instance.setWidth(30),
-                      width: ScreenUtil.instance.setWidth(30),
-                      child: Image.asset('assets/icons/icon_apps/edit.png'),
-                    )
-                    // Container(
-                    //   height: ScreenUtil.instance.setWidth(44),
-                    //   width: ScreenUtil.instance.setWidth(50),
-                    //   decoration: BoxDecoration(
-                    //       image: DecorationImage(
-                    //           image: AssetImage(
-                    //               'assets/icons/page_post_media.png'),
-                    //           fit: BoxFit.fill),
-                    //       borderRadius: BorderRadius.circular(11),
-                    //       boxShadow: <BoxShadow>[
-                    //         BoxShadow(
-                    //             blurRadius: 10,
-                    //             color: Colors.grey
-                    //                 .withOpacity(0.3),
-                    //             spreadRadius: .5)
-                    //       ]),
-                    // )
-                  ],
-                ),
-              ),
-            )
+                  )
           ],
         ),
       ),

@@ -46,6 +46,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
   String desc;
   String ticketPaidBy = 'owner';
   int _curValue = 0;
+  int fee;
 
   bool isLoading = false;
 
@@ -61,12 +62,16 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
       imageUri = widget.ticketDetail['image_url'];
       ticketQuantity = widget.ticketDetail['quantity'];
       price = widget.ticketDetail['price'];
-      startDate = widget.ticketDetail['start_date'];
-      endDate = widget.ticketDetail['end_date'];
-      startTime = widget.ticketDetail['start_time'];
-      endTime = widget.ticketDetail['end_time'];
+      startDate = widget.ticketDetail['sales_start_date'];
+      endDate = widget.ticketDetail['sales_end_date'];
       desc = widget.ticketDetail['description'];
       ticketTypeId = widget.ticketDetail['ticket_type_id'];
+
+      fee = (int.parse(price) * 3) ~/ 100;
+
+      if (fee < 5000) {
+        fee = 5000;
+      }
     });
   }
 
@@ -226,7 +231,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                                         height:
                                             ScreenUtil.instance.setWidth(40),
                                         child:
-                                            Text(startDate + ' ' + startTime)),
+                                            Text(startDate)),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(7)),
@@ -246,7 +251,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                                             ScreenUtil.instance.setWidth(170),
                                         height:
                                             ScreenUtil.instance.setWidth(40),
-                                        child: Text(endDate + ' ' + endTime)),
+                                        child: Text(endDate)),
                                   ],
                                 )
                               ],
@@ -476,7 +481,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                         child: SizedBox(),
                       ),
                       Text(
-                        '- Rp. ' + '5,000',
+                        '- Rp. ' + fee.toString(),
                         style: TextStyle(color: Colors.red),
                       ),
                       SizedBox(
@@ -511,7 +516,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                         child: SizedBox(),
                       ),
                       Text(
-                        'Rp. ' + (int.parse(price) - 5000).toString(),
+                        'Rp. ' + (int.parse(price) - fee).toString(),
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontSize: ScreenUtil.instance.setSp(18),
@@ -568,7 +573,8 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                                 'eventevent fee will be paid by your \ncustomers, please see details.',
                                 maxLines: 2,
                                 textAlign: TextAlign.left,
-                                style: TextStyle(fontSize: 11),
+                                style:
+                                    TextStyle(fontSize: 12, color: Colors.grey),
                                 softWrap: true,
                               ))
                         ],
@@ -591,7 +597,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                                 child: Text(
-                              'Rp. ' + (int.parse(price) + 5000).toString(),
+                              'Rp. ' + (int.parse(price) + fee).toString(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil.instance.setSp(14),
@@ -668,7 +674,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                         child: SizedBox(),
                       ),
                       Text(
-                        '+ Rp. ' + '5,000',
+                        '+ Rp. ' + fee.toString(),
                         style: TextStyle(color: Colors.grey),
                       ),
                       SizedBox(
@@ -703,7 +709,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                         child: SizedBox(),
                       ),
                       Text(
-                        'Rp. ' + (int.parse(price) + 5000).toString(),
+                        'Rp. ' + (int.parse(price) + fee).toString(),
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontSize: ScreenUtil.instance.setSp(18),
@@ -782,13 +788,13 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
     if (_curValue == 0) {
       setState(() {
         ticketPaidBy = 'owner';
-        finalPrice = price;
+        finalPrice = (int.parse(price) - fee).toString();
         merchantPrice = price;
       });
     } else if (_curValue == 1) {
       setState(() {
         ticketPaidBy = 'attandee';
-        finalPrice = (int.parse(price) + 5000).toString();
+        finalPrice = (int.parse(price) + fee).toString();
         merchantPrice = price;
       });
     } else if (_curValue == 2) {
@@ -808,8 +814,8 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
         'price': price,
         'min_ticket': widget.ticketDetail['min_ticket'],
         'max_ticket': widget.ticketDetail['max_ticket'],
-        'sales_start_date': startDate + startTime,
-        'sales_end_date': endDate + endTime,
+        'sales_start_date': startDate,
+        'sales_end_date': endDate,
         'descriptions': desc,
         'show_remaining_ticket': widget.ticketDetail['show_remaining_ticket'],
         'fee_paid_by': ticketPaidBy,

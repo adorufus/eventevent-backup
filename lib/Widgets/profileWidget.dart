@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/Widgets/editProfileWidget.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,8 +19,9 @@ import 'package:http/http.dart' as http;
 class ProfileWidget extends StatefulWidget {
   final initialIndex;
   final userId;
+  final isRest;
 
-  const ProfileWidget({Key key, this.initialIndex, this.userId}) : super(key: key);
+  const ProfileWidget({Key key, this.initialIndex, this.userId, this.isRest}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -55,8 +57,19 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       return;
     } else {
       print(widget.userId);
+      initializeClevertap();
       getUserProfileData();
     }
+  }
+
+  void initializeClevertap() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    // if(widget.userId == preferences.getString("Last User ID")){
+    //   ClevertapHandler.logPageView("Self-Profile");
+    // } else {
+    //   ClevertapHandler.handleViewUserProfile(username, widget.userId);
+    // }
   }
 
   @override
@@ -71,6 +84,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     return userData == null
         ? HomeLoadingScreen().profileLoading(context)
         : ProfileHeader(
+          isRest: widget.isRest,
             username: username,
             fullName: fullName,
             firstName: firstName,
@@ -96,13 +110,27 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var session = preferences.getString('Session');
 
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session')
+      };
+    }
+
     final userProfileAPI =
-        BaseApi().apiUrl + '/user/detail?X-API-KEY=$API_KEY&userID=${widget.userId}';
+        baseUrl + '/user/detail?X-API-KEY=$API_KEY&userID=${widget.userId}';
     print(userProfileAPI);
-    final response = await http.get(userProfileAPI, headers: {
-      'Authorization': 'Basic YWRtaW46MTIzNA==',
-      'cookie': session
-    });
+    final response = await http.get(userProfileAPI, headers: headers);
     var extractedData = json.decode(response.body);
 
     print(response.statusCode);

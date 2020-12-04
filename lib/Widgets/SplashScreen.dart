@@ -37,28 +37,39 @@ class _SplashScreenState extends State<SplashScreen> {
   startTime() async {
     return Timer(Duration(seconds: splashDuration), () async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
-      if (preferences.getString('LastScreenRoute') == null) {
-        sendAnalytics('LoginRegister');
-        Navigator.of(context).pushReplacementNamed('/LoginRegister');
-      } else {
-        if (preferences.getString('LastScreenRoute') == "/Dashboard" &&
-            preferences.getString('Session') != null) {
-          sendAnalytics(preferences.getString('LastScreenRoute'));
-          if (preferences.getString('Session') != null) {
-            sendAnalytics('Dashboard');
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => DashboardWidget(
-                      isRest: false,
-                    )));
+      if (preferences.containsKey("Session")) {
+        if (preferences.getString('LastScreenRoute') == null) {
+          sendAnalytics('login_register');
+          Navigator.of(context).pushReplacementNamed('/LoginRegister');
+        } else {
+          if (preferences.getString('LastScreenRoute') == "/Dashboard" &&
+              preferences.getString('Session') != null) {
+            sendAnalytics(preferences.getString('LastScreenRoute'));
+            if (preferences.getString('Session') != null) {
+              sendAnalytics('Dashboard');
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => DashboardWidget(
+                    isRest: false,
+                  ),
+                ),
+              );
+            } else {
+              sendAnalytics('LoginRegister');
+              Navigator.of(context).pushReplacementNamed('/LoginRegister');
+            }
+          } else if (preferences.getString('LastScreenRoute') ==
+              '/LoginRegister') {
+            sendAnalytics('LoginRegister');
+            Navigator.pushReplacementNamed(context, '/LoginRegister');
           } else {
             sendAnalytics('LoginRegister');
-            Navigator.of(context).pushReplacementNamed('/LoginRegister');
+            Navigator.pushReplacementNamed(context, '/LoginRegister');
           }
-        } else if (preferences.getString('LastScreenRoute') ==
-            '/LoginRegister') {
-          sendAnalytics('LoginRegister');
-          Navigator.pushReplacementNamed(context, '/LoginRegister');
         }
+      } else {
+        sendAnalytics('LoginRegister');
+        Navigator.pushReplacementNamed(context, '/LoginRegister');
       }
     });
   }
@@ -86,17 +97,17 @@ class _SplashScreenState extends State<SplashScreen> {
           statusBarIconBrightness: Brightness.light),
       child: Scaffold(
         backgroundColor: eventajaGreenTeal,
-          body: Container(
-            color: eventajaGreenTeal,
-            child: Center(
+        body: Container(
+          color: eventajaGreenTeal,
+          child: Center(
               child: Container(
-                child: FlareActor(
-                  'assets/flare/Spalsh_Eventevent.flr',
-                  sizeFromArtboard: true,
-                  artboard: 'Artboard',
-                  animation: 'Splashanimation',
-                ),
-              )
+            child: FlareActor(
+              'assets/flare/Spalsh_Eventevent.flr',
+              sizeFromArtboard: true,
+              artboard: 'Artboard',
+              animation: 'Splashanimation',
+            ),
+          )
               //  Container(
               //   height: 400,
               //   width: 200,
@@ -108,8 +119,8 @@ class _SplashScreenState extends State<SplashScreen> {
               //     artboard: 'Artboard',
               //   ),
               // ),
-            ),
-          ),
+              ),
+        ),
       ),
     );
   }

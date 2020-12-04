@@ -79,7 +79,7 @@ class _LoveItemState extends State<LoveItem> {
         height: ScreenUtil.instance.setWidth(30),
         decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(50),
             boxShadow: <BoxShadow>[
               BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -102,11 +102,9 @@ class _LoveItemState extends State<LoveItem> {
           widget.isComment == false ? _loveCount < 1 ? Container() : SizedBox(width: ScreenUtil.instance.setWidth(5)) : widget.commentCount == "0" ? Container() : SizedBox(width: ScreenUtil.instance.setWidth(5)),
           widget.isComment == false ? _loveCount < 1 ? Container() : Text(_loveCount.toString(),
               style: TextStyle(
-                  color: Color(
-                      0xFF8A8A8B))) :  widget.commentCount == "0" ? Container() : Text(widget.commentCount,
+                  color: eventajaBlack, fontWeight: FontWeight.bold)) :  widget.commentCount == "0" ? Container() : Text(widget.commentCount,
               style: TextStyle(
-                  color: Color(
-                      0xFF8A8A8B)))
+                  color: eventajaBlack, fontWeight: FontWeight.bold))
         ]),
       ),
     );

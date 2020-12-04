@@ -94,14 +94,14 @@ class TransactionHistoryItem extends StatelessWidget {
                 ),
                 SizedBox(height: ScreenUtil.instance.setWidth(5)),
                 Text(
-                  'Rp. $price',
+                  '$price',
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: eventajaGreenTeal),
                 ),
                 SizedBox(height: ScreenUtil.instance.setWidth(15)),
                 Container(
-                  height: ScreenUtil.instance.setWidth(28),
-                  width: ScreenUtil.instance.setWidth(133),
+                  height: ScreenUtil.instance.setWidth(32),
+                  width: ScreenUtil.instance.setWidth(110),
                   decoration: BoxDecoration(
                       boxShadow: <BoxShadow>[
                         BoxShadow(

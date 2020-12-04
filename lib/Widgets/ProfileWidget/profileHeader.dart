@@ -5,8 +5,11 @@ import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventList.dart';
 import 'package:eventevent/Widgets/ManageEvent/PublicEventList.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsWidget.dart';
+import 'package:eventevent/Widgets/ProfileWidget/UserProfileTimeline.dart';
 import 'package:eventevent/Widgets/ProfileWidget/editProfile.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/listviewWithAppBar.dart';
+import 'package:eventevent/Widgets/loginRegisterWidget.dart';
+import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -40,6 +43,7 @@ class ProfileHeader extends StatefulWidget {
   final String isVerified;
   final initialIndex;
   final isFollowing;
+  final isRest;
 
   const ProfileHeader(
       {Key key,
@@ -59,7 +63,8 @@ class ProfileHeader extends StatefulWidget {
       this.bio,
       this.initialIndex,
       this.isVerified,
-      this.isFollowing})
+      this.isFollowing,
+      this.isRest})
       : super(key: key);
 
   @override
@@ -75,7 +80,6 @@ class _ProfileHeaderState extends State<ProfileHeader>
 
   String userId;
   bool isFollowed;
-  List userTimelineList;
 
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
@@ -90,22 +94,6 @@ class _ProfileHeaderState extends State<ProfileHeader>
   @override
   void initState() {
     super.initState();
-
-    timelineList().then((response) {
-      print(response.statusCode);
-      print(response.body);
-
-      var extractedData = json.decode(response.body);
-
-      if (response.statusCode == 200) {
-        setState(() {
-          userTimelineIsLoading = false;
-          userTimelineList = extractedData['data'];
-        });
-      } else {
-        print('error' + extractedData.toString());
-      }
-    });
 
     getUserProfile();
     print('isFollowing' + widget.isFollowing);
@@ -139,7 +127,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
             padding: EdgeInsets.symmetric(horizontal: 13),
             color: Colors.white,
             child: AppBar(
-                brightness: Brightness.light,
+              brightness: Brightness.light,
               elevation: 0,
               backgroundColor: Colors.white,
               leading: widget.currentUserId == userId
@@ -194,6 +182,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
           child: Column(
             children: <Widget>[
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 28, vertical: 3),
@@ -319,19 +308,34 @@ class _ProfileHeaderState extends State<ProfileHeader>
                             )
                           : GestureDetector(
                               onTap: () {
-                                print(this.isFollowed);
-                                if (this.isFollowed == false) {
-                                  FollowUnfollow().follow(widget.currentUserId);
-                                  setState(() {
-                                    this.isFollowed = true;
-                                  });
+                                if (widget.isRest == true) {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              LoginRegisterWidget(
+                                                previousWidget: ProfileWidget(
+                                                    isRest: false,
+                                                    initialIndex: 0,
+                                                    userId:
+                                                        widget.currentUserId),
+                                              )));
                                 } else {
-                                  FollowUnfollow()
-                                      .unfollow(widget.currentUserId);
+                                  print(this.isFollowed);
+                                  if (this.isFollowed == false) {
+                                    FollowUnfollow()
+                                        .follow(widget.currentUserId);
+                                    setState(() {
+                                      this.isFollowed = true;
+                                    });
+                                  } else {
+                                    FollowUnfollow()
+                                        .unfollow(widget.currentUserId);
 
-                                  setState(() {
-                                    this.isFollowed = false;
-                                  });
+                                    setState(() {
+                                      this.isFollowed = false;
+                                    });
+                                  }
                                 }
                               },
                               child: Container(
@@ -367,17 +371,18 @@ class _ProfileHeaderState extends State<ProfileHeader>
               ),
               Container(
                 height: ScreenUtil.instance.setWidth(60.63),
-                margin: EdgeInsets.symmetric(horizontal: 13, vertical: 28),
+                margin: EdgeInsets.symmetric(horizontal: 8, vertical: 28),
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          blurRadius: 2,
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 1.5)
-                    ]),
+                  color: Colors.white,
+                  // borderRadius: BorderRadius.circular(15),
+                  // boxShadow: <BoxShadow>[
+                  //   BoxShadow(
+                  //       blurRadius: 2,
+                  //       color: Colors.black.withOpacity(0.1),
+                  //       spreadRadius: 1.5)
+                  // ]
+                ),
                 child: ConstrainedBox(
                   constraints: BoxConstraints.expand(),
                   child: Row(
@@ -392,6 +397,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         EventList(
+                                      isRest: widget.isRest,
                                       userId: widget.currentUserId,
                                       type: 'created',
                                     ),
@@ -414,7 +420,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                         int.parse(widget.eventCreatedCount) >
                                                 999
                                             ? 14
-                                            : 17,
+                                            : 22,
                                     color: widget.eventCreatedCount == "0" ||
                                             widget.eventCreatedCount == null
                                         ? Colors.grey
@@ -450,6 +456,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         EventList(
+                                          isRest: widget.isRest,
                                           type: 'going',
                                           userId: widget.currentUserId,
                                         )));
@@ -470,7 +477,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                           int.parse(widget.eventCreatedCount) >
                                                   999
                                               ? 14
-                                              : 17,
+                                              : 22,
                                       color: widget.eventGoingCount == "0" ||
                                               widget.eventGoingCount == null
                                           ? Colors.grey
@@ -502,12 +509,16 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         onTap: widget.follower == '0'
                             ? () {}
                             : () {
+                                String baseUrl = widget.isRest
+                                    ? BaseApi().restUrl
+                                    : BaseApi().apiUrl;
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         ListViewWithAppBar(
+                                          isRest: widget.isRest,
                                           title: 'FOLLOWER',
-                                          apiURL: BaseApi().apiUrl +
-                                              '/user/follower?X-API-KEY=$API_KEY&userID=${widget.currentUserId}&page=1',
+                                          apiURL: baseUrl +
+                                              '/user/follower?X-API-KEY=$API_KEY&userID=${widget.currentUserId}',
                                         )));
                               },
                         child: Padding(
@@ -527,7 +538,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                           int.parse(widget.eventCreatedCount) >
                                                   999
                                               ? 14
-                                              : 17,
+                                              : 22,
                                       color: widget.follower == "0" ||
                                               widget.follower == null
                                           ? Colors.grey
@@ -559,12 +570,17 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         onTap: widget.following == '0'
                             ? () {}
                             : () {
+                                String baseUrl = widget.isRest
+                                    ? BaseApi().restUrl
+                                    : BaseApi().apiUrl;
+
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         ListViewWithAppBar(
+                                          isRest: widget.isRest,
                                           title: 'FOLLOWING',
-                                          apiURL: BaseApi().apiUrl +
-                                              '/user/following?X-API-KEY=${API_KEY}&userID=${widget.currentUserId}&page=1',
+                                          apiURL: baseUrl +
+                                              '/user/following?X-API-KEY=${API_KEY}&userID=${widget.currentUserId}',
                                         )));
                               },
                         child: Padding(
@@ -583,7 +599,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                           int.parse(widget.eventCreatedCount) >
                                                   999
                                               ? 14
-                                              : 17,
+                                              : 22,
                                       color: widget.following == "0" ||
                                               widget.following == null
                                           ? Colors.grey
@@ -710,23 +726,6 @@ class _ProfileHeaderState extends State<ProfileHeader>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Image.asset(
-                        'assets/icons/icon_apps/home.png',
-                        scale: 4.5,
-                      ),
-                      SizedBox(width: ScreenUtil.instance.setWidth(10)),
-                      Text('Timeline',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: ScreenUtil.instance.setSp(12.5))),
-                    ],
-                  ),
-                ),
-                Tab(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Image.asset(
                         'assets/icons/icon_apps/latest.png',
                         scale: 4.5,
                       ),
@@ -741,6 +740,23 @@ class _ProfileHeaderState extends State<ProfileHeader>
                     ],
                   ),
                 ),
+                Tab(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/icons/icon_apps/home.png',
+                        scale: 4.5,
+                      ),
+                      SizedBox(width: ScreenUtil.instance.setWidth(10)),
+                      Text('Timeline',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: ScreenUtil.instance.setSp(12.5))),
+                    ],
+                  ),
+                ),
               ],
               unselectedLabelColor: Colors.grey,
             ),
@@ -749,471 +765,23 @@ class _ProfileHeaderState extends State<ProfileHeader>
             height: MediaQuery.of(context).size.height,
             child: TabBarView(
               children: <Widget>[
-                userTimelineIsLoading == true
-                    ? HomeLoadingScreen().timelineLoading()
-                    : userTimelineList == null ? EmptyState(
-              imagePath: 'assets/icons/empty_state/public_timeline.png',
-                  reasonText: 'Your timeline is empty :(',
-          ) : timeline(),
                 widget.currentUserId == userId
                     ? MyTicketWidget()
                     : PublicEventList(
+                        isRest: widget.isRest,
                         type: 'going',
                         userId: widget.currentUserId,
-                      )
+                      ),
+                UserProfileTimeline(
+                  isRest: widget.isRest,
+                  currentUserId: widget.currentUserId,
+                )
               ],
             ),
           ),
         ],
       ),
     );
-  }
-
-  int newPage = 0;
-
-  void _onLoading() async {
-    await Future.delayed(Duration(milliseconds: 2000));
-    setState(() {
-      newPage += 1;
-    });
-
-    timelineList(newPage: newPage).then((response) {
-      var extractedData = json.decode(response.body);
-
-      print(response.body);
-
-      if (response.statusCode == 200) {
-        setState(() {
-          userTimelineIsLoading = false;
-          List updatedData = extractedData['data'];
-          if (updatedData == null) {
-            refreshController.loadNoData();
-          }
-          print('data: ' + updatedData.toString());
-          userTimelineList.addAll(updatedData);
-        });
-        if (mounted) setState(() {});
-        refreshController.loadComplete();
-      } else {
-        refreshController.loadFailed();
-      }
-    });
-  }
-
-  bool userTimelineIsLoading = false;
-
-  Widget timeline() {
-    return SmartRefresher(
-        controller: refreshController,
-        enablePullUp: true,
-        enablePullDown: false,
-        footer: CustomFooter(builder: (BuildContext context, LoadStatus mode) {
-          Widget body;
-          if (mode == LoadStatus.idle) {
-            body = Text("Load data");
-          } else if (mode == LoadStatus.loading) {
-            body = CupertinoActivityIndicator(radius: 20);
-          } else if (mode == LoadStatus.failed) {
-            body = Text("Load Failed!");
-          } else if (mode == LoadStatus.canLoading) {
-            body = Text('More');
-          } else {
-            body = Container();
-          }
-
-          return Container(
-              margin: EdgeInsets.only(bottom: 25),
-              height: ScreenUtil.instance.setWidth(35),
-              child: Center(child: body));
-        }),
-        onLoading: _onLoading,
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: userTimelineList == null ? 0 : userTimelineList.length,
-          itemBuilder: (context, i) {
-            List _loveCount = userTimelineList[i]['impression']['data'];
-            List commentList = userTimelineList[i]['comment']['data'];
-
-            Map impressionData;
-
-            for (var impres in userTimelineList[i]['impression']['data']) {
-              impressionData = impres;
-              print(impressionData.toString());
-            }
-
-            return TimelineItem(
-              id: userTimelineList[i]['id'],
-              commentTotalRows: userTimelineList[i]['comment']['totalRows'],
-              fullName: userTimelineList[i]['fullName'],
-              description: userTimelineList[i]['description'],
-              isVerified: userTimelineList[i]['isVerified'],
-              name: userTimelineList[i]['name'],
-              photo: userTimelineList[i]['photo'],
-              dateTime: DateTime.parse(userTimelineList[i]['createdDate']),
-              photoFull: userTimelineList[i]['photoFull'],
-              picture: userTimelineList[i]['picture'],
-              pictureFull: userTimelineList[i]['pictureFull'],
-              type: userTimelineList[i]['type'],
-              userId: userTimelineList[i]['userID'],
-              location: userTimelineList[i]['locationName'],
-              impressionId:
-                  userTimelineList[i]['impression']['data'].length == 0
-                      ? ''
-                      : impressionData['id'],
-              loveCount: userTimelineList[i]['impression']['data'].length,
-              isLoved: userTimelineList[i]['impression']['data'].length == 0
-                  ? false
-                  : impressionData.containsValue(widget.currentUserId) == true
-                      ? true
-                      : false,
-            );
-          },
-        ));
-  }
-
-  Widget showMoreOption(String id, String postType) {
-    return Container(
-      color: Color(0xFF737373),
-      child: Container(
-        padding: EdgeInsets.only(top: 13, left: 25, right: 25, bottom: 30),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15),
-            )),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                child: SizedBox(
-                    height: ScreenUtil.instance.setWidth(5),
-                    width: ScreenUtil.instance.setWidth(50),
-                    child: Image.asset(
-                      'assets/icons/icon_line.png',
-                      fit: BoxFit.fill,
-                    ))),
-            SizedBox(height: ScreenUtil.instance.setWidth(35)),
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return deletePrompt(id, postType);
-                    });
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (BuildContext context) =>
-                //             PostEvent()));
-              },
-              child: Container(
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Delete',
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontSize: ScreenUtil.instance.setSp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    Container(
-                        height: ScreenUtil.instance.setWidth(30),
-                        width: ScreenUtil.instance.setWidth(30),
-                        child: Image.asset('assets/icons/icon_apps/delete.png'))
-                    // Container(
-                    //   height: ScreenUtil.instance.setWidth(44),
-                    //   width: ScreenUtil.instance.setWidth(50),
-                    //   decoration: BoxDecoration(
-                    //       image: DecorationImage(
-                    //           image: AssetImage(
-                    //               'assets/icons/page_post_event.png'),
-                    //           fit: BoxFit.fill),
-                    //       borderRadius: BorderRadius.circular(11),
-                    //       boxShadow: <BoxShadow>[
-                    //         BoxShadow(
-                    //             blurRadius: 10,
-                    //             color: Colors.grey
-                    //                 .withOpacity(0.3),
-                    //             spreadRadius: .5)
-                    //       ]),
-                    // )
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: ScreenUtil.instance.setWidth(19)),
-            Divider(),
-            SizedBox(height: ScreenUtil.instance.setWidth(16)),
-            GestureDetector(
-              onTap: () {
-                // imageCaputreCamera();
-                // Navigator.of(context).pushNamed('/CustomCamera');
-              },
-              child: Container(
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Edit',
-                          style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(16),
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF40D7FF)),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      height: ScreenUtil.instance.setWidth(30),
-                      width: ScreenUtil.instance.setWidth(30),
-                      child: Image.asset('assets/icons/icon_apps/edit.png'),
-                    )
-                    // Container(
-                    //   height: ScreenUtil.instance.setWidth(44),
-                    //   width: ScreenUtil.instance.setWidth(50),
-                    //   decoration: BoxDecoration(
-                    //       image: DecorationImage(
-                    //           image: AssetImage(
-                    //               'assets/icons/page_post_media.png'),
-                    //           fit: BoxFit.fill),
-                    //       borderRadius: BorderRadius.circular(11),
-                    //       boxShadow: <BoxShadow>[
-                    //         BoxShadow(
-                    //             blurRadius: 10,
-                    //             color: Colors.grey
-                    //                 .withOpacity(0.3),
-                    //             spreadRadius: .5)
-                    //       ]),
-                    // )
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget showMoreOptionReport(String id, String postType) {
-    return Container(
-      color: Color(0xFF737373),
-      child: Container(
-        padding: EdgeInsets.only(top: 13, left: 25, right: 25, bottom: 30),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15),
-            )),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                child: SizedBox(
-                    height: ScreenUtil.instance.setWidth(5),
-                    width: ScreenUtil.instance.setWidth(50),
-                    child: Image.asset(
-                      'assets/icons/icon_line.png',
-                      fit: BoxFit.fill,
-                    ))),
-            SizedBox(height: ScreenUtil.instance.setWidth(35)),
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => ReportPost(
-                              postId: id,
-                              postType: postType,
-                            )));
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (BuildContext context) =>
-                //             PostEvent()));
-              },
-              child: Container(
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Report',
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontSize: ScreenUtil.instance.setSp(16),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      height: ScreenUtil.instance.setWidth(30),
-                      width: ScreenUtil.instance.setWidth(30),
-                      child: Image.asset('assets/icons/icon_apps/report.png'),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget deletePrompt(String id, String postType) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Material(
-        color: Colors.transparent,
-        child: Center(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            height: ScreenUtil.instance.setWidth(100),
-            width: ScreenUtil.instance.setWidth(200),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  'Oops',
-                  style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: ScreenUtil.instance.setSp(18),
-                      fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: ScreenUtil.instance.setWidth(10),
-                ),
-                Text(
-                  'Delete this moment?',
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: ScreenUtil.instance.setWidth(20),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        'Keep',
-                        style: TextStyle(
-                            color: Colors.lightBlue,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    SizedBox(
-                      width: ScreenUtil.instance.setWidth(50),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        deletePost(id, postType).then((response) {
-                          print('calling delete api');
-                          print(response.statusCode);
-                          print(response.body);
-
-                          Navigator.pop(context);
-                          if (!mounted) return;
-                          timelineList().then((response) {
-                            print(response.statusCode);
-                            print(response.body);
-                            var extractedData = json.decode(response.body);
-
-                            if (response.statusCode == 200) {
-                              setState(() {
-                                userTimelineIsLoading = false;
-                                userTimelineList = extractedData['data'];
-                              });
-                            }
-                          });
-                        });
-                      },
-                      child: Text('Delete',
-                          style: TextStyle(
-                              color: Colors.red, fontWeight: FontWeight.bold)),
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Future<http.Response> deletePost(String id, String postType) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    String deletePostType = '/photo/delete';
-
-    if (postType == 'photo') {
-      deletePostType = '/photo/delete';
-    } else if (postType == 'video') {
-      deletePostType = '/video/remove';
-    }
-
-    String url = BaseApi().apiUrl + deletePostType;
-
-    final response = await http.delete(url, headers: {
-      'X-API-KEY': API_KEY,
-      'Authorization': AUTHORIZATION_KEY,
-      'id': id,
-      'cookie': prefs.getString('Session')
-    });
-
-    return response;
-  }
-
-  Future<http.Response> timelineList({int newPage}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int currentPage = 1;
-
-    setState(() {
-      userTimelineIsLoading = true;
-      if (newPage != null) {
-        currentPage += newPage;
-      }
-
-      print(currentPage);
-    });
-
-    String url = BaseApi().apiUrl +
-        '/timeline/user?X-API-KEY=$API_KEY&page=$currentPage&userID=${widget.currentUserId}';
-    final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
-    });
-
-    return response;
   }
 }
 

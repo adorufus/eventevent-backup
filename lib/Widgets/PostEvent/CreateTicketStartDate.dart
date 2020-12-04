@@ -73,7 +73,7 @@ class CreateTicketStartDateState extends State<CreateTicketStartDate> {
           ),
           centerTitle: true,
           title: Text(
-            'CREATE EVENT',
+            'CREATE TICKET',
             style: TextStyle(color: eventajaGreenTeal),
           ),
           actions: <Widget>[

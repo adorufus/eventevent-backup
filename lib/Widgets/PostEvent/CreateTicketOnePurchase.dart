@@ -116,20 +116,32 @@ class CreateTicketOnePurchaseState extends State<CreateTicketOnePurchase> {
                 ),
               ),
               SizedBox(
-                height: ScreenUtil.instance.setWidth(150),
+                height: ScreenUtil.instance.setWidth(50),
+              ),
+              Image.asset('assets/drawable/single_ticket_purchase.png', scale: 4, colorBlendMode: BlendMode.dstIn, color: Colors.white.withOpacity(.5)),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(12),
+              ),
+              Container(
+                width: 300,
+                child: Text('Do you want to limit one purchase per user for your event?', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey),)),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(30),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 29, left: 20),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Radio(
                       groupValue: __curValue,
                       onChanged: (int i) => setState(() => __curValue = i),
                       value: 1,
                     ),
-                    Text('Yes'),
-                    SizedBox(width: ScreenUtil.instance.setWidth(25),),
+                    Text('Yes', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),),
+                    SizedBox(
+                        width: ScreenUtil.instance.setWidth(80),
+                      ),
                     Radio(
                       groupValue: __curValue,
                       onChanged: isLivestream == true ? null : (int i) => setState((){
@@ -138,7 +150,7 @@ class CreateTicketOnePurchaseState extends State<CreateTicketOnePurchase> {
                       }),
                       value: 0,
                     ),
-                    Text('No', style: TextStyle(color: isLivestream == true ? Colors.grey : Colors.black),)
+                    Text('No', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26))
                   ],
                 )
               )

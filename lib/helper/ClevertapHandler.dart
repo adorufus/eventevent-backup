@@ -1,125 +1,151 @@
-import 'package:clevertap_flutter/clevertap_flutter.dart';
-import 'package:uuid/uuid.dart';
+// // import 'package:clevertap_flutter/clevertap_flutter.dart';
+// import 'package:clevertap_plugin/clevertap_plugin.dart';
+// import 'package:uuid/uuid.dart';
 
-class ClevertapHandler {
-  static void recordEvent(String name, {Map<String, dynamic> withProps}) {
-    if (withProps != null) {
-      ClevertapFlutter.pushEvent(name, withProps);
-    } else {
-      ClevertapFlutter.pushEvent(name);
-    }
-  }
+// class ClevertapHandler {
+//   static void recordEvent(String name, {Map<String, dynamic> withProps}) {
+//     CleverTapPlugin.recordEvent(name, withProps);
+//   }
 
-  //Event Handling
-  static void handleEventDetail(String eventName, String eventOrganizer, String startDate, String endDate, String private, List categories) {
-    print("************************");
-    print("CleverTap record Event");
+//   static void logPageView(String pageName){
+//     print("**************");
+//     print("CleverTap record page view");
 
-    String privateType = "Undefined";
+//     Map<String, dynamic> props = {'Name': pageName as dynamic};
+//     recordEvent("Page viewed", withProps: props);
+//   }
 
-    if(private == '0'){
-      privateType = "Public event";
-    }
-    else if(private == '1'){
-      privateType = "Private event";
-    }
+//   static void logCategoryView(String categoryName){
+//     print("**************");
+//     print("CleverTap record category view");
 
-    String categoryString = "";
+//     Map<String, dynamic> props = {'Name': categoryName as dynamic};
+//     recordEvent("Category viewed", withProps: props);
+//   }
 
-    if(categories != null){
-      for(var cat in categories){
-        if(categoryString == ""){
-          categoryString = cat['name'].toString() ?? "";
-        }
-        else{
-          categoryString = categoryString + ", " + cat['name'].toString() ?? "";
-        }
-      }
-    }
+//   static void handleViewUserProfile(String username, String userID){
+//     if(userID == null){
+//       return;
+//     }
 
-    Map<String, dynamic> props = {
-      'Event name': eventName ?? "-",
-      'Event organizer': eventOrganizer ?? "-",
-      'Is private': privateType,
-      'Category': categoryString,
-      'Start date': startDate ?? '-',
-      'End date': endDate ?? '-'
-    };
+//     print("****************");
+//     print("CleverTap record see user profile");
 
-    recordEvent('Event viewed', withProps: props);
-  }
+//     Map<String, dynamic> props = {'Username': username ?? "" as dynamic, 'UserID': userID as dynamic};
+//     recordEvent("User viewed", withProps: props);
+//   }
 
-  //Authentication method
+//   static void handleSearch(String searchString){
+//     print("****************");
+//     print("CleverTap record search");
 
-  static void pushUserProfile(
-      String userFullName,
-      String userLastName,
-      String email,
-      String pictureNormalUrl,
-      String userBirthDay,
-      String username,
-      String userGender,
-      String userPhone) {
-    print("************************");
-    print("CleverTap push user data");
+//     Map<String, dynamic> props = {"keyword": searchString as dynamic};
+//     recordEvent("Search", withProps: props);
+//   }
 
-    var parameters = Map<String, dynamic>();
-    parameters['Name'] = userFullName ?? '' + ' ' + userLastName ?? '';
-    parameters['Email'] = email ?? '';
+//   //Event Handling
+//   static void handleEventDetail(String eventName, String eventOrganizer,
+//       String startDate, String endDate, String isPrivate, List categories) {
+//     print("************************");
+//     print("CleverTap record Event");
 
-    if (pictureNormalUrl != null) {
-      parameters['Photo'] = pictureNormalUrl;
-    }
+//     String privateType = "Undefined";
 
-    parameters['Tz'] = DateTime.now().timeZoneName;
+//     if (isPrivate == '0') {
+//       privateType = "Public event";
+//     } else if (isPrivate == '1') {
+//       privateType = "Private event";
+//     }
 
-    if (userBirthDay != null) {
-      parameters['DOB'] = userBirthDay;
-    }
+//     String categoryString = "";
 
-    parameters['Identity'] = username;
+//     if (categories != null) {
+//       for (var cat in categories) {
+//         if (categoryString == "") {
+//           categoryString = cat['name'].toString() ?? "";
+//         } else {
+//           categoryString = categoryString + ", " + cat['name'].toString() ?? "";
+//         }
+//       }
+//     }
 
-    if (userGender.toLowerCase() == "male") {
-      parameters['Gender'] = 'M';
-    } else if (userGender.toLowerCase() == "female") {
-      parameters['Gender'] = 'F';
-    }
+//     Map<String, dynamic> props = {
+//       'Event name': eventName ?? "-",
+//       'Event organizer': eventOrganizer ?? "-",
+//       'Is private': privateType,
+//       'Category': categoryString,
+//       'Start date': startDate ?? '-',
+//       'End date': endDate ?? '-'
+//     };
 
-    if (userPhone != null) {
-      parameters['Phone'] = userPhone;
-    }
+//     recordEvent('Event viewed', withProps: props);
+//   }
 
-    ClevertapFlutter.onUserLogin(parameters);
-  }
+//   //Authentication method
 
-  static void removeUserProfile(
-      String deviceName,
-      String email,
-      String pictureNormalUrl,
-      String userBirthDay,
-      String username,
-      String userGender,
-      String userPhone) {
-    print("************************");
-    print("CleverTap push user data");
+//   static void pushUserProfile(
+//       String userFullName,
+//       String userLastName,
+//       String email,
+//       String pictureNormalUrl,
+//       String userBirthDay,
+//       String username,
+//       String userGender,
+//       String userPhone) {
+//     print("************************");
+//     print("CleverTap push user data");
 
-    var uuid = new Uuid();
+//     var parameters = Map<String, dynamic>();
+//     parameters['Name'] = userFullName ?? '' + ' ' + userLastName ?? '';
+//     parameters['Email'] = email ?? '';
 
-    var parameters = Map<String, dynamic>();
-    parameters['Name'] = '$deviceName Unauthenticated';
-    parameters['Email'] = '-';
+//     if (pictureNormalUrl != null) {
+//       parameters['Photo'] = pictureNormalUrl;
+//     }
 
-    parameters['Tz'] = DateTime.now().timeZoneName;
+//     parameters['Tz'] = DateTime.now().timeZoneName;
 
-    if (userBirthDay != null) {
-      parameters['DOB'] = '-';
-    }
+//     if (userBirthDay != null) {
+//       parameters['DOB'] = userBirthDay;
+//     }
 
-    parameters['Identity'] = uuid.v4.toString();
+//     parameters['Identity'] = username;
 
-    parameters['Gender'] = '-';
-    parameters['Phone'] = '-';
+//     if (userGender.toLowerCase() == "male") {
+//       parameters['Gender'] = 'M';
+//     } else if (userGender.toLowerCase() == "female") {
+//       parameters['Gender'] = 'F';
+//     }
 
-    ClevertapFlutter.onUserLogin(parameters);
-  }
-}
+//     if (userPhone != null) {
+//       parameters['Phone'] = userPhone;
+//     }
+
+//     CleverTapPlugin.onUserLogin(parameters);
+//   }
+
+//   static void removeUserProfile(
+//     String deviceName,
+//   ) {
+//     print("************************");
+//     print("CleverTap remove user data");
+
+//     var uuid = new Uuid();
+
+//     var parameters = Map<String, dynamic>();
+//     parameters['Name'] = '$deviceName Unauthenticated';
+//     parameters['Email'] = '-';
+//     parameters['Photo'] = '-';
+
+//     parameters['Tz'] = DateTime.now().timeZoneName;
+
+//     parameters['DOB'] = '-';
+
+//     parameters['Identity'] = uuid.v4.toString() ?? '-';
+
+//     parameters['Gender'] = '-';
+//     parameters['Phone'] = '-';
+
+//     CleverTapPlugin.onUserLogin(parameters);
+//   }
+// }

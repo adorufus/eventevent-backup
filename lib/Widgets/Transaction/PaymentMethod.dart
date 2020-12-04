@@ -43,10 +43,11 @@ class PaymentMethodState extends State<PaymentMethod> {
     print(paymentAmount);
   }
 
-  savePaymentInfo(String fee, String methodID, {String paymentCode}) async {
+  savePaymentInfo(String fee, String methodID, {String paymentCode, int percentFee = 0}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     prefs.setString('ticket_fee', fee);
+    prefs.setInt('percent_fee', percentFee);
     prefs.setString('payment_method_id', methodID);
     prefs.setString('payment_code', paymentCode);
   }
@@ -69,6 +70,7 @@ class PaymentMethodState extends State<PaymentMethod> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 0,
@@ -86,6 +88,7 @@ class PaymentMethodState extends State<PaymentMethod> {
         title: Text('PAYMENT', style: TextStyle(color: eventajaGreenTeal)),
       ),
       body: ListView(
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 13),
         children: <Widget>[
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,9 +104,9 @@ class PaymentMethodState extends State<PaymentMethod> {
                   children: <Widget>[
                     Text('Transfer Amount'.toUpperCase(),
                         style: TextStyle(
-                            fontSize: ScreenUtil.instance.setSp(20),
+                            fontSize: ScreenUtil.instance.setSp(14),
                             color: Colors.grey)),
-                    SizedBox(height: ScreenUtil.instance.setWidth(20)),
+                    SizedBox(height: ScreenUtil.instance.setWidth(8)),
                     Text('Rp. $paymentAmount',
                         style: TextStyle(
                             fontSize: 35, fontWeight: FontWeight.bold)),
@@ -183,7 +186,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                   );
                                 } else if (paymentMethodList[i]['id'] == '4') {
                                   savePaymentInfo(paymentMethodList[i]['fee'],
-                                      paymentMethodList[i]['id']);
+                                      paymentMethodList[i]['id'], percentFee: int.parse(paymentMethodList[i]['percent_fee']));
                                   print('payment method used: ' +
                                       paymentMethodList[i]['id']);
                                   Navigator.push(
@@ -191,6 +194,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           TicketReview(
+                                            ticketType: 'gopay',
                                         isCustomForm: widget.isCustomForm,
                                         customFormId: widget.customFormId,
                                         customFormList: widget.answerList,
@@ -200,13 +204,15 @@ class PaymentMethodState extends State<PaymentMethod> {
                                 }
                               } else if (paymentMethodList[i]['id'] == '9') {
                                 savePaymentInfo(paymentMethodList[i]['fee'],
-                                    paymentMethodList[i]['id']);
+                                    paymentMethodList[i]['id'], percentFee: int.parse(paymentMethodList[i]['percent_fee']));
                                 print('payment method used: ' +
                                     paymentMethodList[i]['id']);
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (context) => widget.customFormId == null || widget.answerList == null ? TicketReview(
-                                        isCustomForm: widget.isCustomForm
+                                        isCustomForm: widget.isCustomForm,
+                                        ticketType: 'ovo',
                                       ) : TicketReview(
+                                        ticketType: 'ovo',
                                         customFormId: widget.customFormId,
                                         isCustomForm: widget.isCustomForm,
                                         customFormList: widget.answerList
@@ -242,16 +248,16 @@ class PaymentMethodState extends State<PaymentMethod> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      paymentMethodList[i]['method'] == null
-                                          ? ''
-                                          : paymentMethodList[i]['method'],
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(left: 2, bottom: 4),
+                                  //   child: Text(
+                                  //     paymentMethodList[i]['method'] == null
+                                  //         ? ''
+                                  //         : paymentMethodList[i]['method'],
+                                  //     style: TextStyle(
+                                  //         fontWeight: FontWeight.bold),
+                                  //   ),
+                                  // ),
                                   Container(
                                     height: ScreenUtil.instance.setWidth(60),
                                     width: MediaQuery.of(context).size.width,
@@ -264,7 +270,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                               blurRadius: 5,
                                               spreadRadius: 5,
                                               color: Color(0xff8a8a8b)
-                                                  .withOpacity(.5))
+                                                  .withOpacity(.1))
                                         ],
                                         borderRadius:
                                             BorderRadius.circular(15)),
@@ -328,6 +334,7 @@ class PaymentMethodState extends State<PaymentMethod> {
     print(response.body);
 
     if (response.statusCode == 200) {
+      if(!mounted) return;
       setState(() {
         var extractedData = json.decode(response.body);
         print(extractedData['data'].runtimeType);

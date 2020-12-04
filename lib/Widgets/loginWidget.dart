@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
+import 'package:eventevent/Widgets/RegisterApple.dart';
+import 'package:eventevent/helper/LoginHandler.dart';
 import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,6 +24,7 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginWidget extends StatefulWidget {
   final previousWidget;
@@ -101,7 +104,7 @@ class _LoginWidgetState extends State<LoginWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(left: 40, right: 30, top: 45),
+                padding: EdgeInsets.only(left: 20, right: 20, top: 45),
                 child: Material(
                   color: Colors.white,
                   child: loginForm(),
@@ -161,6 +164,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                 ),
               ),
             ),
+            Expanded(
+              child: Container(),
+            ),
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -175,7 +181,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                     color:
                         hidePassword == true ? Colors.grey : eventajaGreenTeal,
                   )),
-            )
+            ),
+            SizedBox(
+              width: ScreenUtil.instance.setWidth(13),
+            ),
           ],
         ),
         SizedBox(
@@ -187,9 +196,10 @@ class _LoginWidgetState extends State<LoginWidget> {
           child: RaisedButton(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            child: Text('Login',
+            child: Text('LOGIN',
                 style: TextStyle(
-                    fontSize: ScreenUtil.instance.setSp(15),
+                    fontSize: ScreenUtil.instance.setSp(14),
+                    fontWeight: FontWeight.bold,
                     color: Colors.white)),
             color: eventajaGreenTeal,
             onPressed: () {
@@ -224,7 +234,8 @@ class _LoginWidgetState extends State<LoginWidget> {
         GestureDetector(
           child: Text(
             'Forgot Your Password?',
-            style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
+            style: TextStyle(
+                color: Colors.grey, fontSize: ScreenUtil.instance.setSp(15)),
           ),
           onTap: () {
             Navigator.push(
@@ -244,9 +255,9 @@ class _LoginWidgetState extends State<LoginWidget> {
             initiateFacebookLogin();
           },
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 26),
+            // margin: EdgeInsets.symmetric(horizontal: 26),
             width: MediaQuery.of(context).size.width,
-            height: ScreenUtil.instance.setWidth(37.02),
+            height: ScreenUtil.instance.setWidth(44),
             decoration: BoxDecoration(
                 color: Color(0xFF4C64B5),
                 borderRadius: BorderRadius.circular(180),
@@ -272,7 +283,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                       'LOGIN WITH FACEBOOK',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: ScreenUtil.instance.setSp(12),
+                          fontSize: ScreenUtil.instance.setSp(14),
                           fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -293,9 +304,9 @@ class _LoginWidgetState extends State<LoginWidget> {
             });
           },
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 26),
+            // margin: EdgeInsets.symmetric(horizontal: 26),
             width: MediaQuery.of(context).size.width,
-            height: ScreenUtil.instance.setWidth(37.02),
+            height: ScreenUtil.instance.setWidth(44),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(180),
@@ -320,7 +331,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     child: Text(
                       'LOGIN WITH GOOGLE',
                       style: TextStyle(
-                          fontSize: ScreenUtil.instance.setSp(12),
+                          fontSize: ScreenUtil.instance.setSp(14),
                           fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -329,6 +340,53 @@ class _LoginWidgetState extends State<LoginWidget> {
             ),
           ),
         ),
+        Platform.isAndroid
+            ? Container()
+            : Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                child: SignInWithAppleButton(
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    LoginHandler.processAppleLogin().then((callback) {
+                      var extractedData =
+                          json.decode(callback['response'].body);
+
+                      if (callback['response'].statusCode == 201 ||
+                          callback['response'].statusCode == 200) {
+                        prefs.setString('Session',
+                            callback['response'].headers['set-cookie']);
+                        prefs.setString(
+                            'Last User ID', extractedData['data']['id']);
+                        prefs.setBool('isUsingGoogle', false);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    DashboardWidget(
+                                      isRest: false,
+                                    )));
+                      } else if (callback['response'].statusCode == 400) {
+                        if (extractedData['desc'] == "User is not register") {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RegisterApple(
+                                appleData: callback['appleData'],
+                                isRest: false,
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                    });
+                  },
+                  height: 44,
+                  style: SignInWithAppleButtonStyle.whiteOutlined,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
       ],
     );
   }
@@ -359,6 +417,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       }
     });
     prefs.setBool('isUsingGoogle', true);
+    prefs.setBool('isUsingFacebook', false);
     prefs.setString('REGIS_GOOGLE_PHOTO', user.photoUrl);
     prefs.setString('REGIS_GOOGLE_PHONE', user.phoneNumber);
     prefs.setString('REGIS_GOOGLE_NAME', user.displayName);
@@ -400,6 +459,18 @@ class _LoginWidgetState extends State<LoginWidget> {
       prefs.setString('UserPicture', extractedData['data']['pictureAvatarURL']);
       prefs.setString('UserFirstname', extractedData['data']['fullName']);
       prefs.setString('UserUsername', extractedData['data']['username']);
+
+      // ClevertapHandler.pushUserProfile(
+      //     extractedData['data']['fullName'],
+      //     extractedData['data']['lastName'],
+      //     extractedData['data']['email'],
+      //     extractedData['data']['pictureNormalURL'],
+      //     extractedData['data']['birthday'] == null
+      //         ? '-'
+      //         : extractedData['data']['birthday'],
+      //     extractedData['data']['username'],
+      //     extractedData['data']['gender'],
+      //     extractedData['data']['phone']);
 
       getProfileDetail(extractedData['data']['id']).then((response) {
         var profileData = json.decode(response.body);
@@ -533,7 +604,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           prefs.setString('REGIS_FB_PHOTO',
               "https://graph.facebook.com/" + id + "/picture?type=large");
           prefs.setString('REGIS_FB_BIRTH_DATE', graphData['birthday']);
-          prefs.setString('REGIS_FB_GENDER', graphData['gender']);
+          // prefs.setString('REGIS_FB_GENDER', graphData['gender']);
           prefs.setString('REGIS_FB_EMAIL', graphData['email']);
           prefs.setString('REGIS_FB_FULLNAME', graphData['name']);
           prefs.setString('REGIS_FB_FIRST_NAME', graphData['first_name']);
@@ -567,23 +638,30 @@ class _LoginWidgetState extends State<LoginWidget> {
   }
 
   void initiateFacebookLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     var facebookLogin = FacebookLogin();
     var facebookLoginResult = await facebookLogin.logInWithReadPermissions(
-        ['email', 'public_profile', 'user_friends', 'user_gender']);
+        ['email', 'public_profile']);
 
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.loggedIn:
         print(facebookLoginResult.accessToken.token);
         goLoginFb(facebookLoginResult.accessToken.token);
         onLoginStatusChanged(true);
+
+        prefs.setBool('isUsingFacebook', true);
         break;
       case FacebookLoginStatus.cancelledByUser:
         print("CancelledByUser");
         onLoginStatusChanged(false);
+
+        prefs.setBool('isUsingFacebook', false);
         break;
       case FacebookLoginStatus.error:
         print("Error");
         onLoginStatusChanged(false);
+
+        prefs.setBool('isUsingFacebook', false);
         break;
     }
   }
@@ -602,6 +680,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     final loginApiUrl = BaseApi().apiUrl + '/signin/login?=';
     final String apiKey = '47d32cb10889cbde94e5f5f28ab461e52890034b';
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isUsingFacebook', false);
 
     Map<String, String> body = {
       'username': username,
@@ -629,7 +708,6 @@ class _LoginWidgetState extends State<LoginWidget> {
     ///Jika statusCode == 200 maka lanjutkan proses dan alihkan ke halaman berikutnya
 
     if (response.statusCode == 200) {
-      
       print('apiHelper-line41:' + cookies);
       print('username: ' + prefs.getString('Last Username').toString());
       print('id: ' + prefs.getString('Last User ID').toString());
@@ -659,17 +737,15 @@ class _LoginWidgetState extends State<LoginWidget> {
         });
       });
 
-
-
-      ClevertapHandler.pushUserProfile(
-          extractedData['data']['fullName'],
-          "",
-          extractedData['data']['email'],
-          extractedData['data']['pictureNormalURL'],
-          extractedData['data']['birthday'],
-          extractedData['data']['username'],
-          extractedData['data']['gender'],
-          extractedData['data']['phone']);
+      // ClevertapHandler.pushUserProfile(
+      //     extractedData['data']['fullName'],
+      //     "",
+      //     extractedData['data']['email'],
+      //     extractedData['data']['pictureNormalURL'],
+      //     extractedData['data']['birthday'],
+      //     extractedData['data']['username'],
+      //     extractedData['data']['gender'],
+      //     extractedData['data']['phone']);
 
       SharedPrefs().saveCurrentSession(responseJson);
 

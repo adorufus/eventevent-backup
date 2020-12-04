@@ -8,6 +8,7 @@ import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,9 +21,14 @@ class CollectionPage extends StatefulWidget {
   final categoryId;
   final String collectionName;
   final headerImage;
+  final isRest;
 
   const CollectionPage(
-      {Key key, this.categoryId, this.collectionName, this.headerImage})
+      {Key key,
+      this.categoryId,
+      this.collectionName,
+      this.headerImage,
+      this.isRest})
       : super(key: key);
   @override
   _CollectionPageState createState() => _CollectionPageState();
@@ -157,25 +163,25 @@ class _CollectionPageState extends State<CollectionPage> {
           child: SmartRefresher(
             enablePullDown: true,
             enablePullUp: true,
-            footer:
-                CustomFooter(builder: (BuildContext context, LoadStatus mode) {
-              Widget body;
-              if (mode == LoadStatus.idle) {
-                body = Container();
-              } else if (mode == LoadStatus.loading) {
-                body = CupertinoActivityIndicator(radius: 20);
-              } else if (mode == LoadStatus.failed) {
-                body = Text("Load Failed!");
-              } else if (mode == LoadStatus.canLoading) {
-                body = Text('More');
-              } else {
-                body = Container();
-              }
+            // footer:
+            //     CustomFooter(builder: (BuildContext context, LoadStatus mode) {
+            //   Widget body;
+            //   if (mode == LoadStatus.idle) {
+            //     body = Container();
+            //   } else if (mode == LoadStatus.loading) {
+            //     body = CupertinoActivityIndicator(radius: 20);
+            //   } else if (mode == LoadStatus.failed) {
+            //     body = Text("Load Failed!");
+            //   } else if (mode == LoadStatus.canLoading) {
+            //     body = Text('More');
+            //   } else {
+            //     body = Container();
+            //   }
 
-              return Container(
-                  height: ScreenUtil.instance.setWidth(35),
-                  child: Center(child: body));
-            }),
+            //   return Container(
+            //       height: ScreenUtil.instance.setWidth(35),
+            //       child: Center(child: body));
+            // }),
             controller: refreshController,
             onRefresh: () {
               setState(() {
@@ -313,7 +319,7 @@ class _CollectionPageState extends State<CollectionPage> {
 
                                 if (eventByCategoryList[i]['ticket_type']
                                             ['type'] ==
-                                        'paid' ||
+                                        'paid' || eventByCategoryList[i]['ticket_type']['type'] == "paid_live_stream" ||
                                     eventByCategoryList[i]['ticket_type']
                                             ['type'] ==
                                         'paid_seating') {
@@ -321,8 +327,13 @@ class _CollectionPageState extends State<CollectionPage> {
                                           ['availableTicketStatus'] ==
                                       '1') {
                                     itemColor = Color(0xFF34B323);
-                                    itemPriceText = eventByCategoryList[i]
-                                        ['ticket']['cheapestTicket'];
+                                    itemPriceText = 'Rp. ' +
+                                        formatPrice(
+                                          price: eventByCategoryList[i]
+                                                  ['ticket']['cheapestTicket']
+                                              .toString(),
+                                        ) +
+                                        ',-';
                                   } else {
                                     if (eventByCategoryList[i]['ticket']
                                             ['salesStatus'] ==
@@ -405,6 +416,7 @@ class _CollectionPageState extends State<CollectionPage> {
                                                 name: 'EventDetails'),
                                             builder: (BuildContext context) =>
                                                 EventDetailLoadingScreen(
+                                                    isRest: widget.isRest,
                                                     eventId:
                                                         eventByCategoryList[i]
                                                             ['id'])));
@@ -435,7 +447,24 @@ class _CollectionPageState extends State<CollectionPage> {
   Future<http.Response> fetchUserByCollectionId() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    final latestEventApi = BaseApi().apiUrl +
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session')
+      };
+    }
+
+    final latestEventApi = baseUrl +
         '/collections/user?X-API-KEY=$API_KEY&id=${widget.categoryId}';
 
     print(latestEventApi);
@@ -444,10 +473,7 @@ class _CollectionPageState extends State<CollectionPage> {
       isLoading = true;
     });
 
-    final response = await http.get(latestEventApi, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': preferences.getString('Session')
-    });
+    final response = await http.get(latestEventApi, headers: headers);
 
     print(response.body);
 
@@ -464,7 +490,24 @@ class _CollectionPageState extends State<CollectionPage> {
       }
     });
 
-    final latestEventApi = BaseApi().apiUrl +
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session')
+      };
+    }
+
+    final latestEventApi = baseUrl +
         '/collections/event?X-API-KEY=$API_KEY&id=${widget.categoryId}&page=$currentPage';
 
     print(latestEventApi);
@@ -473,10 +516,7 @@ class _CollectionPageState extends State<CollectionPage> {
     //   isLoading = true;
     // });
 
-    final response = await http.get(latestEventApi, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': preferences.getString('Session')
-    });
+    final response = await http.get(latestEventApi, headers: headers);
 
     print(response.body);
 

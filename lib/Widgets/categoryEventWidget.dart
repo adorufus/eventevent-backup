@@ -4,12 +4,16 @@ import 'package:eventevent/Widgets/CategoryPage.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CategoryEventWidget extends StatefulWidget {
+  final isRest;
+
+  const CategoryEventWidget({Key key, this.isRest}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _CategoryEventWidget();
@@ -47,7 +51,8 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
                   builder: (BuildContext context) {
                     return GestureDetector(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(settings: RouteSettings(name: 'CategoryList'), builder: (context) => CategoryPage(categoryId: categoryData['id'],)));
+                        //ClevertapHandler.logCategoryView(categoryData['name']);
+                        Navigator.push(context, MaterialPageRoute(settings: RouteSettings(name: 'CategoryList'), builder: (context) => CategoryPage(isRest: widget.isRest, categoryId: categoryData['id'],)));
                       },
                         child: SizedBox(
                             height: ScreenUtil.instance.setWidth(85),
@@ -114,17 +119,28 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
   Future fetchCategoryEvent() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    if (!mounted) return;
-    setState(() {
-      session = preferences.getString('Session');
-    });
+    
+
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': preferences.getString('Session')
+      };
+    }
 
     final categoryApi =
-        BaseApi().apiUrl + '/category/list?X-API-KEY=${API_KEY}&page=1';
-    final response = await http.get(categoryApi, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': session
-    });
+        baseUrl + '/category/list?X-API-KEY=${API_KEY}&page=1';
+    final response = await http.get(categoryApi, headers: headers);
 
     print(response.body);
 

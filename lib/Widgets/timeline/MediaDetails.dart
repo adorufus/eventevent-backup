@@ -5,6 +5,7 @@ import 'package:chewie/chewie.dart';
 import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_placeholder_textlines/placeholder_lines.dart';
@@ -61,6 +62,7 @@ class _MediaDetailsState extends State<MediaDetails> {
   TextEditingController textEditingController = new TextEditingController();
 
   String videoId = '';
+  String htmlMediaContent = "";
 
   bool isLoading = false;
 
@@ -77,6 +79,12 @@ class _MediaDetailsState extends State<MediaDetails> {
         setState(() {
           mediaDetails = extractedData['data'];
           commentList = mediaDetails['comment'];
+
+          // List mediaContentList = mediaDetails['media_content'];
+
+          // mediaContentList.map((data){
+
+          // });
 
           print(commentList);
         });
@@ -144,6 +152,7 @@ class _MediaDetailsState extends State<MediaDetails> {
     )..init(context);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(
@@ -381,7 +390,7 @@ class _MediaDetailsState extends State<MediaDetails> {
                 widget.isVideo == true
                     ? videoType()
                     : Container(
-                        height: ScreenUtil.instance.setWidth(200),
+                        height: ScreenUtil.instance.setWidth(300),
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                             color: Color(0xff8a8a8b),
@@ -429,26 +438,57 @@ class _MediaDetailsState extends State<MediaDetails> {
                   height: ScreenUtil.instance.setWidth(15),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 13),
-                  child: mediaDetails['media_content'] == null
-                      ? Container(
-                          // width: 200,
-                          // child: PlaceholderLines(
-                          //   count: 10,
-                          //   align: TextAlign.left,
-                          //   lineHeight: 10,
-                          //   color: Colors.grey,
-                          //   animate: true,
-                          // ),
-                          )
-                      : Html(
-                          defaultTextStyle:
-                              TextStyle(fontSize: 18, height: 1.5),
-                          data: mediaDetails['media_content'][0]
-                              ['content_text'],
-                          onLinkTap: (url) {},
-                        ),
-                ),
+                    margin: EdgeInsets.symmetric(horizontal: 13),
+                    child: mediaDetails['media_content'] == null
+                        ? Container(
+                            // width: 200,
+                            // child: PlaceholderLines(
+                            //   count: 10,
+                            //   align: TextAlign.left,
+                            //   lineHeight: 10,
+                            //   color: Colors.grey,
+                            //   animate: true,
+                            // ),
+                            )
+                        : ColumnBuilder(
+                          itemCount: mediaDetails['media_content'].length,
+                          itemBuilder: (context,i){
+                            if (mediaDetails['media_content'][i]['content_type'] == "text") {
+                                return Html(
+                                  defaultTextStyle:
+                                      TextStyle(fontSize: 18, height: 1.5),
+                                  data: mediaDetails['media_content'][i]['content_text'],
+                                  onLinkTap: (url) {},
+                                );
+                              } else if (mediaDetails['media_content'][i]['content_type'] == 'media') {
+                                if (mediaDetails['media_content'][i]['image'] != null) {
+                                  return Container(
+                                    // height: 100,
+                                    // width: 200,
+                                      child: Image.network(mediaDetails['media_content'][i]['image']));
+                                }
+                                
+                                if (mediaDetails['media_content'][i]['youtube'] != null) {
+                                  String id = YoutubePlayer.convertUrlToId(
+                                      mediaDetails['media_content'][i]['youtube']);
+                                  return YoutubePlayer(
+                                    controller: YoutubePlayerController(
+                                      initialVideoId: id,
+                                      flags: YoutubePlayerFlags(
+                                        autoPlay: false,
+                                        loop: false,
+                                        controlsVisibleAtStart: true
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              } else {
+                                return Container();
+                              }
+                          } 
+                        )),
                 SizedBox(
                   height: ScreenUtil.instance.setWidth(10),
                 ),

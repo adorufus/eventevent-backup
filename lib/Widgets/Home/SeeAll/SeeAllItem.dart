@@ -5,6 +5,8 @@ import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
@@ -13,9 +15,10 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SeeAllItem extends StatefulWidget {
+  final isRest;
   final initialIndex;
 
-  const SeeAllItem({Key key, this.initialIndex}) : super(key: key);
+  const SeeAllItem({Key key, this.initialIndex, this.isRest}) : super(key: key);
 
   @override
   _SeeAllItemState createState() => _SeeAllItemState();
@@ -241,25 +244,25 @@ class _SeeAllItemState extends State<SeeAllItem> {
             : SmartRefresher(
                 enablePullDown: true,
                 enablePullUp: true,
-                footer: CustomFooter(
-                    builder: (BuildContext context, LoadStatus mode) {
-                  Widget body;
-                  if (mode == LoadStatus.idle) {
-                    body = Text("Load data");
-                  } else if (mode == LoadStatus.loading) {
-                    body = CupertinoActivityIndicator(radius: 20);
-                  } else if (mode == LoadStatus.failed) {
-                    body = Text("Load Failed!");
-                  } else if (mode == LoadStatus.canLoading) {
-                    body = Text('More');
-                  } else {
-                    body = Container();
-                  }
+                // footer: CustomFooter(
+                //     builder: (BuildContext context, LoadStatus mode) {
+                //   Widget body;
+                //   if (mode == LoadStatus.idle) {
+                //     body = Text("Load data");
+                //   } else if (mode == LoadStatus.loading) {
+                //     body = CupertinoActivityIndicator(radius: 20);
+                //   } else if (mode == LoadStatus.failed) {
+                //     body = Text("Load Failed!");
+                //   } else if (mode == LoadStatus.canLoading) {
+                //     body = Text('More');
+                //   } else {
+                //     body = Container();
+                //   }
 
-                  return Container(
-                      height: ScreenUtil.instance.setWidth(35),
-                      child: Center(child: body));
-                }),
+                //   return Container(
+                //       height: ScreenUtil.instance.setWidth(35),
+                //       child: Center(child: body));
+                // }),
                 controller: refreshController,
                 onRefresh: () {
                   setState(() {
@@ -294,13 +297,17 @@ class _SeeAllItemState extends State<SeeAllItem> {
 
                     if (popularEventList[i]['ticket_type']['type'] == 'paid' ||
                         popularEventList[i]['ticket_type']['type'] ==
-                            'paid_seating') {
+                            'paid_seating' || popularEventList[i]['ticket_type']['type'] == 'paid_live_stream') {
                       if (popularEventList[i]['ticket']
                               ['availableTicketStatus'] ==
                           '1') {
                         itemColor = Color(0xFF34B323);
                         itemPriceText = 'Rp. ' +
-                            popularEventList[i]['ticket']['cheapestTicket'];
+                            formatPrice(
+                              price: popularEventList[i]['ticket']
+                                      ['cheapestTicket']
+                                  .toString(),
+                            );
                       } else {
                         if (popularEventList[i]['ticket']['salesStatus'] ==
                             'comingSoon') {
@@ -341,8 +348,12 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     } else if (popularEventList[i]['ticket_type']['type'] ==
                         'free_live_stream') {
                       itemColor = Color(0xFFFFAA00);
-                      itemPriceText =
-                          popularEventList[i]['ticket_type']['name'];
+                      itemPriceText = "FREE";
+                    } else if (popularEventList[i]['ticket_type']['type'] ==
+                        'paid_live_stream') {
+                      itemColor = Color(0xFF34B323);
+                      itemPriceText = 'Rp. ' +
+                          popularEventList[i]['ticket']['cheapestTicket'];
                     } else if (popularEventList[i]['ticket_type']['type'] ==
                         'free_limited') {
                       if (popularEventList[i]['ticket']
@@ -377,6 +388,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     EventDetailLoadingScreen(
+                                        isRest: widget.isRest,
                                         eventId: popularEventList[i]['id'])));
                       },
                       child: new LatestEventItem(
@@ -384,6 +396,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                           title: popularEventList[i]['name'],
                           location: popularEventList[i]['address'],
                           itemColor: itemColor,
+                          isHybridEvent: popularEventList[i]['isHybridEvent'],
                           itemPrice: itemPriceText,
                           type: popularEventList[i]['ticket_type']['type'],
                           date:
@@ -402,25 +415,25 @@ class _SeeAllItemState extends State<SeeAllItem> {
             : SmartRefresher(
                 enablePullDown: true,
                 enablePullUp: true,
-                footer: CustomFooter(
-                    builder: (BuildContext context, LoadStatus mode) {
-                  Widget body;
-                  if (mode == LoadStatus.idle) {
-                    body = Text("Load data");
-                  } else if (mode == LoadStatus.loading) {
-                    body = CupertinoActivityIndicator(radius: 20);
-                  } else if (mode == LoadStatus.failed) {
-                    body = Text("Load Failed!");
-                  } else if (mode == LoadStatus.canLoading) {
-                    body = Text('More');
-                  } else {
-                    body = Container();
-                  }
+                // footer: CustomFooter(
+                //     builder: (BuildContext context, LoadStatus mode) {
+                //   Widget body;
+                //   if (mode == LoadStatus.idle) {
+                //     body = Text("Load data");
+                //   } else if (mode == LoadStatus.loading) {
+                //     body = CupertinoActivityIndicator(radius: 20);
+                //   } else if (mode == LoadStatus.failed) {
+                //     body = Text("Load Failed!");
+                //   } else if (mode == LoadStatus.canLoading) {
+                //     body = Text('More');
+                //   } else {
+                //     body = Container();
+                //   }
 
-                  return Container(
-                      height: ScreenUtil.instance.setWidth(35),
-                      child: Center(child: body));
-                }),
+                //   return Container(
+                //       height: ScreenUtil.instance.setWidth(35),
+                //       child: Center(child: body));
+                // }),
                 controller: refreshController,
                 onRefresh: () {
                   setState(() {
@@ -502,8 +515,12 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     } else if (discoverEventList[i]['ticket_type']['type'] ==
                         'free_live_stream') {
                       itemColor = Color(0xFFFFAA00);
-                      itemPriceText =
-                          discoverEventList[i]['ticket_type']['name'];
+                      itemPriceText = "FREE";
+                    } else if (discoverEventList[i]['ticket_type']['type'] ==
+                        'paid_live_stream') {
+                      itemColor = Color(0xFF34B323);
+                      itemPriceText = 'Rp. ' +
+                          discoverEventList[i]['ticket']['cheapestTicket'];
                     } else if (discoverEventList[i]['ticket_type']['type'] ==
                         'free_limited') {
                       if (discoverEventList[i]['ticket']
@@ -539,6 +556,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     EventDetailLoadingScreen(
+                                        isRest: widget.isRest,
                                         eventId: discoverEventList[i]['id'])));
                       },
                       child: new LatestEventItem(
@@ -547,6 +565,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                           location: discoverEventList[i]['address'],
                           itemColor: itemColor,
                           itemPrice: itemPriceText,
+                          isHybridEvent: discoverEventList[i]['isHybridEvent'],
                           type: discoverEventList[i]['ticket_type']['type'],
                           date:
                               DateTime.parse(discoverEventList[i]['dateStart']),
@@ -569,12 +588,26 @@ class _SeeAllItemState extends State<SeeAllItem> {
       print(currentPage);
     });
 
-    final catalogApiUrl = BaseApi().apiUrl +
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': prefs.getString('Session')
+      };
+    }
+
+    final catalogApiUrl = baseUrl +
         '/event/popular?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&page=$currentPage&total=20';
-    final response = await http.get(catalogApiUrl, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': prefs.getString('Session')
-    });
+    final response = await http.get(catalogApiUrl, headers: headers);
 
     return response;
   }
@@ -589,12 +622,26 @@ class _SeeAllItemState extends State<SeeAllItem> {
       }
     });
 
-    final catalogApiUrl = BaseApi().apiUrl +
+    String baseUrl = '';
+    Map<String, String> headers;
+
+    if (widget.isRest) {
+      baseUrl = BaseApi().restUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'signature': SIGNATURE,
+      };
+    } else {
+      baseUrl = BaseApi().apiUrl;
+      headers = {
+        'Authorization': AUTHORIZATION_KEY,
+        'cookie': prefs.getString('Session')
+      };
+    }
+
+    final catalogApiUrl = baseUrl +
         '/event/discover?X-API-KEY=47d32cb10889cbde94e5f5f28ab461e52890034b&page=$currentPage&total=20';
-    final response = await http.get(catalogApiUrl, headers: {
-      'Authorization': "Basic YWRtaW46MTIzNA==",
-      'cookie': prefs.getString('Session')
-    });
+    final response = await http.get(catalogApiUrl, headers: headers);
 
     return response;
   }

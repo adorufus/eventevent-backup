@@ -133,6 +133,8 @@ class _EventDetailCommentState extends State<EventDetailComment> {
                     onSuggestionSelected: (suggestion) {
                       mentionList.add(suggestion);
                       commentController.text += suggestion;
+
+                      print(mentionList);
                     },
                   )
                   // TextFormField(

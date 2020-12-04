@@ -47,7 +47,7 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
     return Scaffold(
         key: thisScaffold,
         appBar: AppBar(
-            brightness: Brightness.light,
+          brightness: Brightness.light,
           backgroundColor: Colors.white,
           elevation: 0,
           leading: GestureDetector(
@@ -97,7 +97,7 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                   Padding(
                     padding: const EdgeInsets.only(left: 13),
                     child: Text(
-                      'Event Poster',
+                      'Additional Media',
                       style: TextStyle(
                           color: Colors.black54,
                           fontSize: 40,
@@ -137,147 +137,122 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                 height: ScreenUtil.instance.setWidth(200),
                 width: MediaQuery.of(context).size.width,
                 child: ListView(
-                  padding: EdgeInsets.only(left: 5, right: 5),
+                  padding:
+                      EdgeInsets.only(left: 10, right: 5, top: 5, bottom: 5),
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(right: 10),
                       child: additionalMediaPhoto.length < 1
-                          ? Container()
+                          ? newImageContainer(0)
                           : Container(
-                            decoration: BoxDecoration(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        spreadRadius: 1.5,
+                                        color:
+                                            Color(0xff8a8a8b).withOpacity(.2),
+                                        blurRadius: 2)
+                                  ]),
+                              child: ClipRRect(
                                 borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    spreadRadius: 1.5,
-                                    color: Color(0xff8a8a8b).withOpacity(.2),
-                                    blurRadius: 2
-                                  )
-                                ]
-                              ),
-                              child: Image.file(
-                                File(additionalMediaPhoto[0]),
-                                fit: BoxFit.fill,
+                                child: Image.file(
+                                  File(additionalMediaPhoto[0]),
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: additionalMediaPhoto.length < 2
-                          ? Container()
+                          ? newImageContainer(1)
                           : Container(
-                            decoration: BoxDecoration(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        spreadRadius: 1.5,
+                                        color:
+                                            Color(0xff8a8a8b).withOpacity(.2),
+                                        blurRadius: 2)
+                                  ]),
+                              child: ClipRRect(
                                 borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    spreadRadius: 1.5,
-                                    color: Color(0xff8a8a8b).withOpacity(.2),
-                                    blurRadius: 2
-                                  )
-                                ]
-                              ),
-                              child: Image.file(
-                                File(additionalMediaPhoto[1]),
-                                fit: BoxFit.fill,
+                                child: Image.file(
+                                  File(additionalMediaPhoto[1]),
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: additionalMediaPhoto.length < 3
-                          ? Container()
+                          ? newImageContainer(2)
                           : Container(
-                            decoration: BoxDecoration(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        spreadRadius: 1.5,
+                                        color:
+                                            Color(0xff8a8a8b).withOpacity(.2),
+                                        blurRadius: 2)
+                                  ]),
+                              child: ClipRRect(
                                 borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    spreadRadius: 1.5,
-                                    color: Color(0xff8a8a8b).withOpacity(.2),
-                                    blurRadius: 2
-                                  )
-                                ]
-                              ),
-                              child: Image.file(
-                                File(additionalMediaPhoto[2]),
-                                fit: BoxFit.fill,
+                                child: Image.file(
+                                  File(additionalMediaPhoto[2]),
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: additionalMediaPhoto.length < 4
-                          ? Container()
+                          ? newImageContainer(3)
                           : Container(
-                            decoration: BoxDecoration(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        spreadRadius: 1.5,
+                                        color:
+                                            Color(0xff8a8a8b).withOpacity(.2),
+                                        blurRadius: 2)
+                                  ]),
+                              child: ClipRRect(
                                 borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    spreadRadius: 1.5,
-                                    color: Color(0xff8a8a8b).withOpacity(.2),
-                                    blurRadius: 2
-                                  )
-                                ]
-                              ),
-                              child: Image.file(
-                                File(additionalMediaPhoto[3]),
-                                fit: BoxFit.fill,
+                                child: Image.file(
+                                  File(additionalMediaPhoto[3]),
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: additionalMediaPhoto.length < 5
-                          ? Container()
+                          ? newImageContainer(4)
                           : Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    spreadRadius: 1.5,
-                                    color: Color(0xff8a8a8b).withOpacity(.2),
-                                    blurRadius: 2
-                                  )
-                                ]
-                              ),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        spreadRadius: 1.5,
+                                        color:
+                                            Color(0xff8a8a8b).withOpacity(.2),
+                                        blurRadius: 2)
+                                  ]),
                               child: Image.file(
                                 File(additionalMediaPhoto[4]),
                                 fit: BoxFit.fill,
                               ),
                             ),
                     ),
-                    additionalMediaList.length < 5
-                        ? GestureDetector(
-                            onTap: () {
-                              _showDialog();
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/grey-fade.jpg'),
-                                  fit: BoxFit.fill
-                                ),
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    spreadRadius: 1.5,
-                                    color: Color(0xff8a8a8b).withOpacity(.2),
-                                    blurRadius: 2
-                                  )
-                                ]
-                              ),
-                              height: ScreenUtil.instance.setWidth(200),
-                              width: ScreenUtil.instance.setWidth(150),
-                              child: Center(
-                                child: SizedBox(
-                                  height: ScreenUtil.instance.setWidth(50),
-                                  width: ScreenUtil.instance.setWidth(50),
-                                  child: Image.asset(
-                                      'assets/bottom-bar/new-something-white.png'),
-                                ),
-                              ),
-                            ),
-                          )
-                        : Container(),
                   ],
                 ),
               )
@@ -286,14 +261,53 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
         ));
   }
 
-  void _showDialog() {
+  Widget newImageContainer(int index) {
+    return GestureDetector(
+      onTap: () {
+        _showDialog(index);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/grey-fade.jpg'), fit: BoxFit.fill),
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                  spreadRadius: 1.5,
+                  color: Color(0xff8a8a8b).withOpacity(.2),
+                  blurRadius: 2)
+            ]),
+        height: ScreenUtil.instance.setWidth(200),
+        width: ScreenUtil.instance.setWidth(150),
+        child: Center(
+          child: SizedBox(
+            height: ScreenUtil.instance.setWidth(50),
+            width: ScreenUtil.instance.setWidth(50),
+            child: index == 0
+                ? Icon(
+                    Icons.video_call,
+                    size: 50,
+                    color: Colors.grey[400],
+                  )
+                : Icon(
+                    Icons.add_a_photo,
+                    size: 50,
+                    color: Colors.grey[400],
+                  ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showDialog(int index) {
     showModalBottomSheet<void>(
         context: context,
         builder: (BuildContext context) {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              additionalMediaList.length == 4
+              index == 0
                   ? Container()
                   : ListTile(
                       leading: new Icon(Icons.photo_library),
@@ -303,7 +317,7 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                         Navigator.pop(context);
                       },
                     ),
-              additionalMediaList.length != 4
+              index != 0
                   ? Container()
                   : ListTile(
                       leading: new Icon(Icons.videocam),
@@ -313,7 +327,7 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                         Navigator.pop(context);
                       },
                     ),
-              additionalMediaList.length == 4
+              index == 0
                   ? Container()
                   : ListTile(
                       leading: new Icon(Icons.camera_alt),
@@ -349,8 +363,9 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
 
     var appDocDir;
 
-    if(Platform.isAndroid){
-      appDocDir = await getExternalStorageDirectories(type: StorageDirectory.dcim);
+    if (Platform.isAndroid) {
+      appDocDir =
+          await getExternalStorageDirectories(type: StorageDirectory.dcim);
       print(appDocDir.path);
     } else {
       appDocDir = await getLibraryDirectory();
@@ -388,6 +403,16 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
   cropImage(File galleryFile) async {
     File croppedImage = await ImageCropper.cropImage(
         sourcePath: galleryFile.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio16x9,
+          CropAspectRatioPreset.ratio7x5,
+          CropAspectRatioPreset.ratio5x4,
+          CropAspectRatioPreset.ratio5x3,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio3x2
+        ],
         aspectRatio: CropAspectRatio(
           ratioX: 2.0,
           ratioY: 3.0,

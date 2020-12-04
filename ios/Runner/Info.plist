@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -45,13 +45,19 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CleverTapAccoutID</key>
+	<string>R97-7Z8-R95Z</string>
+	<key>CleverTapToken</key>
+	<string>b1a-ac2</string>
 	<key>FacebookAppID</key>
 	<string>482210258650577</string>
 	<key>FacebookDisplayName</key>
 	<string>EventEvent</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
+	<key>FirebaseScreenReportingEnabled</key>
+	<true/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>itms</string>
@@ -63,16 +69,26 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>EventEvent need permission for your Media Library, so you can upload a video to EventEvent</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>EventEvent need permission for your calendars, so we can create events reminder for you.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>EventEvent need to use the camera</string>
+	<string>EventEvent need to use the camera, either for broadcasting, or snap photo that can be used for event poster / additional info / timeline.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>EventEvent need permission for your contacts, to see if your friends already registered on EventEvent or not.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Needed to access location</string>
+	<string>Needed to access location, so we can show you events closest to your current location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Needed to access location</string>
+	<string>Needed to access location, so we can show you events closest to your current location</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>EventEvent need to use the mic</string>
+	<string>EventEvent need to use the microphone, so you can speak to your audience when broadcasting</string>
+	<key>NSMotionUsageDescription</key>
+	<string>EventEvent need permission for Motion</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>EventEvent need to access to your gallery</string>
+	<string>EventEvent need to access to your gallery, so you can choose your photo and upload it to EventEvent, maybe for event poster, or for your timeline.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>EventEvent need permission for SpeechRecognition, so you can speak to your audience when broadcasting</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -109,6 +125,6 @@
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
 	<key>kTCCServiceMediaLibrary</key>
-	<string>Allow to acces media library</string>
+	<string>Allow to acces media library, so you can choose your photo or video and upload it to EventEvent, maybe for event additional information, or for your timeline.</string>
 </dict>
 </plist>

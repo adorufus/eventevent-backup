@@ -82,6 +82,7 @@ class _TicketReviewState extends State<TicketReview> {
     var ticketAmount = preferences.getString('ticket_many');
     var ticketPrice = preferences.getString('ticket_price_total');
     var ticketFee = preferences.getString('ticket_fee');
+    var ticketPercentFee = preferences.getInt('percent_fee');
 
     setState(() {
       thisEventName = eventName;
@@ -97,6 +98,11 @@ class _TicketReviewState extends State<TicketReview> {
         thisTicketFee = '0';
         pajak = 0;
         total = 0;
+      } else if(widget.ticketType == 'gopay') {
+        thisTicketFee = ((int.parse(thisTicketPrice) * ticketPercentFee) ~/ 100).toString();
+        pajak = int.parse(thisTicketFee);
+        total = int.parse(thisTicketPrice) + pajak;
+        print(total);
       } else {
         thisTicketFee = ticketFee;
         pajak = int.parse(thisTicketFee);
@@ -186,91 +192,86 @@ class _TicketReviewState extends State<TicketReview> {
           Container(
               color: Colors.white,
               padding: EdgeInsets.all(15),
-              height: ScreenUtil.instance.setWidth(280),
+              height: ScreenUtil.instance.setWidth(220),
               width: MediaQuery.of(context).size.width,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Center(
-                      child: Container(
-                          width: 300,
-                        child: Text(
-                          thisEventName == null ? '' : thisEventName,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: ScreenUtil.instance.setSp(22)),
-                          textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: ScreenUtil.instance.setWidth(20)),
-                    Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              height: ScreenUtil.instance.setWidth(150),
-                              width: ScreenUtil.instance.setWidth(100),
-                              child: Image(
-                                  image: thisEventImage == null
-                                      ? AssetImage('assets/white.png')
-                                      : NetworkImage(thisEventImage),
-                                  fit: BoxFit.fill)),
-                          SizedBox(width: ScreenUtil.instance.setWidth(20)),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Text(thisTicketAmount == null
-                                    ? ''
-                                    : thisTicketAmount + 'X' + ' Ticket(s)'),
-                                SizedBox(
-                                    height: ScreenUtil.instance.setWidth(15)),
-                                Text(
-                                    thisTicketName == null
-                                        ? ''
-                                        : thisTicketName,
-                                    style: TextStyle(
-                                        fontSize: ScreenUtil.instance.setSp(20),
-                                        fontWeight: FontWeight.bold)),
-                                SizedBox(
-                                    height: ScreenUtil.instance.setWidth(15)),
-                                Container(
-                                    width: ScreenUtil.instance.setWidth(190),
-                                    child: Text(
-                                        thisEventAddres == null
-                                            ? ''
-                                            : thisEventAddres,
-                                        overflow: TextOverflow.ellipsis)),
-                                SizedBox(
-                                    height: ScreenUtil.instance.setWidth(15)),
-                                Text(
-                                    thisEventDate == null ? '' : thisEventDate),
-                                SizedBox(
-                                    height: ScreenUtil.instance.setWidth(15)),
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(thisEventStartTime == null
+                    Flexible(
+                                          child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                                height: ScreenUtil.instance.setWidth(150),
+                                width: ScreenUtil.instance.setWidth(100),
+                                child: Image(
+                                    image: thisEventImage == null
+                                        ? AssetImage('assets/white.png')
+                                        : NetworkImage(thisEventImage),
+                                    fit: BoxFit.fill)),
+                            SizedBox(width: ScreenUtil.instance.setWidth(20)),
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(thisTicketAmount == null
+                                      ? ''
+                                      : thisTicketAmount + 'X' + ' Ticket(s)'),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(4)),
+                                  Text(
+                                      thisTicketName == null
                                           ? ''
-                                          : thisEventStartTime +
-                                                      ' - ' +
-                                                      thisEventEndTime ==
-                                                  null
+                                          : thisTicketName,
+                                      style: TextStyle(
+                                          fontSize: ScreenUtil.instance.setSp(20),
+                                          fontWeight: FontWeight.bold)),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(2)),
+                                  Container(
+                                      width: ScreenUtil.instance.setWidth(190),
+                                      child: Text(
+                                          thisEventAddres == null
                                               ? ''
-                                              : thisEventEndTime)
-                                    ])
-                              ])
-                        ])
+                                              : thisEventAddres,
+                                              style: TextStyle(
+                                                color: Colors.grey
+                                              ),
+                                          overflow: TextOverflow.ellipsis)),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(2)),
+                                  Text(
+                                      thisEventDate == null ? '' : thisEventDate,style: TextStyle(
+                                                color: Colors.grey
+                                              ),),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(2)),
+                                  Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(thisEventStartTime == null
+                                            ? ''
+                                            : thisEventStartTime +
+                                                        ' - ' +
+                                                        thisEventEndTime ==
+                                                    null
+                                                ? ''
+                                                : thisEventEndTime,style: TextStyle(
+                                                color: Colors.grey
+                                              ),)
+                                      ])
+                                ])
+                          ]),
+                    )
                   ])),
-          SizedBox(height: ScreenUtil.instance.setWidth(50)),
+          SizedBox(height: ScreenUtil.instance.setWidth(10)),
           Container(
               padding:
-                  EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 15),
+                  EdgeInsets.only(left: 15, right: 15, top: 2, bottom: 15),
               color: Colors.white,
               height: ScreenUtil.instance.setWidth(200),
               width: MediaQuery.of(context).size.width,
@@ -329,7 +330,7 @@ class _TicketReviewState extends State<TicketReview> {
                                 ? Colors.grey
                                 : buttonColor))
                   ])),
-          SizedBox(height: ScreenUtil.instance.setWidth(50)),
+          SizedBox(height: ScreenUtil.instance.setWidth(10)),
           Container(
               padding: EdgeInsets.all(15),
               color: Colors.white,
@@ -341,9 +342,8 @@ class _TicketReviewState extends State<TicketReview> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text('Ticket Price'),
-                      SizedBox(width: ScreenUtil.instance.setWidth(95)),
-                      Text(':'),
-                      SizedBox(width: ScreenUtil.instance.setWidth(50)),
+                      
+                      Expanded(child: SizedBox(),),
                       Text('Rp. ' + thisTicketPrice)
                     ]),
                 SizedBox(height: ScreenUtil.instance.setWidth(20)),
@@ -352,9 +352,8 @@ class _TicketReviewState extends State<TicketReview> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text('Processing Fee'),
-                      SizedBox(width: ScreenUtil.instance.setWidth(70.5)),
-                      Text(':'),
-                      SizedBox(width: ScreenUtil.instance.setWidth(50)),
+                      
+                      Expanded(child: SizedBox(),),
                       Text(pajak.toString())
                     ]),
                 SizedBox(height: ScreenUtil.instance.setWidth(20)),
@@ -362,14 +361,13 @@ class _TicketReviewState extends State<TicketReview> {
                     alignment: Alignment.centerRight,
                     child: Divider(
                         height: ScreenUtil.instance.setWidth(10), indent: 150)),
+                        SizedBox(height: 6,),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text('Total'),
-                      SizedBox(width: ScreenUtil.instance.setWidth(135)),
-                      Text(':'),
-                      SizedBox(width: ScreenUtil.instance.setWidth(50)),
+                      Expanded(child: SizedBox(),),
                       Text(
                         'Rp. ' + total.toString(),
                         style: TextStyle(
