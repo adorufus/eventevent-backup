@@ -288,7 +288,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
         );
       } else if (paymentData['payment_method_id'] == '5') {
         //        launch(paymentData['payment']['data_vendor']['payment_url']);
-       await ProcessingPayment.analytics.logAddToCart(
+        await ProcessingPayment.analytics.logAddToCart(
           itemId: paymentData['id'],
           itemName: paymentData['ticket']['ticket_name'],
           itemCategory: 'ticket',
@@ -305,7 +305,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                       url: paymentData['payment']['data_vendor']['payment_url'],
                     )));
       } else if (paymentData['payment_method_id'] == '9') {
-       await ProcessingPayment.analytics.logAddToCart(
+        await ProcessingPayment.analytics.logAddToCart(
           itemId: paymentData['id'],
           itemName: paymentData['ticket']['ticket_name'],
           itemCategory: 'ticket',
@@ -370,6 +370,10 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       });
 
       print(lookupMimeType(widget.imageFile.path));
+      print(prefs.getString('POST_EVENT_START_DATE'));
+      print(prefs.getString('POST_EVENT_START_TIME'));
+      print(prefs.getString('POST_EVENT_END_DATE'));
+      print(prefs.getString('POST_EVENT_END_TIME'));
 
       Map<String, dynamic> body = {
         'X-API-KEY': API_KEY,
@@ -484,7 +488,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                     'NEW_EVENT_TICKET_TYPE_ID', widget.ticketType[index]['id']);
                 prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
               });
-              Navigator.of(context).push(CupertinoPageRoute(
+              Navigator.of(context).pushReplacement(CupertinoPageRoute(
                   builder: (context) => PostEventInvitePeople(
                         calledFrom: "new event",
                       )));

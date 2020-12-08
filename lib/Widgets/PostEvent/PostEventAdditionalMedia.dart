@@ -364,23 +364,34 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
     var appDocDir;
 
     if (Platform.isAndroid) {
-      appDocDir =
-          await getExternalStorageDirectories(type: StorageDirectory.dcim);
-      print(appDocDir.path);
+      appDocDir = await getApplicationDocumentsDirectory();
+      // print(appDocDir.path);
     } else {
       appDocDir = await getLibraryDirectory();
     }
 
     String fileFolder = appDocDir.path;
 
-    String thumbnail = await Thumbnails.getThumbnail(
-      thumbnailFolder: fileFolder,
-      videoFile: galleryFile.path,
-      imageType: ThumbFormat.JPEG,
-      quality: 50,
-    );
+    String thumbnail;
 
-    print(thumbnail);
+    await VideoThumbnail.thumbnailFile(
+      video: galleryFile.path,
+      thumbnailPath: fileFolder,
+      imageFormat: ImageFormat.JPEG,
+      quality: 80,
+      maxWidth: 512,
+    ).then((value) {
+      thumbnail = value;
+      print(File(value));
+    });
+    // await Thumbnails.getThumbnail(
+    //   thumbnailFolder: fileFolder,
+    //   videoFile: galleryFile.path,
+    //   imageType: ThumbFormat.JPEG,
+    //   quality: 50,
+    // );
+
+    print(thumbnail.hashCode);
 
     setState(() {
       preferences.setString('POST_EVENT_ADDITIONAL_VIDEO', galleryFile.path);

@@ -39,7 +39,6 @@ class SelectTicketTypeState extends State<SelectTicketType> {
   List<String> additionalMediaList = [];
   List<File> additionalMediaFiles = [];
   bool isLoading;
-  
 
   @override
   void initState() {
@@ -55,7 +54,8 @@ class SelectTicketTypeState extends State<SelectTicketType> {
 
     setState(() {
       isPrivate = prefs.getString('POST_EVENT_TYPE');
-      additionalMediaList.addAll(prefs.getStringList('POST_EVENT_ADDITIONAL_MEDIA'));
+      additionalMediaList
+          .addAll(prefs.getStringList('POST_EVENT_ADDITIONAL_MEDIA'));
 
       print(additionalMediaFiles);
 
@@ -98,98 +98,95 @@ class SelectTicketTypeState extends State<SelectTicketType> {
             style: TextStyle(color: eventajaGreenTeal),
           ),
         ),
-        body: ticketType == null ? HomeLoadingScreen().myTicketLoading() : Container(
-          color: Colors.white,
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: ListView.builder(
-            itemCount: ticketType.length == null ? 0 : ticketType.length,
-            itemBuilder: (BuildContext context, i) {
-              if (ticketType[i]['id'] == '4') {
-                imageUri = 'assets/btn_ticket/paid.png';
-              }
-              else if (ticketType[i]['id'] == '9') {
-                imageUri = 'assets/btn_ticket/paid.png';
-              }
-              else if (ticketType[i]['id'] == '5') {
-                imageUri = 'assets/btn_ticket/free-limited.png';
-              }
-              else if (ticketType[i]['id'] == '10') {
-                imageUri = 'assets/btn_ticket/free-limited.png';
-              }
-              else if (ticketType[i]['id'] == '1') {
-                imageUri = 'assets/btn_ticket/free.png';
-              }
-              else if (ticketType[i]['id'] == '2') {
-                imageUri = 'assets/btn_ticket/no-ticket.png';
-              }
-              else if (ticketType[i]['id'] == '3') {
-                imageUri = 'assets/btn_ticket/ots-800px.png';
-              }
-              else if (ticketType[i]['id'] == '7'){
-                imageUri = 'assets/btn_ticket/free-live-limited.png';
-              } else if (ticketType[i]['id'] == '6'){
-                imageUri = 'assets/btn_ticket/paid-live.png';
-              }
-
-              return ListTile(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      return ProcessingPayment(
-                        loadingType: 'create event',
-                        ticketType: ticketType,
-                        isPrivate: isPrivate,
-                        imageFile: imageFile,
-                        index: i,
-                        additionalMedia: additionalMediaList,
-                        context: context
-                      );
+        body: ticketType == null
+            ? HomeLoadingScreen().myTicketLoading()
+            : Container(
+                color: Colors.white,
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: ListView.builder(
+                  itemCount: ticketType.length == null ? 0 : ticketType.length,
+                  itemBuilder: (BuildContext context, i) {
+                    if (ticketType[i]['id'] == '4') {
+                      imageUri = 'assets/btn_ticket/paid.png';
+                    } else if (ticketType[i]['id'] == '9') {
+                      imageUri = 'assets/btn_ticket/paid.png';
+                    } else if (ticketType[i]['id'] == '5') {
+                      imageUri = 'assets/btn_ticket/free-limited.png';
+                    } else if (ticketType[i]['id'] == '10') {
+                      imageUri = 'assets/btn_ticket/free-limited.png';
+                    } else if (ticketType[i]['id'] == '1') {
+                      imageUri = 'assets/btn_ticket/free.png';
+                    } else if (ticketType[i]['id'] == '2') {
+                      imageUri = 'assets/btn_ticket/no-ticket.png';
+                    } else if (ticketType[i]['id'] == '3') {
+                      imageUri = 'assets/btn_ticket/ots-800px.png';
+                    } else if (ticketType[i]['id'] == '7') {
+                      imageUri = 'assets/btn_ticket/free-live-limited.png';
+                    } else if (ticketType[i]['id'] == '6') {
+                      imageUri = 'assets/btn_ticket/paid-live.png';
                     }
-                  )).then((val){
-                    print('value $val');
-                    if(val == null){
 
-                    } else {
-                      Flushbar(
-                        animationDuration: Duration(milliseconds: 500),
-                        duration: Duration(seconds: 3),
-                        backgroundColor: Colors.red,
-                        flushbarPosition: FlushbarPosition.TOP,
-                        message: val,
-                      )..show(context);
-                    }
-                  });
-                  //postEvent(i);
-                },
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                leading: SizedBox(
-                  height: ScreenUtil.instance.setWidth(35),
-                  width: ScreenUtil.instance.setWidth(120),
-                  child: Image.asset(
-                    imageUri,
-                    fit: BoxFit.fill,
-                  ),
+                    return ListTile(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ProcessingPayment(
+                              loadingType: 'create event',
+                              ticketType: ticketType,
+                              isPrivate: isPrivate,
+                              imageFile: imageFile,
+                              index: i,
+                              additionalMedia: additionalMediaList,
+                              context: context);
+                        })).then((val) {
+                          print('value $val');
+                          if (val == null) {
+                          } else {
+                            Flushbar(
+                              animationDuration: Duration(milliseconds: 500),
+                              duration: Duration(seconds: 3),
+                              backgroundColor: Colors.red,
+                              flushbarPosition: FlushbarPosition.TOP,
+                              message: val,
+                            )..show(context);
+                          }
+                        });
+                        //postEvent(i);
+                      },
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                      leading: SizedBox(
+                        height: ScreenUtil.instance.setWidth(35),
+                        width: ScreenUtil.instance.setWidth(120),
+                        child: Image.asset(
+                          imageUri,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      title: Text(
+                        ticketType[i]['name'] == null
+                            ? ''
+                            : ticketType[i]['name'],
+                        style: TextStyle(
+                            fontSize: ScreenUtil.instance.setSp(18),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(ticketType[i]['description'] == null
+                              ? ticketType[i]['id'] == '7' ||
+                                      ticketType[i]['id'] == '6'
+                                  ? 'Create livestream ticket'
+                                  : ''
+                              : ticketType[i]['description']),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-                title: Text(
-                  ticketType[i]['name'] == null ? '' : ticketType[i]['name'],
-                  style: TextStyle(
-                      fontSize: ScreenUtil.instance.setSp(18),
-                      fontWeight: FontWeight.bold),
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(ticketType[i]['description'] == null
-                        ? ticketType[i]['id'] == '7' || ticketType[i]['id'] == '6' ? 'Create livestream ticket' : ''
-                        : ticketType[i]['description']),
-                  ],
-                ),
-              );
-            },
-          ),
-        ));
+              ));
   }
 
   Future getTicketTypeList() async {
@@ -206,154 +203,139 @@ class SelectTicketTypeState extends State<SelectTicketType> {
       setState(() {
         var extractedData = json.decode(response.body);
         ticketType = extractedData['data'];
-        if(prefs.getBool('isLivestream') == true){
-          ticketType.removeWhere((data) => data['id'] != '7' && data['id'] != '6');
+        if (prefs.getBool('isLivestream') == true) {
+          ticketType
+              .removeWhere((data) => data['id'] != '7' && data['id'] != '6');
         } else {
-          ticketType.removeWhere((data) => data['id'] == '7' || data['id'] == '6');
+          ticketType
+              .removeWhere((data) => data['id'] == '7' || data['id'] == '6');
         }
       });
     }
   }
 
-  Future postPhoto(int index, BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    Map<String, String> headers = {
-      "Authorization": AUTHORIZATION_KEY,
-      "X-API-KEY": API_KEY,
-      "cookie": prefs.getString('Session')
-    };
+//   Future postPhoto(int index, BuildContext context) async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     Map<String, String> headers = {
+//       "Authorization": AUTHORIZATION_KEY,
+//       "X-API-KEY": API_KEY,
+//       "cookie": prefs.getString('Session')
+//     };
 
-    String url = BaseApi().apiUrl + '/event/create';
-    var stream =
-        new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
-    var length = await imageFile.length();
-    var request = new http.MultipartRequest("POST", Uri.parse(url));
-    var parsed;
-    request.headers.addAll(headers);
-    request.fields['name'] = prefs.getString('POST_EVENT_NAME');
-    request.fields['eventTypeID'] =
-        (int.parse(prefs.getString('POST_EVENT_TYPE')) + 1).toString();
-    request.fields['ticketTypeID'] = ticketType[index]['id'];
-    request.fields['address'] =
-        prefs.getString('CREATE_EVENT_LOCATION_ADDRESS');
-    request.fields['latitude'] = prefs.getString('CREATE_EVENT_LOCATION_LAT');
-    request.fields['longitude'] = prefs.getString('CREATE_EVENT_LOCATION_LONG');
-    request.fields['dateStart'] = prefs.getString('POST_EVENT_START_DATE');
-    request.fields['timeStart'] = prefs.getString('POST_EVENT_START_TIME');
-    request.fields['dateEnd'] = prefs.getString('POST_EVENT_END_DATE');
-    request.fields['timeEnd'] = prefs.getString('POST_EVENT_END_TIME');
-    request.fields['description'] = prefs.getString('CREATE_EVENT_DESCRIPTION');
-    request.fields['phone'] = prefs.getString('CREATE_EVENT_TELEPHONE');
-    request.fields['email'] = prefs.getString('CREATE_EVENT_EMAIL');
-    request.fields['website'] = prefs.getString('CREATE_EVENT_WEBSITE');
-    request.fields['isPrivate'] = prefs.getString('POST_EVENT_TYPE');
-    request.fields['modifiedById'] = prefs.getString('Last User ID');
+//     String url = BaseApi().apiUrl + '/event/create';
+//     var stream =
+//         new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+//     var length = await imageFile.length();
+//     var request = new http.MultipartRequest("POST", Uri.parse(url));
+//     var parsed;
+//     request.headers.addAll(headers);
+//     request.fields['name'] = prefs.getString('POST_EVENT_NAME');
+//     request.fields['eventTypeID'] =
+//         (int.parse(prefs.getString('POST_EVENT_TYPE')) + 1).toString();
+//     request.fields['ticketTypeID'] = ticketType[index]['id'];
+//     request.fields['address'] =
+//         prefs.getString('CREATE_EVENT_LOCATION_ADDRESS');
+//     request.fields['latitude'] = prefs.getString('CREATE_EVENT_LOCATION_LAT');
+//     request.fields['longitude'] = prefs.getString('CREATE_EVENT_LOCATION_LONG');
+//     request.fields['dateStart'] = prefs.getString('POST_EVENT_START_DATE');
+//     request.fields['timeStart'] = prefs.getString('POST_EVENT_START_TIME');
+//     request.fields['dateEnd'] = prefs.getString('POST_EVENT_END_DATE');
+//     request.fields['timeEnd'] = prefs.getString('POST_EVENT_END_TIME');
+//     request.fields['description'] = prefs.getString('CREATE_EVENT_DESCRIPTION');
+//     request.fields['phone'] = prefs.getString('CREATE_EVENT_TELEPHONE');
+//     request.fields['email'] = prefs.getString('CREATE_EVENT_EMAIL');
+//     request.fields['website'] = prefs.getString('CREATE_EVENT_WEBSITE');
+//     request.fields['isPrivate'] = prefs.getString('POST_EVENT_TYPE');
+//     request.fields['modifiedById'] = prefs.getString('Last User ID');
 
-//    request.fields.addAll({
-////      'X-API-KEY': API_KEY,
-//      'eventTypeID':
-//          (int.parse(prefs.getString('POST_EVENT_TYPE')) + 1).toString(),
-//      'ticketTypeID': ticketType[index]['id'],
-//      'name': prefs.getString('POST_EVENT_NAME'),
-//      'address': prefs.getString('CREATE_EVENT_LOCATION_ADDRESS'),
-//      'latitude': prefs.getString('CREATE_EVENT_LOCATION_LAT'),
-//      'longitude': prefs.getString('CREATE_EVENT_LOCATION_LONG'),
-//      'dateStart': prefs.getString('POST_EVENT_START_DATE'),
-//      'timeStart': prefs.getString('POST_EVENT_START_TIME'),
-//      'dateEnd': prefs.getString('POST_EVENT_END_DATE'),
-//      'timeEnd': prefs.getString('POST_EVENT_END_TIME'),
-//      'description': prefs.getString('CREATE_EVENT_DESCRIPTION'),
-//      'phone': prefs.getString('CREATE_EVENT_TELEPHONE'),
-//      'email': prefs.getString('CREATE_EVENT_EMAIL'),
-//      'website': prefs.getString('CREATE_EVENT_WEBSITE'),
-//      'isPrivate': prefs.getString('POST_EVENT_TYPE'),
-//      'modifiedById': prefs.getString('Last User ID'),
-//    });
-    for (int i = 0;
-        i < prefs.getStringList('POST_EVENT_CATEGORY_ID').length;
-        i++) {
-      setState(() {
-        request.fields['category[]'] =
-            prefs.getStringList('POST_EVENT_CATEGORY_ID')[i];
-      });
-    }
-    var multipartFile = new http.MultipartFile('photo', stream, length,
-        filename: basename(imageFile.path));
-    request.files.add(multipartFile);
+//     for (int i = 0;
+//         i < prefs.getStringList('POST_EVENT_CATEGORY_ID').length;
+//         i++) {
+//       setState(() {
+//         request.fields['category[]'] =
+//             prefs.getStringList('POST_EVENT_CATEGORY_ID')[i];
+//       });
+//     }
+//     var multipartFile = new http.MultipartFile('photo', stream, length,
+//         filename: basename(imageFile.path));
+//     request.files.add(multipartFile);
 
-//    request.finalize();
+// //    request.finalize();
 
-    print(request.fields.toString());
+//     print(request.fields.toString());
 
-    request.send().then((response) async {
-      print(response.statusCode);
-      print(response.stream.toString());
-      var response2 = await http.Response.fromStream(response);
-      print(response2.body);
-      // response.stream.transform(utf8.decoder).map((value) => print(value[0]));
-      // response.stream.transform(utf8.decoder).listen((value){
-      //   print(value);
-      // });
+//     request.send().then((response) async {
+//       print(response.statusCode);
+//       print(response.stream.toString());
+//       var response2 = await http.Response.fromStream(response);
+//       print(response2.body);
+//       // response.stream.transform(utf8.decoder).map((value) => print(value[0]));
+//       // response.stream.transform(utf8.decoder).listen((value){
+//       //   print(value);
+//       // });
 
-      if (response.statusCode == 200) {
-        print('ini untuk setup ticket');
-        print(ticketType[index]['id']);
-        if (ticketType[index]['isSetupTicket'] == '1') {
-          print('paid: ' + response2.body);
+//       if (response.statusCode == 200) {
+//         print('ini untuk setup ticket');
+//         print(ticketType[index]['id']);
+//         if (ticketType[index]['isSetupTicket'] == '1') {
+//           print('paid: ' + response2.body);
 
-          setState(() {
-            var extractedData = json.decode(response2.body);
-            prefs.setString('SETUP_TICKET_PAID_TICKET_TYPE',
-                ticketType[index]['paid_ticket_type']['id']);
-            prefs.setString(
-                'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['paid_ticket_type_id'] == null ? ticketType[index]['id'] : ticketType[index]['paid_ticket_type_id']);
-            prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
-          });
-          Navigator.of(context).push(
-              CupertinoPageRoute(builder: (context) => CreateTicketName()));
-        } else {
-          if (isPrivate == '0') {
-            if (ticketType[index]['id'] == '1' ||
-                ticketType[index]['2'] ||
-                ticketType[index]['3']) {
-              var myResponse = await http.Response.fromStream(response);
+//           setState(() {
+//             var extractedData = json.decode(response2.body);
+//             prefs.setString('SETUP_TICKET_PAID_TICKET_TYPE',
+//                 ticketType[index]['paid_ticket_type']['id']);
+//             prefs.setString(
+//                 'NEW_EVENT_TICKET_TYPE_ID',
+//                 ticketType[index]['paid_ticket_type_id'] == null
+//                     ? ticketType[index]['id']
+//                     : ticketType[index]['paid_ticket_type_id']);
+//             prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
+//           });
+//           Navigator.of(context).push(
+//               CupertinoPageRoute(builder: (context) => CreateTicketName()));
+//         } else {
+//           if (isPrivate == '0') {
+//             if (ticketType[index]['id'] == '1' ||
+//                 ticketType[index]['2'] ||
+//                 ticketType[index]['3']) {
+//               var myResponse = await http.Response.fromStream(response);
 
-              print('non Paid: ' + myResponse.body);
-              setState(() {
-                var extractedData = json.decode(myResponse.body);
-                prefs.setString(
-                    'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
-                prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
-              });
-              Navigator.of(context).push(
-                  CupertinoPageRoute(builder: (context) => FinishPostEvent()));
-            }
-          } else {
-            print(ticketType[index]['id']);
-            if (ticketType[index]['id'] == '1' ||
-                ticketType[index]['id'] == '2' ||
-                ticketType[index]['id'] == '3') {
-              var myResponse = await http.Response.fromStream(response);
+//               print('non Paid: ' + myResponse.body);
+//               setState(() {
+//                 var extractedData = json.decode(myResponse.body);
+//                 prefs.setString(
+//                     'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
+//                 prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
+//               });
+//               Navigator.of(context).push(
+//                   CupertinoPageRoute(builder: (context) => FinishPostEvent()));
+//             }
+//           } else {
+//             print(ticketType[index]['id']);
+//             if (ticketType[index]['id'] == '1' ||
+//                 ticketType[index]['id'] == '2' ||
+//                 ticketType[index]['id'] == '3') {
+//               var myResponse = await http.Response.fromStream(response);
 
-              print('non paid: ' + myResponse.body);
-              setState(() {
-                var extractedData = json.decode(myResponse.body);
-                prefs.setString(
-                    'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
-                prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
-              });
-              Navigator.of(context).push(CupertinoPageRoute(
-                  builder: (context) => PostEventInvitePeople(
-                    calledFrom: "new event",
-                  )));
-            }
-          }
-        }
-      }
+//               print('non paid: ' + myResponse.body);
+//               setState(() {
+//                 var extractedData = json.decode(myResponse.body);
+//                 prefs.setString(
+//                     'NEW_EVENT_TICKET_TYPE_ID', ticketType[index]['id']);
+//                 prefs.setInt('NEW_EVENT_ID', extractedData['data']['id']);
+//               });
+//               Navigator.of(context).push(CupertinoPageRoute(
+//                   builder: (context) => PostEventInvitePeople(
+//                         calledFrom: "new event",
+//                       )));
+//             }
+//           }
+//         }
+//       }
 
-      return http.Response.fromStream(response);
-    }).then((extractJson) {
-      print(prefs.getString('NEW_EVENT_ID'));
-    }).catchError((error) => print(error));
-  }
+//       return http.Response.fromStream(response);
+//     }).then((extractJson) {
+//       print(prefs.getString('NEW_EVENT_ID'));
+//     }).catchError((error) => print(error));
+//   }
 }

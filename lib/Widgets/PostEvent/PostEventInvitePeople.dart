@@ -63,7 +63,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
               },
               child: Center(
                   child: Text(
-                'back',
+                'Back',
                 style: TextStyle(
                     color: eventajaGreenTeal,
                     fontSize: ScreenUtil.instance.setSp(18)),
@@ -119,13 +119,13 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
                           ).then((invitedFromSearch) {
                             print(invitedFromSearch);
                             tempInvitedPeople.addAll(invitedFromSearch);
-                            for(int i = 0; i < invitedFromSearch.length; i++){
+                            for (int i = 0; i < invitedFromSearch.length; i++) {
                               invitedPeople.add(invitedFromSearch[i]['id']);
                             }
 
                             print(invitedPeople);
                             print(tempInvitedPeople);
-                            if(mounted) setState((){});
+                            if (mounted) setState(() {});
                           });
                         },
                         child: Material(
@@ -170,22 +170,24 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
                                 onTap: () {
                                   tempInvitedPeople.removeAt(i);
                                   invitedPeople.removeAt(i);
-                                  if (mounted) setState((){});
+                                  if (mounted) setState(() {});
                                 },
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: 15, horizontal: 15),
                                 leading: CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(tempInvitedPeople[i]['photo']),
+                                  backgroundImage: NetworkImage(
+                                      tempInvitedPeople[i]['photo']),
                                 ),
                                 title: Text(
                                   tempInvitedPeople[i]['fullName'],
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                subtitle: Text('@' + tempInvitedPeople[i]['username']),
+                                subtitle: Text(
+                                    '@' + tempInvitedPeople[i]['username']),
                                 trailing: Icon(
                                   Icons.check,
-                                  color: invitedPeople.contains(tempInvitedPeople[i]['id'])
+                                  color: invitedPeople
+                                          .contains(tempInvitedPeople[i]['id'])
                                       ? eventajaGreenTeal
                                       : Colors.grey,
                                 ),
@@ -193,46 +195,51 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
                             },
                           )
                         : Container(),
-                    data.isEmpty ? Container() : Text(
-                      'Recommended From Following',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: eventajaBlack),
-                    ),
-                    data.isEmpty ? Center(
-                      heightFactor: 2,
-                      child: EmptyState(
-                        imagePath: 'assets/icons/empty_state/profile.png',
-                        isTimeout: false,
-                        reasonText: 'You\'re not following anyone',
-                      ),
-                    ) : ColumnBuilder(
-                      itemCount: data.length == null ? 0 : data.length,
-                      itemBuilder: (context, i) {
-                        return ListTile(
-                          onTap: () {
-                            saveData(i);
-                          },
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 15),
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(data[i]['photo']),
+                    data.isEmpty
+                        ? Container()
+                        : Text(
+                            'Recommended From Following',
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: eventajaBlack),
                           ),
-                          title: Text(
-                            data[i]['fullName'],
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                    data.isEmpty
+                        ? Center(
+                            heightFactor: 2,
+                            child: EmptyState(
+                              imagePath: 'assets/icons/empty_state/profile.png',
+                              isTimeout: false,
+                              reasonText: 'You\'re not following anyone',
+                            ),
+                          )
+                        : ColumnBuilder(
+                            itemCount: data.length == null ? 0 : data.length,
+                            itemBuilder: (context, i) {
+                              return ListTile(
+                                onTap: () {
+                                  saveData(i);
+                                },
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 15),
+                                leading: CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(data[i]['photo']),
+                                ),
+                                title: Text(
+                                  data[i]['fullName'],
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Text('@' + data[i]['username']),
+                                trailing: Icon(
+                                  Icons.check,
+                                  color: invitedPeople.contains(data[i]['id'])
+                                      ? eventajaGreenTeal
+                                      : Colors.grey,
+                                ),
+                              );
+                            },
                           ),
-                          subtitle: Text('@' + data[i]['username']),
-                          trailing: Icon(
-                            Icons.check,
-                            color: invitedPeople.contains(data[i]['id'])
-                                ? eventajaGreenTeal
-                                : Colors.grey,
-                          ),
-                        );
-                      },
-                    ),
                   ],
                 ),
               ));
@@ -279,7 +286,8 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
     setState(() {
       if (invitedPeople.contains(data[index]['id'])) {
         invitedPeople.remove(data[index]['id']);
-        tempInvitedPeople.removeWhere((invPpl) => invPpl['id'] == data[index]['id']);
+        tempInvitedPeople
+            .removeWhere((invPpl) => invPpl['id'] == data[index]['id']);
       } else {
         invitedPeople.add(data[index]['id']);
         tempInvitedPeople.add({
@@ -297,7 +305,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
   Future fetchData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     isLoading = true;
-    if(mounted) setState((){});
+    if (mounted) setState(() {});
 
     String url = BaseApi().apiUrl +
         '/user/follower?X-API-KEY=$API_KEY&userID=${prefs.getString('Last User ID')}&page=1';
@@ -317,14 +325,14 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
     });
 
     if (response.statusCode == 200) {
-      
-      if(mounted) setState(() {
-        isLoading = false;
-        data = extractedData['data'];
-      });
+      if (mounted)
+        setState(() {
+          isLoading = false;
+          data = extractedData['data'];
+        });
     } else {
       isLoading = false;
-      if(mounted) setState((){});
+      if (mounted) setState(() {});
     }
   }
 }

@@ -1,11 +1,13 @@
 import 'dart:async';
-import 'dart:io'; import 'package:flushbar/flushbar.dart';
+import 'dart:io';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/PostEvent/CreateTicketReview.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +27,8 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
   File posterFile;
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -64,7 +67,9 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -192,14 +197,16 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
 
   Future cropImage(File image) async {
     File croppedImage = await ImageCropper.cropImage(
-        sourcePath: image.path,
-        aspectRatio: CropAspectRatio(
-          ratioX: 2.0,
-          ratioY: 3.0,
-        ),
-        maxWidth: 512,
-        maxHeight: 512,
-      );
+      saveLocation:
+          SavedDirectoryLocation(location: DirectorySaveLocation.external),
+      sourcePath: image.path,
+      aspectRatio: CropAspectRatio(
+        ratioX: 2.0,
+        ratioY: 3.0,
+      ),
+      maxWidth: 512,
+      maxHeight: 512,
+    );
 
     print(croppedImage.path);
     setState(() {

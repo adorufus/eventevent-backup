@@ -187,37 +187,58 @@ class PostEventPosterState extends State<PostEventPoster> {
   }
 
   imageSelectorGalery() async {
-    var galleryFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var galleryFile = await ImagePicker().getImage(source: ImageSource.gallery);
 
     print(galleryFile.path);
-    cropImage(galleryFile);
+    cropImage(File(galleryFile.path));
   }
 
   imageCaptureCamera() async {
-    var galleryFile = await ImagePicker.pickImage(
+    var galleryFile = await ImagePicker().getImage(
       source: ImageSource.camera,
     );
 
     if (!mounted) return;
 
-    cropImage(galleryFile);
+    cropImage(File(galleryFile.path));
   }
 
   Future cropImage(File image) async {
     File croppedImage = await ImageCropper.cropImage(
-        sourcePath: image.path,
-        aspectRatio: CropAspectRatio(
-          ratioX: 2.0,
-          ratioY: 3.0,
-        ),
-        maxWidth: 512,
-        maxHeight: 512,
-      );
+      saveLocation:
+          SavedDirectoryLocation(location: DirectorySaveLocation.external),
+      sourcePath: image.path,
+      androidUiSettings: AndroidUiSettings(),
+      aspectRatio: CropAspectRatio(
+        ratioX: 2.0,
+        ratioY: 3.0,
+      ),
+      maxWidth: 512,
+      maxHeight: 512,
+    );
 
     print(croppedImage.path);
     setState(() {
       posterFile = croppedImage;
     });
+  }
+
+  Future<void> checkForLostImageData() async {
+    final LostData response = await ImagePicker().getLostData();
+
+    if (response.isEmpty) {
+      print("lost data empty");
+      return;
+    } else {
+      if (response.file != null) {
+        print("lost data found");
+        print(response.file.path);
+        posterFile = File(response.file.path);
+        if (mounted) setState(() {});
+      } else {
+        print(response.exception);
+      }
+    }
   }
 
   void navigateToNextStep() async {
@@ -231,13 +252,15 @@ class PostEventPosterState extends State<PostEventPoster> {
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
     } else {
-      setState(() {
-        prefs.setString('POST_EVENT_POSTER', posterFile.path);
+      checkForLostImageData().then((_) {
+        setState(() {
+          prefs.setString('POST_EVENT_POSTER', posterFile.path);
+        });
+        Navigator.push(
+            context,
+            CupertinoPageRoute(
+                builder: (BuildContext context) => PostEventMap()));
       });
-      Navigator.push(
-          context,
-          CupertinoPageRoute(
-              builder: (BuildContext context) => PostEventMap()));
     }
   }
 }

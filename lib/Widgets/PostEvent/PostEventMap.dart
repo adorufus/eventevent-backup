@@ -44,9 +44,7 @@ class PostEventMapState extends State<PostEventMap> {
         builder: (context) => PlacePicker(
             'AIzaSyDO-ES5Iy3hOfiwz-IMQ-tXhOtH9d01RwI',
             displayLocation: LatLng(
-                currentLocation == null
-                    ? -6.1753924
-                    : currentLocation.latitude,
+                currentLocation == null ? -6.1753924 : currentLocation.latitude,
                 currentLocation == null
                     ? 106.8249641
                     : currentLocation.longitude))));
@@ -194,10 +192,11 @@ class PostEventMapState extends State<PostEventMap> {
     initPlatformState();
     locationSubcription =
         location.onLocationChanged().listen((LocationData result) {
-      setState(() {
-        currentLocation = result;
-        print(currentLocation.latitude);
-      });
+      if (mounted)
+        setState(() {
+          currentLocation = result;
+          print(currentLocation.latitude);
+        });
     });
   }
 

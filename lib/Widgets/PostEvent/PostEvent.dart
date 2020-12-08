@@ -282,7 +282,9 @@ class PostEvent2State extends State<PostEvent2> {
                                         fit: BoxFit.fill,
                                       ),
                                     ),
-                                    SizedBox(height: 10,)
+                                    SizedBox(
+                                      height: 10,
+                                    )
                                   ],
                                 ),
                                 SizedBox(
@@ -315,7 +317,10 @@ class PostEvent2State extends State<PostEvent2> {
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(40),
                                 ),
-                                Icon(Icons.arrow_forward_ios,color: Colors.grey,)
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.grey,
+                                )
                                 // isPrivateChecked == null ||
                                 //         isPrivateChecked == true
                                 //     ? Container()
@@ -357,7 +362,9 @@ class PostEvent2State extends State<PostEvent2> {
                                         fit: BoxFit.fill,
                                       ),
                                     ),
-                                    SizedBox(height: 10,)
+                                    SizedBox(
+                                      height: 10,
+                                    )
                                   ],
                                 ),
                                 SizedBox(
@@ -390,7 +397,10 @@ class PostEvent2State extends State<PostEvent2> {
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(40),
                                 ),
-                                Icon(Icons.arrow_forward_ios,color: Colors.grey,)
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.grey,
+                                )
                                 // isPrivateChecked == null ||
                                 //         isPrivateChecked == false
                                 //     ? Container()
@@ -595,13 +605,17 @@ class PostEvent3State extends State<PostEvent3> {
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
     } else {
+      String formatedDay = _selectedDate.day.toString().length == 1
+          ? '0' + _selectedDate.day.toString()
+          : _selectedDate.day.toString();
+
       prefs.setString(
           'POST_EVENT_START_DATE',
           _selectedDate.year.toString() +
               '-' +
               _selectedDate.month.toString() +
               '-' +
-              _selectedDate.day.toString());
+              formatedDay);
       Navigator.push(
           context,
           CupertinoPageRoute(
@@ -776,13 +790,17 @@ class PostEvent4State extends State<PostEvent4> {
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
     } else {
+      String formatedDay = _selectedDate.day.toString().length == 1
+          ? '0' + _selectedDate.day.toString()
+          : _selectedDate.day.toString();
+
       prefs.setString(
           'POST_EVENT_END_DATE',
           _selectedDate.year.toString() +
               '-' +
               _selectedDate.month.toString() +
               '-' +
-              _selectedDate.day.toString());
+              formatedDay);
       Navigator.push(
           context, CupertinoPageRoute(builder: (context) => PostEvent5()));
       print(_selectedDate.day);

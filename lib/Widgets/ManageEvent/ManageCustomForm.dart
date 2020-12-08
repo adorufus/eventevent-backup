@@ -53,7 +53,7 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
             context,
             MaterialPageRoute(
                 builder: (context) => ManageCustomForm(
-                      from: "createEvent",
+                      from: widget.from,
                       eventId: widget.eventId,
                     )));
       }
@@ -197,11 +197,20 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
               SizedBox(
                 height: ScreenUtil.instance.setWidth(50),
               ),
-              Image.asset('assets/drawable/use_custom_form.png', scale: 3,colorBlendMode: BlendMode.dstIn, color: Colors.white.withOpacity(.5),),
+              Image.asset(
+                'assets/drawable/use_custom_form.png',
+                scale: 3,
+                colorBlendMode: BlendMode.dstIn,
+                color: Colors.white.withOpacity(.5),
+              ),
               SizedBox(
                 height: ScreenUtil.instance.setWidth(12),
               ),
-              Text('Do you want to use custom form for this event?', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey),),
+              Text(
+                'Do you want to use custom form for this event?',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey),
+              ),
               SizedBox(
                 height: ScreenUtil.instance.setWidth(30),
               ),
@@ -215,7 +224,11 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
                         onChanged: (int i) => setState(() => __curValue = i),
                         value: 1,
                       ),
-                      Text('Yes', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),),
+                      Text(
+                        'Yes',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 26),
+                      ),
                       SizedBox(
                         width: ScreenUtil.instance.setWidth(80),
                       ),
@@ -227,7 +240,9 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
                         }),
                         value: 0,
                       ),
-                      Text('No', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26))
+                      Text('No',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 26))
                     ],
                   ))
             ],
@@ -267,6 +282,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
 
   Future createCustomForm() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("event id: " + widget.eventId);
 
     Map<String, dynamic> data = {
       'X-API-KEY': API_KEY,
@@ -299,6 +315,8 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
     print(data);
     print('creating');
 
+    print("navigator from" + widget.from);
+
     try {
       Response response = await dio.post('/custom_form/create',
           options: Options(headers: {
@@ -309,7 +327,10 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
 
       print(response.statusCode);
       print(response.data);
+
+      var extractedData = json.decode(response.data);
       if (response.statusCode == 200 || response.statusCode == 201) {
+        print("navigator from" + widget.from);
         if (widget.from == "createEvent") {
           Navigator.push(
               context,
@@ -321,6 +342,14 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
           Navigator.pop(context);
           Navigator.pop(context);
           Navigator.pop(context);
+
+          Flushbar(
+            backgroundColor: Colors.red,
+            animationDuration: Duration(milliseconds: 500),
+            duration: Duration(seconds: 3),
+            flushbarPosition: FlushbarPosition.TOP,
+            message: extractedData['desc'],
+          ).show(context);
         }
       }
     } catch (e) {
@@ -331,7 +360,13 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
         var extractedData = json.decode(e.response.data);
         if (extractedData['desc'] ==
             'Question already created, you must use update\/delete instead') {
-//          updateCustomForm();
+          Flushbar(
+            backgroundColor: Colors.red,
+            animationDuration: Duration(milliseconds: 500),
+            duration: Duration(seconds: 3),
+            flushbarPosition: FlushbarPosition.TOP,
+            message: extractedData['desc'],
+          ).show(context);
         }
       }
     }
@@ -394,10 +429,11 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                   builder: (context) => PostEventInvitePeople(
                         calledFrom: "new event",
                       )));
+        } else {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
         }
-        Navigator.pop(context);
-        Navigator.pop(context);
-        Navigator.pop(context);
       }
     } catch (e) {
       if (e is DioError) {
@@ -844,7 +880,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
     });
   }
 
-  int multipleFormCount = 0;
+  int multipleFormCount = 2;
 
   Widget multipleFormat() {
     return StatefulBuilder(
@@ -889,14 +925,14 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                 if (multipleFormCount < textEditingControllers.length) {
                   textEditingControllers.length = 0;
                 }
-                print('multiple form count' + multipleFormCount.toString());
+                print('multiple form count ' + multipleFormCount.toString());
                 for (int i = 0; i < multipleFormCount; i++) {
                   setState(() {
                     textEditingControllers.add(TextEditingController());
                   });
                 }
 
-                if (isEditForm = true) {
+                if (isEditForm == true) {
                   print('editing');
                   for (int i = 0; i < textEditingControllers.length; i++) {
                     if (textEditingControllers.length >
@@ -977,6 +1013,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                     }
                     if (simpleQuestionController.text != null) {
                       List questions = [];
+                      print(isEditForm);
                       if (isEditForm == true) {
                         setState(() {
                           questions.addAll(currentQuestionList);
