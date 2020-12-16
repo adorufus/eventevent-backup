@@ -709,7 +709,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                         child: SizedBox(),
                       ),
                       Text(
-                        'Rp. ' + (int.parse(price) + fee).toString(),
+                        'Rp. ' + price,
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontSize: ScreenUtil.instance.setSp(18),
@@ -788,8 +788,8 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
     if (_curValue == 0) {
       setState(() {
         ticketPaidBy = 'owner';
-        finalPrice = (int.parse(price) - fee).toString();
-        merchantPrice = price;
+        finalPrice = price;
+        merchantPrice = (int.parse(price) - fee).toString();
       });
     } else if (_curValue == 1) {
       setState(() {
@@ -800,8 +800,8 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
     } else if (_curValue == 2) {
       setState(() {
         ticketPaidBy = 'op1';
-        finalPrice = (int.parse(price) + 10000).toString();
-        merchantPrice = price;
+        finalPrice = price;
+        merchantPrice = (int.parse(price) + 10000).toString();
       });
     }
 

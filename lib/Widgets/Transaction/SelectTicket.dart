@@ -143,13 +143,24 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                         'paid_seating') {
                   if (ticketListData[i]['availableTicketStatus'] == '1') {
                     if (ticketListData[i]['final_price'] == '0') {
-                      itemColor = Color(0xFFFFAA00);
-                      ticketPrice = 'Free Limited';
-                    } else if (int.parse(ticketListData[i]['final_price']) >
+                        itemColor = Color(0xFFFFAA00);
+                        ticketPrice = 'Free Limited';
+                      } else if (int.parse(ticketListData[i]['final_price']) >
                         0) {
-                      itemColor = Color(0xFF34B323);
-                      ticketPrice = 'Rp. ' + ticketListData[i]['final_price'];
-                    }
+                        itemColor = Color(0xFF34B323);
+                        ticketPrice = 'Rp. ' + ticketListData[i]['final_price'];
+                      }
+                  //  if(ticketListData[i]['fee_paid_by'] == 'attandee'){
+                      
+                  //  } else {
+                  //    if (ticketListData[i]['merchant_price'] == '0') {
+                  //       itemColor = Color(0xFFFFAA00);
+                  //       ticketPrice = 'Free Limited';
+                  //     } else if (int.parse(ticketListData[i]['merchant_price']) >0) {
+                  //       itemColor = Color(0xFF34B323);
+                  //       ticketPrice = 'Rp. ' + ticketListData[i]['merchant_price'];
+                  //     }
+                  //  }
                   }
 
                   if (ticketListData[i]['is_single_ticket'] == '1' &&

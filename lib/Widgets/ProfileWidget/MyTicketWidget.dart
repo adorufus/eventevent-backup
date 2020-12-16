@@ -142,6 +142,12 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                       String ticketStatusText;
 
                       if (ticketDetailData[i]['usedStatus'] == 'available') {
+                        if (ticketDetailData[i]['paid_ticket_type']['type'] ==
+                            'free_live_stream') {
+                          ticketColor = eventajaGreenTeal;
+                          ticketStatusText = 'Streaming';
+                        }
+
                         if (ticketDetailData[i].containsKey("livestream")) {
                           if (ticketDetailData[i]['livestream']
                                   ['streaming_type'] ==
@@ -195,6 +201,13 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                         ticketStatus = 'used';
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'streaming') {
+                        if (ticketDetailData[i]['paid_ticket_type']['type'] ==
+                                'free_live_stream' ||
+                            ticketDetailData[i]['paid_ticket_type']['type'] ==
+                                'paid_live_stream') {
+                          ticketColor = eventajaGreenTeal;
+                          ticketStatusText = 'Streaming';
+                        }
                         if (ticketDetailData[i].containsKey("livestream")) {
                           if (ticketDetailData[i]['livestream']
                                   ['streaming_type'] ==
@@ -311,6 +324,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                                 ticketDesc: ticketDetailData[i]['event']
                                     ['name'],
                                 ticketID: ticketDetailData[i]['paid_ticket_id'],
+                                qrScanTicketId: ticketDetailData[i]['id'],
                                 usedStatusName: ticketStatusText,
                                 zoomId: ticketDetailData[i]
                                         .containsKey("livestream")

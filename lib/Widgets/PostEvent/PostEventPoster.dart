@@ -205,8 +205,8 @@ class PostEventPosterState extends State<PostEventPoster> {
 
   Future cropImage(File image) async {
     File croppedImage = await ImageCropper.cropImage(
-      saveLocation:
-          SavedDirectoryLocation(location: DirectorySaveLocation.external),
+      // saveLocation:
+      //     SavedDirectoryLocation(location: DirectorySaveLocation.external),
       sourcePath: image.path,
       androidUiSettings: AndroidUiSettings(),
       aspectRatio: CropAspectRatio(

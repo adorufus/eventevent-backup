@@ -2480,9 +2480,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     builder: (BuildContext
                                                             context) =>
                                                         ShowQr(
-                                                      qrUrl: widget.detailData[
-                                                              'qrcode']
-                                                          ['secure_url'],
+                                                      qrUrl: prefs.getString('QR_URI'),
                                                       eventName: widget
                                                           .detailData['name'],
                                                     ),

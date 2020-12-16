@@ -197,8 +197,8 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
 
   Future cropImage(File image) async {
     File croppedImage = await ImageCropper.cropImage(
-      saveLocation:
-          SavedDirectoryLocation(location: DirectorySaveLocation.external),
+      // saveLocation:
+      //     SavedDirectoryLocation(location: DirectorySaveLocation.external),
       sourcePath: image.path,
       aspectRatio: CropAspectRatio(
         ratioX: 2.0,

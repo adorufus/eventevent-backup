@@ -74,6 +74,7 @@ class UseTicket extends StatefulWidget {
   final ticketEndTime;
   final ticketDesc;
   final ticketID;
+  final qrScanTicketId;
   final eventId;
   final usedStatusName;
   final livestreamUrl;
@@ -93,6 +94,7 @@ class UseTicket extends StatefulWidget {
     this.ticketEndTime,
     this.ticketDesc,
     this.ticketID,
+    this.qrScanTicketId,
     this.eventId,
     this.usedStatusName,
     this.livestreamUrl,
@@ -343,7 +345,7 @@ class UseTicketState extends State<UseTicket> {
                                 }, body: {
                                   'X-API-KEY': API_KEY,
                                   'qrData': _scanBarcode,
-                                  'ticketID': widget.ticketID
+                                  'ticketID': widget.qrScanTicketId
                                 });
 
                                 var extractedData = json.decode(response.body);
