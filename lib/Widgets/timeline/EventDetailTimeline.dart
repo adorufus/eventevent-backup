@@ -82,7 +82,7 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
               : impressionData.containsValue(currentUserId) == true
                   ? true
                   : false;
-                  
+
           print('isLoved: ' + _isLoved.toString());
           _loveCount = timelineList[i]['impression']['data'].length;
 
@@ -399,7 +399,9 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
                                 if (_isLoved == false) {
                                   _loveCount += 1;
                                   _isLoved = true;
-                                  doLove(widget.id, '6', timelineList[i]['type']).then((response) {
+                                  doLove(widget.id, '6',
+                                          timelineList[i]['type'])
+                                      .then((response) {
                                     print(response.body);
                                     print(response.statusCode);
                                   });
@@ -407,7 +409,13 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
                                 } else {
                                   _loveCount -= 1;
                                   _isLoved = false;
-                                  unLove(timelineList[i]['impression']['data'].length == 0 ? '' : impressionData['id'], timelineList[i]['type']);
+                                  unLove(
+                                      timelineList[i]['impression']['data']
+                                                  .length ==
+                                              0
+                                          ? ''
+                                          : impressionData['id'],
+                                      timelineList[i]['type']);
                                   doRefresh();
                                 }
                               });
@@ -435,8 +443,12 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
                                       scale: 3.5,
                                     ),
                                     SizedBox(
-                                        width: ScreenUtil.instance.setWidth(_loveCount < 1 ? 0 : 5)),
-                                    Text(_loveCount < 1 ? '' : _loveCount.toString(),
+                                        width: ScreenUtil.instance
+                                            .setWidth(_loveCount < 1 ? 0 : 5)),
+                                    Text(
+                                        _loveCount < 1
+                                            ? ''
+                                            : _loveCount.toString(),
                                         style: TextStyle(
                                             color: Color(
                                                 0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
@@ -470,8 +482,7 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
                                               0xFF8A8A8B))) //timelineList[i]['impression']['data'] == null ? '0' : timelineList[i]['impression']['data']
                                 ]),
                           ),
-                          SizedBox(
-                              width: _loveCount > 99 ? 100 : 150),
+                          SizedBox(width: _loveCount > 99 ? 100 : 150),
                           GestureDetector(
                             onTap: () async {
                               SharedPreferences prefs =
@@ -594,67 +605,70 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
             SizedBox(height: ScreenUtil.instance.setWidth(19)),
             Divider(),
             SizedBox(height: ScreenUtil.instance.setWidth(16)),
-            postType == 'event' || postType == 'love' ? Container() : GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => EditPost(
-                              isVideo: postType == 'video' ? true : false,
-                              postId: id,
-                              thumbnailPath: imageUrl,
-                            ))).then((value) {
-                  setState(() {
-                    isLoading = true;
-                    doRefresh();
-                  });
-                });
-              },
-              child: Container(
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Edit',
-                          style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(16),
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF40D7FF)),
-                        ),
-                      ],
+            postType == 'event' || postType == 'love'
+                ? Container()
+                : GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditPost(
+                                    isVideo: postType == 'video' ? true : false,
+                                    postId: id,
+                                    thumbnailPath: imageUrl,
+                                  ))).then((value) {
+                        setState(() {
+                          isLoading = true;
+                          doRefresh();
+                        });
+                      });
+                    },
+                    child: Container(
+                      color: Colors.white,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Edit',
+                                style: TextStyle(
+                                    fontSize: ScreenUtil.instance.setSp(16),
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF40D7FF)),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            height: ScreenUtil.instance.setWidth(30),
+                            width: ScreenUtil.instance.setWidth(30),
+                            child:
+                                Image.asset('assets/icons/icon_apps/edit.png'),
+                          )
+                          // Container(
+                          //   height: ScreenUtil.instance.setWidth(44),
+                          //   width: ScreenUtil.instance.setWidth(50),
+                          //   decoration: BoxDecoration(
+                          //       image: DecorationImage(
+                          //           image: AssetImage(
+                          //               'assets/icons/page_post_media.png'),
+                          //           fit: BoxFit.fill),
+                          //       borderRadius: BorderRadius.circular(11),
+                          //       boxShadow: <BoxShadow>[
+                          //         BoxShadow(
+                          //             blurRadius: 10,
+                          //             color: Colors.grey
+                          //                 .withOpacity(0.3),
+                          //             spreadRadius: .5)
+                          //       ]),
+                          // )
+                        ],
+                      ),
                     ),
-                    Container(
-                      height: ScreenUtil.instance.setWidth(30),
-                      width: ScreenUtil.instance.setWidth(30),
-                      child: Image.asset('assets/icons/icon_apps/edit.png'),
-                    )
-                    // Container(
-                    //   height: ScreenUtil.instance.setWidth(44),
-                    //   width: ScreenUtil.instance.setWidth(50),
-                    //   decoration: BoxDecoration(
-                    //       image: DecorationImage(
-                    //           image: AssetImage(
-                    //               'assets/icons/page_post_media.png'),
-                    //           fit: BoxFit.fill),
-                    //       borderRadius: BorderRadius.circular(11),
-                    //       boxShadow: <BoxShadow>[
-                    //         BoxShadow(
-                    //             blurRadius: 10,
-                    //             color: Colors.grey
-                    //                 .withOpacity(0.3),
-                    //             spreadRadius: .5)
-                    //       ]),
-                    // )
-                  ],
-                ),
-              ),
-            )
+                  )
           ],
         ),
       ),
@@ -874,7 +888,7 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
       'id': postId,
       'impressionID': impressionID
     }, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session'),
     });
 
@@ -910,7 +924,7 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
     }
 
     final response = await http.delete(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'X-API-KEY': API_KEY,
       'cookie': prefences.getString('Session'),
       'id': id
@@ -936,7 +950,7 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
 
     final response = await http.delete(url, headers: {
       'X-API-KEY': API_KEY,
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'id': id,
       'cookie': prefs.getString('Session')
     });
@@ -960,7 +974,7 @@ class _EventDetailTimelineState extends State<EventDetailTimeline>
         '/event_activity/list?X-API-KEY=$API_KEY&page=$currentPage&eventID=${widget.id}';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 

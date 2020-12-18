@@ -58,7 +58,7 @@ class GoogleRegisterState extends State<GoogleRegisterStart> {
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        brightness: Brightness.light,
+          brightness: Brightness.light,
           elevation: 0,
           backgroundColor: Colors.white,
           leading: GestureDetector(
@@ -269,8 +269,8 @@ class GoogleRegisterState extends State<GoogleRegisterStart> {
       'register_device': Platform.isIOS ? 'IOS' : 'android'
     };
 
-    final response = await http.post(url,
-        headers: {'Authorization': AUTHORIZATION_KEY}, body: body);
+    final response =
+        await http.post(url, headers: {'Authorization': AUTH_KEY}, body: body);
 
     if (response.statusCode == 201) {
       final responseJson = json.decode(response.body);
@@ -279,7 +279,9 @@ class GoogleRegisterState extends State<GoogleRegisterStart> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget(isRest: false,)));
+              builder: (BuildContext context) => DashboardWidget(
+                    isRest: false,
+                  )));
       return Register.fromJson(responseJson);
     } else if (response.statusCode == 400) {
       final responseJson = json.decode(response.body);

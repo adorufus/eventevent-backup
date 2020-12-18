@@ -319,7 +319,10 @@ class _CollectionPageState extends State<CollectionPage> {
 
                                 if (eventByCategoryList[i]['ticket_type']
                                             ['type'] ==
-                                        'paid' || eventByCategoryList[i]['ticket_type']['type'] == "paid_live_stream" ||
+                                        'paid' ||
+                                    eventByCategoryList[i]['ticket_type']
+                                            ['type'] ==
+                                        "paid_live_stream" ||
                                     eventByCategoryList[i]['ticket_type']
                                             ['type'] ==
                                         'paid_seating') {
@@ -453,13 +456,13 @@ class _CollectionPageState extends State<CollectionPage> {
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': preferences.getString('Session')
       };
     }
@@ -496,13 +499,13 @@ class _CollectionPageState extends State<CollectionPage> {
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': preferences.getString('Session')
       };
     }

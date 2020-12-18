@@ -195,7 +195,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
 
     final response = await http.get(url,
         headers: ({
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': prefs.getString('Session')
         }));
 

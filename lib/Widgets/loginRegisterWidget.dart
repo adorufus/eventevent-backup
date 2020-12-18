@@ -49,11 +49,12 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
   String googleTokenID;
 
   void initiateFacebookLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();   var facebookLogin = FacebookLogin();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var facebookLogin = FacebookLogin();
     facebookLogin.loginBehavior = FacebookLoginBehavior.webViewOnly;
-    var facebookLoginResult = await facebookLogin.logInWithReadPermissions(
-        ['email', 'public_profile']);
-        // 'user_friends', 'user_gender'
+    var facebookLoginResult = await facebookLogin
+        .logInWithReadPermissions(['email', 'public_profile']);
+    // 'user_friends', 'user_gender'
 
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.loggedIn:
@@ -123,7 +124,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
     final response = await http.get(
       url,
       headers: {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
       },
     );
 
@@ -159,8 +160,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
   Future goLoginFb(String fbToken) async {
     String url =
         BaseApi().apiUrl + '/signin/facebook?X-API-KEY=$API_KEY&token=$fbToken';
-    final response =
-        await http.get(url, headers: {'Authorization': AUTHORIZATION_KEY});
+    final response = await http.get(url, headers: {'Authorization': AUTH_KEY});
 
     print(response.statusCode);
     print(response.body);
@@ -331,8 +331,9 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           GestureDetector(
-                            onTap: () async{
-                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                            onTap: () async {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
                               prefs.setBool('isUsingFacebook', false);
 
                               Navigator.push(
@@ -373,7 +374,8 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                           SizedBox(width: ScreenUtil.instance.setWidth(20)),
                           GestureDetector(
                             onTap: () async {
-                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
                               prefs.setBool('isUsingFacebook', false);
                               Navigator.push(
                                   context,
@@ -505,59 +507,70 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                         ),
                       ),
                     ),
-                    Platform.isAndroid ? Container() : Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 25, vertical: 15),
-                      child: SignInWithAppleButton(
-                        onPressed: () async {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          LoginHandler.processAppleLogin().then((callback) {
-                            var extractedData =
-                                json.decode(callback['response'].body);
+                    Platform.isAndroid
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 15),
+                            child: SignInWithAppleButton(
+                              onPressed: () async {
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                LoginHandler.processAppleLogin()
+                                    .then((callback) {
+                                  var extractedData =
+                                      json.decode(callback['response'].body);
 
-                            if (callback['response'].statusCode == 201 ||
-                                callback['response'].statusCode == 200) {
-                              prefs.setString('Session',
-                                  callback['response'].headers['set-cookie']);
-                                  print("Cookie set" + prefs.getString('Session'));
-                              prefs.setString(
-                                  'Last User ID', extractedData['data']['id']);
-                              prefs.setBool('isUsingGoogle', false);
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          DashboardWidget(
+                                  if (callback['response'].statusCode == 201 ||
+                                      callback['response'].statusCode == 200) {
+                                    prefs.setString(
+                                        'Session',
+                                        callback['response']
+                                            .headers['set-cookie']);
+                                    print("Cookie set" +
+                                        prefs.getString('Session'));
+                                    prefs.setString('Last User ID',
+                                        extractedData['data']['id']);
+                                    prefs.setBool('isUsingGoogle', false);
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                DashboardWidget(
+                                                  isRest: false,
+                                                )));
+                                  } else if (callback['response'].statusCode ==
+                                      400) {
+                                    if (extractedData['desc'] ==
+                                        "User is not register") {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => RegisterApple(
+                                            appleData: callback['appleData'],
                                             isRest: false,
-                                          )));
-                            } else if (callback['response'].statusCode == 400) {
-                              if (extractedData['desc'] ==
-                                  "User is not register") {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => RegisterApple(appleData: callback['appleData'], isRest: false,),
-                                  ),
-                                );
-                              }
-                            }
-                          }).catchError((e){
-                            print(e);
-                            Flushbar(
-                              animationDuration: Duration(milliseconds: 500),
-                              duration: Duration(seconds: 3),
-                              backgroundColor: Colors.red,
-                              flushbarPosition: FlushbarPosition.TOP,
-                              message: e.toString(),
-                            ).show(context);
-                          });
-                        },
-                        height: 44,
-                        style: SignInWithAppleButtonStyle.whiteOutlined,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                }).catchError((e) {
+                                  print(e);
+                                  Flushbar(
+                                    animationDuration:
+                                        Duration(milliseconds: 500),
+                                    duration: Duration(seconds: 3),
+                                    backgroundColor: Colors.red,
+                                    flushbarPosition: FlushbarPosition.TOP,
+                                    message: e.toString(),
+                                  ).show(context);
+                                });
+                              },
+                              height: 44,
+                              style: SignInWithAppleButtonStyle.whiteOutlined,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
                     Padding(
                       padding: EdgeInsets.only(top: 15, left: 5, right: 5),
                       child: Row(

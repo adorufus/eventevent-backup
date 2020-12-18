@@ -264,7 +264,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
 
     final response = await http.post(url,
         headers: {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': prefs.getString('Session')
         },
         body: body);
@@ -313,7 +313,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
 
     final response = await http.get(url,
         headers: ({
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': prefs.getString('Session')
         }));
 

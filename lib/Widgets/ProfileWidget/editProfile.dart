@@ -172,11 +172,17 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
         SizedBox(
           height: ScreenUtil.instance.setWidth(30),
         ),
-        userData == null ? HomeLoadingScreen().basicSettingsLoading(context, eventajaGreenTeal) : basicSettings(),
+        userData == null
+            ? HomeLoadingScreen()
+                .basicSettingsLoading(context, eventajaGreenTeal)
+            : basicSettings(),
         SizedBox(
           height: ScreenUtil.instance.setWidth(20),
         ),
-        userData == null ? HomeLoadingScreen().contactSettingsLoading(context, eventajaGreenTeal) : contactSettings(),
+        userData == null
+            ? HomeLoadingScreen()
+                .contactSettingsLoading(context, eventajaGreenTeal)
+            : contactSettings(),
         SizedBox(
           height: ScreenUtil.instance.setWidth(20),
         )
@@ -191,19 +197,21 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
       },
       child: Column(
         children: <Widget>[
-          userData == null ? HomeLoadingScreen().EditProfilePictureLoading() : Container(
-            height: ScreenUtil.instance.setWidth(200),
-            width: ScreenUtil.instance.setWidth(200),
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                    image: pictureUri == null
-                        ? AssetImage('assets/white.png')
-                        : croppedProfilePicture == null
-                            ? NetworkImage(pictureUri)
-                            : FileImage(croppedProfilePicture),
-                    fit: BoxFit.cover)),
-          ),
+          userData == null
+              ? HomeLoadingScreen().EditProfilePictureLoading()
+              : Container(
+                  height: ScreenUtil.instance.setWidth(200),
+                  width: ScreenUtil.instance.setWidth(200),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: pictureUri == null
+                              ? AssetImage('assets/white.png')
+                              : croppedProfilePicture == null
+                                  ? NetworkImage(pictureUri)
+                                  : FileImage(croppedProfilePicture),
+                          fit: BoxFit.cover)),
+                ),
           SizedBox(
             height: ScreenUtil.instance.setWidth(30),
             child: Row(
@@ -644,7 +652,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
       Response response = await dio.post(
         userProfileAPI,
         options: Options(
-          headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session},
+          headers: {'Authorization': AUTH_KEY, 'cookie': session},
           responseType: ResponseType.plain,
         ),
         data: FormData.fromMap(
@@ -661,7 +669,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
             'photo': croppedProfilePicture == null
                 ? ''
                 : await MultipartFile.fromFile(croppedProfilePicture.path,
-                    filename: "eventevent-profilepicture-${DateTime.now().toString()}.jpg",
+                    filename:
+                        "eventevent-profilepicture-${DateTime.now().toString()}.jpg",
                     contentType: MediaType('image', 'jpg'))
           },
         ),
@@ -683,7 +692,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
           Navigator.pop(context);
         });
       } else {
-        setState((){
+        setState(() {
           isLoading = false;
         });
         print(response.data);

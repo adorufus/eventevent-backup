@@ -5,7 +5,8 @@ import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eventevent/helper/ClevertapHandler.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,7 +37,8 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -50,10 +52,17 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
               : Builder(
                   builder: (BuildContext context) {
                     return GestureDetector(
-                      onTap: (){
-                        //ClevertapHandler.logCategoryView(categoryData['name']);
-                        Navigator.push(context, MaterialPageRoute(settings: RouteSettings(name: 'CategoryList'), builder: (context) => CategoryPage(isRest: widget.isRest, categoryId: categoryData['id'],)));
-                      },
+                        onTap: () {
+                          //ClevertapHandler.logCategoryView(categoryData['name']);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  settings: RouteSettings(name: 'CategoryList'),
+                                  builder: (context) => CategoryPage(
+                                        isRest: widget.isRest,
+                                        categoryId: categoryData['id'],
+                                      )));
+                        },
                         child: SizedBox(
                             height: ScreenUtil.instance.setWidth(85),
                             width: ScreenUtil.instance.setWidth(80),
@@ -81,11 +90,13 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
                                           categoryData['logo'],
                                         ))),
                                   ),
-                                  SizedBox(height: ScreenUtil.instance.setWidth(9)),
+                                  SizedBox(
+                                      height: ScreenUtil.instance.setWidth(9)),
                                   Text(
                                     categoryData['name'],
                                     style: TextStyle(
-                                        fontSize: ScreenUtil.instance.setSp(10), color: Color(0xFF8A8A8B)),
+                                        fontSize: ScreenUtil.instance.setSp(10),
+                                        color: Color(0xFF8A8A8B)),
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.center,
                                   )
@@ -101,7 +112,9 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
       height: ScreenUtil.instance.setWidth(220),
       padding: EdgeInsets.symmetric(horizontal: 0),
       width: MediaQuery.of(context).size.width,
-      child: categoryEventData == null ? HomeLoadingScreen().categoryLoading() : ListView(
+      child: categoryEventData == null
+          ? HomeLoadingScreen().categoryLoading()
+          : ListView(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               children: <Widget>[
@@ -119,27 +132,24 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
   Future fetchCategoryEvent() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    
-
     String baseUrl = '';
     Map<String, String> headers;
 
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': preferences.getString('Session')
       };
     }
 
-    final categoryApi =
-        baseUrl + '/category/list?X-API-KEY=${API_KEY}&page=1';
+    final categoryApi = baseUrl + '/category/list?X-API-KEY=${API_KEY}&page=1';
     final response = await http.get(categoryApi, headers: headers);
 
     print(response.body);

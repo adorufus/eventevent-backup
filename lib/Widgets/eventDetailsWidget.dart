@@ -315,7 +315,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     final response = await http.delete(
       url,
       headers: {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': preferences.getString('Session'),
         'id': widget.id,
         'X-API-KEY': API_KEY,
@@ -334,7 +334,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     final response = await http.post(
       url,
       headers: {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': preferences.getString('Session')
       },
       body: {'X-API-KEY': API_KEY, 'eventID': widget.id},
@@ -2480,7 +2480,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     builder: (BuildContext
                                                             context) =>
                                                         ShowQr(
-                                                      qrUrl: prefs.getString('QR_URI'),
+                                                      qrUrl: prefs
+                                                          .getString('QR_URI'),
                                                       eventName: widget
                                                           .detailData['name'],
                                                     ),
@@ -3164,7 +3165,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
     final response = await http.delete(url, headers: {
       'cookie': prefs.getString('Session'),
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'X-API-KEY': API_KEY,
       'id': commentId
     });
@@ -3406,12 +3407,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     setState(() {
       if (widget.isRest == false) {
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': preferences.getString('Session')
         };
         baseUrl = BaseApi().apiUrl;
       } else {
-        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': SIGNATURE};
+        headers = {'Authorization': AUTH_KEY, 'signature': SIGNATURE};
         baseUrl = BaseApi().restUrl;
       }
     });
@@ -3447,12 +3448,12 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
 
       if (widget.isRest == false) {
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': prefs.getString('Session')
         };
         baseUrl = BaseApi().apiUrl;
       } else {
-        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': SIGNATURE};
+        headers = {'Authorization': AUTH_KEY, 'signature': SIGNATURE};
         baseUrl = BaseApi().restUrl;
       }
 
@@ -3479,10 +3480,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
       session = preferences.getString('Session');
       if (widget.isRest == true) {
         baseUrl = BaseApi().restUrl;
-        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': SIGNATURE};
+        headers = {'Authorization': AUTH_KEY, 'signature': SIGNATURE};
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
-        headers = {'Authorization': AUTHORIZATION_KEY, 'cookie': session};
+        headers = {'Authorization': AUTH_KEY, 'cookie': session};
       }
     });
 

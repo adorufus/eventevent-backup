@@ -251,7 +251,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
         BaseApi().apiUrl + '/ticket_transaction/list?X-API-KEY=$API_KEY&page=1';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 
@@ -280,11 +280,12 @@ class TransactionHistoryState extends State<TransactionHistory> {
   }
 
   Future<void> logEventPurchase(List paymentData, int index) async {
-    await ProcessingPayment.analytics.logEvent(name: 'purchase', parameters: <String, dynamic>{
-          'transaction_id': paymentData[index]['transaction_code'],
-          'value': int.parse(paymentData[index]['amount_detail']['total_price']),
-          'currency': "IDR",
-          'items': paymentData[index]['ticket']['ticket_name']
-        });
+    await ProcessingPayment.analytics
+        .logEvent(name: 'purchase', parameters: <String, dynamic>{
+      'transaction_id': paymentData[index]['transaction_code'],
+      'value': int.parse(paymentData[index]['amount_detail']['total_price']),
+      'currency': "IDR",
+      'items': paymentData[index]['ticket']['ticket_name']
+    });
   }
 }

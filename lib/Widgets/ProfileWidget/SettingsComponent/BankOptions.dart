@@ -18,7 +18,8 @@ class BankOptions extends StatefulWidget {
       this.userBankId,
       this.accountName,
       this.bankName,
-      this.accountNumber, this.bankIndex})
+      this.accountNumber,
+      this.bankIndex})
       : super(key: key);
 
   @override
@@ -99,7 +100,11 @@ class BankOptionsState extends State<BankOptions> {
                 builder: (context) {
                   return CupertinoAlertDialog(
                     title: Text('Warning'),
-                    content: Text('Delete this bank account?',textScaleFactor: 1.2, textWidthBasis: TextWidthBasis.longestLine,),
+                    content: Text(
+                      'Delete this bank account?',
+                      textScaleFactor: 1.2,
+                      textWidthBasis: TextWidthBasis.longestLine,
+                    ),
                     actions: <Widget>[
                       CupertinoDialogAction(
                         child: Text('No'),
@@ -146,7 +151,7 @@ class BankOptionsState extends State<BankOptions> {
     String url = BaseApi().apiUrl + '/user_bank/delete';
 
     final response = http.delete(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session'),
       'id': widget.userBankId,
       'X-API-KEY': API_KEY

@@ -52,28 +52,19 @@ class LoginHandler {
 
     print('apple data' + appleData.toString());
 
-    final response = await http.post(
-      baseUrl,
-      body: {
-        'identity_token': appleData['id_token'],
-        'user_id': appleData['user_id'],
-        'X-API-KEY': API_KEY
-      },
-      headers: {
-        'Authorization': AUTHORIZATION_KEY,
-      }
-    );
+    final response = await http.post(baseUrl, body: {
+      'identity_token': appleData['id_token'],
+      'user_id': appleData['user_id'],
+      'X-API-KEY': API_KEY
+    }, headers: {
+      'Authorization': AUTH_KEY,
+    });
 
     print(response.statusCode);
     print(response.body);
 
-    return {
-      'response': response,
-      'appleData': appleData
-    };
+    return {'response': response, 'appleData': appleData};
   }
 
-  static Future<http.Response> proccessAppleRegister() {
-
-  }
+  static Future<http.Response> proccessAppleRegister() {}
 }

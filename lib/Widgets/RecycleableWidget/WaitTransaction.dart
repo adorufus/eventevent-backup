@@ -484,7 +484,6 @@ class _WaitTransactionState extends State<WaitTransaction>
                                   left: 15, right: 7, top: 10, bottom: 10),
                               decoration: BoxDecoration(
                                   color: Colors.white,
-
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(
                                         color: Colors.grey,
@@ -582,8 +581,8 @@ class _WaitTransactionState extends State<WaitTransaction>
 
     String url = BaseApi().apiUrl +
         '/ticket_transaction/detail?transID=${widget.transactionID}&X-API-KEY=${API_KEY}';
-    final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session});
+    final response = await http
+        .get(url, headers: {'Authorization': AUTH_KEY, 'cookie': session});
 
     print(response.body);
     print(response.statusCode);

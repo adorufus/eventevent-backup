@@ -483,7 +483,7 @@ class _UserProfileTimelineState extends State<UserProfileTimeline> {
 
     final response = await http.delete(url, headers: {
       'X-API-KEY': API_KEY,
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'id': id,
       'cookie': prefs.getString('Session')
     });
@@ -501,13 +501,13 @@ class _UserProfileTimelineState extends State<UserProfileTimeline> {
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': prefs.getString('Session')
       };
     }

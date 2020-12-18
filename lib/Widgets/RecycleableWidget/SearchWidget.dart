@@ -661,13 +661,13 @@ class SearchState extends State<Search> {
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': prefs.getString('Session')
       };
     }
@@ -694,13 +694,13 @@ class SearchState extends State<Search> {
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': prefs.getString('Session')
       };
     }

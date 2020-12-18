@@ -451,34 +451,44 @@ class _MediaDetailsState extends State<MediaDetails> {
                             // ),
                             )
                         : ColumnBuilder(
-                          itemCount: mediaDetails['media_content'].length,
-                          itemBuilder: (context,i){
-                            if (mediaDetails['media_content'][i]['content_type'] == "text") {
+                            itemCount: mediaDetails['media_content'].length,
+                            itemBuilder: (context, i) {
+                              if (mediaDetails['media_content'][i]
+                                      ['content_type'] ==
+                                  "text") {
                                 return Html(
                                   defaultTextStyle:
                                       TextStyle(fontSize: 18, height: 1.5),
-                                  data: mediaDetails['media_content'][i]['content_text'],
+                                  data: mediaDetails['media_content'][i]
+                                      ['content_text'],
                                   onLinkTap: (url) {},
                                 );
-                              } else if (mediaDetails['media_content'][i]['content_type'] == 'media') {
-                                if (mediaDetails['media_content'][i]['image'] != null) {
+                              } else if (mediaDetails['media_content'][i]
+                                      ['content_type'] ==
+                                  'media') {
+                                if (mediaDetails['media_content'][i]['image'] !=
+                                    null) {
                                   return Container(
-                                    // height: 100,
-                                    // width: 200,
-                                      child: Image.network(mediaDetails['media_content'][i]['image']));
+                                      // height: 100,
+                                      // width: 200,
+                                      child: Image.network(
+                                          mediaDetails['media_content'][i]
+                                              ['image']));
                                 }
-                                
-                                if (mediaDetails['media_content'][i]['youtube'] != null) {
+
+                                if (mediaDetails['media_content'][i]
+                                        ['youtube'] !=
+                                    null) {
                                   String id = YoutubePlayer.convertUrlToId(
-                                      mediaDetails['media_content'][i]['youtube']);
+                                      mediaDetails['media_content'][i]
+                                          ['youtube']);
                                   return YoutubePlayer(
                                     controller: YoutubePlayerController(
                                       initialVideoId: id,
                                       flags: YoutubePlayerFlags(
-                                        autoPlay: false,
-                                        loop: false,
-                                        controlsVisibleAtStart: true
-                                      ),
+                                          autoPlay: false,
+                                          loop: false,
+                                          controlsVisibleAtStart: true),
                                     ),
                                   );
                                 } else {
@@ -487,8 +497,7 @@ class _MediaDetailsState extends State<MediaDetails> {
                               } else {
                                 return Container();
                               }
-                          } 
-                        )),
+                            })),
                 SizedBox(
                   height: ScreenUtil.instance.setWidth(10),
                 ),
@@ -562,7 +571,7 @@ class _MediaDetailsState extends State<MediaDetails> {
         '/user/search?X-API-KEY=$API_KEY&people=$queryString&page=1';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': preferences.getString('Session')
     });
 
@@ -591,12 +600,12 @@ class _MediaDetailsState extends State<MediaDetails> {
     setState(() {
       if (widget.isRest == true) {
         baseUrl = BaseApi().restUrl;
-        headers = {'Authorization': AUTHORIZATION_KEY, 'signature': SIGNATURE};
+        headers = {'Authorization': AUTH_KEY, 'signature': SIGNATURE};
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
         headers = {
           'Accept': 'application/json',
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': preferences.getString('Session')
         };
       }
@@ -644,10 +653,10 @@ class _MediaDetailsState extends State<MediaDetails> {
 
     Map<String, String> headers;
     if (widget.isRest == true) {
-      headers = {'Authorization': AUTHORIZATION_KEY, 'signature': SIGNATURE};
+      headers = {'Authorization': AUTH_KEY, 'signature': SIGNATURE};
     } else {
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': prefs.getString('Session')
       };
     }

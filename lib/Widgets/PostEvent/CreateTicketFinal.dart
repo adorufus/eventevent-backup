@@ -904,7 +904,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
         '/ticket_setup/post',
         options: Options(
           headers: {
-            'Authorization': AUTHORIZATION_KEY,
+            'Authorization': AUTH_KEY,
             'cookie': prefs.getString('Session')
           },
           responseType: ResponseType.plain,

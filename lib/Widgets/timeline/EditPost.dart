@@ -86,7 +86,7 @@ class EditPostState extends State<EditPost> {
                     } else {
                       Flushbar(
                         flushbarPosition: FlushbarPosition.TOP,
-                        message: response.body + ': ' + widget.imagePath ,
+                        message: response.body + ': ' + widget.imagePath,
                         backgroundColor: Colors.red,
                         duration: Duration(seconds: 3),
                         animationDuration: Duration(milliseconds: 500),
@@ -178,7 +178,7 @@ class EditPostState extends State<EditPost> {
       'id': widget.postId,
       'caption': captionController.text
     }, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 

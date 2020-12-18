@@ -41,7 +41,7 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
       Response response = await dio.post(
         '/custom_form/active',
         options: Options(headers: {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': preferences.getString('Session')
         }, responseType: ResponseType.plain),
         data: FormData.fromMap(data),
@@ -84,7 +84,7 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
       Response response = await dio.post(
         '/custom_form/inactive',
         options: Options(headers: {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': preferences.getString('Session')
         }, responseType: ResponseType.plain),
         data: FormData.fromMap(data),
@@ -320,7 +320,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
     try {
       Response response = await dio.post('/custom_form/create',
           options: Options(headers: {
-            'Authorization': AUTHORIZATION_KEY,
+            'Authorization': AUTH_KEY,
             'cookie': prefs.getString('Session')
           }, responseType: ResponseType.plain),
           data: FormData.fromMap(data));
@@ -413,7 +413,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
     try {
       Response response = await dio.post('/custom_form/update',
           options: Options(headers: {
-            'Authorization': AUTHORIZATION_KEY,
+            'Authorization': AUTH_KEY,
             'cookie': prefs.getString('Session')
           }, responseType: ResponseType.plain),
           data: FormData.fromMap(data));
@@ -1239,7 +1239,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
       Response response = await dio.get(
         '/custom_form/get?X-API-KEY=$API_KEY&id=${widget.eventId}',
         options: Options(headers: {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': preferences.getString('Session')
         }, responseType: ResponseType.plain),
       );
@@ -1278,7 +1278,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
     Response response = await dio.delete('/custom_form/delete',
         options: Options(headers: {
           'X-API-KEY': API_KEY,
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': preferences.getString('Session'),
           'id': formId
         }, responseType: ResponseType.plain));

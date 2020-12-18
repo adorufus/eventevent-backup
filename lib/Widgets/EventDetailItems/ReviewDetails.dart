@@ -244,7 +244,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
         '/event_review/list?X-API-KEY=$API_KEY&eventID=${widget.eventId}&page=1';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': sharedPreferences.getString('Session')
     });
 

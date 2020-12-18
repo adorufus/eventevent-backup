@@ -109,7 +109,7 @@ class _AfterRegisterState extends State<AfterRegister> {
       key: _scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        brightness: Brightness.light,
+          brightness: Brightness.light,
           elevation: 0,
           backgroundColor: Colors.white,
           leading: GestureDetector(
@@ -318,7 +318,7 @@ class _AfterRegisterState extends State<AfterRegister> {
       Response response = await dio.post(
         registerApiUrl,
         options: Options(
-          headers: {'Authorization': AUTHORIZATION_KEY},
+          headers: {'Authorization': AUTH_KEY},
           responseType: ResponseType.plain,
         ),
         data: FormData.fromMap(

@@ -335,7 +335,7 @@ class PrivateEventListState extends State<PrivateEventList> {
     final response = await http.get(
       uri,
       headers: {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': prefs.getString('Session')
       },
     );

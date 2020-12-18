@@ -141,11 +141,11 @@ class _WaitingGopayState extends State<WaitingGopay> {
       ),
       body: paymentData == null
           ? Center(
-            child: CupertinoActivityIndicator(
+              child: CupertinoActivityIndicator(
                 animating: true,
                 radius: 15,
               ),
-          )
+            )
           : ListView(
               children: <Widget>[
                 Container(
@@ -350,8 +350,8 @@ class _WaitingGopayState extends State<WaitingGopay> {
 
     String url = BaseApi().apiUrl +
         '/ticket_transaction/detail?transID=${widget.transactionID}&X-API-KEY=${API_KEY}';
-    final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session});
+    final response = await http
+        .get(url, headers: {'Authorization': AUTH_KEY, 'cookie': session});
 
     print(response.body);
     print(response.statusCode);

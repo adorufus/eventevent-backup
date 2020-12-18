@@ -186,9 +186,9 @@ class _CategoryPageState extends State<CategoryPage> {
                       if (eventByCategoryList[i]['ticket_type']['type'] ==
                               'paid' ||
                           eventByCategoryList[i]['ticket_type']['type'] ==
-                              'paid_seating' || eventByCategoryList[i]['ticket_type']
-                              ['type'] ==
-                          'paid_live_stream') {
+                              'paid_seating' ||
+                          eventByCategoryList[i]['ticket_type']['type'] ==
+                              'paid_live_stream') {
                         if (eventByCategoryList[i]['ticket']
                                 ['availableTicketStatus'] ==
                             '1') {
@@ -317,13 +317,13 @@ class _CategoryPageState extends State<CategoryPage> {
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': preferences.getString('Session')
       };
     }

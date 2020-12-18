@@ -297,7 +297,9 @@ class _SeeAllItemState extends State<SeeAllItem> {
 
                     if (popularEventList[i]['ticket_type']['type'] == 'paid' ||
                         popularEventList[i]['ticket_type']['type'] ==
-                            'paid_seating' || popularEventList[i]['ticket_type']['type'] == 'paid_live_stream') {
+                            'paid_seating' ||
+                        popularEventList[i]['ticket_type']['type'] ==
+                            'paid_live_stream') {
                       if (popularEventList[i]['ticket']
                               ['availableTicketStatus'] ==
                           '1') {
@@ -594,13 +596,13 @@ class _SeeAllItemState extends State<SeeAllItem> {
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': prefs.getString('Session')
       };
     }
@@ -628,13 +630,13 @@ class _SeeAllItemState extends State<SeeAllItem> {
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': prefs.getString('Session')
       };
     }

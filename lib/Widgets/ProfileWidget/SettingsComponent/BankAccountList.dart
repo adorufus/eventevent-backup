@@ -5,7 +5,8 @@ import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/SetupBankAcco
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,7 +27,8 @@ class BankAccountListState extends State<BankAccountList> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -58,70 +60,80 @@ class BankAccountListState extends State<BankAccountList> {
         width: MediaQuery.of(context).size.width,
         child: ListView(
           children: <Widget>[
-            bankList == null ? Container() : ColumnBuilder(
-              mainAxisAlignment: MainAxisAlignment.center,
-              itemCount: bankList.length == null ? 0 : bankList.length,
-              itemBuilder: (BuildContext context, i) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => BankOptions(
-                              userBankId: bankList[i]['id'],
-                              accountName: bankList[i]['account_name'],
-                              accountNumber: bankList[i]['account_number'],
-                              bankName: bankList[i]['bank_name'],
-                            )));
-                  },
-                  child: Container(
-                    height: ScreenUtil.instance.setWidth(85),
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(bottom: 3),
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+            bankList == null
+                ? Container()
+                : ColumnBuilder(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    itemCount: bankList.length == null ? 0 : bankList.length,
+                    itemBuilder: (BuildContext context, i) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      BankOptions(
+                                        userBankId: bankList[i]['id'],
+                                        accountName: bankList[i]
+                                            ['account_name'],
+                                        accountNumber: bankList[i]
+                                            ['account_number'],
+                                        bankName: bankList[i]['bank_name'],
+                                      )));
+                        },
+                        child: Container(
+                          height: ScreenUtil.instance.setWidth(85),
+                          width: MediaQuery.of(context).size.width,
+                          margin: EdgeInsets.only(bottom: 3),
+                          color: Colors.white,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              Container(
-                                  child: Text(
-                                bankList[i]['account_name'],
-                                style: TextStyle(color: Colors.grey),
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                              Container(
-                                  width: ScreenUtil.instance.setWidth(200),
-                                  child: Text(
-                                    bankList[i]['bank_name'],
-                                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(15)),
-                                    overflow: TextOverflow.ellipsis,
-                                  )),
-                              Text(
-                                bankList[i]['account_number'],
-                                style: TextStyle(
-                                    fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                        child: Text(
+                                      bankList[i]['account_name'],
+                                      style: TextStyle(color: Colors.grey),
+                                      overflow: TextOverflow.ellipsis,
+                                    )),
+                                    Container(
+                                        width:
+                                            ScreenUtil.instance.setWidth(200),
+                                        child: Text(
+                                          bankList[i]['bank_name'],
+                                          style: TextStyle(
+                                              fontSize: ScreenUtil.instance
+                                                  .setSp(15)),
+                                          overflow: TextOverflow.ellipsis,
+                                        )),
+                                    Text(
+                                      bankList[i]['account_number'],
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(18),
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
                               ),
+                              SizedBox(width: ScreenUtil.instance.setWidth(15)),
+                              Icon(
+                                Icons.navigate_next,
+                                size: 25,
+                              )
                             ],
                           ),
                         ),
-                        SizedBox(width: ScreenUtil.instance.setWidth(15)),
-                        Icon(
-                          Icons.navigate_next,
-                          size: 25,
-                        )
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
             bankList.length == 3
                 ? Container()
                 : GestureDetector(
@@ -154,7 +166,7 @@ class BankAccountListState extends State<BankAccountList> {
     String url = BaseApi().apiUrl + '/user_bank/list?X-API-KEY=$API_KEY';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 
@@ -164,10 +176,9 @@ class BankAccountListState extends State<BankAccountList> {
     if (response.statusCode == 200) {
       setState(() {
         var extractedData = json.decode(response.body);
-        if(extractedData['desc'] == "Bank Account Found!"){
+        if (extractedData['desc'] == "Bank Account Found!") {
           bankList = extractedData['data'];
-        }
-        else{}
+        } else {}
       });
     }
   }

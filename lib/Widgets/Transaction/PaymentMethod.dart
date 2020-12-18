@@ -43,7 +43,8 @@ class PaymentMethodState extends State<PaymentMethod> {
     print(paymentAmount);
   }
 
-  savePaymentInfo(String fee, String methodID, {String paymentCode, int percentFee = 0}) async {
+  savePaymentInfo(String fee, String methodID,
+      {String paymentCode, int percentFee = 0}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     prefs.setString('ticket_fee', fee);
@@ -186,7 +187,9 @@ class PaymentMethodState extends State<PaymentMethod> {
                                   );
                                 } else if (paymentMethodList[i]['id'] == '4') {
                                   savePaymentInfo(paymentMethodList[i]['fee'],
-                                      paymentMethodList[i]['id'], percentFee: int.parse(paymentMethodList[i]['percent_fee']));
+                                      paymentMethodList[i]['id'],
+                                      percentFee: int.parse(
+                                          paymentMethodList[i]['percent_fee']));
                                   print('payment method used: ' +
                                       paymentMethodList[i]['id']);
                                   Navigator.push(
@@ -194,7 +197,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           TicketReview(
-                                            ticketType: 'gopay',
+                                        ticketType: 'gopay',
                                         isCustomForm: widget.isCustomForm,
                                         customFormId: widget.customFormId,
                                         customFormList: widget.answerList,
@@ -204,20 +207,30 @@ class PaymentMethodState extends State<PaymentMethod> {
                                 }
                               } else if (paymentMethodList[i]['id'] == '9') {
                                 savePaymentInfo(paymentMethodList[i]['fee'],
-                                    paymentMethodList[i]['id'], percentFee: int.parse(paymentMethodList[i]['percent_fee']));
+                                    paymentMethodList[i]['id'],
+                                    percentFee: int.parse(
+                                        paymentMethodList[i]['percent_fee']));
                                 print('payment method used: ' +
                                     paymentMethodList[i]['id']);
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) => widget.customFormId == null || widget.answerList == null ? TicketReview(
-                                        isCustomForm: widget.isCustomForm,
-                                        ticketType: 'ovo',
-                                      ) : TicketReview(
-                                        ticketType: 'ovo',
-                                        customFormId: widget.customFormId,
-                                        isCustomForm: widget.isCustomForm,
-                                        customFormList: widget.answerList
-                                      )
-                                    ));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            widget.customFormId == null ||
+                                                    widget.answerList == null
+                                                ? TicketReview(
+                                                    isCustomForm:
+                                                        widget.isCustomForm,
+                                                    ticketType: 'ovo',
+                                                  )
+                                                : TicketReview(
+                                                    ticketType: 'ovo',
+                                                    customFormId:
+                                                        widget.customFormId,
+                                                    isCustomForm:
+                                                        widget.isCustomForm,
+                                                    customFormList:
+                                                        widget.answerList)));
                               } else if (paymentMethodList[i]['id'] == '7') {
                                 savePaymentInfo(paymentMethodList[i]['fee'],
                                     paymentMethodList[i]['id']);
@@ -243,7 +256,8 @@ class PaymentMethodState extends State<PaymentMethod> {
                               }
                             },
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 5),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 13, vertical: 5),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -287,10 +301,13 @@ class PaymentMethodState extends State<PaymentMethod> {
                                                 : NetworkImage(
                                                     paymentMethodList[i]
                                                         ['photo']),
-                                            width: paymentMethodList[i]['method'] ==
-                                  'Virtual Account' ? ScreenUtil.instance
-                                                .setWidth(200) : ScreenUtil.instance
-                                                .setWidth(150),
+                                            width: paymentMethodList[i]
+                                                        ['method'] ==
+                                                    'Virtual Account'
+                                                ? ScreenUtil.instance
+                                                    .setWidth(200)
+                                                : ScreenUtil.instance
+                                                    .setWidth(150),
                                           )),
                                         ),
                                         Expanded(child: SizedBox()),
@@ -327,25 +344,25 @@ class PaymentMethodState extends State<PaymentMethod> {
         '/payment_method/list?X-API-KEY=$API_KEY&indomaret=true';
 
     final response = await http.get(paymentMethodURI, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': session
     }).timeout(Duration(seconds: 30));
 
     print(response.body);
 
     if (response.statusCode == 200) {
-      if(!mounted) return;
+      if (!mounted) return;
       setState(() {
         var extractedData = json.decode(response.body);
         print(extractedData['data'].runtimeType);
 
-        if(extractedData['data'].runtimeType.toString() == '_InternalLinkedHashMap<String, dynamic>'){
+        if (extractedData['data'].runtimeType.toString() ==
+            '_InternalLinkedHashMap<String, dynamic>') {
           extractedData['data'].forEach((k, v) => paymentMethodList.add(v));
           print(paymentMethodList);
         } else {
           paymentMethodList = extractedData['data'];
         }
-
       });
     }
   }

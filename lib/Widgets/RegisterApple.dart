@@ -39,7 +39,8 @@ class RegisterAppleState extends State<RegisterApple> {
 
   String MIN_DATETIME = '1685-05-12';
   String MAX_DATETIME = '2020-11-25';
-  String INIT_DATETIME = '${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}';
+  String INIT_DATETIME =
+      '${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}';
 
   DateTimePickerLocale _locale = DateTimePickerLocale.en_us;
   List<DateTimePickerLocale> _locales = DateTimePickerLocale.values;
@@ -170,7 +171,7 @@ class RegisterAppleState extends State<RegisterApple> {
         ),
         TextFormField(
           controller: birthdateController,
-          onTap: (){
+          onTap: () {
             showDatePicker();
           },
           decoration: InputDecoration(
@@ -293,7 +294,7 @@ class RegisterAppleState extends State<RegisterApple> {
     }
 
     final response = await http.post(url, headers: {
-      'Authorization': AUTHORIZATION_KEY
+      'Authorization': AUTH_KEY
     }, body: {
       'X-API-KEY': API_KEY,
       'email': widget.appleData['email'],
@@ -334,7 +335,6 @@ class RegisterAppleState extends State<RegisterApple> {
           MaterialPageRoute(
               builder: (BuildContext context) => DashboardWidget(
                     isRest: false,
-                    
                   )));
       return Register.fromJson(responseJson);
     } else {

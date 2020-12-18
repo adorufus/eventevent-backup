@@ -15,7 +15,8 @@ class SeeWhosGoingInvitedWidget extends StatefulWidget {
   final peopleType;
   final isRest;
 
-  const SeeWhosGoingInvitedWidget({Key key, this.eventId, this.peopleType, this.isRest})
+  const SeeWhosGoingInvitedWidget(
+      {Key key, this.eventId, this.peopleType, this.isRest})
       : super(key: key);
   @override
   _SeeWhosGoingInvitedWidgetState createState() =>
@@ -26,7 +27,8 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
   List peopleList = [];
   int newPage = 0;
 
-  RefreshController refreshController = RefreshController(initialRefresh: false);
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
 
   void _onLoading() async {
     await Future.delayed(Duration(milliseconds: 2000));
@@ -50,15 +52,15 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
 
   @override
   void initState() {
-    fetchPeopleData().then((response){
+    fetchPeopleData().then((response) {
       print(response.statusCode);
       print(response.body);
 
       var extractedData = json.decode(response.body);
 
-      if(response.statusCode == 200){
-        setState((){
-          if(widget.peopleType == 'invited'){
+      if (response.statusCode == 200) {
+        setState(() {
+          if (widget.peopleType == 'invited') {
             peopleList = extractedData['data'][widget.peopleType];
           } else {
             peopleList = extractedData['data'][widget.peopleType]['data'];
@@ -140,7 +142,8 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
                       if (response.statusCode == 200) {
                         setState(() {
                           var extractedData = json.decode(response.body);
-                          peopleList = extractedData['data'][widget.peopleType]['data'];
+                          peopleList =
+                              extractedData['data'][widget.peopleType]['data'];
                           assert(peopleList != null);
 
                           print(peopleList);
@@ -155,7 +158,6 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
                     if (mounted) setState(() {});
                     refreshController.refreshCompleted();
                   },
-                  
                   child: ListView.builder(
                     itemCount: peopleList == null ? 0 : peopleList.length,
                     itemBuilder: (BuildContext context, i) {
@@ -172,7 +174,7 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => ProfileWidget(
-                                isRest: widget.isRest,
+                                    isRest: widget.isRest,
                                     initialIndex: 0,
                                     userId: peopleList[i]['id'],
                                   )));
@@ -206,7 +208,7 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
         currentPage += page;
       }
 
-      if(widget.peopleType == "invited") {
+      if (widget.peopleType == "invited") {
         eventIdType = 'event_id';
       } else {
         eventIdType = 'eventID';
@@ -219,13 +221,13 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': preferences.getString('Session')
       };
     }

@@ -172,7 +172,7 @@ class PostMediaState extends State<PostMedia> {
       Response response = await dio.post(
         theUrl,
         options: Options(headers: {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': prefs.getString('Session')
         }, responseType: ResponseType.plain),
         data: FormData.fromMap(data),

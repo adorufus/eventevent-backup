@@ -22,7 +22,8 @@ class LoveItem extends StatefulWidget {
     this.loveCount,
     this.commentCount,
     this.isAlreadyCommented,
-    this.isAlreadyLoved, @required this.eventId,
+    this.isAlreadyLoved,
+    @required this.eventId,
   }) : super(key: key);
 
   @override
@@ -38,7 +39,6 @@ class _LoveItemState extends State<LoveItem> {
     receiveTimeout: 10000,
     connectTimeout: 10000,
   ));
-
 
   @override
   void initState() {
@@ -61,8 +61,8 @@ class _LoveItemState extends State<LoveItem> {
     )..init(context);
 
     return GestureDetector(
-      onTap: (){
-        if(_isLoved == false){
+      onTap: () {
+        if (_isLoved == false) {
           setState(() {
             _loveCount += 1;
             _isLoved = true;
@@ -75,7 +75,10 @@ class _LoveItemState extends State<LoveItem> {
         }
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: widget.isComment == false ? _loveCount < 1 ? 7.5 : 13 : widget.commentCount == "0" ? 7.5 : 13),
+        padding: EdgeInsets.symmetric(
+            horizontal: widget.isComment == false
+                ? _loveCount < 1 ? 7.5 : 13
+                : widget.commentCount == "0" ? 7.5 : 13),
         height: ScreenUtil.instance.setWidth(30),
         decoration: BoxDecoration(
             color: Colors.white,
@@ -99,12 +102,24 @@ class _LoveItemState extends State<LoveItem> {
                     : eventajaGreenTeal,
             scale: 3.5,
           ),
-          widget.isComment == false ? _loveCount < 1 ? Container() : SizedBox(width: ScreenUtil.instance.setWidth(5)) : widget.commentCount == "0" ? Container() : SizedBox(width: ScreenUtil.instance.setWidth(5)),
-          widget.isComment == false ? _loveCount < 1 ? Container() : Text(_loveCount.toString(),
-              style: TextStyle(
-                  color: eventajaBlack, fontWeight: FontWeight.bold)) :  widget.commentCount == "0" ? Container() : Text(widget.commentCount,
-              style: TextStyle(
-                  color: eventajaBlack, fontWeight: FontWeight.bold))
+          widget.isComment == false
+              ? _loveCount < 1
+                  ? Container()
+                  : SizedBox(width: ScreenUtil.instance.setWidth(5))
+              : widget.commentCount == "0"
+                  ? Container()
+                  : SizedBox(width: ScreenUtil.instance.setWidth(5)),
+          widget.isComment == false
+              ? _loveCount < 1
+                  ? Container()
+                  : Text(_loveCount.toString(),
+                      style: TextStyle(
+                          color: eventajaBlack, fontWeight: FontWeight.bold))
+              : widget.commentCount == "0"
+                  ? Container()
+                  : Text(widget.commentCount,
+                      style: TextStyle(
+                          color: eventajaBlack, fontWeight: FontWeight.bold))
         ]),
       ),
     );
@@ -113,25 +128,20 @@ class _LoveItemState extends State<LoveItem> {
   Future doLove() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    try{
-      Map<String, dynamic> data = {
-        'X-API-KEY': API_KEY,
-        'id': widget.eventId
-      };
+    try {
+      Map<String, dynamic> data = {'X-API-KEY': API_KEY, 'id': widget.eventId};
 
-      Response response = await dio.post(
-        '/event_love/post',
-        options: Options(
+      Response response = await dio.post('/event_love/post',
+          options: Options(
             headers: {
-              'Authorization': AUTHORIZATION_KEY,
+              'Authorization': AUTH_KEY,
               'cookie': prefs.getString('Session')
             },
             contentType: 'text',
-        ),
-        data: FormData.fromMap(data)
-      );
+          ),
+          data: FormData.fromMap(data));
 
-      if(response.statusCode == 200 || response.statusCode == 201){
+      if (response.statusCode == 200 || response.statusCode == 201) {
         print('BERHASIL LIKE EVENT!');
       } else {
         print('GAGAL LIKE EVENT, KENAPA? ');
@@ -142,39 +152,38 @@ class _LoveItemState extends State<LoveItem> {
         });
       }
     } catch (e) {
-        if(e is DioError){
-          print(e.response);
-          print(e.message);
-          print(e.error);
-          setState(() {
-            _isLoved = false;
-            _loveCount -= 1;
-          });
-        } else if( e is NoSuchMethodError){
-          print(e.stackTrace);
-        }
+      if (e is DioError) {
+        print(e.response);
+        print(e.message);
+        print(e.error);
+        setState(() {
+          _isLoved = false;
+          _loveCount -= 1;
+        });
+      } else if (e is NoSuchMethodError) {
+        print(e.stackTrace);
+      }
     }
   }
 
   Future doUnlove() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    try{
-
+    try {
       Response response = await dio.delete(
-          '/event_love/delete',
-          options: Options(
-              headers: {
-                'Authorization': AUTHORIZATION_KEY,
-                'cookie': prefs.getString('Session'),
-                'X-API-KEY': API_KEY,
-                'id': widget.eventId
-              },
-              contentType: 'text',
-          ),
+        '/event_love/delete',
+        options: Options(
+          headers: {
+            'Authorization': AUTH_KEY,
+            'cookie': prefs.getString('Session'),
+            'X-API-KEY': API_KEY,
+            'id': widget.eventId
+          },
+          contentType: 'text',
+        ),
       );
 
-      if(response.statusCode == 200 || response.statusCode == 201){
+      if (response.statusCode == 200 || response.statusCode == 201) {
         print('BERHASIL DISLIKE EVENT!');
       } else {
         print('GAGAL LIKE EVENT, KENAPA? ');
@@ -185,7 +194,7 @@ class _LoveItemState extends State<LoveItem> {
         });
       }
     } catch (e) {
-      if(e is DioError){
+      if (e is DioError) {
         print(e.response);
         print(e.message);
         print(e.error);
@@ -193,7 +202,7 @@ class _LoveItemState extends State<LoveItem> {
           _isLoved = true;
           _loveCount += 1;
         });
-      } else if( e is NoSuchMethodError){
+      } else if (e is NoSuchMethodError) {
         print(e.stackTrace);
       }
     }

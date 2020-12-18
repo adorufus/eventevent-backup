@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flushbar/flushbar.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,7 +30,8 @@ class ReportPostState extends State<ReportPost> {
   bool isReported = false;
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -53,25 +55,33 @@ class ReportPostState extends State<ReportPost> {
         ),
         actions: <Widget>[
           GestureDetector(
-            onTap: (){
-              doReport('3').then((response){
-                  print(response.statusCode);
-                  print(response.body);
-                  var extractedData = json.decode(response.body);
+            onTap: () {
+              doReport('3').then((response) {
+                print(response.statusCode);
+                print(response.body);
+                var extractedData = json.decode(response.body);
 
-                  if(response.statusCode == 201){
-                    print('reported!');
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SuccesReportPage()));
-                  }
-                  else{
-                    print('failed');
-                  }
-                });
+                if (response.statusCode == 201) {
+                  print('reported!');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SuccesReportPage()));
+                } else {
+                  print('failed');
+                }
+              });
             },
-                      child: isShow == false ? Container() : Container(
-              margin: EdgeInsets.symmetric(horizontal: 13),
-              child: Center(child: Text('Send', style: TextStyle(color: eventajaGreenTeal),)),
-            ),
+            child: isShow == false
+                ? Container()
+                : Container(
+                    margin: EdgeInsets.symmetric(horizontal: 13),
+                    child: Center(
+                        child: Text(
+                      'Send',
+                      style: TextStyle(color: eventajaGreenTeal),
+                    )),
+                  ),
           )
         ],
         centerTitle: true,
@@ -114,16 +124,18 @@ class ReportPostState extends State<ReportPost> {
             title: Text('This post is inappropriate'),
             onTap: () {
               setState(() {
-                doReport('0').then((response){
+                doReport('0').then((response) {
                   print(response.statusCode);
                   print(response.body);
                   var extractedData = json.decode(response.body);
 
-                  if(response.statusCode == 201){
+                  if (response.statusCode == 201) {
                     print('reported!');
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SuccesReportPage()));
-                  }
-                  else{
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SuccesReportPage()));
+                  } else {
                     print('failed');
                   }
                 });
@@ -139,16 +151,18 @@ class ReportPostState extends State<ReportPost> {
             title: Text('This post is spam or scam'),
             onTap: () {
               setState(() {
-                doReport('1').then((response){
+                doReport('1').then((response) {
                   print(response.statusCode);
                   print(response.body);
                   var extractedData = json.decode(response.body);
 
-                  if(response.statusCode == 201){
+                  if (response.statusCode == 201) {
                     print('reported!');
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SuccesReportPage()));
-                  }
-                  else{
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SuccesReportPage()));
+                  } else {
                     print('failed');
                   }
                 });
@@ -164,16 +178,18 @@ class ReportPostState extends State<ReportPost> {
             title: Text('This post shouldn\'t be in EventEvent'),
             onTap: () {
               setState(() {
-                doReport('2').then((response){
+                doReport('2').then((response) {
                   print(response.statusCode);
                   print(response.body);
                   var extractedData = json.decode(response.body);
 
-                  if(response.statusCode == 201){
+                  if (response.statusCode == 201) {
                     print('reported!');
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SuccesReportPage()));
-                  }
-                  else{
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SuccesReportPage()));
+                  } else {
                     print('failed');
                   }
                 });
@@ -193,13 +209,12 @@ class ReportPostState extends State<ReportPost> {
             },
           ),
         ),
-        
         isShow == false ? Container() : showOtherForm()
       ]),
     );
   }
 
-  Widget showOtherForm(){
+  Widget showOtherForm() {
     return Padding(
       padding: const EdgeInsets.all(13.0),
       child: TextFormField(
@@ -208,14 +223,11 @@ class ReportPostState extends State<ReportPost> {
         textInputAction: TextInputAction.newline,
         maxLines: 10,
         decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10)
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10)
-          ),
-          hintText: 'Tell me about your problem...'
-        ),
+            enabledBorder:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            focusedBorder:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            hintText: 'Tell me about your problem...'),
       ),
     );
   }
@@ -243,16 +255,13 @@ class ReportPostState extends State<ReportPost> {
         endpoints = Event;
       }
 
-      if(responseId == '0'){
+      if (responseId == '0') {
         responseMsg = 'This post is inappropriate';
-      }
-      else if(responseId == '1'){
+      } else if (responseId == '1') {
         responseMsg = 'This post is spam or scam';
-      }
-      else if(responseId == '2'){
+      } else if (responseId == '2') {
         responseMsg = 'This post shouldn\'t be in EventEvent';
-      }
-      else if(responseId == '3'){
+      } else if (responseId == '3') {
         responseMsg = othersController.text;
       }
     });
@@ -260,12 +269,10 @@ class ReportPostState extends State<ReportPost> {
     print(responseMsg);
     print(responseId);
 
-
-
     String url = BaseApi().apiUrl + endpoints;
 
     final response = await http.post(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     }, body: {
       'X-API-KEY': API_KEY,
@@ -275,7 +282,7 @@ class ReportPostState extends State<ReportPost> {
 
     var extractedData = json.decode(response.body);
 
-    if(response.statusCode == 400){
+    if (response.statusCode == 400) {
       Flushbar(
         flushbarPosition: FlushbarPosition.TOP,
         message: extractedData['desc'],
@@ -291,7 +298,8 @@ class ReportPostState extends State<ReportPost> {
 
 class SuccesReportPage extends StatelessWidget {
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -312,7 +320,6 @@ class SuccesReportPage extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        
         centerTitle: true,
         title: Text(
           'Report',

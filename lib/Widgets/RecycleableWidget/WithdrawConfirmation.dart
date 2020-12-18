@@ -414,7 +414,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
 
     final response = await http.post(url,
         headers: {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': prefs.getString('Session')
         },
         body: body);
@@ -474,7 +474,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
         '/payment_method/list?X-API-KEY=$API_KEY&indomaret=true';
 
     final response = await http.get(baseUrl, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': preferences.getString('Session')
     });
 

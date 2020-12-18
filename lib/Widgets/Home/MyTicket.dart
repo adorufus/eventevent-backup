@@ -617,7 +617,7 @@ class _MyTicketState extends State<MyTicket> {
         '/tickets/all?X-API-KEY=$API_KEY&page=1&search=${searchController.text}';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 
@@ -642,7 +642,7 @@ class _MyTicketState extends State<MyTicket> {
     var urlApi = BaseApi().apiUrl +
         '/tickets/all?X-API-KEY=$API_KEY&page=$currentPage&search=';
     final response = await http.get(urlApi, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 

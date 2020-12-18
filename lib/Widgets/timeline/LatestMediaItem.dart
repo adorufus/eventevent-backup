@@ -34,7 +34,8 @@ class LatestMediaItem extends StatefulWidget {
       this.videoUrl,
       this.article,
       this.mediaId,
-      @required this.isRest, this.isLiked})
+      @required this.isRest,
+      this.isLiked})
       : super(key: key);
 
   @override
@@ -131,22 +132,22 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                                    if (isLiked == false) {
-                                      likeCount += 1;
-                                      isLiked = true;
-                                      doLove().then((response) {
-                                        print(response.statusCode);
-                                        print(response.body);
-                                        if (response.statusCode == 200) {}
-                                      });
-                                    } else {
-                                      likeCount -= 1;
-                                      isLiked = false;
-                                      doLove().then((response) {
-                                        if (response.statusCode == 200) {}
-                                      });
-                                    }
-                                  });
+                              if (isLiked == false) {
+                                likeCount += 1;
+                                isLiked = true;
+                                doLove().then((response) {
+                                  print(response.statusCode);
+                                  print(response.body);
+                                  if (response.statusCode == 200) {}
+                                });
+                              } else {
+                                likeCount -= 1;
+                                isLiked = false;
+                                doLove().then((response) {
+                                  if (response.statusCode == 200) {}
+                                });
+                              }
+                            });
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
@@ -251,7 +252,7 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
     String url = BaseApi().apiUrl + '/media/love';
 
     final response = await http.post(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     }, body: {
       'X-API-KEY': API_KEY,

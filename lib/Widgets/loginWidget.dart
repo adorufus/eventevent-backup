@@ -437,7 +437,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     final response = await http.get(
       url,
       headers: {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
       },
     );
 
@@ -524,8 +524,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   Future goLoginFb(String fbToken) async {
     String url =
         BaseApi().apiUrl + '/signin/facebook?X-API-KEY=$API_KEY&token=$fbToken';
-    final response =
-        await http.get(url, headers: {'Authorization': AUTHORIZATION_KEY});
+    final response = await http.get(url, headers: {'Authorization': AUTH_KEY});
 
     print(response.statusCode);
     print(response.body);
@@ -625,7 +624,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         BaseApi().apiUrl + '/user/detail?X-API-KEY=$API_KEY&userID=$userId';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': preferences.getString('Session')
     });
 
@@ -640,8 +639,8 @@ class _LoginWidgetState extends State<LoginWidget> {
   void initiateFacebookLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var facebookLogin = FacebookLogin();
-    var facebookLoginResult = await facebookLogin.logInWithReadPermissions(
-        ['email', 'public_profile']);
+    var facebookLoginResult = await facebookLogin
+        .logInWithReadPermissions(['email', 'public_profile']);
 
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.loggedIn:

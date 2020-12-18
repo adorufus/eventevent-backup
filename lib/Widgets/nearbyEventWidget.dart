@@ -225,7 +225,9 @@ class _ListenPageState extends State<ListenPage> {
                           itemPriceText = 'Going!';
                         } else {
                           if (nearbyEventData[i]['ticket_type']['type'] ==
-                                  'paid' || nearbyEventData[i]['ticket_type']['type'] == 'paid_live_stream' ||
+                                  'paid' ||
+                              nearbyEventData[i]['ticket_type']['type'] ==
+                                  'paid_live_stream' ||
                               nearbyEventData[i]['ticket_type']['type'] ==
                                   'paid_seating') {
                             if (nearbyEventData[i]['ticket']
@@ -385,13 +387,13 @@ class _ListenPageState extends State<ListenPage> {
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': preferences.getString('Session')
       };
     }

@@ -43,33 +43,27 @@ Future<http.Response> getWatchLivestreamToken(String eventId) async {
 
   String url = BaseApi().apiUrl + '/signin/login?=';
 
-  final response = await http.post(
-    url,
-    body: {
-      'username': prefs.getString('UserUsername'),
-      'password': prefs.getString('UserPw'),
-      'streaming_event_id': eventId,
-      'X-API-KEY': API_KEY
-    },
-    headers: {
-      'Authorization': AUTHORIZATION_KEY,
-    }
-  );
+  final response = await http.post(url, body: {
+    'username': prefs.getString('UserUsername'),
+    'password': prefs.getString('UserPw'),
+    'streaming_event_id': eventId,
+    'X-API-KEY': API_KEY
+  }, headers: {
+    'Authorization': AUTH_KEY,
+  });
 
   return response;
 }
 
-Future<http.Response> getEventStreamingDetail(String token) async{
+Future<http.Response> getEventStreamingDetail(String token) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String url = BaseApi().apiUrl + '/event/streaming_detail?X-API-KEY=$API_KEY&streaming_token=$token';
+  String url = BaseApi().apiUrl +
+      '/event/streaming_detail?X-API-KEY=$API_KEY&streaming_token=$token';
 
-  final response = await http.get(
-    url,
-    headers: {
-      'Authorization': AUTHORIZATION_KEY,
-      'cookie': prefs.getString('Session')
-    }
-  );
+  final response = await http.get(url, headers: {
+    'Authorization': AUTH_KEY,
+    'cookie': prefs.getString('Session')
+  });
 
   return response;
 }

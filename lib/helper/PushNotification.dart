@@ -455,7 +455,9 @@ class PushNotificationState extends State<PushNotification> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  notificationData[index]['type'] == 'reminder_ticket' ? 'Post a new event' : notificationData[index]['caption'],
+                  notificationData[index]['type'] == 'reminder_ticket'
+                      ? 'Post a new event'
+                      : notificationData[index]['caption'],
                   style: TextStyle(
                       fontSize: ScreenUtil.instance.setSp(13),
                       fontWeight: FontWeight.bold),
@@ -523,7 +525,8 @@ class PushNotificationState extends State<PushNotification> {
             Container(
                 height: ScreenUtil.instance.setWidth(25),
                 width: ScreenUtil.instance.setWidth(25),
-                child: Image.asset('assets/icons/icon_apps/announcement.png', scale: 5)),
+                child: Image.asset('assets/icons/icon_apps/announcement.png',
+                    scale: 5)),
             SizedBox(width: 15),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -573,7 +576,10 @@ class PushNotificationState extends State<PushNotification> {
                 Text(
                   notificationData[index]['type'] == 'balance'
                       ? notificationData[index]['caption']
-                      : notificationData[index]['detail'][0]['status'] == 'declined' ? 'Withdraw Declined' : 'Withdraw Complete',
+                      : notificationData[index]['detail'][0]['status'] ==
+                              'declined'
+                          ? 'Withdraw Declined'
+                          : 'Withdraw Complete',
                   style: TextStyle(
                       fontSize: ScreenUtil.instance.setSp(13),
                       fontWeight: FontWeight.bold),
@@ -677,7 +683,7 @@ class PushNotificationState extends State<PushNotification> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Image.asset('assets/icons/icon_apps/announcement.png', scale:6),
+            Image.asset('assets/icons/icon_apps/announcement.png', scale: 6),
             SizedBox(width: 15),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -695,7 +701,9 @@ class PushNotificationState extends State<PushNotification> {
                         ),
                       )
                     : Text(
-                        notificationData[index]['type'] == 'reminder_event' ? 'Post a new event' : notificationData[index]['caption'],
+                        notificationData[index]['type'] == 'reminder_event'
+                            ? 'Post a new event'
+                            : notificationData[index]['caption'],
                         maxLines: 2,
                         style: TextStyle(
                             fontSize: ScreenUtil.instance.setSp(13),
@@ -806,8 +814,10 @@ class PushNotificationState extends State<PushNotification> {
         isRest: false,
       ));
     } else if (notificationData[index]['type'] == 'live_stream_cancel') {
-      navigationHandler(
-          EventDetailLoadingScreen(eventId: notificationData[index]['id'], isRest: false,));
+      navigationHandler(EventDetailLoadingScreen(
+        eventId: notificationData[index]['id'],
+        isRest: false,
+      ));
     } else if (notificationData[index]['type'] == 'photo_comment') {
       navigationHandler(UserMediaDetail(
         postID: notificationData[index]['id'],
@@ -880,27 +890,40 @@ class PushNotificationState extends State<PushNotification> {
         autoFocus: true,
       ));
     } else if (notificationData[index]['type'] == 'eventgoingstatus') {
-      navigationHandler(
-          EventDetailLoadingScreen(eventId: notificationData[index]['id'], isRest: false,));
+      navigationHandler(EventDetailLoadingScreen(
+        eventId: notificationData[index]['id'],
+        isRest: false,
+      ));
     } else if (notificationData[index]['type'] == 'eventdetail_comment') {
-      navigationHandler(
-          EventDetailLoadingScreen(eventId: notificationData[index]['id'], isRest: false,));
+      navigationHandler(EventDetailLoadingScreen(
+        eventId: notificationData[index]['id'],
+        isRest: false,
+      ));
     } else if (notificationData[index]['type'] == 'eventdetail_love') {
-      navigationHandler(
-          EventDetailLoadingScreen(eventId: notificationData[index]['id'], isRest: false,));
+      navigationHandler(EventDetailLoadingScreen(
+        eventId: notificationData[index]['id'],
+        isRest: false,
+      ));
     } else if (notificationData[index]['type'] == 'photo_impression') {
       navigationHandler(UserMediaDetail(
         postID: notificationData[index]['id'],
         autoFocus: true,
       ));
     } else if (notificationData[index]['type'] == 'event') {
-      navigationHandler(
-          EventDetailLoadingScreen(eventId: notificationData[index]['id'], isRest: false,));
+      navigationHandler(EventDetailLoadingScreen(
+        eventId: notificationData[index]['id'],
+        isRest: false,
+      ));
     } else if (notificationData[index]['type'] == 'eventinvite') {
-      navigationHandler(
-          EventDetailLoadingScreen(eventId: notificationData[index]['id'], isRest: false,));
+      navigationHandler(EventDetailLoadingScreen(
+        eventId: notificationData[index]['id'],
+        isRest: false,
+      ));
     } else if (notificationData[index]['type'] == 'reminder_qr') {
-      navigationHandler(EventDetailLoadingScreen(eventId: notificationData[index]['id'], isRest: false,));
+      navigationHandler(EventDetailLoadingScreen(
+        eventId: notificationData[index]['id'],
+        isRest: false,
+      ));
     }
   }
 
@@ -915,7 +938,7 @@ class PushNotificationState extends State<PushNotification> {
     int currentPage = 1;
 
     setState(() {
-      if(isOnInitial == true){
+      if (isOnInitial == true) {
         isLoading = true;
       }
       if (page != null) {
@@ -927,7 +950,7 @@ class PushNotificationState extends State<PushNotification> {
         '/user/notification?X-API-KEY=$API_KEY&page=$currentPage';
 
     var response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': preferences.getString('Session')
     });
 
@@ -955,7 +978,7 @@ class PushNotificationState extends State<PushNotification> {
     String url = BaseApi().apiUrl + '/device/notif';
 
     final response = await http.post(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': preferences.getString('Session')
     }, body: {
       'X-API-KEY': API_KEY,

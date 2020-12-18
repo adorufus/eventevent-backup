@@ -965,7 +965,7 @@ class _TimelineItemState extends State<TimelineItem>
 
     final response = await http.delete(url, headers: {
       'X-API-KEY': API_KEY,
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'id': id,
       'cookie': prefs.getString('Session')
     });
@@ -1004,7 +1004,7 @@ class _TimelineItemState extends State<TimelineItem>
       'id': postId,
       'impressionID': impressionID
     }, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session'),
     });
 
@@ -1040,7 +1040,7 @@ class _TimelineItemState extends State<TimelineItem>
     }
 
     final response = await http.delete(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'X-API-KEY': API_KEY,
       'cookie': prefences.getString('Session'),
       'id': widget.impressionId
@@ -1067,7 +1067,7 @@ class _TimelineItemState extends State<TimelineItem>
         '/timeline/user?X-API-KEY=$API_KEY&page=$currentPage&userID=1';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 

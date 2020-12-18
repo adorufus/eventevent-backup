@@ -649,7 +649,7 @@ class WithdrawBankState extends State<WithdrawBank> {
     String url = BaseApi().apiUrl + '/user_bank/list?X-API-KEY=$API_KEY';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 
@@ -855,7 +855,7 @@ class WithdrawBankState extends State<WithdrawBank> {
     String url = BaseApi().apiUrl + "/withdraw/list?X-API-KEY=$API_KEY&page=1";
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 
@@ -868,7 +868,7 @@ class WithdrawBankState extends State<WithdrawBank> {
     String uri = BaseApi().apiUrl + '/withdraw/balance?X-API-KEY=$API_KEY';
 
     final response = await http.get(uri, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 

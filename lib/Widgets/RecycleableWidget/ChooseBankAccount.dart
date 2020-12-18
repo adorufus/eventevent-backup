@@ -76,107 +76,119 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
                   style: TextStyle(fontSize: ScreenUtil.instance.setSp(20)),
                 )),
               ),
-              isLoading == true ? HomeLoadingScreen().myTicketLoading() : Container(
-                height: ScreenUtil.instance.setWidth(340),
-                width: MediaQuery.of(context).size.width,
-                child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: vaList == null ? 0 : vaList.length,
-                  itemBuilder: (BuildContext context, i) {
-                    return GestureDetector(
-                      onTap: () async {
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
+              isLoading == true
+                  ? HomeLoadingScreen().myTicketLoading()
+                  : Container(
+                      height: ScreenUtil.instance.setWidth(340),
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: vaList == null ? 0 : vaList.length,
+                        itemBuilder: (BuildContext context, i) {
+                          return GestureDetector(
+                            onTap: () async {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
 
-                        prefs.setString("virtual_account_vendor_id", vaList[i]['vendor_id']);
-                        print('va vendor id: ' + prefs.getString("virtual_account_vendor_id"));
-                        if (vaList[i]['bank_code'] == 'BNI') {
-                          getBankDetails(
-                              vaList[i]['bank_code'],
-                              vaList[i]['virtual_account_number'],
-                              vaList[i]['virtual_account_name']);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      TicketReview()));
-                        } else if (vaList[i]['bank_code'] == 'BRI') {
-                          getBankDetails(
-                              vaList[1]['bank_code'],
-                              vaList[1]['virtual_account_number'],
-                              vaList[1]['virtual_account_name']);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      TicketReview()));
-                        }
-                      },
-                      child: Container(
-                        height: ScreenUtil.instance.setWidth(130),
-                        margin: EdgeInsets.all(10),
-                        padding: EdgeInsets.only(
-                            left: 15, right: 7, top: 10, bottom: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 1,)
-                            ],
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: SizedBox(
-                                height:
-                                    vaList[i]['bank_code'] == 'BNI' ? 50 : 50,
-                                child: Image.asset(
-                                    vaList[i]['bank_code'] == 'BNI'
-                                        ? 'assets/drawable/bni.png'
-                                        : 'assets/drawable/bri.png'),
-                              ),
-                            ),
-                            SizedBox(
-                              width: ScreenUtil.instance.setWidth(20),
-                            ),
-                            Column(
+                              prefs.setString("virtual_account_vendor_id",
+                                  vaList[i]['vendor_id']);
+                              print('va vendor id: ' +
+                                  prefs.getString("virtual_account_vendor_id"));
+                              if (vaList[i]['bank_code'] == 'BNI') {
+                                getBankDetails(
+                                    vaList[i]['bank_code'],
+                                    vaList[i]['virtual_account_number'],
+                                    vaList[i]['virtual_account_name']);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            TicketReview()));
+                              } else if (vaList[i]['bank_code'] == 'BRI') {
+                                getBankDetails(
+                                    vaList[1]['bank_code'],
+                                    vaList[1]['virtual_account_number'],
+                                    vaList[1]['virtual_account_name']);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            TicketReview()));
+                              }
+                            },
+                            child: Container(
+                              height: ScreenUtil.instance.setWidth(130),
+                              margin: EdgeInsets.all(10),
+                              padding: EdgeInsets.only(
+                                  left: 15, right: 7, top: 10, bottom: 10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      blurRadius: 1,
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(
-                                    vaList[i]['virtual_account_name'],
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: ScreenUtil.instance.setSp(20),
-                                        color: Colors.black54),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: SizedBox(
+                                      height: vaList[i]['bank_code'] == 'BNI'
+                                          ? 50
+                                          : 50,
+                                      child: Image.asset(
+                                          vaList[i]['bank_code'] == 'BNI'
+                                              ? 'assets/drawable/bni.png'
+                                              : 'assets/drawable/bri.png'),
+                                    ),
                                   ),
                                   SizedBox(
-                                      height: ScreenUtil.instance.setWidth(10)),
-                                  Text(vaList[i]['bank_code'],
-                                      style: TextStyle(color: Colors.grey)),
-                                ]),
-                            Expanded(
-                              child: SizedBox(),
-                            ),
-                            Flexible(
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                                              child: Padding(
-                                  padding: EdgeInsets.only(right: 13),
-                                  child: Icon(Icons.arrow_forward_ios),
-                                ),
+                                    width: ScreenUtil.instance.setWidth(20),
+                                  ),
+                                  Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          vaList[i]['virtual_account_name'],
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize:
+                                                  ScreenUtil.instance.setSp(20),
+                                              color: Colors.black54),
+                                        ),
+                                        SizedBox(
+                                            height: ScreenUtil.instance
+                                                .setWidth(10)),
+                                        Text(vaList[i]['bank_code'],
+                                            style:
+                                                TextStyle(color: Colors.grey)),
+                                      ]),
+                                  Expanded(
+                                    child: SizedBox(),
+                                  ),
+                                  Flexible(
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(right: 13),
+                                        child: Icon(Icons.arrow_forward_ios),
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-              )
+                    )
             ],
           )
         ],
@@ -207,7 +219,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
 
     String virtualAccURI = BaseApi().apiUrl + '/va/list?X-API-KEY=' + API_KEY;
     final response = await http.get(virtualAccURI,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session});
+        headers: {'Authorization': AUTH_KEY, 'cookie': session});
 
     print(response.body);
 

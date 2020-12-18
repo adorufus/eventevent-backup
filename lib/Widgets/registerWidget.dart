@@ -688,7 +688,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         '/signup/check_username?username=$username&X-API-KEY=$API_KEY';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
     });
 
     return response;
@@ -701,7 +701,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         '/signup/check_email?email=$email&X-API-KEY=$API_KEY';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
     });
 
     return response;

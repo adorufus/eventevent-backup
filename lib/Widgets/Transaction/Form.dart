@@ -62,7 +62,7 @@ class _TransactionFormState extends State<TransactionForm> {
     var formDataAPI =
         BaseApi().apiUrl + '/form_filling/user?X-API-KEY=' + API_KEY;
     final response = await http.get(formDataAPI,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': cookie});
+        headers: {'Authorization': AUTH_KEY, 'cookie': cookie});
 
     print(response.body);
     if (response.statusCode == 200) {
@@ -626,7 +626,7 @@ class _TransactionFormState extends State<TransactionForm> {
         preferences.getString('eventID');
     print(customFormURI.toString());
     final response = await http.get(customFormURI,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session});
+        headers: {'Authorization': AUTH_KEY, 'cookie': session});
 
     print(response.body);
 

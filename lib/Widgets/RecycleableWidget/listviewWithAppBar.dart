@@ -114,7 +114,6 @@ class _ListViewWithAppBar extends State<ListViewWithAppBar> {
     });
 
     await Future.delayed(Duration(seconds: 3));
-    
   }
 
   @override
@@ -166,7 +165,7 @@ class _ListViewWithAppBar extends State<ListViewWithAppBar> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => ProfileWidget(
-                                isRest: widget.isRest,
+                                    isRest: widget.isRest,
                                     initialIndex: 0,
                                     userId: profileData[i]['id'],
                                   )));
@@ -275,12 +274,12 @@ class _ListViewWithAppBar extends State<ListViewWithAppBar> {
 
     if (widget.isRest) {
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': preferences.getString('Session')
       };
     }

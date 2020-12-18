@@ -350,8 +350,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                       });
                     },
                   )
-                : SafeArea(
-                    child: emedia()
+                : SafeArea(child: emedia()
                     // DefaultTabController(
                     //   initialIndex: 0,
                     //   length: 2,
@@ -455,7 +454,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                     //     ],
                     //   ),
                     // ),
-                  ),
+                    ),
           );
   }
 
@@ -920,7 +919,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                 imageCount: 'img' + i.toString(),
                                 username: latestMediaPhoto[i]['creator']
                                     ['username'],
-                                imageUri: latestMediaPhoto[i]['banner_avatar'].toString().replaceAll("\n", ""),
+                                imageUri: latestMediaPhoto[i]['banner_avatar']
+                                    .toString()
+                                    .replaceAll("\n", ""),
                                 mediaTitle: latestMediaPhoto[i]['title'],
                                 autoFocus: false,
                                 mediaId: latestMediaPhoto[i]['id'],
@@ -931,7 +932,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                   isRest: widget.isRest,
                   isVideo: false,
                   isLiked: latestMediaPhoto[i]['is_loved'],
-                  image: latestMediaPhoto[i]['banner_timeline'].toString().replaceAll("\n", ""),
+                  image: latestMediaPhoto[i]['banner_timeline']
+                      .toString()
+                      .replaceAll("\n", ""),
                   mediaId: latestMediaPhoto[i]['id'],
                   title: latestMediaPhoto[i]['title'],
                   username: latestMediaPhoto[i]['creator']['username'],
@@ -1016,7 +1019,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                   username: popularMediaVideo[i]['creator']
                                       ['username'],
                                   imageUri: popularMediaVideo[i]
-                                      ['thumbnail_timeline'].toString().replaceAll("\n", ""),
+                                          ['thumbnail_timeline']
+                                      .toString()
+                                      .replaceAll("\n", ""),
                                   mediaTitle: popularMediaVideo[i]['title'],
                                   autoFocus: false,
                                   mediaId: popularMediaVideo[i]['id'],
@@ -1028,7 +1033,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                     videoUrl: popularMediaVideo[i]['video'],
                     youtube: popularMediaVideo[i]['youtube'],
                     isVideo: true,
-                    image: popularMediaVideo[i]['thumbnail_avatar'].toString().replaceAll("\n", ""),
+                    image: popularMediaVideo[i]['thumbnail_avatar']
+                        .toString()
+                        .replaceAll("\n", ""),
                     title: popularMediaVideo[i]['title'],
                     username: popularMediaVideo[i]['creator']['username'],
                     userPicture: popularMediaVideo[i]['creator']['photo'],
@@ -1110,7 +1117,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                 username: latestMediaVideo[i]['creator']
                                     ['username'],
                                 imageUri: latestMediaVideo[i]
-                                    ['thumbnail_timeline'].toString().replaceAll("\n", ""),
+                                        ['thumbnail_timeline']
+                                    .toString()
+                                    .replaceAll("\n", ""),
                                 mediaTitle: latestMediaVideo[i]['title'],
                                 autoFocus: false,
                                 mediaId: latestMediaVideo[i]['id'],
@@ -1123,7 +1132,9 @@ class TimelineDashboardState extends State<TimelineDashboard>
                   youtube: latestMediaVideo[i]['youtube'] ?? '/',
                   videoUrl: latestMediaVideo[i]['video'] ?? '/',
                   mediaId: latestMediaVideo[i]['id'],
-                  image: latestMediaVideo[i]['thumbnail_timeline'].toString().replaceAll("\n", ""),
+                  image: latestMediaVideo[i]['thumbnail_timeline']
+                      .toString()
+                      .replaceAll("\n", ""),
                   title: latestMediaVideo[i]['title'],
                   username: latestMediaVideo[i]['creator']['username'],
                   userImage: latestMediaVideo[i]['creator']['photo'],
@@ -1168,7 +1179,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
       'id': postId,
       'impressionID': impressionID
     }, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session'),
     });
 
@@ -1181,7 +1192,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
     String url = BaseApi().apiUrl + '/photo_impression/delete';
 
     final response = await http.delete(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'X-API-KEY': API_KEY,
       'cookie': prefences.getString('Session'),
       'id': id
@@ -1201,13 +1212,13 @@ class TimelineDashboardState extends State<TimelineDashboard>
       if (widget.isRest == true) {
         baseUrl = BaseApi().restUrl;
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'signature': SIGNATURE,
         };
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': preferences.getString('Session'),
         };
       }
@@ -1234,13 +1245,13 @@ class TimelineDashboardState extends State<TimelineDashboard>
       if (widget.isRest == true) {
         baseUrl = BaseApi().restUrl;
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'signature': SIGNATURE,
         };
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': preferences.getString('Session'),
         };
       }
@@ -1274,7 +1285,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
         '/timeline/list?X-API-KEY=$API_KEY&page=$currentPage';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 
@@ -1292,13 +1303,13 @@ class TimelineDashboardState extends State<TimelineDashboard>
       if (widget.isRest == true) {
         baseUrl = BaseApi().restUrl;
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'signature': SIGNATURE,
         };
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': preferences.getString('Session'),
         };
       }
@@ -1321,13 +1332,13 @@ class TimelineDashboardState extends State<TimelineDashboard>
       if (widget.isRest == true) {
         baseUrl = BaseApi().restUrl;
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'signature': SIGNATURE,
         };
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': preferences.getString('Session'),
         };
       }
@@ -1354,13 +1365,13 @@ class TimelineDashboardState extends State<TimelineDashboard>
       if (widget.isRest == true) {
         baseUrl = BaseApi().restUrl;
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'signature': SIGNATURE,
         };
       } else if (widget.isRest == false) {
         baseUrl = BaseApi().apiUrl;
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': prefs.getString('Session'),
         };
       }

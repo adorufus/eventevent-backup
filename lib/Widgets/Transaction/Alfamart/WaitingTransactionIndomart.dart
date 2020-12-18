@@ -4,7 +4,8 @@ import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -64,7 +65,8 @@ class _WaitingTransactionAlfamartState
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -75,8 +77,10 @@ class _WaitingTransactionAlfamartState
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
       bottomNavigationBar: GestureDetector(
-        onTap: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SuccessPage(invoiceNumber: paymentData['transaction_code'])));
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  SuccessPage(invoiceNumber: paymentData['transaction_code'])));
         },
         child: Container(
           height: ScreenUtil.instance.setWidth(50),
@@ -197,19 +201,25 @@ class _WaitingTransactionAlfamartState
                               children: <Widget>[
                                 Text('H',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20))),
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('M',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20))),
                                 SizedBox(
                                   width: ScreenUtil.instance.setWidth(35),
                                 ),
                                 Text('S',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: ScreenUtil.instance.setSp(20))),
+                                        color: Colors.white,
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(20))),
                               ],
                             ),
                             SizedBox(
@@ -221,11 +231,13 @@ class _WaitingTransactionAlfamartState
                                 Text(
                                   'Complete payment before ',
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white, fontSize: 14),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
                                 ),
                                 Text('${widget.expDate}',
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 12,
+                                        color: Colors.white,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold))
                               ],
                             )
@@ -241,8 +253,9 @@ class _WaitingTransactionAlfamartState
                         children: <Widget>[
                           Text(
                             'PAYMENT',
-                            style:
-                                TextStyle(fontSize: ScreenUtil.instance.setSp(20), color: Colors.black45),
+                            style: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(20),
+                                color: Colors.black45),
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
@@ -252,7 +265,9 @@ class _WaitingTransactionAlfamartState
                             style: TextStyle(
                                 fontSize: 50, fontWeight: FontWeight.bold),
                           ),
-                          Divider(height: ScreenUtil.instance.setWidth(5), color: Colors.black),
+                          Divider(
+                              height: ScreenUtil.instance.setWidth(5),
+                              color: Colors.black),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Container(
                               height: ScreenUtil.instance.setWidth(50),
@@ -263,7 +278,9 @@ class _WaitingTransactionAlfamartState
                           SizedBox(height: ScreenUtil.instance.setWidth(5)),
                           Text(
                             'Kode pembayaran Alfamart',
-                            style: TextStyle(color: Colors.grey, fontSize: ScreenUtil.instance.setSp(12)),
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: ScreenUtil.instance.setSp(12)),
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
@@ -311,7 +328,8 @@ class _WaitingTransactionAlfamartState
                           Text(
                             ALFAMART_HOWTO_LINE1_ID +
                                 paymentData['payment_vendor_code'],
-                            style: TextStyle(fontSize: ScreenUtil.instance.setSp(14)),
+                            style: TextStyle(
+                                fontSize: ScreenUtil.instance.setSp(14)),
                           ),
                           Text(ALFAMART_HOWTO_LINE2_ID)
                         ]),
@@ -330,11 +348,13 @@ class _WaitingTransactionAlfamartState
                                 Text(HEADER_EN,
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold)),
-                                SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                                SizedBox(
+                                    height: ScreenUtil.instance.setWidth(10)),
                                 Text(
                                   ALFAMART_HOWTO_LINE1_EN +
                                       paymentData['payment_vendor_code'],
-                                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(14)),
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil.instance.setSp(14)),
                                 ),
                                 Text(ALFAMART_HOWTO_LINE2_EN)
                               ]))
@@ -358,8 +378,8 @@ class _WaitingTransactionAlfamartState
 
     String url = BaseApi().apiUrl +
         '/ticket_transaction/detail?transID=${widget.transactionID}&X-API-KEY=${API_KEY}';
-    final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session});
+    final response = await http
+        .get(url, headers: {'Authorization': AUTH_KEY, 'cookie': session});
 
     print(response.body);
     print(response.statusCode);

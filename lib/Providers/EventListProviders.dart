@@ -8,26 +8,22 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EventListProviders {
-
   final String _endpoints = BaseApi().apiUrl;
   final Dio _dio = Dio();
 
-  Future<PopularEventModel> getPopularEvent(bool isRest, BuildContext context) async {
+  Future<PopularEventModel> getPopularEvent(
+      bool isRest, BuildContext context) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     Cookie cookie = Cookie.fromSetCookieValue(preferences.getString('Session'));
 
     Map<String, dynamic> headerType;
 
-    if(isRest == true){
+    if (isRest == true) {
+      headerType = {'Authorization': AUTH_KEY, 'signature': SIGNATURE};
+    } else if (isRest == false) {
       headerType = {
-        'Authorization': AUTHORIZATION_KEY,
-        'signature': SIGNATURE
-      };
-    }
-    else if(isRest == false){
-      headerType = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': preferences.getString('Session')
       };
     }
@@ -44,7 +40,6 @@ class EventListProviders {
       print(response.data);
 
       return PopularEventModel.fromJson(response.data);
-
     } on DioError catch (error) {
       Flushbar(
         message: error.message,

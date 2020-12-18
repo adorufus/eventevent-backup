@@ -16,7 +16,8 @@ class SeeAllPeople extends StatefulWidget {
   final initialIndex;
   final isRest;
 
-  const SeeAllPeople({Key key, this.initialIndex, this.isRest}) : super(key: key);
+  const SeeAllPeople({Key key, this.initialIndex, this.isRest})
+      : super(key: key);
 
   @override
   _SeeAllPeopleState createState() => _SeeAllPeopleState();
@@ -259,13 +260,13 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': prefs.getString('Session')
       };
     }
@@ -279,19 +280,19 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
 
   Future<http.Response> discoverPeopleData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-String baseUrl = '';
+    String baseUrl = '';
     Map<String, String> headers;
 
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': prefs.getString('Session')
       };
     }

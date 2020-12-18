@@ -94,12 +94,14 @@ class _TicketReviewState extends State<TicketReview> {
       thisEventEndTime = eventEndTime;
       thisTicketAmount = ticketAmount;
       thisTicketPrice = ticketPrice;
-      if (widget.ticketType == 'free_limited' || widget.ticketType == 'free_live_stream') {
+      if (widget.ticketType == 'free_limited' ||
+          widget.ticketType == 'free_live_stream') {
         thisTicketFee = '0';
         pajak = 0;
         total = 0;
-      } else if(widget.ticketType == 'gopay') {
-        thisTicketFee = ((int.parse(thisTicketPrice) * ticketPercentFee) ~/ 100).toString();
+      } else if (widget.ticketType == 'gopay') {
+        thisTicketFee =
+            ((int.parse(thisTicketPrice) * ticketPercentFee) ~/ 100).toString();
         pajak = int.parse(thisTicketFee);
         total = int.parse(thisTicketPrice) + pajak;
         print(total);
@@ -131,7 +133,7 @@ class _TicketReviewState extends State<TicketReview> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-          brightness: Brightness.light,
+        brightness: Brightness.light,
         backgroundColor: Colors.white,
         elevation: 1,
         leading: GestureDetector(
@@ -165,14 +167,14 @@ class _TicketReviewState extends State<TicketReview> {
                 loadingType: 'buy ticket',
               ),
             ),
-          ).then((val){
+          ).then((val) {
             Flushbar(
-            flushbarPosition: FlushbarPosition.TOP,
-            message: '$val',
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
-            animationDuration: Duration(milliseconds: 500),
-          )..show(context);
+              flushbarPosition: FlushbarPosition.TOP,
+              message: '$val',
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 3),
+              animationDuration: Duration(milliseconds: 500),
+            )..show(context);
           });
         },
         child: Container(
@@ -199,7 +201,7 @@ class _TicketReviewState extends State<TicketReview> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Flexible(
-                                          child: Row(
+                      child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
@@ -226,7 +228,8 @@ class _TicketReviewState extends State<TicketReview> {
                                           ? ''
                                           : thisTicketName,
                                       style: TextStyle(
-                                          fontSize: ScreenUtil.instance.setSp(20),
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(20),
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(
                                       height: ScreenUtil.instance.setWidth(2)),
@@ -236,33 +239,33 @@ class _TicketReviewState extends State<TicketReview> {
                                           thisEventAddres == null
                                               ? ''
                                               : thisEventAddres,
-                                              style: TextStyle(
-                                                color: Colors.grey
-                                              ),
+                                          style: TextStyle(color: Colors.grey),
                                           overflow: TextOverflow.ellipsis)),
                                   SizedBox(
                                       height: ScreenUtil.instance.setWidth(2)),
                                   Text(
-                                      thisEventDate == null ? '' : thisEventDate,style: TextStyle(
-                                                color: Colors.grey
-                                              ),),
+                                    thisEventDate == null ? '' : thisEventDate,
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
                                   SizedBox(
                                       height: ScreenUtil.instance.setWidth(2)),
                                   Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text(thisEventStartTime == null
-                                            ? ''
-                                            : thisEventStartTime +
-                                                        ' - ' +
-                                                        thisEventEndTime ==
-                                                    null
-                                                ? ''
-                                                : thisEventEndTime,style: TextStyle(
-                                                color: Colors.grey
-                                              ),)
+                                        Text(
+                                          thisEventStartTime == null
+                                              ? ''
+                                              : thisEventStartTime +
+                                                          ' - ' +
+                                                          thisEventEndTime ==
+                                                      null
+                                                  ? ''
+                                                  : thisEventEndTime,
+                                          style: TextStyle(color: Colors.grey),
+                                        )
                                       ])
                                 ])
                           ]),
@@ -270,8 +273,7 @@ class _TicketReviewState extends State<TicketReview> {
                   ])),
           SizedBox(height: ScreenUtil.instance.setWidth(10)),
           Container(
-              padding:
-                  EdgeInsets.only(left: 15, right: 15, top: 2, bottom: 15),
+              padding: EdgeInsets.only(left: 15, right: 15, top: 2, bottom: 15),
               color: Colors.white,
               height: ScreenUtil.instance.setWidth(200),
               width: MediaQuery.of(context).size.width,
@@ -342,8 +344,9 @@ class _TicketReviewState extends State<TicketReview> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text('Ticket Price'),
-                      
-                      Expanded(child: SizedBox(),),
+                      Expanded(
+                        child: SizedBox(),
+                      ),
                       Text('Rp. ' + thisTicketPrice)
                     ]),
                 SizedBox(height: ScreenUtil.instance.setWidth(20)),
@@ -352,8 +355,9 @@ class _TicketReviewState extends State<TicketReview> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text('Processing Fee'),
-                      
-                      Expanded(child: SizedBox(),),
+                      Expanded(
+                        child: SizedBox(),
+                      ),
                       Text(pajak.toString())
                     ]),
                 SizedBox(height: ScreenUtil.instance.setWidth(20)),
@@ -361,13 +365,17 @@ class _TicketReviewState extends State<TicketReview> {
                     alignment: Alignment.centerRight,
                     child: Divider(
                         height: ScreenUtil.instance.setWidth(10), indent: 150)),
-                        SizedBox(height: 6,),
+                SizedBox(
+                  height: 6,
+                ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text('Total'),
-                      Expanded(child: SizedBox(),),
+                      Expanded(
+                        child: SizedBox(),
+                      ),
                       Text(
                         'Rp. ' + total.toString(),
                         style: TextStyle(
@@ -402,8 +410,7 @@ class _TicketReviewState extends State<TicketReview> {
 
     String url = BaseApi().apiUrl + '/promo/check';
     final response = await http.post(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session},
-        body: body);
+        headers: {'Authorization': AUTH_KEY, 'cookie': session}, body: body);
 
     print(response.statusCode);
     print(response.body);

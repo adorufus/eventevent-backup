@@ -176,29 +176,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
       selectNotificationSubject.add(payload);
     });
 
-    // _firebaseMessaging.configure(
-    //     onMessage: (Map<String, dynamic> message) async {
-    //       print('on message $message');
-    //       print(message['notification']);
-    //     },
-    //     onBackgroundMessage: myBackgroundMessageHandler,
-    //     onResume: (Map<String, dynamic> message) async {
-    //       List<Widget> navPages = [
-    //         EventDetailsConstructView(id: '15'),
-    //       ];
-
-    //       Navigator.push(
-    //           context, MaterialPageRoute(builder: (context) => navPages[0]));
-    //       print('on resume $message');
-    //     },
-    //     onLaunch: (Map<String, dynamic> message) async {
-    //       print('on launch $message');
-    //     });
-
-    // didRecieveLocalNotificationSubject.stream.listen((RecievedNotification recievedNotification) async {
-
-    // });
-
     registerNotification();
 
     selectNotificationSubject.stream.listen((String payload) async {
@@ -436,13 +413,14 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
     await flutterLocalNotificationsPlugin.show(
         0,
-        Platform.isIOS ? message['aps']['alert']['title'] : message['notification']['title'],
-        Platform.isIOS ? message['aps']['alert']['body'] : message['notification']['body'],
+        Platform.isIOS
+            ? message['aps']['alert']['title']
+            : message['notification']['title'],
+        Platform.isIOS
+            ? message['aps']['alert']['body']
+            : message['notification']['body'],
         platformChannelSpecifics,
         payload: json.encode(message));
-
-    
-        
 
     // flutterLocalNotificationsPlugin.didReceiveLocalNotificationCallback();
   }
@@ -452,7 +430,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
     String url = BaseApi().apiUrl + '/device/token';
 
     final response = await http.post(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     }, body: {
       'X-API-KEY': API_KEY,
@@ -480,10 +458,11 @@ class _DashboardWidgetState extends State<DashboardWidget>
             return;
           },
           onLaunch: (Map<String, dynamic> message) {
-            print('onResume: $message');
+            print('onLaunch: $message');
             return;
           },
-          onBackgroundMessage: Platform.isIOS ? null : myBackgroundMessageHandler);
+          onBackgroundMessage:
+              Platform.isIOS ? null : myBackgroundMessageHandler);
     } on PlatformException catch (e) {
       print(e.message + ' ' + e.code);
     }
@@ -831,10 +810,11 @@ class _DashboardWidgetState extends State<DashboardWidget>
   Future<http.Response> getPopup() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl + '/announcement?X-API-KEY=$API_KEY&type=mobile';
+    String url =
+        BaseApi().apiUrl + '/announcement?X-API-KEY=$API_KEY&type=mobile';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 
@@ -867,7 +847,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text('Choose Livestream Platform',
-                  textAlign: TextAlign.center,
+                      textAlign: TextAlign.center,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                   SizedBox(height: 11),

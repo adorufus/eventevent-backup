@@ -10,7 +10,8 @@ import 'package:eventevent/Widgets/registerWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -67,7 +68,8 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
     final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
-    final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+    final FirebaseUser user =
+        (await _auth.signInWithCredential(credential)).user;
     assert(user.email != null);
     assert(user.displayName != null);
     assert(!user.isAnonymous);
@@ -99,7 +101,7 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
     final response = await http.get(
       url,
       headers: {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
       },
     );
 
@@ -114,7 +116,9 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget(isRest: false,)));
+              builder: (BuildContext context) => DashboardWidget(
+                    isRest: false,
+                  )));
     } else {
       var extractedData = json.decode(response.body);
       if (extractedData['desc'] == 'User is not register') {
@@ -129,8 +133,7 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
   Future goLoginFb(String fbToken) async {
     String url =
         BaseApi().apiUrl + '/signin/facebook?X-API-KEY=$API_KEY&token=$fbToken';
-    final response =
-        await http.get(url, headers: {'Authorization': AUTHORIZATION_KEY});
+    final response = await http.get(url, headers: {'Authorization': AUTH_KEY});
 
     print(response.statusCode);
     print(response.body);
@@ -148,7 +151,9 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => DashboardWidget(isRest: false,)));
+              builder: (BuildContext context) => DashboardWidget(
+                    isRest: false,
+                  )));
     } else {
       var extractedData = json.decode(response.body);
       String message = extractedData['desc'];
@@ -202,7 +207,8 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -212,241 +218,244 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
     )..init(context);
     return Scaffold(
       body: Container(
-         child: ListView(
-           children: <Widget>[
-             Row(
-               children: <Widget>[
-                 Text(widget.selectedPage),
-                 Flexible(
-                   child: SizedBox(),
-                 ),
-                 GestureDetector(
-                   onTap: (){
-                     Navigator.pop(context);
-                   },
-                   child: Icon(Icons.close),
-                 )
-               ],
-             ),
-             SizedBox(
-               height: ScreenUtil.instance.setWidth(10),
-             ),
-             Text('Sign in to start using timeline and get updates from your friends and organizers', textAlign: TextAlign.center,),
-             SizedBox(
-               height: ScreenUtil.instance.setWidth(15),
-             ),
-             Container(
-                margin: EdgeInsets.symmetric(
-                    vertical: ScreenUtil.instance.setWidth(10),
-                    horizontal: ScreenUtil.instance.setWidth(26)),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    LoginWidget()));
-                      },
-                      child: Container(
-                        width: ScreenUtil.instance.setWidth(147.41),
-                        height: ScreenUtil.instance.setWidth(37.02),
-                        decoration: BoxDecoration(
-                            color: eventajaGreenTeal,
-                            borderRadius: BorderRadius.circular(
-                                ScreenUtil.instance.setWidth(180)),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  blurRadius: 2,
-                                  color: eventajaGreenTeal.withOpacity(0.3),
-                                  spreadRadius: 1.5)
-                            ]),
-                        child: Center(
-                          child: Text(
-                            'LOGIN',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: ScreenUtil.instance.setSp(12),
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: ScreenUtil.instance.setWidth(13)),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    RegisterWidget()));
-                      },
-                      child: Container(
-                        width: ScreenUtil.instance.setWidth(147.41),
-                        height: ScreenUtil.instance.setWidth(37.02),
-                        decoration: BoxDecoration(
-                            color: eventajaGreenTeal,
-                            borderRadius: BorderRadius.circular(
-                                ScreenUtil.instance.setWidth(180)),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  blurRadius: 2,
-                                  color: eventajaGreenTeal.withOpacity(0.3),
-                                  spreadRadius: 1.5)
-                            ]),
-                        child: Center(
-                          child: Text(
-                            'REGISTER',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: ScreenUtil.instance.setSp(12),
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+        child: ListView(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Text(widget.selectedPage),
+                Flexible(
+                  child: SizedBox(),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  initiateFacebookLogin();
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil.instance.setWidth(26)),
-                  width: MediaQuery.of(context).size.width,
-                  height: ScreenUtil.instance.setWidth(37.02),
-                  decoration: BoxDecoration(
-                      color: Color(0xFF4C64B5),
-                      borderRadius: BorderRadius.circular(180),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            blurRadius: 2,
-                            color: Color(0xFF4C64B5).withOpacity(0.5),
-                            spreadRadius: 1.5)
-                      ]),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                          height: ScreenUtil.instance.setWidth(37),
-                          width: ScreenUtil.instance.setWidth(37),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle, color: Color(0xFF324b9c)),
-                          child: Center(
-                              child: Image.asset('assets/drawable/facebook.png',
-                                  scale: 3))),
-                      Flexible(
-                        child: Center(
-                          child: Text(
-                            'LOGIN WITH FACEBOOK',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: ScreenUtil.instance.setSp(12),
-                                fontWeight: FontWeight.bold),
-                          ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(Icons.close),
+                )
+              ],
+            ),
+            SizedBox(
+              height: ScreenUtil.instance.setWidth(10),
+            ),
+            Text(
+              'Sign in to start using timeline and get updates from your friends and organizers',
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: ScreenUtil.instance.setWidth(15),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(
+                  vertical: ScreenUtil.instance.setWidth(10),
+                  horizontal: ScreenUtil.instance.setWidth(26)),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  LoginWidget()));
+                    },
+                    child: Container(
+                      width: ScreenUtil.instance.setWidth(147.41),
+                      height: ScreenUtil.instance.setWidth(37.02),
+                      decoration: BoxDecoration(
+                          color: eventajaGreenTeal,
+                          borderRadius: BorderRadius.circular(
+                              ScreenUtil.instance.setWidth(180)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                blurRadius: 2,
+                                color: eventajaGreenTeal.withOpacity(0.3),
+                                spreadRadius: 1.5)
+                          ]),
+                      child: Center(
+                        child: Text(
+                          'LOGIN',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: ScreenUtil.instance.setSp(12),
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  SizedBox(width: ScreenUtil.instance.setWidth(13)),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  RegisterWidget()));
+                    },
+                    child: Container(
+                      width: ScreenUtil.instance.setWidth(147.41),
+                      height: ScreenUtil.instance.setWidth(37.02),
+                      decoration: BoxDecoration(
+                          color: eventajaGreenTeal,
+                          borderRadius: BorderRadius.circular(
+                              ScreenUtil.instance.setWidth(180)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                blurRadius: 2,
+                                color: eventajaGreenTeal.withOpacity(0.3),
+                                spreadRadius: 1.5)
+                          ]),
+                      child: Center(
+                        child: Text(
+                          'REGISTER',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: ScreenUtil.instance.setSp(12),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: ScreenUtil.instance.setWidth(10)),
-              GestureDetector(
-                onTap: () {
-                  goLoginGoogle().then((result) {
-                    print(result.accessToken);
-                    print(result.idToken);
-                    proccesGoogle(result.accessToken, result.idToken);
-                  }).catchError((e) {
-                    print(e);
-                  });
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil.instance.setWidth(26)),
-                  width: MediaQuery.of(context).size.width,
-                  height: ScreenUtil.instance.setWidth(37.02),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(180),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            blurRadius: 2,
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 1.5)
-                      ]),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      Container(
+            ),
+            GestureDetector(
+              onTap: () {
+                initiateFacebookLogin();
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(
+                    horizontal: ScreenUtil.instance.setWidth(26)),
+                width: MediaQuery.of(context).size.width,
+                height: ScreenUtil.instance.setWidth(37.02),
+                decoration: BoxDecoration(
+                    color: Color(0xFF4C64B5),
+                    borderRadius: BorderRadius.circular(180),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          blurRadius: 2,
+                          color: Color(0xFF4C64B5).withOpacity(0.5),
+                          spreadRadius: 1.5)
+                    ]),
+                child: Row(
+                  children: <Widget>[
+                    Container(
                         height: ScreenUtil.instance.setWidth(37),
                         width: ScreenUtil.instance.setWidth(37),
                         decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Color(0xFFf9f9f9)),
-                        child:
-                            Image.asset('assets/drawable/google.png', scale: 3),
-                      ),
-                      Flexible(
+                            shape: BoxShape.circle, color: Color(0xFF324b9c)),
                         child: Center(
-                          child: Text(
-                            'LOGIN WITH GOOGLE',
-                            style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(12),
-                                fontWeight: FontWeight.bold),
-                          ),
+                            child: Image.asset('assets/drawable/facebook.png',
+                                scale: 3))),
+                    Flexible(
+                      child: Center(
+                        child: Text(
+                          'LOGIN WITH FACEBOOK',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: ScreenUtil.instance.setSp(12),
+                              fontWeight: FontWeight.bold),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 15, left: 5, right: 5),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('By registering, you are agree with',
-                        style:
-                            TextStyle(fontSize: ScreenUtil.instance.setSp(11))),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Terms()));
-                      },
-                      child: Text(
-                        ' Terms',
-                        style: TextStyle(
-                            fontSize: ScreenUtil.instance.setSp(12),
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Text(' and',
-                        style:
-                            TextStyle(fontSize: ScreenUtil.instance.setSp(11))),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PrivacyPolicy()));
-                      },
-                      child: Text(
-                        ' Privacy Policy',
-                        style: TextStyle(
-                            fontSize: ScreenUtil.instance.setSp(12),
-                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
                 ),
               ),
-           ],
-         ),
+            ),
+            SizedBox(height: ScreenUtil.instance.setWidth(10)),
+            GestureDetector(
+              onTap: () {
+                goLoginGoogle().then((result) {
+                  print(result.accessToken);
+                  print(result.idToken);
+                  proccesGoogle(result.accessToken, result.idToken);
+                }).catchError((e) {
+                  print(e);
+                });
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(
+                    horizontal: ScreenUtil.instance.setWidth(26)),
+                width: MediaQuery.of(context).size.width,
+                height: ScreenUtil.instance.setWidth(37.02),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(180),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          blurRadius: 2,
+                          color: Colors.black.withOpacity(0.1),
+                          spreadRadius: 1.5)
+                    ]),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Container(
+                      height: ScreenUtil.instance.setWidth(37),
+                      width: ScreenUtil.instance.setWidth(37),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: Color(0xFFf9f9f9)),
+                      child:
+                          Image.asset('assets/drawable/google.png', scale: 3),
+                    ),
+                    Flexible(
+                      child: Center(
+                        child: Text(
+                          'LOGIN WITH GOOGLE',
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(12),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 15, left: 5, right: 5),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('By registering, you are agree with',
+                      style:
+                          TextStyle(fontSize: ScreenUtil.instance.setSp(11))),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Terms()));
+                    },
+                    child: Text(
+                      ' Terms',
+                      style: TextStyle(
+                          fontSize: ScreenUtil.instance.setSp(12),
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Text(' and',
+                      style:
+                          TextStyle(fontSize: ScreenUtil.instance.setSp(11))),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PrivacyPolicy()));
+                    },
+                    child: Text(
+                      ' Privacy Policy',
+                      style: TextStyle(
+                          fontSize: ScreenUtil.instance.setSp(12),
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

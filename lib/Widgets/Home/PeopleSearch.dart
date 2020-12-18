@@ -222,7 +222,7 @@ class PeopleSearchState extends State<PeopleSearch> {
     setState(() {
       peopleNewPage = 0;
     });
-    _getProfile().then((response) async{
+    _getProfile().then((response) async {
       var extractedData = json.decode(response.body);
       List resultData = extractedData['data'];
       List tempList = new List();
@@ -237,14 +237,13 @@ class PeopleSearchState extends State<PeopleSearch> {
         profile = tempList;
         filteredProfile = profile;
         await Future.delayed(Duration(seconds: 3));
-        if(mounted) setState((){});
+        if (mounted) setState(() {});
         peopleSearchRefreshController.refreshCompleted();
-
       } else if (response.statusCode == 400) {
         isLoading = false;
         notFound = true;
-        
-        if(mounted) setState((){});
+
+        if (mounted) setState(() {});
         peopleSearchRefreshController.refreshFailed();
       }
     });
@@ -324,7 +323,7 @@ class PeopleSearchState extends State<PeopleSearch> {
     int currentPage = 1;
 
     setState(() {
-      if(isLoadData == false){
+      if (isLoadData == false) {
         isLoading = true;
       }
       if (page != null) {
@@ -336,7 +335,7 @@ class PeopleSearchState extends State<PeopleSearch> {
         '/user/search?X-API-KEY=$API_KEY&people=${searchController.text}&page=$currentPage';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 

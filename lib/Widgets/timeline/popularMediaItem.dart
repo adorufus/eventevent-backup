@@ -297,7 +297,7 @@ class _MediaItemState extends State<MediaItem> {
     String url = BaseApi().apiUrl + '/media/love';
 
     final response = await http.post(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     }, body: {
       'X-API-KEY': API_KEY,

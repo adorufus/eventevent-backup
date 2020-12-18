@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +19,8 @@ class ForgotPasswordState extends State<ForgotPassword> {
   var _usernameController = new TextEditingController();
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -31,9 +33,9 @@ class ForgotPasswordState extends State<ForgotPassword> {
         brightness: Brightness.light,
         backgroundColor: Colors.white,
         leading: GestureDetector(
-          onTap: (){
-            Navigator.pop(context);
-          },
+            onTap: () {
+              Navigator.pop(context);
+            },
             child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal)),
         centerTitle: true,
         title: Text(
@@ -61,7 +63,9 @@ class ForgotPasswordState extends State<ForgotPassword> {
                 ),
                 Text(
                   'Enter your username or the email address associated with your account.',
-                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), color: Colors.grey),
+                  style: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(18),
+                      color: Colors.grey),
                   textAlign: TextAlign.center,
                 )
               ],
@@ -81,7 +85,7 @@ class ForgotPasswordState extends State<ForgotPassword> {
                 )),
             SizedBox(height: ScreenUtil.instance.setWidth(50)),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 requestForgotPassword(_usernameController.text);
               },
               child: Container(
@@ -105,40 +109,39 @@ class ForgotPasswordState extends State<ForgotPassword> {
 
   Future requestForgotPassword(String username) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    String url = BaseApi().apiUrl +
-        '/forgot/password';
-    
-    final response = await http.post(
-      url,
-      headers: {
-        'Authorization': AUTHORIZATION_KEY,
-        'cookie': preferences.getString('Session'),
-      },
-      body: {
-        'X-API-KEY': API_KEY,
-        'username': username
-      }
-    );
+    String url = BaseApi().apiUrl + '/forgot/password';
+
+    final response = await http.post(url, headers: {
+      'Authorization': AUTH_KEY,
+      'cookie': preferences.getString('Session'),
+    }, body: {
+      'X-API-KEY': API_KEY,
+      'username': username
+    });
 
     print(response.statusCode);
     print(response.body);
 
-    if(response.statusCode == 201){
+    if (response.statusCode == 201) {
       var extractedData = json.decode(response.body);
-      Navigator.push(context, MaterialPageRoute(
-        builder: (BuildContext context) => SuccessResetPassword(username: username,)
-      ));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => SuccessResetPassword(
+                    username: username,
+                  )));
     }
   }
 }
 
-class SuccessResetPassword extends StatelessWidget{
+class SuccessResetPassword extends StatelessWidget {
   final username;
 
   const SuccessResetPassword({Key key, this.username}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -149,23 +152,27 @@ class SuccessResetPassword extends StatelessWidget{
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        brightness: Brightness.light,
-        backgroundColor: Colors.white,
-        elevation: 1,
-        leading: GestureDetector(
-          onTap: (){
-            Navigator.of(context).pop();
-          },
-          child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal)
-        ),
-        title: Text('RESET PASSWORD', style: TextStyle(color: eventajaGreenTeal),),
-        centerTitle: true
-      ),
+          brightness: Brightness.light,
+          backgroundColor: Colors.white,
+          elevation: 1,
+          leading: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal)),
+          title: Text(
+            'RESET PASSWORD',
+            style: TextStyle(color: eventajaGreenTeal),
+          ),
+          centerTitle: true),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 35),
         child: Center(
-          child: Text('Hi $username, an email has been set to your account\'s email address, Please check your email to continue', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18)), textAlign: TextAlign.center,)
-        ),
+            child: Text(
+          'Hi $username, an email has been set to your account\'s email address, Please check your email to continue',
+          style: TextStyle(fontSize: ScreenUtil.instance.setSp(18)),
+          textAlign: TextAlign.center,
+        )),
       ),
     );
   }

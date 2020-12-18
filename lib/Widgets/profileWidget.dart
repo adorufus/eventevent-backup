@@ -6,7 +6,8 @@ import 'package:eventevent/Widgets/editProfileWidget.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/API/profileModel.dart';
 import 'package:http/http.dart' as http;
@@ -21,7 +22,8 @@ class ProfileWidget extends StatefulWidget {
   final userId;
   final isRest;
 
-  const ProfileWidget({Key key, this.initialIndex, this.userId, this.isRest}) : super(key: key);
+  const ProfileWidget({Key key, this.initialIndex, this.userId, this.isRest})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -30,7 +32,6 @@ class ProfileWidget extends StatefulWidget {
 }
 
 class _ProfileWidgetState extends State<ProfileWidget> {
-
   String fullName;
   String firstName;
   String username;
@@ -73,7 +74,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   }
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -84,7 +86,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     return userData == null
         ? HomeLoadingScreen().profileLoading(context)
         : ProfileHeader(
-          isRest: widget.isRest,
+            isRest: widget.isRest,
             username: username,
             fullName: fullName,
             firstName: firstName,
@@ -116,13 +118,13 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': preferences.getString('Session')
       };
     }

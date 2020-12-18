@@ -414,8 +414,8 @@ class PaymentBcaState extends State<PaymentBCA> {
 
     String url = BaseApi().apiUrl +
         '/ticket_transaction/detail?transID=${widget.transactionID}&X-API-KEY=${API_KEY}';
-    final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session});
+    final response = await http
+        .get(url, headers: {'Authorization': AUTH_KEY, 'cookie': session});
 
     print(response.body);
     print(response.statusCode);
@@ -433,8 +433,9 @@ class PaymentBcaState extends State<PaymentBCA> {
         imageUriBank = paymentData['payment']['data_vendor']['icon'];
         _dDay = DateTime.parse(paymentData['expired_time']);
 
-        int firstPrice = int.parse(paymentData['amount_detail']['final_amount']);
-        
+        int firstPrice =
+            int.parse(paymentData['amount_detail']['final_amount']);
+
         finalAmount = (firstPrice).toString();
 
         firstAmount = finalAmount.substring(0, finalAmount.length - 3);

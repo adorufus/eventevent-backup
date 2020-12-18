@@ -30,7 +30,8 @@ class TicketSalesState extends State<TicketSales> {
   String eventName;
   Map ticketSalesData;
   List ticketData = [];
-  RefreshController refreshController = new RefreshController(initialRefresh: true);
+  RefreshController refreshController =
+      new RefreshController(initialRefresh: true);
 
   @override
   void initState() {
@@ -48,13 +49,11 @@ class TicketSalesState extends State<TicketSales> {
   }
 
   void onRefresh() async {
-    getTicketSales().then((_)async{
-      
-    });
+    getTicketSales().then((_) async {});
 
     await Future.delayed(Duration(seconds: 2));
 
-    if(mounted) setState((){});
+    if (mounted) setState(() {});
     refreshController.refreshCompleted();
   }
 
@@ -69,25 +68,27 @@ class TicketSalesState extends State<TicketSales> {
       allowFontScaling: true,
     )..init(context);
 
-    return ticketSalesData == null || ticketData == null ? HomeLoadingScreen().eventStatisticLoading(context) : Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.light,
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal)),
-      ),
-      body:Container(
+    return ticketSalesData == null || ticketData == null
+        ? HomeLoadingScreen().eventStatisticLoading(context)
+        : Scaffold(
+            appBar: AppBar(
+              brightness: Brightness.light,
+              elevation: 0,
+              backgroundColor: Colors.white,
+              leading: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal)),
+            ),
+            body: Container(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: SmartRefresher(
                 controller: refreshController,
                 enablePullDown: true,
                 enablePullUp: false,
-                onRefresh: (){
+                onRefresh: () {
                   onRefresh();
                 },
                 child: ListView(
@@ -279,10 +280,11 @@ class TicketSalesState extends State<TicketSales> {
                                         height:
                                             ScreenUtil.instance.setWidth(100),
                                         width: ScreenUtil.instance.setWidth(70),
-                                        child: Image.asset("assets/grey-fade.jpg",
-                                        // Image.network(
-                                        //   ticketData[i]['event']
-                                        //       ['pictureTimelinePath'],
+                                        child: Image.asset(
+                                          "assets/grey-fade.jpg",
+                                          // Image.network(
+                                          //   ticketData[i]['event']
+                                          //       ['pictureTimelinePath'],
                                           fit: BoxFit.fill,
                                         ),
                                       ),
@@ -437,7 +439,7 @@ class TicketSalesState extends State<TicketSales> {
                 ),
               ),
             ),
-    );
+          );
   }
 
   Future getTicketSales() async {
@@ -446,7 +448,7 @@ class TicketSalesState extends State<TicketSales> {
     String url = BaseApi().apiUrl + '/event/sales';
 
     final response = await http.post(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     }, body: {
       'X-API-KEY': API_KEY,

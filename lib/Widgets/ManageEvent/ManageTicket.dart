@@ -88,10 +88,10 @@ class ManageTicketState extends State<ManageTicket> {
                             ticketList[i]['paid_ticket_type']['type'] ==
                                 'paid_seating') {
                           itemColor = Color(0xFF34B323);
-                          itemPriceText =
-                              'Rp. ' + formatPrice(
-                              price: ticketList[i]['final_price']
-                                  .toString(),);
+                          itemPriceText = 'Rp. ' +
+                              formatPrice(
+                                price: ticketList[i]['final_price'].toString(),
+                              );
                         } else if (ticketList[i]['event']['ticket_type']
                                 ['type'] ==
                             'no_ticket') {
@@ -115,13 +115,16 @@ class ManageTicketState extends State<ManageTicket> {
                           itemColor = Color(0xFFFFAA00);
                           itemPriceText =
                               ticketList[i]['event']['ticket_type']['name'];
-                        } else if (ticketList[i]['event']['ticket_type']['type'] ==
+                        } else if (ticketList[i]['event']['ticket_type']
+                                ['type'] ==
                             'paid_live_stream') {
                           itemColor = itemColor = Color(0xFF34B323);
-                          itemPriceText = 'Rp. ' + formatPrice(
-                              price: ticketList[i]['final_price']
-                                  .toString(),);
-                        } else if (ticketList[i]['event']['ticket_type']['type'] ==
+                          itemPriceText = 'Rp. ' +
+                              formatPrice(
+                                price: ticketList[i]['final_price'].toString(),
+                              );
+                        } else if (ticketList[i]['event']['ticket_type']
+                                ['type'] ==
                             'free_live_stream') {
                           itemColor = Color(0xFFFFAA00);
                           itemPriceText =
@@ -143,16 +146,18 @@ class ManageTicketState extends State<ManageTicket> {
                                 await SharedPreferences.getInstance();
                             prefs.setString('Previous Widget', 'AddNewTicket');
 
-                            
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => EditTicketDetail(
                                           ticketTitle: ticketList[i]
                                               ['ticket_name'],
-                                          ticketImage: ticketList[i].containsKey("ticket_image") ? ticketList[i]
-                                              ['ticket_image']['secure_url'] : ticketList[i]
-                                              ['event']['pictureAvatarPath'],
+                                          ticketImage: ticketList[i]
+                                                  .containsKey("ticket_image")
+                                              ? ticketList[i]['ticket_image']
+                                                  ['secure_url']
+                                              : ticketList[i]['event']
+                                                  ['pictureAvatarPath'],
                                           ticketQuantity: ticketList[i]
                                               ['quantity'],
                                           ticketDescription: ticketList[i]
@@ -201,9 +206,12 @@ class ManageTicketState extends State<ManageTicket> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
                                       child: Image.network(
-                                        ticketList[i].containsKey("ticket_image") ? ticketList[i]
-                                              ['ticket_image']['secure_url'] : ticketList[i]
-                                              ['event']['pictureAvatarPath'],
+                                        ticketList[i]
+                                                .containsKey("ticket_image")
+                                            ? ticketList[i]['ticket_image']
+                                                ['secure_url']
+                                            : ticketList[i]['event']
+                                                ['pictureAvatarPath'],
                                         fit: BoxFit.fill,
                                       ),
                                     ),
@@ -222,7 +230,8 @@ class ManageTicketState extends State<ManageTicket> {
                                           style: TextStyle(
                                               fontSize:
                                                   ScreenUtil.instance.setSp(20),
-                                              fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,
+                                              fontWeight: FontWeight.bold),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       SizedBox(
@@ -270,8 +279,8 @@ class ManageTicketState extends State<ManageTicket> {
                                         child: Text(
                                             'Ticket(s) left: ${(int.parse(ticketList[i]['quantity']) - int.parse(ticketList[i]['sold']))} / ${ticketList[i]['quantity']}',
                                             style: TextStyle(
-                                                fontSize:
-                                                    ScreenUtil.instance.setSp(12),
+                                                fontSize: ScreenUtil.instance
+                                                    .setSp(12),
                                                 color: Colors.grey),
                                             textAlign: TextAlign.center),
                                       )
@@ -286,7 +295,9 @@ class ManageTicketState extends State<ManageTicket> {
                                     color: Colors.black,
                                     size: 30,
                                   ),
-                                  SizedBox(width: 12,)
+                                  SizedBox(
+                                    width: 12,
+                                  )
                                 ],
                               ),
                             ),
@@ -346,7 +357,7 @@ class ManageTicketState extends State<ManageTicket> {
         '/ticket_setup/list?X-API-KEY=$API_KEY&eventID=${widget.eventID}';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 
@@ -372,7 +383,7 @@ class ManageTicketState extends State<ManageTicket> {
         BaseApi().apiUrl + '/ticket_setup/tickets?X-API-KEY=$API_KEY&id=$id';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 

@@ -183,7 +183,9 @@ class _EventDetailCommentState extends State<EventDetailComment> {
                   return Container();
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Container(child: Center(child: CupertinoActivityIndicator(radius: 20)));
+                  return Container(
+                      child: Center(
+                          child: CupertinoActivityIndicator(radius: 20)));
                 }
                 if (snapshot.data == null) {
                   print('loading');
@@ -207,13 +209,14 @@ class _EventDetailCommentState extends State<EventDetailComment> {
                         backgroundImage: NetworkImage(commentList[i]['photo']),
                       ),
                       title: Text(
-                        commentList[i]['fullName'] +
-                            ': ',
+                        commentList[i]['fullName'] + ': ',
                         style: TextStyle(
                             fontSize: ScreenUtil.instance.setSp(12),
                             fontWeight: FontWeight.bold),
                       ),
-                      subtitle: Text(commentList[i]['response'],),
+                      subtitle: Text(
+                        commentList[i]['response'],
+                      ),
                     );
                   },
                 );
@@ -231,7 +234,7 @@ class _EventDetailCommentState extends State<EventDetailComment> {
         '/eventdetail_comment/list?X-API-KEY=$API_KEY&id=${widget.eventID}&page=1';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 
@@ -251,7 +254,7 @@ class _EventDetailCommentState extends State<EventDetailComment> {
         '/user/search?X-API-KEY=$API_KEY&people=$queryString&page=1';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': preferences.getString('Session')
     });
 
@@ -291,7 +294,7 @@ class _EventDetailCommentState extends State<EventDetailComment> {
     }
 
     final response = await http.post(url, body: body, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 

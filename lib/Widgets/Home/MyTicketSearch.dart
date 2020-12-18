@@ -412,7 +412,7 @@ class MyTicketSearchState extends State<MyTicketSearch> {
         '/user/search?X-API-KEY=$API_KEY&people=${searchController.text}&page=1';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 
@@ -430,7 +430,7 @@ class MyTicketSearchState extends State<MyTicketSearch> {
         '/tickets/all?X-API-KEY=$API_KEY&page=1&search=${searchController.text}';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 

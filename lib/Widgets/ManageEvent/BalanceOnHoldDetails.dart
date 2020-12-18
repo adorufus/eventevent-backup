@@ -30,7 +30,8 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
   String price = '0';
   int balance = 0;
   int newPage = 0;
-  RefreshController refreshController = new RefreshController(initialRefresh: false);
+  RefreshController refreshController =
+      new RefreshController(initialRefresh: false);
   List<int> amountAccumulatedList = [];
 
   @override
@@ -81,9 +82,9 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
     });
   }
 
-  void onLoading () async {
+  void onLoading() async {
     await Future.delayed(Duration(seconds: 2));
-    setState((){
+    setState(() {
       newPage += 1;
     });
 
@@ -117,7 +118,6 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
                 print(e);
                 refreshController.loadFailed();
               }
-
             }
           });
         }
@@ -129,7 +129,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
   }
 
   void onRefresh() async {
-    setState((){
+    setState(() {
       newPage = 0;
     });
 
@@ -137,7 +137,6 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
       var extractedData = json.decode(response.body);
 
       if (response.statusCode == 200) {
-        
         if (extractedData['data']['history'].toString() == 'false') {
           setState(() {
             isEmpty = true;
@@ -200,7 +199,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
         onRefresh: onRefresh,
         controller: refreshController,
         enablePullUp: true,
-              child: ListView(
+        child: ListView(
           children: <Widget>[
             Container(
               decoration: BoxDecoration(color: Colors.white, boxShadow: [
@@ -249,8 +248,9 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
                     : ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
-                        itemCount:
-                            ticketSalesData == null ? 0 : ticketSalesData.length,
+                        itemCount: ticketSalesData == null
+                            ? 0
+                            : ticketSalesData.length,
                         // itemCount: 5,
                         itemBuilder: (context, i) {
                           print(price);
@@ -269,7 +269,8 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
                             child: BalanceOnHoldItem(
                                 username: ticketSalesData[i]['username'],
                                 totalPrice: reversedList[i],
-                                price: int.parse(ticketSalesData[i]['quantity']) <
+                                price: int.parse(
+                                            ticketSalesData[i]['quantity']) <
                                         2
                                     ? ticketSalesData[i]['amount']
                                     : (int.parse(ticketSalesData[i]['amount']) /
@@ -295,7 +296,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     int currentPage = 1;
     setState(() {
-      if(page != null){
+      if (page != null) {
         currentPage += page;
       }
       isPull == false ? isLoading = true : isLoading = false;
@@ -305,7 +306,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
       BaseApi().apiUrl +
           '/event/sales_history?X-API-KEY=$API_KEY&event_id=${widget.eventId}&page=$currentPage',
       headers: {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': preferences.getString('Session')
       },
     );

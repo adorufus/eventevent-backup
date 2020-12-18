@@ -278,7 +278,7 @@ class BuyersState extends State<Buyers> {
                     ),
                     isExportDataLoading == true
                         ? Container(
-                          color: Colors.grey.withOpacity(.8),
+                            color: Colors.grey.withOpacity(.8),
                             height: MediaQuery.of(context).size.height,
                             width: MediaQuery.of(context).size.width,
                             child: Column(
@@ -288,7 +288,9 @@ class BuyersState extends State<Buyers> {
                                 CupertinoActivityIndicator(
                                   animating: true,
                                 ),
-                                SizedBox(height: 12,),
+                                SizedBox(
+                                  height: 12,
+                                ),
                                 Text('Please wait, this might take a while...')
                               ],
                             ),
@@ -406,7 +408,7 @@ class BuyersState extends State<Buyers> {
 
     try {
       final response = await http.get(url, headers: {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': prefs.getString('Session'),
       });
 
@@ -444,7 +446,7 @@ class BuyersState extends State<Buyers> {
         '/tickets/user?X-API-KEY=$API_KEY&ticketID=${widget.ticketID}&page=$currentPage';
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 

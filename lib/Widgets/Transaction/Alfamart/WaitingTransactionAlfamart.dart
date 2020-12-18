@@ -294,8 +294,7 @@ class _WaitingTransactionAlfamartState
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
                     children: <Widget>[
                       Padding(
-                        padding:
-                            const EdgeInsets.only(left: 15, right: 15),
+                        padding: const EdgeInsets.only(left: 15, right: 15),
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -362,8 +361,8 @@ class _WaitingTransactionAlfamartState
 
     String url = BaseApi().apiUrl +
         '/ticket_transaction/detail?transID=${widget.transactionID}&X-API-KEY=${API_KEY}';
-    final response = await http.get(url,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session});
+    final response = await http
+        .get(url, headers: {'Authorization': AUTH_KEY, 'cookie': session});
 
     print(response.body);
     print(response.statusCode);

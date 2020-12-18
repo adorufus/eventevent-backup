@@ -230,8 +230,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                                             ScreenUtil.instance.setWidth(170),
                                         height:
                                             ScreenUtil.instance.setWidth(40),
-                                        child:
-                                            Text(startDate)),
+                                        child: Text(startDate)),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(7)),
@@ -825,8 +824,8 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
         'is_single_ticket': widget.ticketDetail['single_ticket'],
         'ticket_image': imageFile == null
             ? ''
-            : await MultipartFile.fromFile(
-                imageFile.path, filename: "eventeventticket-${DateTime.now().toString()}.jpg",
+            : await MultipartFile.fromFile(imageFile.path,
+                filename: "eventeventticket-${DateTime.now().toString()}.jpg",
                 contentType: MediaType('image', 'jpeg'))
       };
 
@@ -839,7 +838,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
         '/ticket_setup/update',
         options: Options(
           headers: {
-            'Authorization': AUTHORIZATION_KEY,
+            'Authorization': AUTH_KEY,
             'cookie': prefs.getString('Session')
           },
           responseType: ResponseType.plain,

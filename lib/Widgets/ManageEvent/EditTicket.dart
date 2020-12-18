@@ -715,7 +715,7 @@ class _EditTicketState extends State<EditTicket> {
           '/ticket_setup/update',
           options: Options(
             headers: {
-              'Authorization': AUTHORIZATION_KEY,
+              'Authorization': AUTH_KEY,
               'cookie': prefs.getString('Session')
             },
             responseType: ResponseType.plain,

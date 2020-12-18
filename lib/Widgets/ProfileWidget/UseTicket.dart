@@ -340,7 +340,7 @@ class UseTicketState extends State<UseTicket> {
                                     BaseApi().apiUrl + '/tickets/verify';
 
                                 final response = await http.post(url, headers: {
-                                  'Authorization': AUTHORIZATION_KEY,
+                                  'Authorization': AUTH_KEY,
                                   'cookie': prefs.getString('Session')
                                 }, body: {
                                   'X-API-KEY': API_KEY,
@@ -592,7 +592,7 @@ class UseTicketState extends State<UseTicket> {
         baseUrl +
             '/tickets/get?paidTicketId=${widget.ticketID}&X-API-KEY=$API_KEY',
         headers: {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': preferences.getString("Session")
         },
       );

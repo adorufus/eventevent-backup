@@ -171,9 +171,13 @@ class SetupBankAccountState extends State<SetupBankAccount> {
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) => DashboardWidget(isRest: false, selectedPage: 3,)),
+                          builder: (BuildContext context) => DashboardWidget(
+                                isRest: false,
+                                selectedPage: 3,
+                              )),
                       ModalRoute.withName('/WithdrawBank'));
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => WithdrawBank()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => WithdrawBank()));
                 } else {
                   Flushbar(
                     flushbarPosition: FlushbarPosition.TOP,
@@ -212,7 +216,7 @@ class SetupBankAccountState extends State<SetupBankAccount> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     final response = await http.post(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     }, body: {
       'X-API-KEY': API_KEY,

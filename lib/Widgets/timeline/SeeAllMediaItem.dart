@@ -498,13 +498,13 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
       if (widget.isRest == true) {
         baseApi = BaseApi().restUrl;
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'signature': SIGNATURE,
         };
       } else {
         baseApi = BaseApi().apiUrl;
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': prefs.getString('Session'),
         };
       }
@@ -545,13 +545,13 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
       if (widget.isRest == true) {
         baseApi = BaseApi().restUrl;
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'signature': SIGNATURE,
         };
       } else {
         baseApi = BaseApi().apiUrl;
         headers = {
-          'Authorization': AUTHORIZATION_KEY,
+          'Authorization': AUTH_KEY,
           'cookie': prefs.getString('Session'),
         };
       }

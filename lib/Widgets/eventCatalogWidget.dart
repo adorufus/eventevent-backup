@@ -1724,12 +1724,12 @@ class _EventCatalogState extends State<EventCatalog>
     Map<String, String> headerType = {};
 
     Map<String, String> headerProd = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     };
 
     Map<String, String> headerRest = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'signature': SIGNATURE
     };
 
@@ -1742,7 +1742,7 @@ class _EventCatalogState extends State<EventCatalog>
     });
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 
@@ -1758,12 +1758,12 @@ class _EventCatalogState extends State<EventCatalog>
     Map<String, String> headerType = {};
 
     Map<String, String> headerProd = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     };
 
     Map<String, String> headerRest = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'signature': SIGNATURE
     };
 
@@ -1776,7 +1776,7 @@ class _EventCatalogState extends State<EventCatalog>
     });
 
     final response = await http.get(url, headers: {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': prefs.getString('Session')
     });
 
@@ -1813,12 +1813,12 @@ class _EventCatalogState extends State<EventCatalog>
     Map<String, String> headerType = {};
 
     Map<String, String> headerProd = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': preferences.getString('Session')
     };
 
     Map<String, String> headerRest = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'signature': SIGNATURE
     };
 
@@ -1885,12 +1885,12 @@ class _EventCatalogState extends State<EventCatalog>
     Map<String, String> headerType = {};
 
     Map<String, String> headerProd = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': preferences.getString('Session')
     };
 
     Map<String, String> headerRest = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'signature': SIGNATURE
     };
 
@@ -2053,12 +2053,12 @@ class _EventCatalogState extends State<EventCatalog>
     Map<String, String> headerType = {};
 
     Map<String, String> headerProd = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': preferences.getString('Session')
     };
 
     Map<String, String> headerRest = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'signature': SIGNATURE
     };
 
@@ -2121,12 +2121,12 @@ class _EventCatalogState extends State<EventCatalog>
     Map<String, String> headerType = {};
 
     Map<String, String> headerProd = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': preferences.getString('Session')
     };
 
     Map<String, String> headerRest = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'signature': SIGNATURE
     };
 
@@ -2189,12 +2189,12 @@ class _EventCatalogState extends State<EventCatalog>
     Map<String, String> headerType = {};
 
     Map<String, String> headerProd = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': preferences.getString('Session')
     };
 
     Map<String, String> headerRest = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'signature': SIGNATURE
     };
 
@@ -2257,14 +2257,14 @@ class _EventCatalogState extends State<EventCatalog>
     Map<String, String> headerType = {};
 
     Map<String, String> headerProd = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'cookie': preferences.getString('Session')
     };
 
     print(headerProd);
 
     Map<String, String> headerRest = {
-      'Authorization': AUTHORIZATION_KEY,
+      'Authorization': AUTH_KEY,
       'signature': SIGNATURE
     };
 

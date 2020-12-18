@@ -158,7 +158,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
     });
 
     final response = await http.post(purchaseUri,
-        headers: {'Authorization': AUTHORIZATION_KEY, 'cookie': session},
+        headers: {'Authorization': AUTH_KEY, 'cookie': session},
         body: widget.ticketType == 'free_limited' ||
                 widget.ticketType == 'free_live_stream'
             ? bodyFreeLimit
@@ -425,7 +425,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       var data = FormData.fromMap(body);
       Response response = await dio.post('/event/create',
           options: Options(headers: {
-            'Authorization': AUTHORIZATION_KEY,
+            'Authorization': AUTH_KEY,
             'cookie': prefs.getString('Session')
           }, responseType: ResponseType.plain),
           data: data, onSendProgress: (sent, total) {

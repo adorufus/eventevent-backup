@@ -193,13 +193,15 @@ class EditEventState extends State<EditEvent> {
           : await MultipartFile.fromFile(imageUri.path,
               filename:
                   "eventevent_event_photo-${DateTime.now().toString()}.jpg"),
-      'addVideo': prefs.getString('POST_EVENT_ADDITIONAL_VIDEO') == null ? '' : await MultipartFile.fromFile(
-          prefs.getString('POST_EVENT_ADDITIONAL_VIDEO'),
-          filename: 'eventevent_video-${DateTime.now()}.mp4',
-          contentType: MediaType('video', 'quicktime')),
+      'addVideo': prefs.getString('POST_EVENT_ADDITIONAL_VIDEO') == null
+          ? ''
+          : await MultipartFile.fromFile(
+              prefs.getString('POST_EVENT_ADDITIONAL_VIDEO'),
+              filename: 'eventevent_video-${DateTime.now()}.mp4',
+              contentType: MediaType('video', 'quicktime')),
     };
 
-    for(int i = 0; i < removedAdditionalMedia.length; i++){
+    for (int i = 0; i < removedAdditionalMedia.length; i++) {
       data['removeContent[$i]'] = removedAdditionalMedia[i];
     }
 
@@ -233,7 +235,7 @@ class EditEventState extends State<EditEvent> {
     try {
       Response response = await dio.post('/event/update',
           options: Options(headers: {
-            'Authorization': AUTHORIZATION_KEY,
+            'Authorization': AUTH_KEY,
             'cookie': prefs.getString('Session')
           }, responseType: ResponseType.plain), onSendProgress: (sent, total) {
         print('hit test');
@@ -1095,10 +1097,10 @@ class EditEventState extends State<EditEvent> {
                               left: 0,
                               child: GestureDetector(
                                 onTap: () {
-                                  if(additionalMediaID[0] == null){
-
+                                  if (additionalMediaID[0] == null) {
                                   } else {
-                                    removedAdditionalMedia.add(additionalMediaID[0]);
+                                    removedAdditionalMedia
+                                        .add(additionalMediaID[0]);
                                   }
                                   additionalMediaPhoto.removeAt(0);
                                   setState(() {});
@@ -1152,10 +1154,10 @@ class EditEventState extends State<EditEvent> {
                               left: 0,
                               child: GestureDetector(
                                 onTap: () {
-                                  if(additionalMediaID[1] == null){
-
+                                  if (additionalMediaID[1] == null) {
                                   } else {
-                                    removedAdditionalMedia.add(additionalMediaID[1]);
+                                    removedAdditionalMedia
+                                        .add(additionalMediaID[1]);
                                   }
                                   additionalMediaPhoto.removeAt(1);
                                   setState(() {});
@@ -1209,10 +1211,10 @@ class EditEventState extends State<EditEvent> {
                               left: 0,
                               child: GestureDetector(
                                 onTap: () {
-                                  if(additionalMediaID[2] == null){
-
+                                  if (additionalMediaID[2] == null) {
                                   } else {
-                                    removedAdditionalMedia.add(additionalMediaID[2]);
+                                    removedAdditionalMedia
+                                        .add(additionalMediaID[2]);
                                   }
                                   additionalMediaPhoto.removeAt(2);
                                   setState(() {});
@@ -1266,10 +1268,10 @@ class EditEventState extends State<EditEvent> {
                               left: 0,
                               child: GestureDetector(
                                 onTap: () {
-                                  if(additionalMediaID[3] == null){
-
+                                  if (additionalMediaID[3] == null) {
                                   } else {
-                                    removedAdditionalMedia.add(additionalMediaID[3]);
+                                    removedAdditionalMedia
+                                        .add(additionalMediaID[3]);
                                   }
                                   additionalMediaPhoto.removeAt(3);
                                   print(additionalMediaPhoto.length);
@@ -1326,10 +1328,10 @@ class EditEventState extends State<EditEvent> {
                               left: 0,
                               child: GestureDetector(
                                 onTap: () {
-                                  if(additionalMediaID[4] == null){
-
+                                  if (additionalMediaID[4] == null) {
                                   } else {
-                                    removedAdditionalMedia.add(additionalMediaID[4]);
+                                    removedAdditionalMedia
+                                        .add(additionalMediaID[4]);
                                   }
                                   additionalMediaPhoto.removeAt(4);
                                   setState(() {});

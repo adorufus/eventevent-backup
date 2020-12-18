@@ -19,7 +19,8 @@ class PublicEventList extends StatefulWidget {
   final type;
   final userId;
 
-  const PublicEventList({Key key, this.type, this.userId, this.isRest}) : super(key: key);
+  const PublicEventList({Key key, this.type, this.userId, this.isRest})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return PublicEventListState();
@@ -106,7 +107,9 @@ class PublicEventListState extends State<PublicEventList> {
       child: isEmpty == true
           ? EmptyState(
               emptyImage: 'assets/drawable/event_empty_state.png',
-              reasonText: widget.type == "going" ? "No Event Going Found :(" : 'You Have No Event Created Yet',
+              reasonText: widget.type == "going"
+                  ? "No Event Going Found :("
+                  : 'You Have No Event Created Yet',
             )
           : publicData == null
               ? HomeLoadingScreen().myTicketLoading()
@@ -184,11 +187,11 @@ class PublicEventListState extends State<PublicEventList> {
                         if (publicData[i]['ticket']['availableTicketStatus'] ==
                             '1') {
                           itemColor = Color(0xFF34B323);
-                          itemPriceText =
-                              'Rp. ' + formatPrice(
-                              price: publicData[i]['ticket']
-                                      ['cheapestTicket']
-                                  .toString(),);
+                          itemPriceText = 'Rp. ' +
+                              formatPrice(
+                                price: publicData[i]['ticket']['cheapestTicket']
+                                    .toString(),
+                              );
                         } else {
                           if (publicData[i]['ticket']['salesStatus'] ==
                               'comingSoon') {
@@ -233,7 +236,8 @@ class PublicEventListState extends State<PublicEventList> {
                       } else if (publicData[i]['ticket_type']['type'] ==
                           'paid_live_stream') {
                         itemColor = eventajaGreenTeal;
-                        itemPriceText = 'Rp. ' + publicData[i]['ticket_type']['name'];
+                        itemPriceText =
+                            'Rp. ' + publicData[i]['ticket_type']['name'];
                       } else if (publicData[i]['ticket_type']['type'] ==
                               'free_limited' ||
                           publicData[i]['ticket_type']['type'] ==
@@ -270,7 +274,7 @@ class PublicEventListState extends State<PublicEventList> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       EventDetailLoadingScreen(
-                                        isRest: widget.isRest,
+                                          isRest: widget.isRest,
                                           eventId: widget.type == 'going'
                                               ? publicData[i]['eventID']
                                               : publicData[i]['id'])));
@@ -386,20 +390,20 @@ class PublicEventListState extends State<PublicEventList> {
   Future fetchMyEvent({int page}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int currentPage = 1;
-    
+
     String baseUrl = '';
     Map<String, String> headers;
 
     if (widget.isRest) {
       baseUrl = BaseApi().restUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'signature': SIGNATURE,
       };
     } else {
       baseUrl = BaseApi().apiUrl;
       headers = {
-        'Authorization': AUTHORIZATION_KEY,
+        'Authorization': AUTH_KEY,
         'cookie': prefs.getString('Session')
       };
     }
