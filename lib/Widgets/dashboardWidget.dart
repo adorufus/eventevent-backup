@@ -188,8 +188,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
 
     _selectedPage = widget.selectedPage;
 
-    // configureNotification();
-
     if (widget.isRest == true) {
       setState(() {
         urlPrefix = 'rest';
