@@ -1846,17 +1846,17 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
+      // Flushbar(
+      //   flushbarPosition: FlushbarPosition.TOP,
+      //   message: response.reasonPhrase,
+      //   backgroundColor: Colors.red,
+      //   duration: Duration(seconds: 3),
+      //   animationDuration: Duration(milliseconds: 500),
+      // )..show(context).then((val) {
 
-      Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: response.reasonPhrase,
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context).then((val) {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
-        });
+      //   });
     }
   }
 
@@ -1919,16 +1919,8 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: 'Collections' + response.reasonPhrase,
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context).then((val) {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
-        });
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     } else if (extractedData['desc'] == 'Event Not Found') {
       setState(() {
         isLoading = false;
@@ -2089,16 +2081,9 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: response.reasonPhrase,
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context).then((val) {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
-        });
+
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     }
   }
 
@@ -2156,16 +2141,8 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: response.reasonPhrase,
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context).then((val) {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
-        });
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     }
   }
 
@@ -2226,16 +2203,8 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: response.reasonPhrase,
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context).then((val) {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
-        });
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     }
   }
 
@@ -2296,16 +2265,8 @@ class _EventCatalogState extends State<EventCatalog>
       setState(() {
         isLoading = false;
       });
-      Flushbar(
-        flushbarPosition: FlushbarPosition.TOP,
-        message: response.reasonPhrase,
-        backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
-        animationDuration: Duration(milliseconds: 500),
-      )..show(context).then((val) {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
-        });
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginRegisterWidget()));
     }
   }
 }

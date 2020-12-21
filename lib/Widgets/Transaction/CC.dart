@@ -338,7 +338,11 @@ class CreditCardInputState extends State<CreditCardInput> {
         "order_id": paymentData['transaction_code'],
         "gross_amount": int.parse(paymentData['amount'])
       },
-      "credit_card": {"token_id": token_id, "authentication": true},
+      "credit_card": {
+        "token_id": token_id,
+        "authentication": true,
+        "bank": "maybank"
+      },
       "item_details": [
         {
           "id": paymentData['paid_ticket_id'],
