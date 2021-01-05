@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/TransactionHistory.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:quiver/async.dart';
 
@@ -321,7 +322,9 @@ class _WaitTransactionState extends State<WaitTransaction>
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
-                            'Rp. ' + widget.finalPrice.toString(),
+                            'Rp ' +
+                                formatPrice(
+                                    price: widget.finalPrice.toString()),
                             style: TextStyle(
                                 fontSize: 35, fontWeight: FontWeight.bold),
                           ),

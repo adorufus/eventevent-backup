@@ -13,6 +13,7 @@ import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
 import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -594,9 +595,9 @@ class PushNotificationState extends State<PushNotification> {
             ),
             notificationData[index]['type'] == 'balance'
                 ? Container()
-                : Text('Rp. ' +
-                    notificationData[index]['detail'][0]['amount'] +
-                    ',-')
+                : Text('Rp ' +
+                    formatPrice(
+                        price: notificationData[index]['detail'][0]['amount']))
           ],
         ),
       );

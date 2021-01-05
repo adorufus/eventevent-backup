@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:async/async.dart';
@@ -403,7 +404,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                                 child: Text(
-                              'Rp. ' + price,
+                              'Rp ' + formatPrice(price: price),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil.instance.setSp(14),
@@ -444,7 +445,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                       Expanded(
                         child: SizedBox(),
                       ),
-                      Text('Rp. ' + price),
+                      Text('Rp ' + formatPrice(price: price)),
                       SizedBox(
                         width: ScreenUtil.instance.setWidth(13),
                       ),
@@ -480,7 +481,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                         child: SizedBox(),
                       ),
                       Text(
-                        '- Rp. ' + fee.toString(),
+                        '- Rp ' + formatPrice(price: fee.toString()),
                         style: TextStyle(color: Colors.red),
                       ),
                       SizedBox(
@@ -515,7 +516,9 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                         child: SizedBox(),
                       ),
                       Text(
-                        'Rp. ' + (int.parse(price) - fee).toString(),
+                        'Rp ' +
+                            formatPrice(
+                                price: (int.parse(price) - fee).toString()),
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontSize: ScreenUtil.instance.setSp(18),
@@ -543,237 +546,237 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                 ]),
             height: ScreenUtil.instance.setWidth(250),
             width: MediaQuery.of(context).size.width,
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+                    Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  Radio(
+                    groupValue: _curValue,
+                    onChanged: (int i) => setState(() {
+                      _curValue = i;
+                    }),
+                    value: 1,
+                  ),
+                  SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('Paid by attendee',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: ScreenUtil.instance.setSp(20))),
+                      SizedBox(height: ScreenUtil.instance.setWidth(10)),
+                      Container(
+                          height: ScreenUtil.instance.setWidth(50),
+                          child: Text(
+                            'eventevent fee will be paid by your \ncustomers, please see details.',
+                            maxLines: 2,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                            softWrap: true,
+                          ))
+                    ],
+                  ),
+                  Expanded(child: SizedBox()),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Radio(
-                        groupValue: _curValue,
-                        onChanged: (int i) => setState(() {
-                          _curValue = i;
-                        }),
-                        value: 1,
-                      ),
-                      SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text('Paid by attendee',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: ScreenUtil.instance.setSp(20))),
-                          SizedBox(height: ScreenUtil.instance.setWidth(10)),
-                          Container(
-                              height: ScreenUtil.instance.setWidth(50),
-                              child: Text(
-                                'eventevent fee will be paid by your \ncustomers, please see details.',
-                                maxLines: 2,
-                                textAlign: TextAlign.left,
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.grey),
-                                softWrap: true,
-                              ))
-                        ],
-                      ),
-                      Expanded(child: SizedBox()),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            height: ScreenUtil.instance.setWidth(28),
-                            width: ScreenUtil.instance.setWidth(110),
-                            decoration: BoxDecoration(
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                      color: Color(0xFF34B323).withOpacity(0.4),
-                                      blurRadius: 2,
-                                      spreadRadius: 1.5)
-                                ],
-                                color: Color(0xFF34B323),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Center(
-                                child: Text(
-                              'Rp. ' + (int.parse(price) + fee).toString(),
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil.instance.setSp(14),
-                                  fontWeight: FontWeight.bold),
-                            )),
-                          ),
-                          SizedBox(
-                            height: ScreenUtil.instance.setWidth(8),
-                          ),
-                          Text(
-                            'Displayed Price',
-                            style: TextStyle(color: Colors.grey, fontSize: 11),
-                          )
-                        ],
+                      Container(
+                        height: ScreenUtil.instance.setWidth(28),
+                        width: ScreenUtil.instance.setWidth(110),
+                        decoration: BoxDecoration(
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Color(0xFF34B323).withOpacity(0.4),
+                                  blurRadius: 2,
+                                  spreadRadius: 1.5)
+                            ],
+                            color: Color(0xFF34B323),
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Center(
+                            child: Text(
+                          'Rp ' +
+                              formatPrice(
+                                  price: (int.parse(price) + fee).toString()),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: ScreenUtil.instance.setSp(14),
+                              fontWeight: FontWeight.bold),
+                        )),
                       ),
                       SizedBox(
-                        width: ScreenUtil.instance.setWidth(13),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: ScreenUtil.instance.setWidth(20),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(50),
-                      ),
-                      Text('Ticket Price'),
-                      Expanded(
-                        child: SizedBox(),
-                      ),
-                      Text(' :'),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(100),
-                      ),
-                      Expanded(
-                        child: SizedBox(),
-                      ),
-                      Text('Rp. ' + price),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(13),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: ScreenUtil.instance.setWidth(10),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(50),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Image.asset('assets/icon_eventevent_kecil.png',
-                              scale: 3),
-                          SizedBox(
-                            width: ScreenUtil.instance.setWidth(5),
-                          ),
-                          Text('Fee'),
-                        ],
-                      ),
-                      Expanded(
-                        child: SizedBox(),
-                      ),
-                      Text(' :'),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(67),
-                      ),
-                      Expanded(
-                        child: SizedBox(),
+                        height: ScreenUtil.instance.setWidth(8),
                       ),
                       Text(
-                        '+ Rp. ' + fee.toString(),
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(13),
-                      ),
+                        'Displayed Price',
+                        style: TextStyle(color: Colors.grey, fontSize: 11),
+                      )
                     ],
                   ),
                   SizedBox(
-                    height: ScreenUtil.instance.setWidth(10),
+                    width: ScreenUtil.instance.setWidth(13),
                   ),
-                  Divider(
-                    color: Colors.black,
-                  ),
+                ],
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(20),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
                   SizedBox(
-                    height: ScreenUtil.instance.setWidth(10),
+                    width: ScreenUtil.instance.setWidth(50),
+                  ),
+                  Text('Ticket Price'),
+                  Expanded(
+                    child: SizedBox(),
+                  ),
+                  Text(' :'),
+                  SizedBox(
+                    width: ScreenUtil.instance.setWidth(100),
+                  ),
+                  Expanded(
+                    child: SizedBox(),
+                  ),
+                  Text('Rp ' + formatPrice(price: price)),
+                  SizedBox(
+                    width: ScreenUtil.instance.setWidth(13),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(10),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    width: ScreenUtil.instance.setWidth(50),
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
+                      Image.asset('assets/icon_eventevent_kecil.png', scale: 3),
                       SizedBox(
-                        width: ScreenUtil.instance.setWidth(50),
+                        width: ScreenUtil.instance.setWidth(5),
                       ),
-                      Text('You\'ll get'),
-                      Expanded(
-                        child: SizedBox(),
-                      ),
-                      Text(' :'),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(67),
-                      ),
-                      Expanded(
-                        child: SizedBox(),
-                      ),
-                      Text(
-                        'Rp. ' + price,
-                        style: TextStyle(
-                            color: eventajaGreenTeal,
-                            fontSize: ScreenUtil.instance.setSp(18),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil.instance.setWidth(13),
-                      ),
+                      Text('Fee'),
                     ],
-                  )
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
-                  //   children: <Widget>[
-                  //     SizedBox(
-                  //       width: ScreenUtil.instance.setWidth(55),
-                  //     ),
-                  //     Text('Ticket Price    :'),
-                  //     SizedBox(
-                  //       width: ScreenUtil.instance.setWidth(55),
-                  //     ),
-                  //     Text('Rp. ' + price)
-                  //   ],
-                  // ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
-                  //   children: <Widget>[
-                  //     SizedBox(
-                  //       width: ScreenUtil.instance.setWidth(55),
-                  //     ),
-                  //     Text('Fee                 :'),
-                  //     SizedBox(
-                  //       width: ScreenUtil.instance.setWidth(55),
-                  //     ),
-                  //     Text(
-                  //       'Rp. ' + '5,000',
-                  //       style: TextStyle(color: Colors.grey[300]),
-                  //     )
-                  //   ],
-                  // ),
-                  // SizedBox(
-                  //   height: ScreenUtil.instance.setWidth(10),
-                  // ),
-                  // Divider(
-                  //   color: Colors.black,
-                  // ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
-                  //   children: <Widget>[
-                  //     SizedBox(
-                  //       width: ScreenUtil.instance.setWidth(55),
-                  //     ),
-                  //     Text('You\'ll get       :'),
-                  //     SizedBox(
-                  //       width: ScreenUtil.instance.setWidth(55),
-                  //     ),
-                  //     Text(
-                  //       'Rp. ' + (int.parse(price) + 5000).toString(),
-                  //       style: TextStyle(
-                  //           color: eventajaGreenTeal,
-                  //           fontSize: ScreenUtil.instance.setSp(18),
-                  //           fontWeight: FontWeight.bold),
-                  //     )
-                  //   ],
-                  // ),
-                ]))
+                  ),
+                  Expanded(
+                    child: SizedBox(),
+                  ),
+                  Text(' :'),
+                  SizedBox(
+                    width: ScreenUtil.instance.setWidth(67),
+                  ),
+                  Expanded(
+                    child: SizedBox(),
+                  ),
+                  Text(
+                    '+ Rp ' + formatPrice(price: fee.toString()),
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  SizedBox(
+                    width: ScreenUtil.instance.setWidth(13),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(10),
+              ),
+              Divider(
+                color: Colors.black,
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(10),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    width: ScreenUtil.instance.setWidth(50),
+                  ),
+                  Text('You\'ll get'),
+                  Expanded(
+                    child: SizedBox(),
+                  ),
+                  Text(' :'),
+                  SizedBox(
+                    width: ScreenUtil.instance.setWidth(67),
+                  ),
+                  Expanded(
+                    child: SizedBox(),
+                  ),
+                  Text(
+                    'Rp ' + formatPrice(price: price),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18),
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    width: ScreenUtil.instance.setWidth(13),
+                  ),
+                ],
+              )
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.start,
+              //   children: <Widget>[
+              //     SizedBox(
+              //       width: ScreenUtil.instance.setWidth(55),
+              //     ),
+              //     Text('Ticket Price    :'),
+              //     SizedBox(
+              //       width: ScreenUtil.instance.setWidth(55),
+              //     ),
+              //     Text('Rp. ' + price)
+              //   ],
+              // ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.start,
+              //   children: <Widget>[
+              //     SizedBox(
+              //       width: ScreenUtil.instance.setWidth(55),
+              //     ),
+              //     Text('Fee                 :'),
+              //     SizedBox(
+              //       width: ScreenUtil.instance.setWidth(55),
+              //     ),
+              //     Text(
+              //       'Rp. ' + '5,000',
+              //       style: TextStyle(color: Colors.grey[300]),
+              //     )
+              //   ],
+              // ),
+              // SizedBox(
+              //   height: ScreenUtil.instance.setWidth(10),
+              // ),
+              // Divider(
+              //   color: Colors.black,
+              // ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.start,
+              //   children: <Widget>[
+              //     SizedBox(
+              //       width: ScreenUtil.instance.setWidth(55),
+              //     ),
+              //     Text('You\'ll get       :'),
+              //     SizedBox(
+              //       width: ScreenUtil.instance.setWidth(55),
+              //     ),
+              //     Text(
+              //       'Rp. ' + (int.parse(price) + 5000).toString(),
+              //       style: TextStyle(
+              //           color: eventajaGreenTeal,
+              //           fontSize: ScreenUtil.instance.setSp(18),
+              //           fontWeight: FontWeight.bold),
+              //     )
+              //   ],
+              // ),
+            ]))
       ],
     ));
   }

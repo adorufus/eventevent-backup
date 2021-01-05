@@ -193,7 +193,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                 ['availableTicketStatus'] ==
                             '1') {
                           itemColor = Color(0xFF34B323);
-                          itemPriceText = 'Rp. ' +
+                          itemPriceText = 'Rp ' +
                               formatPrice(
                                 price: eventByCategoryList[i]['ticket']
                                         ['cheapestTicket']

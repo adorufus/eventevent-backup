@@ -8,6 +8,7 @@ import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/WebView3DS.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
@@ -255,8 +256,10 @@ class CreditCardInputState extends State<CreditCardInput> {
                             ),
                             SizedBox(height: ScreenUtil.instance.setWidth(15)),
                             Text(
-                              'Rp. ' +
-                                  paymentData['amount_detail']['final_amount'],
+                              'Rp ' +
+                                  formatPrice(
+                                      price: paymentData['amount_detail']
+                                          ['final_amount']),
                               style: TextStyle(
                                   fontSize: 50, fontWeight: FontWeight.bold),
                             ),

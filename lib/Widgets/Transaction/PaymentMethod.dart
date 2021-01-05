@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/Transaction/Xendit/TicketReview.dart';
 import 'package:eventevent/Widgets/Transaction/Xendit/vaList.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/cupertino.dart';
@@ -108,7 +109,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                             fontSize: ScreenUtil.instance.setSp(14),
                             color: Colors.grey)),
                     SizedBox(height: ScreenUtil.instance.setWidth(8)),
-                    Text('Rp. $paymentAmount',
+                    Text('Rp ${formatPrice(price: paymentAmount)}',
                         style: TextStyle(
                             fontSize: 35, fontWeight: FontWeight.bold)),
                   ],

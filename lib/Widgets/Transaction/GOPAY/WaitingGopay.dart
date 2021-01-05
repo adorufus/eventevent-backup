@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/TransactionHistory.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -252,8 +253,10 @@ class _WaitingGopayState extends State<WaitingGopay> {
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
-                            'Rp. ' +
-                                paymentData['amount_detail']['final_amount'],
+                            'Rp ' +
+                                formatPrice(
+                                    price: paymentData['amount_detail']
+                                        ['final_amount']),
                             style: TextStyle(
                                 fontSize: 50, fontWeight: FontWeight.bold),
                           ),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -259,9 +260,11 @@ class _WaitingTransactionAlfamartState
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
-                            'Rp. ' + paymentData['amount'] == null
+                            'Rp ' + formatPrice(price: paymentData['amount']) ==
+                                    null
                                 ? '-'
-                                : 'Rp. ' + paymentData['amount'],
+                                : 'Rp ' +
+                                    formatPrice(price: paymentData['amount']),
                             style: TextStyle(
                                 fontSize: 50, fontWeight: FontWeight.bold),
                           ),

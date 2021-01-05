@@ -1,5 +1,6 @@
 import 'package:eventevent/Widgets/Transaction/Form.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -196,9 +197,11 @@ class _SelectedTicketQuantityWidgetState
                       width: ScreenUtil.instance.setWidth(150),
                     ),
                     Text(
-                      'Rp. ' +
-                          (int.parse(widget.ticketPrice) * ticketCount)
-                              .toString(),
+                      'Rp ' +
+                          formatPrice(
+                              price:
+                                  (int.parse(widget.ticketPrice) * ticketCount)
+                                      .toString()),
                       style: TextStyle(
                           fontSize: ScreenUtil.instance.setSp(18),
                           fontWeight: FontWeight.bold,
@@ -250,7 +253,9 @@ class _SelectedTicketQuantityWidgetState
             height: ScreenUtil.instance.setWidth(250),
             width: ScreenUtil.instance.setWidth(110),
             child: Image(
-                image: widget.eventImage == 'assets/grey-fade.jpg' ? AssetImage('assets/grey-fade.jpg') : NetworkImage(widget.eventImage.toString()),
+                image: widget.eventImage == 'assets/grey-fade.jpg'
+                    ? AssetImage('assets/grey-fade.jpg')
+                    : NetworkImage(widget.eventImage.toString()),
                 fit: BoxFit.fill),
           ),
           Container(

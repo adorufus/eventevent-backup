@@ -9,6 +9,7 @@ import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -347,7 +348,7 @@ class _TicketReviewState extends State<TicketReview> {
                       Expanded(
                         child: SizedBox(),
                       ),
-                      Text('Rp. ' + thisTicketPrice)
+                      Text('Rp ' + formatPrice(price: thisTicketPrice))
                     ]),
                 SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 Row(
@@ -377,7 +378,7 @@ class _TicketReviewState extends State<TicketReview> {
                         child: SizedBox(),
                       ),
                       Text(
-                        'Rp. ' + total.toString(),
+                        'Rp ' + formatPrice(price: total.toString()),
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontWeight: FontWeight.bold,

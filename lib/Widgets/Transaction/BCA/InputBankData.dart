@@ -6,6 +6,7 @@ import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -234,7 +235,7 @@ class PaymentBcaState extends State<PaymentBCA> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            'Rp. ' + firstAmount + ',',
+                            'Rp ' + formatPrice(price: firstAmount) + ',',
                             style: TextStyle(
                                 fontSize: ScreenUtil.instance.setSp(38),
                                 fontWeight: FontWeight.bold),

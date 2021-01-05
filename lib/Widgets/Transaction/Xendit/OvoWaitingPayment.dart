@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
 import 'package:eventevent/Widgets/TransactionHistory.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -229,9 +230,11 @@ class _OvoWaitingPaymentState extends State<OvoWaitingPayment> {
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
-                            'Rp. ' + paymentData['amount'] == null
+                            'Rp ' + formatPrice(price: paymentData['amount']) ==
+                                    null
                                 ? '-'
-                                : 'Rp. ' + paymentData['amount'],
+                                : 'Rp ' +
+                                    formatPrice(price: paymentData['amount']),
                             style: TextStyle(
                                 fontSize: 50, fontWeight: FontWeight.bold),
                           ),

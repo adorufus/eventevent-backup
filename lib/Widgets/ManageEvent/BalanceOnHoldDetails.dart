@@ -7,6 +7,7 @@ import 'package:eventevent/Widgets/RecycleableWidget/Invoice.dart';
 import 'package:eventevent/Widgets/notification/TransactionHistoryItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -224,7 +225,9 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
                     height: ScreenUtil.instance.setWidth(15),
                   ),
                   Text(
-                    'Rp. ' + widget.ticketSales['onhold_balance'] + ',-',
+                    'Rp ' +
+                        formatPrice(
+                            price: widget.ticketSales['onhold_balance']),
                     style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,

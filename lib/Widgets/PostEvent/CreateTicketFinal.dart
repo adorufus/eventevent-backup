@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
+import 'package:eventevent/helper/utils.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:async/async.dart';
@@ -418,7 +419,9 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                                 child: Text(
-                              'Rp. ' + price == null ? '' : price,
+                              'Rp ' + formatPrice(price: price) == null
+                                  ? ''
+                                  : formatPrice(price: price),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil.instance.setSp(14),
@@ -459,7 +462,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                       Expanded(
                         child: SizedBox(),
                       ),
-                      Text('Rp. ' + price),
+                      Text('Rp ' + formatPrice(price: price)),
                       SizedBox(
                         width: ScreenUtil.instance.setWidth(13),
                       ),
@@ -495,7 +498,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         child: SizedBox(),
                       ),
                       Text(
-                        '- Rp. ' + fee.toString(),
+                        '- Rp ' + formatPrice(price: fee.toString()),
                         style: TextStyle(color: Colors.red),
                       ),
                       SizedBox(
@@ -530,7 +533,9 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         child: SizedBox(),
                       ),
                       Text(
-                        'Rp. ' + (int.parse(price) - fee).toString(),
+                        'Rp ' +
+                            formatPrice(
+                                price: (int.parse(price) - fee).toString()),
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontSize: ScreenUtil.instance.setSp(18),
@@ -610,7 +615,10 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                                 child: Text(
-                              'Rp. ' + (int.parse(price) + fee).toString(),
+                              'Rp ' +
+                                  formatPrice(
+                                      price:
+                                          (int.parse(price) + fee).toString()),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil.instance.setSp(14),
@@ -651,7 +659,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                       Expanded(
                         child: SizedBox(),
                       ),
-                      Text('Rp. ' + price),
+                      Text('Rp ' + formatPrice(price: price)),
                       SizedBox(
                         width: ScreenUtil.instance.setWidth(13),
                       ),
@@ -687,7 +695,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         child: SizedBox(),
                       ),
                       Text(
-                        '+ Rp. ' + fee.toString(),
+                        '+ Rp ' + formatPrice(price: fee.toString()),
                         style: TextStyle(color: Colors.grey),
                       ),
                       SizedBox(
@@ -722,7 +730,9 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         child: SizedBox(),
                       ),
                       Text(
-                        'Rp. ' + (int.parse(price) + 5000).toString(),
+                        'Rp ' +
+                            formatPrice(
+                                price: (int.parse(price) + 5000).toString()),
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontSize: ScreenUtil.instance.setSp(18),
