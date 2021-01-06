@@ -62,6 +62,7 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
               padding: EdgeInsets.only(right: 10),
               child: Center(
                 child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: () {
                     navigateToNextStep();
                   },

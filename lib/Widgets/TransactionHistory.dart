@@ -130,9 +130,10 @@ class TransactionHistoryState extends State<TransactionHistory> {
                         );
 
                         if (transactionList[i]
-                                .containsKey("payment")
-                                .toString() ==
-                            'true') {
+                                    .containsKey("payment")
+                                    .toString() ==
+                                'true' &&
+                            transactionList[i]['payment'] != false) {
                           if (transactionList[i]['payment']['method'] ==
                               'Bca') {
                             page = PaymentBCA(

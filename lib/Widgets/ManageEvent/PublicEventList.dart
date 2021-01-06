@@ -52,14 +52,15 @@ class PublicEventListState extends State<PublicEventList> {
         } else {
           isEmpty = false;
           print(response.body);
-          setState(() {
-            publicData = extractedData['data']['public']['data'];
-            publicData.removeWhere((item) =>
-                item['ticket_type']['type'] == 'free_limited_seating' ||
-                item['ticket_type']['type'] == 'paid_seating' ||
-                item['ticket_type']['type'] == 'paid_seating');
-            print(publicData);
-          });
+          if (mounted)
+            setState(() {
+              publicData = extractedData['data']['public']['data'];
+              publicData.removeWhere((item) =>
+                  item['ticket_type']['type'] == 'free_limited_seating' ||
+                  item['ticket_type']['type'] == 'paid_seating' ||
+                  item['ticket_type']['type'] == 'paid_seating');
+              print(publicData);
+            });
         }
       } else {
         isEmpty = true;
