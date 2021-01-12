@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:eventevent/Models/AppState.dart';
 import 'package:eventevent/Models/MerchDetailModel.dart';
 import 'package:eventevent/Models/MerchLoveModels.dart';
@@ -12,16 +14,21 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:redux/redux.dart';
+import 'package:share_extend/share_extend.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 class MerchDetails extends StatefulWidget {
   final merchId;
+  final minimalData;
 
-  const MerchDetails({Key key, this.merchId}) : super(key: key);
+  const MerchDetails({Key key, this.merchId, this.minimalData})
+      : super(key: key);
   @override
   _MerchDetailsState createState() => _MerchDetailsState();
 }
@@ -31,9 +38,65 @@ typedef OnMerchLoveAddItem = Function(
 typedef OnMerchLoved = Function(MerchLoveModel item);
 
 class _MerchDetailsState extends State<MerchDetails> {
+  StreamController<String> controllerUrl = StreamController<String>();
   int currentTab = 0;
   String currentUserID = "";
   SharedPreferences preferences;
+  String generatedLink = "";
+
+  BranchContentMetaData metaData;
+  BranchUniversalObject buo;
+  BranchLinkProperties lp;
+  BranchEvent eventStandard;
+  BranchEvent eventCustom;
+
+  void initDeepLinkData({String merchName, String imageUrl, String merchId}) {
+    setState(() {
+      metaData = BranchContentMetaData()
+          .addCustomMetadata('merch_name', merchName)
+          .addCustomMetadata('merch_id', merchId)
+          .addCustomMetadata('image_url', imageUrl)
+          .addCustomMetadata('merch_detail', widget.minimalData.toString());
+
+      buo = BranchUniversalObject(
+          canonicalIdentifier: 'merch_$merchId',
+          title: merchName,
+          imageUrl: imageUrl,
+          contentDescription: 'you can see the merch description on the app',
+          contentMetadata: metaData,
+          publiclyIndex: true,
+          keywords: [],
+          locallyIndex: true);
+    });
+
+    print('Branch universal object' +
+        buo.contentMetadata.customMetadata.toString());
+
+    FlutterBranchSdk.registerView(buo: buo);
+    FlutterBranchSdk.listOnSearch(buo: buo);
+
+    lp = BranchLinkProperties(
+      feature: "sharing",
+    );
+
+    lp.addControlParam(
+        '\$desktop_url', 'http://eventevent.com/merch/product/$merchId');
+  }
+
+  void generateLink() async {
+    BranchResponse response =
+        await FlutterBranchSdk.getShortUrl(buo: buo, linkProperties: lp);
+
+    if (response.success) {
+      print('generated link: ' + response.result);
+      setState(() {
+        generatedLink = response.result;
+      });
+    } else {
+      controllerUrl.sink
+          .add('Error: ${response.errorCode} - ${response.errorDescription}');
+    }
+  }
 
   void initialization() async {
     preferences = await SharedPreferences.getInstance();
@@ -45,7 +108,16 @@ class _MerchDetailsState extends State<MerchDetails> {
 
   @override
   void initState() {
+    print("minimalData: " + widget.minimalData.toString());
+
     initialization();
+    initDeepLinkData(
+      imageUrl: widget.minimalData['imageUrl'],
+      merchId: widget.merchId,
+      merchName: widget.minimalData['productName'],
+    );
+
+    generateLink();
     super.initState();
   }
 
@@ -78,8 +150,12 @@ class _MerchDetailsState extends State<MerchDetails> {
               ),
               actions: <Widget>[
                 actionButton(
-                  icons: Icons.share,
-                ),
+                    icons: Icons.share,
+                    onTap: () {
+                      if (generatedLink != null || generatedLink != "") {
+                        ShareExtend.share(generatedLink, 'text');
+                      }
+                    }),
                 SizedBox(width: ScreenUtil.instance.setWidth(8)),
                 actionButton(
                   icons: Icons.more_vert,
@@ -118,30 +194,7 @@ class _MerchDetailsState extends State<MerchDetails> {
               ),
               props.merchDetailResponse.loading == true
                   ? Container()
-                  : Container(
-                      height: ScreenUtil.instance.setWidth(28 * 1.1),
-                      width: ScreenUtil.instance.setWidth(133 * 1.1),
-                      decoration: BoxDecoration(
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: eventajaGreenTeal.withOpacity(0.4),
-                                blurRadius: 2,
-                                spreadRadius: 1.5)
-                          ],
-                          color: eventajaGreenTeal,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Center(
-                        child: Text(
-                          'Rp. ' +
-                              props.merchDetailResponse.data.details[0]
-                                  ['basic_price'],
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenUtil.instance.setSp(14),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
+                  : priceButton(data: props.merchDetailResponse.data)
             ],
           ),
         ),
@@ -217,12 +270,25 @@ class _MerchDetailsState extends State<MerchDetails> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           contactButton(
-                            image: 'assets/icons/btn_phone.png',
-                          ),
+                              image: 'assets/icons/btn_phone.png',
+                              onTap: () {}),
                           SizedBox(width: 50),
                           contactButton(
-                            image: 'assets/icons/btn_mail.png',
-                          ),
+                              image: 'assets/icons/btn_mail.png',
+                              onTap: () {
+                                if (props.merchDetailResponse.data
+                                            .merchantDetails.email !=
+                                        null ||
+                                    props.merchDetailResponse.data
+                                            .merchantDetails.email !=
+                                        "") {
+                                  launch(
+                                    'mailto:' +
+                                        props.merchDetailResponse.data
+                                            .merchantDetails.email,
+                                  );
+                                }
+                              }),
                           SizedBox(width: 50),
                           contactButton(
                             image: 'assets/icons/btn_web.png',
@@ -285,9 +351,7 @@ class _MerchDetailsState extends State<MerchDetails> {
       child: Row(
         children: <Widget>[
           GestureDetector(
-            onTap: (){
-              
-            },
+            onTap: () {},
             child: MerchLove(
               merchId: data.merchId,
               isComment: false,
@@ -315,9 +379,11 @@ class _MerchDetailsState extends State<MerchDetails> {
 
   Widget priceButton({MerchDetailModel data}) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () async {
         SharedPreferences preferences = await SharedPreferences.getInstance();
-        preferences.setString("sellerProductId", data.merchantDetails.merchantId);
+        preferences.setString(
+            "sellerProductId", data.merchantDetails.merchantId);
         preferences.setString("productId", data.merchId);
         preferences.setString("productName", data.productName);
         preferences.setString("productPrice", data.details[0]['basic_price']);
@@ -325,10 +391,12 @@ class _MerchDetailsState extends State<MerchDetails> {
         preferences.setString("productDetailsId", data.details[0]['id']);
 
         print(preferences.getString("sellerProductId"));
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => BuyOptionSelector(
-              
-            ),),);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BuyOptionSelector(),
+          ),
+        );
       },
       child: Container(
         height: ScreenUtil.instance.setWidth(28),
@@ -632,6 +700,7 @@ class _MerchDetailsState extends State<MerchDetails> {
   Widget actionButton({IconData icons, Function onTap}) {
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Icon(
         icons,
         color: eventajaGreenTeal,

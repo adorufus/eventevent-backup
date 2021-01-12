@@ -24,7 +24,18 @@ class PopularMerchModel {
           merchantName: json['seller']['username'],
           profileImageUrl: json['seller']['photo'],
           productName: json['product_name'],
-          imageUrl: json['images'] == false ? '' : json['images']['mainImage'] as String);
+          imageUrl: json['images'] == false
+              ? ''
+              : json['images']['mainImage'] as String);
+
+  Map<String, dynamic> toJson() => {
+        'merchId': merchId,
+        'imageUrl': imageUrl,
+        'profileImageUrl': profileImageUrl,
+        'productName': productName,
+        'merchantName': merchantName,
+        'details': details,
+      };
 }
 
 class PopularMerchMiniDetails {

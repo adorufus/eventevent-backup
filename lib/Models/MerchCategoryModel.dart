@@ -15,7 +15,7 @@ class MerchCategoryModel {
   factory MerchCategoryModel.fromJson(Map<String, dynamic> json) =>
       MerchCategoryModel(
         categoryId: json['id'] as String,
-        imageUrl: json['logo_avatar'] as String,
+        imageUrl: json['logo'] as String,
         categoryName: json['name'] as String,
       );
 }

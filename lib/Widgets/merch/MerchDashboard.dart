@@ -151,7 +151,8 @@ class _MerchDashboardState extends State<MerchDashboard> {
       ),
       body: SafeArea(
         child: StoreConnector<AppState, AppScreenProps>(
-          converter: (store) => mapStateToProps(store, isInRecommendation: false),
+          converter: (store) =>
+              mapStateToProps(store, isInRecommendation: false),
           onInitialBuild: (props) => handleInitialBuild(props),
           builder: (context, props) {
             List<MerchBannerModel> bannerData = props.listResponse.data;
@@ -327,7 +328,7 @@ class _MerchDashboardState extends State<MerchDashboard> {
                   ),
                   Image.network(
                     data.imageUrl == null ? "" : data.imageUrl,
-                    scale: 6,
+                    scale: 10,
                   ),
                   Expanded(
                     child: SizedBox(),
@@ -509,14 +510,16 @@ class _MerchDashboardState extends State<MerchDashboard> {
             scrollDirection: Axis.horizontal,
             itemCount: data == null ? 0 : data.length,
             itemBuilder: (BuildContext context, i) {
-              print(data[i]);
+              print('data' + data[i].toString());
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              MerchDetails(merchId: data[i].merchId)));
+                          builder: (context) => MerchDetails(
+                                merchId: data[i].merchId,
+                                minimalData: data[i].toJson(),
+                              )));
                 },
                 child: MerchItem(
                   imageUrl: data[i].imageUrl,
@@ -700,7 +703,8 @@ class AppScreenProps {
 //       getCollection: () => store.dispatch(getCollection()));
 // }
 
-AppScreenProps mapStateToProps(Store<AppState> store, {@required bool isInRecommendation, List<String> categoryIds}) {
+AppScreenProps mapStateToProps(Store<AppState> store,
+    {@required bool isInRecommendation, List<String> categoryIds}) {
   return AppScreenProps(
     listResponse: store.state.banner.list,
     listCollectionResponse: store.state.collections.list,
