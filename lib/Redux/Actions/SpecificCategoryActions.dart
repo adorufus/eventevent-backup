@@ -15,7 +15,7 @@ const LIST_SPECCATEGORY_FAILURE = 'LIST_SPECCATEGORY_FAILURE';
 RSAA getSpecificCategoryListRequest({String session, String id}) {
   final String baseUrl = BaseApi().restUrl;
   final String getSpecCategoryUrl = baseUrl +
-      '/product/list?X-API-KEY=$API_KEY&page=1&type=popular&categoryId=$id&limit=10';
+      '/product/list?X-API-KEY=$API_KEY&page=1&type=popular&productType=$id&limit=10';
   return RSAA(
     method: 'GET',
     endpoint: getSpecCategoryUrl,

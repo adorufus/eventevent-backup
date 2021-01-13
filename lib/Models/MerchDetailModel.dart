@@ -54,6 +54,8 @@ class MerchantDetails {
   final String fullName;
   final String lastName;
   final String email;
+  final String phone;
+  final String website;
   final String isVerified;
 
   MerchantDetails(
@@ -64,9 +66,12 @@ class MerchantDetails {
       this.fullName,
       this.lastName,
       this.email,
+      this.phone,
+      this.website,
       this.isVerified});
 
-      factory MerchantDetails.fromJson(Map<String, dynamic> json) => MerchantDetails(
+  factory MerchantDetails.fromJson(Map<String, dynamic> json) =>
+      MerchantDetails(
         merchantId: json['id'],
         merchantUserId: json['user_id'],
         provinceId: json['province_id'],
@@ -74,7 +79,9 @@ class MerchantDetails {
         email: json['email'],
         fullName: json['fullName'],
         lastName: json['lastName'],
-        isVerified: json['isVerified']
+        phone: json['phone'],
+        website: json['website'],
+        isVerified: json['isVerified'],
       );
 }
 

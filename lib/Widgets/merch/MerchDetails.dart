@@ -271,27 +271,36 @@ class _MerchDetailsState extends State<MerchDetails> {
                         children: <Widget>[
                           contactButton(
                               image: 'assets/icons/btn_phone.png',
-                              onTap: () {}),
-                          SizedBox(width: 50),
-                          contactButton(
-                              image: 'assets/icons/btn_mail.png',
                               onTap: () {
-                                if (props.merchDetailResponse.data
-                                            .merchantDetails.email !=
-                                        null ||
+                                launch('tel:' +
                                     props.merchDetailResponse.data
-                                            .merchantDetails.email !=
-                                        "") {
-                                  launch(
-                                    'mailto:' +
-                                        props.merchDetailResponse.data
-                                            .merchantDetails.email,
-                                  );
-                                }
+                                        .merchantDetails.phone);
                               }),
                           SizedBox(width: 50),
                           contactButton(
+                            image: 'assets/icons/btn_mail.png',
+                            onTap: () {
+                              if (props.merchDetailResponse.data.merchantDetails
+                                          .email !=
+                                      null ||
+                                  props.merchDetailResponse.data.merchantDetails
+                                          .email !=
+                                      "") {
+                                launch(
+                                  'mailto:' +
+                                      props.merchDetailResponse.data
+                                          .merchantDetails.email,
+                                );
+                              }
+                            },
+                          ),
+                          SizedBox(width: 50),
+                          contactButton(
                             image: 'assets/icons/btn_web.png',
+                            onTap: () {
+                              launch(props.merchDetailResponse.data
+                                  .merchantDetails.website);
+                            },
                           ),
                         ],
                       ),

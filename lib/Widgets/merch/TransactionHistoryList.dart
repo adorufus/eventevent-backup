@@ -26,6 +26,7 @@ class _TransactionHistoryListState extends State<TransactionHistoryList> {
   Color paymentStatusColor;
 
   bool isLoading = false;
+  bool isEmpty = false;
 
   @override
   void initState() {
@@ -38,9 +39,15 @@ class _TransactionHistoryListState extends State<TransactionHistoryList> {
       if (response.statusCode == 200) {
         transactionList.addAll(extractedData['data']);
         isLoading = false;
+        isEmpty = false;
         if (mounted) setState(() {});
       } else {
         print("error with response: " + response.body);
+        if (extractedData['desc'] == "Transaction Not Found") {
+          isLoading = false;
+          isEmpty = true;
+          if (mounted) setState(() {});
+        }
       }
     });
     super.initState();
@@ -99,7 +106,7 @@ class _TransactionHistoryListState extends State<TransactionHistoryList> {
             )),
         body: isLoading == true
             ? HomeLoadingScreen().myTicketLoading()
-            : transactionList == null
+            : transactionList == null || isEmpty
                 ? EmptyState(
                     imagePath: 'assets/icons/empty_state/history.png',
                     reasonText: 'You have no transaction yet.',
@@ -158,10 +165,15 @@ class _TransactionHistoryListState extends State<TransactionHistoryList> {
                               //               ExpiredPage()));
                               // }
 
-                              SharedPreferences preferences = await SharedPreferences.getInstance();
+                              SharedPreferences preferences =
+                                  await SharedPreferences.getInstance();
 
-                              preferences.setString("productName", transactionList[i]['product']['product_name']);
-                              preferences.setString("productImage", transactionList[i]['product']['images']);
+                              preferences.setString(
+                                  "productName",
+                                  transactionList[i]['product']
+                                      ['product_name']);
+                              preferences.setString("productImage",
+                                  transactionList[i]['product']['images']);
 
                               getMerchTransactionDetail(
                                       transactionList[i]['id'], false)
@@ -182,11 +194,12 @@ class _TransactionHistoryListState extends State<TransactionHistoryList> {
                                   );
                                 } else {
                                   Flushbar(
-                                    animationDuration: Duration(milliseconds: 500),
+                                    animationDuration:
+                                        Duration(milliseconds: 500),
                                     backgroundColor: Colors.red,
                                     flushbarPosition: FlushbarPosition.TOP,
                                     duration: Duration(seconds: 2),
-                                    message: "Something went wrong :(",                                    
+                                    message: "Something went wrong :(",
                                   ).show(context);
                                 }
                               });
