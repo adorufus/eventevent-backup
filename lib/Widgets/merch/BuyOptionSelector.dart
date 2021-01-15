@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BuyOptionSelector extends StatefulWidget {
-
   @override
   _BuyOptionSelectorState createState() => _BuyOptionSelectorState();
 }
@@ -28,13 +27,13 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
 
   void initializeValue() async {
     preferences = await SharedPreferences.getInstance();
-    
+
     productName = preferences.getString("productName");
     productPrice = preferences.getString("productPrice");
     productImage = preferences.getString("productImage");
     accumulatedPrice = int.parse(productPrice);
 
-    if(mounted) setState((){});
+    if (mounted) setState(() {});
   }
 
   @override
@@ -62,7 +61,7 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
                   alignment: Alignment.centerLeft,
                 ),
               ),
-              title: Text('Lorem Ipsum'),
+              title: Text('TRANSACTION'),
               centerTitle: true,
               textTheme: TextTheme(
                   title: TextStyle(
@@ -75,15 +74,14 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
         ),
       ),
       bottomNavigationBar: GestureDetector(
-        onTap: (){
+        onTap: () {
           preferences.setInt('accumulatedPrice', accumulatedPrice);
           preferences.setInt('productQuantity', howMuch);
-          
-          Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SelectAddress())
-          );
+
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => SelectAddress()));
         },
-              child: Container(
+        child: Container(
           height: ScreenUtil.instance.setWidth(50),
           color: Color(0xFFff8812),
           child: Center(
@@ -138,9 +136,10 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
           decoration: BoxDecoration(
               color: Colors.grey,
               image: DecorationImage(
-                image: NetworkImage(productImage, ),
-                fit: BoxFit.cover
-              ),
+                  image: NetworkImage(
+                    productImage,
+                  ),
+                  fit: BoxFit.cover),
               borderRadius: BorderRadius.circular(10)),
         ),
         SizedBox(
@@ -190,15 +189,16 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
           child: Row(
             children: <Widget>[
               GestureDetector(
-                onTap: (){
-                  if(howMuch > 1){
+                onTap: () {
+                  if (howMuch > 1) {
                     howMuch -= 1;
-                    accumulatedPrice = accumulatedPrice - int.parse(productPrice);
+                    accumulatedPrice =
+                        accumulatedPrice - int.parse(productPrice);
                   }
 
-                  if(mounted) setState((){});
+                  if (mounted) setState(() {});
                 },
-                              child: Icon(
+                child: Icon(
                   Icons.remove_circle,
                   color: Colors.red,
                   size: 30,
@@ -212,12 +212,12 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
                 child: SizedBox(),
               ),
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   howMuch += 1;
                   accumulatedPrice = int.parse(productPrice) * howMuch;
-                  if(mounted) setState((){});
+                  if (mounted) setState(() {});
                 },
-                              child: Icon(
+                child: Icon(
                   Icons.add_circle,
                   color: eventajaGreenTeal,
                   size: 30,
@@ -292,15 +292,17 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
               Container(
                 height: 26,
                 width: 80,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(15),border: Border.all(color: Colors.black)),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: Colors.black)),
                 child: Center(child: Text('XXL')),
               ),
               Container(
                 height: 26,
                 width: 80,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(15),border: Border.all(color: Colors.black)),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: Colors.black)),
                 child: Center(child: Text('XXXL')),
               )
             ],
@@ -310,7 +312,7 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
     );
   }
 
-  Widget totalSection(BuildContext context){
+  Widget totalSection(BuildContext context) {
     return Row(
       children: <Widget>[
         Text(
@@ -324,7 +326,9 @@ class _BuyOptionSelectorState extends State<BuyOptionSelector> {
         Text(
           'Rp. $accumulatedPrice',
           style: TextStyle(
-              color: eventajaGreenTeal, fontWeight: FontWeight.bold, fontSize: 15),
+              color: eventajaGreenTeal,
+              fontWeight: FontWeight.bold,
+              fontSize: 15),
         ),
       ],
     );
