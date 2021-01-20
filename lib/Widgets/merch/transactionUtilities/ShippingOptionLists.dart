@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class _ShippingOptionListsState extends State<ShippingOptionLists> {
   List shippingOptionList = [];
 
   bool isLoading = false;
+  bool isNoShippingOption = false;
 
   @override
   void initState() {
@@ -28,8 +30,14 @@ class _ShippingOptionListsState extends State<ShippingOptionLists> {
       if (response.statusCode == 200) {
         shippingOptionList.addAll(extractedData['data']);
         isLoading = false;
+        isNoShippingOption = false;
         if (mounted) setState(() {});
       } else {
+        if(extractedData['desc'] == 'Shipping Price not availableA' || extractedData['desc'] == 'Shipping Price not available'){
+          isNoShippingOption = true;
+          isLoading = false;
+          if(mounted) setState((){});
+        }
         print(response.body);
       }
     });
@@ -79,7 +87,9 @@ class _ShippingOptionListsState extends State<ShippingOptionLists> {
                 animating: true,
               ),
             )
-          : ListView.builder(
+          : isNoShippingOption ? Container(
+            child: Center(child: EmptyState(emptyImage: 'assets/icons/empty_state/profile.png', reasonText: 'No Shipping Method Found',),),
+          ) : ListView.builder(
               itemCount: shippingOptionList.length,
               itemBuilder: (context, i) {
                 return ListTile(
@@ -128,8 +138,8 @@ class _ShippingOptionListsState extends State<ShippingOptionLists> {
     String thisProductSellerId = preferences.getString("sellerProductId");
     if (mounted) setState(() {});
 
-    print(currentBuyerAddressId);
-    print(thisProductSellerId);
+    print('buyer address id: ' + currentBuyerAddressId);
+    print('seller id: ' + thisProductSellerId);
 
     String url = BaseApi().apiUrl +
         '/address/shipping?X-API-KEY=$API_KEY&addressId=$currentBuyerAddressId&weight=2000&sellerId=$thisProductSellerId';

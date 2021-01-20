@@ -100,17 +100,6 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
       ),
       bottomNavigationBar: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MerchPaymentMethod(
-                shippingName: selectedShippingMethodName,
-                shippingCode: selectedShippingMethodCode,
-                shippingService: selectedShippingMethodService,
-                price: accumulatedPrice,
-              ),
-            ),
-          );
           if (shippingMethodSelected == false) {
             Flushbar(
               message: "Please Select Shipping Method",
@@ -119,6 +108,18 @@ class _DeliveryOptionsState extends State<DeliveryOptions> {
               flushbarPosition: FlushbarPosition.TOP,
               animationDuration: Duration(milliseconds: 500),
             ).show(context);
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MerchPaymentMethod(
+                  shippingName: selectedShippingMethodName,
+                  shippingCode: selectedShippingMethodCode,
+                  shippingService: selectedShippingMethodService,
+                  price: accumulatedPrice,
+                ),
+              ),
+            );
           }
         },
         child: Container(

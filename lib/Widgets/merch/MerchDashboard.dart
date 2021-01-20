@@ -185,7 +185,7 @@ class _MerchDashboardState extends State<MerchDashboard> {
                         ? HomeLoadingScreen().collectionLoading()
                         : collectionImage(data: collectionData),
                     Row(children: <Widget>[
-                      titleText('Popular Merch', 'Lorem Ipsum Dolor'),
+                      titleText('Popular Merch', 'Most popular products in store'),
                       Expanded(
                         child: SizedBox(),
                       ),
@@ -217,7 +217,7 @@ class _MerchDashboardState extends State<MerchDashboard> {
                     peopleText('Popular', onNavigateSeeAll: () {}),
                     peopleImage(data: popularPeopleData),
                     Row(children: <Widget>[
-                      titleText('Discover Merch', 'Lorem Ipsum Dolor Sit Amet'),
+                      titleText('Discover Merch', 'One of these pieces might be made just for you'),
                       Expanded(
                         child: SizedBox(),
                       ),
@@ -433,7 +433,7 @@ class _MerchDashboardState extends State<MerchDashboard> {
                               ],
                               shape: BoxShape.circle,
                               image: DecorationImage(
-                                image: NetworkImage(data[i]["photo"]),
+                                image: data[i]["photo"] == null ? AssetImage('assets/grey-fade.jpg') : NetworkImage(data[i]["photo"]),
                                 fit: BoxFit.fill,
                               )),
                         ),
