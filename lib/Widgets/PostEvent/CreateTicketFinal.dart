@@ -21,8 +21,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateTicketFinal extends StatefulWidget {
   final from;
+  final Map ticketDetail;
 
-  const CreateTicketFinal({Key key, this.from}) : super(key: key);
+  const CreateTicketFinal({Key key, this.from, this.ticketDetail})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return CreateTicketFinalState();
@@ -40,8 +42,6 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
   String merchantPrice;
   String startDate = "";
   String endDate = "";
-  String startTime = "";
-  String endTime = "";
   String desc = "";
   String ticketPaidBy = 'owner';
   int _curValue = 0;
@@ -60,16 +60,20 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
     prefs = await SharedPreferences.getInstance();
 
     setState(() {
-      imageUri = prefs.getString('SETUP_TICKET_POSTER');
-      ticketQuantity = prefs.getString('SETUP_TICKET_QTY');
-      price = prefs.getString('SETUP_TICKET_PRICE');
-      startDate = prefs.getString('SETUP_TICKET_START_DATE');
-      endDate = prefs.getString('SETUP_TICKET_END_DATE');
-      startTime = prefs.getString('SETUP_TICKET_START_TIME');
-      endTime = prefs.getString('SETUP_TICKET_END_TIME');
-      desc = prefs.getString('SETUP_TICKET_DESCRIPTION');
-      ticketTypeId = prefs.getString('NEW_EVENT_TICKET_TYPE_ID');
+      imageUri = widget.ticketDetail['image_url'];
+      ticketQuantity = widget.ticketDetail['quantity'];
+      price = widget.ticketDetail['price'];
+      startDate = widget.ticketDetail['sales_start_date'];
+      endDate = widget.ticketDetail['sales_end_date'];
+      desc = widget.ticketDetail['description'];
+      ticketTypeId = widget.ticketDetail['id'];
       imageFile = new File(imageUri);
+
+      fee = (int.parse(price) * 3) ~/ 100;
+
+      if (fee < 5000) {
+        fee = 5000;
+      }
     });
   }
 
@@ -77,13 +81,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
   void initState() {
     getData();
 
-    if (price != null) {
-      fee = (int.parse(price) * 3) ~/ 100;
-
-      if (fee < 5000) {
-        fee = 5000;
-      }
-    }
+    print('price: ' + price.toString());
 
     setState(() {});
     super.initState();
@@ -245,8 +243,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                             ScreenUtil.instance.setWidth(170),
                                         height:
                                             ScreenUtil.instance.setWidth(40),
-                                        child:
-                                            Text(startDate + ' ' + startTime)),
+                                        child: Text(startDate)),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(7)),
@@ -266,7 +263,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                             ScreenUtil.instance.setWidth(170),
                                         height:
                                             ScreenUtil.instance.setWidth(40),
-                                        child: Text(endDate + ' ' + endTime)),
+                                        child: Text(endDate)),
                                   ],
                                 )
                               ],
@@ -816,8 +813,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
       if (_curValue == 0) {
         setState(() {
           ticketPaidBy = 'owner';
-          finalPrice = (int.parse(price) - fee).toString();
-          merchantPrice = price;
+          finalPrice = price;
+          merchantPrice = (int.parse(price) - fee).toString();
         });
       } else if (_curValue == 1) {
         setState(() {
@@ -828,8 +825,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
       } else if (_curValue == 2) {
         setState(() {
           ticketPaidBy = 'op1';
-          finalPrice = (int.parse(price) + 10000).toString();
-          merchantPrice = price;
+          finalPrice = price;
+          merchantPrice = (int.parse(price) + 10000).toString();
         });
       }
     }
@@ -838,8 +835,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
       Map<String, dynamic> body = {
         'X-API-KEY': API_KEY,
         'eventID': prefs.getInt('NEW_EVENT_ID').toString(),
-        'ticket_name': prefs.getString('SETUP_TICKET_NAME'),
-        'quantity': prefs.getString('SETUP_TICKET_QTY'),
+        'ticket_name': widget.ticketDetail['ticket_name'],
+        'quantity': ticketQuantity,
         'price': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
@@ -847,19 +844,12 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
             ? '0'
             : price,
-        'min_ticket': prefs.getString('SETUP_TICKET_MIN_BOUGHT'),
-        'max_ticket': prefs.getString('SETUP_TICKET_MAX_BOUGHT'),
-        'sales_start_date': prefs.getString('SETUP_TICKET_START_DATE') +
-            ' ' +
-            prefs.getString('SETUP_TICKET_START_TIME') +
-            ':00',
-        'sales_end_date': prefs.getString('SETUP_TICKET_END_DATE') +
-            ' ' +
-            prefs.getString('SETUP_TICKET_END_TIME') +
-            ':00',
-        'descriptions': prefs.getString('SETUP_TICKET_DESCRIPTION'),
-        'show_remaining_ticket':
-            prefs.getString('SETUP_TICKET_SHOW_REMAINING_TICKET'),
+        'min_ticket': widget.ticketDetail['min_ticket'],
+        'max_ticket': widget.ticketDetail['max_ticket'],
+        'sales_start_date': startDate,
+        'sales_end_date': endDate,
+        'descriptions': desc,
+        'show_remaining_ticket': widget.ticketDetail['show_remaining_ticket'],
         'fee_paid_by': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
@@ -873,8 +863,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '7' ||
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
             ? '0'
-            : ticketPaidBy == 'owner' ? price : finalPrice,
-        'paid_ticket_type_id': prefs.getString('SETUP_TICKET_PAID_TICKET_TYPE'),
+            : finalPrice,
+        'paid_ticket_type_id': widget.ticketDetail['id'],
         'merchant_price': prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
@@ -882,7 +872,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                 prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10'
             ? '0'
             : merchantPrice,
-        'is_single_ticket': prefs.getString('SETUP_TICKET_IS_ONE_PURCHASE'),
+        'is_single_ticket': widget.ticketDetail['single_ticket'],
         'ticket_image': await MultipartFile.fromFile(imageFile.path,
             filename: "eventeventticket-${DateTime.now().toString()}.jpg",
             contentType: MediaType('image', 'jpeg'))
@@ -953,12 +943,15 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                 MaterialPageRoute(
                     builder: (context) => EventDetailLoadingScreen(
                         eventId: prefs.getInt('NEW_EVENT_ID').toString())));
-          } else {
-            Navigator.of(context).push(CupertinoPageRoute(
+          } else if (prefs.getString("Previous Widget") == 'New Event') {
+            Navigator.of(context).push(
+              CupertinoPageRoute(
                 builder: (BuildContext context) => CustomFormActivator(
-                      eventId: prefs.getInt("NEW_EVENT_ID").toString(),
-                      from: "createEvent",
-                    )));
+                  eventId: prefs.getInt("NEW_EVENT_ID").toString(),
+                  from: "createEvent",
+                ),
+              ),
+            );
           }
         }
       } else {

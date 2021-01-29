@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
+import 'package:eventevent/Widgets/Home/PeopleItem.dart';
 import 'package:eventevent/Widgets/Home/PeopleSearch.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
@@ -216,28 +217,46 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
                         : ColumnBuilder(
                             itemCount: data.length == null ? 0 : data.length,
                             itemBuilder: (context, i) {
-                              return ListTile(
+                              return GestureDetector(
                                 onTap: () {
                                   saveData(i);
                                 },
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 15, horizontal: 15),
-                                leading: CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage(data[i]['photo']),
-                                ),
-                                title: Text(
-                                  data[i]['fullName'],
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                subtitle: Text('@' + data[i]['username']),
-                                trailing: Icon(
-                                  Icons.check,
+                                child: PeopleItem(
+                                  image: data[i]['photo'],
+                                  username: data[i]['username'],
+                                  isVerified: data[i]['isVerified'],
+                                  title: data[i]['fullName'],
+                                  topPadding: i == 0 ? 13.0 : 0.0,
+                                  userId: data[i]['id'],
                                   color: invitedPeople.contains(data[i]['id'])
                                       ? eventajaGreenTeal
                                       : Colors.grey,
+                                  isInvite: true,
+                                  isFollowing: data[i]['isFollowed'],
                                 ),
                               );
+                              // ListTile(
+                              //   onTap: () {
+                              //     saveData(i);
+                              //   },
+                              //   contentPadding: EdgeInsets.symmetric(
+                              //       vertical: 5, horizontal: 15),
+                              //   leading: CircleAvatar(
+                              //     backgroundImage:
+                              //         NetworkImage(data[i]['photo']),
+                              //   ),
+                              //   title: Text(
+                              //     data[i]['fullName'],
+                              //     style: TextStyle(fontWeight: FontWeight.bold),
+                              //   ),
+                              //   subtitle: Text('@' + data[i]['username']),
+                              //   trailing: Icon(
+                              //     Icons.check,
+                              //     color: invitedPeople.contains(data[i]['id'])
+                              //         ? eventajaGreenTeal
+                              //         : Colors.grey,
+                              //   ),
+                              // );
                             },
                           ),
                   ],

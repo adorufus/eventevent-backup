@@ -12,6 +12,7 @@ class PeopleItem extends StatefulWidget {
   final location;
   final isFollowing;
   final userId;
+  final bool isInvite;
   final Color color;
   final followText;
   final Color followTextColor;
@@ -30,7 +31,7 @@ class PeopleItem extends StatefulWidget {
       this.pressAction,
       this.color,
       this.followText,
-      this.followTextColor})
+      this.followTextColor, this.isInvite = false})
       : super(key: key);
 
   @override
@@ -153,7 +154,7 @@ class _PeopleItemState extends State<PeopleItem> {
                 });
               }
             },
-            child: Container(
+            child: widget.isInvite == true ? Icon(Icons.check, color: widget.color) : Container(
               height: ScreenUtil.instance.setWidth(32.93),
               width: ScreenUtil.instance.setWidth(82.31),
               decoration: BoxDecoration(

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:eventevent/Widgets/EventDetailComment.dart';
 import 'package:eventevent/Widgets/EventDetailItems/FeedbackLogic.dart';
 import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
@@ -36,7 +35,6 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:marquee_flutter/marquee_flutter.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:share_extend/share_extend.dart';
@@ -1293,18 +1291,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     SizedBox(
                                       width: ScreenUtil.instance.setWidth(10),
                                     ),
-                                    GestureDetector(
-                                      behavior: prefix0.HitTestBehavior.opaque,
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    EventDetailComment(
-                                                      eventID: widget
-                                                          .detailData['id'],
-                                                    )));
-                                      },
-                                      child: LoveItem(
+                                    LoveItem(
                                           isComment: true,
                                           eventId: widget.id,
                                           isAlreadyCommented: widget
@@ -1321,7 +1308,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           commentCount: widget
                                               .detailData['total_comment']
                                               .toString()),
-                                    ),
                                     Expanded(
                                       child: SizedBox(),
                                     ),

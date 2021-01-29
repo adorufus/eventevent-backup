@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:eventevent/Widgets/EventDetailComment.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -62,16 +63,27 @@ class _LoveItemState extends State<LoveItem> {
 
     return GestureDetector(
       onTap: () {
-        if (_isLoved == false) {
-          setState(() {
-            _loveCount += 1;
-            _isLoved = true;
-            doLove();
-          });
+        if (widget.isComment == false) {
+          if (_isLoved == false) {
+            setState(() {
+              _loveCount += 1;
+              _isLoved = true;
+              doLove();
+            });
+          } else {
+            _loveCount -= 1;
+            _isLoved = false;
+            doUnlove();
+          }
         } else {
-          _loveCount -= 1;
-          _isLoved = false;
-          doUnlove();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EventDetailComment(
+                eventID: widget.eventId,
+              ),
+            ),
+          );
         }
       },
       child: Container(

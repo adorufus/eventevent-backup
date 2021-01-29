@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/PostEvent/CreateTicketFinal.dart';
@@ -96,7 +97,6 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
       prefs.setString('SETUP_TICKET_PRICE', priceController.text);
       prefs.setString('SETUP_TICKET_MIN_BOUGHT', minTicketController.text);
       prefs.setString('SETUP_TICKET_MAX_BOUGHT', maxTicketController.text);
-      prefs.setString('SETUP_TICKET_NAME', eventNameController.text);
       prefs.setString('SETUP_TICKET_POSTER', imageUri);
       prefs.setString(
           'SETUP_TICKET_SHOW_REMAINING_TICKET', __curValue.toString());
@@ -106,10 +106,30 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
       prefs.setString('SETUP_TICKET_START_TIME', startTime);
       prefs.setString('SETUP_TICKET_END_TIME', endTime);
       prefs.setString('SETUP_TICKET_DESCRIPTION', descController.text);
+      prefs.setString('Previous Widget', "New Event");
     });
 
+    Map ticketDetail = {
+        'id': ticketTypeID,
+        'ticket_name': eventNameController.text,
+        'quantity': ticketQuantityController.text,
+        'price': priceController.text,
+        'min_ticket': minTicketController.text,
+        'max_ticket': maxTicketController.text,
+        'sales_start_date': startDate + ' ' + startTime,
+        'sales_end_date': endDate + ' ' + endTime,
+        'show_remaining_ticket': __curValue.toString(),
+        'single_ticket': __curValue2.toString(),
+        'description': descController.text,
+        'image_url': imageUri != null
+            ? imageUri
+            : ''
+      };
+
     Navigator.push(
-        context, CupertinoPageRoute(builder: (context) => CreateTicketFinal()));
+        context, CupertinoPageRoute(builder: (context) => CreateTicketFinal(
+          ticketDetail: ticketDetail,
+        )));
   }
 
   @override
