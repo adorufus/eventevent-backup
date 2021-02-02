@@ -326,7 +326,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                 height: ScreenUtil.instance.setWidth(50),
                                 padding: EdgeInsets.only(left: 10),
                                 child: ticketTypeID == '5' ||
-                                        ticketTypeID == '10'
+                                        ticketTypeID == '10' || ticketTypeID == '7'
                                     ? Text('FREE',
                                         style: TextStyle(
                                             fontSize:

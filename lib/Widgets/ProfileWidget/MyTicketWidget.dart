@@ -198,9 +198,10 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                           ticketStatusText = 'Used';
                         }
 
-                        ticketStatus = 'used';
+                        ticketStatus = ticketDetailData[i]['usedStatus'];
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'streaming') {
+
                         if (ticketDetailData[i]['paid_ticket_type']['type'] ==
                                 'free_live_stream' ||
                             ticketDetailData[i]['paid_ticket_type']['type'] ==
@@ -232,9 +233,11 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                             ticketStatusText = 'On Demand Video';
                           }
                         }
-                        ticketStatus = 'streaming';
+
+                        ticketStatus = ticketDetailData[i]['usedStatus'];
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'playback') {
+
                         if (ticketDetailData[i].containsKey("livestream")) {
                           ticketColor = eventajaGreenTeal;
                           ticketStatusText = 'Playback';
@@ -242,6 +245,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                           ticketColor = eventajaGreenTeal;
                           ticketStatusText = 'Playback';
                         }
+
                         ticketStatus = 'playback';
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'expired') {
@@ -286,7 +290,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                           ticketStatusText = 'Expired';
                         }
 
-                        ticketStatus = 'expired';
+                        ticketStatus = ticketDetailData[i]['usedStatus'];
                       } else if (ticketDetailData[i]['usedStatus'] ==
                           'refund') {
                         ticketColor = Colors.blue;
@@ -310,7 +314,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                             MaterialPageRoute(
                               builder: (BuildContext context) => UseTicket(
                                 ticketDetail: ticketDetailData[i],
-                                status: ticketStatus,
+                                status: ticketDetailData[i]['usedStatus'],
                                 eventId: ticketDetailData[i]['event_id'],
                                 ticketTitle: ticketDetailData[i]['ticket']
                                     ['ticket_name'],

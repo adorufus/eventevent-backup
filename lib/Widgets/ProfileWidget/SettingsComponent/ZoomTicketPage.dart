@@ -116,6 +116,7 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
                       Flushbar(
                         flushbarPosition: FlushbarPosition.TOP,
                         message: 'Zoom URL Coppied!',
+                        backgroundColor: Colors.green,
                         duration: Duration(seconds: 3),
                         animationDuration: Duration(milliseconds: 500),
                       )..show(context);

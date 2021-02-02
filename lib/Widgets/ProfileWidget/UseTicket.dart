@@ -415,7 +415,7 @@ class UseTicketState extends State<UseTicket> {
                                                           'livestream') &&
                                                       widget.zoomId != null ||
                                                   widget.zoomId != ""
-                                              ? 'Zoom Session Ended'
+                                              ? 'Get Zoom Link Here'
                                               : 'USE TICKET',
               style: TextStyle(
                   color: Colors.white,

@@ -205,6 +205,8 @@ class _DashboardWidgetState extends State<DashboardWidget>
     getPopup().then((response) {
       var extractedData = json.decode(response.body);
 
+      print('Popup Data: ' + extractedData.toString());
+
       if (response.statusCode == 200) {
         showDialog(
             context: context,

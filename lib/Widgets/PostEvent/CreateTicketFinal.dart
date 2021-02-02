@@ -57,12 +57,13 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
 
   void getData() async {
     print('get data');
+    print("ticket Detail: " + widget.ticketDetail.toString());
     prefs = await SharedPreferences.getInstance();
 
     setState(() {
       imageUri = widget.ticketDetail['image_url'];
       ticketQuantity = widget.ticketDetail['quantity'];
-      price = widget.ticketDetail['price'];
+      price = widget.ticketDetail['price'] ?? "0";
       startDate = widget.ticketDetail['sales_start_date'];
       endDate = widget.ticketDetail['sales_end_date'];
       desc = widget.ticketDetail['description'];
