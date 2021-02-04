@@ -450,7 +450,7 @@ class _TransactionFormState extends State<TransactionForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: mapIndexed(customFormList, (index, item) {
-          if (item['isRequired'] == "1") {
+          if (item['isRequired'] == "2") {
             isRequired = true;
           } else {
             isRequired = false;
