@@ -611,7 +611,8 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                             CustomFormActivator(
                                                               eventId:
                                                                   widget.id,
-                                                            )));
+                                                                  from: 'EventDetails'
+                                                            ),),);
                                               },
                                               child: Text('Edit Custom Form')),
                                         ],
