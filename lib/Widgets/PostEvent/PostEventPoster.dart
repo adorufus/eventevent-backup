@@ -67,14 +67,20 @@ class PostEventPosterState extends State<PostEventPoster> {
               padding: EdgeInsets.only(right: 10),
               child: Center(
                 child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: () {
                     navigateToNextStep();
                   },
-                  child: Text(
-                    'Next',
-                    style: TextStyle(
-                        color: eventajaGreenTeal,
-                        fontSize: ScreenUtil.instance.setSp(18)),
+                  child: Container(
+                    height: 50,
+                    child: Center(
+                      child: Text(
+                        'Next',
+                        style: TextStyle(
+                            color: eventajaGreenTeal,
+                            fontSize: ScreenUtil.instance.setSp(18)),
+                      ),
+                    ),
                   ),
                 ),
               ),

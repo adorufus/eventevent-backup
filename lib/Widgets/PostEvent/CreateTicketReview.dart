@@ -73,7 +73,8 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
       eventNameController.text = prefs.getString('SETUP_TICKET_NAME');
       imageUri = prefs.getString('SETUP_TICKET_POSTER');
       ticketQuantityController.text = prefs.getString('SETUP_TICKET_QTY');
-      priceController.text = prefs.getString('SETUP_TICKET_PRICE');
+      priceController.text = ticketTypeID == '5' ||
+                                        ticketTypeID == '10' || ticketTypeID == '7' ? "0" : prefs.getString('SETUP_TICKET_PRICE');
       minTicketController.text = prefs.getString('SETUP_TICKET_MIN_BOUGHT');
       maxTicketController.text = prefs.getString('SETUP_TICKET_MAX_BOUGHT');
       __curValue =

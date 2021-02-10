@@ -63,7 +63,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
     setState(() {
       imageUri = widget.ticketDetail['image_url'];
       ticketQuantity = widget.ticketDetail['quantity'];
-      price = widget.ticketDetail['price'] ?? "0";
+      price = widget.ticketDetail['price'] == 'free' || widget.ticketDetail['price'] == 'FREE' ? "0" : widget.ticketDetail['price'] ?? "0";
       startDate = widget.ticketDetail['sales_start_date'];
       endDate = widget.ticketDetail['sales_end_date'];
       desc = widget.ticketDetail['description'];
@@ -417,7 +417,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                                 child: Text(
-                              'Rp ' + formatPrice(price: price) == null
+                              price == "free" || price == "FREE" ? "FREE" : 'Rp ' + formatPrice(price: price) == null
                                   ? ''
                                   : formatPrice(price: price),
                               style: TextStyle(
