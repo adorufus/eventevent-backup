@@ -88,7 +88,7 @@ class ManageTicketState extends State<ManageTicket> {
                             ticketList[i]['paid_ticket_type']['type'] ==
                                 'paid_seating') {
                           itemColor = Color(0xFF34B323);
-                          itemPriceText = 'Rp ' +
+                          itemPriceText = 'Rp' +
                               formatPrice(
                                 price: ticketList[i]['final_price'].toString(),
                               );
@@ -119,7 +119,7 @@ class ManageTicketState extends State<ManageTicket> {
                                 ['type'] ==
                             'paid_live_stream') {
                           itemColor = itemColor = Color(0xFF34B323);
-                          itemPriceText = 'Rp ' +
+                          itemPriceText = 'Rp' +
                               formatPrice(
                                 price: ticketList[i]['final_price'].toString(),
                               );

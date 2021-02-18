@@ -90,7 +90,7 @@ class AddNewTicketState extends State<AddNewTicket> {
                               fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(
-                            'Set-up and start selling your own paid ticket(s) to your attandees'),
+                            'Set-up and start selling your own paid ticket(s) to your attendees'),
                       ),
                 widget.isLivestream == true
                     ? Container()

@@ -2335,7 +2335,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                       return CupertinoAlertDialog(
                                                         title: Text('Notice'),
                                                         content: Text(
-                                                          'please start broadcast using zoom link you provide to your attandees',
+                                                          'please start broadcast using zoom link you provide to your attendees',
                                                           textScaleFactor: 1.2,
                                                           textWidthBasis:
                                                               TextWidthBasis

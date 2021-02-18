@@ -417,7 +417,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                                 child: Text(
-                              price == "free" || price == "FREE" ? "FREE" : 'Rp ' + formatPrice(price: price) == null
+                              price == "free" || price == "FREE" ? "FREE" : 'Rp' + formatPrice(price: price) == null
                                   ? ''
                                   : formatPrice(price: price),
                               style: TextStyle(
@@ -460,7 +460,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                       Expanded(
                         child: SizedBox(),
                       ),
-                      Text('Rp ' + formatPrice(price: price)),
+                      Text('Rp' + formatPrice(price: price)),
                       SizedBox(
                         width: ScreenUtil.instance.setWidth(13),
                       ),
@@ -496,7 +496,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         child: SizedBox(),
                       ),
                       Text(
-                        '- Rp ' + formatPrice(price: fee.toString()),
+                        '-Rp' + formatPrice(price: fee.toString()),
                         style: TextStyle(color: Colors.red),
                       ),
                       SizedBox(
@@ -531,7 +531,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         child: SizedBox(),
                       ),
                       Text(
-                        'Rp ' +
+                        'Rp' +
                             formatPrice(
                                 price: (int.parse(price) - fee).toString()),
                         style: TextStyle(
@@ -613,7 +613,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                                 child: Text(
-                              'Rp ' +
+                              'Rp' +
                                   formatPrice(
                                       price:
                                           (int.parse(price) + fee).toString()),
@@ -657,7 +657,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                       Expanded(
                         child: SizedBox(),
                       ),
-                      Text('Rp ' + formatPrice(price: price)),
+                      Text('Rp' + formatPrice(price: price)),
                       SizedBox(
                         width: ScreenUtil.instance.setWidth(13),
                       ),
@@ -693,7 +693,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         child: SizedBox(),
                       ),
                       Text(
-                        '+ Rp ' + formatPrice(price: fee.toString()),
+                        '+Rp' + formatPrice(price: fee.toString()),
                         style: TextStyle(color: Colors.grey),
                       ),
                       SizedBox(
@@ -728,7 +728,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                         child: SizedBox(),
                       ),
                       Text(
-                        'Rp ' +
+                        'Rp' +
                             formatPrice(
                                 price: (int.parse(price) + 5000).toString()),
                         style: TextStyle(
@@ -751,7 +751,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                   //     SizedBox(
                   //       width: ScreenUtil.instance.setWidth(55),
                   //     ),
-                  //     Text('Rp. ' + price)
+                  //     Text('Rp' + price)
                   //   ],
                   // ),
                   // Row(
@@ -765,7 +765,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                   //       width: ScreenUtil.instance.setWidth(55),
                   //     ),
                   //     Text(
-                  //       'Rp. ' + '5,000',
+                  //       'Rp' + '5,000',
                   //       style: TextStyle(color: Colors.grey[300]),
                   //     )
                   //   ],
@@ -787,7 +787,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                   //       width: ScreenUtil.instance.setWidth(55),
                   //     ),
                   //     Text(
-                  //       'Rp. ' + (int.parse(price) + 5000).toString(),
+                  //       'Rp' + (int.parse(price) + 5000).toString(),
                   //       style: TextStyle(
                   //           color: eventajaGreenTeal,
                   //           fontSize: ScreenUtil.instance.setSp(18),

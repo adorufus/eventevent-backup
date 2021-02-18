@@ -235,7 +235,7 @@ class PaymentBcaState extends State<PaymentBCA> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            'Rp ' + formatPrice(price: firstAmount) + ',',
+                            'Rp' + formatPrice(price: firstAmount) + '.',
                             style: TextStyle(
                                 fontSize: ScreenUtil.instance.setSp(38),
                                 fontWeight: FontWeight.bold),
@@ -245,10 +245,7 @@ class PaymentBcaState extends State<PaymentBCA> {
                                   color: Colors.red,
                                   fontSize: ScreenUtil.instance.setSp(38),
                                   fontWeight: FontWeight.bold)),
-                          Text(',-',
-                              style: TextStyle(
-                                  fontSize: ScreenUtil.instance.setSp(38),
-                                  fontWeight: FontWeight.bold))
+                          
                         ],
                       ),
                       SizedBox(height: ScreenUtil.instance.setWidth(15)),

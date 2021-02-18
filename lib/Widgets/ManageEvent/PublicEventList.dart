@@ -188,7 +188,7 @@ class PublicEventListState extends State<PublicEventList> {
                         if (publicData[i]['ticket']['availableTicketStatus'] ==
                             '1') {
                           itemColor = Color(0xFF34B323);
-                          itemPriceText = 'Rp. ' +
+                          itemPriceText = 'Rp' +
                               formatPrice(
                                 price: publicData[i]['ticket']['cheapestTicket']
                                     .toString(),
@@ -238,7 +238,7 @@ class PublicEventListState extends State<PublicEventList> {
                           'paid_live_stream') {
                         itemColor = eventajaGreenTeal;
                         itemPriceText =
-                            'Rp. ' + publicData[i]['ticket_type']['name'];
+                            'Rp' + publicData[i]['ticket_type']['name'];
                       } else if (publicData[i]['ticket_type']['type'] ==
                               'free_limited' ||
                           publicData[i]['ticket_type']['type'] ==

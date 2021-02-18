@@ -143,7 +143,7 @@ class TicketSalesState extends State<TicketSales> {
                             height: ScreenUtil.instance.setWidth(15),
                           ),
                           Text(
-                            'Rp. ' +
+                            'Rp' +
                                 ticketSalesData['onhold_balance'].toString() +
                                 ',-',
                             style: TextStyle(
@@ -230,7 +230,7 @@ class TicketSalesState extends State<TicketSales> {
                                 width: ScreenUtil.instance.setWidth(30),
                               ),
                               Text(
-                                'Rp. ' +
+                                'Rp' +
                                     ticketSalesData['event_sold_amount'] +
                                     ',-',
                                 style: TextStyle(
@@ -322,7 +322,7 @@ class TicketSalesState extends State<TicketSales> {
                                                             ticketData[i][
                                                                     'paid_ticket_type_id'] ==
                                                                 '3'
-                                                        ? 'Rp. ' +
+                                                        ? 'Rp' +
                                                             (int.parse(ticketData[
                                                                             i][
                                                                         'merchant_price']) *

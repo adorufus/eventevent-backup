@@ -383,7 +383,7 @@ class MyTicketSearchState extends State<MyTicketSearch> {
                 //                     child: Text(
                 //                         filteredEvents[i]['paid_ticket_type']['type'] ==
                 //                                 'paid'
-                //                             ? filteredEvents[i]['status'] == 'ended' ? '' : 'Rp. ' +
+                //                             ? filteredEvents[i]['status'] == 'ended' ? '' : 'Rp' +
                 //                                 filteredEvents[i]['ticket']
                 //                                     ['cheapestTicket']
                 //                             : '',

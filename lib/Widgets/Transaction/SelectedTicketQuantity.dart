@@ -197,7 +197,7 @@ class _SelectedTicketQuantityWidgetState
                       width: ScreenUtil.instance.setWidth(150),
                     ),
                     Text(
-                      'Rp ' +
+                      'Rp' +
                           formatPrice(
                               price:
                                   (int.parse(widget.ticketPrice) * ticketCount)

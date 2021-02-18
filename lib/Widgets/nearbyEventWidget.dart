@@ -234,7 +234,7 @@ class _ListenPageState extends State<ListenPage> {
                                     ['availableTicketStatus'] ==
                                 '1') {
                               itemColor = Color(0xFF34B323);
-                              itemPriceText = 'Rp. ' +
+                              itemPriceText = 'Rp' +
                                   formatPrice(
                                     price: nearbyEventData[i]['ticket']
                                             ['cheapestTicket']
@@ -285,7 +285,7 @@ class _ListenPageState extends State<ListenPage> {
                                   ['type'] ==
                               'paid_live_stream') {
                             itemColor = Color(0xFF34B323);
-                            itemPriceText = 'Rp. ' +
+                            itemPriceText = 'Rp' +
                                 nearbyEventData[i]['ticket']['cheapestTicket'];
                           } else if (nearbyEventData[i]['ticket_type']
                                   ['type'] ==

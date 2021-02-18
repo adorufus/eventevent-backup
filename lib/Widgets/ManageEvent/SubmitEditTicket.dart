@@ -404,7 +404,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                                 child: Text(
-                              'Rp ' + formatPrice(price: price),
+                              'Rp' + formatPrice(price: price),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil.instance.setSp(14),
@@ -445,7 +445,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                       Expanded(
                         child: SizedBox(),
                       ),
-                      Text('Rp ' + formatPrice(price: price)),
+                      Text('Rp' + formatPrice(price: price)),
                       SizedBox(
                         width: ScreenUtil.instance.setWidth(13),
                       ),
@@ -481,7 +481,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                         child: SizedBox(),
                       ),
                       Text(
-                        '- Rp ' + formatPrice(price: fee.toString()),
+                        '-Rp' + formatPrice(price: fee.toString()),
                         style: TextStyle(color: Colors.red),
                       ),
                       SizedBox(
@@ -516,7 +516,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                         child: SizedBox(),
                       ),
                       Text(
-                        'Rp ' +
+                        'Rp' +
                             formatPrice(
                                 price: (int.parse(price) - fee).toString()),
                         style: TextStyle(
@@ -598,7 +598,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                             borderRadius: BorderRadius.circular(15)),
                         child: Center(
                             child: Text(
-                          'Rp ' +
+                          'Rp' +
                               formatPrice(
                                   price: (int.parse(price) + fee).toString()),
                           style: TextStyle(
@@ -641,7 +641,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                   Expanded(
                     child: SizedBox(),
                   ),
-                  Text('Rp ' + formatPrice(price: price)),
+                  Text('Rp' + formatPrice(price: price)),
                   SizedBox(
                     width: ScreenUtil.instance.setWidth(13),
                   ),
@@ -676,7 +676,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                     child: SizedBox(),
                   ),
                   Text(
-                    '+ Rp ' + formatPrice(price: fee.toString()),
+                    '+Rp' + formatPrice(price: fee.toString()),
                     style: TextStyle(color: Colors.grey),
                   ),
                   SizedBox(
@@ -711,7 +711,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                     child: SizedBox(),
                   ),
                   Text(
-                    'Rp ' + formatPrice(price: price),
+                    'Rp' + formatPrice(price: price),
                     style: TextStyle(
                         color: eventajaGreenTeal,
                         fontSize: ScreenUtil.instance.setSp(18),
@@ -732,7 +732,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
               //     SizedBox(
               //       width: ScreenUtil.instance.setWidth(55),
               //     ),
-              //     Text('Rp. ' + price)
+              //     Text('Rp' + price)
               //   ],
               // ),
               // Row(
@@ -746,7 +746,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
               //       width: ScreenUtil.instance.setWidth(55),
               //     ),
               //     Text(
-              //       'Rp. ' + '5,000',
+              //       'Rp' + '5,000',
               //       style: TextStyle(color: Colors.grey[300]),
               //     )
               //   ],
@@ -768,7 +768,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
               //       width: ScreenUtil.instance.setWidth(55),
               //     ),
               //     Text(
-              //       'Rp. ' + (int.parse(price) + 5000).toString(),
+              //       'Rp' + (int.parse(price) + 5000).toString(),
               //       style: TextStyle(
               //           color: eventajaGreenTeal,
               //           fontSize: ScreenUtil.instance.setSp(18),

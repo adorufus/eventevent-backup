@@ -230,10 +230,10 @@ class _OvoWaitingPaymentState extends State<OvoWaitingPayment> {
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
-                            'Rp ' + formatPrice(price: paymentData['amount']) ==
+                            'Rp' + formatPrice(price: paymentData['amount']) ==
                                     null
                                 ? '-'
-                                : 'Rp ' +
+                                : 'Rp' +
                                     formatPrice(price: paymentData['amount']),
                             style: TextStyle(
                                 fontSize: 50, fontWeight: FontWeight.bold),

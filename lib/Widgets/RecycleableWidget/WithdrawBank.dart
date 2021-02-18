@@ -252,7 +252,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                   alignment: Alignment.topCenter,
                   child: Text(
                       'Available Balance For Withdraw: ' +
-                          '\nRp ${formatPrice(price: balanceData['amount'].toString())},-',
+                          '\nRp${formatPrice(price: balanceData['amount'].toString())}',
                       style: TextStyle(color: eventajaGreenTeal),
                       textAlign: TextAlign.center)),
               SizedBox(height: ScreenUtil.instance.setWidth(26)),
@@ -391,7 +391,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                 ),
                 child: Center(
                     child: Text(
-                        'Rp ${formatPrice(price: balanceData['amount'].toString())}',
+                        'Rp${formatPrice(price: balanceData['amount'].toString())}',
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontSize: ScreenUtil.instance.setSp(35),
@@ -834,7 +834,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                       alignment: Alignment.center,
                       child: Center(
                         child: Text(
-                          'Rp ${fo.withoutFractionDigits}',
+                          'Rp${fo.withoutFractionDigits}',
                           textAlign: TextAlign.end,
                           style: TextStyle(
                               color: amountColor, fontWeight: FontWeight.bold),

@@ -16,8 +16,7 @@ Iterable<E> mapIndexed<E, T>(
 String formatPrice({String price}) {
   MoneyFormatterOutput fo =
       FlutterMoneyFormatter(amount: double.parse(price + '.0')).output;
-
-  return fo.withoutFractionDigits;
+  return fo.withoutFractionDigits.toString().replaceAll(',', '.');
 }
 
 class Utils {

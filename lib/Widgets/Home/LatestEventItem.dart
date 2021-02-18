@@ -45,7 +45,7 @@ class LatestEventItem extends StatelessWidget {
       allowFontScaling: true,
     )..init(context);
 
-    // String price = 'Rp. ';
+    // String price = 'Rp';
     // MoneyFormatterOutput fo;
     // RegExp pricesRegex = new RegExp(r"^[0-9]*$");
 

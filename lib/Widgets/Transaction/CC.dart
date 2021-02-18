@@ -256,7 +256,7 @@ class CreditCardInputState extends State<CreditCardInput> {
                             ),
                             SizedBox(height: ScreenUtil.instance.setWidth(15)),
                             Text(
-                              'Rp ' +
+                              'Rp' +
                                   formatPrice(
                                       price: paymentData['amount_detail']
                                           ['final_amount']),

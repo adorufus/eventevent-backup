@@ -304,7 +304,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                               ['availableTicketStatus'] ==
                           '1') {
                         itemColor = Color(0xFF34B323);
-                        itemPriceText = 'Rp. ' +
+                        itemPriceText = 'Rp' +
                             formatPrice(
                               price: popularEventList[i]['ticket']
                                       ['cheapestTicket']
@@ -354,7 +354,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     } else if (popularEventList[i]['ticket_type']['type'] ==
                         'paid_live_stream') {
                       itemColor = Color(0xFF34B323);
-                      itemPriceText = 'Rp. ' +
+                      itemPriceText = 'Rp' +
                           popularEventList[i]['ticket']['cheapestTicket'];
                     } else if (popularEventList[i]['ticket_type']['type'] ==
                         'free_limited') {
@@ -475,7 +475,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                               ['availableTicketStatus'] ==
                           '1') {
                         itemColor = Color(0xFF34B323);
-                        itemPriceText = 'Rp. ' +
+                        itemPriceText = 'Rp' +
                             discoverEventList[i]['ticket']['cheapestTicket'];
                       } else {
                         if (discoverEventList[i]['ticket']['salesStatus'] ==
@@ -521,7 +521,7 @@ class _SeeAllItemState extends State<SeeAllItem> {
                     } else if (discoverEventList[i]['ticket_type']['type'] ==
                         'paid_live_stream') {
                       itemColor = Color(0xFF34B323);
-                      itemPriceText = 'Rp. ' +
+                      itemPriceText = 'Rp' +
                           discoverEventList[i]['ticket']['cheapestTicket'];
                     } else if (discoverEventList[i]['ticket_type']['type'] ==
                         'free_limited') {

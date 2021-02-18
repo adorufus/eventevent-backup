@@ -225,7 +225,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
                     height: ScreenUtil.instance.setWidth(15),
                   ),
                   Text(
-                    'Rp ' +
+                    'Rp' +
                         formatPrice(
                             price: widget.ticketSales['onhold_balance']),
                     style: TextStyle(

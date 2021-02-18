@@ -445,7 +445,7 @@ class SearchState extends State<Search> {
                 //                     child: Text(
                 //                         filteredEvents[i]['ticket_type']['type'] ==
                 //                                 'paid'
-                //                             ? filteredEvents[i]['status'] == 'ended' ? '' : 'Rp. ' +
+                //                             ? filteredEvents[i]['status'] == 'ended' ? '' : 'Rp' +
                 //                                 filteredEvents[i]['ticket']
                 //                                     ['cheapestTicket']
                 //                             : '',

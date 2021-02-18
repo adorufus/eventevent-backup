@@ -149,7 +149,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                     } else if (int.parse(ticketListData[i]['final_price']) >
                         0) {
                       itemColor = Color(0xFF34B323);
-                      ticketPrice = 'Rp ' +
+                      ticketPrice = 'Rp' +
                           formatPrice(
                               price:
                                   ticketListData[i]['final_price'].toString());
@@ -162,7 +162,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                     //       ticketPrice = 'Free Limited';
                     //     } else if (int.parse(ticketListData[i]['merchant_price']) >0) {
                     //       itemColor = Color(0xFF34B323);
-                    //       ticketPrice = 'Rp. ' + ticketListData[i]['merchant_price'];
+                    //       ticketPrice = 'Rp' + ticketListData[i]['merchant_price'];
                     //     }
                     //  }
                   }
@@ -170,7 +170,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                   if (ticketListData[i]['is_single_ticket'] == '1' &&
                       ticketListData[i]['user_have_ticket'] == '1') {
                     itemColor = Color(0xff36b323).withOpacity(.2);
-                    ticketPrice = 'Rp ' +
+                    ticketPrice = 'Rp' +
                         formatPrice(
                             price: ticketListData[i]['final_price'].toString());
                   }
@@ -178,7 +178,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                   if (ticketListData[i]['availableTicketStatus'] == '0' &&
                       int.parse(ticketListData[i]['final_price']) > 0) {
                     itemColor = Color(0xFF34B323).withOpacity(.2);
-                    ticketPrice = 'Rp ' +
+                    ticketPrice = 'Rp' +
                         formatPrice(
                             price: ticketListData[i]['final_price'].toString());
                   }
@@ -189,7 +189,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                 } else if (ticketListData[i]['event']['ticket_type']['type'] ==
                     'paid_live_stream') {
                   itemColor = Color(0xFF34B323);
-                  ticketPrice = 'Rp ' +
+                  ticketPrice = 'Rp' +
                       formatPrice(
                           price: ticketListData[i]['final_price'].toString());
                 } else if (ticketListData[i]['event']['ticket_type']['type'] ==
@@ -200,7 +200,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                       ticketListData[i]['user_have_ticket'] == '1') {
                     if (int.parse(ticketListData[i]['final_price']) > 0) {
                       itemColor = Color(0xff36b323).withOpacity(.2);
-                      ticketPrice = 'Rp ' +
+                      ticketPrice = 'Rp' +
                           formatPrice(
                               price:
                                   ticketListData[i]['final_price'].toString());
@@ -210,7 +210,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                   } else {
                     if (int.parse(ticketListData[i]['final_price']) > 0) {
                       itemColor = Color(0xFF34B323);
-                      ticketPrice = 'Rp ' +
+                      ticketPrice = 'Rp' +
                           formatPrice(
                               price:
                                   ticketListData[i]['final_price'].toString());

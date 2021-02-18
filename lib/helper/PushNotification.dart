@@ -595,7 +595,7 @@ class PushNotificationState extends State<PushNotification> {
             ),
             notificationData[index]['type'] == 'balance'
                 ? Container()
-                : Text('Rp ' +
+                : Text('Rp' +
                     formatPrice(
                         price: notificationData[index]['detail'][0]['amount']))
           ],

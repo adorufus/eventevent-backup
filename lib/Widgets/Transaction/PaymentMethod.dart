@@ -109,7 +109,7 @@ class PaymentMethodState extends State<PaymentMethod> {
                             fontSize: ScreenUtil.instance.setSp(14),
                             color: Colors.grey)),
                     SizedBox(height: ScreenUtil.instance.setWidth(8)),
-                    Text('Rp ${formatPrice(price: paymentAmount)}',
+                    Text('Rp${formatPrice(price: paymentAmount)}',
                         style: TextStyle(
                             fontSize: 35, fontWeight: FontWeight.bold)),
                   ],

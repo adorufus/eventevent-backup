@@ -290,7 +290,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                                       color: Colors.black26),
                                 ),
                                 Text(
-                                  'Rp. ' + withdrawAmount.toString() + ',-',
+                                  'Rp' + withdrawAmount.toString() + ',-',
                                   style: TextStyle(
                                       fontSize: ScreenUtil.instance.setSp(18)),
                                 ),
@@ -308,7 +308,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                                       color: Colors.black26),
                                 ),
                                 Text(
-                                  '-Rp. ${withdrawFee == null ? '0' : withdrawFee}',
+                                  '-Rp${withdrawFee == null ? '0' : withdrawFee}',
                                   style: TextStyle(
                                       fontSize: ScreenUtil.instance.setSp(18),
                                       color: Colors.red),
@@ -332,7 +332,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                               height: ScreenUtil.instance.setWidth(20),
                             ),
                             Text(
-                              'Rp. ' +
+                              'Rp' +
                                   (withdrawAmount == null || withdrawFee == null
                                           ? 0
                                           : withdrawAmount -

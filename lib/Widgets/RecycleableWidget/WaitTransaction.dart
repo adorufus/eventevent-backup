@@ -322,7 +322,7 @@ class _WaitTransactionState extends State<WaitTransaction>
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
-                            'Rp ' +
+                            'Rp' +
                                 formatPrice(
                                     price: widget.finalPrice.toString()),
                             style: TextStyle(

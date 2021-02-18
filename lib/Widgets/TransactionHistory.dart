@@ -235,7 +235,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
                               timeStart: transactionList[i]['updated_at'],
                               price: transactionList[i]['amount'] == '0'
                                   ? 'Free'
-                                  : 'Rp ' +
+                                  : 'Rp' +
                                       formatPrice(
                                           price: transactionList[i]['amount']),
                             ));

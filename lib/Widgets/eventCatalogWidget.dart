@@ -567,7 +567,7 @@ class _EventCatalogState extends State<EventCatalog>
                                       itemPriceText = 'Free Limited';
                                     } else {
                                       itemColor = Color(0xFF34B323);
-                                      itemPriceText = 'Rp. ' +
+                                      itemPriceText = 'Rp' +
                                           data[i]['ticket']['cheapestTicket'] +
                                           ',-';
                                     }
@@ -612,7 +612,7 @@ class _EventCatalogState extends State<EventCatalog>
                                 } else if (data[i]['ticket_type']['type'] ==
                                     'paid_live_stream') {
                                   itemColor = eventajaGreenTeal;
-                                  itemPriceText = 'Rp. ' +
+                                  itemPriceText = 'Rp' +
                                       data[i]['ticket']['cheapestTicket'] +
                                       ',-';
                                 } else if (data[i]['ticket_type']['type'] ==
@@ -780,7 +780,7 @@ class _EventCatalogState extends State<EventCatalog>
                                     ['availableTicketStatus'] ==
                                 '1') {
                               itemColor = Color(0xFF34B323);
-                              itemPriceText = 'Rp. ' +
+                              itemPriceText = 'Rp' +
                                   discoverData[i]['ticket']['cheapestTicket'] +
                                   ',-';
                             } else {
@@ -823,7 +823,7 @@ class _EventCatalogState extends State<EventCatalog>
                           } else if (discoverData[i]['ticket_type']['type'] ==
                               'paid_live_stream') {
                             itemColor = eventajaGreenTeal;
-                            itemPriceText = 'Rp. ' +
+                            itemPriceText = 'Rp' +
                                 discoverData[i]['ticket']['cheapestTicket'] +
                                 ',-';
                           } else if (discoverData[i]['ticket_type']['type'] ==

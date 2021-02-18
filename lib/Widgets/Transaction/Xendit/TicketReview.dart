@@ -348,7 +348,7 @@ class _TicketReviewState extends State<TicketReview> {
                       Expanded(
                         child: SizedBox(),
                       ),
-                      Text('Rp ' + formatPrice(price: thisTicketPrice))
+                      Text('Rp' + formatPrice(price: thisTicketPrice))
                     ]),
                 SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 Row(
@@ -378,7 +378,7 @@ class _TicketReviewState extends State<TicketReview> {
                         child: SizedBox(),
                       ),
                       Text(
-                        'Rp ' + formatPrice(price: total.toString()),
+                        'Rp' + formatPrice(price: total.toString()),
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontWeight: FontWeight.bold,

@@ -68,24 +68,40 @@ class _MediaPlayerState extends State<MediaPlayer> {
       height: defaultScreenHeight,
       allowFontScaling: true,
     )..init(context);
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: Center(
-          child: Chewie(
-        controller: chewieController,
-      )),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     setState(() {
-      //       _controller.value.isPlaying
-      //           ? _controller.pause()
-      //           : _controller.play();
-      //     });
-      //   },
-      //   child: Icon(
-      //     _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-      //   ),
-      // ),
+    return SafeArea(
+          child: Scaffold(
+        backgroundColor: backgroundColor,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(top: 80),
+          child: FloatingActionButton(
+            child: Icon(
+              Icons.close,
+              color: Colors.white,
+            ),
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            backgroundColor: Colors.white.withOpacity(.2),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+        body: Center(
+            child: Chewie(
+          controller: chewieController,
+        )),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     setState(() {
+        //       _controller.value.isPlaying
+        //           ? _controller.pause()
+        //           : _controller.play();
+        //     });
+        //   },
+        //   child: Icon(
+        //     _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+        //   ),
+        // ),
+      ),
     );
   }
 
