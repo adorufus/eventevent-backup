@@ -2843,6 +2843,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   .toString()
                                                   .contains(".png")
                                           ? PhotoView(
+                                            
                                               imageProvider: NetworkImage(
                                                   additional['posterPathFull']),
                                             )

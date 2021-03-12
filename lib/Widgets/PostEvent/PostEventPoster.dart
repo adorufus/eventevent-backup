@@ -258,15 +258,22 @@ class PostEventPosterState extends State<PostEventPoster> {
         animationDuration: Duration(milliseconds: 500),
       )..show(context);
     } else {
-      checkForLostImageData().then((_) {
-        setState(() {
-          prefs.setString('POST_EVENT_POSTER', posterFile.path);
+      if (Platform.isAndroid) {
+        checkForLostImageData().then((_) {
+          setState(() {
+            prefs.setString('POST_EVENT_POSTER', posterFile.path);
+          });
+          Navigator.push(
+              context,
+              CupertinoPageRoute(
+                  builder: (BuildContext context) => PostEventMap()));
         });
+      } else {
         Navigator.push(
-            context,
-            CupertinoPageRoute(
-                builder: (BuildContext context) => PostEventMap()));
-      });
+          context,
+          CupertinoPageRoute(builder: (context) => PostEventMap())
+        );
+      }
     }
   }
 }
