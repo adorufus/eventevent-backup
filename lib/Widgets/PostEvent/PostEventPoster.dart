@@ -269,10 +269,11 @@ class PostEventPosterState extends State<PostEventPoster> {
                   builder: (BuildContext context) => PostEventMap()));
         });
       } else {
+        setState(() {
+          prefs.setString('POST_EVENT_POSTER', posterFile.path);
+        });
         Navigator.push(
-          context,
-          CupertinoPageRoute(builder: (context) => PostEventMap())
-        );
+            context, CupertinoPageRoute(builder: (context) => PostEventMap()));
       }
     }
   }
