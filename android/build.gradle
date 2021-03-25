@@ -27,6 +27,15 @@ subprojects {
 subprojects {
     project.evaluationDependsOn(':app')
 }
+subprojects{
+    afterEvaluate {
+        project -> if(project.name == "thumbnails"){
+            android {
+                compileSdkVersion 28
+            }
+        }
+    }
+}
 
 task clean(type: Delete) {
     delete rootProject.buildDir

@@ -13,7 +13,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:eventevent/CrashlyticsTester.dart';
+// import 'package:eventevent/CrashlyticsTester.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEvent.dart';
 import 'package:eventevent/Widgets/ProfileWidget/editProfile.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/CustomCamera.dart';
@@ -26,7 +26,7 @@ import 'package:eventevent/Widgets/registerWidget.dart';
 import 'package:eventevent/helper/PushNotification.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:camera/camera.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
@@ -40,8 +40,8 @@ import 'package:flutter/services.dart';
 List<CameraDescription> cameras;
 
 Future<Null> main() async {
-  Crashlytics.instance.enableInDevMode = false;
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  // Crashlytics.instance.enableInDevMode = false;
+  // FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
   // HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,9 +54,13 @@ Future<Null> main() async {
   //   print('code: ${e.code} message: ${e.description}');
   // }
 
+  // runZoned(() {
+  //   runApp(new RunApp());
+  // }, onError: Crashlytics.instance.recordError);
+
   runZoned(() {
     runApp(new RunApp());
-  }, onError: Crashlytics.instance.recordError);
+  });
 }
 
 class RunApp extends StatefulWidget {

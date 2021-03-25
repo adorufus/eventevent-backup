@@ -109,31 +109,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                 imagePath: 'assets/drawable/my_ticket_empty_state.png',
                 reasonText: 'You have no ticket :(',
               )
-            : SmartRefresher(
-                enablePullDown: false,
-                enablePullUp: true,
-                footer: CustomFooter(
-                    builder: (BuildContext context, LoadStatus mode) {
-                  Widget body;
-                  if (mode == LoadStatus.idle) {
-                    body = Text("Load data");
-                  } else if (mode == LoadStatus.loading) {
-                    body = CupertinoActivityIndicator(radius: 20);
-                  } else if (mode == LoadStatus.failed) {
-                    body = Text("Load Failed!");
-                  } else if (mode == LoadStatus.canLoading) {
-                    body = Text('More');
-                  } else {
-                    body = Container();
-                  }
-
-                  return Container(
-                      height: ScreenUtil.instance.setWidth(35),
-                      child: Center(child: body));
-                }),
-                controller: refreshController,
-                onLoading: _onLoading,
-                child: ListView.builder(
+            : ListView.builder(
                     physics: AlwaysScrollableScrollPhysics(),
                     itemCount:
                         ticketDetailData == null ? 0 : ticketDetailData.length,
@@ -405,8 +381,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                           // topPadding: i == 0 ? 13.0 : 0.0,
                         ),
                       );
-                    }),
-              );
+                    });
   }
 
   Future<http.Response> getDataTicket({int newPage}) async {
