@@ -35,6 +35,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/API/catalogModel.dart';
+import 'package:progressive_image/progressive_image.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:carousel_pro/carousel_pro.dart';
@@ -242,12 +243,18 @@ class _EventCatalogState extends State<EventCatalog>
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
-                      child: CachedNetworkImage(
-                          imageUrl: bannerData["image"]
-                              .toString()
-                              .replaceAll("\n", ""),
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Container()),
+                      child: ProgressiveImage.assetNetwork(
+                          placeholder: 'assets/grey-fade.jpg',
+                          thumbnail: bannerData["image"],
+                          image: bannerData["image"],
+                          width: 350,
+                          height: 180),
+                      // CachedNetworkImage(
+                      //     imageUrl: bannerData["image"]
+                      //         .toString()
+                      //         .replaceAll("\n", ""),
+                      //     fit: BoxFit.cover,
+                      //     placeholder: (context, url) => Container()),
                     ),
                   ));
             },
@@ -864,12 +871,15 @@ class _EventCatalogState extends State<EventCatalog>
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        EventDetailLoadingScreen(
-                                            isRest: widget.isRest,
-                                            eventId: discoverData[i]['id'])));
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    EventDetailLoadingScreen(
+                                  isRest: widget.isRest,
+                                  eventId: discoverData[i]['id'],
+                                ),
+                              ),
+                            );
                           },
                           child: PopularEventWidget(
                             imageUrl: discoverData[i]['picture'],
@@ -1108,54 +1118,6 @@ class _EventCatalogState extends State<EventCatalog>
         ],
       ),
     );
-  }
-
-  Widget discoverEventContent() {
-    return Container(
-        height: ScreenUtil.instance.setWidth(310),
-        child: isLoading
-            ? Center(child: CupertinoActivityIndicator(radius: 20))
-            : new ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: discoverData == null ? 0 : discoverData.length,
-                itemBuilder: (BuildContext context, i) {
-                  return new Container(
-                      width: i == 0 ? 200 : 190,
-                      child: Padding(
-                        padding: i == 0
-                            ? EdgeInsets.only(left: 25)
-                            : EdgeInsets.only(left: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              height: ScreenUtil.instance.setWidth(250),
-                              width: ScreenUtil.instance.setWidth(190),
-                              child: CachedNetworkImage(
-                                fit: BoxFit.fill,
-                                imageUrl: discoverData[i]["picture"],
-                                placeholder: (context, url) => new Container(
-                                  child: Image.asset(
-                                    'assets/grey-fade.jpg',
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Text(discoverData[i]["dateStart"],
-                                style: TextStyle(color: eventajaGreenTeal)),
-                            Text(discoverData[i]["name"],
-                                style: TextStyle(
-                                    fontSize: ScreenUtil.instance.setSp(20),
-                                    fontWeight: FontWeight.bold),
-                                overflow: TextOverflow.ellipsis),
-                            Text(discoverData[i]["address"],
-                                overflow: TextOverflow.ellipsis),
-                          ],
-                        ),
-                      ));
-                }));
   }
 
   ///Construct PopularPeople Widget
@@ -1551,143 +1513,6 @@ class _EventCatalogState extends State<EventCatalog>
       ),
     );
   }
-
-  // Widget mediaContent() {
-  //   return Container(
-  //       height: ScreenUtil.instance.setWidth(250),
-  //       alignment: Alignment.centerLeft,
-  //       child: isLoading
-  //           ? Center(
-  //               child: CircularProgressIndicator(
-  //               backgroundColor: Colors.white,
-  //             ))
-  //           : new ListView.builder(
-  //               scrollDirection: Axis.horizontal,
-  //               itemCount:
-  //                   mediaData['data'] == null ? 0 : mediaData['data'].length,
-  //               itemBuilder: (BuildContext context, i) {
-  //                 return Padding(
-  //                   padding: const EdgeInsets.only(right: 10, left: 10),
-  //                   child: new Container(
-  //                       alignment: Alignment.center,
-  //                       decoration: BoxDecoration(
-  //                           borderRadius: BorderRadius.circular(15),
-  //                           boxShadow: <BoxShadow>[
-  //                             BoxShadow(
-  //                                 color: Colors.grey,
-  //                                 offset: Offset(1, 1),
-  //                                 spreadRadius: 1,
-  //                                 blurRadius: 5),
-  //                           ]),
-  //                       width: i == 0 ? 250 : 250,
-  //                       child: Padding(
-  //                         padding: i == 0
-  //                             ? EdgeInsets.only(left: 0)
-  //                             : EdgeInsets.only(left: 0),
-  //                         child: Column(
-  //                           crossAxisAlignment: CrossAxisAlignment.start,
-  //                           mainAxisAlignment: MainAxisAlignment.start,
-  //                           mainAxisSize: MainAxisSize.max,
-  //                           children: <Widget>[
-  //                             GestureDetector(
-  //                               onTap: () {
-  //                                 launch(
-  //                                     'https://media.eventevent.com/medias/${mediaData['data'][i]['id']}',
-  //                                     enableJavaScript: true,
-  //                                     forceWebView: true,
-  //                                     forceSafariVC: true);
-  //                               },
-  //                               child: Container(
-  //                                 height: ScreenUtil.instance.setWidth(120),
-  //                                 width: i == 0 ? 250 : 250,
-  //                                 decoration: BoxDecoration(
-  //                                     borderRadius: BorderRadius.only(
-  //                                         topLeft: Radius.circular(15),
-  //                                         topRight: Radius.circular(15)),
-  //                                     image: DecorationImage(
-  //                                         image: NetworkImage(
-  //                                           mediaData['data'][i]['banner'],
-  //                                         ),
-  //                                         fit: BoxFit.fill)),
-  //                               ),
-  //                             ),
-  //                             Container(
-  //                               height: ScreenUtil.instance.setWidth(120),
-  //                               decoration: BoxDecoration(
-  //                                 color: Colors.white,
-  //                                 borderRadius: BorderRadius.only(
-  //                                     topLeft: Radius.circular(15),
-  //                                     topRight: Radius.circular(15)),
-  //                               ),
-  //                               child: Column(children: <Widget>[
-  //                                 SizedBox(height: ScreenUtil.instance.setWidth(9)),
-  //                                 // Text(data[i]["dateStart"],
-  //                                 //     style: TextStyle(color: eventajaGreenTeal),
-  //                                 //     textAlign: TextAlign.start),
-  //                                 Padding(
-  //                                   padding: const EdgeInsets.only(left: 15),
-  //                                   child: Column(
-  //                                     crossAxisAlignment:
-  //                                         CrossAxisAlignment.start,
-  //                                     mainAxisAlignment:
-  //                                         MainAxisAlignment.start,
-  //                                     children: <Widget>[
-  //                                       Container(
-  //                                         width: ScreenUtil.instance.setWidth(220),
-  //                                         child: Text(
-  //                                           //'asdfghhtij aijitaj sjakj \n ofkoakf ffffa gggdssef ffwf',
-  //                                           mediaData['data'][i]["title"],
-  //                                           overflow: TextOverflow.ellipsis,
-  //                                           style: TextStyle(
-  //                                               fontSize: ScreenUtil.instance.setSp(20),
-  //                                               fontWeight: FontWeight.bold),
-  //                                           textAlign: TextAlign.start,
-  //                                           maxLines: 2,
-  //                                         ),
-  //                                       ),
-  //                                     ],
-  //                                   ),
-  //                                 ),
-  //                                 SizedBox(height: ScreenUtil.instance.setWidth(9)),
-  //                                 Padding(
-  //                                   padding: const EdgeInsets.only(left: 10),
-  //                                   child: Row(
-  //                                     mainAxisAlignment:
-  //                                         MainAxisAlignment.start,
-  //                                     crossAxisAlignment:
-  //                                         CrossAxisAlignment.center,
-  //                                     children: <Widget>[
-  //                                       Container(
-  //                                         height: ScreenUtil.instance.setWidth(30),
-  //                                         width: ScreenUtil.instance.setWidth(30),
-  //                                         decoration: BoxDecoration(
-  //                                             shape: BoxShape.circle,
-  //                                             image: DecorationImage(
-  //                                                 image: NetworkImage(
-  //                                                     mediaData['data'][i]
-  //                                                         ['creator']['photo']),
-  //                                                 fit: BoxFit.fill)),
-  //                                       ),
-  //                                       SizedBox(
-  //                                         height: ScreenUtil.instance.setWidth(10),
-  //                                       ),
-  //                                       Text(mediaData['data'][i]['creator']
-  //                                                   ['fullName'] ==
-  //                                               null
-  //                                           ? '-'
-  //                                           : mediaData['data'][i]['creator']
-  //                                               ['fullName'])
-  //                                     ],
-  //                                   ),
-  //                                 ),
-  //                               ]),
-  //                             )
-  //                           ],
-  //                         ),
-  //                       )),
-  //                 );
-  //               }));
-  // }
 
   List<Catalog> _list = [];
   var isLoading = false;

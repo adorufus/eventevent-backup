@@ -35,6 +35,7 @@ dependencies:
   flutter_branch_sdk: ^0.1.3
   video_thumbnail: ^0.2.5
   mime:
+  progressive_image:
   media_info: ^0.6.4
   auto_orientation: ^1.0.6
   device_info: ^0.4.2+8

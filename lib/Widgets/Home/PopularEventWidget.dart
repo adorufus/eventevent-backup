@@ -3,6 +3,7 @@ import 'package:eventevent/Widgets/Home/MiniDate.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:progressive_image/progressive_image.dart';
 
 class PopularEventWidget extends StatelessWidget {
   final imageUrl;
@@ -60,25 +61,29 @@ class PopularEventWidget extends StatelessWidget {
           ),
           child: Column(
             children: <Widget>[
-              Container(
-                height: ScreenUtil.instance.setWidth(259),
-                decoration: BoxDecoration(
-                    color: Color(0xFFB5B5B5).withOpacity(.5),
-                    image: DecorationImage(
-                        image: CachedNetworkImageProvider(imageUrl),
-                        fit: BoxFit.cover),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15),
-                    ),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 2,
-                          spreadRadius: 2)
-                    ]),
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                              child: Container(
+                  height: ScreenUtil.instance.setWidth(259),
+                  decoration: BoxDecoration(
+                      color: Color(0xFFB5B5B5).withOpacity(.5),
+                      // image: DecorationImage(
+                      //     image: CachedNetworkImageProvider(imageUrl),
+                      //     fit: BoxFit.cover),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                      ),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 2,
+                            spreadRadius: 2)
+                      ]),
+                      child: ProgressiveImage.assetNetwork(placeholder: 'assets/grey-fade.jpg', thumbnail: imageUrl, image: imageUrl, width: 200, height: 259),
+                ),
               ),
               Container(
                 padding: EdgeInsets.only(left: 1, top: 15),

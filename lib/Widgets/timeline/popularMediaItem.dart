@@ -5,6 +5,7 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
+import 'package:progressive_image/progressive_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MediaItem extends StatefulWidget {
@@ -91,7 +92,7 @@ class _MediaItemState extends State<MediaItem> {
             Container(
               height: ScreenUtil.instance.setWidth(146),
               decoration: BoxDecoration(
-                  image: DecorationImage(
+                  image: widget.isVideo == false ? null :  DecorationImage(
                       image: CachedNetworkImageProvider(widget.image),
                       fit: BoxFit.cover),
                   color: Color(0xFFB5B5B5),
@@ -100,7 +101,12 @@ class _MediaItemState extends State<MediaItem> {
                     topRight: Radius.circular(15),
                   )),
               child: widget.isVideo == false
-                  ? Container()
+                  ? ProgressiveImage.assetNetwork(
+                      placeholder: 'assets/grey-fade.jpg',
+                      thumbnail: widget.image,
+                      image: widget.image,
+                      width: 200,
+                      height: 259)
                   : Center(
                       child: Icon(
                       Icons.play_circle_filled,
