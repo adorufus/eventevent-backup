@@ -3,6 +3,7 @@ import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:progressive_image/progressive_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -82,19 +83,31 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
           Container(
             width: ScreenUtil.instance.setWidth(167),
             decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: NetworkImage(widget.image), fit: BoxFit.cover),
+              image: widget.isVideo == false
+                  ? null
+                  : DecorationImage(
+                      image: NetworkImage(widget.image), fit: BoxFit.cover),
               color: Color(0xFFB5B5B5),
               borderRadius: BorderRadius.circular(15),
             ),
             child: widget.isVideo == false
-                ? Container()
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: ProgressiveImage.assetNetwork(
+                      placeholder: 'assets/grey-fade.jpg',
+                      thumbnail: widget.image,
+                      image: widget.image,
+                      width: 223,
+                      height: 259,
+                    ),
+                  )
                 : Center(
                     child: Icon(
-                    Icons.play_circle_filled,
-                    color: Colors.white.withOpacity(.7),
-                    size: 50,
-                  )),
+                      Icons.play_circle_filled,
+                      color: Colors.white.withOpacity(.7),
+                      size: 50,
+                    ),
+                  ),
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 8, vertical: 8),

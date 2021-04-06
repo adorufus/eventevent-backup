@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/EmptyState.dart';
+import 'package:progressive_image/progressive_image.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
@@ -260,11 +261,11 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                           )));
                             },
                             child: Container(
-                              width: MediaQuery.of(context).devicePixelRatio *
-                                  2645.0,
-                              margin: EdgeInsets.only(
-                                  left: 13, right: 13, bottom: 15, top: 13),
-                              decoration: BoxDecoration(
+                                width: MediaQuery.of(context).devicePixelRatio *
+                                    2645.0,
+                                margin: EdgeInsets.only(
+                                    left: 13, right: 13, bottom: 15, top: 13),
+                                decoration: BoxDecoration(
                                   color: Colors.white,
                                   shape: BoxShape.rectangle,
                                   boxShadow: <BoxShadow>[
@@ -275,13 +276,26 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                         spreadRadius: 1.5)
                                   ],
                                   borderRadius: BorderRadius.circular(15),
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: CachedNetworkImageProvider(
-                                      bannerData["banner_avatar"],
-                                    ),
-                                  )),
-                            ),
+                                  // image: DecorationImage(
+                                  //   fit: BoxFit.cover,
+                                  //   image: CachedNetworkImageProvider(
+                                  //     bannerData["banner_avatar"],
+                                  //   ),
+                                  // ),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: ProgressiveImage.assetNetwork(
+                                    placeholder: 'assets/grey-fade.jpg',
+                                    thumbnail: bannerData["banner_avatar"],
+                                    image: bannerData["banner"],
+                                    fadeDuration: Duration(seconds: 2),
+                                    width: MediaQuery.of(context)
+                                            .devicePixelRatio *
+                                        2645.0,
+                                    height: 180,
+                                  ),
+                                )),
                           );
                   },
                 );

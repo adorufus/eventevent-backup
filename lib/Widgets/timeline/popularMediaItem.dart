@@ -92,21 +92,26 @@ class _MediaItemState extends State<MediaItem> {
             Container(
               height: ScreenUtil.instance.setWidth(146),
               decoration: BoxDecoration(
-                  image: widget.isVideo == false ? null :  DecorationImage(
-                      image: CachedNetworkImageProvider(widget.image),
-                      fit: BoxFit.cover),
+                  image: widget.isVideo == false
+                      ? null
+                      : DecorationImage(
+                          image: CachedNetworkImageProvider(widget.image),
+                          fit: BoxFit.cover),
                   color: Color(0xFFB5B5B5),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(15),
                     topRight: Radius.circular(15),
                   )),
               child: widget.isVideo == false
-                  ? ProgressiveImage.assetNetwork(
-                      placeholder: 'assets/grey-fade.jpg',
-                      thumbnail: widget.image,
-                      image: widget.image,
-                      width: 200,
-                      height: 259)
+                  ? ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                      child: ProgressiveImage.assetNetwork(
+                          placeholder: 'assets/grey-fade.jpg',
+                          thumbnail: widget.image,
+                          image: widget.image,
+                          width: 223,
+                          height: 259),
+                    )
                   : Center(
                       child: Icon(
                       Icons.play_circle_filled,
