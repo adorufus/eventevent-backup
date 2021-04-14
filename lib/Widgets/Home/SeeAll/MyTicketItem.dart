@@ -2,7 +2,7 @@ import 'package:eventevent/Widgets/Home/MiniDate.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class MyTicketItem extends StatelessWidget {
+class MyTicketItem extends StatefulWidget {
   final String image;
   final title;
   final ticketName;
@@ -25,6 +25,18 @@ class MyTicketItem extends StatelessWidget {
       this.ticketType,
       this.ticketStatus, this.ticketName, this.ticketColor, this.date, this.ticketImage})
       : super(key: key);
+
+  @override
+  _MyTicketItemState createState() => _MyTicketItemState();
+}
+
+class _MyTicketItemState extends State<MyTicketItem> {
+
+  @override
+  void initState() {
+    print("image: " + widget.image);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
@@ -53,7 +65,7 @@ class MyTicketItem extends StatelessWidget {
               width: ScreenUtil.instance.setWidth(100.19),
               decoration: BoxDecoration(
                 image:
-                    DecorationImage(image: image == '' ? AssetImage('assets/grey-fade.jpg') : NetworkImage(image), fit: BoxFit.fill),
+                    DecorationImage(image: widget.image == '' || widget.image == 'assets/grey-fade.jpg' || widget.image.toString() == "false" || widget.image == null ? AssetImage('assets/grey-fade.jpg') : NetworkImage(widget.image), fit: BoxFit.fill),
                 color: Color(0xFFB5B5B5),
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -75,7 +87,7 @@ class MyTicketItem extends StatelessWidget {
                                       child: Container(
                       width: 500,
                       child: Text(
-                        ticketName,
+                        widget.ticketName,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: ScreenUtil.instance.setSp(14),
@@ -92,7 +104,7 @@ class MyTicketItem extends StatelessWidget {
                       width: 500,
                       // height: ScreenUtil.instance.setWidth(18),
                       child: Text(
-                        ticketCode,
+                        widget.ticketCode,
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(20)),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -123,19 +135,19 @@ class MyTicketItem extends StatelessWidget {
                   Expanded(child: Container()),
                   Container(
                     height: ScreenUtil.instance.setWidth(32),
-                    width: ticketStatus == 'On Demand Video' ? ScreenUtil.instance.setWidth(140) : ScreenUtil.instance.setWidth(110),
+                    width: widget.ticketStatus == 'On Demand Video' ? ScreenUtil.instance.setWidth(140) : ScreenUtil.instance.setWidth(110),
                     decoration: BoxDecoration(
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                              color: ticketColor.withOpacity(0.4),
+                              color: widget.ticketColor.withOpacity(0.4),
                               blurRadius: 2,
                               spreadRadius: 1.5)
                         ],
-                        color: ticketColor,
+                        color: widget.ticketColor,
                         borderRadius: BorderRadius.circular(15)),
                     child: Center(
                         child: Text(
-                      ticketStatus.toString().toUpperCase(),
+                      widget.ticketStatus.toString().toUpperCase(),
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: ScreenUtil.instance.setSp(14),

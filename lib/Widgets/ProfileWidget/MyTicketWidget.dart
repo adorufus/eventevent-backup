@@ -83,7 +83,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
         } else {
           setState(() {
             isLoading = false;
-            print(isLoading);
+            print('is Loading: '  + isLoading.toString());
 
             ticketDetailData = extractedData['data'];
           });
@@ -117,7 +117,8 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                       Color ticketColor;
                       String ticketStatusText;
 
-                      if (ticketDetailData[i]['usedStatus'] == 'available') {
+                      try {
+                        if (ticketDetailData[i]['usedStatus'] == 'available') {
                         if (ticketDetailData[i]['paid_ticket_type']['type'] ==
                             'free_live_stream') {
                           ticketColor = eventajaGreenTeal;
@@ -276,11 +277,11 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
 
                       // print('status text ' + ticketStatusText);
 
-                      print(ticketDetailData[i]
+                      print('ticket image: ' + ticketDetailData[i]
                           .containsKey('ticket_image')
                           .toString());
 
-                      print(ticketDetailData[i]['ticket_image'].runtimeType);
+                      print('runtime type: ' + ticketDetailData[i]['ticket_image'].runtimeType.toString());
 
                       return GestureDetector(
                         onTap: () {
@@ -355,10 +356,8 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                         },
                         child: new MyTicketItem(
                           image: ticketDetailData[i]
-                                          .containsKey('ticket_image')
-                                          .toString() ==
-                                      'false' ||
-                                  ticketDetailData[i]['ticket_image'] == false
+                                          .containsKey('ticket_image') == false ||
+                                  ticketDetailData[i]['ticket_image'] == false || ticketDetailData[i]['ticket_image'].isEmpty
                               ? 'assets/grey-fade.jpg'
                               : ticketDetailData[i]['ticket_image']
                                           .runtimeType
@@ -381,6 +380,10 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                           // topPadding: i == 0 ? 13.0 : 0.0,
                         ),
                       );
+                      } on Exception catch (e) {
+                        print(e);
+                        return Container();
+                      }
                     });
   }
 
@@ -407,8 +410,8 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
       'cookie': session
     });
 
-    print(response.statusCode);
-    print(response.body);
+    print('status code: '  + response.statusCode.toString());
+    print('body: ' + response.body);
 
     return response;
   }

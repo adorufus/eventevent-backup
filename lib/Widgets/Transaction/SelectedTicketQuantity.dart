@@ -16,6 +16,7 @@ class SelectedTicketQuantityWidget extends StatefulWidget {
   final eventAddress;
   final eventImage;
   final ticketDetail;
+  final thisTicket;
   final ticketPrice;
   final ticketID;
   final ticketType;
@@ -36,7 +37,7 @@ class SelectedTicketQuantityWidget extends StatefulWidget {
       this.eventStartTime,
       this.eventEndTime,
       this.isSingleTicket,
-      this.minTicket})
+      this.minTicket, this.thisTicket})
       : super(key: key);
 
   @override
@@ -144,9 +145,15 @@ class _SelectedTicketQuantityWidgetState
                   prodViewedAction['Quantity'] = ticketCount;
                   print(prodViewedAction['Type']);
 
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          TransactionForm(ticketType: widget.ticketType)));
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => TransactionForm(
+                        ticketType: widget.ticketType,
+                        eventTicketType: widget.thisTicket['event']
+                            ['ticket_type']['type'],
+                      ),
+                    ),
+                  );
                 },
                 child: Container(
                   alignment: Alignment.bottomCenter,

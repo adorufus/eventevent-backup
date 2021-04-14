@@ -96,7 +96,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
     super.initState();
 
     getUserProfile();
-    print('isFollowing' + widget.isFollowing);
+    print('isFollowing: ' + widget.isFollowing);
     if (widget.isFollowing == '0') {
       setState(() {
         isFollowed = false;

@@ -31,8 +31,8 @@ class _UserProfileTimelineState extends State<UserProfileTimeline> {
   @override
   void initState() {
     timelineList().then((response) {
-      print(response.statusCode);
-      print(response.body);
+      print("timeline list: " + response.statusCode.toString());
+      print("timeline list: " + response.body);
 
       var extractedData = json.decode(response.body);
 
@@ -83,7 +83,7 @@ class _UserProfileTimelineState extends State<UserProfileTimeline> {
                     for (var impres in userTimelineList[i]['impression']
                         ['data']) {
                       impressionData = impres;
-                      print(impressionData.toString());
+                      print("impression data: " + impressionData.toString());
                     }
 
                     return TimelineItem(
@@ -143,7 +143,7 @@ class _UserProfileTimelineState extends State<UserProfileTimeline> {
     timelineList(newPage: newPage).then((response) {
       var extractedData = json.decode(response.body);
 
-      print(response.body);
+      print("body on loading: " + response.body);
 
       if (response.statusCode == 200) {
         setState(() {
@@ -435,14 +435,15 @@ class _UserProfileTimelineState extends State<UserProfileTimeline> {
                       onTap: () {
                         deletePost(id, postType).then((response) {
                           print('calling delete api');
-                          print(response.statusCode);
-                          print(response.body);
+                          print("status code delete: " + response
+                              .statusCode.toString());
+                          print("delete body: " + response.body);
 
                           Navigator.pop(context);
                           if (!mounted) return;
                           timelineList().then((response) {
-                            print(response.statusCode);
-                            print(response.body);
+                            print("timeline list: " + response.statusCode.toString());
+                            print("timeline list body: " + response.body);
                             var extractedData = json.decode(response.body);
 
                             if (response.statusCode == 200) {
@@ -518,7 +519,7 @@ class _UserProfileTimelineState extends State<UserProfileTimeline> {
         currentPage += newPage;
       }
 
-      print(currentPage);
+      print("current page: " + currentPage.toString());
     });
 
     String url = baseUrl +

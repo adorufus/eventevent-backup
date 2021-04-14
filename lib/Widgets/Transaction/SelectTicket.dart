@@ -252,6 +252,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                                     ? true
                                     : false,
                             minTicket: ticketListData[i]['min_ticket'],
+                            thisTicket: ticketListData[i],
                             ticketDetail: ticketListData[i]['descriptions'],
                             ticketPrice: ticketListData[i]['final_price'],
                             ticketID: ticketListData[i]['id'],
