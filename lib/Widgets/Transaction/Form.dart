@@ -431,45 +431,47 @@ class _TransactionFormState extends State<TransactionForm> {
   Widget nextWidget() {
     return widget.ticketType == 'early_bird'
         ? widget.eventTicketType == 'free_limited' ||
-        widget.eventTicketType == 'free_live_stream'
-        ? customFormList == null
-        ? TicketReview(
-      ticketType: widget.ticketType,
-      isCustomForm: false,
-    )
-        : TicketReview(
-      ticketType: widget.ticketType,
-      customFormList: answer,
-      customFormId: questionId,
-      isCustomForm: true,
-    )
-        : customFormList == null
-        ? PaymentMethod(isCustomForm: false)
-        : PaymentMethod(
-      isCustomForm: true,
-      answerList: answer,
-      customFormId: questionId,
-    )
+                widget.eventTicketType == 'free_live_stream'
+            ? customFormList == null
+                ? TicketReview(
+                    ticketType: widget.ticketType,
+                    eventTicketType: widget.eventTicketType,
+                    isCustomForm: false,
+                  )
+                : TicketReview(
+                    ticketType: widget.ticketType,
+                    eventTicketType: widget.eventTicketType,
+                    customFormList: answer,
+                    customFormId: questionId,
+                    isCustomForm: true,
+                  )
+            : customFormList == null
+                ? PaymentMethod(isCustomForm: false)
+                : PaymentMethod(
+                    isCustomForm: true,
+                    answerList: answer,
+                    customFormId: questionId,
+                  )
         : widget.ticketType == 'free_limited' ||
-        widget.ticketType == 'free_live_stream'
-        ? customFormList == null
-        ? TicketReview(
-      ticketType: widget.ticketType,
-      isCustomForm: false,
-    )
-        : TicketReview(
-      ticketType: widget.ticketType,
-      customFormList: answer,
-      customFormId: questionId,
-      isCustomForm: true,
-    )
-        : customFormList == null
-        ? PaymentMethod(isCustomForm: false)
-        : PaymentMethod(
-      isCustomForm: true,
-      answerList: answer,
-      customFormId: questionId,
-    );
+                widget.ticketType == 'free_live_stream'
+            ? customFormList == null
+                ? TicketReview(
+                    ticketType: widget.ticketType,
+                    isCustomForm: false,
+                  )
+                : TicketReview(
+                    ticketType: widget.ticketType,
+                    customFormList: answer,
+                    customFormId: questionId,
+                    isCustomForm: true,
+                  )
+            : customFormList == null
+                ? PaymentMethod(isCustomForm: false)
+                : PaymentMethod(
+                    isCustomForm: true,
+                    answerList: answer,
+                    customFormId: questionId,
+                  );
   }
 
   Widget customForm() {

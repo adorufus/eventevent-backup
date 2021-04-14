@@ -23,6 +23,7 @@ import '../CC.dart';
 
 class TicketReview extends StatefulWidget {
   final ticketType;
+  final eventTicketType;
   final List<Map<String, dynamic>> customForm;
   final List customFormList;
   final List customFormId;
@@ -34,7 +35,7 @@ class TicketReview extends StatefulWidget {
       this.customForm,
       this.customFormList,
       this.customFormId,
-      this.isCustomForm})
+      this.isCustomForm, this.eventTicketType})
       : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -165,6 +166,7 @@ class _TicketReviewState extends State<TicketReview> {
                 uuid: uuid,
                 ticketType: widget.ticketType,
                 total: total,
+                eventTicketType: widget.eventTicketType,
                 loadingType: 'buy ticket',
               ),
             ),
@@ -348,7 +350,11 @@ class _TicketReviewState extends State<TicketReview> {
                       Expanded(
                         child: SizedBox(),
                       ),
-                      Text('Rp' + formatPrice(price: thisTicketPrice))
+                      Text(thisTicketPrice == null || thisTicketPrice == 'fre'
+                          'e_limited' || thisTicketPrice == 'free_live_stream'
+                          '' || thisTicketPrice == "0" ?
+                      "free" : 'Rp' + formatPrice(price:
+                          thisTicketPrice))
                     ]),
                 SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 Row(
@@ -359,7 +365,7 @@ class _TicketReviewState extends State<TicketReview> {
                       Expanded(
                         child: SizedBox(),
                       ),
-                      Text(pajak.toString())
+                      Text(pajak == null ? "-" : pajak.toString())
                     ]),
                 SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 Align(
@@ -378,7 +384,10 @@ class _TicketReviewState extends State<TicketReview> {
                         child: SizedBox(),
                       ),
                       Text(
-                        'Rp' + formatPrice(price: total.toString()),
+                        thisTicketPrice == null || thisTicketPrice == 'fre'
+                            'e_limited' || thisTicketPrice == 'free_live_stream'
+                            '' || thisTicketPrice == "0" ?
+                        "free" : 'Rp' + formatPrice(price: total.toString()),
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontWeight: FontWeight.bold,

@@ -30,6 +30,7 @@ class ProcessingPayment extends StatefulWidget {
   final uuid;
   final isCustomForm;
   final ticketType;
+  final eventTicketType;
   final customFormId;
   final customFormList;
   final total;
@@ -60,7 +61,8 @@ class ProcessingPayment extends StatefulWidget {
       this.isPrivate,
       this.index,
       this.context,
-      this.additionalMedia})
+      this.additionalMedia,
+      this.eventTicketType})
       : super(key: key);
 
   @override
@@ -159,10 +161,17 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
 
     final response = await http.post(purchaseUri,
         headers: {'Authorization': AUTH_KEY, 'cookie': session},
-        body: widget.ticketType == 'free_limited' ||
-                widget.ticketType == 'free_live_stream'
-            ? bodyFreeLimit
-            : body);
+        body: widget.ticketType == "early_bird"
+            ? widget.eventTicketType == 'free_limited' ||
+                    widget.eventTicketType == 'free_live_stream'
+                ? bodyFreeLimit
+                : body
+            : widget.ticketType ==
+                        'fr'
+                            'ee_limited' ||
+                    widget.ticketType == 'free_live_stream'
+                ? bodyFreeLimit
+                : body);
 
     var length = response.contentLength;
     var recieved = 0;
