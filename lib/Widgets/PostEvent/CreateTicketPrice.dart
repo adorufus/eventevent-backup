@@ -1,5 +1,4 @@
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,17 +1,9 @@
 import 'dart:convert';
 
-import 'package:eventevent/Widgets/ProfileWidget/ScanBarcode.dart';
-import 'package:eventevent/Widgets/ProfileWidget/SettingsWidget.dart';
 import 'package:eventevent/Widgets/ProfileWidget/UseTicketSuccess.dart';
-import 'package:eventevent/Widgets/Transaction/SuccesPage.dart';
-import 'package:eventevent/Widgets/openMedia.dart';
-import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:eventevent/helper/WebView.dart';
 import 'package:eventevent/helper/WebViewLivestream.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:eventevent/helper/countdownCounter.dart';
-import 'package:eventevent/livestream/LivestreamPlayer.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +13,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/ZoomTicketPage.dart';
 
 class MyInAppBrowser extends InAppBrowser {

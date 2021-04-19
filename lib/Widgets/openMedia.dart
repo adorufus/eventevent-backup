@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class OpenMedia extends StatefulWidget {
@@ -12,7 +13,8 @@ class OpenMedia extends StatefulWidget {
 
 class _OpenMediaState extends State<OpenMedia> {
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -33,10 +35,10 @@ class _OpenMediaState extends State<OpenMedia> {
             elevation: 0,
             backgroundColor: Colors.white,
             leading: GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
               },
-                          child: Image.asset(
+              child: Image.asset(
                 'assets/icons/icon_apps/arrow.png',
                 scale: 5.5,
                 alignment: Alignment.centerLeft,
@@ -44,8 +46,8 @@ class _OpenMediaState extends State<OpenMedia> {
             ),
             title: Text('eMedia'),
             centerTitle: true,
-            
-            textTheme: TextTheme(title: TextStyle(
+            textTheme: TextTheme(
+                title: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: ScreenUtil.instance.setSp(14),
               color: Colors.black,
@@ -57,9 +59,8 @@ class _OpenMediaState extends State<OpenMedia> {
         children: <Widget>[
           Expanded(
             child: WebView(
-              javascriptMode: JavascriptMode.unrestricted,
-              initialUrl: widget.url
-            ),
+                javascriptMode: JavascriptMode.unrestricted,
+                initialUrl: widget.url),
           )
         ],
       ),

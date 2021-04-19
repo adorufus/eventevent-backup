@@ -1,7 +1,5 @@
-import 'package:eventevent/Widgets/Home/MiniDate.dart';
 import 'package:eventevent/helper/FollowUnfollow.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'PopularEventWidget.dart';
 
 class PeopleItem extends StatefulWidget {
   final image;

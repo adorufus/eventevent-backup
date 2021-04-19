@@ -2,14 +2,7 @@ import 'dart:convert';
 
 import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
-// import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
-// import 'package:eventevent/Widgets/Home/SeeAll/MyTicketItem.dart';
-// import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
-// import 'package:eventevent/Widgets/ProfileWidget/UseTicket.dart';
-// import 'package:eventevent/Widgets/eventDetailsWidget.dart';
-// import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-// import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';

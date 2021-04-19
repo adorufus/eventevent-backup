@@ -1,19 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
-// import 'package:clevertap_plugin/clevertap_plugin.dart';
-import 'package:eventevent/Providers/EventListProviders.dart';
-import 'package:eventevent/Widgets/ManageEvent/ShowQr.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
-import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
-import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
-import 'package:http/http.dart' as http;
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-// import 'package:eventevent/CrashlyticsTester.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEvent.dart';
 import 'package:eventevent/Widgets/ProfileWidget/editProfile.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/CustomCamera.dart';
@@ -23,19 +10,14 @@ import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/Widgets/loginWidget.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/Widgets/registerWidget.dart';
-import 'package:eventevent/helper/PushNotification.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:camera/camera.dart';
-// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
-import 'package:rxdart/subjects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Widgets/loginRegisterWidget.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
-import 'package:flutter/services.dart';
 
 List<CameraDescription> cameras;
 

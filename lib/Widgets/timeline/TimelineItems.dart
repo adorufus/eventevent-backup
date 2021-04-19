@@ -4,10 +4,7 @@ import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/timeline/EditPost.dart';
 import 'package:eventevent/Widgets/timeline/ReportPost.dart';
-import 'package:eventevent/Widgets/timeline/UserMediaDetail.dart';
-import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart' as prefix0;
 import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart';
-import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +12,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:eventevent/helper/ClevertapHandler.dart';
 
 class UserTimelineItem extends StatefulWidget {
   final currentUserId;

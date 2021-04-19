@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankAccountList.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankList.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';

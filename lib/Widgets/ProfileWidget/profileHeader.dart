@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:eventevent/Widgets/EmptyState.dart';
-import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventList.dart';
 import 'package:eventevent/Widgets/ManageEvent/PublicEventList.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsWidget.dart';
@@ -10,8 +6,6 @@ import 'package:eventevent/Widgets/ProfileWidget/editProfile.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/listviewWithAppBar.dart';
 import 'package:eventevent/Widgets/loginRegisterWidget.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
-import 'package:eventevent/Widgets/timeline/ReportPost.dart';
-import 'package:eventevent/Widgets/timeline/UserTimelineItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eventevent/helper/FollowUnfollow.dart';
@@ -23,7 +17,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'MyTicketWidget.dart';
-import 'package:http/http.dart' as http;
 
 class ProfileHeader extends StatefulWidget {
   final String currentUserId;

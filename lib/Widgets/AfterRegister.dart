@@ -1,27 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
-
-import 'package:eventevent/helper/API/apiHelper.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/API/registerModel.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:async/async.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart' as path;
 
 import 'dashboardWidget.dart';
 

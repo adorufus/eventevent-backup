@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:eventevent/Widgets/PostEvent/PostEventPoster.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flushbar/flushbar.dart';

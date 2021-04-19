@@ -4,10 +4,8 @@ import 'dart:io';
 
 import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/LoveItem.dart';
-import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';

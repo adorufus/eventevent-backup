@@ -1,6 +1,5 @@
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:http/http.dart' as http;
-import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedbackLogic {
