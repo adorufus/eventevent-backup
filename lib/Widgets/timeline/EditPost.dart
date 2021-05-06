@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class EditPost extends StatefulWidget {
   final String imagePath;
   final String thumbnailPath;
