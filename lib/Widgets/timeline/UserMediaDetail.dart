@@ -7,7 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:googleapis/plusdomains/v1.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 

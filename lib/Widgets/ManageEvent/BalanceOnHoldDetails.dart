@@ -4,7 +4,6 @@ import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/BalanceOnHoldItem.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/Invoice.dart';
-import 'package:eventevent/Widgets/notification/TransactionHistoryItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/utils.dart';

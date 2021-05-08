@@ -2,21 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
-import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/utils.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:async/async.dart';
-import 'package:eventevent/Widgets/PostEvent/FinishPostEvent.dart';
-import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
+
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SubmitEditTicket extends StatefulWidget {

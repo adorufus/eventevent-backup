@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
-import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/timeline/LatestMediaItem.dart';
 import 'package:eventevent/Widgets/timeline/MediaDetails.dart';
-import 'package:eventevent/Widgets/timeline/popularMediaItem.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

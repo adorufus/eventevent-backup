@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:eventevent/Widgets/ManageEvent/EditTicket.dart';
 import 'package:eventevent/helper/DateTimeConverter.dart';
 import 'package:eventevent/helper/colorsManagement.dart';

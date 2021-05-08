@@ -5,7 +5,6 @@ import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/MyTicketSearch.dart';
 import 'package:eventevent/Widgets/Home/SeeAll/MyTicketItem.dart';
 import 'package:eventevent/Widgets/ProfileWidget/UseTicket.dart';
-import 'package:eventevent/Widgets/RecycleableWidget/SearchWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
@@ -225,11 +224,18 @@ class _MyTicketState extends State<MyTicket> {
                           itemBuilder: (BuildContext context, i) {
                             Color ticketColor;
                             String ticketStatusText;
+                            String ticketStatus;
 
                             // print(
                             //     'PLAYBACK URL: ${myTicketList[i]['livestream']['playback_url']}');
 
                             if (myTicketList[i]['usedStatus'] == 'available') {
+                              if (myTicketList[i]['paid_ticket_type']['type'] ==
+                                  'free_live_stream') {
+                                ticketColor = eventajaGreenTeal;
+                                ticketStatusText = 'Streaming';
+                              }
+
                               if (myTicketList[i].containsKey("livestream")) {
                                 if (myTicketList[i]['livestream']
                                         ['streaming_type'] ==
@@ -257,6 +263,7 @@ class _MyTicketState extends State<MyTicket> {
                                 ticketColor = eventajaGreenTeal;
                                 ticketStatusText = 'Available';
                               }
+                              ticketStatus = 'available';
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'used') {
                               if (myTicketList[i].containsKey("livestream")) {
@@ -279,8 +286,17 @@ class _MyTicketState extends State<MyTicket> {
                                 ticketColor = Color(0xFF652D90);
                                 ticketStatusText = 'Used';
                               }
+
+                              ticketStatus = myTicketList[i]['usedStatus'];
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'streaming') {
+                              if (myTicketList[i]['paid_ticket_type']['type'] ==
+                                      'free_live_stream' ||
+                                  myTicketList[i]['paid_ticket_type']['type'] ==
+                                      'paid_live_stream') {
+                                ticketColor = eventajaGreenTeal;
+                                ticketStatusText = 'Streaming';
+                              }
                               if (myTicketList[i].containsKey("livestream")) {
                                 if (myTicketList[i]['livestream']
                                         ['streaming_type'] ==
@@ -305,12 +321,19 @@ class _MyTicketState extends State<MyTicket> {
                                   ticketStatusText = 'On Demand Video';
                                 }
                               }
+
+                              ticketStatus = myTicketList[i]['usedStatus'];
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'playback') {
                               if (myTicketList[i].containsKey("livestream")) {
                                 ticketColor = eventajaGreenTeal;
                                 ticketStatusText = 'Playback';
+                              } else {
+                                ticketColor = eventajaGreenTeal;
+                                ticketStatusText = 'Playback';
                               }
+
+                              ticketStatus = 'playback';
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'expired') {
                               if (myTicketList[i].containsKey('livestream')) {
@@ -353,26 +376,24 @@ class _MyTicketState extends State<MyTicket> {
                                 ticketColor = Color(0xFF8E1E2D);
                                 ticketStatusText = 'Expired';
                               }
+
+                              ticketStatus = myTicketList[i]['usedStatus'];
                             } else if (myTicketList[i]['usedStatus'] ==
                                 'refund') {
                               ticketColor = Colors.blue;
                               ticketStatusText = 'Refund';
+                              ticketStatus = 'refund';
                             }
 
-                            print('ticketStatusText');
+                            print('ticket image: ' +
+                                myTicketList[i]
+                                    .containsKey('ticket_image')
+                                    .toString());
 
-                            print(myTicketList[i]
-                                .containsKey('ticket_image')
-                                .toString());
-                            print(myTicketList[i]['ticket_image'].toString());
-                            String ticketImage;
-
-                            if (myTicketList[i]['ticket_image'] == false) {
-                              ticketImage = '';
-                            } else {
-                              ticketImage =
-                                  myTicketList[i]['ticket_image']['secure_url'];
-                            }
+                            print('runtime type: ' +
+                                myTicketList[i]['ticket_image']
+                                    .runtimeType
+                                    .toString());
 
                             return GestureDetector(
                               onTap: () {
@@ -454,13 +475,23 @@ class _MyTicketState extends State<MyTicket> {
                                             )));
                               },
                               child: Container(
-                                child: new MyTicketItem(
-                                  image: myTicketList[i]
-                                              .containsKey('ticket_image')
-                                              .toString() ==
-                                          'true'
-                                      ? ticketImage ?? ''
-                                      : '',
+                                child: MyTicketItem(
+                                  image: myTicketList[i].containsKey(
+                                                  'ticket_image') ==
+                                              false ||
+                                          myTicketList[i]['ticket_image'] ==
+                                              false ||
+                                          myTicketList[i]['ticket_image']
+                                              .isEmpty
+                                      ? 'assets/grey-fade.jpg'
+                                      : myTicketList[i]['ticket_image']
+                                                  .runtimeType
+                                                  .toString() ==
+                                              'List<dynamic>'
+                                          ? myTicketList[i]['event']
+                                              ['pictureTimelinePath']
+                                          : myTicketList[i]['ticket_image']
+                                              ['secure_url'],
                                   title: myTicketList[i]['event']['name'],
                                   ticketCode: myTicketList[i]['ticket_code'],
                                   ticketStatus: ticketStatusText,

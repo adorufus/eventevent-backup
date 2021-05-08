@@ -1,6 +1,4 @@
-import 'package:eventevent/Widgets/Home/MiniDate.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class MyTicketItem extends StatefulWidget {
   final String image;

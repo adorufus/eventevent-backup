@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:eventevent/Widgets/EventDetailComment.dart';
-import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';

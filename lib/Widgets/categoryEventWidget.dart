@@ -4,7 +4,6 @@ import 'package:eventevent/Widgets/CategoryPage.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;

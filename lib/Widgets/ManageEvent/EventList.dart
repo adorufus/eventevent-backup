@@ -1,10 +1,7 @@
 import 'package:eventevent/Widgets/ManageEvent/PrivateEventList.dart';
 import 'package:eventevent/Widgets/ManageEvent/PublicEventList.dart';
-import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EventList extends StatefulWidget{

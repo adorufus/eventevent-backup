@@ -1,14 +1,7 @@
-import 'dart:convert';
-
 import 'package:eventevent/Widgets/LoveItem.dart';
-import 'package:eventevent/Widgets/loginRegisterWidget.dart';
-import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_placeholder_textlines/placeholder_lines.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
 
 class HomeLoadingScreen {

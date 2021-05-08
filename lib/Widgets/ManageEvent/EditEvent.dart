@@ -6,7 +6,6 @@ import 'package:eventevent/Widgets/timeline/EditEventItem/EditCategoryList.dart'
 import 'package:eventevent/Widgets/timeline/EditEventItem/EditEventDate.dart';
 import 'package:eventevent/Widgets/timeline/EditEventItem/EditEventTime.dart';
 import 'package:eventevent/Widgets/timeline/EditEventItem/EditEventType.dart';
-import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mime/mime.dart';
@@ -17,9 +16,7 @@ import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
-import 'package:async/async.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
@@ -30,7 +27,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:thumbnails/thumbnails.dart';
-import 'package:http_parser/src/media_type.dart';
 
 class EditEvent extends StatefulWidget {
   final additional;

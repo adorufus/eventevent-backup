@@ -1,10 +1,6 @@
-import 'package:eventevent/Widgets/Home/MiniDate.dart';
-import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'PopularEventWidget.dart';
 
 class LatestEventItem extends StatelessWidget {
   final image;

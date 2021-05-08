@@ -1,8 +1,5 @@
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
-import 'package:eventevent/Widgets/ManageEvent/EventList.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
-import 'package:eventevent/Widgets/eventDetailsWidget.dart';
-import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';

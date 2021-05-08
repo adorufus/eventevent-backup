@@ -11,8 +11,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:eventevent/helper/ClevertapHandler.dart';
-import 'package:flutter/foundation.dart';
 import 'dart:io' show Platform;
 
 class RegisterFacebook extends StatefulWidget {

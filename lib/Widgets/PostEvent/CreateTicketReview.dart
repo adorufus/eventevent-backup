@@ -1,24 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:eventevent/Widgets/PostEvent/CreateTicketFinal.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
-import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:place_picker/place_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-import 'PostEventSelectTicketType.dart';
 
 class CreateTicketReview extends StatefulWidget {
   @override

@@ -2,7 +2,6 @@ import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
-import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/cupertino.dart';

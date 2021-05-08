@@ -13,7 +13,6 @@ import 'package:eventevent/Widgets/RegisterGoogle.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/API/loginModel.dart';
-import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:eventevent/helper/sharedPreferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

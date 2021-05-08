@@ -1,20 +1,12 @@
-import 'dart:io';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
-
-import 'package:eventevent/Widgets/dashboardWidget.dart';
-import 'package:eventevent/Widgets/timeline/TimelineDashboard.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:async/async.dart';
-import 'package:path/path.dart';
 
 class EditPost extends StatefulWidget {
   final String imagePath;

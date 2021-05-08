@@ -7,12 +7,9 @@ import 'package:eventevent/Widgets/PostEvent/CreateTicketReview.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'PostEventMap.dart';
 
 class CreateTicketPicture extends StatefulWidget {
   @override

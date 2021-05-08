@@ -1,12 +1,15 @@
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmptyState extends StatelessWidget {
   final emptyImage;
   final reasonText;
 
-  const EmptyState({Key key, this.emptyImage, this.reasonText}) : super(key: key);
+  const EmptyState({Key key, this.emptyImage, this.reasonText})
+      : super(key: key);
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(

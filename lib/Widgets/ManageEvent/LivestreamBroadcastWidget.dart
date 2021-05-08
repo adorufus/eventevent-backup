@@ -1,16 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:camera_with_rtmp/camera.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
-import 'package:eventevent/main.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_wowza/gocoder/wowza_gocoder.dart';
-import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:torch_compat/torch_compat.dart';
 import 'package:wakelock/wakelock.dart';

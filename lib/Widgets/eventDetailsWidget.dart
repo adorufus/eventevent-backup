@@ -4,7 +4,6 @@ import 'package:eventevent/Widgets/EventDetailComment.dart';
 import 'package:eventevent/Widgets/EventDetailItems/FeedbackLogic.dart';
 import 'package:eventevent/Widgets/EventDetailItems/ReviewDetails.dart';
 import 'package:eventevent/Widgets/ManageEvent/LivestreamBroadcastWidget.dart';
-// import 'package:eventevent/Widgets/ManageEvent/LivestreamBroadcastWidgetAndroid.dart';
 import 'package:eventevent/Widgets/ManageEvent/ManageCustomForm.dart';
 import 'package:eventevent/Widgets/ManageEvent/SeeWhosGoingInvitedWidget.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEventInvitePeople.dart';
@@ -13,9 +12,8 @@ import 'package:eventevent/Widgets/timeline/ReportPost.dart';
 import 'package:eventevent/Widgets/timeline/TimelineItems.dart';
 import 'package:eventevent/Widgets/timeline/VideoPlayer.dart';
 import 'package:eventevent/helper/API/apiHelper.dart';
-import 'package:eventevent/helper/ClevertapHandler.dart';
 import 'package:flushbar/flushbar.dart';
-import 'package:flutter/material.dart' as prefix0;
+import 'package:flutter/material.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -31,7 +29,6 @@ import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/static_map_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:marquee_flutter/marquee_flutter.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -1765,8 +1762,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 .setWidth(15),
                                           ),
                                           Row(
-                                            crossAxisAlignment: prefix0
-                                                .CrossAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
                                               Icon(Icons.thumb_up,
@@ -2029,8 +2025,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                         height: ScreenUtil
                                                                             .instance
                                                                             .setWidth(0)),
-                                                                    prefix0
-                                                                        .Container(
+                                                                   Container(
                                                                       margin: EdgeInsets.symmetric(
                                                                           horizontal:
                                                                               13),
@@ -2659,7 +2654,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     Flexible(
                                       child: GestureDetector(
                                         behavior:
-                                            prefix0.HitTestBehavior.opaque,
+                                            HitTestBehavior.opaque,
                                         onTap: () {
                                           currentTab = 0;
                                         },
@@ -2698,7 +2693,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     Flexible(
                                       child: GestureDetector(
                                         behavior:
-                                            prefix0.HitTestBehavior.opaque,
+                                            HitTestBehavior.opaque,
                                         onTap: () {
                                           currentTab = 1;
                                         },
@@ -2737,7 +2732,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     Flexible(
                                       child: GestureDetector(
                                         behavior:
-                                            prefix0.HitTestBehavior.opaque,
+                                            HitTestBehavior.opaque,
                                         onTap: () {
                                           currentTab = 2;
                                         },

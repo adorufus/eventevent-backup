@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/SubmitEditTicket.dart';
-import 'package:eventevent/Widgets/PostEvent/FinishPostEvent.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/Widgets/timeline/EditEventItem/EditEventDate.dart';
 import 'package:eventevent/Widgets/timeline/EditEventItem/EditEventTime.dart';
