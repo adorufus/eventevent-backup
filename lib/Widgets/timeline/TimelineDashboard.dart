@@ -258,7 +258,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                 margin: EdgeInsets.only(
                                     left: 13, right: 13, bottom: 15, top: 13),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: checkForContainerBackgroundColor
+                                    (context),
                                   shape: BoxShape.rectangle,
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(
@@ -308,12 +309,11 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 height: ScreenUtil.instance.setWidth(75),
                 padding: EdgeInsets.symmetric(horizontal: 13),
                 child: Container(
-                  color: Colors.white,
                   child: AppBar(
-                    brightness: Brightness.light,
+                    // brightness: Brightness.light,
                     automaticallyImplyLeading: false,
                     elevation: 0,
-                    backgroundColor: Colors.white,
+                    // backgroundColor: Colors.white,
                     titleSpacing: 0,
                     centerTitle: false,
                     title: Container(
@@ -339,7 +339,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                 ),
               ),
             ),
-            backgroundColor: Colors.white,
+            // backgroundColor: Colors.white,
             body: isTimeoutPopularMediaPhoto == true &&
                     isTimeoutBanner == true &&
                     isTimeoutLatestMediaPhoto == true &&

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:eventevent/Providers/ThemeProvider.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/WithdrawBank.dart';
 import 'package:eventevent/Widgets/PostEvent/PostEvent.dart';
 import 'package:eventevent/Widgets/ProfileWidget/editProfile.dart';
@@ -12,8 +13,11 @@ import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/Widgets/registerWidget.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:camera/camera.dart';
+import 'package:eventevent/helper/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Widgets/loginRegisterWidget.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -28,8 +32,6 @@ Future<Null> main() async {
   // HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.white, statusBarIconBrightness: Brightness.light));
   // try{
   cameras = await availableCameras();
   // } on CameraException catch (e){
@@ -41,7 +43,12 @@ Future<Null> main() async {
   // }, onError: Crashlytics.instance.recordError);
 
   runZoned(() {
-    runApp(new RunApp());
+    runApp(
+      ChangeNotifierProvider<ThemeProvider>(
+        create: (context) => ThemeProvider(),
+        child: RunApp(),
+      ),
+    );
   });
 }
 
@@ -227,6 +234,20 @@ class _RunAppState extends State<RunApp> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Provider.of<ThemeProvider>(context).isDarkMode
+            ? darkPrimarySwatch
+            : Colors.white,
+        statusBarIconBrightness: Provider.of<ThemeProvider>(context).isDarkMode
+            ? Brightness.light
+            : Brightness.dark,
+        systemNavigationBarColor: Provider.of<ThemeProvider>(context).isDarkMode
+            ? darkPrimarySwatch
+            : Colors.white,
+      ),
+    );
+
     return MaterialApp(
       // navigatorObservers: [
       //   FirebaseAnalyticsObserver(analytics:  analytics)
@@ -234,67 +255,41 @@ class _RunAppState extends State<RunApp> {
       title: 'EventEvent',
       debugShowCheckedModeBanner: false,
       navigatorObservers: <NavigatorObserver>[RunApp.observer],
+      // themeMode: Provider.of<ThemeProvider>(context).mode,
+      themeMode: ThemeMode.system,
+      darkTheme: darkTheme,
       theme: ThemeData(
           fontFamily: 'Proxima',
-          primarySwatch: eventajaGreen,
-          brightness: Brightness.light,
+          primarySwatch: whitePrimarySwatch,
+          brightness: Brightness.dark,
+          textTheme: TextTheme(
+            title: TextStyle(
+              color: eventajaBlack
+            ),
+            subtitle: TextStyle(
+              color: eventajaBlack
+            )
+          ),
+          cupertinoOverrideTheme: CupertinoThemeData(
+              barBackgroundColor: Colors.white,
+              scaffoldBackgroundColor: darkPrimarySwatch,
+              brightness: Brightness.light
+          ),
           backgroundColor: Colors.white),
       // home: CrashlyticsTester(),
-      home: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle(
-            statusBarColor: Colors.white,
-            statusBarIconBrightness: Brightness.light),
-        child: SplashScreen(
-            analytics: RunApp.analytics, observer: RunApp.observer),
-      ),
+      home:
+          SplashScreen(analytics: RunApp.analytics, observer: RunApp.observer),
       routes: <String, WidgetBuilder>{
-        '/LoginRegister': (BuildContext context) =>
-            AnnotatedRegion<SystemUiOverlayStyle>(
-                value: SystemUiOverlayStyle(
-                    statusBarColor: Colors.white,
-                    statusBarIconBrightness: Brightness.light),
-                child: LoginRegisterWidget()),
+        '/LoginRegister': (BuildContext context) => LoginRegisterWidget(),
         '/WithdrawBank': (BuildContext context) => WithdrawBank(),
-        '/Login': (BuildContext context) => AnnotatedRegion(
-            value: SystemUiOverlayStyle(
-                statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.light),
-            child: LoginWidget()),
-        '/Register': (BuildContext context) => AnnotatedRegion(
-            value: SystemUiOverlayStyle(
-                statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.light),
-            child: RegisterWidget()),
-        '/Dashboard': (BuildContext context) => AnnotatedRegion(
-            value: SystemUiOverlayStyle(
-                statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.light),
-            child: DashboardWidget()),
-        '/Profile': (BuildContext context) => AnnotatedRegion(
-            value: SystemUiOverlayStyle(
-                statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.light),
-            child: ProfileWidget()),
-        '/EventDetails': (BuildContext context) => AnnotatedRegion(
-            value: SystemUiOverlayStyle(
-                statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.light),
-            child: EventDetailsConstructView()),
-        '/EditProfile': (BuildContext context) => AnnotatedRegion(
-            value: SystemUiOverlayStyle(
-                statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.light),
-            child: EditProfileWidget()),
-        '/PostEvent': (BuildContext context) => AnnotatedRegion(
-            value: SystemUiOverlayStyle(
-                statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.light),
-            child: PostEvent()),
-        '/CustomCamera': (BuildContext context) => AnnotatedRegion(
-            value: SystemUiOverlayStyle(
-                statusBarColor: Colors.white,
-                statusBarIconBrightness: Brightness.light),
-            child: CustomCamera(cameras)),
+        '/Login': (BuildContext context) => LoginWidget(),
+        '/Register': (BuildContext context) => RegisterWidget(),
+        '/Dashboard': (BuildContext context) =>  DashboardWidget(),
+        '/Profile': (BuildContext context) => ProfileWidget(),
+        '/EventDetails': (BuildContext context) => EventDetailsConstructView(),
+        '/EditProfile': (BuildContext context) => EditProfileWidget(),
+        '/PostEvent': (BuildContext context) => PostEvent(),
+        '/CustomCamera': (BuildContext context) => CustomCamera(cameras),
       },
     );
   }

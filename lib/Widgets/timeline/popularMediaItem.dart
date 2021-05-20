@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eventevent/Providers/ThemeProvider.dart';
 import 'package:eventevent/Widgets/timeline/MediaDetails.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:progressive_image/progressive_image.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MediaItem extends StatefulWidget {
@@ -79,7 +81,7 @@ class _MediaItemState extends State<MediaItem> {
         height: ScreenUtil.instance.setWidth(247),
         width: ScreenUtil.instance.setWidth(223),
         decoration: BoxDecoration(
-            color: Colors.white,
+            // color: Colors.white,
             borderRadius: BorderRadius.circular(15),
             boxShadow: <BoxShadow>[
               BoxShadow(
@@ -125,7 +127,7 @@ class _MediaItemState extends State<MediaItem> {
                   padding: EdgeInsets.symmetric(horizontal: 0, vertical: 7),
                   height: ScreenUtil.instance.setWidth(110),
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: checkForContainerBackgroundColor(context),
                       borderRadius: BorderRadius.circular(15)),
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 8),

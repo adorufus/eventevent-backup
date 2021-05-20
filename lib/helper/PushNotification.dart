@@ -176,7 +176,7 @@ class PushNotificationState extends State<PushNotification> {
             width: MediaQuery.of(context).size.width,
             height: ScreenUtil.instance.setWidth(75),
             child: Container(
-              color: Colors.white,
+              // color: Colors.white,
               child: Container(
                 margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
                 child: Center(
@@ -270,7 +270,7 @@ class PushNotificationState extends State<PushNotification> {
                               blurRadius: 2,
                               spreadRadius: 1.5)
                         ],
-                        color: Colors.white,
+                        color: checkForContainerBackgroundColor(context),
                         borderRadius: BorderRadius.circular(15)),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -323,7 +323,7 @@ class PushNotificationState extends State<PushNotification> {
                             blurRadius: 2,
                             spreadRadius: 1.5)
                       ],
-                      color: Colors.white,
+                      color: checkForContainerBackgroundColor(context),
                       borderRadius: BorderRadius.circular(15)),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -374,7 +374,7 @@ class PushNotificationState extends State<PushNotification> {
                                 doNavigateOnPressedNotification(i);
                               },
                               child: Container(
-                                  color: Colors.white,
+                                  color: checkForContainerBackgroundColor(context),
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 13, vertical: 10),
                                   margin: EdgeInsets.only(

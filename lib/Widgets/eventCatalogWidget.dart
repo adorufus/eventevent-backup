@@ -48,6 +48,7 @@ class EventCatalog extends StatefulWidget {
   final isRest;
 
   const EventCatalog({Key key, this.isRest: true}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _EventCatalogState();
@@ -62,6 +63,7 @@ class _EventCatalogState extends State<EventCatalog>
   TimelineDashboardState timelineState = new TimelineDashboardState();
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
+
   // ContainerTransitionType _transitionType = ContainerTransitionType.fade;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -82,6 +84,7 @@ class _EventCatalogState extends State<EventCatalog>
   String urlType = '';
 
   final StreamController<int> _bannerCount = StreamController<int>();
+
   Stream<int> get bannerCount => _bannerCount.stream;
 
   int _current = 0;
@@ -258,19 +261,18 @@ class _EventCatalogState extends State<EventCatalog>
         child: Scaffold(
           resizeToAvoidBottomPadding: false,
           resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
           appBar: PreferredSize(
             preferredSize: Size(null, 100),
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: ScreenUtil.instance.setWidth(75),
               padding: EdgeInsets.symmetric(horizontal: 13),
-              color: Colors.white,
+              // color: Colors.white,
               child: AppBar(
                 brightness: Brightness.light,
                 automaticallyImplyLeading: false,
                 elevation: 0,
-                backgroundColor: Colors.white,
+                // backgroundColor: Colors.white,
                 titleSpacing: 0,
                 centerTitle: false,
                 title: Container(
@@ -311,7 +313,7 @@ class _EventCatalogState extends State<EventCatalog>
                         height: ScreenUtil.instance.setWidth(35),
                         width: ScreenUtil.instance.setWidth(35),
                         decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: checkForContainerBackgroundColor(context),
                             shape: BoxShape.circle,
                             boxShadow: <BoxShadow>[
                               BoxShadow(
@@ -323,6 +325,7 @@ class _EventCatalogState extends State<EventCatalog>
                         child: Image.asset(
                           'assets/icons/icon_apps/search.png',
                           scale: 4.5,
+                          color: checkForIconThemeColor(context),
                         )),
                   ),
                   SizedBox(width: ScreenUtil.instance.setWidth(8)),
@@ -337,7 +340,7 @@ class _EventCatalogState extends State<EventCatalog>
                               height: ScreenUtil.instance.setWidth(35),
                               width: ScreenUtil.instance.setWidth(35),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: checkForContainerBackgroundColor(context),
                                   shape: BoxShape.circle,
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(
@@ -363,7 +366,7 @@ class _EventCatalogState extends State<EventCatalog>
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  color: Colors.white,
+                  // color: Colors.white,
                   child: TabBar(
                     onTap: (val) {
                       setState(() {
@@ -376,7 +379,6 @@ class _EventCatalogState extends State<EventCatalog>
 
                       print(isOnlyContainer);
                     },
-                    labelColor: Colors.black,
                     labelStyle: TextStyle(fontFamily: 'Proxima'),
                     tabs: [
                       Tab(
@@ -913,7 +915,6 @@ class _EventCatalogState extends State<EventCatalog>
             children: <Widget>[
               Text('Categories',
                   style: TextStyle(
-                      color: eventajaBlack,
                       fontSize: ScreenUtil.instance.setSp(26),
                       fontWeight: FontWeight.bold)),
             ],
@@ -934,7 +935,6 @@ class _EventCatalogState extends State<EventCatalog>
             children: <Widget>[
               Text('Popular Event',
                   style: TextStyle(
-                      color: eventajaBlack,
                       fontSize: ScreenUtil.instance.setSp(26),
                       fontWeight: FontWeight.bold)),
               Expanded(
@@ -967,9 +967,7 @@ class _EventCatalogState extends State<EventCatalog>
           ),
           SizedBox(height: ScreenUtil.instance.setWidth(5)),
           Text('Find the most popular event',
-              style: TextStyle(
-                  color: Color(0xFF868686),
-                  fontSize: ScreenUtil.instance.setSp(14))),
+              style: TextStyle(fontSize: ScreenUtil.instance.setSp(14))),
         ],
       ),
     );
@@ -1070,7 +1068,6 @@ class _EventCatalogState extends State<EventCatalog>
             children: <Widget>[
               Text('Discover Event',
                   style: TextStyle(
-                      color: eventajaBlack,
                       fontSize: ScreenUtil.instance.setSp(26),
                       fontWeight: FontWeight.bold)),
               Expanded(child: SizedBox()),
@@ -1100,10 +1097,12 @@ class _EventCatalogState extends State<EventCatalog>
             ],
           ),
           SizedBox(height: ScreenUtil.instance.setWidth(5)),
-          Text('Discover the undiscovered',
-              style: TextStyle(
-                  fontSize: ScreenUtil.instance.setSp(14),
-                  color: Color(0xFF868686))),
+          Text(
+            'Discover the undiscovered',
+            style: TextStyle(
+              fontSize: ScreenUtil.instance.setSp(14),
+            ),
+          ),
         ],
       ),
     );
@@ -1122,7 +1121,6 @@ class _EventCatalogState extends State<EventCatalog>
             children: <Widget>[
               Text('Popular Profile',
                   style: TextStyle(
-                      color: eventajaBlack,
                       fontSize: ScreenUtil.instance.setSp(26),
                       fontWeight: FontWeight.bold)),
               Expanded(child: SizedBox()),
@@ -1153,9 +1151,7 @@ class _EventCatalogState extends State<EventCatalog>
           ),
           SizedBox(height: ScreenUtil.instance.setWidth(5)),
           Text('Find the most popular profile',
-              style: TextStyle(
-                  color: Color(0xFF868686),
-                  fontSize: ScreenUtil.instance.setSp(14))),
+              style: TextStyle(fontSize: ScreenUtil.instance.setSp(14))),
         ],
       ),
     );
@@ -1226,7 +1222,6 @@ class _EventCatalogState extends State<EventCatalog>
               Text(
                 'Collection',
                 style: TextStyle(
-                    color: eventajaBlack,
                     fontSize: ScreenUtil.instance.setSp(26),
                     fontWeight: FontWeight.bold),
               ),
@@ -1234,9 +1229,7 @@ class _EventCatalogState extends State<EventCatalog>
           ),
           SizedBox(height: ScreenUtil.instance.setWidth(5)),
           Text('Check out our hand-picked collectoins bellow',
-              style: TextStyle(
-                  color: Color(0xFF868686),
-                  fontSize: ScreenUtil.instance.setSp(14))),
+              style: TextStyle(fontSize: ScreenUtil.instance.setSp(14))),
         ],
       ),
     );
@@ -1319,7 +1312,6 @@ class _EventCatalogState extends State<EventCatalog>
             children: <Widget>[
               Text('Discover Profile',
                   style: TextStyle(
-                      color: eventajaBlack,
                       fontSize: ScreenUtil.instance.setSp(26),
                       fontWeight: FontWeight.bold)),
               Expanded(child: SizedBox()),
@@ -1351,7 +1343,6 @@ class _EventCatalogState extends State<EventCatalog>
           SizedBox(height: ScreenUtil.instance.setWidth(5)),
           Text('Find more profile to follow',
               style: TextStyle(
-                  color: Color(0xFF868686),
                   fontSize: ScreenUtil.instance.setSp(14))),
         ],
       ),
@@ -1471,7 +1462,6 @@ class _EventCatalogState extends State<EventCatalog>
             children: <Widget>[
               Text('Popular Media',
                   style: TextStyle(
-                      color: eventajaBlack,
                       fontSize: ScreenUtil.instance.setSp(26),
                       fontWeight: FontWeight.bold)),
               Expanded(child: SizedBox()),
@@ -1756,7 +1746,6 @@ class _EventCatalogState extends State<EventCatalog>
             children: <Widget>[
               Text('Latest Video',
                   style: TextStyle(
-                      color: eventajaBlack,
                       fontSize: ScreenUtil.instance.setSp(26),
                       fontWeight: FontWeight.bold)),
               Expanded(child: SizedBox()),

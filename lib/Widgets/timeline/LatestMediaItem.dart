@@ -77,7 +77,7 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
             color: Colors.black.withOpacity(0.1),
             blurRadius: 2,
             spreadRadius: 1.5)
-      ], color: Colors.white, borderRadius: BorderRadius.circular(15)),
+      ], color: checkForContainerBackgroundColor(context), borderRadius: BorderRadius.circular(15)),
       child: Row(
         children: <Widget>[
           Container(

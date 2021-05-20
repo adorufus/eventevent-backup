@@ -163,7 +163,8 @@ class _ListenPageState extends State<ListenPage> {
                           EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       width: MediaQuery.of(context).size.width,
                       height: ScreenUtil.instance.setWidth(50),
-                      decoration: BoxDecoration(color: Colors.white,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
                           // borderRadius: BorderRadius.circular(15),
                           boxShadow: <BoxShadow>[
                             BoxShadow(

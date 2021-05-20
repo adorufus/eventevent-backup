@@ -82,12 +82,12 @@ class _LoginWidgetState extends State<LoginWidget> {
       appBar: CupertinoNavigationBar(
         padding:
             EdgeInsetsDirectional.only(start: 15, bottom: 10, end: 15, top: 5),
-        backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () {
             backEvent();
           },
-          child: Icon(Icons.arrow_back, color: eventajaGreenTeal),
+          child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal, size:
+          25,),
         ),
         middle: Text(
           'Login',
@@ -96,7 +96,6 @@ class _LoginWidgetState extends State<LoginWidget> {
               color: eventajaGreenTeal),
         ),
       ),
-      backgroundColor: Colors.white,
       body: Stack(
         children: <Widget>[
           Column(
@@ -104,10 +103,7 @@ class _LoginWidgetState extends State<LoginWidget> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(left: 20, right: 20, top: 45),
-                child: Material(
-                  color: Colors.white,
-                  child: loginForm(),
-                ),
+                child: loginForm(),
               ),
             ],
           ),
@@ -138,7 +134,9 @@ class _LoginWidgetState extends State<LoginWidget> {
           controller: _usernameController,
           keyboardType: TextInputType.text,
           autofocus: false,
+          style: Theme.of(context).textTheme.body1,
           decoration: InputDecoration(
+            hintStyle: Theme.of(context).textTheme.body1,
             border: InputBorder.none,
             hintText: 'Username',
           ),
@@ -155,10 +153,12 @@ class _LoginWidgetState extends State<LoginWidget> {
                 keyboardType: TextInputType.text,
                 autofocus: false,
                 obscureText: hidePassword,
+                style: Theme.of(context).textTheme.body1,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   // fillColor: Colors.white,
                   // filled: true,
+                  hintStyle: Theme.of(context).textTheme.body1,
                   hintText: 'Password',
                 ),
               ),
@@ -330,6 +330,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     child: Text(
                       'LOGIN WITH GOOGLE',
                       style: TextStyle(
+                        color: darkPrimarySwatch,
                           fontSize: ScreenUtil.instance.setSp(14),
                           fontWeight: FontWeight.bold),
                     ),

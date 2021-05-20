@@ -62,7 +62,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
             child: AppBar(
               brightness: Brightness.light,
               elevation: 0,
-              backgroundColor: Colors.white,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               leading: Padding(
                 padding: const EdgeInsets.only(left: 13.0),
                 child: GestureDetector(

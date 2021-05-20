@@ -224,7 +224,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       decoration: BoxDecoration(
-                          color: Colors.white,
+                          // color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
                               image:
@@ -514,11 +514,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
             ),
     ];
 
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle(
-          statusBarColor: Colors.white,
-          statusBarIconBrightness: Brightness.dark),
-      child: WillPopScope(
+    return WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
           resizeToAvoidBottomPadding: false,
@@ -526,7 +522,6 @@ class _DashboardWidgetState extends State<DashboardWidget>
           //   leading: ,
           // ),
           key: scaffoldKey,
-          backgroundColor: Colors.white,
           bottomNavigationBar: SafeArea(
             bottom: true,
             child: CupertinoTabBar(
@@ -541,7 +536,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                             padding: EdgeInsets.only(
                                 top: 13, left: 25, right: 25, bottom: 30),
                             decoration: BoxDecoration(
-                                color: Colors.white,
+                                // color: Colors.white,
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(15),
                                   topRight: Radius.circular(15),
@@ -578,7 +573,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                                 PostEvent()));
                                   },
                                   child: Container(
-                                    color: Colors.white,
+                                    // color: Colors.white,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -646,7 +641,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                     livestreamSelectDialog(context);
                                   },
                                   child: Container(
-                                    color: Colors.white,
+                                    // color: Colors.white,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -711,13 +706,13 @@ class _DashboardWidgetState extends State<DashboardWidget>
                     }
                   });
                 },
-                backgroundColor: Colors.white,
+                // backgroundColor: Colors.white,
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                       title: Text(
                         'Discover',
                         style: TextStyle(
-                            color: Colors.black26,
+                            // color: Colors.black26,
                             fontSize: ScreenUtil.instance.setSp(10)),
                       ),
                       icon: Image.asset("assets/icons/aset_icon/eventevent.png",
@@ -733,7 +728,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                       title: Text(
                         'Media',
                         style: TextStyle(
-                            color: Colors.black26,
+                            // color: Colors.black26,
                             fontSize: ScreenUtil.instance.setSp(10)),
                       ),
                       icon: Image.asset(
@@ -751,7 +746,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                       title: Text(
                         'Post',
                         style: TextStyle(
-                            color: Colors.black26,
+                            // color: Colors.black26,
                             fontSize: ScreenUtil.instance.setSp(10)),
                       ),
                       icon: Image.asset("assets/icons/aset_icon/post.png",
@@ -767,7 +762,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                     title: Text(
                       'Notification',
                       style: TextStyle(
-                          color: Colors.black26,
+                          // color: Colors.black26,
                           fontSize: ScreenUtil.instance.setSp(10)),
                     ),
                     icon: Image.asset("assets/icons/aset_icon/notif.png",
@@ -784,7 +779,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                     title: Text(
                       'Profile',
                       style: TextStyle(
-                          color: Colors.black26,
+                          // color: Colors.black26,
                           fontSize: ScreenUtil.instance.setSp(10)),
                     ),
                     icon: Image.asset("assets/icons/aset_icon/profile.png",
@@ -797,11 +792,10 @@ class _DashboardWidgetState extends State<DashboardWidget>
                       color: eventajaGreenTeal,
                     ),
                   )
-                ]),
+                ],),
           ),
           body: _pageOptions[_selectedPage],
         ),
-      ),
     );
   }
 
@@ -834,7 +828,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
           return Dialog(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            backgroundColor: Colors.white,
+            // backgroundColor: Colors.white,
             child: Container(
               width: ScreenUtil.instance.setWidth(400),
               height: ScreenUtil.instance.setWidth(250),

@@ -36,6 +36,7 @@ dependencies:
   video_thumbnail: ^0.2.5
   mime:
   progressive_image:
+  provider:
   media_info: ^0.6.4
   auto_orientation: ^1.0.6
   device_info: ^0.4.2+8

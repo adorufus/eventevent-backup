@@ -44,7 +44,7 @@ class TransactionHistoryItem extends StatelessWidget {
             color: Colors.black.withOpacity(0.1),
             blurRadius: 2,
             spreadRadius: 1.5)
-      ], color: Colors.white, borderRadius: BorderRadius.circular(15)),
+      ], color: checkForContainerBackgroundColor(context), borderRadius: BorderRadius.circular(15)),
       child: Row(
         children: <Widget>[
           Container(
@@ -56,69 +56,71 @@ class TransactionHistoryItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
           ),
-          Container(
-            padding: EdgeInsets.only(left: 19.35, top: 15.66, right: 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width - 146,
-                  height: ScreenUtil.instance.setWidth(18),
-                  child: Text(
-                    ticketCode,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(15)),
+          Flexible(
+            child: Container(
+              padding: EdgeInsets.only(left: 19.35, top: 15.66, right: 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width - 146,
+                    height: ScreenUtil.instance.setWidth(18),
+                    child: Text(
+                      ticketCode,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(15)),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textWidthBasis: TextWidthBasis.parent,
+                    ),
+                  ),
+                  Text(
+                    quantity + 'x $ticketName'.toUpperCase(),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: ScreenUtil.instance.setSp(10),
+                        color: Color(0xFF8A8A8B)),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textWidthBasis: TextWidthBasis.parent,
                   ),
-                ),
-                Text(
-                  quantity + 'x $ticketName'.toUpperCase(),
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: ScreenUtil.instance.setSp(10),
-                      color: Color(0xFF8A8A8B)),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textWidthBasis: TextWidthBasis.parent,
-                ),
-                SizedBox(height: ScreenUtil.instance.setWidth(5)),
-                Text(
-                  'Last updated: $timeStart',
-                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(10), color: Color(0xFF8A8A8B)),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textWidthBasis: TextWidthBasis.parent,
-                ),
-                SizedBox(height: ScreenUtil.instance.setWidth(5)),
-                Text(
-                  '$price',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: eventajaGreenTeal),
-                ),
-                SizedBox(height: ScreenUtil.instance.setWidth(15)),
-                Container(
-                  height: ScreenUtil.instance.setWidth(32),
-                  width: ScreenUtil.instance.setWidth(110),
-                  decoration: BoxDecoration(
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: ticketColor.withOpacity(0.4),
-                            blurRadius: 2,
-                            spreadRadius: 1.5)
-                      ],
-                      color: ticketColor,
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Center(
-                      child: Text(
-                    ticketStatus.toString().toUpperCase(),
+                  SizedBox(height: ScreenUtil.instance.setWidth(5)),
+                  Text(
+                    'Last updated: $timeStart',
+                    style: TextStyle(fontSize: ScreenUtil.instance.setSp(10), color: Color(0xFF8A8A8B)),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textWidthBasis: TextWidthBasis.parent,
+                  ),
+                  SizedBox(height: ScreenUtil.instance.setWidth(5)),
+                  Text(
+                    '$price',
                     style: TextStyle(
-                        color: Colors.white,
-                        fontSize: ScreenUtil.instance.setSp(10),
-                        fontWeight: FontWeight.bold),
-                  )),
-                ),
-              ],
+                        fontWeight: FontWeight.bold, color: eventajaGreenTeal),
+                  ),
+                  SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                  Container(
+                    height: ScreenUtil.instance.setWidth(32),
+                    width: ScreenUtil.instance.setWidth(110),
+                    decoration: BoxDecoration(
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: ticketColor.withOpacity(0.4),
+                              blurRadius: 2,
+                              spreadRadius: 1.5)
+                        ],
+                        color: ticketColor,
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Center(
+                        child: Text(
+                      ticketStatus.toString().toUpperCase(),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenUtil.instance.setSp(10),
+                          fontWeight: FontWeight.bold),
+                    )),
+                  ),
+                ],
+              ),
             ),
           )
         ],

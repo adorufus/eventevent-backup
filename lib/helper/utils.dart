@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+
+import 'colorsManagement.dart';
 
 Iterable<E> mapIndexed<E, T>(
     Iterable<T> items, E Function(int index, T item) f) sync* {
@@ -33,6 +36,36 @@ class Utils {
   Utils({this.currentUserId});
 }
 
+ThemeData darkTheme = ThemeData(
+  fontFamily: 'Proxima',
+  appBarTheme:
+      AppBarTheme(color: darkPrimarySwatch, brightness: Brightness.light),
+  textTheme: TextTheme(
+      body1: TextStyle().apply(color: Colors.white),
+      body2: TextStyle().apply(color: Colors.white)),
+  tabBarTheme: TabBarTheme(
+    labelColor: Colors.white,
+  ),
+  cupertinoOverrideTheme: CupertinoThemeData(
+      barBackgroundColor: darkPrimarySwatch,
+      scaffoldBackgroundColor: darkPrimarySwatch,
+      primaryColor: Colors.white,
+      textTheme: CupertinoTextThemeData(
+          tabLabelTextStyle: TextStyle(color: Colors.white),
+          navActionTextStyle: TextStyle(color: Colors.white),
+          navTitleTextStyle: TextStyle(color: Colors.white),
+          actionTextStyle: TextStyle(color: Colors.white),
+          navLargeTitleTextStyle: TextStyle(color: Colors.white),
+          primaryColor: Colors.white,
+          textStyle: TextStyle(color: Colors.white))),
+  brightness: Brightness.light,
+  iconTheme: IconThemeData(
+    color: Colors.white,
+  ),
+  backgroundColor: darkPrimarySwatch,
+  scaffoldBackgroundColor: darkPrimarySwatch,
+);
+
 class TextFieldFormatPrice extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
@@ -52,5 +85,3 @@ class TextFieldFormatPrice extends TextInputFormatter {
         selection: new TextSelection.collapsed(offset: newText.length));
   }
 }
-
-

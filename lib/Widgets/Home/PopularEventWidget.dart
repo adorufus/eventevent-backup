@@ -47,7 +47,6 @@ class PopularEventWidget extends StatelessWidget {
           margin: EdgeInsets.only(left: 13, top: 8, bottom: 8, right: 3),
           width: ScreenUtil.instance.setWidth(172),
           decoration: BoxDecoration(
-            color: Colors.white,
             borderRadius: BorderRadius.circular(15),
             // boxShadow: <BoxShadow>[
             //   BoxShadow(

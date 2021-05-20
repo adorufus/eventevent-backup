@@ -256,12 +256,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
       allowFontScaling: true,
     )..init(context);
 
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle(
-          statusBarColor: Colors.white,
-          statusBarIconBrightness: Brightness.dark),
-      child: Scaffold(
-        backgroundColor: Colors.white,
+    return Scaffold(
         body: SafeArea(
           child: Stack(
             children: <Widget>[
@@ -497,6 +492,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
                                 child: Text(
                                   'LOGIN WITH GOOGLE',
                                   style: TextStyle(
+                                    color: darkPrimarySwatch,
                                       fontSize: ScreenUtil.instance.setSp(14),
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -636,7 +632,6 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
             ],
           ),
         ),
-      ),
     );
   }
 }
