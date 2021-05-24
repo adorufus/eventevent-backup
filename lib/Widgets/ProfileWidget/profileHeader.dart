@@ -118,11 +118,11 @@ class _ProfileHeaderState extends State<ProfileHeader>
             width: MediaQuery.of(context).size.width,
             height: ScreenUtil.instance.setWidth(60),
             padding: EdgeInsets.symmetric(horizontal: 13),
-            color: Colors.white,
+            // color: Colors.white,
             child: AppBar(
               brightness: Brightness.light,
               elevation: 0,
-              backgroundColor: Colors.white,
+              // backgroundColor: Colors.white,
               leading: widget.currentUserId == userId
                   ? Container()
                   : GestureDetector(
@@ -170,7 +170,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
     return ListView(
       children: <Widget>[
         Container(
-          color: Colors.white,
+          // color: Colors.white,
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: <Widget>[
@@ -185,7 +185,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                         shape: BoxShape.circle,
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                              color: Colors.grey,
+                              color: Color(0xff383838),
                               blurRadius: 5,
                               offset: Offset(1, 1))
                         ],
@@ -367,7 +367,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
                 margin: EdgeInsets.symmetric(horizontal: 8, vertical: 28),
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: barColor(context),
                   // borderRadius: BorderRadius.circular(15),
                   // boxShadow: <BoxShadow>[
                   //   BoxShadow(
@@ -417,7 +417,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                     color: widget.eventCreatedCount == "0" ||
                                             widget.eventCreatedCount == null
                                         ? Colors.grey
-                                        : Colors.black),
+                                        : Theme.of(context).textTheme.body1
+                                        .color),
                               ),
                               SizedBox(
                                 height: ScreenUtil.instance.setWidth(9),
@@ -428,7 +429,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       color: widget.eventCreatedCount == "0" ||
                                               widget.eventCreatedCount == null
                                           ? Colors.grey
-                                          : Colors.black))
+                                          : Theme.of(context).textTheme.body1
+                                          .color))
                             ],
                           ),
                         ),
@@ -474,7 +476,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       color: widget.eventGoingCount == "0" ||
                                               widget.eventGoingCount == null
                                           ? Colors.grey
-                                          : Colors.black)),
+                                          : Theme.of(context).textTheme.body1
+                                          .color)),
                               SizedBox(
                                 height: ScreenUtil.instance.setWidth(9),
                               ),
@@ -484,7 +487,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       color: widget.eventGoingCount == "0" ||
                                               widget.eventGoingCount == null
                                           ? Colors.grey
-                                          : Colors.black))
+                                          : Theme.of(context).textTheme.body1
+                                          .color))
                             ],
                           ),
                         ),
@@ -535,7 +539,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       color: widget.follower == "0" ||
                                               widget.follower == null
                                           ? Colors.grey
-                                          : Colors.black)),
+                                          : Theme.of(context).textTheme.body1
+                                          .color)),
                               SizedBox(
                                 height: ScreenUtil.instance.setWidth(9),
                               ),
@@ -545,7 +550,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       color: widget.follower == "0" ||
                                               widget.follower == null
                                           ? Colors.grey
-                                          : Colors.black))
+                                          : Theme.of(context).textTheme.body1
+                                          .color))
                             ],
                           ),
                         ),
@@ -596,7 +602,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       color: widget.following == "0" ||
                                               widget.following == null
                                           ? Colors.grey
-                                          : Colors.black)),
+                                          : Theme.of(context).textTheme.body1
+                                          .color)),
                               SizedBox(
                                 height: ScreenUtil.instance.setWidth(9),
                               ),
@@ -605,7 +612,8 @@ class _ProfileHeaderState extends State<ProfileHeader>
                                       fontSize: 7,
                                       color: widget.following == "0"
                                           ? Colors.grey
-                                          : Colors.black))
+                                          : Theme.of(context).textTheme.body1
+                                          .color))
                             ],
                           ),
                         ),
@@ -708,9 +716,9 @@ class _ProfileHeaderState extends State<ProfileHeader>
         // mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
-            color: Colors.white,
+            // color: Colors.white,
             child: TabBar(
-              labelColor: Colors.black,
+              // labelColor: Colors.black,
               labelStyle: TextStyle(fontFamily: 'Proxima'),
               tabs: [
                 Tab(

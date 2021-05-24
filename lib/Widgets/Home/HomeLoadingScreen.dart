@@ -1270,12 +1270,12 @@ class HomeLoadingScreen {
           width: MediaQuery.of(context).size.width,
           height: ScreenUtil.instance.setWidth(60),
           padding: EdgeInsets.symmetric(horizontal: 13),
-          color: Colors.white,
+          // color: Colors.white,
           child: AppBar(
             brightness: Brightness.light,
             elevation: 0,
             automaticallyImplyLeading: false,
-            backgroundColor: Colors.white,
+            // backgroundColor: Colors.white,
           ),
         ),
       ),
@@ -1283,7 +1283,7 @@ class HomeLoadingScreen {
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           Container(
-            color: Colors.white,
+            // color: Colors.white,
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: <Widget>[

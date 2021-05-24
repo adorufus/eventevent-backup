@@ -43,6 +43,11 @@ Color checkForContainerBackgroundColor(BuildContext context) {
   Color(0xff383838) : Colors.white;
 }
 
+Color barColor(BuildContext context) {
+  return Provider.of<ThemeProvider>(context).isDarkMode ?
+  darkPrimarySwatch : Colors.white;
+}
+
 Color checkForIconThemeColor(BuildContext context) {
   return Provider.of<ThemeProvider>(context).isDarkMode ? ThemeData.dark()
       .iconTheme.color : ThemeData.light().iconTheme.color;

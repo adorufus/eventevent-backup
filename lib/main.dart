@@ -256,7 +256,7 @@ class _RunAppState extends State<RunApp> {
       debugShowCheckedModeBanner: false,
       navigatorObservers: <NavigatorObserver>[RunApp.observer],
       // themeMode: Provider.of<ThemeProvider>(context).mode,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       darkTheme: darkTheme,
       theme: ThemeData(
           fontFamily: 'Proxima',

@@ -222,9 +222,10 @@ class TransactionHistoryState extends State<TransactionHistory> {
                             },
                             child: TransactionHistoryItem(
                               image: transactionList[i]['ticket_image'] == false
-                                  ? ''
-                                  : transactionList[i]['ticket_image']
-                                      ['secure_url'],
+                                  ? transactionList[i]['event']
+                              ['pictureAvatarPath']
+                                  : transactionList[i]['event']
+                                      ['pictureAvatarPath'],
                               ticketCode: transactionList[i]
                                   ['transaction_code'],
                               ticketName: transactionList[i]['ticket']

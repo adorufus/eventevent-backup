@@ -1,3 +1,4 @@
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyTicketItem extends StatefulWidget {
@@ -53,7 +54,7 @@ class _MyTicketItemState extends State<MyTicketItem> {
             color: Colors.black.withOpacity(0.1),
             blurRadius: 2,
             spreadRadius: 1.5)
-      ], color: Colors.white, borderRadius: BorderRadius.circular(15)),
+      ], color: checkForContainerBackgroundColor(context), borderRadius: BorderRadius.circular(15)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

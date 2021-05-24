@@ -137,12 +137,12 @@ class _TimelineItemState extends State<TimelineItem>
               color: Colors.black.withOpacity(0.1),
               blurRadius: 2,
               spreadRadius: 1.5)
-        ], color: Color(0xFFF9F9F9), borderRadius: BorderRadius.circular(15)),
+        ], color: checkForContainerBackgroundColor(context), borderRadius: BorderRadius.circular(15)),
         child: Column(
           children: <Widget>[
             Container(
               decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(15)),
+                  color: checkForContainerBackgroundColor(context), borderRadius: BorderRadius.circular(15)),
               padding: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
