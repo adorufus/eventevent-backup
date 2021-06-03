@@ -87,7 +87,7 @@ class _EditTicketState extends State<EditTicket> {
       key: thisScaffold,
       appBar: AppBar(
         brightness: Brightness.light,
-        backgroundColor: Colors.white,
+        backgroundColor: ThemeData.fallback().appBarTheme.color,
         elevation: 1,
         leading: GestureDetector(
           onTap: () {
@@ -104,13 +104,9 @@ class _EditTicketState extends State<EditTicket> {
           style: TextStyle(color: eventajaGreenTeal),
         ),
       ),
-      bottomNavigationBar: GestureDetector(
-        onTap: () {
-          // saveFinalData();
-        },
-        child: Container(
+      bottomNavigationBar: Container(
           height: 60,
-          decoration: BoxDecoration(color: Colors.white, boxShadow: [
+          decoration: BoxDecoration(color: checkForBackgroundColor(context), boxShadow: [
             BoxShadow(
                 blurRadius: 2,
                 spreadRadius: 1.5,
@@ -137,7 +133,6 @@ class _EditTicketState extends State<EditTicket> {
             ),
           ),
         ),
-      ),
       body: Stack(
         children: <Widget>[
           Container(
@@ -151,13 +146,7 @@ class _EditTicketState extends State<EditTicket> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        'Ticket Name',
-                        style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: ScreenUtil.instance.setSp(18),
-                            fontWeight: FontWeight.bold),
-                      ),
+                      title("Ticket Name"),
                       SizedBox(
                         height: ScreenUtil.instance.setWidth(5),
                       ),
@@ -214,13 +203,7 @@ class _EditTicketState extends State<EditTicket> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  'Ticket Quantity',
-                                  style: TextStyle(
-                                      fontSize: ScreenUtil.instance.setSp(18),
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                                title("Ticket Quantity"),
                                 SizedBox(
                                     height: ScreenUtil.instance.setWidth(10)),
                                 Container(
@@ -244,13 +227,7 @@ class _EditTicketState extends State<EditTicket> {
                                     )),
                                 SizedBox(
                                     height: ScreenUtil.instance.setWidth(20)),
-                                Text(
-                                  'Set The Price',
-                                  style: TextStyle(
-                                      fontSize: ScreenUtil.instance.setSp(18),
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                                title("Set The Price"),
                                 Text(
                                   'Set your ticket price',
                                   style: TextStyle(
@@ -320,14 +297,7 @@ class _EditTicketState extends State<EditTicket> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(
-                                      'Min Ticket',
-                                      style: TextStyle(
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    title("Min Ticket"),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(10)),
@@ -357,14 +327,7 @@ class _EditTicketState extends State<EditTicket> {
                               Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(
-                                      'Max Ticket',
-                                      style: TextStyle(
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    title("Max Ticket"),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(10)),
@@ -393,12 +356,10 @@ class _EditTicketState extends State<EditTicket> {
                                   ])
                             ],
                           ),
-                          Text(
-                            'Ticket Sales Starts',
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: ScreenUtil.instance.setSp(18)),
+                          SizedBox(
+                            height: ScreenUtil.instance.setWidth(15),
                           ),
+                          title("Ticket Sales Start"),
                           SizedBox(
                             height: ScreenUtil.instance.setWidth(15),
                           ),
@@ -431,6 +392,7 @@ class _EditTicketState extends State<EditTicket> {
                                         child: Text(
                                           startDate,
                                           style: TextStyle(
+                                            color: themeBasedTextColor,
                                               fontSize: ScreenUtil.instance
                                                   .setSp(20)),
                                         ))),
@@ -463,6 +425,7 @@ class _EditTicketState extends State<EditTicket> {
                                         child: Text(
                                           startTime,
                                           style: TextStyle(
+                                            color: themeBasedTextColor,
                                               fontSize: ScreenUtil.instance
                                                   .setSp(20)),
                                         ))),
@@ -472,12 +435,7 @@ class _EditTicketState extends State<EditTicket> {
                           SizedBox(
                             height: ScreenUtil.instance.setWidth(20),
                           ),
-                          Text(
-                            'Ticket Sales Ends',
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: ScreenUtil.instance.setSp(18)),
-                          ),
+                         title("Ticket Sales Ends"),
                           SizedBox(
                             height: ScreenUtil.instance.setWidth(15),
                           ),
@@ -510,6 +468,7 @@ class _EditTicketState extends State<EditTicket> {
                                         child: Text(
                                           endDate,
                                           style: TextStyle(
+                                            color: themeBasedTextColor,
                                               fontSize: ScreenUtil.instance
                                                   .setSp(20)),
                                         ))),
@@ -542,6 +501,7 @@ class _EditTicketState extends State<EditTicket> {
                                         child: Text(
                                           endTime,
                                           style: TextStyle(
+                                            color: themeBasedTextColor,
                                               fontSize: ScreenUtil.instance
                                                   .setSp(20)),
                                         ))),
@@ -552,13 +512,7 @@ class _EditTicketState extends State<EditTicket> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              Text(
-                                'Show Remaining Ticket',
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: ScreenUtil.instance.setSp(18),
-                                    fontWeight: FontWeight.bold),
-                              ),
+                              title("Show Remaining Ticket"),
                             ],
                           ),
                           SizedBox(
@@ -591,13 +545,7 @@ class _EditTicketState extends State<EditTicket> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              Text(
-                                'One Purchase Per User',
-                                style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: ScreenUtil.instance.setSp(18),
-                                    fontWeight: FontWeight.bold),
-                              ),
+                              title("One Purchase Per User"),
                             ],
                           ),
                           SizedBox(
@@ -628,13 +576,7 @@ class _EditTicketState extends State<EditTicket> {
                             ],
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(20)),
-                          Text(
-                            'Description',
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: ScreenUtil.instance.setSp(18),
-                                fontWeight: FontWeight.bold),
-                          ),
+                          title("Description"),
                           SizedBox(
                             height: ScreenUtil.instance.setWidth(10),
                           ),
@@ -791,7 +733,8 @@ class _EditTicketState extends State<EditTicket> {
             ? await MultipartFile.fromFile(imageUri.path,
                 filename:
                     "eventevent_ticket_photo-${DateTime.now().toString()}.jpg")
-            : ''
+            : widget.ticketDetail[
+        'ticket_image']['secure_url']
       };
 
       Navigator.push(
@@ -824,5 +767,15 @@ class _EditTicketState extends State<EditTicket> {
     imageUri = croppedImage;
 
     setState(() {});
+  }
+
+  Widget title(String text) {
+    return Text(
+      text,
+      style: TextStyle(
+          color: checkForTextTitleColor(context),
+          fontSize: ScreenUtil.instance.setSp(18),
+          fontWeight: FontWeight.bold),
+    );
   }
 }

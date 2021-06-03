@@ -67,19 +67,19 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 1,
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).pop();
           },
           child: Icon(
             Icons.arrow_back_ios,
-            color: eventajaGreenTeal,
+            color: checkForAppBarTitleColor(context),
           ),
         ),
         title: Text(
           'SETTINGS',
-          style: TextStyle(color: eventajaGreenTeal),
+          style: TextStyle(color: checkForAppBarTitleColor(context)),
         ),
         centerTitle: true,
       ),
@@ -196,7 +196,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               ),
               Container(
                 width: MediaQuery.of(context).size.width,
-                color: Colors.white,
+                color: checkForContainerBackgroundColor(context),
                 child: Column(
                   children: <Widget>[
                     GestureDetector(
@@ -206,13 +206,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        color: Colors.white,
                         padding: EdgeInsets.only(left: 30, bottom: 15, top: 15),
                         child: Text(
                           'Rate EventEvent on App Store / Google Play',
                           style: TextStyle(
                               fontSize: ScreenUtil.instance.setSp(18),
-                              color: Colors.grey[700]),
+                              color: checkForSettingsTitleColor(context)),
                         ),
                       ),
                     ),
@@ -236,7 +235,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               ),
               Container(
                 width: MediaQuery.of(context).size.width,
-                color: Colors.white,
+                color: checkForContainerBackgroundColor(context),
                 padding: EdgeInsets.symmetric(vertical: 12),
                 child: Column(
                   children: <Widget>[
@@ -250,13 +249,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        color: Colors.white,
                         padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Bank Account',
                           style: TextStyle(
                               fontSize: ScreenUtil.instance.setSp(18),
-                              color: Colors.grey[700]),
+                              color: checkForSettingsTitleColor(context)),
                         ),
                       ),
                     ),
@@ -276,13 +274,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        color: Colors.white,
                         padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Withdraw',
                           style: TextStyle(
                               fontSize: ScreenUtil.instance.setSp(18),
-                              color: Colors.grey[700]),
+                              color: checkForSettingsTitleColor(context)),
                         ),
                       ),
                     ),
@@ -307,7 +304,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(vertical: 12),
-                color: Colors.white,
+                color: checkForContainerBackgroundColor(context),
                 child: Column(
                   children: <Widget>[
                     GestureDetector(
@@ -320,13 +317,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        color: Colors.white,
                         padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Edit Profile',
                           style: TextStyle(
                               fontSize: ScreenUtil.instance.setSp(18),
-                              color: Colors.grey[700]),
+                              color: checkForSettingsTitleColor(context)),
                         ),
                       ),
                     ),
@@ -346,13 +342,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        color: Colors.white,
                         padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Change Password',
                           style: TextStyle(
                               fontSize: ScreenUtil.instance.setSp(18),
-                              color: Colors.grey[700]),
+                              color: checkForSettingsTitleColor(context)),
                         ),
                       ),
                     ),
@@ -376,7 +371,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               ),
               Container(
                 width: MediaQuery.of(context).size.width,
-                color: Colors.white,
+                color: checkForContainerBackgroundColor(context),
                 child: Column(
                   children: <Widget>[
                     GestureDetector(
@@ -389,13 +384,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        color: Colors.white,
                         padding: EdgeInsets.only(left: 30, top: 15, bottom: 15),
                         child: Text(
                           'Give us feedback',
                           style: TextStyle(
                               fontSize: ScreenUtil.instance.setSp(18),
-                              color: Colors.grey[700]),
+                              color: checkForSettingsTitleColor(context)),
                         ),
                       ),
                     ),
@@ -447,7 +441,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  color: Colors.white,
+                  color: checkForContainerBackgroundColor(context),
                   padding: EdgeInsets.only(left: 30, bottom: 15, top: 15),
                   child: Text(
                     'Log Out',
@@ -474,7 +468,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               ),
               Container(
                 width: MediaQuery.of(context).size.width,
-                color: Colors.white,
+                color: checkForContainerBackgroundColor(context),
                 padding: EdgeInsets.symmetric(vertical: 12),
                 child: Column(
                   children: <Widget>[
@@ -487,13 +481,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        color: Colors.white,
                         padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Terms',
                           style: TextStyle(
                               fontSize: ScreenUtil.instance.setSp(18),
-                              color: Colors.grey[700]),
+                              color: checkForSettingsTitleColor(context)),
                         ),
                       ),
                     ),
@@ -513,13 +506,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        color: Colors.white,
                         padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Privacy Policy',
                           style: TextStyle(
                               fontSize: ScreenUtil.instance.setSp(18),
-                              color: Colors.grey[700]),
+                              color: checkForSettingsTitleColor(context)),
                         ),
                       ),
                     ),
@@ -541,13 +533,12 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        color: Colors.white,
                         padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
                         child: Text(
                           'Open Source Library',
                           style: TextStyle(
                               fontSize: ScreenUtil.instance.setSp(18),
-                              color: Colors.grey[700]),
+                              color: checkForSettingsTitleColor(context)),
                         ),
                       ),
                     ),
@@ -562,12 +553,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: ScreenUtil.instance.setWidth(50),
-                    color: Colors.white,
                     child: Center(
                         child: Text(
                       appVersion,
                       style: TextStyle(
-                          color: Colors.grey[700],
+                          color: checkForSettingsTitleColor(context),
                           fontSize: ScreenUtil.instance.setSp(18)),
                     ))),
               ),

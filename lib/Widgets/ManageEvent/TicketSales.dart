@@ -74,7 +74,7 @@ class TicketSalesState extends State<TicketSales> {
             appBar: AppBar(
               brightness: Brightness.light,
               elevation: 0,
-              backgroundColor: Colors.white,
+              backgroundColor: appBarColor,
               leading: GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
@@ -94,7 +94,7 @@ class TicketSalesState extends State<TicketSales> {
                 child: ListView(
                   children: <Widget>[
                     Container(
-                      color: Colors.white,
+                      color: checkForBackgroundColor(context),
                       height: ScreenUtil.instance.setWidth(150),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -122,7 +122,7 @@ class TicketSalesState extends State<TicketSales> {
                     ),
                     SizedBox(height: ScreenUtil.instance.setWidth(30)),
                     Container(
-                      color: Colors.white,
+                      color: checkForBackgroundColor(context),
                       height: ScreenUtil.instance.setWidth(300),
                       padding:
                           EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -212,7 +212,7 @@ class TicketSalesState extends State<TicketSales> {
                       height: ScreenUtil.instance.setWidth(20),
                     ),
                     Container(
-                      color: Colors.white,
+                      color: checkForBackgroundColor(context),
                       width: MediaQuery.of(context).size.width,
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Column(

@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/Home/PeopleItem.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -75,7 +76,7 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
             width: MediaQuery.of(context).size.width,
             height: ScreenUtil.instance.setWidth(75),
             child: Container(
-              color: Colors.white,
+              color: appBarColor,
               child: Container(
                 margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
                 child: Row(
@@ -118,7 +119,6 @@ class _SeeAllPeopleState extends State<SeeAllPeople> {
             physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
               Container(
-                color: Colors.white,
                 child: TabBar(
                   tabs: <Widget>[
                     Tab(

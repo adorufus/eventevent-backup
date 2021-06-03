@@ -123,20 +123,19 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
       key: scaffoldKey,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
           child: Icon(
             Icons.arrow_back_ios,
-            color: eventajaGreenTeal,
+            color: checkForAppBarTitleColor(context),
           ),
         ),
         centerTitle: true,
         title: Text(
           'CONFIRMATION',
-          style: TextStyle(color: eventajaGreenTeal),
+          style: TextStyle(color: checkForAppBarTitleColor(context)),
         ),
       ),
       bottomNavigationBar: GestureDetector(
@@ -155,7 +154,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                         padding:
                             EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                         decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: checkForBackgroundColor(context),
                             borderRadius: BorderRadius.circular(10)),
                         height: ScreenUtil.instance.setWidth(200),
                         width: ScreenUtil.instance.setWidth(300),
@@ -164,7 +163,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                             Text(
                               'PASSWORD REQUIRED',
                               style: TextStyle(
-                                  color: Colors.black54,
+                                  color: checkForSettingsTitleColor(context),
                                   fontSize: ScreenUtil.instance.setSp(18),
                                   fontWeight: FontWeight.bold),
                             ),
@@ -181,6 +180,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                             TextFormField(
                               obscureText: true,
                               controller: passwordController,
+                              style: TextStyle(color: checkForSettingsTitleColor(context)),
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -202,35 +202,37 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                             SizedBox(
                               height: ScreenUtil.instance.setWidth(20),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                    'Cancel',
-                                    style: TextStyle(
-                                        color: Colors.lightBlue,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: ScreenUtil.instance.setWidth(50),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(thisContext);
-                                    postWithdraw(passwordController.text);
-                                  },
-                                  child: Text('Ok',
+                            Flexible(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      'Cancel',
                                       style: TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.bold)),
-                                )
-                              ],
-                            )
+                                          color: Colors.lightBlue,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: ScreenUtil.instance.setWidth(50),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(thisContext);
+                                      postWithdraw(passwordController.text);
+                                    },
+                                    child: Text('Ok',
+                                        style: TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.bold)),
+                                  )
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -261,7 +263,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                       Container(
                         padding:
                             EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                        color: Colors.white,
+                        
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: <Widget>[
@@ -269,7 +271,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                               child: Text(
                                 'WITHDRAW AMOUNT',
                                 style: TextStyle(
-                                  color: Colors.black54,
+                                  color: checkForSettingsTitleColor(context),
                                   fontWeight: FontWeight.bold,
                                   fontSize: ScreenUtil.instance.setSp(18),
                                 ),
@@ -287,7 +289,8 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: ScreenUtil.instance.setSp(18),
-                                      color: Colors.black26),
+                                      color: checkForSettingsTitleColor
+                                        (context)),
                                 ),
                                 Text(
                                   'Rp' + withdrawAmount.toString() + ',-',
@@ -305,7 +308,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: ScreenUtil.instance.setSp(18),
-                                      color: Colors.black26),
+                                      color: checkForSettingsTitleColor(context)),
                                 ),
                                 Text(
                                   '-Rp${withdrawFee == null ? '0' : withdrawFee}',
@@ -352,7 +355,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                         child: Text(
                           'TRANSFER TO',
                           style: TextStyle(
-                              color: Colors.black54,
+                              color: checkForSettingsTitleColor(context),
                               fontWeight: FontWeight.bold,
                               fontSize: ScreenUtil.instance.setSp(18)),
                         ),
@@ -360,7 +363,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
                       SizedBox(height: ScreenUtil.instance.setWidth(20)),
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 12),
-                        color: Colors.white,
+                        color: checkForContainerBackgroundColor(context),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[

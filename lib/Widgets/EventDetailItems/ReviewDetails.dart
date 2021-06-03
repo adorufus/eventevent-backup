@@ -47,10 +47,8 @@ class _ReviewDetailsState extends State<ReviewDetails> {
           width: MediaQuery.of(context).size.width,
           height: ScreenUtil.instance.setWidth(80),
           padding: EdgeInsets.symmetric(horizontal: 13),
-          color: Colors.white,
           child: AppBar(
             elevation: 0,
-            backgroundColor: Colors.white,
             leading: GestureDetector(
               onTap: () {
                 Navigator.pop(context);
@@ -67,18 +65,16 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                 title: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: ScreenUtil.instance.setSp(14),
-              color: Colors.black,
+              color: checkForAppBarTitleColor(context),
             )),
           ),
         ),
       ),
-      backgroundColor: Colors.white,
       body: SafeArea(
         bottom: false,
         child: ListView(
           children: <Widget>[
             Container(
-              color: Colors.white,
               padding: EdgeInsets.symmetric(
                   horizontal: ScreenUtil.instance.setWidth(13),
                   vertical: ScreenUtil.instance.setWidth(13)),
@@ -206,10 +202,13 @@ class _ReviewDetailsState extends State<ReviewDetails> {
                                     ': ',
                                 style: TextStyle(
                                     fontSize: ScreenUtil.instance.setSp(12),
+                                    color: checkForSettingsTitleColor(context),
                                     fontWeight: FontWeight.bold),
                               ),
                               subtitle: Text(
-                                  '\"${reviewData[i]['description'] == null ? reviewData[i]['review_type']['type_name'] : reviewData[i]['description']}\"'),
+                                '\"${reviewData[i]['description'] == null ? reviewData[i]['review_type']['type_name'] : reviewData[i]['description']}\"',
+                                style: TextStyle(color: checkForSettingsTitleColor(context)),
+                              ),
                               trailing:
                                   reviewData[i]['review_type']['type'] == 'good'
                                       ? Icon(Icons.thumb_up,

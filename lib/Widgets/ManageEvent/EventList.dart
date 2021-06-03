@@ -48,19 +48,17 @@ class EventListState extends State<EventList>{
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.light,
-        backgroundColor: Colors.white,
         elevation: 0,
         leading: GestureDetector(
-            child: Icon(Icons.arrow_back_ios, color: eventajaGreenTeal, size: 20,),
+            child: Icon(Icons.arrow_back_ios, color: checkForAppBarTitleColor(context), size: 20,),
             onTap: (){
               Navigator.pop(context);
             },
         ),
-        title: Text('event ${widget.type}', style: TextStyle(color: eventajaGreenTeal),),
+        title: Text('event ${widget.type}', style: TextStyle(color: checkForAppBarTitleColor(context)),),
         centerTitle: true,
       ),
       body: Container(
-        color: Colors.white,
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: widget.userId == currentUserId ? DefaultTabController(
@@ -69,8 +67,7 @@ class EventListState extends State<EventList>{
           child: ListView(
             children: <Widget>[
               TabBar(
-                labelColor: eventajaGreenTeal,
-                labelStyle: TextStyle(color: eventajaGreenTeal),
+                labelColor: checkForAppBarTitleColor(context),
                 tabs: <Widget>[
                   Tab(text: 'PUBLIC',),
                   Tab(text: 'PRIVATE',)

@@ -79,7 +79,7 @@ class SearchState extends State<Search> {
             width: MediaQuery.of(context).size.width,
             height: ScreenUtil.instance.setWidth(75),
             child: Container(
-              color: Colors.white,
+              color: appBarColor,
               child: Container(
                 margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
                 child: Row(
@@ -203,7 +203,6 @@ class SearchState extends State<Search> {
                   child: Column(
                     children: <Widget>[
                       Container(
-                        color: Colors.white,
                         child: TabBar(
                           onTap: (i) {
                             currentTab = i;

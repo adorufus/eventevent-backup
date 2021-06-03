@@ -1,9 +1,11 @@
+import 'package:eventevent/Providers/ThemeProvider.dart';
 import 'package:eventevent/Widgets/ManageEvent/EditTicket.dart';
 import 'package:eventevent/helper/DateTimeConverter.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class EditTicketDetail extends StatefulWidget {
   final ticketTitle;
@@ -32,10 +34,8 @@ class _EditTicketDetailState extends State<EditTicketDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: thisScaffold,
-        backgroundColor: Colors.white.withOpacity(.5),
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
           elevation: 1,
           leading: GestureDetector(
             onTap: () {
@@ -43,13 +43,13 @@ class _EditTicketDetailState extends State<EditTicketDetail> {
             },
             child: Icon(
               Icons.arrow_back_ios,
-              color: eventajaGreenTeal,
+              color: checkForAppBarTitleColor(context),
             ),
           ),
           centerTitle: true,
           title: Text(
             widget.ticketTitle,
-            style: TextStyle(color: eventajaGreenTeal),
+            style: TextStyle(color: checkForAppBarTitleColor(context)),
           ),
         ),
         bottomNavigationBar: GestureDetector(
@@ -58,7 +58,10 @@ class _EditTicketDetailState extends State<EditTicketDetail> {
           },
           child: Container(
             height: 60,
-            decoration: BoxDecoration(color: Colors.white, boxShadow: [
+            decoration: BoxDecoration(color: checkForBackgroundColor(context)
+                , boxShadow: Provider.of<ThemeProvider>(context).isDarkMode ?
+                null
+                    : [
               BoxShadow(
                   blurRadius: 2,
                   spreadRadius: 1.5,
@@ -89,7 +92,6 @@ class _EditTicketDetailState extends State<EditTicketDetail> {
         body: Stack(
           children: <Widget>[
             Container(
-              color: Colors.white,
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: SingleChildScrollView(
@@ -130,14 +132,7 @@ class _EditTicketDetailState extends State<EditTicketDetail> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(
-                                      'Ticket Quantity',
-                                      style: TextStyle(
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    titleText("Ticket Quantity"),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(10)),
@@ -150,14 +145,7 @@ class _EditTicketDetailState extends State<EditTicketDetail> {
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(7)),
-                                    Text(
-                                      'Ticket Sales Starts',
-                                      style: TextStyle(
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    titleText("Ticket Sales Starts"),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(10)),
@@ -171,14 +159,7 @@ class _EditTicketDetailState extends State<EditTicketDetail> {
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(7)),
-                                    Text(
-                                      'Ticket Sales Ends',
-                                      style: TextStyle(
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    titleText("Ticket Sales Ends"),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(10)),
@@ -221,13 +202,7 @@ class _EditTicketDetailState extends State<EditTicketDetail> {
                           SizedBox(
                             height: ScreenUtil.instance.setWidth(15),
                           ),
-                          Text(
-                            'Description',
-                            style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(18),
-                                color: Colors.black54,
-                                fontWeight: FontWeight.bold),
-                          ),
+                          titleText("Description"),
                           Text(widget.ticketDescription),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Divider(),
@@ -243,5 +218,16 @@ class _EditTicketDetailState extends State<EditTicketDetail> {
             ),
           ],
         ));
+  }
+
+  Widget titleText (String title) {
+    return Text(
+      title,
+      style: TextStyle(
+          fontSize:
+          ScreenUtil.instance.setSp(18),
+          color: checkForTextTitleColor(context),
+          fontWeight: FontWeight.bold),
+    );
   }
 }

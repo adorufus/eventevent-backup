@@ -6,6 +6,7 @@ import 'package:eventevent/Widgets/EmptyState.dart';
 import 'package:eventevent/Widgets/LoveItem.dart';
 import 'package:eventevent/Widgets/eventDetailsWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
@@ -471,11 +472,9 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
             width: MediaQuery.of(context).size.width,
             height: ScreenUtil.instance.setWidth(75),
             padding: EdgeInsets.symmetric(horizontal: 13),
-            color: Colors.white,
             child: AppBar(
               brightness: Brightness.light,
               elevation: 0,
-              backgroundColor: Colors.white,
               leading: GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
@@ -505,7 +504,6 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                 children: <Widget>[
                   Container(
                     height: MediaQuery.of(context).size.height,
-                    color: Colors.white,
                     child: ListView(
                       shrinkWrap: true,
                       children: <Widget>[
@@ -693,7 +691,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                           padding: EdgeInsets.all(15),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
+                              color: checkForContainerBackgroundColor(context),
                               boxShadow: [
                                 BoxShadow(
                                     blurRadius: 5,
@@ -808,7 +806,6 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
                               horizontal: 13, vertical: 13),
                           height: ScreenUtil.instance.setWidth(40),
                           decoration: BoxDecoration(
-                            color: Colors.white,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -83,7 +83,7 @@ class ShowQrState extends State<ShowQr> {
             color: eventajaGreenTeal,
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         centerTitle: true,
         title: Text(
           'SCAN THIS QR CODE FOR ENTRY',
@@ -127,7 +127,8 @@ class ShowQrState extends State<ShowQr> {
         child: ListView(
           children: <Widget>[
             Container(
-              decoration: BoxDecoration(color: Colors.white, boxShadow: [
+              decoration: BoxDecoration(color: checkForBackgroundColor
+                (context), boxShadow: isBlackThemed(context) ? null : [
                 BoxShadow(
                     offset: Offset(0, 1), color: Colors.grey, blurRadius: 5)
               ]),

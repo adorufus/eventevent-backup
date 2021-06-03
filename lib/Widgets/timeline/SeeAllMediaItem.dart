@@ -4,6 +4,7 @@ import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/timeline/LatestMediaItem.dart';
 import 'package:eventevent/Widgets/timeline/MediaDetails.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
@@ -157,7 +158,7 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
           width: MediaQuery.of(context).size.width,
           height: ScreenUtil.instance.setWidth(75),
           child: Container(
-            color: Colors.white,
+            color: appBarColor,
             child: Container(
               margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
               child: Row(
@@ -199,7 +200,6 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
         child: ListView(
           children: <Widget>[
             Container(
-              color: Colors.white,
               child: TabBar(
                 onTap: (index) {
                   setState(() {
@@ -375,25 +375,6 @@ class _SeeAllMediaItemState extends State<SeeAllMediaItem> {
             : SmartRefresher(
                 enablePullDown: true,
                 enablePullUp: true,
-                // footer: CustomFooter(
-                //     builder: (BuildContext context, LoadStatus mode) {
-                //   Widget body;
-                //   if (mode == LoadStatus.idle) {
-                //     body = Text("Load data");
-                //   } else if (mode == LoadStatus.loading) {
-                //     body = CupertinoActivityIndicator(radius: 20);
-                //   } else if (mode == LoadStatus.failed) {
-                //     body = Text("Load Failed!");
-                //   } else if (mode == LoadStatus.canLoading) {
-                //     body = Text('More');
-                //   } else {
-                //     body = Container();
-                //   }
-
-                //   return Container(
-                //       height: ScreenUtil.instance.setWidth(35),
-                //       child: Center(child: body));
-                // }),
                 controller: refreshController,
                 onRefresh: () {
                   setState(() {

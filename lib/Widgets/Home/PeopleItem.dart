@@ -1,4 +1,5 @@
 import 'package:eventevent/helper/FollowUnfollow.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PeopleItem extends StatefulWidget {
@@ -75,7 +76,7 @@ class _PeopleItemState extends State<PeopleItem> {
             color: Colors.black.withOpacity(0.1),
             blurRadius: 2,
             spreadRadius: 1.5)
-      ], color: Colors.white, borderRadius: BorderRadius.circular(30)),
+      ], color: checkForContainerBackgroundColor(context), borderRadius: BorderRadius.circular(30)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,

@@ -357,7 +357,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     )..init(context);
     return detailData == null
         ? Container(
-            color: Colors.white,
+            color: checkForBackgroundColor(context),
             child: Center(child: CupertinoActivityIndicator(radius: 20)))
         : Scaffold(
             appBar: PreferredSize(
@@ -366,11 +366,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                 width: MediaQuery.of(context).size.width,
                 height: ScreenUtil.instance.setWidth(75),
                 padding: EdgeInsets.symmetric(horizontal: 13),
-                color: Colors.white,
                 child: AppBar(
                   brightness: Brightness.light,
                   elevation: 0,
-                  backgroundColor: Colors.white,
                   leading: GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
@@ -662,7 +660,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               child: Container(
                 height: 80,
                 padding: EdgeInsets.symmetric(horizontal: 25.7),
-                decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                decoration: BoxDecoration(color: checkForContainerBackgroundColor(context), boxShadow: [
                   BoxShadow(
                       offset: Offset(0, -1),
                       blurRadius: 2,
@@ -783,7 +781,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                             child: CupertinoActivityIndicator(radius: 20)))
                     // :
                     : Container(
-                        color: Colors.white,
                         child: SmartRefresher(
                           controller: refreshController,
                           enablePullDown: true,
@@ -1266,7 +1263,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                 padding: EdgeInsets.all(15),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
+                                    color: checkForContainerBackgroundColor(context),
                                     boxShadow: [
                                       BoxShadow(
                                           blurRadius: 5,
@@ -2210,7 +2207,9 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           EdgeInsets.symmetric(horizontal: 13),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white,
+                                        color:
+                                        checkForContainerBackgroundColor
+                                          (context),
                                         boxShadow: [
                                           BoxShadow(
                                               blurRadius: 5,
@@ -2269,7 +2268,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                     'MANAGE TICKET',
                                                     style: TextStyle(
                                                         color:
-                                                            Color(0xff404041),
+                                                            checkForEventDetailsEOMenuTitle(context),
                                                         fontSize: ScreenUtil
                                                             .instance
                                                             .setSp(10)),
@@ -2581,7 +2580,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                           : 'SHOW QR CODE',
                                                       style: TextStyle(
                                                           color:
-                                                              Color(0xff404041),
+                                                          checkForEventDetailsEOMenuTitle(context),
                                                           fontSize: ScreenUtil
                                                               .instance
                                                               .setSp(10)))
@@ -2626,7 +2625,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   Text('TICKET SALES',
                                                       style: TextStyle(
                                                           color:
-                                                              Color(0xff404041),
+                                                          checkForEventDetailsEOMenuTitle(context),
                                                           fontSize: ScreenUtil
                                                               .instance
                                                               .setSp(10)))
@@ -2645,7 +2644,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                     horizontal: 13, vertical: 13),
                                 height: ScreenUtil.instance.setWidth(40),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
@@ -2783,7 +2781,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
   Widget tabItem() {
     if (currentTab == 0) {
       return Container(
-        color: Color(0xff8a8a8b).withOpacity(.05),
+        // color: Color(0xff8a8a8b).withOpacity(.05),
         child: ListView(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
@@ -2799,7 +2797,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                         spreadRadius: 1.5,
                         color: Color(0xff8a8a8b).withOpacity(.2))
                   ],
-                  color: Colors.white),
+                  color: checkForContainerBackgroundColor(context)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -2929,7 +2927,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                               spreadRadius: 1.5,
                               color: Color(0xff8a8a8b).withOpacity(.2))
                         ],
-                        color: Colors.white),
+                        color: checkForContainerBackgroundColor(context)),
                     child: Column(
                       children: <Widget>[showMap()],
                     ),
@@ -3208,7 +3206,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
     return Container(
       width: MediaQuery.of(context).size.width,
       height: ScreenUtil.instance.setWidth(200),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
+      decoration: BoxDecoration(),
       child: mapProvider,
     );
   }

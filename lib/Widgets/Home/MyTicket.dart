@@ -103,11 +103,10 @@ class _MyTicketState extends State<MyTicket> {
           width: MediaQuery.of(context).size.width,
           height: ScreenUtil.instance.setWidth(65),
           padding: EdgeInsets.symmetric(horizontal: 13),
-          color: Colors.white,
           child: AppBar(
             brightness: Brightness.light,
             elevation: 0,
-            backgroundColor: Colors.white,
+            backgroundColor: appBarColor,
             leading: GestureDetector(
               onTap: () {
                 Navigator.pop(context);

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:eventevent/Providers/ThemeProvider.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/Widgets/ManageEvent/AddNewTicket.dart';
 import 'package:eventevent/Widgets/ManageEvent/EditTicketDetail.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -57,22 +59,19 @@ class ManageTicketState extends State<ManageTicket> {
               Navigator.pop(context);
             },
             child:
-                Icon(Icons.arrow_back_ios, color: eventajaGreenTeal, size: 15)),
-        backgroundColor: Colors.white,
+                Icon(Icons.arrow_back_ios, color: checkForAppBarTitleColor(context), size: 15)),
         centerTitle: true,
         title:
-            Text('MANAGE TICKETS', style: TextStyle(color: eventajaGreenTeal)),
+            Text('MANAGE TICKETS', style: TextStyle(color: checkForAppBarTitleColor(context))),
       ),
       body: ticketList == null
           ? HomeLoadingScreen().myTicketLoading()
           : Container(
-              color: Colors.white,
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: ListView(
                 children: <Widget>[
                   Container(
-                    color: Colors.white,
                     child: ColumnBuilder(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,8 +182,9 @@ class ManageTicketState extends State<ManageTicket> {
                             margin: EdgeInsets.only(
                                 left: 14, right: 14, bottom: 10),
                             decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
+                                color: checkForContainerBackgroundColor(context),
+                                boxShadow: Provider.of<ThemeProvider>
+                                  (context).isDarkMode ? null : [
                                   BoxShadow(
                                       blurRadius: 2,
                                       spreadRadius: 5,
@@ -320,7 +320,7 @@ class ManageTicketState extends State<ManageTicket> {
                               )));
                     },
                     child: Container(
-                      color: Colors.white,
+                      color: checkForContainerBackgroundColor(context),
                       height: ScreenUtil.instance.setWidth(150),
                       width: MediaQuery.of(context).size.width,
                       child: Column(

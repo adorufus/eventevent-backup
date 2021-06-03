@@ -80,7 +80,6 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
           width: MediaQuery.of(context).size.width,
           height: ScreenUtil.instance.setWidth(75),
           child: Container(
-            color: Colors.white,
             child: Container(
               margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
               child: Row(

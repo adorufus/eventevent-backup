@@ -56,7 +56,7 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
     return Scaffold(
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
               onTap: () {
@@ -101,7 +101,6 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
         body: isLoading == true
             ? HomeLoadingScreen().followListLoading()
             : Container(
-                color: Colors.white,
                 padding: EdgeInsets.only(left: 15, top: 15),
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
@@ -181,10 +180,16 @@ class PostEventInvitePeopleState extends State<PostEventInvitePeople> {
                                 ),
                                 title: Text(
                                   tempInvitedPeople[i]['fullName'],
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                    color: isBlackThemed(context) ? Colors
+                                        .white : Colors.black,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 subtitle: Text(
-                                    '@' + tempInvitedPeople[i]['username']),
+                                    '@' + tempInvitedPeople[i]['username'],
+                                    style: TextStyle(
+                                      color: checkForTextTitleColor(context)
+                                    ),),
                                 trailing: Icon(
                                   Icons.check,
                                   color: invitedPeople

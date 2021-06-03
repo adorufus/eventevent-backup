@@ -91,7 +91,6 @@ class WithdrawBankState extends State<WithdrawBank> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white,
       key: scaffoldKey,
       resizeToAvoidBottomPadding: false,
       appBar: PreferredSize(
@@ -100,10 +99,10 @@ class WithdrawBankState extends State<WithdrawBank> {
           width: MediaQuery.of(context).size.width,
           height: ScreenUtil.instance.setWidth(75),
           child: Container(
-            color: Colors.white,
             child: Container(
               margin: EdgeInsets.fromLTRB(13, 15, 13, 0),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
@@ -115,10 +114,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                         SizedBox(
                           height: ScreenUtil.instance.setWidth(15.49),
                           width: ScreenUtil.instance.setWidth(9.73),
-                          child: Image.asset(
-                            'assets/icons/icon_apps/arrow.png',
-                            fit: BoxFit.fill,
-                          ),
+                          child: Icon(Icons.arrow_back_ios, color: checkForAppBarTitleColor(context),)
                         ),
                       ],
                     ),
@@ -140,7 +136,11 @@ class WithdrawBankState extends State<WithdrawBank> {
         onTap: () async {
           showModalBottomSheet(
               context: context,
+              backgroundColor: Colors.black.withOpacity(0),
               isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15)
+              ),
               builder: (BuildContext context) {
                 return showBottomPopup();
               });
@@ -164,9 +164,8 @@ class WithdrawBankState extends State<WithdrawBank> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    color: Colors.white,
                     child: TabBar(
-                      labelColor: Colors.black,
+                      labelColor: checkForSettingsTitleColor(context),
                       labelStyle: TextStyle(fontFamily: 'Proxima'),
                       tabs: [
                         Tab(
@@ -226,15 +225,14 @@ class WithdrawBankState extends State<WithdrawBank> {
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: Container(
-        color: Color(0xFF737373),
-        child: Container(
           padding: EdgeInsets.only(top: 13, left: 25, right: 25, bottom: 30),
           decoration: BoxDecoration(
-              color: Colors.white,
+              color: checkForBackgroundColor(context),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(15),
                 topRight: Radius.circular(15),
-              )),
+              ),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -276,9 +274,10 @@ class WithdrawBankState extends State<WithdrawBank> {
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 2, vertical: 12),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: checkForContainerBackgroundColor(context),
                             hintText: 'Enter withdraw amount (e.g. 125000)',
                             hintStyle: TextStyle(
+                              color: checkForSettingsTitleColor(context),
                                 fontSize: ScreenUtil.instance.setSp(12))),
                       ),
                       GestureDetector(
@@ -356,7 +355,6 @@ class WithdrawBankState extends State<WithdrawBank> {
             ],
           ),
         ),
-      ),
     );
   }
 
@@ -380,14 +378,8 @@ class WithdrawBankState extends State<WithdrawBank> {
                 margin: EdgeInsets.symmetric(horizontal: 13),
                 height: ScreenUtil.instance.setWidth(80),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: checkForContainerBackgroundColor(context),
                   borderRadius: BorderRadius.circular(15),
-                  // boxShadow: <BoxShadow>[
-                  //   BoxShadow(
-                  //       blurRadius: 2,
-                  //       color: Colors.black.withOpacity(0.1),
-                  //       spreadRadius: 1.5)
-                  // ]
                 ),
                 child: Center(
                     child: Text(
@@ -400,26 +392,6 @@ class WithdrawBankState extends State<WithdrawBank> {
               SizedBox(
                 height: ScreenUtil.instance.setWidth(15),
               ),
-              // TextFormField(
-              //   controller: amountController,
-              //   keyboardType: TextInputType.number,
-              //   decoration: InputDecoration(
-              //       filled: true,
-              //       fillColor: Colors.white,
-              //       hintText: 'Enter withdraw amount (e.g. 125000)',
-              //       enabledBorder: OutlineInputBorder(
-              //           borderSide: BorderSide.none,
-              //           borderRadius: BorderRadius.circular(0)
-              //       ),
-              //       focusedBorder: OutlineInputBorder(
-              //           borderSide: BorderSide.none,
-              //           borderRadius: BorderRadius.circular(0)
-              //       )
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: ScreenUtil.instance.setWidth(25),
-              // ),
               bankList != null && bankList.length == 3
                   ? Container()
                   : GestureDetector(
@@ -435,7 +407,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                         padding: EdgeInsets.symmetric(horizontal: 8),
                         height: ScreenUtil.instance.setWidth(42.61),
                         decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: checkForContainerBackgroundColor(context),
                             borderRadius: BorderRadius.circular(30),
                             boxShadow: <BoxShadow>[
                               BoxShadow(
@@ -523,7 +495,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                       padding:
                           EdgeInsets.only(bottom: 9, left: 9, right: 9, top: 9),
                       decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: checkForContainerBackgroundColor(context),
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: <BoxShadow>[
                             BoxShadow(
@@ -697,7 +669,7 @@ class WithdrawBankState extends State<WithdrawBank> {
               if (historyList[i]['status'] == 'completed') {
                 transactionStatus = 'WITHDRAW COMPLETE';
                 transactionColor = eventajaGreenTeal;
-                amountColor = Colors.black;
+                amountColor = checkForSettingsTitleColor(context);
               } else if (historyList[i]['status'] == 'pending') {
                 transactionStatus = 'PROCESSING WITHDRAW';
                 transactionColor = Colors.yellow;
@@ -720,7 +692,7 @@ class WithdrawBankState extends State<WithdrawBank> {
                 margin: EdgeInsets.only(top: 5, bottom: 5, left: 13, right: 13),
                 padding: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: checkForContainerBackgroundColor(context),
                     borderRadius: BorderRadius.circular(15)),
                 child: Row(
                   children: <Widget>[

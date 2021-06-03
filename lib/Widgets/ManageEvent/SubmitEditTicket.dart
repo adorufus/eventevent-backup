@@ -6,7 +6,6 @@ import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/utils.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +19,7 @@ class SubmitEditTicket extends StatefulWidget {
 
   const SubmitEditTicket({Key key, this.from, this.ticketDetail})
       : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return SubmitEditTicketState();
@@ -51,7 +51,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
   Dio dio = new Dio(BaseOptions(
       connectTimeout: 5000, baseUrl: BaseApi().apiUrl, receiveTimeout: 5000));
 
-  getData() async {
+  Future getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     setState(() {
@@ -74,7 +74,10 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
   @override
   void initState() {
     super.initState();
-    getData();
+    getData().then((_) {
+      print("Ticket Type Id: " + ticketTypeId.toString());
+      print("image url: " + widget.ticketDetail['image_url']);
+    });
   }
 
   @override
@@ -90,10 +93,9 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
 
     return Scaffold(
         key: thisScaffold,
-        backgroundColor: Colors.white.withOpacity(.5),
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 1,
           leading: GestureDetector(
             onTap: () {
@@ -116,13 +118,15 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
           },
           child: Container(
             height: 60,
-            decoration: BoxDecoration(color: Colors.white, boxShadow: [
-              BoxShadow(
-                  blurRadius: 2,
-                  spreadRadius: 1.5,
-                  color: Color(0xff8a8a8b).withOpacity(.3),
-                  offset: Offset(0, -1))
-            ]),
+            decoration: BoxDecoration(
+                color: checkForBackgroundColor(context),
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 2,
+                      spreadRadius: 1.5,
+                      color: Color(0xff8a8a8b).withOpacity(.3),
+                      offset: Offset(0, -1))
+                ]),
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
               height: ScreenUtil.instance.setWidth(50),
@@ -147,7 +151,6 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
         body: Stack(
           children: <Widget>[
             Container(
-              color: Colors.white,
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: SingleChildScrollView(
@@ -195,7 +198,8 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                                       style: TextStyle(
                                           fontSize:
                                               ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
+                                          color:
+                                              checkForTextTitleColor(context),
                                           fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(
@@ -215,7 +219,8 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                                       style: TextStyle(
                                           fontSize:
                                               ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
+                                          color:
+                                              checkForTextTitleColor(context),
                                           fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(
@@ -235,7 +240,8 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                                       style: TextStyle(
                                           fontSize:
                                               ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
+                                          color:
+                                              checkForTextTitleColor(context),
                                           fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(
@@ -260,7 +266,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                             'Description',
                             style: TextStyle(
                                 fontSize: ScreenUtil.instance.setSp(18),
-                                color: Colors.black54,
+                                color: checkForTextTitleColor(context),
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(desc),
@@ -270,7 +276,8 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                           ticketTypeId == '5' ||
                                   ticketTypeId == '10' ||
                                   ticketTypeId == '2' ||
-                                  ticketTypeId == '7'
+                                  ticketTypeId == '7' ||
+                                  ticketTypeId == '1'
                               ? Container()
                               : serviceFee(context),
                           SizedBox(
@@ -333,7 +340,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
         Container(
             margin: EdgeInsets.symmetric(vertical: 20, horizontal: 2),
             decoration: BoxDecoration(
-                color: Colors.white,
+                color: checkForContainerBackgroundColor(context),
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
@@ -399,17 +406,18 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                                 borderRadius: BorderRadius.circular(15)),
                             child: Center(
                                 child: ticketTypeId == '5' ||
-                                  ticketTypeId == '10' ||
-                                  ticketTypeId == '2' ||
-                                  ticketTypeId == '7'
-                              ? Container()
-                              : Text(
-                              'Rp' + formatPrice(price: price),
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil.instance.setSp(14),
-                                  fontWeight: FontWeight.bold),
-                            )),
+                                        ticketTypeId == '10' ||
+                                        ticketTypeId == '2' ||
+                                        ticketTypeId == '7'
+                                    ? Container()
+                                    : Text(
+                                        'Rp' + formatPrice(price: price),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                                ScreenUtil.instance.setSp(14),
+                                            fontWeight: FontWeight.bold),
+                                      )),
                           ),
                           SizedBox(
                             height: ScreenUtil.instance.setWidth(6),
@@ -446,11 +454,11 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                         child: SizedBox(),
                       ),
                       ticketTypeId == '5' ||
-                                  ticketTypeId == '10' ||
-                                  ticketTypeId == '2' ||
-                                  ticketTypeId == '7'
-                              ? Container()
-                              : Text('Rp' + formatPrice(price: price)),
+                              ticketTypeId == '10' ||
+                              ticketTypeId == '2' ||
+                              ticketTypeId == '7'
+                          ? Container()
+                          : Text('Rp' + formatPrice(price: price)),
                       SizedBox(
                         width: ScreenUtil.instance.setWidth(13),
                       ),
@@ -486,14 +494,14 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                         child: SizedBox(),
                       ),
                       ticketTypeId == '5' ||
-                                  ticketTypeId == '10' ||
-                                  ticketTypeId == '2' ||
-                                  ticketTypeId == '7'
-                              ? Container()
-                              : Text(
-                        '-Rp' + formatPrice(price: fee.toString()),
-                        style: TextStyle(color: Colors.red),
-                      ),
+                              ticketTypeId == '10' ||
+                              ticketTypeId == '2' ||
+                              ticketTypeId == '7'
+                          ? Container()
+                          : Text(
+                              '-Rp' + formatPrice(price: fee.toString()),
+                              style: TextStyle(color: Colors.red),
+                            ),
                       SizedBox(
                         width: ScreenUtil.instance.setWidth(13),
                       ),
@@ -526,19 +534,20 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                         child: SizedBox(),
                       ),
                       ticketTypeId == '5' ||
-                                  ticketTypeId == '10' ||
-                                  ticketTypeId == '2' ||
-                                  ticketTypeId == '7'
-                              ? Container()
-                              : Text(
-                        'Rp' +
-                            formatPrice(
-                                price: (int.parse(price) - fee).toString()),
-                        style: TextStyle(
-                            color: eventajaGreenTeal,
-                            fontSize: ScreenUtil.instance.setSp(18),
-                            fontWeight: FontWeight.bold),
-                      ),
+                              ticketTypeId == '10' ||
+                              ticketTypeId == '2' ||
+                              ticketTypeId == '7'
+                          ? Container()
+                          : Text(
+                              'Rp' +
+                                  formatPrice(
+                                      price:
+                                          (int.parse(price) - fee).toString()),
+                              style: TextStyle(
+                                  color: eventajaGreenTeal,
+                                  fontSize: ScreenUtil.instance.setSp(18),
+                                  fontWeight: FontWeight.bold),
+                            ),
                       SizedBox(
                         width: ScreenUtil.instance.setWidth(13),
                       ),
@@ -551,7 +560,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
         Container(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 2),
             decoration: BoxDecoration(
-                color: Colors.white,
+                color: checkForContainerBackgroundColor(context),
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
@@ -613,19 +622,20 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                             borderRadius: BorderRadius.circular(15)),
                         child: Center(
                             child: ticketTypeId == '5' ||
-                                  ticketTypeId == '10' ||
-                                  ticketTypeId == '2' ||
-                                  ticketTypeId == '7'
-                              ? Container()
-                              :  Text(
-                          'Rp' +
-                              formatPrice(
-                                  price: (int.parse(price) + fee).toString()),
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenUtil.instance.setSp(14),
-                              fontWeight: FontWeight.bold),
-                        )),
+                                    ticketTypeId == '10' ||
+                                    ticketTypeId == '2' ||
+                                    ticketTypeId == '7'
+                                ? Container()
+                                : Text(
+                                    'Rp' +
+                                        formatPrice(
+                                            price: (int.parse(price) + fee)
+                                                .toString()),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: ScreenUtil.instance.setSp(14),
+                                        fontWeight: FontWeight.bold),
+                                  )),
                       ),
                       SizedBox(
                         height: ScreenUtil.instance.setWidth(8),
@@ -662,11 +672,11 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                     child: SizedBox(),
                   ),
                   ticketTypeId == '5' ||
-                                  ticketTypeId == '10' ||
-                                  ticketTypeId == '2' ||
-                                  ticketTypeId == '7'
-                              ? Container()
-                              : Text('Rp' + formatPrice(price: price)),
+                          ticketTypeId == '10' ||
+                          ticketTypeId == '2' ||
+                          ticketTypeId == '7'
+                      ? Container()
+                      : Text('Rp' + formatPrice(price: price)),
                   SizedBox(
                     width: ScreenUtil.instance.setWidth(13),
                   ),
@@ -701,14 +711,14 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                     child: SizedBox(),
                   ),
                   ticketTypeId == '5' ||
-                                  ticketTypeId == '10' ||
-                                  ticketTypeId == '2' ||
-                                  ticketTypeId == '7'
-                              ? Container()
-                              : Text(
-                    '+Rp' + formatPrice(price: fee.toString()),
-                    style: TextStyle(color: Colors.grey),
-                  ),
+                          ticketTypeId == '10' ||
+                          ticketTypeId == '2' ||
+                          ticketTypeId == '7'
+                      ? Container()
+                      : Text(
+                          '+Rp' + formatPrice(price: fee.toString()),
+                          style: TextStyle(color: Colors.grey),
+                        ),
                   SizedBox(
                     width: ScreenUtil.instance.setWidth(13),
                   ),
@@ -741,17 +751,17 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
                     child: SizedBox(),
                   ),
                   ticketTypeId == '5' ||
-                                  ticketTypeId == '10' ||
-                                  ticketTypeId == '2' ||
-                                  ticketTypeId == '7'
-                              ? Container()
-                              : Text(
-                    'Rp' + formatPrice(price: price),
-                    style: TextStyle(
-                        color: eventajaGreenTeal,
-                        fontSize: ScreenUtil.instance.setSp(18),
-                        fontWeight: FontWeight.bold),
-                  ),
+                          ticketTypeId == '10' ||
+                          ticketTypeId == '2' ||
+                          ticketTypeId == '7'
+                      ? Container()
+                      : Text(
+                          'Rp' + formatPrice(price: price),
+                          style: TextStyle(
+                              color: eventajaGreenTeal,
+                              fontSize: ScreenUtil.instance.setSp(18),
+                              fontWeight: FontWeight.bold),
+                        ),
                   SizedBox(
                     width: ScreenUtil.instance.setWidth(13),
                   ),
