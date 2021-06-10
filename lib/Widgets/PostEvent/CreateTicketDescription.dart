@@ -32,7 +32,7 @@ class CreateTicketDescriptionState extends State<CreateTicketDescription> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           // leading: GestureDetector(
           //   onTap: (){
@@ -65,7 +65,6 @@ class CreateTicketDescriptionState extends State<CreateTicketDescription> {
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -80,7 +79,7 @@ class CreateTicketDescriptionState extends State<CreateTicketDescription> {
                     Text(
                       'Ticket Description',
                       style: TextStyle(
-                          color: Colors.black54,
+                          color: checkForAppBarTitleColor(context),
                           fontSize: 40,
                           fontWeight: FontWeight.bold),
                     ),
@@ -138,11 +137,15 @@ class CreateTicketDescriptionState extends State<CreateTicketDescription> {
                         controller: textController,
                         autocorrect: false,
                         autofocus: false,
+                        style: TextStyle(color:
+                        checkForTextTitleColor(context),),
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(
-                            fillColor: Colors.grey[200],
+                            fillColor: checkForContainerBackgroundColor(context),
                             filled: true,
                             hintText: 'enter your ticket description',
+                            hintStyle: TextStyle(color:
+                            checkForTextTitleColor(context),),
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide.none,
                                 borderRadius: BorderRadius.circular(8)),

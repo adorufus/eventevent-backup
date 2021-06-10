@@ -32,11 +32,10 @@ class PostEventState extends State<PostEvent> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         resizeToAvoidBottomPadding: false,
-        backgroundColor: Colors.white,
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           // leading: GestureDetector(
           //   onTap: (){
@@ -69,7 +68,6 @@ class PostEventState extends State<PostEvent> {
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -83,7 +81,7 @@ class PostEventState extends State<PostEvent> {
                   Text(
                     'Event Name',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
                   ),
@@ -111,9 +109,18 @@ class PostEventState extends State<PostEvent> {
                   controller: textController,
                   autocorrect: false,
                   autofocus: false,
+                  style: TextStyle(color: checkForAppBarTitleColor(context)),
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
+                    hintStyle: TextStyle(
+                      color: checkForAppBarTitleColor(context),
+                    ),
                     hintText: 'enter your event name',
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: checkForAppBarTitleColor(context),
+                      ),
+                    ),
                   ),
                 ),
               )
@@ -169,10 +176,9 @@ class PostEvent2State extends State<PostEvent2> {
     )..init(context);
     return Scaffold(
         key: thisScaffold,
-        backgroundColor: Colors.white,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -208,7 +214,6 @@ class PostEvent2State extends State<PostEvent2> {
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: ScreenUtil.instance.setWidth(400),
           width: MediaQuery.of(context).size.width,
@@ -222,7 +227,7 @@ class PostEvent2State extends State<PostEvent2> {
                   Text(
                     'Event Type',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
                   ),
@@ -293,10 +298,11 @@ class PostEvent2State extends State<PostEvent2> {
                                     Text(
                                       'Public Event',
                                       style: TextStyle(
-                                          color: Colors.black54,
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(18),
-                                          fontWeight: FontWeight.bold),
+                                        color:
+                                            checkForAppBarTitleColor(context),
+                                        fontSize: ScreenUtil.instance.setSp(18),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     SizedBox(
                                       height: ScreenUtil.instance.setWidth(5),
@@ -373,7 +379,8 @@ class PostEvent2State extends State<PostEvent2> {
                                     Text(
                                       'Private Event',
                                       style: TextStyle(
-                                          color: Colors.black54,
+                                          color:
+                                              checkForAppBarTitleColor(context),
                                           fontSize:
                                               ScreenUtil.instance.setSp(18),
                                           fontWeight: FontWeight.bold),
@@ -482,6 +489,8 @@ class PostEvent3State extends State<PostEvent3> {
       allowFontScaling: true,
     )..init(context);
     dp.DatePickerStyles styles = dp.DatePickerStyles(
+      displayedPeriodTitle: TextStyle(color: checkForAppBarTitleColor(context),),
+        defaultDateTextStyle: TextStyle(color: checkForAppBarTitleColor(context),),
         selectedDateStyle: Theme.of(context)
             .accentTextTheme
             .body2
@@ -493,7 +502,7 @@ class PostEvent3State extends State<PostEvent3> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -529,7 +538,6 @@ class PostEvent3State extends State<PostEvent3> {
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -543,7 +551,7 @@ class PostEvent3State extends State<PostEvent3> {
                   Text(
                     'Start Date',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
                   ),
@@ -626,6 +634,7 @@ class PostEvent4 extends StatefulWidget {
   final firstDate;
 
   const PostEvent4({Key key, this.firstDate}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return PostEvent4State();
@@ -670,6 +679,7 @@ class PostEvent4State extends State<PostEvent4> {
       allowFontScaling: true,
     )..init(context);
     dp.DatePickerStyles styles = dp.DatePickerStyles(
+      displayedPeriodTitle: TextStyle(color: checkForAppBarTitleColor(context),),
         currentDateStyle: Theme.of(context)
             .accentTextTheme
             .body2
@@ -685,7 +695,7 @@ class PostEvent4State extends State<PostEvent4> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -721,7 +731,6 @@ class PostEvent4State extends State<PostEvent4> {
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -735,7 +744,7 @@ class PostEvent4State extends State<PostEvent4> {
                   Text(
                     'End Date',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
                   ),
@@ -854,7 +863,7 @@ class PostEvent5State extends State<PostEvent5> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -890,7 +899,6 @@ class PostEvent5State extends State<PostEvent5> {
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -904,7 +912,7 @@ class PostEvent5State extends State<PostEvent5> {
                   Text(
                     'Start Time',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
                   ),
@@ -929,7 +937,7 @@ class PostEvent5State extends State<PostEvent5> {
                   Text(
                     'Start Time',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: ScreenUtil.instance.setSp(18),
                         fontWeight: FontWeight.bold),
                   ),
@@ -1041,7 +1049,7 @@ class PostEvent6State extends State<PostEvent6> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -1077,7 +1085,6 @@ class PostEvent6State extends State<PostEvent6> {
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -1091,7 +1098,7 @@ class PostEvent6State extends State<PostEvent6> {
                   Text(
                     'End Time',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
                   ),
@@ -1116,7 +1123,7 @@ class PostEvent6State extends State<PostEvent6> {
                   Text(
                     'End Time',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: ScreenUtil.instance.setSp(18),
                         fontWeight: FontWeight.bold),
                   ),

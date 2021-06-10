@@ -124,7 +124,7 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
         appBar: AppBar(
           brightness: Brightness.light,
           elevation: 1,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           centerTitle: true,
           title: Text(
             'Edit / Add Custom Form',
@@ -164,7 +164,6 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -178,7 +177,7 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
                   Text(
                     'Use Custom Form?',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: ScreenUtil.instance.setSp(25),
                         fontWeight: FontWeight.bold),
                   ),

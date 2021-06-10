@@ -2,7 +2,8 @@ import 'package:eventevent/Widgets/PostEvent/CreateTicketStartDate.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'CreateTicketPrice.dart';
@@ -19,7 +20,8 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
   var thisScaffold = new GlobalKey<ScaffoldState>();
 
   @override
-  Widget build(BuildContext context) { double defaultScreenWidth = 400.0;
+  Widget build(BuildContext context) {
+    double defaultScreenWidth = 400.0;
     double defaultScreenHeight = 810.0;
 
     ScreenUtil.instance = ScreenUtil(
@@ -28,11 +30,11 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false,
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           // leading: GestureDetector(
           //   onTap: (){
@@ -55,7 +57,9 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
                   },
                   child: Text(
                     'Next',
-                    style: TextStyle(color: eventajaGreenTeal, fontSize: ScreenUtil.instance.setSp(18)),
+                    style: TextStyle(
+                        color: eventajaGreenTeal,
+                        fontSize: ScreenUtil.instance.setSp(18)),
                   ),
                 ),
               ),
@@ -63,7 +67,6 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -77,7 +80,7 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
                   Text(
                     'Ticket Quantity',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
                   ),
@@ -106,10 +109,17 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
                   controller: textController,
                   autocorrect: false,
                   autofocus: false,
+                  style: TextStyle(color: checkForTextTitleColor(context)),
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
-                    hintText: 'enter your ticket quantity',
-                  ),
+                      hintText: 'enter your ticket quantity',
+                      hintStyle: TextStyle(
+                        color: checkForTextTitleColor(context),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                        color: checkForAppBarTitleColor(context),
+                      ))),
                 ),
               ),
             ],
@@ -117,9 +127,11 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
         ));
   }
 
-  navigateToNextStep() async{
+  navigateToNextStep() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (textController.text == null || textController.text == '' || textController.text == ' ') {
+    if (textController.text == null ||
+        textController.text == '' ||
+        textController.text == ' ') {
       Flushbar(
         flushbarPosition: FlushbarPosition.TOP,
         message: 'Input ticket quantity!',
@@ -131,8 +143,16 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
       prefs.setString('SETUP_TICKET_QTY', textController.text);
       print(prefs.getString('SETUP_TICKET_QTY'));
       print(prefs.getString('NEW_EVENT_TICKET_TYPE_ID'));
-      Navigator.push(context,
-          CupertinoPageRoute(builder: (BuildContext context) => prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' || prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '7' ? CreateTicketStartDate() : CreateTicketPrice()));
+      Navigator.push(
+          context,
+          CupertinoPageRoute(
+              builder: (BuildContext context) =>
+                  prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '5' ||
+                          prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '10' ||
+                          prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '2' ||
+                          prefs.getString('NEW_EVENT_TICKET_TYPE_ID') == '7'
+                      ? CreateTicketStartDate()
+                      : CreateTicketPrice()));
     }
   }
 }

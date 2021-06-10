@@ -38,7 +38,7 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -88,7 +88,7 @@ class CreateTicketPictureState extends State<CreateTicketPicture> {
                   Text(
                     'Ticket Picture',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
                   ),

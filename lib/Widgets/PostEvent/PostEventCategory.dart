@@ -69,7 +69,7 @@ class PostEvent7State extends State<PostEvent7> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -107,7 +107,6 @@ class PostEvent7State extends State<PostEvent7> {
             ? Center(child: CupertinoActivityIndicator(radius: 20))
             : 
             Container(
-                color: Colors.white,
                 padding: EdgeInsets.only(left: 15, top: 15),
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
@@ -119,7 +118,7 @@ class PostEvent7State extends State<PostEvent7> {
                         Text(
                           'Category',
                           style: TextStyle(
-                              color: Colors.black54,
+                              color: checkForAppBarTitleColor(context),
                               fontSize: 40,
                               fontWeight: FontWeight.bold),
                         ),
@@ -166,7 +165,9 @@ class PostEvent7State extends State<PostEvent7> {
                               },
                               leading:
                                   Image.network(categoryEventData[i]['logo'], scale: 15,),
-                              title: Text(categoryEventData[i]['name'], style: TextStyle(fontWeight: FontWeight.bold),),
+                              title: Text(categoryEventData[i]['name'],
+                                style: TextStyle(fontWeight: FontWeight.bold,
+                                    color: checkForTextTitleColor(context),),),
                               trailing: myListName
                                       .contains(categoryEventData[i]['name'])
                                   ? Container(

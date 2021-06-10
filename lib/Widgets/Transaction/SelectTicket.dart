@@ -94,10 +94,9 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         centerTitle: true,
         title: Text(
           'SELECT TICKET',
@@ -273,11 +272,11 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
                           width: MediaQuery.of(context).size.width,
                           margin: EdgeInsets.only(left: 14, right: 14, top: 10),
                           decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: checkForContainerBackgroundColor(context),
                               boxShadow: [
                                 BoxShadow(
                                     blurRadius: 2,
-                                    spreadRadius: 5,
+                                    spreadRadius: 2,
                                     color: Color(0xff8a8a8b).withOpacity(0.2))
                               ],
                               borderRadius: BorderRadius.circular(10)),

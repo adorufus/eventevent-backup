@@ -539,7 +539,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.white,
+        color: checkForBackgroundColor(context),
         child: Center(
           child: widget.loadingType == 'create event'
               ? Container(
@@ -560,7 +560,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                     ),
                   ),
                 )
-              : HomeLoadingScreen().myTicketLoading(),
+                : HomeLoadingScreen().myTicketLoading(),
         ),
       ),
     );

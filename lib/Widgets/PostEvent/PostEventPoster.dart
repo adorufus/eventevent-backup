@@ -45,7 +45,7 @@ class PostEventPosterState extends State<PostEventPoster> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -100,7 +100,7 @@ class PostEventPosterState extends State<PostEventPoster> {
                   Text(
                     'Event Poster',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
                   ),
@@ -161,33 +161,38 @@ class PostEventPosterState extends State<PostEventPoster> {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            new ListTile(
-              leading: new Icon(Icons.photo_library),
-              title: new Text('Choose Photo from Library'),
-              onTap: () {
+        return Container(
+          color: checkForBackgroundColor(context),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              listTileWidget('Choose Photo from Library', (){
                 imageSelectorGalery();
                 Navigator.pop(context);
-              },
-            ),
-            new ListTile(
-                leading: new Icon(Icons.camera_alt),
-                title: new Text('Take Photo from Camera'),
-                onTap: () {
-                  imageCaptureCamera();
-                }),
-            new ListTile(
-              leading: new Icon(Icons.close),
-              title: new Text('Cancel'),
-              onTap: () {
+              }),
+              listTileWidget('Take Photo From Camera', () {
+                imageCaptureCamera();
                 Navigator.pop(context);
-              },
-            ),
-          ],
+              }),
+              listTileWidget('Cancel', () {
+                Navigator.pop(context);
+              }),
+            ],
+          ),
         );
       },
+    );
+  }
+
+  Widget listTileWidget(String title, Function onTap) {
+    return ListTile(
+      leading: new Icon(Icons.photo_library,
+          color: checkForAppBarTitleColor(context)),
+      title: new Text(
+        title,
+        style: TextStyle(color: checkForAppBarTitleColor(context)),
+      ),
+      onTap: onTap,
     );
   }
 

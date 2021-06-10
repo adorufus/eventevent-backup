@@ -7,6 +7,7 @@ import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/Widgets/RecycleableWidget/EmptyState.dart';
 import 'package:eventevent/Widgets/profileWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -129,11 +130,10 @@ class _CollectionPageState extends State<CollectionPage> {
               width: MediaQuery.of(context).size.width,
               height: ScreenUtil.instance.setWidth(50),
               padding: EdgeInsets.symmetric(horizontal: 13),
-              color: Colors.white,
               child: AppBar(
                 brightness: Brightness.light,
                 elevation: 0,
-                backgroundColor: Colors.white,
+                backgroundColor: appBarColor,
                 leading: GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
@@ -152,7 +152,7 @@ class _CollectionPageState extends State<CollectionPage> {
                     title: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: ScreenUtil.instance.setSp(14),
-                  color: Colors.black,
+                  color: checkForAppBarTitleColor(context),
                 )),
               ),
             ),
@@ -214,13 +214,13 @@ class _CollectionPageState extends State<CollectionPage> {
                           fit: BoxFit.cover)),
                 ),
                 Container(
-                  color: Colors.white,
+                  color: checkForBackgroundColor(context),
                   padding: EdgeInsets.symmetric(vertical: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        color: Colors.white,
+                        // color: Colors.white,
                         margin: EdgeInsets.symmetric(horizontal: 25),
                         child: Text('Organizers in this collections'),
                       ),
@@ -229,7 +229,7 @@ class _CollectionPageState extends State<CollectionPage> {
                       ),
                       Container(
                           height: ScreenUtil.instance.setWidth(50),
-                          color: Colors.white,
+                          // color: Colors.white,
                           child: userByCollectionList == null
                               ? HomeLoadingScreen().peopleLoading()
                               : ListView.builder(

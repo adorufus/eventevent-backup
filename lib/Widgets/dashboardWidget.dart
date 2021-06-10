@@ -525,6 +525,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
           bottomNavigationBar: SafeArea(
             bottom: true,
             child: CupertinoTabBar(
+              backgroundColor: Colors.black.withOpacity(0),
                 currentIndex: _selectedPage,
                 onTap: (int index) {
                   setState(() {
@@ -536,7 +537,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                             padding: EdgeInsets.only(
                                 top: 13, left: 25, right: 25, bottom: 30),
                             decoration: BoxDecoration(
-                                // color: Colors.white,
+                                color: checkForBackgroundColor(context),
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(15),
                                   topRight: Radius.circular(15),

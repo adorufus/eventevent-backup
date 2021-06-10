@@ -42,9 +42,8 @@ class SuccessPageState extends State<SuccessPage> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         elevation: 1,
         leading: GestureDetector(
           onTap: (){

@@ -28,7 +28,7 @@ class CreateTicketMinBoughtState extends State<CreateTicketMinBought> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           // leading: GestureDetector(
           //   onTap: (){
@@ -59,7 +59,6 @@ class CreateTicketMinBoughtState extends State<CreateTicketMinBought> {
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -73,7 +72,7 @@ class CreateTicketMinBoughtState extends State<CreateTicketMinBought> {
                   Text(
                     'Min. Ticket Bought',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: 35,
                         fontWeight: FontWeight.bold),
                   ),
@@ -102,8 +101,15 @@ class CreateTicketMinBoughtState extends State<CreateTicketMinBought> {
                   controller: textController,
                   autocorrect: false,
                   autofocus: false,
+                  style: TextStyle(color: checkForTextTitleColor(context)),
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
+                    hintStyle: TextStyle(color: checkForTextTitleColor(context)),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: checkForAppBarTitleColor(context)
+                      )
+                    ),
                     hintText: 'default is 1',
                   ),
                 ),

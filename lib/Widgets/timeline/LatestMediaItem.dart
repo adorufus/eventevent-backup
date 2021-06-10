@@ -167,7 +167,7 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
                                 horizontal: likeCount < 1 ? 8 : 13),
                             height: ScreenUtil.instance.setWidth(30),
                             decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: checkForContainerBackgroundColor(context),
                                 borderRadius: BorderRadius.circular(15),
                                 boxShadow: <BoxShadow>[
                                   BoxShadow(
@@ -219,7 +219,7 @@ class _LatestMediaItemState extends State<LatestMediaItem> {
                                 horizontal: commentCount.length < 1 ? 8 : 13),
                             height: ScreenUtil.instance.setWidth(30),
                             decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: checkForContainerBackgroundColor(context),
                                 borderRadius: BorderRadius.circular(15),
                                 boxShadow: <BoxShadow>[
                                   BoxShadow(

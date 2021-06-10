@@ -151,18 +151,16 @@ class _MediaDetailsState extends State<MediaDetails> {
     )..init(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: ScreenUtil.instance.setWidth(65),
           padding: EdgeInsets.symmetric(horizontal: 13),
-          color: Colors.white,
           child: AppBar(
             brightness: Brightness.light,
             elevation: 0,
-            backgroundColor: Colors.white,
+            backgroundColor: appBarColor,
             leading: GestureDetector(
               onTap: () {
                 Navigator.pop(context);
@@ -173,7 +171,8 @@ class _MediaDetailsState extends State<MediaDetails> {
                 alignment: Alignment.centerLeft,
               ),
             ),
-            title: Text(widget.mediaTitle),
+            title: Text(widget.mediaTitle, style: TextStyle(color:
+            checkForAppBarTitleColor(context),),),
             centerTitle: true,
             textTheme: TextTheme(
                 title: TextStyle(
@@ -530,10 +529,17 @@ class _MediaDetailsState extends State<MediaDetails> {
                             commentList[i]['lastName'] +
                             ': ',
                         style: TextStyle(
-                            fontSize: ScreenUtil.instance.setSp(12),
-                            fontWeight: FontWeight.bold),
+                          fontSize: ScreenUtil.instance.setSp(12),
+                          fontWeight: FontWeight.bold,
+                          color: checkForTextTitleColor(context),
+                        ),
                       ),
-                      subtitle: Text(commentList[i]['comment']),
+                      subtitle: Text(
+                        commentList[i]['comment'],
+                        style: TextStyle(
+                          color: checkForAppBarTitleColor(context),
+                        ),
+                      ),
                     );
                   },
                 ))

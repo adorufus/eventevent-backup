@@ -30,11 +30,10 @@ class _EventDetailCommentState extends State<EventDetailComment> {
           width: MediaQuery.of(context).size.width,
           height: ScreenUtil.instance.setWidth(80),
           padding: EdgeInsets.symmetric(horizontal: 13),
-          color: Colors.white,
           child: AppBar(
             brightness: Brightness.light,
             elevation: 0,
-            backgroundColor: Colors.white,
+            backgroundColor: appBarColor,
             leading: GestureDetector(
               onTap: () {
                 Navigator.pop(context);
@@ -45,7 +44,7 @@ class _EventDetailCommentState extends State<EventDetailComment> {
                 alignment: Alignment.centerLeft,
               ),
             ),
-            title: Text('Comments'),
+            title: Text('Comments', style: TextStyle(color: checkForAppBarTitleColor(context),),),
             centerTitle: true,
             textTheme: TextTheme(
                 title: TextStyle(
@@ -69,12 +68,14 @@ class _EventDetailCommentState extends State<EventDetailComment> {
                     textFieldConfiguration: TextFieldConfiguration(
                       controller: commentController,
                       autofocus: false,
+                      style: TextStyle(color: checkForTextTitleColor(context),),
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(0)),
                               borderSide: BorderSide(color: Colors.black)),
                           hintText: 'Add a comment..',
+                          hintStyle: TextStyle(color: checkForTextTitleColor(context),),
                           suffix: GestureDetector(
                             onTap: () {
                               FocusScope.of(context).requestFocus(FocusNode());
@@ -211,11 +212,15 @@ class _EventDetailCommentState extends State<EventDetailComment> {
                       title: Text(
                         commentList[i]['fullName'] + ': ',
                         style: TextStyle(
+                          color: checkForTextTitleColor(context),
                             fontSize: ScreenUtil.instance.setSp(12),
                             fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(
                         commentList[i]['response'],
+                        style: TextStyle(
+                          color: checkForSettingsTitleColor(context),
+                        ),
                       ),
                     );
                   },

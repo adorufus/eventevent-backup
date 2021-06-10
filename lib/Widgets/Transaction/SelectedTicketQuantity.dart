@@ -99,10 +99,9 @@ class _SelectedTicketQuantityWidgetState
     return SafeArea(
       bottom: false,
       child: Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 1,
           leading: GestureDetector(
             child: Icon(
@@ -181,7 +180,6 @@ class _SelectedTicketQuantityWidgetState
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: ScreenUtil.instance.setWidth(150),
-        color: Colors.white,
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 25),
           child: Column(
@@ -248,8 +246,9 @@ class _SelectedTicketQuantityWidgetState
     return Container(
       height: ScreenUtil.instance.setWidth(200),
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(color: Colors.white, boxShadow: <BoxShadow>[
-        BoxShadow(color: Colors.grey, offset: Offset(1, 1), blurRadius: 2)
+      decoration: BoxDecoration(color: checkForContainerBackgroundColor(context), boxShadow: <BoxShadow>[
+        BoxShadow(color: Colors.grey, offset: Offset(1, 1), blurRadius: 5,
+            spreadRadius: 2)
       ]),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -319,7 +318,7 @@ class _SelectedTicketQuantityWidgetState
                   width: ScreenUtil.instance.setWidth(100),
                   height: ScreenUtil.instance.setWidth(40),
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: checkForContainerBackgroundColor(context),
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(

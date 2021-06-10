@@ -28,7 +28,7 @@ class CreateTicketMaxBoughtState extends State<CreateTicketMaxBought> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           // leading: GestureDetector(
           //   onTap: (){
@@ -59,7 +59,6 @@ class CreateTicketMaxBoughtState extends State<CreateTicketMaxBought> {
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -73,7 +72,7 @@ class CreateTicketMaxBoughtState extends State<CreateTicketMaxBought> {
                   Text(
                     'Max. Ticket Bought',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: 35,
                         fontWeight: FontWeight.bold),
                   ),
@@ -101,9 +100,16 @@ class CreateTicketMaxBoughtState extends State<CreateTicketMaxBought> {
                   },
                   controller: textController,
                   autocorrect: false,
+                  style: TextStyle(color: checkForTextTitleColor(context),),
                   autofocus: false,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
+                    hintStyle: TextStyle(color: checkForTextTitleColor(context)),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: checkForAppBarTitleColor(context),
+                      )
+                    ),
                     hintText: 'default is 10 or total quantity',
                   ),
                 ),

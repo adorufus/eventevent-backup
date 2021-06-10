@@ -90,7 +90,7 @@ class _LoveItemState extends State<LoveItem> {
                 : widget.commentCount == "0" ? 7.5 : 13),
         height: ScreenUtil.instance.setWidth(30),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: checkForContainerBackgroundColor(context),
             borderRadius: BorderRadius.circular(50),
             boxShadow: <BoxShadow>[
               BoxShadow(

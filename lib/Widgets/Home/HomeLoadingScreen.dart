@@ -1,4 +1,5 @@
 import 'package:eventevent/Widgets/LoveItem.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_placeholder_textlines/placeholder_lines.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -1087,7 +1088,8 @@ class HomeLoadingScreen {
                     color: Colors.black.withOpacity(0.1),
                     blurRadius: 2,
                     spreadRadius: 1.5)
-              ], color: Colors.white, borderRadius: BorderRadius.circular(15)),
+              ], color: checkForContainerBackgroundColor(context),
+                  borderRadius: BorderRadius.circular(15)),
               child: Row(
                 children: <Widget>[
                   Shimmer.fromColors(

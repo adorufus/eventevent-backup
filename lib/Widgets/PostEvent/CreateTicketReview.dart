@@ -68,8 +68,10 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
       eventNameController.text = prefs.getString('SETUP_TICKET_NAME');
       imageUri = prefs.getString('SETUP_TICKET_POSTER');
       ticketQuantityController.text = prefs.getString('SETUP_TICKET_QTY');
-      priceController.text = ticketTypeID == '5' ||
-                                        ticketTypeID == '10' || ticketTypeID == '7' ? "0" : prefs.getString('SETUP_TICKET_PRICE');
+      priceController.text =
+          ticketTypeID == '5' || ticketTypeID == '10' || ticketTypeID == '7'
+              ? "0"
+              : prefs.getString('SETUP_TICKET_PRICE');
       minTicketController.text = prefs.getString('SETUP_TICKET_MIN_BOUGHT');
       maxTicketController.text = prefs.getString('SETUP_TICKET_MAX_BOUGHT');
       __curValue =
@@ -106,26 +108,26 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
     });
 
     Map ticketDetail = {
-        'id': ticketTypeID,
-        'ticket_name': eventNameController.text,
-        'quantity': ticketQuantityController.text,
-        'price': priceController.text,
-        'min_ticket': minTicketController.text,
-        'max_ticket': maxTicketController.text,
-        'sales_start_date': startDate + ' ' + startTime,
-        'sales_end_date': endDate + ' ' + endTime,
-        'show_remaining_ticket': __curValue.toString(),
-        'single_ticket': __curValue2.toString(),
-        'description': descController.text,
-        'image_url': imageUri != null
-            ? imageUri
-            : ''
-      };
+      'id': ticketTypeID,
+      'ticket_name': eventNameController.text,
+      'quantity': ticketQuantityController.text,
+      'price': priceController.text,
+      'min_ticket': minTicketController.text,
+      'max_ticket': maxTicketController.text,
+      'sales_start_date': startDate + ' ' + startTime,
+      'sales_end_date': endDate + ' ' + endTime,
+      'show_remaining_ticket': __curValue.toString(),
+      'single_ticket': __curValue2.toString(),
+      'description': descController.text,
+      'image_url': imageUri != null ? imageUri : ''
+    };
 
     Navigator.push(
-        context, CupertinoPageRoute(builder: (context) => CreateTicketFinal(
-          ticketDetail: ticketDetail,
-        )));
+        context,
+        CupertinoPageRoute(
+            builder: (context) => CreateTicketFinal(
+                  ticketDetail: ticketDetail,
+                )));
   }
 
   @override
@@ -135,8 +137,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
     getData();
     locationSubcription =
         location.onLocationChanged().listen((LocationData result) {
-          if(!mounted)
-            return;
+      if (!mounted) return;
       setState(() {
         currentLocation = result;
       });
@@ -160,7 +161,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
       key: thisScaffold,
       appBar: AppBar(
         brightness: Brightness.light,
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         elevation: 1,
         leading: GestureDetector(
           onTap: () {
@@ -184,31 +185,29 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
         child: Container(
           height: 60,
           decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 2,
-                spreadRadius: 1.5,
-                color: Color(0xff8a8a8b).withOpacity(.3),
-                offset: Offset(0, -1)
-              )
-            ]
-          ),
+              color: checkForBackgroundColor(context),
+              boxShadow: [
+                BoxShadow(
+                    blurRadius: 2,
+                    spreadRadius: 1.5,
+                    color: Color(0xff8a8a8b).withOpacity(.3),
+                    offset: Offset(0, -1))
+              ]),
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
             height: ScreenUtil.instance.setWidth(50),
             child: ClipRRect(
               clipBehavior: Clip.antiAlias,
               borderRadius: BorderRadius.circular(50),
-                          child: RaisedButton(
+              child: RaisedButton(
                 color: eventajaGreenTeal,
                 onPressed: () {
                   saveFinalData();
                 },
                 child: Text(
                   'CREATE TICKET',
-                  style:
-                      TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -229,7 +228,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                   Text(
                     'Ticket Name',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: ScreenUtil.instance.setSp(18),
                         fontWeight: FontWeight.bold),
                   ),
@@ -238,9 +237,10 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                   ),
                   TextFormField(
                     controller: eventNameController,
+                    style: TextStyle(color: checkForTextTitleColor(context)),
                     decoration: InputDecoration(
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: checkForContainerBackgroundColor(context),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(8),
@@ -279,7 +279,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                               'Ticket Quantity',
                               style: TextStyle(
                                   fontSize: ScreenUtil.instance.setSp(18),
-                                  color: Colors.black54,
+                                  color: checkForAppBarTitleColor(context),
                                   fontWeight: FontWeight.bold),
                             ),
                             SizedBox(height: ScreenUtil.instance.setWidth(10)),
@@ -289,9 +289,13 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                 padding: EdgeInsets.only(left: 10),
                                 child: TextFormField(
                                   controller: ticketQuantityController,
+                                  style: TextStyle(
+                                      color: checkForTextTitleColor(context)),
                                   decoration: InputDecoration(
-                                      fillColor: Colors.white,
                                       filled: true,
+                                      fillColor:
+                                          checkForContainerBackgroundColor(
+                                              context),
                                       enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide.none,
                                           borderRadius:
@@ -306,7 +310,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                               'Set The Price',
                               style: TextStyle(
                                   fontSize: ScreenUtil.instance.setSp(18),
-                                  color: Colors.black54,
+                                  color: checkForAppBarTitleColor(context),
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
@@ -318,33 +322,43 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                             ),
                             SizedBox(height: ScreenUtil.instance.setWidth(10)),
                             Container(
-                                width: ScreenUtil.instance.setWidth(170),
-                                height: ScreenUtil.instance.setWidth(50),
-                                padding: EdgeInsets.only(left: 10),
-                                child: ticketTypeID == '5' ||
-                                        ticketTypeID == '10' || ticketTypeID == '7'
-                                    ? Text('FREE',
-                                        style: TextStyle(
-                                            fontSize:
-                                                ScreenUtil.instance.setSp(18),
-                                            color: Colors.grey[300],
-                                            fontWeight: FontWeight.bold))
-                                    : TextFormField(
-                                        controller: priceController,
-                                        decoration: InputDecoration(
-                                            fillColor: Colors.white,
-                                            filled: true,
-                                            enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide.none,
-                                                borderRadius:
-                                                    BorderRadius.circular(7)),
-                                            focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide.none,
-                                                borderRadius:
-                                                    BorderRadius.circular(7))),
-                                      ))
+                              width: ScreenUtil.instance.setWidth(170),
+                              height: ScreenUtil.instance.setWidth(50),
+                              padding: EdgeInsets.only(left: 10),
+                              child: ticketTypeID == '5' ||
+                                      ticketTypeID == '10' ||
+                                      ticketTypeID == '7'
+                                  ? Text('FREE',
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(18),
+                                          color: Colors.grey[300],
+                                          fontWeight: FontWeight.bold))
+                                  : TextFormField(
+                                      controller: priceController,
+                                      style: TextStyle(
+                                        color: checkForTextTitleColor(context),
+                                      ),
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor:
+                                            checkForContainerBackgroundColor(
+                                                context),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                        ),
+                                      ),
+                                    ),
+                            )
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -360,74 +374,86 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  'Min Ticket',
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Min Ticket',
+                                style: TextStyle(
+                                    fontSize: ScreenUtil.instance.setSp(18),
+                                    color: checkForAppBarTitleColor(context),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10)),
+                              Container(
+                                width: ScreenUtil.instance.setWidth(170),
+                                height: ScreenUtil.instance.setWidth(50),
+                                padding: EdgeInsets.only(left: 10),
+                                child: TextFormField(
+                                  controller: minTicketController,
                                   style: TextStyle(
-                                      fontSize: ScreenUtil.instance.setSp(18),
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.bold),
+                                      color: checkForTextTitleColor(context)),
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: checkForContainerBackgroundColor(
+                                        context),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                  ),
                                 ),
-                                SizedBox(
-                                    height: ScreenUtil.instance.setWidth(10)),
-                                Container(
-                                    width: ScreenUtil.instance.setWidth(170),
-                                    height: ScreenUtil.instance.setWidth(50),
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: TextFormField(
-                                      controller: minTicketController,
-                                      decoration: InputDecoration(
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide.none,
-                                              borderRadius:
-                                                  BorderRadius.circular(7)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderSide: BorderSide.none,
-                                              borderRadius:
-                                                  BorderRadius.circular(7))),
-                                    )),
-                              ]),
+                              ),
+                            ],
+                          ),
                           Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  'Max Ticket',
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Max Ticket',
+                                style: TextStyle(
+                                    fontSize: ScreenUtil.instance.setSp(18),
+                                    color: checkForAppBarTitleColor(context),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                  height: ScreenUtil.instance.setWidth(10)),
+                              Container(
+                                width: ScreenUtil.instance.setWidth(170),
+                                height: ScreenUtil.instance.setWidth(50),
+                                padding: EdgeInsets.only(left: 10),
+                                child: TextFormField(
+                                  controller: maxTicketController,
                                   style: TextStyle(
-                                      fontSize: ScreenUtil.instance.setSp(18),
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.bold),
+                                      color: checkForTextTitleColor(context)),
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: checkForContainerBackgroundColor(
+                                        context),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                  ),
                                 ),
-                                SizedBox(
-                                    height: ScreenUtil.instance.setWidth(10)),
-                                Container(
-                                    width: ScreenUtil.instance.setWidth(170),
-                                    height: ScreenUtil.instance.setWidth(50),
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: TextFormField(
-                                      controller: maxTicketController,
-                                      decoration: InputDecoration(
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide.none,
-                                              borderRadius:
-                                                  BorderRadius.circular(7)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderSide: BorderSide.none,
-                                              borderRadius:
-                                                  BorderRadius.circular(7))),
-                                    )),
-                              ])
+                              ),
+                            ],
+                          )
                         ],
                       ),
                       Text(
                         'Ticket Sales Starts',
                         style: TextStyle(
-                            color: Colors.black54,
+                            color: checkForAppBarTitleColor(context),
                             fontSize: ScreenUtil.instance.setSp(18)),
                       ),
                       SizedBox(
@@ -441,7 +467,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                               height: ScreenUtil.instance.setWidth(50),
                               padding: EdgeInsets.only(left: 10),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: checkForContainerBackgroundColor(context),
                                   borderRadius: BorderRadius.circular(8)),
                               child: Align(
                                   alignment: Alignment.centerLeft,
@@ -459,7 +485,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                               height: ScreenUtil.instance.setWidth(50),
                               padding: EdgeInsets.only(left: 10),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: checkForContainerBackgroundColor(context),
                                   borderRadius: BorderRadius.circular(8)),
                               child: Align(
                                   alignment: Alignment.centerLeft,
@@ -477,7 +503,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                       Text(
                         'Ticket Sales Ends',
                         style: TextStyle(
-                            color: Colors.black54,
+                            color: checkForAppBarTitleColor(context),
                             fontSize: ScreenUtil.instance.setSp(18)),
                       ),
                       SizedBox(
@@ -491,7 +517,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                               height: ScreenUtil.instance.setWidth(50),
                               padding: EdgeInsets.only(left: 10),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: checkForContainerBackgroundColor(context),
                                   borderRadius: BorderRadius.circular(8)),
                               child: Align(
                                   alignment: Alignment.centerLeft,
@@ -509,7 +535,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                               height: ScreenUtil.instance.setWidth(50),
                               padding: EdgeInsets.only(left: 10),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: checkForContainerBackgroundColor(context),
                                   borderRadius: BorderRadius.circular(8)),
                               child: Align(
                                   alignment: Alignment.centerLeft,
@@ -528,7 +554,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                           Text(
                             'Show Remaining Ticket',
                             style: TextStyle(
-                                color: Colors.black54,
+                                color: checkForAppBarTitleColor(context),
                                 fontSize: ScreenUtil.instance.setSp(18),
                                 fontWeight: FontWeight.bold),
                           ),
@@ -567,7 +593,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                           Text(
                             'One Purchase Per User',
                             style: TextStyle(
-                                color: Colors.black54,
+                                color: checkForAppBarTitleColor(context),
                                 fontSize: ScreenUtil.instance.setSp(18),
                                 fontWeight: FontWeight.bold),
                           ),
@@ -604,7 +630,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                       Text(
                         'Description',
                         style: TextStyle(
-                            color: Colors.black54,
+                            color: checkForAppBarTitleColor(context),
                             fontSize: ScreenUtil.instance.setSp(18),
                             fontWeight: FontWeight.bold),
                       ),
@@ -614,9 +640,10 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                       TextFormField(
                         controller: descController,
                         maxLines: 10,
+                        style: TextStyle(color: checkForTextTitleColor(context)),
                         decoration: InputDecoration(
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: checkForContainerBackgroundColor(context),
                             enabledBorder:
                                 OutlineInputBorder(borderSide: BorderSide.none),
                             focusedBorder: OutlineInputBorder(

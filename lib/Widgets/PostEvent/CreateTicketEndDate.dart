@@ -49,6 +49,9 @@ class CreateTicketEndDateState extends State<CreateTicketEndDate> {
       allowFontScaling: true,
     )..init(context);
     dp.DatePickerStyles styles = dp.DatePickerStyles(
+      displayedPeriodTitle: TextStyle(
+        color: checkForAppBarTitleColor(context),
+      ),
         selectedDateStyle: Theme.of(context)
             .accentTextTheme
             .body2
@@ -60,7 +63,7 @@ class CreateTicketEndDateState extends State<CreateTicketEndDate> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -94,7 +97,6 @@ class CreateTicketEndDateState extends State<CreateTicketEndDate> {
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -108,7 +110,7 @@ class CreateTicketEndDateState extends State<CreateTicketEndDate> {
                   Text(
                     'Sales End Date',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
                   ),

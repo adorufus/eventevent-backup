@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eventevent/Widgets/Home/LatestEventItem.dart';
 import 'package:eventevent/Widgets/ManageEvent/EventDetailLoadingScreen.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,9 @@ import 'package:http/http.dart' as http;
 class CategoryPage extends StatefulWidget {
   final categoryId;
   final isRest;
+  final categoryName;
 
-  const CategoryPage({Key key, this.categoryId, this.isRest}) : super(key: key);
+  const CategoryPage({Key key, this.categoryId, this.isRest, this.categoryName}) : super(key: key);
   @override
   _CategoryPageState createState() => _CategoryPageState();
 }
@@ -91,11 +93,10 @@ class _CategoryPageState extends State<CategoryPage> {
             width: MediaQuery.of(context).size.width,
             height: ScreenUtil.instance.setWidth(50),
             padding: EdgeInsets.symmetric(horizontal: 13),
-            color: Colors.white,
             child: AppBar(
               brightness: Brightness.light,
               elevation: 0,
-              backgroundColor: Colors.white,
+              backgroundColor: appBarColor,
               leading: GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
@@ -106,13 +107,13 @@ class _CategoryPageState extends State<CategoryPage> {
                   alignment: Alignment.centerLeft,
                 ),
               ),
-              title: Text('Category'),
+              title: Text(widget.categoryName),
               centerTitle: true,
               textTheme: TextTheme(
                   title: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: ScreenUtil.instance.setSp(14),
-                color: Colors.black,
+                color: checkForAppBarTitleColor(context),
               )),
             ),
           ),

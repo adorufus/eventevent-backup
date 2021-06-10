@@ -35,8 +35,10 @@ class TicketReview extends StatefulWidget {
       this.customForm,
       this.customFormList,
       this.customFormId,
-      this.isCustomForm, this.eventTicketType})
+      this.isCustomForm,
+      this.eventTicketType})
       : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _TicketReviewState();
@@ -133,11 +135,10 @@ class _TicketReviewState extends State<TicketReview> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         brightness: Brightness.light,
-        backgroundColor: Colors.white,
-        elevation: 1,
+        backgroundColor: appBarColor,
+        elevation: 0,
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).pop();
@@ -195,7 +196,7 @@ class _TicketReviewState extends State<TicketReview> {
       body: ListView(
         children: <Widget>[
           Container(
-              color: Colors.white,
+              color: checkForContainerBackgroundColor(context),
               padding: EdgeInsets.all(15),
               height: ScreenUtil.instance.setWidth(220),
               width: MediaQuery.of(context).size.width,
@@ -277,7 +278,7 @@ class _TicketReviewState extends State<TicketReview> {
           SizedBox(height: ScreenUtil.instance.setWidth(10)),
           Container(
               padding: EdgeInsets.only(left: 15, right: 15, top: 2, bottom: 15),
-              color: Colors.white,
+              color: checkForContainerBackgroundColor(context),
               height: ScreenUtil.instance.setWidth(200),
               width: MediaQuery.of(context).size.width,
               child: Column(
@@ -298,9 +299,17 @@ class _TicketReviewState extends State<TicketReview> {
                       ],
                     ),
                     TextFormField(
-                        controller: promoCodeController,
-                        decoration:
-                            InputDecoration(hintText: 'Example: TIX25')),
+                      controller: promoCodeController,
+                      style: TextStyle(
+                        color: checkForTextTitleColor(context),
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Example: TIX25',
+                        hintStyle: TextStyle(
+                          color: checkForTextTitleColor(context),
+                        ),
+                      ),
+                    ),
                     SizedBox(height: ScreenUtil.instance.setWidth(15)),
                     SizedBox(
                         width: MediaQuery.of(context).size.width,
@@ -338,7 +347,7 @@ class _TicketReviewState extends State<TicketReview> {
           SizedBox(height: ScreenUtil.instance.setWidth(10)),
           Container(
               padding: EdgeInsets.all(15),
-              color: Colors.white,
+              color: checkForContainerBackgroundColor(context),
               height: ScreenUtil.instance.setWidth(150),
               width: MediaQuery.of(context).size.width,
               child: Column(children: <Widget>[
@@ -350,11 +359,16 @@ class _TicketReviewState extends State<TicketReview> {
                       Expanded(
                         child: SizedBox(),
                       ),
-                      Text(thisTicketPrice == null || thisTicketPrice == 'fre'
-                          'e_limited' || thisTicketPrice == 'free_live_stream'
-                          '' || thisTicketPrice == "0" ?
-                      "free" : 'Rp' + formatPrice(price:
-                          thisTicketPrice))
+                      Text(thisTicketPrice == null ||
+                              thisTicketPrice ==
+                                  'fre'
+                                      'e_limited' ||
+                              thisTicketPrice ==
+                                  'free_live_stream'
+                                      '' ||
+                              thisTicketPrice == "0"
+                          ? "free"
+                          : 'Rp' + formatPrice(price: thisTicketPrice))
                     ]),
                 SizedBox(height: ScreenUtil.instance.setWidth(20)),
                 Row(
@@ -384,10 +398,16 @@ class _TicketReviewState extends State<TicketReview> {
                         child: SizedBox(),
                       ),
                       Text(
-                        thisTicketPrice == null || thisTicketPrice == 'fre'
-                            'e_limited' || thisTicketPrice == 'free_live_stream'
-                            '' || thisTicketPrice == "0" ?
-                        "free" : 'Rp' + formatPrice(price: total.toString()),
+                        thisTicketPrice == null ||
+                                thisTicketPrice ==
+                                    'fre'
+                                        'e_limited' ||
+                                thisTicketPrice ==
+                                    'free_live_stream'
+                                        '' ||
+                                thisTicketPrice == "0"
+                            ? "free"
+                            : 'Rp' + formatPrice(price: total.toString()),
                         style: TextStyle(
                             color: eventajaGreenTeal,
                             fontWeight: FontWeight.bold,

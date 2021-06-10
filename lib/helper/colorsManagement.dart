@@ -63,7 +63,7 @@ Color checkForEventDetailsEOMenuTitle(BuildContext context) {
 
 Color checkForAppBarTitleColor(BuildContext context) {
   return Provider.of<ThemeProvider>(context).isDarkMode ? Colors.white :
-  eventajaGreenTeal;
+  Colors.black54;
 }
 
 Color checkForTextTitleColor(BuildContext context) {

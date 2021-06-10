@@ -46,7 +46,7 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -97,7 +97,7 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
                     child: Text(
                       'Additional Media',
                       style: TextStyle(
-                          color: Colors.black54,
+                          color: checkForAppBarTitleColor(context),
                           fontSize: 40,
                           fontWeight: FontWeight.bold),
                     ),
@@ -266,8 +266,7 @@ class PostEventAdditionalMediaState extends State<PostEventAdditionalMedia> {
       },
       child: Container(
         decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/grey-fade.jpg'), fit: BoxFit.fill),
+            color: checkForContainerBackgroundColor(context),
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(

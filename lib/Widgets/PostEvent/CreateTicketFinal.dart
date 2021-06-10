@@ -102,10 +102,9 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
 
     return Scaffold(
         key: thisScaffold,
-        backgroundColor: Colors.white.withOpacity(.5),
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 1,
           leading: GestureDetector(
             onTap: () {
@@ -128,7 +127,8 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
           },
           child: Container(
             height: 60,
-            decoration: BoxDecoration(color: Colors.white, boxShadow: [
+            decoration: BoxDecoration(color: checkForBackgroundColor(context),
+                boxShadow: [
               BoxShadow(
                   blurRadius: 2,
                   spreadRadius: 1.5,
@@ -159,7 +159,6 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
         body: Stack(
           children: <Widget>[
             Container(
-              color: Colors.white,
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: SingleChildScrollView(
@@ -201,14 +200,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
-                                    Text(
-                                      'Ticket Quantity',
-                                      style: TextStyle(
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    title("Ticket Quantity"),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(10)),
@@ -223,14 +215,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(7)),
-                                    Text(
-                                      'Ticket Sales Starts',
-                                      style: TextStyle(
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    title("Ticket Sales Starts"),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(10)),
@@ -243,14 +228,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(7)),
-                                    Text(
-                                      'Ticket Sales Ends',
-                                      style: TextStyle(
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(18),
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    title("Ticket Sales Ends"),
                                     SizedBox(
                                         height:
                                             ScreenUtil.instance.setWidth(10)),
@@ -269,13 +247,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                           SizedBox(
                             height: ScreenUtil.instance.setWidth(15),
                           ),
-                          Text(
-                            'Description',
-                            style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(18),
-                                color: Colors.black54,
-                                fontWeight: FontWeight.bold),
-                          ),
+                          title("Descriptionu"),
                           Text(desc),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Divider(),
@@ -308,6 +280,17 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
                   )
           ],
         ));
+  }
+
+  Widget title(String theTitle) {
+    return Text(
+      theTitle,
+      style: TextStyle(
+          fontSize:
+          ScreenUtil.instance.setSp(18),
+          color: checkForAppBarTitleColor(context),
+          fontWeight: FontWeight.bold),
+    );
   }
 
   Widget serviceFee(BuildContext context) {

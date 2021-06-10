@@ -70,7 +70,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
         key: thisState,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 1,
           leading: GestureDetector(
             onTap: () {
@@ -90,7 +90,6 @@ class SelectTicketTypeState extends State<SelectTicketType> {
         body: ticketType == null
             ? HomeLoadingScreen().myTicketLoading()
             : Container(
-                color: Colors.white,
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
@@ -158,6 +157,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
                             ? ''
                             : ticketType[i]['name'],
                         style: TextStyle(
+                          color: checkForAppBarTitleColor(context),
                             fontSize: ScreenUtil.instance.setSp(18),
                             fontWeight: FontWeight.bold),
                       ),
@@ -169,7 +169,10 @@ class SelectTicketTypeState extends State<SelectTicketType> {
                                       ticketType[i]['id'] == '6'
                                   ? 'Create livestream ticket'
                                   : ''
-                              : ticketType[i]['description']),
+                              : ticketType[i]['description'],
+                          style: TextStyle(
+                            color: checkForTextTitleColor(context),
+                          ),),
                         ],
                       ),
                     );

@@ -142,7 +142,7 @@ class PostEventReviewState extends State<PostEventReview> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 1,
           leading: GestureDetector(
             onTap: () {
@@ -200,9 +200,10 @@ class PostEventReviewState extends State<PostEventReview> {
                     ),
                     TextFormField(
                       controller: eventNameController,
+                      style: TextStyle(color: checkForTextTitleColor(context),),
                       decoration: InputDecoration(
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: checkForContainerBackgroundColor(context),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide.none,
                             borderRadius: BorderRadius.circular(8),
@@ -242,7 +243,7 @@ class PostEventReviewState extends State<PostEventReview> {
                                 'Event Type',
                                 style: TextStyle(
                                     fontSize: ScreenUtil.instance.setSp(18),
-                                    color: Colors.black54,
+                                    color: checkForAppBarTitleColor(context),
                                     fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
@@ -252,13 +253,14 @@ class PostEventReviewState extends State<PostEventReview> {
                                   height: ScreenUtil.instance.setWidth(50),
                                   padding: EdgeInsets.only(left: 10),
                                   decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: checkForContainerBackgroundColor(context),
                                       borderRadius: BorderRadius.circular(8)),
                                   child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         eventType == '0' ? 'PUBLIC' : 'PRIVATE',
                                         style: TextStyle(
+                                          color: checkForTextTitleColor(context),
                                             fontSize:
                                                 ScreenUtil.instance.setSp(15)),
                                       ))),
@@ -268,7 +270,7 @@ class PostEventReviewState extends State<PostEventReview> {
                                 'Category',
                                 style: TextStyle(
                                     fontSize: ScreenUtil.instance.setSp(18),
-                                    color: Colors.black54,
+                                    color: checkForAppBarTitleColor(context),
                                     fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
@@ -278,13 +280,14 @@ class PostEventReviewState extends State<PostEventReview> {
                                   height: ScreenUtil.instance.setWidth(50),
                                   padding: EdgeInsets.only(left: 10),
                                   decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: checkForContainerBackgroundColor(context),
                                       borderRadius: BorderRadius.circular(8)),
                                   child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                         categoryList.toString(),
                                         style: TextStyle(
+                                          color: checkForTextTitleColor(context),
                                             fontSize:
                                                 ScreenUtil.instance.setSp(15)),
                                       )))
@@ -300,7 +303,7 @@ class PostEventReviewState extends State<PostEventReview> {
                         Text(
                           'Date',
                           style: TextStyle(
-                              color: Colors.black54,
+                              color: checkForAppBarTitleColor(context),
                               fontSize: ScreenUtil.instance.setSp(18)),
                         ),
                         SizedBox(
@@ -314,13 +317,14 @@ class PostEventReviewState extends State<PostEventReview> {
                                 height: ScreenUtil.instance.setWidth(50),
                                 padding: EdgeInsets.only(left: 10),
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: checkForContainerBackgroundColor(context),
                                     borderRadius: BorderRadius.circular(8)),
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       startDate,
                                       style: TextStyle(
+                                        color: checkForTextTitleColor(context),
                                           fontSize:
                                               ScreenUtil.instance.setSp(20)),
                                     ))),
@@ -332,13 +336,14 @@ class PostEventReviewState extends State<PostEventReview> {
                                 height: ScreenUtil.instance.setWidth(50),
                                 padding: EdgeInsets.only(left: 10),
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: checkForContainerBackgroundColor(context),
                                     borderRadius: BorderRadius.circular(8)),
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       endDate,
                                       style: TextStyle(
+                                          color: checkForTextTitleColor(context),
                                           fontSize:
                                               ScreenUtil.instance.setSp(20)),
                                     ))),
@@ -350,7 +355,7 @@ class PostEventReviewState extends State<PostEventReview> {
                         Text(
                           'Time',
                           style: TextStyle(
-                              color: Colors.black54,
+                              color: checkForAppBarTitleColor(context),
                               fontSize: ScreenUtil.instance.setSp(18)),
                         ),
                         SizedBox(
@@ -364,13 +369,14 @@ class PostEventReviewState extends State<PostEventReview> {
                                 height: ScreenUtil.instance.setWidth(50),
                                 padding: EdgeInsets.only(left: 10),
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: checkForContainerBackgroundColor(context),
                                     borderRadius: BorderRadius.circular(8)),
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       startTime,
                                       style: TextStyle(
+                                          color: checkForTextTitleColor(context),
                                           fontSize:
                                               ScreenUtil.instance.setSp(20)),
                                     ))),
@@ -382,13 +388,14 @@ class PostEventReviewState extends State<PostEventReview> {
                                 height: ScreenUtil.instance.setWidth(50),
                                 padding: EdgeInsets.only(left: 10),
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: checkForContainerBackgroundColor(context),
                                     borderRadius: BorderRadius.circular(8)),
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       endTime,
                                       style: TextStyle(
+                                          color: checkForTextTitleColor(context),
                                           fontSize:
                                               ScreenUtil.instance.setSp(20)),
                                     ))),
@@ -415,13 +422,13 @@ class PostEventReviewState extends State<PostEventReview> {
                     Text(
                       'Video & Picture',
                       style: TextStyle(
-                          color: Colors.black54,
+                          color: checkForAppBarTitleColor(context),
                           fontSize: ScreenUtil.instance.setSp(18),
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
                       'Add your event\'s video and picture',
-                      style: TextStyle(color: Colors.black26),
+                      style: TextStyle(color: checkForTextTitleColor(context)),
                     ),
                     SizedBox(
                       height: ScreenUtil.instance.setWidth(15),
@@ -448,7 +455,7 @@ class PostEventReviewState extends State<PostEventReview> {
                       Text(
                         'Description',
                         style: TextStyle(
-                            color: Colors.black54,
+                            color: checkForAppBarTitleColor(context),
                             fontSize: ScreenUtil.instance.setSp(18),
                             fontWeight: FontWeight.bold),
                       ),
@@ -458,9 +465,10 @@ class PostEventReviewState extends State<PostEventReview> {
                       TextFormField(
                         controller: descController,
                         maxLines: 10,
+                        style: TextStyle(color: checkForTextTitleColor(context)),
                         decoration: InputDecoration(
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: checkForContainerBackgroundColor(context),
                             enabledBorder:
                                 OutlineInputBorder(borderSide: BorderSide.none),
                             focusedBorder: OutlineInputBorder(
@@ -470,7 +478,7 @@ class PostEventReviewState extends State<PostEventReview> {
                       Text(
                         'Contact',
                         style: TextStyle(
-                            color: Colors.black54,
+                            color: checkForAppBarTitleColor(context),
                             fontSize: ScreenUtil.instance.setSp(18),
                             fontWeight: FontWeight.bold),
                       ),
@@ -493,8 +501,9 @@ class PostEventReviewState extends State<PostEventReview> {
                             child: TextFormField(
                               keyboardType: TextInputType.phone,
                               controller: telephoneController,
+                              style: TextStyle(color: checkForTextTitleColor(context)),
                               decoration: InputDecoration(
-                                  fillColor: Colors.white,
+                                  fillColor: checkForContainerBackgroundColor(context),
                                   filled: true,
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide.none,
@@ -526,8 +535,9 @@ class PostEventReviewState extends State<PostEventReview> {
                             height: ScreenUtil.instance.setWidth(35),
                             child: TextFormField(
                               controller: emailController,
+                              style: TextStyle(color: checkForTextTitleColor(context)),
                               decoration: InputDecoration(
-                                  fillColor: Colors.white,
+                                  fillColor: checkForContainerBackgroundColor(context),
                                   filled: true,
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide.none,
@@ -559,8 +569,10 @@ class PostEventReviewState extends State<PostEventReview> {
                             height: ScreenUtil.instance.setWidth(35),
                             child: TextFormField(
                               controller: websiteController,
+                              style: TextStyle(color: checkForTextTitleColor
+                                (context)),
                               decoration: InputDecoration(
-                                  fillColor: Colors.white,
+                                  fillColor: checkForContainerBackgroundColor(context),
                                   filled: true,
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide.none,
@@ -576,7 +588,7 @@ class PostEventReviewState extends State<PostEventReview> {
                       Text(
                         'Location Address',
                         style: TextStyle(
-                            color: Colors.black54,
+                            color: checkForAppBarTitleColor(context),
                             fontSize: ScreenUtil.instance.setSp(18),
                             fontWeight: FontWeight.bold),
                       ),
@@ -598,8 +610,10 @@ class PostEventReviewState extends State<PostEventReview> {
                       TextFormField(
                         controller: additionalInfoMapController,
                         maxLines: 5,
+                        style: TextStyle(color: checkForTextTitleColor(context)),
                         decoration: InputDecoration(
-                            fillColor: Colors.white,
+                            fillColor: checkForContainerBackgroundColor(context),
+                            hintStyle: TextStyle(color: checkForTextTitleColor(context)),
                             filled: true,
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),

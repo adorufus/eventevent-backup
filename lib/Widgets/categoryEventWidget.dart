@@ -60,6 +60,7 @@ class _CategoryEventWidget extends State<CategoryEventWidget> {
                                   builder: (context) => CategoryPage(
                                         isRest: widget.isRest,
                                         categoryId: categoryData['id'],
+                                        categoryName: categoryData['name'],
                                       )));
                         },
                         child: SizedBox(

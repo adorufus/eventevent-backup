@@ -37,7 +37,7 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -71,7 +71,6 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
           ],
         ),
         body: Container(
-            color: Colors.white,
             padding: EdgeInsets.only(left: 15, top: 15, right: 15),
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
@@ -86,7 +85,7 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                     Text(
                       'Additional Info',
                       style: TextStyle(
-                          color: Colors.black54,
+                          color: checkForAppBarTitleColor(context),
                           fontSize: 40,
                           fontWeight: FontWeight.bold),
                     ),
@@ -114,7 +113,9 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                     SizedBox(height: ScreenUtil.instance.setWidth(40), width: ScreenUtil.instance.setWidth(40), child: Image.asset('assets/icons/btn_phone_active.png'),),
                     Text('*', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 35),),
                     SizedBox(height: ScreenUtil.instance.setWidth(10),),
-                    Text('Telephone', style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.black54, fontWeight: FontWeight.bold),),
+                    Text('Telephone', style: TextStyle(fontSize: ScreenUtil
+                        .instance.setSp(15), color: checkForAppBarTitleColor(context), fontWeight:
+                    FontWeight.bold),),
                     Expanded(child: SizedBox()),
                     Container(
                       width: ScreenUtil.instance.setWidth(220),
@@ -122,6 +123,9 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                       child: TextFormField(
                         keyboardType: TextInputType.phone,
                         controller: telephoneController,
+                        style: TextStyle(
+                          color: checkForTextTitleColor(context),
+                        ),
                         decoration: InputDecoration(
                             fillColor: Colors.grey.withOpacity(0.2),
                             filled: true,
@@ -143,13 +147,16 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                   children: <Widget>[
                     SizedBox(height: ScreenUtil.instance.setWidth(40), width: ScreenUtil.instance.setWidth(40), child: Image.asset('assets/icons/btn_mail_active.png'),),
                     SizedBox(width: ScreenUtil.instance.setWidth(9),),
-                    Text('Email', style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.black54, fontWeight: FontWeight.bold),),
+                    Text('Email', style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: checkForAppBarTitleColor(context), fontWeight: FontWeight.bold),),
                     Expanded(child: SizedBox()),
                     Container(
                       width: ScreenUtil.instance.setWidth(220),
                       height: ScreenUtil.instance.setWidth(35),
                       child: TextFormField(
                         controller: emailController,
+                        style: TextStyle(
+                          color: checkForTextTitleColor(context),
+                        ),
                         decoration: InputDecoration(
                             fillColor: Colors.grey.withOpacity(0.2),
                             filled: true,
@@ -171,13 +178,16 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                   children: <Widget>[
                     SizedBox(height: ScreenUtil.instance.setWidth(40), width: ScreenUtil.instance.setWidth(40), child: Image.asset('assets/icons/btn_web_active.png'),),
                     SizedBox(width: ScreenUtil.instance.setWidth(9),),
-                    Text('Website', style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: Colors.black54, fontWeight: FontWeight.bold),),
+                    Text('Website', style: TextStyle(fontSize: ScreenUtil.instance.setSp(15), color: checkForAppBarTitleColor(context), fontWeight: FontWeight.bold),),
                     Expanded(child: SizedBox()),
                     Container(
                       width: ScreenUtil.instance.setWidth(220),
                       height: ScreenUtil.instance.setWidth(35),
                       child: TextFormField(
                         controller: websiteController,
+                        style: TextStyle(
+                          color: checkForTextTitleColor(context),
+                        ),
                         decoration: InputDecoration(
                             fillColor: Colors.grey.withOpacity(0.2),
                             filled: true,
@@ -206,12 +216,15 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
                 TextFormField(
                   controller: descriptionController,
                   maxLines: 10,
+                  style: TextStyle(
+                    color: checkForTextTitleColor(context),
+                  ),
                   decoration: InputDecoration(
                     fillColor: Colors.grey.withOpacity(0.2),
                     filled: true,
                     hintText: 'Type your event description here',
                     hintStyle: TextStyle(
-                      color: Colors.grey.withOpacity(.5)
+                      color: checkForTextTitleColor(context),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide.none,

@@ -31,7 +31,7 @@ class CreateTicketShowRemainingTicketState extends State<CreateTicketShowRemaini
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           // leading: GestureDetector(
           //   onTap: (){
@@ -62,7 +62,6 @@ class CreateTicketShowRemainingTicketState extends State<CreateTicketShowRemaini
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -76,7 +75,7 @@ class CreateTicketShowRemainingTicketState extends State<CreateTicketShowRemaini
                   Text(
                     'Show Remaining Ticket',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: ScreenUtil.instance.setSp(25),
                         fontWeight: FontWeight.bold),
                   ),

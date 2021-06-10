@@ -212,7 +212,7 @@ class PostEventMapState extends State<PostEventMap> {
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -248,7 +248,6 @@ class PostEventMapState extends State<PostEventMap> {
           ],
         ),
         body: Container(
-            color: Colors.white,
             padding: EdgeInsets.only(left: 15, top: 15, right: 15),
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
@@ -262,7 +261,7 @@ class PostEventMapState extends State<PostEventMap> {
                       Text(
                         'Event Location',
                         style: TextStyle(
-                            color: Colors.black54,
+                            color: checkForAppBarTitleColor(context),
                             fontSize: 40,
                             fontWeight: FontWeight.bold),
                       ),
@@ -278,18 +277,6 @@ class PostEventMapState extends State<PostEventMap> {
                   SizedBox(
                     height: 0,
                   ),
-                  // Container(
-                  //   width: MediaQuery.of(context).size.width,
-                  //   height: ScreenUtil.instance.setWidth(5),
-                  //   child: Center(
-                  //     child: RaisedButton(
-                  //       onPressed: (){
-                  //         showPlacePicker();
-                  //       },
-                  //       child: Text('Show map picker'),
-                  //     )
-                  //   ),
-                  // ),
                   Container(
                     height: MediaQuery.of(context).size.height / 1.32,
                     child: ListView(children: <Widget>[
@@ -304,7 +291,7 @@ class PostEventMapState extends State<PostEventMap> {
                           child: Text(
                             'Location Address',
                             style: TextStyle(
-                                color: Colors.black54,
+                                color: checkForAppBarTitleColor(context),
                                 fontWeight: FontWeight.bold,
                                 fontSize: ScreenUtil.instance.setSp(18)),
                           )),
@@ -338,7 +325,7 @@ class PostEventMapState extends State<PostEventMap> {
                           child: Text(
                             'Aditional Address Information',
                             style: TextStyle(
-                                color: Colors.black54,
+                                color: checkForAppBarTitleColor(context),
                                 fontWeight: FontWeight.bold,
                                 fontSize: ScreenUtil.instance.setSp(18)),
                           )),
@@ -346,9 +333,15 @@ class PostEventMapState extends State<PostEventMap> {
                       TextFormField(
                         controller: additionalInfoController,
                         maxLines: 5,
+                        style: TextStyle(
+                          color: checkForTextTitleColor(context)
+                        ),
                         decoration: InputDecoration(
                             fillColor: Colors.grey.withOpacity(0.2),
                             filled: true,
+                            hintStyle: TextStyle(
+                                color: checkForTextTitleColor(context)
+                            ),
                             hintText:
                                 'Type additional information here, example: Near lion statue, or on the second floor',
                             enabledBorder: OutlineInputBorder(

@@ -137,7 +137,6 @@ class _TransactionFormState extends State<TransactionForm> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white,
       bottomNavigationBar: GestureDetector(
         onTap: () {
           saveInput();
@@ -224,7 +223,7 @@ class _TransactionFormState extends State<TransactionForm> {
       ),
       appBar: AppBar(
         elevation: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).pop();
@@ -244,7 +243,6 @@ class _TransactionFormState extends State<TransactionForm> {
       body: formData == null
           ? HomeLoadingScreen().myTicketLoading()
           : Container(
-              color: Colors.grey.withOpacity(0.05),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: ListView(
@@ -258,7 +256,7 @@ class _TransactionFormState extends State<TransactionForm> {
                     ),
                   ),
                   Container(
-                    color: Colors.white,
+                    color: checkForContainerBackgroundColor(context),
                     child: Container(
                       margin: EdgeInsets.all(15),
                       child: Column(
@@ -270,11 +268,9 @@ class _TransactionFormState extends State<TransactionForm> {
                                 fontSize: ScreenUtil.instance.setSp(16),
                                 fontWeight: FontWeight.bold),
                           ),
-                          TextFormField(
-                            controller: firstnameController,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Put your first name...'),
+                          textForm(
+                            firstnameController,
+                            "Put your first name...",
                           ),
                         ],
                       ),
@@ -284,7 +280,7 @@ class _TransactionFormState extends State<TransactionForm> {
                     height: ScreenUtil.instance.setWidth(30),
                   ),
                   Container(
-                    color: Colors.white,
+                    color: checkForContainerBackgroundColor(context),
                     child: Container(
                       margin: EdgeInsets.all(15),
                       child: Column(
@@ -296,11 +292,9 @@ class _TransactionFormState extends State<TransactionForm> {
                                 fontSize: ScreenUtil.instance.setSp(16),
                                 fontWeight: FontWeight.bold),
                           ),
-                          TextFormField(
-                            controller: lastnameController,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Put your last name...'),
+                          textForm(
+                            lastnameController,
+                            "Put your last name...",
                           ),
                         ],
                       ),
@@ -310,7 +304,7 @@ class _TransactionFormState extends State<TransactionForm> {
                     height: ScreenUtil.instance.setWidth(30),
                   ),
                   Container(
-                    color: Colors.white,
+                    color: checkForContainerBackgroundColor(context),
                     child: Container(
                       margin: EdgeInsets.all(15),
                       child: Column(
@@ -322,11 +316,9 @@ class _TransactionFormState extends State<TransactionForm> {
                                 fontSize: ScreenUtil.instance.setSp(16),
                                 fontWeight: FontWeight.bold),
                           ),
-                          TextFormField(
-                            controller: emailController,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Put your e-mail'),
+                          textForm(
+                            emailController,
+                            "Put your e-mail",
                           ),
                         ],
                       ),
@@ -339,28 +331,19 @@ class _TransactionFormState extends State<TransactionForm> {
                     controller: _emailValidationController,
                     keyboardType: TextInputType.text,
                     autofocus: false,
-                    onFieldSubmitted: (i) async {
-                      if (i == emailController.text) {
-                        validationEmailIcon = Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        );
-                        isEmailMatch = true;
-                        if (mounted) setState(() {});
-                      } else {
-                        validationEmailIcon = Icon(
-                          Icons.close,
-                          color: Colors.red,
-                        );
-                        isEmailMatch = false;
-                        if (mounted) setState(() {});
-                      }
+                    onFieldSubmitted: (text) async {
+                      checkForEmail(text);
+                    },
+                    onChanged: (text) {
+                      checkForEmail(text);
                     },
                     focusNode: emailValidationNode,
+                    style: TextStyle(color: checkForTextTitleColor(context)),
                     decoration: InputDecoration(
-                        fillColor: Colors.white,
+                        fillColor: checkForContainerBackgroundColor(context),
                         filled: true,
                         hintText: 'Re-enter Your Email',
+                        hintStyle: TextStyle(color: checkForTextTitleColor(context)),
                         border: InputBorder.none,
                         suffixIcon: validationEmailIcon),
                   ),
@@ -368,7 +351,7 @@ class _TransactionFormState extends State<TransactionForm> {
                     height: ScreenUtil.instance.setWidth(30),
                   ),
                   Container(
-                    color: Colors.white,
+                    color: checkForContainerBackgroundColor(context),
                     child: Container(
                       margin: EdgeInsets.all(15),
                       child: Column(
@@ -380,11 +363,9 @@ class _TransactionFormState extends State<TransactionForm> {
                                 fontSize: ScreenUtil.instance.setSp(16),
                                 fontWeight: FontWeight.bold),
                           ),
-                          TextFormField(
-                            controller: phoneController,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: '(e.g. 0818123456)'),
+                          textForm(
+                            phoneController,
+                            "e.g. 0818123456",
                           ),
                         ],
                       ),
@@ -394,7 +375,7 @@ class _TransactionFormState extends State<TransactionForm> {
                     height: ScreenUtil.instance.setWidth(30),
                   ),
                   Container(
-                    color: Colors.white,
+                    color: checkForContainerBackgroundColor(context),
                     child: Container(
                       margin: EdgeInsets.all(15),
                       child: Column(
@@ -407,14 +388,12 @@ class _TransactionFormState extends State<TransactionForm> {
                                 fontSize: ScreenUtil.instance.setSp(16),
                                 fontWeight: FontWeight.bold),
                           ),
-                          TextFormField(
-                            controller: aditionalNotesController,
-                            keyboardType: TextInputType.multiline,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintMaxLines: 100,
-                                hintText:
-                                    'Additional notes for event organizer... Example: Please find the best seat for me.'),
+                          textForm(
+                            aditionalNotesController,
+                            "Additional notes for event organizer... Example:"
+                                " Please find the best seat for me.",
+                            isMultiLine: true,
+                            maxLine: 100,
                           ),
                         ],
                       ),
@@ -472,6 +451,24 @@ class _TransactionFormState extends State<TransactionForm> {
                     answerList: answer,
                     customFormId: questionId,
                   );
+  }
+
+  void checkForEmail(String text) {
+    if (text == emailController.text) {
+      validationEmailIcon = Icon(
+        Icons.check,
+        color: Colors.green,
+      );
+      isEmailMatch = true;
+      if (mounted) setState(() {});
+    } else {
+      validationEmailIcon = Icon(
+        Icons.close,
+        color: Colors.red,
+      );
+      isEmailMatch = false;
+      if (mounted) setState(() {});
+    }
   }
 
   Widget customForm() {
@@ -572,6 +569,21 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   int _radioValue = 0;
+
+  Widget textForm(TextEditingController controller, String hintText,
+      {bool isMultiLine = false, int maxLine = 100}) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: isMultiLine ? TextInputType.multiline : null,
+      style: TextStyle(color: checkForTextTitleColor(context)),
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: hintText,
+        hintMaxLines: isMultiLine ? maxLine : null,
+        hintStyle: TextStyle(color: checkForTextTitleColor(context)),
+      ),
+    );
+  }
 
   Widget formType(int index) {
     if (customFormList[index]['type'] == '2') {

@@ -55,7 +55,7 @@ class CreateTicketEndTimeState extends State<CreateTicketEndTime> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -89,7 +89,6 @@ class CreateTicketEndTimeState extends State<CreateTicketEndTime> {
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -103,7 +102,7 @@ class CreateTicketEndTimeState extends State<CreateTicketEndTime> {
                   Text(
                     'Sales End Time',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
                   ),
@@ -123,7 +122,8 @@ class CreateTicketEndTimeState extends State<CreateTicketEndTime> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text('End Time', style: TextStyle(color: Colors.black54, fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
+                  Text('End Time', style: TextStyle(color: checkForAppBarTitleColor(context), fontSize: 
+                  ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold),),
                   SizedBox(
                     width: ScreenUtil.instance.setWidth(30),
                   ),
