@@ -92,6 +92,7 @@ class SubmitEditTicketState extends State<SubmitEditTicket> {
     )..init(context);
 
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,

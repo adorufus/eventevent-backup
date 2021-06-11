@@ -3,6 +3,7 @@ import 'dart:io';
 // import 'package:clevertap_plugin/clevertap_plugin.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/BankAccountList.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/ChangePassword.dart';
+import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/DarkModeSettings.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/Feedback.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/PrivacyPolicy.dart';
 import 'package:eventevent/Widgets/ProfileWidget/SettingsComponent/Terms.dart';
@@ -64,6 +65,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 1,
@@ -217,6 +219,27 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     ),
                   ],
                 ),
+              ),
+              SizedBox(
+                height: ScreenUtil.instance.setWidth(25),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: Text(
+                  'APP SETTINGS',
+                  style: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(18),
+                      color: Colors.grey[600]),
+                ),
+              ),
+              settingsItem(
+                "Dark Mode (experimental)",
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DarkModeSettings()),
+                  );
+                },
               ),
               SizedBox(
                 height: ScreenUtil.instance.setWidth(25),
@@ -572,6 +595,22 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 )
               : Container()
         ],
+      ),
+    );
+  }
+
+  Widget settingsItem(String settingName, Function onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.only(left: 30, top: 10, bottom: 10),
+        child: Text(
+          settingName,
+          style: TextStyle(
+              fontSize: ScreenUtil.instance.setSp(18),
+              color: checkForSettingsTitleColor(context)),
+        ),
       ),
     );
   }

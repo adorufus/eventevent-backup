@@ -41,6 +41,7 @@ class _ReviewDetailsState extends State<ReviewDetails> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(

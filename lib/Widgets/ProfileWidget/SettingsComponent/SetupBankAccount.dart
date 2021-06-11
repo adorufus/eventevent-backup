@@ -38,6 +38,7 @@ class SetupBankAccountState extends State<SetupBankAccount> {
     )..init(context);
     return Scaffold(
       key: scaffoldKey,
+      backgroundColor: checkForBackgroundColor(context),
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(

@@ -42,6 +42,7 @@ class SuccessPageState extends State<SuccessPage> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         backgroundColor: appBarColor,
         elevation: 1,

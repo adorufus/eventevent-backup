@@ -101,6 +101,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
     )..init(context);
 
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,

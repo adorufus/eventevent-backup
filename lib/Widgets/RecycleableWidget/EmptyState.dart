@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 
 class EmptyState extends StatelessWidget {
   final emptyImage;
@@ -18,6 +19,7 @@ class EmptyState extends StatelessWidget {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       body: Container(
         child: Center(
             child: Column(

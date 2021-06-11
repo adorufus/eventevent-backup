@@ -100,7 +100,7 @@ class _AfterRegisterState extends State<AfterRegister> {
     )..init(context);
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
           brightness: Brightness.light,
           elevation: 0,

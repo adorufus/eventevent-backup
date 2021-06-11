@@ -46,6 +46,7 @@ class EventListState extends State<EventList>{
     )..init(context);
     
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 0,

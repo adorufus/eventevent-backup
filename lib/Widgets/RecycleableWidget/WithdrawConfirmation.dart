@@ -120,6 +120,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       key: scaffoldKey,
       appBar: AppBar(
         elevation: 0,

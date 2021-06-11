@@ -37,6 +37,7 @@ class BankAccountListState extends State<BankAccountList> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 1,

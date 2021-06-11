@@ -33,6 +33,7 @@ class PostEventCreatorDetailsState extends State<PostEventCreatorDetails> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         key: thisScaffold,
         resizeToAvoidBottomInset: true,
         appBar: AppBar(

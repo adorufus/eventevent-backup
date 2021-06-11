@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 
 class ZoomTicketPage extends StatefulWidget {
   final zoomLink;
@@ -35,6 +36,7 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: SafeArea(

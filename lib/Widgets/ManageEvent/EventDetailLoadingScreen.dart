@@ -466,6 +466,7 @@ class _EventDetailLoadingScreenState extends State<EventDetailLoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         appBar: PreferredSize(
           preferredSize: Size(null, 100),
           child: Container(

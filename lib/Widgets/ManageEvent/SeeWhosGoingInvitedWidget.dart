@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 
 class SeeWhosGoingInvitedWidget extends StatefulWidget {
   final eventId;
@@ -74,6 +75,7 @@ class _SeeWhosGoingInvitedWidgetState extends State<SeeWhosGoingInvitedWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(

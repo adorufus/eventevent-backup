@@ -22,6 +22,7 @@ class TermsState extends State<Terms>{
     )..init(context);
     
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         elevation: 1,
         backgroundColor: Colors.white,

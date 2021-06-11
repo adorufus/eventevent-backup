@@ -122,6 +122,7 @@ class _CollectionPageState extends State<CollectionPage> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         key: _scaffoldKey,
         appBar: PreferredSize(
           preferredSize: Size(null, 100),

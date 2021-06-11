@@ -41,6 +41,7 @@ ThemeData darkTheme = ThemeData(
   appBarTheme:
       AppBarTheme(color: darkPrimarySwatch, brightness: Brightness.light),
   textTheme: TextTheme(
+      title: TextStyle().apply(color: Colors.white),
       body1: TextStyle().apply(color: Colors.white),
       body2: TextStyle().apply(color: Colors.white)),
   tabBarTheme: TabBarTheme(
@@ -64,6 +65,47 @@ ThemeData darkTheme = ThemeData(
   ),
   backgroundColor: darkPrimarySwatch,
   scaffoldBackgroundColor: darkPrimarySwatch,
+);
+
+ThemeData lightTheme = ThemeData(
+  fontFamily: 'Proxima',
+  appBarTheme:
+  AppBarTheme(color: Colors.white, brightness: Brightness.dark, textTheme:
+  TextTheme(
+    title: TextStyle().apply(color: Colors.black54),
+  )),
+  textTheme: TextTheme(
+      body1: TextStyle().apply(color: Colors.black54),
+      body2: TextStyle().apply(color: Colors.black54)),
+  tabBarTheme: TabBarTheme(
+    labelColor: Colors.black54,
+  ),
+  cupertinoOverrideTheme: CupertinoThemeData(
+      barBackgroundColor: Colors.white,
+      scaffoldBackgroundColor: darkPrimarySwatch,
+      brightness: Brightness.dark
+  ),
+  // cupertinoOverrideTheme: CupertinoThemeData(
+  //     barBackgroundColor: darkPrimarySwatch,
+  //     scaffoldBackgroundColor: darkPrimarySwatch,
+  //     primaryColor: Colors.white,
+  //     textTheme: CupertinoTextThemeData(
+  //         tabLabelTextStyle: TextStyle(color: Colors.white),
+  //         navActionTextStyle: TextStyle(color: Colors.white),
+  //         navTitleTextStyle: TextStyle(color: Colors.white),
+  //         actionTextStyle: TextStyle(color: Colors.white),
+  //         navLargeTitleTextStyle: TextStyle(color: Colors.white),
+  //         primaryColor: Colors.white,
+  //         textStyle: TextStyle(color: Colors.white))),
+  brightness: Brightness.dark,
+  // iconTheme: IconThemeData(
+  //   color: Colors.white,
+  // ),
+  backgroundColor: whitePrimarySwatch,
+  iconTheme: IconThemeData(
+    color: Colors.black54,
+  ),
+  scaffoldBackgroundColor: whitePrimarySwatch,
 );
 
 class TextFieldFormatPrice extends TextInputFormatter {

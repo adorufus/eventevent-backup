@@ -121,6 +121,7 @@ class _CustomFormActivatorState extends State<CustomFormActivator> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         appBar: AppBar(
           brightness: Brightness.light,
           elevation: 1,
@@ -453,6 +454,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 1,

@@ -83,7 +83,7 @@ class _WaitingTransactionAlfamartState
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: checkForBackgroundColor(context),
       // bottomNavigationBar: GestureDetector(
       //   onTap: (){
       //     Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SuccessPage()));

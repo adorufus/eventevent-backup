@@ -94,6 +94,7 @@ class _SelectTicketWidgetState extends State<SelectTicketWidget> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         elevation: 1,
         backgroundColor: appBarColor,

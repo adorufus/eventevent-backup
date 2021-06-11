@@ -138,6 +138,7 @@ class PostEventReviewState extends State<PostEventReview> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         resizeToAvoidBottomInset: true,
         key: thisScaffold,
         appBar: AppBar(

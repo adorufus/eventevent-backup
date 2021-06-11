@@ -36,6 +36,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>{
       final TextEditingController websiteController =TextEditingController();
 
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       body: Flex(
         direction: Axis.vertical,
         children: <Widget>[

@@ -261,6 +261,7 @@ class _EventCatalogState extends State<EventCatalog>
         child: Scaffold(
           resizeToAvoidBottomPadding: false,
           resizeToAvoidBottomInset: false,
+          backgroundColor: checkForBackgroundColor(context),
           appBar: PreferredSize(
             preferredSize: Size(null, 100),
             child: Container(

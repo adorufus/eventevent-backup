@@ -105,6 +105,7 @@ class PaymentBcaState extends State<PaymentBCA> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.white,

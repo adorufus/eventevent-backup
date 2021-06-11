@@ -66,7 +66,7 @@ class EventStatisticState extends State<EventStatistic> {
     )..init(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: checkForBackgroundColor(context),
       appBar: sharedData == null ||
               ticketData == null ||
               checkinData == null ||

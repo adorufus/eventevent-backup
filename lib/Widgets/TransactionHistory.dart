@@ -56,6 +56,7 @@ class TransactionHistoryState extends State<TransactionHistory> {
     )..init(context);
 
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(50),
           child: Container(

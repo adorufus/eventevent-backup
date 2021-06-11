@@ -257,6 +257,7 @@ class _LoginRegisterWidget extends State<LoginRegisterWidget> {
     )..init(context);
 
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
         body: SafeArea(
           child: Stack(
             children: <Widget>[

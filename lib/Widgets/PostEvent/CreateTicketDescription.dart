@@ -28,6 +28,7 @@ class CreateTicketDescriptionState extends State<CreateTicketDescription> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         resizeToAvoidBottomInset: true,
         key: thisScaffold,
         appBar: AppBar(

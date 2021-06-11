@@ -137,6 +137,7 @@ class _TransactionFormState extends State<TransactionForm> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       bottomNavigationBar: GestureDetector(
         onTap: () {
           saveInput();

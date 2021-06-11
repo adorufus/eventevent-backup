@@ -30,6 +30,7 @@ class CreateTicketQtyState extends State<CreateTicketQty> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         resizeToAvoidBottomInset: false,
         key: thisScaffold,
         appBar: AppBar(

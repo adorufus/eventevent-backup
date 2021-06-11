@@ -283,6 +283,7 @@ class EditEventState extends State<EditEvent> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       key: thisScaffold,
       appBar: AppBar(
         brightness: Brightness.light,

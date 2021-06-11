@@ -82,7 +82,7 @@ class _OvoWaitingPaymentState extends State<OvoWaitingPayment> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.9),
+      backgroundColor: checkForBackgroundColor(context),
       // bottomNavigationBar: GestureDetector(
       //   onTap: (){
       //     Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => SuccessPage()));

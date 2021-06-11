@@ -42,6 +42,7 @@ class PostEventPosterState extends State<PostEventPoster> {
     )..init(context);
 
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,

@@ -84,6 +84,7 @@ class _EditTicketState extends State<EditTicket> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       key: thisScaffold,
       appBar: AppBar(
         brightness: Brightness.light,

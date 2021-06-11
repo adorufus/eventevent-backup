@@ -85,6 +85,7 @@ class _CategoryPageState extends State<CategoryPage> {
     )..init(context);
 
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       key: _scaffoldKey,
       appBar: PreferredSize(
         preferredSize: Size(null, 100),

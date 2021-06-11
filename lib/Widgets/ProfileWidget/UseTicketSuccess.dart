@@ -24,7 +24,7 @@ class UseTicketSuccessState extends State<UseTicketSuccess> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.95),
+      backgroundColor: checkForBackgroundColor(context),
       
       body: Container(
         height: MediaQuery.of(context).size.height,

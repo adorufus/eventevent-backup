@@ -14,7 +14,7 @@ class ExpiredPageState extends State<ExpiredPage> {
   @override
   Widget build(BuildContext context)  {
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.95),
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         brightness: Brightness.light,
         backgroundColor: Colors.white,

@@ -112,6 +112,7 @@ class _ProfileHeaderState extends State<ProfileHeader>
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
         appBar: PreferredSize(
           preferredSize: Size(null, 75),
           child: Container(

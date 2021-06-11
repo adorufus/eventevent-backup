@@ -538,6 +538,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       body: Container(
         color: checkForBackgroundColor(context),
         child: Center(

@@ -97,6 +97,7 @@ class _MyTicketState extends State<MyTicket> {
     });
 
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(

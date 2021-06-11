@@ -28,6 +28,7 @@ class CreateTicketShowRemainingTicketState extends State<CreateTicketShowRemaini
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,

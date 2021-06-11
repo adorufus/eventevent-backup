@@ -52,6 +52,7 @@ class CreateTicketEndTimeState extends State<CreateTicketEndTime> {
             color: selectedSingleDateDecorationColor, shape: BoxShape.circle));
 
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,

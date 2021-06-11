@@ -93,9 +93,12 @@ class _SplashScreenState extends State<SplashScreen> {
       allowFontScaling: true,
     )..init(context);
 
-    print(Provider.of<ThemeProvider>(context).isDarkMode);
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    // print(Provider.of<ThemeProvider>(context).isDarkMode);
 
     return Scaffold(
+      backgroundColor: themeProvider.isDarkMode ? darkPrimarySwatch : eventajaGreenTeal,
       body: Container(
         child: Center(
             child: Container(

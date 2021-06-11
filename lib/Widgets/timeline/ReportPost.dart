@@ -40,6 +40,7 @@ class ReportPostState extends State<ReportPost> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       key: scaffoldKey,
       appBar: AppBar(
         brightness: Brightness.light,
@@ -308,6 +309,7 @@ class SuccesReportPage extends StatelessWidget {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         brightness: Brightness.light,
         backgroundColor: Colors.white,

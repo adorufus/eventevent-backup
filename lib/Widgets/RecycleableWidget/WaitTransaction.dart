@@ -178,7 +178,7 @@ class _WaitTransactionState extends State<WaitTransaction>
     )..init(context);
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,

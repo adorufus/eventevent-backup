@@ -53,8 +53,8 @@ class GoogleRegisterState extends State<GoogleRegisterStart> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
       appBar: AppBar(
           brightness: Brightness.light,
           elevation: 0,

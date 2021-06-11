@@ -169,6 +169,7 @@ class PushNotificationState extends State<PushNotification> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
         key: scaffoldKey,
         appBar: PreferredSize(
           preferredSize: Size(null, 100),

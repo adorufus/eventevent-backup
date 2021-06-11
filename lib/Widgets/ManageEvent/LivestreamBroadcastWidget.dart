@@ -9,6 +9,7 @@ import 'package:flutter_wowza/gocoder/wowza_gocoder.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:torch_compat/torch_compat.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 
 class LivestreamBroadcast extends StatefulWidget {
   final eventDetail;
@@ -304,6 +305,7 @@ class _LivestreamBroadcastState extends State<LivestreamBroadcast> with WidgetsB
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         body: SafeArea(
       child: Stack(
         children: <Widget>[

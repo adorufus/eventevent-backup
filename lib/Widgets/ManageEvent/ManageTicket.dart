@@ -52,6 +52,7 @@ class ManageTicketState extends State<ManageTicket> {
     )..init(context);
 
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         brightness: Brightness.light,
         leading: GestureDetector(

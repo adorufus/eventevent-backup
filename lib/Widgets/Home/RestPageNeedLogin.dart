@@ -216,6 +216,7 @@ class _RestPageNeedLoginState extends State<RestPageNeedLogin> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       body: Container(
         child: ListView(
           children: <Widget>[

@@ -256,26 +256,9 @@ class _RunAppState extends State<RunApp> {
       debugShowCheckedModeBanner: false,
       navigatorObservers: <NavigatorObserver>[RunApp.observer],
       // themeMode: Provider.of<ThemeProvider>(context).mode,
-      themeMode: ThemeMode.dark,
+      themeMode: Provider.of<ThemeProvider>(context).mode,
       darkTheme: darkTheme,
-      theme: ThemeData(
-          fontFamily: 'Proxima',
-          primarySwatch: whitePrimarySwatch,
-          brightness: Brightness.dark,
-          textTheme: TextTheme(
-            title: TextStyle(
-              color: eventajaBlack
-            ),
-            subtitle: TextStyle(
-              color: eventajaBlack
-            )
-          ),
-          cupertinoOverrideTheme: CupertinoThemeData(
-              barBackgroundColor: Colors.white,
-              scaffoldBackgroundColor: darkPrimarySwatch,
-              brightness: Brightness.light
-          ),
-          backgroundColor: Colors.white),
+      theme: lightTheme,
       // home: CrashlyticsTester(),
       home:
           SplashScreen(analytics: RunApp.analytics, observer: RunApp.observer),

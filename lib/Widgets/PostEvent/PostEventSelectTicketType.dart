@@ -67,6 +67,7 @@ class SelectTicketTypeState extends State<SelectTicketType> {
     )..init(context);
 
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         key: thisState,
         appBar: AppBar(
           brightness: Brightness.light,

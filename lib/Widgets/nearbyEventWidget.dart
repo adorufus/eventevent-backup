@@ -15,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 
 var session;
 List nearbyEventData;
@@ -129,6 +130,7 @@ class _ListenPageState extends State<ListenPage> {
     )..init(context);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         body: Container(
           child: nearbyEventData == null
               ? HomeLoadingScreen().myTicketLoading()

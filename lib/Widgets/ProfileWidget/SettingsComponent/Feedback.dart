@@ -30,10 +30,11 @@ class GiveFeedbackState extends State<GiveFeedback> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       key: scaffoldKey,
       appBar: AppBar(
         elevation: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);

@@ -24,6 +24,7 @@ class _EventDetailCommentState extends State<EventDetailComment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(

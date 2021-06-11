@@ -162,7 +162,7 @@ class UseTicketState extends State<UseTicket> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: checkForBackgroundColor(context),
       key: scaffoldKey,
       appBar: AppBar(
         brightness: Brightness.light,

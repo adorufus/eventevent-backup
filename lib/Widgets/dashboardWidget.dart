@@ -522,10 +522,11 @@ class _DashboardWidgetState extends State<DashboardWidget>
           //   leading: ,
           // ),
           key: scaffoldKey,
+          backgroundColor: checkForBackgroundColor(context),
           bottomNavigationBar: SafeArea(
             bottom: true,
             child: CupertinoTabBar(
-              backgroundColor: Colors.black.withOpacity(0),
+              backgroundColor: appBarColor,
                 currentIndex: _selectedPage,
                 onTap: (int index) {
                   setState(() {

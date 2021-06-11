@@ -35,6 +35,7 @@ class WebViewTestState extends State<WebViewTest> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         brightness: Brightness.light,
         backgroundColor: Colors.white,

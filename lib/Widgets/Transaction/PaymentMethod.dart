@@ -72,7 +72,7 @@ class PaymentMethodState extends State<PaymentMethod> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 0,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 
 class OpenMedia extends StatefulWidget {
   final articleID;
@@ -23,6 +24,7 @@ class _OpenMediaState extends State<OpenMedia> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: PreferredSize(
         preferredSize: Size(null, 100),
         child: Container(

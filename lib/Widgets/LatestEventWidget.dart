@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 
 class LatestEventWidget extends StatefulWidget {
   final isRest;
@@ -87,6 +88,7 @@ class _LatestEventWidget extends State<LatestEventWidget> {
     )..init(context);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         body: Container(
           child: latestEventData == null
               ? HomeLoadingScreen().myTicketLoading()

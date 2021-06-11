@@ -173,6 +173,7 @@ class BuyersState extends State<Buyers> {
     )..init(context);
 
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       key: scaffoldKey,
       appBar: AppBar(
         brightness: Brightness.light,

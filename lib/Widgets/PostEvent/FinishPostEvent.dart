@@ -3,6 +3,7 @@ import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/utils.dart';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 
 class FinishPostEvent extends StatefulWidget{
   @override
@@ -42,6 +43,7 @@ class FinishPostEventState extends State<FinishPostEvent>{
     )..init(context);
     
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,

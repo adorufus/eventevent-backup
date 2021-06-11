@@ -30,6 +30,7 @@ class PostEventState extends State<PostEvent> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         resizeToAvoidBottomInset: false,
         resizeToAvoidBottomPadding: false,
         key: thisScaffold,
@@ -175,6 +176,7 @@ class PostEvent2State extends State<PostEvent2> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
@@ -499,6 +501,7 @@ class PostEvent3State extends State<PostEvent3> {
             color: selectedSingleDateDecorationColor, shape: BoxShape.circle));
 
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
@@ -692,6 +695,7 @@ class PostEvent4State extends State<PostEvent4> {
             color: selectedSingleDateDecorationColor, shape: BoxShape.circle));
 
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
@@ -860,6 +864,7 @@ class PostEvent5State extends State<PostEvent5> {
             color: selectedSingleDateDecorationColor, shape: BoxShape.circle));
 
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
@@ -1046,6 +1051,7 @@ class PostEvent6State extends State<PostEvent6> {
             color: selectedSingleDateDecorationColor, shape: BoxShape.circle));
 
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,

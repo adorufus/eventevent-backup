@@ -40,8 +40,9 @@ class BankOptionsState extends State<BankOptions> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);

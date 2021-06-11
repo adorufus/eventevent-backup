@@ -26,6 +26,7 @@ class CreateTicketMinBoughtState extends State<CreateTicketMinBought> {
     )..init(context);
     return Scaffold(
         key: thisScaffold,
+        backgroundColor: checkForBackgroundColor(context),
         appBar: AppBar(
           brightness: Brightness.light,
           backgroundColor: appBarColor,

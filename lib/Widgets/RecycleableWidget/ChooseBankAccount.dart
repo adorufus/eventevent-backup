@@ -43,6 +43,7 @@ class _ChooseBankAccountState extends State<ChooseBankAccount> {
     )..init(context);
 
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         elevation: 1,
         backgroundColor: Colors.white,

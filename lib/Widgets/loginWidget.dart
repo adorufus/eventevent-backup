@@ -78,6 +78,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: false,
+      backgroundColor: checkForBackgroundColor(context),
       key: _scaffoldKey,
       appBar: CupertinoNavigationBar(
         padding:

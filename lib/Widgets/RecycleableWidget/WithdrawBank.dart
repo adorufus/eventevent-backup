@@ -91,6 +91,7 @@ class WithdrawBankState extends State<WithdrawBank> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       key: scaffoldKey,
       resizeToAvoidBottomPadding: false,
       appBar: PreferredSize(

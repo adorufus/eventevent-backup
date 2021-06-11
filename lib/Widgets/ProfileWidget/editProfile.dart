@@ -99,6 +99,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
     )..init(context);
 
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 1,

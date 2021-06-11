@@ -70,6 +70,7 @@ class SearchState extends State<Search> {
     });
 
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
       appBar: PreferredSize(

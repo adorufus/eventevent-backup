@@ -142,6 +142,7 @@ class HomeLoadingScreen {
 
   Widget eventStatisticLoading(BuildContext context) {
     return Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         appBar: PreferredSize(
           preferredSize: Size(null, 100),
           child: Container(
@@ -1266,6 +1267,7 @@ class HomeLoadingScreen {
 
   Widget profileLoading(BuildContext context) {
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: PreferredSize(
         preferredSize: Size(null, 75),
         child: Container(

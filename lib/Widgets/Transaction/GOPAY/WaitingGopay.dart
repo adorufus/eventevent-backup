@@ -91,6 +91,7 @@ class _WaitingGopayState extends State<WaitingGopay> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         brightness: Brightness.light,
         backgroundColor: Colors.white,

@@ -70,6 +70,7 @@ class ShowQrState extends State<ShowQr> {
     )..init(context);
 
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 0,

@@ -24,6 +24,7 @@ class TimelineDashboard extends StatefulWidget {
   final isRest;
 
   const TimelineDashboard({Key key, this.isRest}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return TimelineDashboardState();
@@ -258,8 +259,8 @@ class TimelineDashboardState extends State<TimelineDashboard>
                                 margin: EdgeInsets.only(
                                     left: 13, right: 13, bottom: 15, top: 13),
                                 decoration: BoxDecoration(
-                                  color: checkForContainerBackgroundColor
-                                    (context),
+                                  color:
+                                      checkForContainerBackgroundColor(context),
                                   shape: BoxShape.rectangle,
                                   boxShadow: <BoxShadow>[
                                     BoxShadow(
@@ -302,6 +303,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
             ),
           )
         : Scaffold(
+            backgroundColor: checkForBackgroundColor(context),
             appBar: PreferredSize(
               preferredSize: Size(null, 100),
               child: Container(
@@ -314,6 +316,7 @@ class TimelineDashboardState extends State<TimelineDashboard>
                     automaticallyImplyLeading: false,
                     elevation: 0,
                     // backgroundColor: Colors.white,
+                    backgroundColor: appBarColor,
                     titleSpacing: 0,
                     centerTitle: false,
                     title: Container(

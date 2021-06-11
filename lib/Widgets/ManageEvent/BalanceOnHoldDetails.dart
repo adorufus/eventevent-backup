@@ -183,7 +183,7 @@ class _BalanceOnHoldDetailsState extends State<BalanceOnHoldDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.grey.withOpacity(.1),
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 0,

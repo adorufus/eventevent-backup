@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart'; import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
+import 'package:eventevent/helper/colorsManagement.dart';
 
 class ListenPage extends StatefulWidget {
   @override
@@ -33,6 +34,7 @@ class _ListenPageState extends State<ListenPage> {
       @override
       Widget build(BuildContext context) { 
         return Scaffold(
+          backgroundColor: checkForBackgroundColor(context),
           body: Center(child: Text('Get Longitude Latitude | Lat: ${currentLocation.latitude} Long: ${currentLocation.longitude}'),),
         ); 
       }

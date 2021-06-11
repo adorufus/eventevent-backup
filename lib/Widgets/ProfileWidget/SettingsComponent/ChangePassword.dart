@@ -35,9 +35,10 @@ class ChangePasswordState extends State<ChangePassword> {
 
     return Scaffold(
       key: thisScaffold,
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         elevation: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         centerTitle: true,
         title: Text(
           'CHANGE PASSWORD',

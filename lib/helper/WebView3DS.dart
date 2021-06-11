@@ -45,6 +45,7 @@ class WebView3DSState extends State<WebView3DS> {
       allowFontScaling: true,
     )..init(context);
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         brightness: Brightness.light,
         backgroundColor: Colors.white,

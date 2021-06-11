@@ -18,7 +18,7 @@ class _ScanQrTutorialState extends State<ScanQrTutorial> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: checkForBackgroundColor(context),
       body: SafeArea(
         child: Column(
           children: <Widget>[

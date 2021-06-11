@@ -25,6 +25,7 @@ class PrivacyPolicyState extends State<PrivacyPolicy>{
     bool isLoading = false;
     
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         elevation: 1,
         backgroundColor: eventajaGreenTeal,

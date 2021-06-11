@@ -10,6 +10,7 @@ import 'package:video_player/video_player.dart';
 import 'dart:io';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/status.dart' as status;
+import 'package:eventevent/helper/colorsManagement.dart';
 
 class LivestreamPlayer extends StatefulWidget {
   final wowzaLiveUrl;
@@ -79,6 +80,7 @@ class _LivestreamPlayerState extends State<LivestreamPlayer>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: checkForBackgroundColor(context),
       body: SafeArea(
         child: Stack(
           fit: StackFit.expand,
