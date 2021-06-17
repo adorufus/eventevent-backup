@@ -76,8 +76,10 @@ class GiveFeedbackState extends State<GiveFeedback> {
           child: TextFormField(
             controller: feedbackController,
             maxLines: 10,
+            style: TextStyle(color: checkForTextTitleColor(context)),
             keyboardType: TextInputType.multiline,
             decoration: InputDecoration(
+              hintStyle: TextStyle(color: checkForTextTitleColor(context)),
                 enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(15)),
@@ -85,7 +87,7 @@ class GiveFeedbackState extends State<GiveFeedback> {
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(15)),
                 filled: true,
-                fillColor: Colors.white),
+                fillColor: checkForContainerBackgroundColor(context)),
           ),
         ),
       ),

@@ -99,6 +99,7 @@ class _SelectedTicketQuantityWidgetState
     return SafeArea(
       bottom: false,
       child: Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         appBar: AppBar(
           brightness: Brightness.light,
           backgroundColor: appBarColor,

@@ -48,7 +48,7 @@ class _ZoomTicketPageState extends State<ZoomTicketPage> {
             child: AppBar(
               brightness: Brightness.light,
               elevation: 0,
-              backgroundColor: Colors.white,
+              backgroundColor: appBarColor,
               leading: GestureDetector(
                 onTap: () {
                   Navigator.pop(context);

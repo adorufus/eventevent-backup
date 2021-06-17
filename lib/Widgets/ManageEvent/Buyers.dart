@@ -178,7 +178,7 @@ class BuyersState extends State<Buyers> {
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);

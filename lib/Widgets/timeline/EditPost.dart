@@ -39,6 +39,7 @@ class EditPostState extends State<EditPost> {
     )..init(context);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
         key: scaffoldKey,
         appBar: AppBar(
           brightness: Brightness.light,

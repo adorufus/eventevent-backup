@@ -41,7 +41,7 @@ class BankAccountListState extends State<BankAccountList> {
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
@@ -85,8 +85,11 @@ class BankAccountListState extends State<BankAccountList> {
                         child: Container(
                           height: ScreenUtil.instance.setWidth(85),
                           width: MediaQuery.of(context).size.width,
-                          margin: EdgeInsets.only(bottom: 3),
-                          color: Colors.white,
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          margin: EdgeInsets.only(
+                            bottom: 3,
+                          ),
+                          color: checkForContainerBackgroundColor(context),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             mainAxisSize: MainAxisSize.min,
@@ -147,7 +150,7 @@ class BankAccountListState extends State<BankAccountList> {
                     },
                     child: Container(
                       height: ScreenUtil.instance.setWidth(100),
-                      color: Colors.white,
+                      color: checkForContainerBackgroundColor(context),
                       child: Center(
                         child: Icon(
                           Icons.add_circle_outline,

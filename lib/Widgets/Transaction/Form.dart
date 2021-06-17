@@ -344,7 +344,8 @@ class _TransactionFormState extends State<TransactionForm> {
                         fillColor: checkForContainerBackgroundColor(context),
                         filled: true,
                         hintText: 'Re-enter Your Email',
-                        hintStyle: TextStyle(color: checkForTextTitleColor(context)),
+                        hintStyle:
+                            TextStyle(color: checkForTextTitleColor(context)),
                         border: InputBorder.none,
                         suffixIcon: validationEmailIcon),
                   ),
@@ -392,7 +393,7 @@ class _TransactionFormState extends State<TransactionForm> {
                           textForm(
                             aditionalNotesController,
                             "Additional notes for event organizer... Example:"
-                                " Please find the best seat for me.",
+                            " Please find the best seat for me.",
                             isMultiLine: true,
                             maxLine: 100,
                           ),
@@ -489,7 +490,7 @@ class _TransactionFormState extends State<TransactionForm> {
             margin: EdgeInsets.only(bottom: 30),
             padding: EdgeInsets.all(15),
             alignment: Alignment.centerLeft,
-            color: Colors.white,
+            color: checkForContainerBackgroundColor(context),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -612,11 +613,23 @@ class _TransactionFormState extends State<TransactionForm> {
       return TextFormField(
         controller: customFormControllers[index],
         keyboardType: TextInputType.multiline,
+        style: TextStyle(
+          color: checkForTextTitleColor(context),
+        ),
         textInputAction: TextInputAction.done,
         decoration: InputDecoration(
-            border: InputBorder.none,
-            hintMaxLines: 100,
-            hintText: 'Put your answers....'),
+          border: InputBorder.none,
+          hintMaxLines: 100,
+          hintText: 'Put your answers....',
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: checkForTextTitleColor(context),
+            ),
+          ),
+          hintStyle: TextStyle(
+            color: checkForTextTitleColor(context),
+          ),
+        ),
       );
     }
 

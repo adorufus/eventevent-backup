@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:eventevent/Providers/ThemeProvider.dart';
 import 'package:eventevent/Widgets/Home/HomeLoadingScreen.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -103,7 +105,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         leading: GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
@@ -130,7 +132,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                         color: Colors.transparent,
                         child: Center(
                           child: Container(
-                            color: Colors.white,
+                            color: checkForContainerBackgroundColor(context),
                             height: ScreenUtil.instance.setWidth(120),
                             width: ScreenUtil.instance.setWidth(120),
                             child: SizedBox(
@@ -278,8 +280,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
           width: MediaQuery.of(context).size.width / 1.2,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
-              boxShadow: <BoxShadow>[
+              color: checkForContainerBackgroundColor(context),
+              boxShadow:Provider.of<ThemeProvider>(context).isDarkMode ?
+              null : <BoxShadow>[
                 BoxShadow(
                     color: Colors.grey, offset: Offset(1, 1), blurRadius: 2)
               ]),
@@ -305,6 +308,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                       child: TextFormField(
                         controller: usernameController,
                         textAlign: TextAlign.start,
+                        style: TextStyle(color: checkForAppBarTitleColor(context)),
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(vertical: 1),
@@ -339,11 +343,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                       child: TextFormField(
                         controller: firstNameController,
                         textAlign: TextAlign.start,
+                        style: TextStyle(color: checkForAppBarTitleColor(context)),
                         decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(vertical: 1),
                             border: InputBorder.none,
                             hintText: 'First Name',
                             hintStyle: TextStyle(
+                              color: checkForAppBarTitleColor(context),
                                 fontSize: ScreenUtil.instance.setSp(15))),
                       ),
                     ),
@@ -372,11 +378,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                       child: TextFormField(
                         controller: lastNameController,
                         textAlign: TextAlign.start,
+                        style: TextStyle(color: checkForAppBarTitleColor(context)),
                         decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(vertical: 1),
                             border: InputBorder.none,
                             hintText: 'Last Name',
                             hintStyle: TextStyle(
+                              color: checkForAppBarTitleColor(context),
                                 fontSize: ScreenUtil.instance.setSp(15))),
                       ),
                     ),
@@ -405,11 +413,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                       child: TextFormField(
                         controller: birthDateController,
                         textAlign: TextAlign.start,
+                        style: TextStyle(color: checkForAppBarTitleColor(context)),
                         decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(vertical: 1),
                             border: InputBorder.none,
                             hintText: 'Birthday',
                             hintStyle: TextStyle(
+                              color: checkForAppBarTitleColor(context),
                                 fontSize: ScreenUtil.instance.setSp(15))),
                       ),
                     ),
@@ -439,6 +449,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                       child: TextFormField(
                         controller: shortBioController,
                         keyboardType: TextInputType.multiline,
+                        style: TextStyle(color: checkForAppBarTitleColor(context)),
                         maxLines: null,
                         textAlign: TextAlign.start,
                         decoration: InputDecoration(
@@ -446,6 +457,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                             border: InputBorder.none,
                             hintText: 'Short Bio',
                             hintStyle: TextStyle(
+                              color: checkForAppBarTitleColor(context),
                                 fontSize: ScreenUtil.instance.setSp(15))),
                       ),
                     ),
@@ -481,8 +493,10 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
           width: MediaQuery.of(context).size.width / 1.2,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
-              boxShadow: <BoxShadow>[
+              color: checkForContainerBackgroundColor(context),
+              boxShadow: Provider.of<ThemeProvider>(context).isDarkMode ?
+              null :
+                  <BoxShadow>[
                 BoxShadow(
                     color: Colors.grey, offset: Offset(1, 1), blurRadius: 2)
               ]),
@@ -508,11 +522,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                       child: TextFormField(
                         controller: emailController,
                         textAlign: TextAlign.start,
+                        style: TextStyle(color: checkForAppBarTitleColor(context)),
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(vertical: 1),
                           hintText: 'Email Address',
                           hintStyle: TextStyle(
+                            color: checkForAppBarTitleColor(context),
                               fontSize: ScreenUtil.instance.setSp(15)),
                         ),
                       ),
@@ -542,11 +558,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                       child: TextFormField(
                         controller: phoneController,
                         textAlign: TextAlign.start,
+                        style: TextStyle(color: checkForAppBarTitleColor(context)),
                         decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(vertical: 1),
                             border: InputBorder.none,
                             hintText: 'Phone Number',
                             hintStyle: TextStyle(
+                              color: checkForAppBarTitleColor(context),
                                 fontSize: ScreenUtil.instance.setSp(15))),
                       ),
                     ),
@@ -575,11 +593,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
                       child: TextFormField(
                         controller: websiteController,
                         textAlign: TextAlign.start,
+                        style: TextStyle(color: checkForAppBarTitleColor(context)),
                         decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(vertical: 1),
                             border: InputBorder.none,
                             hintText: 'Website',
                             hintStyle: TextStyle(
+                              color: checkForAppBarTitleColor(context),
                                 fontSize: ScreenUtil.instance.setSp(15))),
                       ),
                     ),

@@ -24,11 +24,10 @@ class _ZoomDetailFormState extends State<ZoomDetailForm> {
           width: MediaQuery.of(context).size.width,
           height: ScreenUtil.instance.setWidth(50),
           padding: EdgeInsets.symmetric(horizontal: 13),
-          color: Colors.white,
           child: AppBar(
             brightness: Brightness.light,
             elevation: 0,
-            backgroundColor: Colors.white,
+            backgroundColor: appBarColor,
             leading: GestureDetector(
               onTap: () {
                 Navigator.pop(context);
@@ -45,7 +44,7 @@ class _ZoomDetailFormState extends State<ZoomDetailForm> {
               title: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: ScreenUtil.instance.setSp(14),
-                color: Colors.black,
+                color: checkForAppBarTitleColor(context),
               ),
             ),
           ),
@@ -65,10 +64,11 @@ class _ZoomDetailFormState extends State<ZoomDetailForm> {
             SizedBox(height: 3),
             TextFormField(
               controller: zoomIdController,
+              style: TextStyle(color: checkForTextTitleColor(context),),
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: 'Example: 660 550 440',
-                hintStyle: TextStyle(color: Colors.grey.withOpacity(.3))
+                hintStyle: TextStyle(color: checkForTextTitleColor(context),)
               ),
             ),
             SizedBox(height: 15),
@@ -76,9 +76,10 @@ class _ZoomDetailFormState extends State<ZoomDetailForm> {
             SizedBox(height: 3),
             TextFormField(
               controller: descriptionController,
+              style: TextStyle(color: checkForTextTitleColor(context),),
               decoration: InputDecoration(
                 hintText: 'Example: Awasome zoom livestream',
-                hintStyle: TextStyle(color: Colors.grey.withOpacity(.3))
+                hintStyle: TextStyle(color: checkForTextTitleColor(context),)
               ),
             ),
             SizedBox(height: 20),

@@ -18,6 +18,7 @@ class CustomFormActivator extends StatefulWidget {
 
   const CustomFormActivator({Key key, this.eventId, this.from})
       : super(key: key);
+
   @override
   _CustomFormActivatorState createState() => _CustomFormActivatorState();
 }
@@ -458,7 +459,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         centerTitle: true,
         title: Text(
           'Edit / Add Custom Form',
@@ -515,7 +516,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
               },
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 13),
-                color: Colors.white,
+                // color: Colors.white,
                 child: Center(
                   child: Column(
                     children: <Widget>[
@@ -536,17 +537,17 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
 
   void showAddBottomSheet() {
     showModalBottomSheet(
+      backgroundColor: Colors.black.withOpacity(0),
       context: context,
       isScrollControlled: true,
       builder: (context) {
         return Padding(
           padding: MediaQuery.of(context).viewInsets,
           child: Container(
-            color: Color(0xFF737373),
             child: Container(
               padding: EdgeInsets.only(bottom: 0),
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: checkForBackgroundColor(context),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(15),
                     topRight: Radius.circular(15),
@@ -557,7 +558,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                   Container(
                     padding: EdgeInsets.all(13),
                     decoration: BoxDecoration(
-                        color: eventajaGreenTeal,
+                        color: checkForBottomSheetAppBarColor(context),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(15),
                           topRight: Radius.circular(15),
@@ -788,9 +789,20 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
               width: 200,
               child: TextFormField(
                 controller: simpleQuestionController,
+                style: TextStyle(
+                  color: checkForTextTitleColor(context),
+                ),
                 textAlign: TextAlign.center,
                 decoration: InputDecoration(
                   hintText: 'enter your question',
+                  hintStyle: TextStyle(
+                    color: checkForTextTitleColor(context),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: checkForTextTitleColor(context),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -891,7 +903,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
             Expanded(
               child: Center(
                 child: CupertinoPicker(
-                  backgroundColor: Colors.white,
+                  backgroundColor: checkForBackgroundColor(context),
                   itemExtent: 50,
                   children: [2, 3, 4, 5].map((val) {
                     return Container(
@@ -987,8 +999,20 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
                 itemBuilder: (context, i) {
                   return TextFormField(
                     controller: textEditingControllers[i],
+                    style: TextStyle(
+                      color: checkForTextTitleColor(context),
+                    ),
                     decoration: InputDecoration(
-                        hintText: '${(i + 1).toString()}. Type Question Here'),
+                      hintText: '${(i + 1).toString()}. Type Question Here',
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: checkForTextTitleColor(context),
+                        ),
+                      ),
+                      hintStyle: TextStyle(
+                        color: checkForTextTitleColor(context),
+                      ),
+                    ),
                     onChanged: ((val) {
                       print(textEditingControllers[i].text);
                     }),
@@ -1096,7 +1120,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
     return Container(
       margin: EdgeInsets.only(bottom: 25),
       padding: EdgeInsets.only(bottom: 13),
-      color: Colors.white,
+      color: checkForContainerBackgroundColor(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -1191,7 +1215,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
       padding: EdgeInsets.all(13),
       margin: EdgeInsets.only(bottom: 25),
       height: 120,
-      color: Colors.white,
+      color: checkForContainerBackgroundColor(context),
       child: Stack(
         children: <Widget>[
           Column(
@@ -1220,7 +1244,7 @@ class _ManageCustomFormState extends State<ManageCustomForm> {
             ],
           ),
           Container(
-            color: Colors.white.withOpacity(.8),
+            color: checkForContainerBackgroundColor(context).withOpacity(.8),
             child: Center(
               child: Text('DEFAULT',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),

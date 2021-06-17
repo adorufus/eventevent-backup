@@ -828,6 +828,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
         context: context,
         builder: (thisContext) {
           return Dialog(
+            backgroundColor: checkForBackgroundColor(context),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             // backgroundColor: Colors.white,

@@ -82,63 +82,39 @@ class ChangePasswordState extends State<ChangePassword> {
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           child: Column(
             children: <Widget>[
-              TextFormField(
-                controller: currentPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Current Password',
-                  prefixIcon: Icon(
-                    Icons.lock,
-                    color: Colors.grey,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey)),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey)),
-                  prefixStyle: TextStyle(color: Colors.grey),
-                ),
-              ),
+              textField(currentPasswordController, "Current Password"),
               SizedBox(
                 height: ScreenUtil.instance.setWidth(30),
               ),
-              TextFormField(
-                controller: newPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'New Password',
-                  prefixIcon: Icon(
-                    Icons.lock,
-                    color: Colors.grey,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey)),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey)),
-                  prefixStyle: TextStyle(color: Colors.grey),
-                ),
-              ),
+              textField(newPasswordController, "New Password"),
               SizedBox(
-                height: ScreenUtil.instance.setWidth(10),
+                height: ScreenUtil.instance.setWidth(30),
               ),
-              TextFormField(
-                controller: confirmPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Confirm Password',
-                  prefixIcon: Icon(
-                    Icons.lock,
-                    color: Colors.grey,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey)),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey)),
-                  prefixStyle: TextStyle(color: Colors.grey),
-                ),
-              )
+              textField(confirmPasswordController, "Confirm Password"),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget textField(TextEditingController controller, String hintText) {
+    return TextFormField(
+      controller: controller,
+      obscureText: true,
+      style: TextStyle(color: checkForAppBarTitleColor(context)),
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: TextStyle(color: checkForAppBarTitleColor(context)),
+        prefixIcon: Icon(
+          Icons.lock,
+          color: Colors.grey,
+        ),
+        enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey)),
+        focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey)),
+        prefixStyle: TextStyle(color: Colors.grey),
       ),
     );
   }

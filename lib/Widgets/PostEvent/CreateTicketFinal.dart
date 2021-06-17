@@ -65,10 +65,12 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
       ticketTypeId = widget.ticketDetail['id'];
       imageFile = new File(imageUri);
 
-      fee = (int.parse(price) * 3) ~/ 100;
+      if(ticketTypeId != '5' || ticketTypeId != '7'){
+        fee = (int.parse(price) * 3) ~/ 100;
 
-      if (fee < 5000) {
-        fee = 5000;
+        if (fee < 5000) {
+          fee = 5000;
+        }
       }
     });
   }

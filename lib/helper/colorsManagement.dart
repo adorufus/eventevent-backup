@@ -46,6 +46,11 @@ Color checkForBackgroundColor(BuildContext context) {
   Colors.white;
 }
 
+Color checkForBottomSheetAppBarColor(BuildContext context) {
+  return Provider.of<ThemeProvider>(context).isDarkMode ? Color(0xff383838) :
+  eventajaGreenTeal;
+}
+
 Color checkForContainerBackgroundColor(BuildContext context) {
   return Provider.of<ThemeProvider>(context).isDarkMode ?
   Color(0xff383838) : Colors.white;

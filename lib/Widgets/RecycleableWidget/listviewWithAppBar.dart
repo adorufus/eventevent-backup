@@ -129,7 +129,7 @@ class _ListViewWithAppBar extends State<ListViewWithAppBar> {
       backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
         elevation: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).pop();

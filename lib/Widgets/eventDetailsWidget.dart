@@ -360,6 +360,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             color: checkForBackgroundColor(context),
             child: Center(child: CupertinoActivityIndicator(radius: 20)))
         : Scaffold(
+        backgroundColor: checkForBackgroundColor(context),
             appBar: PreferredSize(
               preferredSize: Size(null, 100),
               child: Container(
