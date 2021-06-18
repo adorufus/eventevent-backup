@@ -100,6 +100,8 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       session = prefs.getString('Session');
     });
 
+    print("ticket id: " + prefs.getString('TicketID'));
+
     Map<String, dynamic> body = {
       'X-API-KEY': API_KEY,
       'ticketID': prefs.getString('TicketID'),
@@ -141,8 +143,9 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
       }
     }
 
-    if (widget.ticketType == 'free_limited') {
-      print(bodyFreeLimit);
+    if (widget.ticketType == 'free_limited' ||
+        widget.ticketType == 'early_bird') {
+      print("body free: " + bodyFreeLimit.toString());
     } else {
       print(body);
     }
@@ -166,9 +169,7 @@ class _ProcessingPaymentState extends State<ProcessingPayment> {
                     widget.eventTicketType == 'free_live_stream'
                 ? bodyFreeLimit
                 : body
-            : widget.ticketType ==
-                        'fr'
-                            'ee_limited' ||
+            : widget.ticketType == 'free_limited' ||
                     widget.ticketType == 'free_live_stream'
                 ? bodyFreeLimit
                 : body);

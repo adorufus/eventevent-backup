@@ -82,6 +82,8 @@ class _SelectedTicketQuantityWidgetState
       ticketCount = int.parse(widget.minTicket);
     });
 
+    print('ticket type: ' + widget.thisTicket.toString());
+
     getPreferences(counterMin, counterMax, price);
     setPreferences(widget.ticketPrice, ticketCount.toString());
   }
@@ -204,7 +206,11 @@ class _SelectedTicketQuantityWidgetState
                       width: ScreenUtil.instance.setWidth(150),
                     ),
                     Text(
-                      'Rp' +
+                      widget.thisTicket['paid_ticket_type_id'] == '5' ||
+                          widget.thisTicket['paid_ticket_type_id'] == '2' ||
+                          widget.thisTicket['paid_ticket_type_id'] == '4' ?
+                    "FREE"
+                          : 'Rp' +
                           formatPrice(
                               price:
                                   (int.parse(widget.ticketPrice) * ticketCount)

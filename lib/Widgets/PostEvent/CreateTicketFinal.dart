@@ -916,20 +916,6 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
 
       print(body);
 
-      print(prefs.getString('SETUP_TICKET_NAME'));
-      print(prefs.getString('SETUP_TICKET_DESCRIPTION'));
-      print(prefs.getString('SETUP_TICKET_QTY'));
-      print(prefs.getString('SETUP_TICKET_PRICE'));
-      print(prefs.getString('SETUP_TICKET_MIN_BOUGHT'));
-      print(prefs.getString('SETUP_TICKET_MAX_BOUGHT'));
-      print(prefs.getString('SETUP_TICKET_START_DATE'));
-      print(prefs.getString('SETUP_TICKET_START_TIME'));
-      print(prefs.getString('SETUP_TICKET_END_DATE'));
-      print(prefs.getString('SETUP_TICKET_END_TIME'));
-      print(prefs.getString('SETUP_TICKET_SHOW_REMAINING_TICKET'));
-      print(ticketPaidBy);
-      print(finalPrice);
-
       var data = FormData.fromMap(body);
       Response response = await dio.post(
         '/ticket_setup/post',

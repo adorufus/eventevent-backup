@@ -63,8 +63,10 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
   getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
+    print('ticket type id: '  + prefs.getString('NEW_EVENT_TICKET_TYPE_ID'));
+
     setState(() {
-      ticketTypeID = prefs.getString('NEW_EVENT_TICKET_TYPE_ID');
+      ticketTypeID = prefs.getString('SETUP_TICKET_PAID_TICKET_TYPE');
       eventNameController.text = prefs.getString('SETUP_TICKET_NAME');
       imageUri = prefs.getString('SETUP_TICKET_POSTER');
       ticketQuantityController.text = prefs.getString('SETUP_TICKET_QTY');
@@ -87,7 +89,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     setState(() {
-      prefs.setString('NEW_EVENT_TICKET_TYPE_ID', ticketTypeID);
+      prefs.setString('SETUP_TICKET_PAID_TICKET_TYPE', ticketTypeID);
       prefs.setString('SETUP_TICKET_NAME', eventNameController.text);
       prefs.setString('SETUP_TICKET_QTY', ticketQuantityController.text);
       prefs.setString('SETUP_TICKET_PRICE', priceController.text);
