@@ -84,7 +84,8 @@ class PopularEventWidget extends StatelessWidget {
                       ]),
                       child: ProgressiveImage.assetNetwork(placeholder: 'asse'
                           'ts/grey-fade.jpg', thumbnail: imageUrl, image:
-                      imageUrl, width: 200, height: 259, fit: BoxFit.cover,),
+                      imageUrl, width: 200 * 1.5, height: 259 * 1.5, fit: BoxFit
+                          .cover,),
                 ),
               ),
               Container(
