@@ -82,7 +82,9 @@ class PopularEventWidget extends StatelessWidget {
                             blurRadius: 2,
                             spreadRadius: 2)
                       ]),
-                      child: ProgressiveImage.assetNetwork(placeholder: 'assets/grey-fade.jpg', thumbnail: imageUrl, image: imageUrl, width: 200, height: 259),
+                      child: ProgressiveImage.assetNetwork(placeholder: 'asse'
+                          'ts/grey-fade.jpg', thumbnail: imageUrl, image:
+                      imageUrl, width: 200, height: 259, fit: BoxFit.cover,),
                 ),
               ),
               Container(

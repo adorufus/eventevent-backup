@@ -93,6 +93,8 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
   saveFinalData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
+    print("paid ticket type: $ticketTypeID");
+
     setState(() {
       prefs.setString('SETUP_TICKET_PAID_TICKET_TYPE', ticketTypeID);
       prefs.setString('SETUP_TICKET_NAME', eventNameController.text);
