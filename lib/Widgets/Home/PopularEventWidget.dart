@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eventevent/Widgets/Home/MiniDate.dart';
 import 'package:eventevent/helper/colorsManagement.dart';
@@ -76,16 +78,16 @@ class PopularEventWidget extends StatelessWidget {
                         bottomLeft: Radius.circular(15),
                         bottomRight: Radius.circular(15),
                       ),
+                      image: DecorationImage(
+                        image: NetworkImage(imageUrl),
+                        fit: BoxFit.fill,
+                      ),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
                             color: Colors.black.withOpacity(0.1),
                             blurRadius: 2,
                             spreadRadius: 2)
                       ]),
-                      child: ProgressiveImage.assetNetwork(placeholder: 'asse'
-                          'ts/grey-fade.jpg', thumbnail: imageUrl, image:
-                      imageUrl, width: 200 * 1.5, height: 259 * 1.5, fit: BoxFit
-                          .contain, thumbnailScale: 2,),
                 ),
               ),
               Container(
