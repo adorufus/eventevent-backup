@@ -360,7 +360,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
             color: checkForBackgroundColor(context),
             child: Center(child: CupertinoActivityIndicator(radius: 20)))
         : Scaffold(
-        backgroundColor: checkForBackgroundColor(context),
+            backgroundColor: checkForBackgroundColor(context),
             appBar: PreferredSize(
               preferredSize: Size(null, 100),
               child: Container(
@@ -602,13 +602,14 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                           CupertinoActionSheetAction(
                                               onPressed: () {
                                                 Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            CustomFormActivator(
-                                                              eventId:
-                                                                  widget.id,
-                                                                  from: 'EventDetails'
-                                                            ),),);
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CustomFormActivator(
+                                                            eventId: widget.id,
+                                                            from:
+                                                                'EventDetails'),
+                                                  ),
+                                                );
                                               },
                                               child: Text('Edit Custom Form')),
                                         ],
@@ -661,13 +662,15 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               child: Container(
                 height: 80,
                 padding: EdgeInsets.symmetric(horizontal: 25.7),
-                decoration: BoxDecoration(color: checkForContainerBackgroundColor(context), boxShadow: [
-                  BoxShadow(
-                      offset: Offset(0, -1),
-                      blurRadius: 2,
-                      color: Color(0xff8a8a8b).withOpacity(.2),
-                      spreadRadius: 1.5)
-                ]),
+                decoration: BoxDecoration(
+                    color: checkForContainerBackgroundColor(context),
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, -1),
+                          blurRadius: 2,
+                          color: Color(0xff8a8a8b).withOpacity(.2),
+                          spreadRadius: 1.5)
+                    ]),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -783,754 +786,579 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                     // :
                     : Container(
                         child: SmartRefresher(
-                          controller: refreshController,
-                          enablePullDown: true,
-                          enablePullUp: false,
-                          onRefresh: () {
-                            setState(() {
-                              getEventDetailsSpecificInfo();
-                              getInvitedUser();
-                              getData();
-                              _currentTime = DateTime.now();
-                              _timer = Timer.periodic(
-                                  Duration(seconds: 1), _onTimeChange);
-                            });
-                            refreshController.refreshCompleted();
-                          },
-                          child: ListView(
-                            padding: EdgeInsets.symmetric(horizontal: 11),
-                            shrinkWrap: true,
-                            children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 13),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      width: ScreenUtil.instance
-                                          .setWidth(122.86 * 1.6),
-                                      height: ScreenUtil.instance
-                                          .setWidth(184.06 * 1.6),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                blurRadius: 10,
-                                                color: Color(0xff8a8a8b)
-                                                    .withOpacity(.5),
-                                                spreadRadius: 1.5)
-                                          ],
-                                          image: DecorationImage(
-                                              image: detailData['photo'] == null
-                                                  ? AssetImage(
-                                                      'assets/grey-fade.jpg')
-                                                  : NetworkImage(widget
-                                                      .detailData['photo']),
-                                              fit: BoxFit.fill)),
-                                    ),
-                                    // Expanded(child: SizedBox()),
-                                    Container(
-                                        margin: EdgeInsets.only(left: 10),
-                                        child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  ProfileWidget(
-                                                                    isRest: widget
-                                                                        .isRest,
-                                                                    userId: widget
-                                                                            .detailData[
-                                                                        'createdByID'],
-                                                                    initialIndex:
-                                                                        0,
-                                                                  )));
-                                                    },
-                                                    child: SizedBox(
+                        controller: refreshController,
+                        enablePullDown: true,
+                        enablePullUp: false,
+                        onRefresh: () {
+                          setState(() {
+                            getEventDetailsSpecificInfo();
+                            getInvitedUser();
+                            getData();
+                            _currentTime = DateTime.now();
+                            _timer = Timer.periodic(
+                                Duration(seconds: 1), _onTimeChange);
+                          });
+                          refreshController.refreshCompleted();
+                        },
+                        child: ListView(
+                          padding: EdgeInsets.symmetric(horizontal: 11),
+                          shrinkWrap: true,
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 13),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    width: ScreenUtil.instance
+                                        .setWidth(122.86 * 1.6),
+                                    height: ScreenUtil.instance
+                                        .setWidth(184.06 * 1.6),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              blurRadius: 10,
+                                              color: Color(0xff8a8a8b)
+                                                  .withOpacity(.5),
+                                              spreadRadius: 1.5)
+                                        ],
+                                        image: DecorationImage(
+                                            image: detailData['photo'] == null
+                                                ? AssetImage(
+                                                    'assets/grey-fade.jpg')
+                                                : NetworkImage(
+                                                    widget.detailData['photo']),
+                                            fit: BoxFit.fill)),
+                                  ),
+                                  // Expanded(child: SizedBox()),
+                                  Container(
+                                      margin: EdgeInsets.only(left: 10),
+                                      child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                ProfileWidget(
+                                                                  isRest: widget
+                                                                      .isRest,
+                                                                  userId: widget
+                                                                          .detailData[
+                                                                      'createdByID'],
+                                                                  initialIndex:
+                                                                      0,
+                                                                )));
+                                                  },
+                                                  child: SizedBox(
+                                                    height: ScreenUtil.instance
+                                                        .setWidth(30),
+                                                    width: ScreenUtil.instance
+                                                        .setWidth(30),
+                                                    child: Container(
                                                       height: ScreenUtil
                                                           .instance
                                                           .setWidth(30),
                                                       width: ScreenUtil.instance
                                                           .setWidth(30),
-                                                      child: Container(
-                                                        height: ScreenUtil
-                                                            .instance
-                                                            .setWidth(30),
-                                                        width: ScreenUtil
-                                                            .instance
-                                                            .setWidth(30),
-                                                        decoration: BoxDecoration(
-                                                            shape:
-                                                                BoxShape.circle,
-                                                            image: DecorationImage(
-                                                                image: NetworkImage(widget
-                                                                    .creatorImageUri
-                                                                    .toString()),
-                                                                fit: BoxFit
-                                                                    .cover)),
-                                                      ),
+                                                      decoration: BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          image: DecorationImage(
+                                                              image: NetworkImage(widget
+                                                                  .creatorImageUri
+                                                                  .toString()),
+                                                              fit: BoxFit
+                                                                  .cover)),
                                                     ),
                                                   ),
-                                                  SizedBox(
-                                                    width: ScreenUtil.instance
-                                                        .setWidth(5),
-                                                  ),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: <Widget>[
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          ProfileWidget(
-                                                                            userId:
-                                                                                detailData['createdByID'],
-                                                                            initialIndex:
-                                                                                0,
-                                                                          )));
-                                                        },
-                                                        child: Text(
-                                                          widget.creatorFullName ==
-                                                                  null
-                                                              ? 'loading'
-                                                              : widget
-                                                                  .creatorFullName
-                                                                  .toString(),
-                                                          style: TextStyle(
-                                                              fontSize:
-                                                                  ScreenUtil
-                                                                      .instance
-                                                                      .setSp(
-                                                                          12),
-                                                              color:
-                                                                  eventajaGreenTeal,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
+                                                ),
+                                                SizedBox(
+                                                  width: ScreenUtil.instance
+                                                      .setWidth(5),
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        ProfileWidget(
+                                                                          userId:
+                                                                              detailData['createdByID'],
+                                                                          initialIndex:
+                                                                              0,
+                                                                        )));
+                                                      },
+                                                      child: Text(
+                                                        widget.creatorFullName ==
+                                                                null
+                                                            ? 'loading'
+                                                            : widget
+                                                                .creatorFullName
+                                                                .toString(),
+                                                        style: TextStyle(
+                                                            fontSize: ScreenUtil
+                                                                .instance
+                                                                .setSp(12),
+                                                            color:
+                                                                eventajaGreenTeal,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
-                                                      Text(
-                                                          widget.creatorName ==
-                                                                  null
-                                                              ? ''
-                                                              : widget
-                                                                  .creatorName
-                                                                  .toString(),
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                              fontSize:
-                                                                  ScreenUtil
-                                                                      .instance
-                                                                      .setSp(
-                                                                          11))),
+                                                    ),
+                                                    Text(
+                                                        widget.creatorName ==
+                                                                null
+                                                            ? ''
+                                                            : widget.creatorName
+                                                                .toString(),
+                                                        style: TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: ScreenUtil
+                                                                .instance
+                                                                .setSp(11))),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                            SizedBox(
+                                                height: ScreenUtil.instance
+                                                    .setWidth(10)),
+                                            Container(
+                                              width: ScreenUtil.instance
+                                                  .setWidth(150),
+                                              child: Text(
+                                                widget.dateTime,
+                                                style: TextStyle(
+                                                  fontSize: ScreenUtil.instance
+                                                      .setSp(12),
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: ScreenUtil.instance
+                                                  .setWidth(5),
+                                            ),
+                                            detailData['isHybridEvent'] ==
+                                                    'streamOnly'
+                                                ? Row(
+                                                    children: <Widget>[
+                                                      Image.asset(
+                                                          'assets/online-event.png',
+                                                          scale: 25),
                                                     ],
                                                   )
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                  height: ScreenUtil.instance
-                                                      .setWidth(10)),
-                                              Container(
-                                                width: ScreenUtil.instance
-                                                    .setWidth(150),
-                                                child: Text(
-                                                  widget.dateTime,
-                                                  style: TextStyle(
+                                                : Container(),
+                                            detailData['isHybridEvent'] ==
+                                                    'streamOnly'
+                                                ? SizedBox(
+                                                    height: ScreenUtil.instance
+                                                        .setWidth(10),
+                                                  )
+                                                : Container(),
+                                            Container(
+                                              height: ScreenUtil.instance
+                                                  .setWidth(
+                                                      widget.detailData['name']
+                                                                  .length <
+                                                              30
+                                                          ? 15
+                                                          : 35),
+                                              width: ScreenUtil.instance
+                                                  .setWidth(170),
+                                              child: MarqueeWidget(
+                                                text: detailData['name'] == null
+                                                    ? '-'
+                                                    : widget.detailData['name']
+                                                        .toUpperCase(),
+                                                scrollAxis: Axis.horizontal,
+                                                textStyle: TextStyle(
                                                     fontSize: ScreenUtil
                                                         .instance
-                                                        .setSp(12),
-                                                    color: Colors.grey,
-                                                  ),
-                                                ),
+                                                        .setSp(15),
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                ratioOfBlankToScreen: .05,
                                               ),
-                                              SizedBox(
+                                            ),
+                                            SizedBox(
                                                 height: ScreenUtil.instance
-                                                    .setWidth(5),
-                                              ),
-                                              detailData['isHybridEvent'] ==
-                                                      'streamOnly'
-                                                  ? Row(
-                                                      children: <Widget>[
-                                                        Image.asset(
-                                                            'assets/online-event.png',
-                                                            scale: 25),
-                                                      ],
-                                                    )
-                                                  : Container(),
-                                              detailData['isHybridEvent'] ==
-                                                      'streamOnly'
-                                                  ? SizedBox(
-                                                      height: ScreenUtil
-                                                          .instance
-                                                          .setWidth(10),
-                                                    )
-                                                  : Container(),
-                                              Container(
-                                                height: ScreenUtil.instance
-                                                    .setWidth(widget
-                                                                .detailData[
-                                                                    'name']
-                                                                .length <
-                                                            30
-                                                        ? 15
-                                                        : 35),
-                                                width: ScreenUtil.instance
-                                                    .setWidth(170),
-                                                child: MarqueeWidget(
-                                                  text: detailData['name'] ==
-                                                          null
-                                                      ? '-'
-                                                      : widget
-                                                          .detailData['name']
-                                                          .toUpperCase(),
-                                                  scrollAxis: Axis.horizontal,
-                                                  textStyle: TextStyle(
-                                                      fontSize: ScreenUtil
-                                                          .instance
-                                                          .setSp(15),
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  ratioOfBlankToScreen: .05,
-                                                ),
-                                              ),
-                                              SizedBox(
+                                                    .setWidth(5)),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                SizedBox(
+                                                  width: ScreenUtil.instance
+                                                      .setWidth(10),
                                                   height: ScreenUtil.instance
-                                                      .setWidth(5)),
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  SizedBox(
+                                                      .setWidth(12),
+                                                  child: Image.asset(
+                                                      'assets/icons/location-transparent.png'),
+                                                ),
+                                                SizedBox(
                                                     width: ScreenUtil.instance
-                                                        .setWidth(10),
-                                                    height: ScreenUtil.instance
-                                                        .setWidth(12),
-                                                    child: Image.asset(
-                                                        'assets/icons/location-transparent.png'),
-                                                  ),
-                                                  SizedBox(
-                                                      width: ScreenUtil.instance
-                                                          .setWidth(5)),
-                                                  detailData['address']
-                                                              .toString()
-                                                              .length <
-                                                          30
-                                                      ? Text(
-                                                          detailData['address'],
-                                                          style: TextStyle(
+                                                        .setWidth(5)),
+                                                detailData['address']
+                                                            .toString()
+                                                            .length <
+                                                        30
+                                                    ? Text(
+                                                        detailData['address'] !=
+                                                                null
+                                                            ? detailData[
+                                                                'address']
+                                                            : '-',
+                                                        style: TextStyle(
+                                                            fontSize: ScreenUtil
+                                                                .instance
+                                                                .setSp(11)),
+                                                        maxLines: 1,
+                                                      )
+                                                    : Container(
+                                                        height: ScreenUtil
+                                                            .instance
+                                                            .setWidth(16),
+                                                        width: ScreenUtil
+                                                            .instance
+                                                            .setWidth(150),
+                                                        child: MarqueeWidget(
+                                                          text: detailData[
+                                                                      'address'] ==
+                                                                  null
+                                                              ? '-'
+                                                              : detailData[
+                                                                  'address'],
+                                                          scrollAxis:
+                                                              Axis.horizontal,
+                                                          textStyle: TextStyle(
                                                               fontSize:
                                                                   ScreenUtil
                                                                       .instance
                                                                       .setSp(
                                                                           11)),
-                                                          maxLines: 1,
-                                                        )
-                                                      : Container(
-                                                          height: ScreenUtil
-                                                              .instance
-                                                              .setWidth(16),
-                                                          width: ScreenUtil
-                                                              .instance
-                                                              .setWidth(150),
-                                                          child: MarqueeWidget(
-                                                            text: detailData[
-                                                                        'address'] ==
-                                                                    null
-                                                                ? '-'
-                                                                : detailData[
-                                                                    'address'],
-                                                            scrollAxis:
-                                                                Axis.horizontal,
-                                                            textStyle: TextStyle(
-                                                                fontSize:
-                                                                    ScreenUtil
-                                                                        .instance
-                                                                        .setSp(
-                                                                            11)),
-                                                            ratioOfBlankToScreen:
-                                                                .05,
-                                                          ),
-                                                        )
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                  height: ScreenUtil.instance
-                                                      .setWidth(5)),
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  SizedBox(
-                                                    width: ScreenUtil.instance
-                                                        .setWidth(10),
-                                                    height: ScreenUtil.instance
-                                                        .setWidth(12),
-                                                    child: Image.asset(
-                                                        'assets/icons/btn_time_green.png'),
-                                                  ),
-                                                  SizedBox(
-                                                      width: ScreenUtil.instance
-                                                          .setWidth(5)),
-                                                  Text(
-                                                      widget.startTime
-                                                              .toString() +
-                                                          ' to ' +
-                                                          widget.endTime
-                                                              .toString(),
-                                                      style: TextStyle(
-                                                          fontSize: ScreenUtil
-                                                              .instance
-                                                              .setSp(11))),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: ScreenUtil.instance
-                                                    .setWidth(30),
-                                              ),
-                                              StatefulBuilder(
-                                                builder: (context, setState) =>
-                                                    GestureDetector(
-                                                  onTap: () {
-                                                    if (widget.isRest == true) {
-                                                      Navigator.of(context).push(MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              LoginRegisterWidget(
-                                                                  previousWidget:
-                                                                      'EventDetailsWidgetRest',
-                                                                  eventId: widget
-                                                                      .id)));
-                                                    } else {
-                                                      if (widget.ticketStat[
-                                                                  'salesStatus'] ==
-                                                              null ||
-                                                          widget.ticketStat[
-                                                                  'salesStatus'] ==
-                                                              'null') {
-                                                        if (detailData['ticket_type']
-                                                                    ['type'] ==
-                                                                'free' ||
-                                                            detailData['ticket_type']
-                                                                    ['type'] ==
-                                                                'no_ticket') {
-                                                          print('show modal');
-                                                          if (isGoing == true) {
-                                                            ungoing().then(
-                                                                (response) {
-                                                              isLoading = true;
-                                                              print(response
-                                                                  .statusCode);
-                                                              print(response
-                                                                  .body);
-
-                                                              if (response.statusCode ==
-                                                                      200 ||
-                                                                  response.statusCode ==
-                                                                      201) {
-                                                                setState(() {
-                                                                  isGoing =
-                                                                      false;
-                                                                });
-                                                                isLoading =
-                                                                    false;
-                                                              } else {
-                                                                isLoading =
-                                                                    false;
-                                                              }
-                                                            });
-                                                          } else {
-                                                            showGoingOption();
-                                                          }
-                                                        }
-                                                      } else {
-                                                        if (widget.ticketStat[
-                                                                    'salesStatus'] ==
-                                                                'endSales' ||
-                                                            widget.ticketStat[
-                                                                    'salesStatus'] ==
-                                                                'comingSoon' ||
-                                                            widget.ticketPrice
-                                                                    .toLowerCase() ==
-                                                                'canceled' ||
-                                                            widget.ticketStat[
-                                                                    'availablewidget.ticketStatus'] ==
-                                                                '0') {
-                                                          return;
-                                                        } else {
-                                                          Navigator.of(context).push(
-                                                              MaterialPageRoute(
-                                                                  builder: (BuildContext
-                                                                          context) =>
-                                                                      SelectTicketWidget(
-                                                                        eventID:
-                                                                            widget.detailData['id'],
-                                                                        eventDate:
-                                                                            widget.detailData['dateStart'],
-                                                                      )));
-                                                        }
-                                                      }
-                                                    }
-                                                  },
-                                                  child: Container(
-                                                    height: ScreenUtil.instance
-                                                        .setWidth(32 * 1.1),
-                                                    width: ScreenUtil.instance
-                                                        .setWidth(widget.ticketStat[
-                                                                    'salesStatus'] ==
-                                                                "comingSoon"
-                                                            ? 135
-                                                            : 110 * 1.1),
-                                                    decoration: BoxDecoration(
-                                                        boxShadow: <BoxShadow>[
-                                                          BoxShadow(
-                                                              color: widget.ticketStat[
-                                                                          'salesStatus'] ==
-                                                                      'comingSoon'
-                                                                  ? Color(0xFF34B323)
-                                                                      .withOpacity(
-                                                                          .2)
-                                                                  : isGoing ==
-                                                                          true
-                                                                      ? Colors
-                                                                          .blue
-                                                                          .withOpacity(
-                                                                              0.4)
-                                                                      : widget
-                                                                          .itemColor
-                                                                          .withOpacity(
-                                                                              0.4),
-                                                              blurRadius: 2,
-                                                              spreadRadius: 1.5)
-                                                        ],
-                                                        color: widget.ticketStat[
-                                                                    'salesStatus'] ==
-                                                                'comingSoon'
-                                                            ? Color(0xFF34B323)
-                                                                .withOpacity(.5)
-                                                            : isGoing == true
-                                                                ? Colors.blue
-                                                                : widget
-                                                                    .itemColor,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(30)),
-                                                    child: Center(
-                                                        child: Text(
-                                                      isGoing == true
-                                                          ? 'Going!'
-                                                          : widget.ticketPrice,
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: ScreenUtil
-                                                              .instance
-                                                              .setSp(16),
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    )),
-                                                  ),
-                                                ),
-                                              ),
-                                            ])),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                  height: ScreenUtil.instance.setWidth(15)),
-                              Container(
-                                width: ScreenUtil.instance.setWidth(333.7),
-                                height: ScreenUtil.instance.setWidth(59.1),
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 13, vertical: 13),
-                                padding: EdgeInsets.all(15),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: checkForContainerBackgroundColor(context),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          blurRadius: 5,
-                                          spreadRadius: 1.5,
-                                          color:
-                                              Color(0xff8a8a8b).withOpacity(.5))
-                                    ]),
-                                child: Row(
-                                  children: <Widget>[
-                                    LoveItem(
-                                      isComment: false,
-                                      eventId: widget.id,
-                                      isAlreadyLoved:
-                                          detailData['isLoved'] == '1'
-                                              ? true
-                                              : false,
-                                      loveCount:
-                                          int.parse(detailData['countLove']),
-                                    ),
-                                    SizedBox(
-                                      width: ScreenUtil.instance.setWidth(10),
-                                    ),
-                                    LoveItem(
-                                          isComment: true,
-                                          eventId: widget.id,
-                                          isAlreadyCommented: widget
-                                                      .detailData['comment']
-                                                      .length <
-                                                  1
-                                              ? false
-                                              : widget.commentData
-                                                          .containsValue(
-                                                              currentUserId) ==
-                                                      true
-                                                  ? true
-                                                  : false,
-                                          commentCount: widget
-                                              .detailData['total_comment']
-                                              .toString()),
-                                    Expanded(
-                                      child: SizedBox(),
-                                    ),
-                                    GestureDetector(
-                                      onTap: widget.phoneNumber == null ||
-                                              widget.phoneNumber == ""
-                                          ? () {}
-                                          : () => launch("tel:" +
-                                              widget.phoneNumber.toString()),
-                                      child: SizedBox(
-                                        height:
-                                            ScreenUtil.instance.setWidth(33),
-                                        width: ScreenUtil.instance.setWidth(33),
-                                        child: Image.asset(
-                                          widget.phoneNumber == null ||
-                                                  widget.phoneNumber == ""
-                                              ? 'assets/icons/btn_phone.png'
-                                              : 'assets/icons/btn_phone_active.png',
-                                        ),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: widget.email == null ||
-                                              widget.email == ""
-                                          ? () {}
-                                          : () => launch("mailto:" +
-                                              widget.email.toString()),
-                                      child: SizedBox(
-                                        height:
-                                            ScreenUtil.instance.setWidth(33),
-                                        width: ScreenUtil.instance.setWidth(33),
-                                        child: Image.asset(widget.email ==
-                                                    null ||
-                                                widget.email == ""
-                                            ? 'assets/icons/btn_mail.png'
-                                            : 'assets/icons/btn_mail_active.png'),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: widget.website == null ||
-                                              widget.website == ""
-                                          ? () {}
-                                          : () =>
-                                              launch(widget.website.toString()),
-                                      child: SizedBox(
-                                        height:
-                                            ScreenUtil.instance.setWidth(33),
-                                        width: ScreenUtil.instance.setWidth(33),
-                                        child: Image.asset(
-                                          widget.website == null ||
-                                                  widget.website == ""
-                                              ? 'assets/icons/btn_web.png'
-                                              : 'assets/icons/btn_web_active.png',
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              widget.isPrivate == "0" || invitedUserList == null
-                                  ? Container()
-                                  : SizedBox(
-                                      height: ScreenUtil.instance.setWidth(20),
-                                    ),
-                              widget.isPrivate == "0" || invitedUserList == null
-                                  ? Container()
-                                  : Padding(
-                                      padding: EdgeInsets.only(left: 0),
-                                      child: Container(
-                                        // margin: EdgeInsets.symmetric(
-                                        //     horizontal: 13, vertical: 13),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 13),
-                                              child: Row(
-                                                children: <Widget>[
-                                                  Text(
-                                                    'Who\'s Invited',
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xff8a8a8b),
-                                                        fontSize: ScreenUtil
-                                                            .instance
-                                                            .setSp(11)),
-                                                  ),
-                                                  Expanded(
-                                                    child: SizedBox(),
-                                                  ),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  SeeWhosGoingInvitedWidget(
-                                                                    isRest: widget
-                                                                        .isRest,
-                                                                    eventId: widget
-                                                                            .detailData[
-                                                                        'id'],
-                                                                    peopleType:
-                                                                        'invited',
-                                                                  )));
-                                                    },
-                                                    child: Container(
-                                                      height: 10,
-                                                      child: Text(
-                                                        'See All >',
-                                                        style: TextStyle(
-                                                            fontSize: 11,
-                                                            color:
-                                                                eventajaGreenTeal),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
+                                                          ratioOfBlankToScreen:
+                                                              .05,
+                                                        ),
+                                                      )
+                                              ],
                                             ),
                                             SizedBox(
                                                 height: ScreenUtil.instance
-                                                    .setWidth(2)),
-                                            Container(
+                                                    .setWidth(5)),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                SizedBox(
+                                                  width: ScreenUtil.instance
+                                                      .setWidth(10),
+                                                  height: ScreenUtil.instance
+                                                      .setWidth(12),
+                                                  child: Image.asset(
+                                                      'assets/icons/btn_time_green.png'),
+                                                ),
+                                                SizedBox(
+                                                    width: ScreenUtil.instance
+                                                        .setWidth(5)),
+                                                Text(
+                                                    widget.startTime
+                                                            .toString() +
+                                                        ' to ' +
+                                                        widget.endTime
+                                                            .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: ScreenUtil
+                                                            .instance
+                                                            .setSp(11))),
+                                              ],
+                                            ),
+                                            SizedBox(
                                               height: ScreenUtil.instance
-                                                  .setWidth(50),
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              child: ListView.builder(
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                itemCount: invitedUserList ==
-                                                        null
-                                                    ? 0
-                                                    : invitedUserList.length,
-                                                itemBuilder:
-                                                    (BuildContext context, i) {
-                                                  return GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.of(context)
-                                                          .push(
+                                                  .setWidth(30),
+                                            ),
+                                            StatefulBuilder(
+                                              builder: (context, setState) =>
+                                                  GestureDetector(
+                                                onTap: () {
+                                                  if (widget.isRest == true) {
+                                                    Navigator.of(context).push(
                                                         MaterialPageRoute(
-                                                          builder: (BuildContext
-                                                                  context) =>
-                                                              ProfileWidget(
-                                                            initialIndex: 0,
-                                                            isRest:
-                                                                widget.isRest,
-                                                            userId: widget
-                                                                        .detailData[
-                                                                    'invited'][
-                                                                'data'][i]['id'],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                    child: Container(
-                                                      margin: EdgeInsets.only(
-                                                          left: 10),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: <Widget>[
-                                                          Container(
-                                                            height: ScreenUtil
-                                                                .instance
-                                                                .setWidth(35),
-                                                            width: ScreenUtil
-                                                                .instance
-                                                                .setWidth(35),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                    boxShadow: <
-                                                                        BoxShadow>[
-                                                                  BoxShadow(
-                                                                      color: Colors
-                                                                          .black26,
-                                                                      offset: Offset(
-                                                                          1.0,
-                                                                          1.0),
-                                                                      blurRadius:
-                                                                          3)
-                                                                ],
-                                                                    shape: BoxShape
-                                                                        .circle,
-                                                                    image:
-                                                                        DecorationImage(
-                                                                      image: CachedNetworkImageProvider(
-                                                                          invitedUserList[i]
-                                                                              [
-                                                                              'photo']),
-                                                                      fit: BoxFit
-                                                                          .cover,
-                                                                    )),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  );
+                                                            builder: (context) =>
+                                                                LoginRegisterWidget(
+                                                                    previousWidget:
+                                                                        'EventDetailsWidgetRest',
+                                                                    eventId: widget
+                                                                        .id)));
+                                                  } else {
+                                                    if (widget.ticketStat[
+                                                                'salesStatus'] ==
+                                                            null ||
+                                                        widget.ticketStat[
+                                                                'salesStatus'] ==
+                                                            'null') {
+                                                      if (detailData['ticket_type']
+                                                                  ['type'] ==
+                                                              'free' ||
+                                                          detailData['ticket_type']
+                                                                  ['type'] ==
+                                                              'no_ticket') {
+                                                        print('show modal');
+                                                        if (isGoing == true) {
+                                                          ungoing()
+                                                              .then((response) {
+                                                            isLoading = true;
+                                                            print(response
+                                                                .statusCode);
+                                                            print(
+                                                                response.body);
+
+                                                            if (response.statusCode ==
+                                                                    200 ||
+                                                                response.statusCode ==
+                                                                    201) {
+                                                              setState(() {
+                                                                isGoing = false;
+                                                              });
+                                                              isLoading = false;
+                                                            } else {
+                                                              isLoading = false;
+                                                            }
+                                                          });
+                                                        } else {
+                                                          showGoingOption();
+                                                        }
+                                                      }
+                                                    } else {
+                                                      if (widget.ticketStat[
+                                                                  'salesStatus'] ==
+                                                              'endSales' ||
+                                                          widget.ticketStat[
+                                                                  'salesStatus'] ==
+                                                              'comingSoon' ||
+                                                          widget.ticketPrice
+                                                                  .toLowerCase() ==
+                                                              'canceled' ||
+                                                          widget.ticketStat[
+                                                                  'availablewidget.ticketStatus'] ==
+                                                              '0') {
+                                                        return;
+                                                      } else {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder: (BuildContext
+                                                                        context) =>
+                                                                    SelectTicketWidget(
+                                                                      eventID: widget
+                                                                              .detailData[
+                                                                          'id'],
+                                                                      eventDate:
+                                                                          widget
+                                                                              .detailData['dateStart'],
+                                                                    )));
+                                                      }
+                                                    }
+                                                  }
                                                 },
+                                                child: Container(
+                                                  height: ScreenUtil.instance
+                                                      .setWidth(32 * 1.1),
+                                                  width: ScreenUtil.instance
+                                                      .setWidth(widget.ticketStat[
+                                                                  'salesStatus'] ==
+                                                              "comingSoon"
+                                                          ? 135
+                                                          : 110 * 1.1),
+                                                  decoration: BoxDecoration(
+                                                      boxShadow: <BoxShadow>[
+                                                        BoxShadow(
+                                                            color: widget.ticketStat[
+                                                                        'salesStatus'] ==
+                                                                    'comingSoon'
+                                                                ? Color(0xFF34B323)
+                                                                    .withOpacity(
+                                                                        .2)
+                                                                : isGoing ==
+                                                                        true
+                                                                    ? Colors
+                                                                        .blue
+                                                                        .withOpacity(
+                                                                            0.4)
+                                                                    : widget
+                                                                        .itemColor
+                                                                        .withOpacity(
+                                                                            0.4),
+                                                            blurRadius: 2,
+                                                            spreadRadius: 1.5)
+                                                      ],
+                                                      color: widget.ticketStat[
+                                                                  'salesStatus'] ==
+                                                              'comingSoon'
+                                                          ? Color(0xFF34B323)
+                                                              .withOpacity(.5)
+                                                          : isGoing == true
+                                                              ? Colors.blue
+                                                              : widget
+                                                                  .itemColor,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              30)),
+                                                  child: Center(
+                                                      child: Text(
+                                                    isGoing == true
+                                                        ? 'Going!'
+                                                        : widget.ticketPrice,
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: ScreenUtil
+                                                            .instance
+                                                            .setSp(16),
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )),
+                                                ),
                                               ),
-                                            )
-                                          ],
-                                        ),
+                                            ),
+                                          ])),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: ScreenUtil.instance.setWidth(15)),
+                            Container(
+                              width: ScreenUtil.instance.setWidth(333.7),
+                              height: ScreenUtil.instance.setWidth(59.1),
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 13, vertical: 13),
+                              padding: EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color:
+                                      checkForContainerBackgroundColor(context),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        blurRadius: 5,
+                                        spreadRadius: 1.5,
+                                        color:
+                                            Color(0xff8a8a8b).withOpacity(.5))
+                                  ]),
+                              child: Row(
+                                children: <Widget>[
+                                  LoveItem(
+                                    isComment: false,
+                                    eventId: widget.id,
+                                    isAlreadyLoved: detailData['isLoved'] == '1'
+                                        ? true
+                                        : false,
+                                    loveCount:
+                                        int.parse(detailData['countLove']),
+                                  ),
+                                  SizedBox(
+                                    width: ScreenUtil.instance.setWidth(10),
+                                  ),
+                                  LoveItem(
+                                      isComment: true,
+                                      eventId: widget.id,
+                                      isAlreadyCommented: widget
+                                                  .detailData['comment']
+                                                  .length <
+                                              1
+                                          ? false
+                                          : widget.commentData.containsValue(
+                                                      currentUserId) ==
+                                                  true
+                                              ? true
+                                              : false,
+                                      commentCount: widget
+                                          .detailData['total_comment']
+                                          .toString()),
+                                  Expanded(
+                                    child: SizedBox(),
+                                  ),
+                                  GestureDetector(
+                                    onTap: widget.phoneNumber == null ||
+                                            widget.phoneNumber == ""
+                                        ? () {}
+                                        : () => launch("tel:" +
+                                            widget.phoneNumber.toString()),
+                                    child: SizedBox(
+                                      height: ScreenUtil.instance.setWidth(33),
+                                      width: ScreenUtil.instance.setWidth(33),
+                                      child: Image.asset(
+                                        widget.phoneNumber == null ||
+                                                widget.phoneNumber == ""
+                                            ? 'assets/icons/btn_phone.png'
+                                            : 'assets/icons/btn_phone_active.png',
                                       ),
                                     ),
-                              SizedBox(
-                                height: 0,
+                                  ),
+                                  GestureDetector(
+                                    onTap: widget.email == null ||
+                                            widget.email == ""
+                                        ? () {}
+                                        : () => launch("mailto:" +
+                                            widget.email.toString()),
+                                    child: SizedBox(
+                                      height: ScreenUtil.instance.setWidth(33),
+                                      width: ScreenUtil.instance.setWidth(33),
+                                      child: Image.asset(widget.email == null ||
+                                              widget.email == ""
+                                          ? 'assets/icons/btn_mail.png'
+                                          : 'assets/icons/btn_mail_active.png'),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: widget.website == null ||
+                                            widget.website == ""
+                                        ? () {}
+                                        : () =>
+                                            launch(widget.website.toString()),
+                                    child: SizedBox(
+                                      height: ScreenUtil.instance.setWidth(33),
+                                      width: ScreenUtil.instance.setWidth(33),
+                                      child: Image.asset(
+                                        widget.website == null ||
+                                                widget.website == ""
+                                            ? 'assets/icons/btn_web.png'
+                                            : 'assets/icons/btn_web_active.png',
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              detailData['ticket']['salesStatus'] ==
-                                      'comingSoon'
-                                  ? countdownTimer()
-                                  : Container(),
-                              widget.goingData == null ||
-                                      widget.goingData.length < 1
-                                  ? Container()
-                                  : Container(
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 0, vertical: 20),
+                            ),
+                            widget.isPrivate == "0" || invitedUserList == null
+                                ? Container()
+                                : SizedBox(
+                                    height: ScreenUtil.instance.setWidth(20),
+                                  ),
+                            widget.isPrivate == "0" || invitedUserList == null
+                                ? Container()
+                                : Padding(
+                                    padding: EdgeInsets.only(left: 0),
+                                    child: Container(
+                                      // margin: EdgeInsets.symmetric(
+                                      //     horizontal: 13, vertical: 13),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -1541,7 +1369,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                             child: Row(
                                               children: <Widget>[
                                                 Text(
-                                                  'Who\'s Going',
+                                                  'Who\'s Invited',
                                                   style: TextStyle(
                                                       color: Color(0xff8a8a8b),
                                                       fontSize: ScreenUtil
@@ -1564,7 +1392,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                           .detailData[
                                                                       'id'],
                                                                   peopleType:
-                                                                      'going',
+                                                                      'invited',
                                                                 )));
                                                   },
                                                   child: Container(
@@ -1592,32 +1420,29 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                 .width,
                                             child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
-                                              itemCount:
-                                                  widget.goingData == null
-                                                      ? 0
-                                                      : widget.goingData.length,
+                                              itemCount: invitedUserList == null
+                                                  ? 0
+                                                  : invitedUserList.length,
                                               itemBuilder:
                                                   (BuildContext context, i) {
                                                 return GestureDetector(
                                                   onTap: () {
                                                     Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder: (BuildContext
-                                                                    context) =>
-                                                                ProfileWidget(
-                                                                  isRest: widget
-                                                                      .isRest,
-                                                                  initialIndex:
-                                                                      0,
-                                                                  userId: detailData[
-                                                                              'going']
-                                                                          [
-                                                                          'data'][i]
-                                                                      [
-                                                                      'userID'],
-                                                                )));
+                                                      MaterialPageRoute(
+                                                        builder: (BuildContext
+                                                                context) =>
+                                                            ProfileWidget(
+                                                          initialIndex: 0,
+                                                          isRest: widget.isRest,
+                                                          userId: widget
+                                                                      .detailData[
+                                                                  'invited']
+                                                              ['data'][i]['id'],
+                                                        ),
+                                                      ),
+                                                    );
                                                   },
-                                                  child: new Container(
+                                                  child: Container(
                                                     margin: EdgeInsets.only(
                                                         left: 10),
                                                     child: Column(
@@ -1653,11 +1478,10 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                                       .circle,
                                                                   image:
                                                                       DecorationImage(
-                                                                    image: CachedNetworkImageProvider(detailData['going']
+                                                                    image: CachedNetworkImageProvider(
+                                                                        invitedUserList[i]
                                                                             [
-                                                                            'data'][i]
-                                                                        [
-                                                                        'photo']),
+                                                                            'photo']),
                                                                     fit: BoxFit
                                                                         .cover,
                                                                   )),
@@ -1672,1101 +1496,1238 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                         ],
                                       ),
                                     ),
-                              detailData['status'] == 'ended' &&
-                                      widget.isRest == false
-                                  ? SizedBox(
-                                      height: ScreenUtil.instance.setWidth(20),
-                                    )
-                                  : Container(),
-                              detailData['status'] == 'ended' &&
-                                      widget.isRest == false
-                                  ? Container(
-                                      // height: ScreenUtil.instance.setWidth(150),
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 13),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Row(
+                                  ),
+                            SizedBox(
+                              height: 0,
+                            ),
+                            detailData['ticket']['salesStatus'] == 'comingSoon'
+                                ? countdownTimer()
+                                : Container(),
+                            widget.goingData == null ||
+                                    widget.goingData.length < 1
+                                ? Container()
+                                : Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 0, vertical: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 13),
+                                          child: Row(
                                             children: <Widget>[
-                                              Expanded(child: SizedBox()),
-                                              Text('USERS FEEDBACK',
-                                                  style: TextStyle(
-                                                      color:
-                                                          Color(0xff8a8a8b))),
-                                              Expanded(child: SizedBox()),
+                                              Text(
+                                                'Who\'s Going',
+                                                style: TextStyle(
+                                                    color: Color(0xff8a8a8b),
+                                                    fontSize: ScreenUtil
+                                                        .instance
+                                                        .setSp(11)),
+                                              ),
+                                              Expanded(
+                                                child: SizedBox(),
+                                              ),
                                               GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                ReviewDetails(
-                                                                  eventId: detailData !=
-                                                                              null ||
-                                                                          !detailData
-                                                                              .isEmpty
-                                                                      ? detailData[
-                                                                          'id']
-                                                                      : widget.detailData[
-                                                                          'id'],
-                                                                  eventName: detailData !=
-                                                                              null ||
-                                                                          !detailData
-                                                                              .isEmpty
-                                                                      ? detailData[
-                                                                          'name']
-                                                                      : widget.detailData[
-                                                                          'name'],
-                                                                  goodReview: detailData !=
-                                                                              null ||
-                                                                          !detailData
-                                                                              .isEmpty
-                                                                      ? detailData['event_review']
-                                                                              [
-                                                                              'percent_review']
-                                                                          [
-                                                                          'good']
-                                                                      : widget.detailData['event_review']
-                                                                              [
-                                                                              'percent_review']
-                                                                          [
-                                                                          'good'],
-                                                                  badReview: detailData !=
-                                                                              null ||
-                                                                          !detailData
-                                                                              .isEmpty
-                                                                      ? detailData['event_review']
-                                                                              [
-                                                                              'percent_review']
-                                                                          [
-                                                                          'bad']
-                                                                      : widget.detailData['event_review']
-                                                                              [
-                                                                              'percent_review']
-                                                                          [
-                                                                          'bad'],
-                                                                )));
-                                                  },
-                                                  child: Text('See All >',
-                                                      style: TextStyle(
-                                                          color:
-                                                              eventajaGreenTeal)))
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: ScreenUtil.instance
-                                                .setWidth(15),
-                                          ),
-                                          Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              Icon(Icons.thumb_up,
-                                                  size: 15,
-                                                  color: eventajaGreenTeal),
-                                              Expanded(
-                                                child: LinearPercentIndicator(
-                                                  lineHeight: ScreenUtil
-                                                      .instance
-                                                      .setWidth(10),
-                                                  progressColor:
-                                                      eventajaGreenTeal,
-                                                  percent: int.parse(detailData !=
-                                                                  null ||
-                                                              !detailData
-                                                                  .isEmpty
-                                                          ? detailData[
-                                                                      'event_review']
-                                                                  [
-                                                                  'percent_review']
-                                                              ['good']
-                                                          : widget.detailData[
-                                                                      'event_review']
-                                                                  [
-                                                                  'percent_review']
-                                                              ['good']) /
-                                                      100,
-                                                ),
-                                              ),
-                                              Container(
-                                                width: ScreenUtil.instance
-                                                    .setWidth(40),
-                                                child: Text(
-                                                  (detailData != null ||
-                                                          !detailData.isEmpty
-                                                      ? detailData['event_review']
-                                                              ['percent_review']
-                                                          ['good']
-                                                      : detailData['event_review']
-                                                                  [
-                                                                  'percent_review']
-                                                              ['good'] +
-                                                          '%'),
-                                                  style: TextStyle(
-                                                      color: eventajaGreenTeal,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  textAlign: TextAlign.end,
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              SeeWhosGoingInvitedWidget(
+                                                                isRest: widget
+                                                                    .isRest,
+                                                                eventId: widget
+                                                                        .detailData[
+                                                                    'id'],
+                                                                peopleType:
+                                                                    'going',
+                                                              )));
+                                                },
+                                                child: Container(
+                                                  height: 10,
+                                                  child: Text(
+                                                    'See All >',
+                                                    style: TextStyle(
+                                                        fontSize: 11,
+                                                        color:
+                                                            eventajaGreenTeal),
+                                                  ),
                                                 ),
                                               )
                                             ],
                                           ),
-                                          SizedBox(
+                                        ),
+                                        SizedBox(
                                             height: ScreenUtil.instance
-                                                .setWidth(15),
-                                          ),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              Icon(Icons.thumb_down,
-                                                  size: 15, color: Colors.red),
-                                              Expanded(
-                                                child: LinearPercentIndicator(
-                                                  lineHeight: ScreenUtil
-                                                      .instance
-                                                      .setWidth(10),
-                                                  progressColor: Colors.red,
-                                                  percent: int.parse(detailData !=
-                                                                  null ||
-                                                              !detailData
-                                                                  .isEmpty
-                                                          ? detailData[
-                                                                      'event_review']
-                                                                  [
-                                                                  'percent_review']
-                                                              ['bad']
-                                                          : widget.detailData[
-                                                                      'event_review']
-                                                                  [
-                                                                  'percent_review']
-                                                              ['bad']) /
-                                                      100,
-                                                ),
-                                              ),
-                                              Container(
-                                                width: ScreenUtil.instance
-                                                    .setWidth(40),
-                                                child: Text(
-                                                  detailData != null ||
-                                                          !detailData.isEmpty
-                                                      ? detailData[
-                                                                  'event_review']
-                                                              ['percent_review']
-                                                          ['bad']
-                                                      : widget.detailData[
-                                                                      'event_review']
-                                                                  [
-                                                                  'percent_review']
-                                                              ['bad'] +
-                                                          '%',
-                                                  style: TextStyle(
-                                                      color: Colors.red,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  textAlign: TextAlign.end,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: detailData['event_review']
-                                                            ['user_review'] ==
-                                                        '1' ||
-                                                    detailData['isGoing'] == '0'
+                                                .setWidth(2)),
+                                        Container(
+                                          height:
+                                              ScreenUtil.instance.setWidth(50),
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: widget.goingData == null
                                                 ? 0
-                                                : 15,
+                                                : widget.goingData.length,
+                                            itemBuilder:
+                                                (BuildContext context, i) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (BuildContext
+                                                                  context) =>
+                                                              ProfileWidget(
+                                                                isRest: widget
+                                                                    .isRest,
+                                                                initialIndex: 0,
+                                                                userId: detailData[
+                                                                            'going']
+                                                                        ['data']
+                                                                    [
+                                                                    i]['userID'],
+                                                              )));
+                                                },
+                                                child: new Container(
+                                                  margin:
+                                                      EdgeInsets.only(left: 10),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        height: ScreenUtil
+                                                            .instance
+                                                            .setWidth(35),
+                                                        width: ScreenUtil
+                                                            .instance
+                                                            .setWidth(35),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                boxShadow: <
+                                                                    BoxShadow>[
+                                                              BoxShadow(
+                                                                  color: Colors
+                                                                      .black26,
+                                                                  offset:
+                                                                      Offset(
+                                                                          1.0,
+                                                                          1.0),
+                                                                  blurRadius: 3)
+                                                            ],
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                                image:
+                                                                    DecorationImage(
+                                                                  image: CachedNetworkImageProvider(
+                                                                      detailData['going']
+                                                                              [
+                                                                              'data'][i]
+                                                                          [
+                                                                          'photo']),
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                )),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
                                           ),
-                                          detailData['event_review']
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                            detailData['status'] == 'ended' &&
+                                    widget.isRest == false
+                                ? SizedBox(
+                                    height: ScreenUtil.instance.setWidth(20),
+                                  )
+                                : Container(),
+                            detailData['status'] == 'ended' &&
+                                    widget.isRest == false
+                                ? Container(
+                                    // height: ScreenUtil.instance.setWidth(150),
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 13),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Row(
+                                          children: <Widget>[
+                                            Expanded(child: SizedBox()),
+                                            Text('USERS FEEDBACK',
+                                                style: TextStyle(
+                                                    color: Color(0xff8a8a8b))),
+                                            Expanded(child: SizedBox()),
+                                            GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder:
+                                                              (context) =>
+                                                                  ReviewDetails(
+                                                                    eventId: detailData !=
+                                                                                null ||
+                                                                            !detailData
+                                                                                .isEmpty
+                                                                        ? detailData[
+                                                                            'id']
+                                                                        : widget
+                                                                            .detailData['id'],
+                                                                    eventName: detailData !=
+                                                                                null ||
+                                                                            !detailData
+                                                                                .isEmpty
+                                                                        ? detailData[
+                                                                            'name']
+                                                                        : widget
+                                                                            .detailData['name'],
+                                                                    goodReview: detailData !=
+                                                                                null ||
+                                                                            !detailData
+                                                                                .isEmpty
+                                                                        ? detailData['event_review']['percent_review']
+                                                                            [
+                                                                            'good']
+                                                                        : widget.detailData['event_review']['percent_review']
+                                                                            [
+                                                                            'good'],
+                                                                    badReview: detailData !=
+                                                                                null ||
+                                                                            !detailData
+                                                                                .isEmpty
+                                                                        ? detailData['event_review']['percent_review']
+                                                                            [
+                                                                            'bad']
+                                                                        : widget.detailData['event_review']['percent_review']
+                                                                            [
+                                                                            'bad'],
+                                                                  )));
+                                                },
+                                                child: Text('See All >',
+                                                    style: TextStyle(
+                                                        color:
+                                                            eventajaGreenTeal)))
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height:
+                                              ScreenUtil.instance.setWidth(15),
+                                        ),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Icon(Icons.thumb_up,
+                                                size: 15,
+                                                color: eventajaGreenTeal),
+                                            Expanded(
+                                              child: LinearPercentIndicator(
+                                                lineHeight: ScreenUtil.instance
+                                                    .setWidth(10),
+                                                progressColor:
+                                                    eventajaGreenTeal,
+                                                percent: int.parse(detailData !=
+                                                                null ||
+                                                            !detailData.isEmpty
+                                                        ? detailData[
+                                                                    'event_review']
+                                                                [
+                                                                'percent_review']
+                                                            ['good']
+                                                        : widget.detailData[
+                                                                    'event_review']
+                                                                [
+                                                                'percent_review']
+                                                            ['good']) /
+                                                    100,
+                                              ),
+                                            ),
+                                            Container(
+                                              width: ScreenUtil.instance
+                                                  .setWidth(40),
+                                              child: Text(
+                                                (detailData != null ||
+                                                        !detailData.isEmpty
+                                                    ? detailData['event_review']
+                                                            ['percent_review']
+                                                        ['good']
+                                                    : detailData['event_review']
+                                                                [
+                                                                'percent_review']
+                                                            ['good'] +
+                                                        '%'),
+                                                style: TextStyle(
+                                                    color: eventajaGreenTeal,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                textAlign: TextAlign.end,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height:
+                                              ScreenUtil.instance.setWidth(15),
+                                        ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Icon(Icons.thumb_down,
+                                                size: 15, color: Colors.red),
+                                            Expanded(
+                                              child: LinearPercentIndicator(
+                                                lineHeight: ScreenUtil.instance
+                                                    .setWidth(10),
+                                                progressColor: Colors.red,
+                                                percent: int.parse(detailData !=
+                                                                null ||
+                                                            !detailData.isEmpty
+                                                        ? detailData[
+                                                                    'event_review']
+                                                                [
+                                                                'percent_review']
+                                                            ['bad']
+                                                        : widget.detailData[
+                                                                    'event_review']
+                                                                [
+                                                                'percent_review']
+                                                            ['bad']) /
+                                                    100,
+                                              ),
+                                            ),
+                                            Container(
+                                              width: ScreenUtil.instance
+                                                  .setWidth(40),
+                                              child: Text(
+                                                detailData != null ||
+                                                        !detailData.isEmpty
+                                                    ? detailData['event_review']
+                                                            ['percent_review']
+                                                        ['bad']
+                                                    : widget.detailData[
+                                                                    'event_review']
+                                                                [
+                                                                'percent_review']
+                                                            ['bad'] +
+                                                        '%',
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                textAlign: TextAlign.end,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: detailData['event_review']
                                                           ['user_review'] ==
                                                       '1' ||
                                                   detailData['isGoing'] == '0'
-                                              ? Container()
-                                              : GestureDetector(
-                                                  onTap: () {
-                                                    showModalBottomSheet(
-                                                        context: context,
-                                                        isScrollControlled:
-                                                            true,
-                                                        builder: (context) {
-                                                          return StatefulBuilder(
-                                                              builder: (context,
-                                                                  state) {
-                                                            return Container(
-                                                              color: Color(
-                                                                  0xFF737373),
-                                                              child: Container(
-                                                                padding: EdgeInsets
-                                                                    .only(
-                                                                        bottom:
-                                                                            30),
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topLeft:
-                                                                              Radius.circular(15),
-                                                                          topRight:
-                                                                              Radius.circular(15),
-                                                                        )),
-                                                                child: Column(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .min,
-                                                                  children: <
-                                                                      Widget>[
-                                                                    Container(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              13),
-                                                                      decoration: BoxDecoration(
-                                                                          color: eventajaGreenTeal,
-                                                                          borderRadius: BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                          )),
-                                                                      child:
-                                                                          Center(
-                                                                        child:
-                                                                            Text(
-                                                                          'Give feedback to this event',
-                                                                          style: TextStyle(
-                                                                              color: Colors.white,
-                                                                              fontSize: 12,
-                                                                              fontWeight: FontWeight.bold),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Container(
+                                              ? 0
+                                              : 15,
+                                        ),
+                                        detailData['event_review']
+                                                        ['user_review'] ==
+                                                    '1' ||
+                                                detailData['isGoing'] == '0'
+                                            ? Container()
+                                            : GestureDetector(
+                                                onTap: () {
+                                                  showModalBottomSheet(
+                                                      context: context,
+                                                      isScrollControlled: true,
+                                                      builder: (context) {
+                                                        return StatefulBuilder(
+                                                            builder: (context,
+                                                                state) {
+                                                          return Container(
+                                                            color: Color(
+                                                                0xFF737373),
+                                                            child: Container(
+                                                              padding: EdgeInsets
+                                                                  .only(
+                                                                      bottom:
+                                                                          30),
+                                                              decoration:
+                                                                  BoxDecoration(
                                                                       color: Colors
                                                                           .white,
-                                                                      margin: EdgeInsets.symmetric(
-                                                                          horizontal:
-                                                                              60,
-                                                                          vertical:
-                                                                              15),
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                        children: <
-                                                                            Widget>[
-                                                                          GestureDetector(
-                                                                            onTap:
-                                                                                () {
-                                                                              state(() {
-                                                                                if (isGoodFeedback == true) {
-                                                                                  isGoodFeedback = false;
-                                                                                  reviewColor = Color(0xff8a8a8b);
-                                                                                } else {
-                                                                                  isGoodFeedback = true;
-                                                                                  if (isBadFeedback == true) {
-                                                                                    isBadFeedback = false;
-                                                                                    reviewColorBad = Color(0xff8a8a8b);
-                                                                                  }
-                                                                                  reviewColor = eventajaGreenTeal;
-                                                                                }
-                                                                              });
-                                                                            },
-                                                                            child:
-                                                                                Column(
-                                                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                                                              children: <Widget>[
-                                                                                Icon(
-                                                                                  Icons.thumb_up,
-                                                                                  size: 100,
-                                                                                  color: reviewColor,
-                                                                                ),
-                                                                                Text('GOOD', style: TextStyle(color: reviewColor, fontSize: 14))
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                          GestureDetector(
-                                                                            onTap:
-                                                                                () {
-                                                                              state(() {
-                                                                                if (isBadFeedback == true) {
-                                                                                  isBadFeedback = false;
-                                                                                  reviewColorBad = Color(0xff8a8a8b);
-                                                                                } else {
-                                                                                  isBadFeedback = true;
-                                                                                  if (isGoodFeedback == true) {
-                                                                                    isGoodFeedback = false;
-                                                                                    reviewColor = Color(0xff8a8a8b);
-                                                                                  }
-                                                                                  reviewColorBad = Colors.red;
-                                                                                }
-                                                                              });
-                                                                            },
-                                                                            child:
-                                                                                Column(
-                                                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                                                              children: <Widget>[
-                                                                                Icon(
-                                                                                  Icons.thumb_down,
-                                                                                  size: 100,
-                                                                                  color: reviewColorBad,
-                                                                                ),
-                                                                                Text('BAD', style: TextStyle(color: reviewColorBad, fontSize: 14))
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                        height: ScreenUtil
-                                                                            .instance
-                                                                            .setWidth(0)),
-                                                                   Container(
-                                                                      margin: EdgeInsets.symmetric(
-                                                                          horizontal:
-                                                                              13),
-                                                                      child:
-                                                                          TextFormField(
-                                                                        controller:
-                                                                            feedbackInputController,
-                                                                        decoration:
-                                                                            InputDecoration(
-                                                                          focusedBorder:
-                                                                              OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(15),
-                                                                          ),
-                                                                          hintText:
-                                                                              'Enter your feedback',
-                                                                          enabledBorder:
-                                                                              OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(15),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      height:
-                                                                          15,
-                                                                    ),
-                                                                    GestureDetector(
-                                                                      onTap:
-                                                                          () {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                        String
-                                                                            typeId =
-                                                                            '0';
-
-                                                                        state(
-                                                                            () {
-                                                                          if (isGoodFeedback == true &&
-                                                                              isBadFeedback == false) {
-                                                                            typeId =
-                                                                                '4';
-                                                                          } else if (isBadFeedback == true &&
-                                                                              isGoodFeedback == false) {
-                                                                            typeId =
-                                                                                '8';
-                                                                          }
-
-                                                                          print(
-                                                                              typeId);
-
-                                                                          isLoading =
-                                                                              true;
-
-                                                                          FeedbackLogic.postFeedback(detailData['id'], typeId, feedbackInputController.text).then(
-                                                                              (response) {
-                                                                            if (response.statusCode == 201 ||
-                                                                                response.statusCode == 200) {
-                                                                              getEventDetailsSpecificInfo().then((response) {
-                                                                                print(response.statusCode);
-                                                                                var extractedData = json.decode(response.body);
-                                                                                if (response.statusCode == 200) {
-                                                                                  setState(() {
-                                                                                    detailData = extractedData['data'];
-                                                                                    isLoading = false;
-                                                                                  });
-                                                                                }
-                                                                              });
-                                                                            } else {
-                                                                              isLoading = false;
-                                                                              print(response.body);
-                                                                            }
-                                                                          }).timeout(
-                                                                              Duration(seconds: 15),
-                                                                              onTimeout:
-                                                                                  () {
-                                                                            isLoading =
-                                                                                false;
-                                                                            print('request timeout');
-                                                                          }).catchError(
-                                                                              (err) {
-                                                                            isLoading =
-                                                                                false;
-                                                                            print(err);
-                                                                          });
-                                                                        });
-                                                                      },
-                                                                      child:
-                                                                          Container(
-                                                                        margin: EdgeInsets.symmetric(
-                                                                            horizontal:
-                                                                                13),
-                                                                        height: ScreenUtil
-                                                                            .instance
-                                                                            .setWidth(50),
-                                                                        decoration: BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                      )),
+                                                              child: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: <
+                                                                    Widget>[
+                                                                  Container(
+                                                                    padding:
+                                                                        EdgeInsets.all(
+                                                                            13),
+                                                                    decoration:
+                                                                        BoxDecoration(
                                                                             color:
                                                                                 eventajaGreenTeal,
                                                                             borderRadius:
-                                                                                BorderRadius.circular(10)),
-                                                                        child:
-                                                                            Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.center,
-                                                                          children: <
-                                                                              Widget>[
-                                                                            Icon(
-                                                                              Icons.chat,
-                                                                              color: Colors.white,
-                                                                              size: 18,
-                                                                            ),
-                                                                            SizedBox(
-                                                                              width: ScreenUtil.instance.setWidth(8),
-                                                                            ),
-                                                                            Text('Write a review',
-                                                                                style: TextStyle(color: Colors.white, fontSize: 15))
-                                                                          ],
+                                                                                BorderRadius.only(
+                                                                              topLeft: Radius.circular(15),
+                                                                              topRight: Radius.circular(15),
+                                                                            )),
+                                                                    child:
+                                                                        Center(
+                                                                      child:
+                                                                          Text(
+                                                                        'Give feedback to this event',
+                                                                        style: TextStyle(
+                                                                            color: Colors
+                                                                                .white,
+                                                                            fontSize:
+                                                                                12,
+                                                                            fontWeight:
+                                                                                FontWeight.bold),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Container(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    margin: EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            60,
+                                                                        vertical:
+                                                                            15),
+                                                                    child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceBetween,
+                                                                      children: <
+                                                                          Widget>[
+                                                                        GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            state(() {
+                                                                              if (isGoodFeedback == true) {
+                                                                                isGoodFeedback = false;
+                                                                                reviewColor = Color(0xff8a8a8b);
+                                                                              } else {
+                                                                                isGoodFeedback = true;
+                                                                                if (isBadFeedback == true) {
+                                                                                  isBadFeedback = false;
+                                                                                  reviewColorBad = Color(0xff8a8a8b);
+                                                                                }
+                                                                                reviewColor = eventajaGreenTeal;
+                                                                              }
+                                                                            });
+                                                                          },
+                                                                          child:
+                                                                              Column(
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.center,
+                                                                            children: <Widget>[
+                                                                              Icon(
+                                                                                Icons.thumb_up,
+                                                                                size: 100,
+                                                                                color: reviewColor,
+                                                                              ),
+                                                                              Text('GOOD', style: TextStyle(color: reviewColor, fontSize: 14))
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            state(() {
+                                                                              if (isBadFeedback == true) {
+                                                                                isBadFeedback = false;
+                                                                                reviewColorBad = Color(0xff8a8a8b);
+                                                                              } else {
+                                                                                isBadFeedback = true;
+                                                                                if (isGoodFeedback == true) {
+                                                                                  isGoodFeedback = false;
+                                                                                  reviewColor = Color(0xff8a8a8b);
+                                                                                }
+                                                                                reviewColorBad = Colors.red;
+                                                                              }
+                                                                            });
+                                                                          },
+                                                                          child:
+                                                                              Column(
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.center,
+                                                                            children: <Widget>[
+                                                                              Icon(
+                                                                                Icons.thumb_down,
+                                                                                size: 100,
+                                                                                color: reviewColorBad,
+                                                                              ),
+                                                                              Text('BAD', style: TextStyle(color: reviewColorBad, fontSize: 14))
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      height: ScreenUtil
+                                                                          .instance
+                                                                          .setWidth(
+                                                                              0)),
+                                                                  Container(
+                                                                    margin: EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            13),
+                                                                    child:
+                                                                        TextFormField(
+                                                                      controller:
+                                                                          feedbackInputController,
+                                                                      decoration:
+                                                                          InputDecoration(
+                                                                        focusedBorder:
+                                                                            OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(15),
+                                                                        ),
+                                                                        hintText:
+                                                                            'Enter your feedback',
+                                                                        enabledBorder:
+                                                                            OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(15),
                                                                         ),
                                                                       ),
                                                                     ),
-                                                                    Padding(
-                                                                        padding:
-                                                                            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom))
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            );
-                                                          });
-                                                        });
-                                                  },
-                                                  child: Container(
-                                                    height: ScreenUtil.instance
-                                                        .setWidth(50),
-                                                    decoration: BoxDecoration(
-                                                        color:
-                                                            eventajaGreenTeal,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10)),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: <Widget>[
-                                                        Icon(
-                                                          Icons.chat,
-                                                          color: Colors.white,
-                                                          size: 18,
-                                                        ),
-                                                        SizedBox(
-                                                          width: ScreenUtil
-                                                              .instance
-                                                              .setWidth(8),
-                                                        ),
-                                                        Text('Write a review',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 15))
-                                                      ],
-                                                    ),
-                                                  ),
-                                                )
-                                        ],
-                                      ),
-                                    )
-                                  : Container(),
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(20),
-                              ),
-                              detailData['createdByID'] != currentUserId
-                                  ? Container()
-                                  : Container(
-                                      width:
-                                          ScreenUtil.instance.setWidth(333.7),
-                                      height:
-                                          ScreenUtil.instance.setWidth(95.4),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 15),
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 13),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color:
-                                        checkForContainerBackgroundColor
-                                          (context),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              blurRadius: 5,
-                                              spreadRadius: 1.5,
-                                              color: Color(0xff8a8a8b)
-                                                  .withOpacity(.5))
-                                        ],
-                                      ),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          GestureDetector(
-                                            onTap: () {
-                                              saveId(detailData['id']);
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder:
-                                                          (BuildContext
-                                                                  context) =>
-                                                              ManageTicket(
-                                                                isLivestream:
-                                                                    detailData['isHybridEvent'] ==
-                                                                            'streamOnly'
-                                                                        ? true
-                                                                        : false,
-                                                                eventID:
-                                                                    widget.id,
-                                                              )));
-                                            },
-                                            child: SizedBox(
-                                              height: ScreenUtil.instance
-                                                  .setWidth(100),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  SizedBox(
-                                                      height: ScreenUtil
-                                                          .instance
-                                                          .setWidth(20.9),
-                                                      // width: ScreenUtil.instance
-                                                      //     .setWidth(30),
-                                                      child: Image.asset(
-                                                          'assets/icons/icon_apps/ticket.png',
-                                                          fit: BoxFit.fill)),
-                                                  SizedBox(
-                                                    height: ScreenUtil.instance
-                                                        .setWidth(15),
-                                                  ),
-                                                  Text(
-                                                    'MANAGE TICKET',
-                                                    style: TextStyle(
-                                                        color:
-                                                            checkForEventDetailsEOMenuTitle(context),
-                                                        fontSize: ScreenUtil
-                                                            .instance
-                                                            .setSp(10)),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () async {
-                                              if (widget.detailData[
-                                                              'ticket_type']
-                                                          ['type'] ==
-                                                      'free_live_stream' ||
-                                                  widget.detailData[
-                                                              'ticket_type']
-                                                          ['type'] ==
-                                                      'paid_live_stream') {
-                                                print('isLivestream');
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 15,
+                                                                  ),
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      String
+                                                                          typeId =
+                                                                          '0';
 
-                                                if (widget.detailData[
-                                                            'livestream'][0]
-                                                        ['on_demand_link'] !=
-                                                    null) {
-                                                  showCupertinoDialog(
-                                                    context: context,
-                                                    builder: (thisContext) {
-                                                      return CupertinoAlertDialog(
-                                                        title: Text('Notice'),
-                                                        content: Text(
-                                                          'You uploaded on demand video',
-                                                          textScaleFactor: 1.2,
-                                                          textWidthBasis:
-                                                              TextWidthBasis
-                                                                  .longestLine,
-                                                        ),
-                                                        actions: <Widget>[
-                                                          CupertinoDialogAction(
-                                                            child:
-                                                                Text('Close'),
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      thisContext)
-                                                                  .pop();
-                                                            },
-                                                          )
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                } else if (widget.detailData[
-                                                            'livestream'][0]
-                                                        ['zoom_id'] !=
-                                                    null) {
-                                                  showCupertinoDialog(
-                                                    context: context,
-                                                    builder: (thisContext) {
-                                                      return CupertinoAlertDialog(
-                                                        title: Text('Notice'),
-                                                        content: Text(
-                                                          'please start broadcast using zoom link you provide to your attendees',
-                                                          textScaleFactor: 1.2,
-                                                          textWidthBasis:
-                                                              TextWidthBasis
-                                                                  .longestLine,
-                                                        ),
-                                                        actions: <Widget>[
-                                                          CupertinoDialogAction(
-                                                            child:
-                                                                Text('Close'),
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      thisContext)
-                                                                  .pop();
-                                                            },
-                                                          )
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                } else {
-                                                  if (streamingState ==
-                                                      'stopped') {
-                                                    showCupertinoDialog(
-                                                        context: context,
-                                                        builder: (thisContext) {
-                                                          return CupertinoAlertDialog(
-                                                            title:
-                                                                Text('Notice'),
-                                                            content: Text(
-                                                              'Please broadcast 5 minutes before the event start',
-                                                              textScaleFactor:
-                                                                  1.2,
-                                                              textWidthBasis:
-                                                                  TextWidthBasis
-                                                                      .longestLine,
+                                                                      state(() {
+                                                                        if (isGoodFeedback ==
+                                                                                true &&
+                                                                            isBadFeedback ==
+                                                                                false) {
+                                                                          typeId =
+                                                                              '4';
+                                                                        } else if (isBadFeedback ==
+                                                                                true &&
+                                                                            isGoodFeedback ==
+                                                                                false) {
+                                                                          typeId =
+                                                                              '8';
+                                                                        }
+
+                                                                        print(
+                                                                            typeId);
+
+                                                                        isLoading =
+                                                                            true;
+
+                                                                        FeedbackLogic.postFeedback(detailData['id'], typeId, feedbackInputController.text).then(
+                                                                            (response) {
+                                                                          if (response.statusCode == 201 ||
+                                                                              response.statusCode == 200) {
+                                                                            getEventDetailsSpecificInfo().then((response) {
+                                                                              print(response.statusCode);
+                                                                              var extractedData = json.decode(response.body);
+                                                                              if (response.statusCode == 200) {
+                                                                                setState(() {
+                                                                                  detailData = extractedData['data'];
+                                                                                  isLoading = false;
+                                                                                });
+                                                                              }
+                                                                            });
+                                                                          } else {
+                                                                            isLoading =
+                                                                                false;
+                                                                            print(response.body);
+                                                                          }
+                                                                        }).timeout(
+                                                                            Duration(seconds: 15),
+                                                                            onTimeout:
+                                                                                () {
+                                                                          isLoading =
+                                                                              false;
+                                                                          print(
+                                                                              'request timeout');
+                                                                        }).catchError(
+                                                                            (err) {
+                                                                          isLoading =
+                                                                              false;
+                                                                          print(
+                                                                              err);
+                                                                        });
+                                                                      });
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      margin: EdgeInsets.symmetric(
+                                                                          horizontal:
+                                                                              13),
+                                                                      height: ScreenUtil
+                                                                          .instance
+                                                                          .setWidth(
+                                                                              50),
+                                                                      decoration: BoxDecoration(
+                                                                          color:
+                                                                              eventajaGreenTeal,
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10)),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: <
+                                                                            Widget>[
+                                                                          Icon(
+                                                                            Icons.chat,
+                                                                            color:
+                                                                                Colors.white,
+                                                                            size:
+                                                                                18,
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                ScreenUtil.instance.setWidth(8),
+                                                                          ),
+                                                                          Text(
+                                                                              'Write a review',
+                                                                              style: TextStyle(color: Colors.white, fontSize: 15))
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                      padding: EdgeInsets.only(
+                                                                          bottom: MediaQuery.of(context)
+                                                                              .viewInsets
+                                                                              .bottom))
+                                                                ],
+                                                              ),
                                                             ),
-                                                            actions: <Widget>[
-                                                              CupertinoDialogAction(
-                                                                child: Text(
-                                                                    'Close'),
-                                                                onPressed: () {
-                                                                  Navigator.of(
-                                                                          thisContext)
-                                                                      .pop();
-                                                                },
-                                                              )
-                                                            ],
                                                           );
                                                         });
-                                                  } else {
-                                                    showCupertinoModalPopup(
-                                                        context: context,
-                                                        builder: (thisContext) {
-                                                          return CupertinoActionSheet(
-                                                            title: Text(
-                                                                'Set Broadcast Bitrate'),
-                                                            actions: <Widget>[
-                                                              CupertinoActionSheetAction(
-                                                                onPressed: () {
-                                                                  Navigator
-                                                                      .push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                      builder: (context) => LivestreamBroadcast(
-                                                                          bitrate:
-                                                                              1000,
-                                                                          eventDetail:
-                                                                              widget.detailData),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                                child: Text(
-                                                                    '1000 Kbps ( Medium Quality )'),
-                                                              ),
-                                                              CupertinoActionSheetAction(
-                                                                onPressed: () {
-                                                                  Navigator
-                                                                      .push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                      builder: (context) => LivestreamBroadcast(
-                                                                          bitrate:
-                                                                              2500,
-                                                                          eventDetail:
-                                                                              widget.detailData),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                                child: Text(
-                                                                    '2500 Kbps ( High Quality )'),
-                                                              ),
-                                                            ],
-                                                            cancelButton:
-                                                                CupertinoActionSheetAction(
+                                                      });
+                                                },
+                                                child: Container(
+                                                  height: ScreenUtil.instance
+                                                      .setWidth(50),
+                                                  decoration: BoxDecoration(
+                                                      color: eventajaGreenTeal,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      Icon(
+                                                        Icons.chat,
+                                                        color: Colors.white,
+                                                        size: 18,
+                                                      ),
+                                                      SizedBox(
+                                                        width: ScreenUtil
+                                                            .instance
+                                                            .setWidth(8),
+                                                      ),
+                                                      Text('Write a review',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 15))
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                      ],
+                                    ),
+                                  )
+                                : Container(),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(20),
+                            ),
+                            detailData['createdByID'] != currentUserId
+                                ? Container()
+                                : Container(
+                                    width: ScreenUtil.instance.setWidth(333.7),
+                                    height: ScreenUtil.instance.setWidth(95.4),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 15),
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 13),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: checkForContainerBackgroundColor(
+                                          context),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            blurRadius: 5,
+                                            spreadRadius: 1.5,
+                                            color: Color(0xff8a8a8b)
+                                                .withOpacity(.5))
+                                      ],
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        GestureDetector(
+                                          onTap: () {
+                                            saveId(detailData['id']);
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder:
+                                                        (BuildContext
+                                                                context) =>
+                                                            ManageTicket(
+                                                              isLivestream:
+                                                                  detailData['isHybridEvent'] ==
+                                                                          'streamOnly'
+                                                                      ? true
+                                                                      : false,
+                                                              eventID:
+                                                                  widget.id,
+                                                            )));
+                                          },
+                                          child: SizedBox(
+                                            height: ScreenUtil.instance
+                                                .setWidth(100),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                SizedBox(
+                                                    height: ScreenUtil.instance
+                                                        .setWidth(20.9),
+                                                    // width: ScreenUtil.instance
+                                                    //     .setWidth(30),
+                                                    child: Image.asset(
+                                                        'assets/icons/icon_apps/ticket.png',
+                                                        fit: BoxFit.fill)),
+                                                SizedBox(
+                                                  height: ScreenUtil.instance
+                                                      .setWidth(15),
+                                                ),
+                                                Text(
+                                                  'MANAGE TICKET',
+                                                  style: TextStyle(
+                                                      color:
+                                                          checkForEventDetailsEOMenuTitle(
+                                                              context),
+                                                      fontSize: ScreenUtil
+                                                          .instance
+                                                          .setSp(10)),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            if (widget.detailData['ticket_type']
+                                                        ['type'] ==
+                                                    'free_live_stream' ||
+                                                widget.detailData['ticket_type']
+                                                        ['type'] ==
+                                                    'paid_live_stream') {
+                                              print('isLivestream');
+
+                                              if (widget.detailData[
+                                                          'livestream'][0]
+                                                      ['on_demand_link'] !=
+                                                  null) {
+                                                showCupertinoDialog(
+                                                  context: context,
+                                                  builder: (thisContext) {
+                                                    return CupertinoAlertDialog(
+                                                      title: Text('Notice'),
+                                                      content: Text(
+                                                        'You uploaded on demand video',
+                                                        textScaleFactor: 1.2,
+                                                        textWidthBasis:
+                                                            TextWidthBasis
+                                                                .longestLine,
+                                                      ),
+                                                      actions: <Widget>[
+                                                        CupertinoDialogAction(
+                                                          child: Text('Close'),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    thisContext)
+                                                                .pop();
+                                                          },
+                                                        )
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              } else if (widget.detailData[
+                                                          'livestream'][0]
+                                                      ['zoom_id'] !=
+                                                  null) {
+                                                showCupertinoDialog(
+                                                  context: context,
+                                                  builder: (thisContext) {
+                                                    return CupertinoAlertDialog(
+                                                      title: Text('Notice'),
+                                                      content: Text(
+                                                        'please start broadcast using zoom link you provide to your attendees',
+                                                        textScaleFactor: 1.2,
+                                                        textWidthBasis:
+                                                            TextWidthBasis
+                                                                .longestLine,
+                                                      ),
+                                                      actions: <Widget>[
+                                                        CupertinoDialogAction(
+                                                          child: Text('Close'),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    thisContext)
+                                                                .pop();
+                                                          },
+                                                        )
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              } else {
+                                                if (streamingState ==
+                                                    'stopped') {
+                                                  showCupertinoDialog(
+                                                      context: context,
+                                                      builder: (thisContext) {
+                                                        return CupertinoAlertDialog(
+                                                          title: Text('Notice'),
+                                                          content: Text(
+                                                            'Please broadcast 5 minutes before the event start',
+                                                            textScaleFactor:
+                                                                1.2,
+                                                            textWidthBasis:
+                                                                TextWidthBasis
+                                                                    .longestLine,
+                                                          ),
+                                                          actions: <Widget>[
+                                                            CupertinoDialogAction(
+                                                              child:
+                                                                  Text('Close'),
                                                               onPressed: () {
-                                                                Navigator.pop(
-                                                                    thisContext);
+                                                                Navigator.of(
+                                                                        thisContext)
+                                                                    .pop();
+                                                              },
+                                                            )
+                                                          ],
+                                                        );
+                                                      });
+                                                } else {
+                                                  showCupertinoModalPopup(
+                                                      context: context,
+                                                      builder: (thisContext) {
+                                                        return CupertinoActionSheet(
+                                                          title: Text(
+                                                              'Set Broadcast Bitrate'),
+                                                          actions: <Widget>[
+                                                            CupertinoActionSheetAction(
+                                                              onPressed: () {
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder: (context) => LivestreamBroadcast(
+                                                                        bitrate:
+                                                                            1000,
+                                                                        eventDetail:
+                                                                            widget.detailData),
+                                                                  ),
+                                                                );
                                                               },
                                                               child: Text(
-                                                                'Cancel',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .red),
-                                                              ),
+                                                                  '1000 Kbps ( Medium Quality )'),
                                                             ),
-                                                          );
-                                                        });
-                                                  }
+                                                            CupertinoActionSheetAction(
+                                                              onPressed: () {
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder: (context) => LivestreamBroadcast(
+                                                                        bitrate:
+                                                                            2500,
+                                                                        eventDetail:
+                                                                            widget.detailData),
+                                                                  ),
+                                                                );
+                                                              },
+                                                              child: Text(
+                                                                  '2500 Kbps ( High Quality )'),
+                                                            ),
+                                                          ],
+                                                          cancelButton:
+                                                              CupertinoActionSheetAction(
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  thisContext);
+                                                            },
+                                                            child: Text(
+                                                              'Cancel',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .red),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      });
                                                 }
-                                              } else {
-                                                SharedPreferences prefs =
-                                                    await SharedPreferences
-                                                        .getInstance();
-                                                prefs.setString('NEW_EVENT_ID',
-                                                    detailData['id']);
-                                                prefs.setString(
-                                                    'QR_URI',
-                                                    detailData['qrcode']
-                                                        ['secure_url']);
-                                                prefs.setString('EVENT_NAME',
-                                                    detailData['name']);
-                                                print(prefs
-                                                    .getString('NEW_EVENT_ID'));
-                                                print(
-                                                    prefs.getString('QR_URI'));
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
+                                              }
+                                            } else {
+                                              SharedPreferences prefs =
+                                                  await SharedPreferences
+                                                      .getInstance();
+                                              prefs.setString('NEW_EVENT_ID',
+                                                  detailData['id']);
+                                              prefs.setString(
+                                                  'QR_URI',
+                                                  detailData['qrcode']
+                                                      ['secure_url']);
+                                              prefs.setString('EVENT_NAME',
+                                                  detailData['name']);
+                                              print(prefs
+                                                  .getString('NEW_EVENT_ID'));
+                                              print(prefs.getString('QR_URI'));
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          ShowQr(
+                                                    qrUrl: prefs
+                                                        .getString('QR_URI'),
+                                                    eventName: widget
+                                                        .detailData['name'],
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          child: SizedBox(
+                                            height: ScreenUtil.instance
+                                                .setWidth(100),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                SizedBox(
+                                                    width: ScreenUtil.instance.setWidth(widget
+                                                                        .detailData['ticket_type']
+                                                                    ['type'] ==
+                                                                'free_live_stream' ||
+                                                            widget.detailData['ticket_type']
+                                                                    ['type'] ==
+                                                                'paid_live_stream'
+                                                        ? widget.detailData['livestream'].isNotEmpty && widget.detailData['livestream'][0]['zoom_id'] != null
+                                                            ? 80
+                                                            : 50
+                                                        : 20.9),
+                                                    child:
+                                                        widget.detailData.containsKey(
+                                                                    'livestream') &&
+                                                                widget
+                                                                    .detailData[
+                                                                        'livestream']
+                                                                    .isNotEmpty &&
+                                                                widget.detailData['livestream']
+                                                                            [0]
+                                                                        ['on_demand_link'] !=
+                                                                    null
+                                                            ? Text(
+                                                                'On Demand Video',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                maxLines: 2,
+                                                              )
+                                                            : Image.asset(
+                                                                widget.detailData['ticket_type']['type'] ==
+                                                                            'free_live_stream' ||
+                                                                        widget.detailData['ticket_type']['type'] ==
+                                                                            'paid_live_stream'
+                                                                    ? widget.detailData['livestream'].isNotEmpty &&
+                                                                            widget.detailData['livestream'][0]['zoom_id'] !=
+                                                                                null
+                                                                        ? 'assets/icons/aset_icon/zoom_livestream.png'
+                                                                        : 'assets/btn_ticket/live.png'
+                                                                    : 'assets/icons/icon_apps/qr.png',
+                                                                fit:
+                                                                    BoxFit.fill,
+                                                                colorBlendMode:
+                                                                    BlendMode
+                                                                        .srcATop,
+                                                                color: widget.detailData['ticket_type']['type'] ==
+                                                                            'free_live_stream' ||
+                                                                        widget.detailData['ticket_type']['type'] ==
+                                                                            'paid_live_stream'
+                                                                    ? streamingState ==
+                                                                            'stopped'
+                                                                        ? Colors
+                                                                            .white
+                                                                            .withOpacity(
+                                                                                .9)
+                                                                        : Colors
+                                                                            .transparent
+                                                                    : Colors
+                                                                        .transparent,
+                                                              )),
+                                                widget.detailData.containsKey(
+                                                            'livestream') &&
+                                                        widget
+                                                            .detailData[
+                                                                'livestream']
+                                                            .isNotEmpty &&
+                                                        widget.detailData[
+                                                                    'livestream'][0]
+                                                                [
+                                                                'on_demand_link'] !=
+                                                            null
+                                                    ? Container()
+                                                    : SizedBox(
+                                                        height: ScreenUtil
+                                                            .instance
+                                                            .setWidth(15),
+                                                      ),
+                                                Text(
+                                                    widget.detailData['ticket_type']
+                                                                    ['type'] ==
+                                                                'free_live_stream' ||
+                                                            widget.detailData['ticket_type']
+                                                                    ['type'] ==
+                                                                'paid_live_stream'
+                                                        ? widget.detailData['livestream'].isNotEmpty &&
+                                                                widget.detailData['livestream'][0]['on_demand_link'] !=
+                                                                    null
+                                                            ? ''
+                                                            : 'NOW !'
+                                                        : 'SHOW QR CODE',
+                                                    style: TextStyle(
+                                                        color:
+                                                            checkForEventDetailsEOMenuTitle(
+                                                                context),
+                                                        fontSize: ScreenUtil
+                                                            .instance
+                                                            .setSp(10)))
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
                                                     builder: (BuildContext
                                                             context) =>
-                                                        ShowQr(
-                                                      qrUrl: prefs
-                                                          .getString('QR_URI'),
-                                                      eventName: widget
-                                                          .detailData['name'],
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                            child: SizedBox(
-                                              height: ScreenUtil.instance
-                                                  .setWidth(100),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  SizedBox(
-                                                      width: ScreenUtil.instance.setWidth(
-                                                          widget.detailData['ticket_type']['type'] == 'free_live_stream' ||
-                                                                  widget.detailData['ticket_type']['type'] ==
-                                                                      'paid_live_stream'
-                                                              ? widget.detailData['livestream'].isNotEmpty &&
-                                                                      widget.detailData['livestream'][0]['zoom_id'] !=
-                                                                          null
-                                                                  ? 80
-                                                                  : 50
-                                                              : 20.9),
-                                                      child:
-                                                          widget.detailData
-                                                                      .containsKey(
-                                                                          'livestream') &&
-                                                                  widget
-                                                                      .detailData[
-                                                                          'livestream']
-                                                                      .isNotEmpty &&
-                                                                  widget.detailData['livestream']
-                                                                              [0]
-                                                                          ['on_demand_link'] !=
-                                                                      null
-                                                              ? Text(
-                                                                  'On Demand Video',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  maxLines: 2,
-                                                                )
-                                                              : Image.asset(
-                                                                  widget.detailData['ticket_type']['type'] ==
-                                                                              'free_live_stream' ||
-                                                                          widget.detailData['ticket_type']['type'] ==
-                                                                              'paid_live_stream'
-                                                                      ? widget.detailData['livestream'].isNotEmpty &&
-                                                                              widget.detailData['livestream'][0]['zoom_id'] != null
-                                                                          ? 'assets/icons/aset_icon/zoom_livestream.png'
-                                                                          : 'assets/btn_ticket/live.png'
-                                                                      : 'assets/icons/icon_apps/qr.png',
-                                                                  fit: BoxFit
-                                                                      .fill,
-                                                                  colorBlendMode:
-                                                                      BlendMode
-                                                                          .srcATop,
-                                                                  color: widget.detailData['ticket_type']['type'] ==
-                                                                              'free_live_stream' ||
-                                                                          widget.detailData['ticket_type']['type'] ==
-                                                                              'paid_live_stream'
-                                                                      ? streamingState ==
-                                                                              'stopped'
-                                                                          ? Colors.white.withOpacity(
-                                                                              .9)
-                                                                          : Colors
-                                                                              .transparent
-                                                                      : Colors
-                                                                          .transparent,
-                                                                )),
-                                                  widget.detailData.containsKey(
-                                                              'livestream') &&
-                                                          widget
-                                                              .detailData[
-                                                                  'livestream']
-                                                              .isNotEmpty &&
-                                                          widget.detailData[
-                                                                      'livestream'][0]
-                                                                  [
-                                                                  'on_demand_link'] !=
-                                                              null
-                                                      ? Container()
-                                                      : SizedBox(
-                                                          height: ScreenUtil
-                                                              .instance
-                                                              .setWidth(15),
-                                                        ),
-                                                  Text(
-                                                      widget.detailData['ticket_type']['type'] ==
-                                                                  'free_live_stream' ||
-                                                              widget.detailData['ticket_type']
-                                                                      [
-                                                                      'type'] ==
-                                                                  'paid_live_stream'
-                                                          ? widget
-                                                                      .detailData[
-                                                                          'livestream']
-                                                                      .isNotEmpty &&
-                                                                  widget.detailData['livestream'][0]['on_demand_link'] !=
-                                                                      null
-                                                              ? ''
-                                                              : 'NOW !'
-                                                          : 'SHOW QR CODE',
-                                                      style: TextStyle(
-                                                          color:
-                                                          checkForEventDetailsEOMenuTitle(context),
-                                                          fontSize: ScreenUtil
-                                                              .instance
-                                                              .setSp(10)))
-                                                ],
-                                              ),
+                                                        TicketSales(
+                                                          eventID: widget
+                                                              .detailData['id'],
+                                                          eventName:
+                                                              widget.detailData[
+                                                                  'name'],
+                                                        )));
+                                          },
+                                          child: SizedBox(
+                                            height: ScreenUtil.instance
+                                                .setWidth(100),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                SizedBox(
+                                                    width: ScreenUtil.instance
+                                                        .setWidth(20.9),
+                                                    child: Image.asset(
+                                                        'assets/icons/icon_apps/wallet.png',
+                                                        fit: BoxFit.fill)),
+                                                SizedBox(
+                                                  height: ScreenUtil.instance
+                                                      .setWidth(12),
+                                                ),
+                                                Text('TICKET SALES',
+                                                    style: TextStyle(
+                                                        color:
+                                                            checkForEventDetailsEOMenuTitle(
+                                                                context),
+                                                        fontSize: ScreenUtil
+                                                            .instance
+                                                            .setSp(10)))
+                                              ],
                                             ),
                                           ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          TicketSales(
-                                                            eventID: widget
-                                                                    .detailData[
-                                                                'id'],
-                                                            eventName: widget
-                                                                    .detailData[
-                                                                'name'],
-                                                          )));
-                                            },
-                                            child: SizedBox(
-                                              height: ScreenUtil.instance
-                                                  .setWidth(100),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  SizedBox(
-                                                      width: ScreenUtil.instance
-                                                          .setWidth(20.9),
-                                                      child: Image.asset(
-                                                          'assets/icons/icon_apps/wallet.png',
-                                                          fit: BoxFit.fill)),
-                                                  SizedBox(
-                                                    height: ScreenUtil.instance
-                                                        .setWidth(12),
-                                                  ),
-                                                  Text('TICKET SALES',
-                                                      style: TextStyle(
-                                                          color:
-                                                          checkForEventDetailsEOMenuTitle(context),
-                                                          fontSize: ScreenUtil
-                                                              .instance
-                                                              .setSp(10)))
-                                                ],
-                                              ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                            SizedBox(
+                              height: ScreenUtil.instance.setWidth(5),
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 13, vertical: 13),
+                              height: ScreenUtil.instance.setWidth(40),
+                              decoration: BoxDecoration(),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Flexible(
+                                    child: GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      onTap: () {
+                                        currentTab = 0;
+                                      },
+                                      child: Container(
+                                        height:
+                                            ScreenUtil.instance.setWidth(115),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            // Row(
+                                            //   children: <Widget>[
+                                            //     CircleAvatar(
+                                            //       backgroundImage: ,
+                                            //     )
+                                            //   ],
+                                            // )
+                                            Text(
+                                              'Detail',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
                                             ),
-                                          )
-                                        ],
+                                            Divider(
+                                              thickness: 2,
+                                              color: currentTab == 0
+                                                  ? eventajaGreenTeal
+                                                  : Theme.of(context)
+                                                      .dividerColor,
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
-                              SizedBox(
-                                height: ScreenUtil.instance.setWidth(5),
+                                  ),
+                                  // Flexible(
+                                  //   child: GestureDetector(
+                                  //     behavior: HitTestBehavior.opaque,
+                                  //     onTap: () {
+                                  //       currentTab = 1;
+                                  //     },
+                                  //     child: Container(
+                                  //       height:
+                                  //           ScreenUtil.instance.setWidth(112),
+                                  //       child: Column(
+                                  //         crossAxisAlignment:
+                                  //             CrossAxisAlignment.center,
+                                  //         children: <Widget>[
+                                  //           // Row(
+                                  //           //   children: <Widget>[
+                                  //           //     CircleAvatar(
+                                  //           //       backgroundImage: ,
+                                  //           //     )
+                                  //           //   ],
+                                  //           // )
+                                  //           Text(
+                                  //             'Activity',
+                                  //             style: TextStyle(
+                                  //                 fontWeight: FontWeight.bold),
+                                  //           ),
+                                  //           Divider(
+                                  //             thickness: 2,
+                                  //             color: currentTab == 1
+                                  //                 ? eventajaGreenTeal
+                                  //                 : Theme.of(context)
+                                  //                     .dividerColor,
+                                  //           )
+                                  //         ],
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  Flexible(
+                                    child: GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      onTap: () {
+                                        currentTab = 2;
+                                      },
+                                      child: Container(
+                                        height:
+                                            ScreenUtil.instance.setWidth(112),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Text(
+                                              'Comments',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Divider(
+                                              thickness: 2,
+                                              color: currentTab == 2
+                                                  ? eventajaGreenTeal
+                                                  : Theme.of(context)
+                                                      .dividerColor,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 13, vertical: 13),
-                                height: ScreenUtil.instance.setWidth(40),
-                                decoration: BoxDecoration(
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Flexible(
-                                      child: GestureDetector(
-                                        behavior:
-                                            HitTestBehavior.opaque,
-                                        onTap: () {
-                                          currentTab = 0;
-                                        },
-                                        child: Container(
-                                          height:
-                                              ScreenUtil.instance.setWidth(115),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              // Row(
-                                              //   children: <Widget>[
-                                              //     CircleAvatar(
-                                              //       backgroundImage: ,
-                                              //     )
-                                              //   ],
-                                              // )
-                                              Text(
-                                                'Detail',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              Divider(
-                                                thickness: 2,
-                                                color: currentTab == 0
-                                                    ? eventajaGreenTeal
-                                                    : Theme.of(context)
-                                                        .dividerColor,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: GestureDetector(
-                                        behavior:
-                                            HitTestBehavior.opaque,
-                                        onTap: () {
-                                          currentTab = 1;
-                                        },
-                                        child: Container(
-                                          height:
-                                              ScreenUtil.instance.setWidth(112),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              // Row(
-                                              //   children: <Widget>[
-                                              //     CircleAvatar(
-                                              //       backgroundImage: ,
-                                              //     )
-                                              //   ],
-                                              // )
-                                              Text(
-                                                'Activity',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              Divider(
-                                                thickness: 2,
-                                                color: currentTab == 1
-                                                    ? eventajaGreenTeal
-                                                    : Theme.of(context)
-                                                        .dividerColor,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: GestureDetector(
-                                        behavior:
-                                            HitTestBehavior.opaque,
-                                        onTap: () {
-                                          currentTab = 2;
-                                        },
-                                        child: Container(
-                                          height:
-                                              ScreenUtil.instance.setWidth(112),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              Text(
-                                                'Comments',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              Divider(
-                                                thickness: 2,
-                                                color: currentTab == 2
-                                                    ? eventajaGreenTeal
-                                                    : Theme.of(context)
-                                                        .dividerColor,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              tabItem()
-                            ],
-                          ),
-                        )),
+                            ),
+                            tabItem()
+                          ],
+                        ),
+                      )),
                 Positioned(
                     child: isLoading == true
                         ? Container(
@@ -2837,7 +2798,6 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                                                   .toString()
                                                   .contains(".png")
                                           ? PhotoView(
-                                            
                                               imageProvider: NetworkImage(
                                                   additional['posterPathFull']),
                                             )
@@ -2958,7 +2918,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
               margin: EdgeInsets.symmetric(horizontal: 13),
               height: 50,
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: checkForContainerBackgroundColor(context),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
@@ -2970,7 +2930,7 @@ class _EventDetailsConstructViewState extends State<EventDetailsConstructView>
                 child: Text('Write a Comment',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.black.withOpacity(.5))),
+                        color: checkForAppBarTitleColor(context))),
               ),
             ),
           ),

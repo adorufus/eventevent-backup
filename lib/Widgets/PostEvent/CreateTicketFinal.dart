@@ -332,7 +332,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
         Container(
             margin: EdgeInsets.symmetric(vertical: 20, horizontal: 2),
             decoration: BoxDecoration(
-                color: Colors.white,
+                color: checkForContainerBackgroundColor(context),
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
@@ -547,7 +547,7 @@ class CreateTicketFinalState extends State<CreateTicketFinal> {
         Container(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 2),
             decoration: BoxDecoration(
-                color: Colors.white,
+                color: checkForContainerBackgroundColor(context),
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(

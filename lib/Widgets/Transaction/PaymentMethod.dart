@@ -76,7 +76,7 @@ class PaymentMethodState extends State<PaymentMethod> {
       appBar: AppBar(
         brightness: Brightness.light,
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         leading: GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
@@ -99,7 +99,6 @@ class PaymentMethodState extends State<PaymentMethod> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: ScreenUtil.instance.setWidth(100),
-                color: Colors.white,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -279,7 +278,9 @@ class PaymentMethodState extends State<PaymentMethod> {
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 10),
                                     decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color:
+                                        checkForContainerBackgroundColor
+                                          (context),
                                         boxShadow: [
                                           BoxShadow(
                                               blurRadius: 5,
@@ -293,7 +294,8 @@ class PaymentMethodState extends State<PaymentMethod> {
                                       children: <Widget>[
                                         Align(
                                           alignment: Alignment.centerLeft,
-                                          child: SizedBox(
+                                          child: Container(
+                                            color: checkForContainerBackgroundColor(context),
                                               child: Image(
                                             image: paymentMethodList[i]
                                                         ['photo'] ==

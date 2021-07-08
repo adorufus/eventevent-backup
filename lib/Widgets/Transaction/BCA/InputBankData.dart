@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math' as math;
 
+import 'package:eventevent/Providers/ThemeProvider.dart';
 import 'package:eventevent/Widgets/TransactionHistory.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -108,7 +110,7 @@ class PaymentBcaState extends State<PaymentBCA> {
       backgroundColor: checkForBackgroundColor(context),
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
@@ -136,7 +138,6 @@ class PaymentBcaState extends State<PaymentBCA> {
             )
           : Container(
               height: MediaQuery.of(context).size.height,
-              color: Colors.white,
               padding: EdgeInsets.symmetric(horizontal: 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -296,10 +297,12 @@ class PaymentBcaState extends State<PaymentBCA> {
                           padding: EdgeInsets.only(
                               left: 15, right: 7, top: 10, bottom: 10),
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: <BoxShadow>[
+                              color: checkForContainerBackgroundColor(context),
+                              boxShadow: Provider.of<ThemeProvider>
+                                (context).isDarkMode ? null : <BoxShadow>[
                                 BoxShadow(
-                                    color: Colors.grey,
+                                    color: Colors
+                                    .grey,
                                     blurRadius: 1,
                                     offset: Offset(1, 1))
                               ],
@@ -347,7 +350,7 @@ class PaymentBcaState extends State<PaymentBCA> {
                                           fontWeight: FontWeight.bold,
                                           fontSize:
                                               ScreenUtil.instance.setSp(28),
-                                          color: Colors.black54),
+                                          color: checkForAppBarTitleColor(context)),
                                     ),
                                     Text(
                                       bank_acc,

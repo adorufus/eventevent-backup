@@ -14,6 +14,7 @@ class EventStatistic extends StatefulWidget {
   final eventId;
 
   const EventStatistic({Key key, this.eventId}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return EventStatisticState();
@@ -67,10 +68,7 @@ class EventStatisticState extends State<EventStatistic> {
 
     return Scaffold(
       backgroundColor: checkForBackgroundColor(context),
-      appBar: sharedData == null ||
-              ticketData == null ||
-              checkinData == null ||
-              dataMap == null
+      appBar: sharedData == null || ticketData == null || checkinData == null || dataMap == null
           ? PreferredSize(
               child: Container(),
               preferredSize: Size(0, 0),
@@ -78,7 +76,7 @@ class EventStatisticState extends State<EventStatistic> {
           : AppBar(
               brightness: Brightness.light,
               elevation: 0,
-              backgroundColor: Colors.white,
+              backgroundColor: appBarColor,
               leading: GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
@@ -94,10 +92,7 @@ class EventStatisticState extends State<EventStatistic> {
                 style: TextStyle(color: eventajaGreenTeal),
               ),
             ),
-      body: sharedData == null ||
-              ticketData == null ||
-              checkinData == null ||
-              dataMap == null
+      body: sharedData == null || ticketData == null || checkinData == null || dataMap == null
           ? HomeLoadingScreen().eventStatisticLoading(context)
           : Container(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -108,15 +103,11 @@ class EventStatisticState extends State<EventStatistic> {
                     children: <Widget>[
                       Text(
                         'EVENT NAME',
-                        style: TextStyle(
-                            fontSize: ScreenUtil.instance.setSp(14),
-                            color: Colors.grey[500]),
+                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(14), color: Colors.grey[500]),
                       ),
                       Text(
                         eventName.toUpperCase(),
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: ScreenUtil.instance.setSp(28)),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(28)),
                       )
                     ],
                   ),
@@ -132,9 +123,7 @@ class EventStatisticState extends State<EventStatistic> {
                   Center(
                     child: Text(
                       'OVERVIEW',
-                      style: TextStyle(
-                          color: Colors.grey[500],
-                          fontSize: ScreenUtil.instance.setSp(18)),
+                      style: TextStyle(color: Colors.grey[500], fontSize: ScreenUtil.instance.setSp(18)),
                     ),
                   ),
                   SizedBox(
@@ -158,9 +147,7 @@ class EventStatisticState extends State<EventStatistic> {
                           ),
                           Text(
                             viewers,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: ScreenUtil.instance.setSp(25)),
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(25)),
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
@@ -184,9 +171,7 @@ class EventStatisticState extends State<EventStatistic> {
                           ),
                           Text(
                             lovers,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: ScreenUtil.instance.setSp(25)),
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(25)),
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
@@ -209,12 +194,8 @@ class EventStatisticState extends State<EventStatistic> {
                             height: ScreenUtil.instance.setWidth(12),
                           ),
                           Text(
-                            sharedData['total_shared'] == null
-                                ? '-'
-                                : sharedData['total_shared'].toString(),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: ScreenUtil.instance.setSp(25)),
+                            sharedData['total_shared'] == null ? '-' : sharedData['total_shared'].toString(),
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(25)),
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(15)),
                           Text(
@@ -229,10 +210,7 @@ class EventStatisticState extends State<EventStatistic> {
                     height: ScreenUtil.instance.setWidth(20),
                   ),
                   Center(
-                    child: Text('VIEWERS',
-                        style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: ScreenUtil.instance.setSp(18))),
+                    child: Text('VIEWERS', style: TextStyle(color: Colors.grey[500], fontSize: ScreenUtil.instance.setSp(18))),
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -241,11 +219,7 @@ class EventStatisticState extends State<EventStatistic> {
                     children: <Widget>[
                       PieChart(
                         dataMap: dataMap,
-                        colorList: <Color>[
-                          eventajaGreenTeal,
-                          eventajaGreenTeal.withOpacity(0.5),
-                          Colors.grey
-                        ],
+                        colorList: <Color>[eventajaGreenTeal, eventajaGreenTeal.withOpacity(0.5), Colors.grey],
                         showLegends: false,
                         chartValuesColor: Colors.white,
                       ),
@@ -261,8 +235,7 @@ class EventStatisticState extends State<EventStatistic> {
                           SizedBox(
                             height: ScreenUtil.instance.setWidth(10),
                           ),
-                          Text(totalMale == null ? '0%' : totalMale,
-                              style: TextStyle(fontWeight: FontWeight.bold))
+                          Text(totalMale == null ? '0%' : totalMale, style: TextStyle(fontWeight: FontWeight.bold))
                         ],
                       ),
                       Column(
@@ -277,8 +250,7 @@ class EventStatisticState extends State<EventStatistic> {
                           SizedBox(
                             height: ScreenUtil.instance.setWidth(10),
                           ),
-                          Text(totalFemale == null ? '0%' : totalFemale,
-                              style: TextStyle(fontWeight: FontWeight.bold))
+                          Text(totalFemale == null ? '0%' : totalFemale, style: TextStyle(fontWeight: FontWeight.bold))
                         ],
                       ),
                       Column(
@@ -295,8 +267,7 @@ class EventStatisticState extends State<EventStatistic> {
                                 )),
                           ),
                           SizedBox(height: ScreenUtil.instance.setWidth(25)),
-                          Text(totalUnspecified == null ? "" : totalUnspecified,
-                              style: TextStyle(fontWeight: FontWeight.bold))
+                          Text(totalUnspecified == null ? "" : totalUnspecified, style: TextStyle(fontWeight: FontWeight.bold))
                         ],
                       )
                     ],
@@ -314,14 +285,9 @@ class EventStatisticState extends State<EventStatistic> {
                     children: <Widget>[
                       Text(
                         'TICKET SOLD',
-                        style:
-                            TextStyle(fontSize: ScreenUtil.instance.setSp(18)),
+                        style: TextStyle(fontSize: ScreenUtil.instance.setSp(18)),
                       ),
-                      Text(ticketData['sold'].toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: ScreenUtil.instance.setSp(18),
-                              color: eventajaGreenTeal))
+                      Text(ticketData['sold'].toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18), color: eventajaGreenTeal))
                     ],
                   ),
                   SizedBox(
@@ -331,14 +297,8 @@ class EventStatisticState extends State<EventStatistic> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text('TICKET BOOKED',
-                          style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(18))),
-                      Text(ticketData['booked'].toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: ScreenUtil.instance.setSp(18),
-                              color: eventajaGreenTeal))
+                      Text('TICKET BOOKED', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18))),
+                      Text(ticketData['booked'].toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18), color: eventajaGreenTeal))
                     ],
                   ),
                   SizedBox(
@@ -348,14 +308,8 @@ class EventStatisticState extends State<EventStatistic> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text('CHECKED IN',
-                          style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(18))),
-                      Text(ticketData['sold'].toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: ScreenUtil.instance.setSp(18),
-                              color: eventajaGreenTeal))
+                      Text('CHECKED IN', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18))),
+                      Text(ticketData['sold'].toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18), color: eventajaGreenTeal))
                     ],
                   ),
                   SizedBox(
@@ -365,14 +319,8 @@ class EventStatisticState extends State<EventStatistic> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text('TOTAL AVAILABLE TICKET',
-                          style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(18))),
-                      Text(ticketData['available'].toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: ScreenUtil.instance.setSp(18),
-                              color: eventajaGreenTeal))
+                      Text('TOTAL AVAILABLE TICKET', style: TextStyle(fontSize: ScreenUtil.instance.setSp(18))),
+                      Text(ticketData['available'].toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: ScreenUtil.instance.setSp(18), color: eventajaGreenTeal))
                     ],
                   )
                 ],
@@ -386,14 +334,10 @@ class EventStatisticState extends State<EventStatistic> {
 
     print(prefs.getInt('NEW_EVENT_ID'));
 
-    String url = BaseApi().apiUrl +
-        '/analytic_event/shared?X-API-KEY=$API_KEY&event_id=${prefs.getInt('NEW_EVENT_ID')}';
+    String url = BaseApi().apiUrl + '/analytic_event/shared?X-API-KEY=$API_KEY&event_id=${prefs.getInt('NEW_EVENT_ID')}';
     print(url);
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTH_KEY,
-      'cookie': prefs.getString('Session')
-    });
+    final response = await http.get(url, headers: {'Authorization': AUTH_KEY, 'cookie': prefs.getString('Session')});
 
     print(response.statusCode);
 
@@ -410,13 +354,9 @@ class EventStatisticState extends State<EventStatistic> {
   Future getCheckedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl +
-        '/analytic_event/checkin?X-API-KEY=$API_KEY&event_id=${widget.eventId}';
+    String url = BaseApi().apiUrl + '/analytic_event/checkin?X-API-KEY=$API_KEY&event_id=${widget.eventId}';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTH_KEY,
-      'cookie': prefs.getString('Session')
-    });
+    final response = await http.get(url, headers: {'Authorization': AUTH_KEY, 'cookie': prefs.getString('Session')});
 
     print(response.statusCode);
 
@@ -433,13 +373,9 @@ class EventStatisticState extends State<EventStatistic> {
   Future getViewers() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl +
-        '/analytic_event/gender?X-API-KEY=$API_KEY&event_id=${widget.eventId}';
+    String url = BaseApi().apiUrl + '/analytic_event/gender?X-API-KEY=$API_KEY&event_id=${widget.eventId}';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTH_KEY,
-      'cookie': prefs.getString('Session')
-    });
+    final response = await http.get(url, headers: {'Authorization': AUTH_KEY, 'cookie': prefs.getString('Session')});
 
     print(response.statusCode);
     print(response.body);
@@ -447,40 +383,18 @@ class EventStatisticState extends State<EventStatistic> {
     if (response.statusCode == 200) {
       setState(() {
         var extractedData = json.decode(response.body);
-        double total = double.parse((extractedData['data']['Male'] +
-                extractedData['data']['Female'] +
-                extractedData['data']['Unspecified'])
-            .toString());
+        double total = double.parse((extractedData['data']['Male'] + extractedData['data']['Female'] + extractedData['data']['Unspecified']).toString());
 
-        totalMale =
-            (((double.parse(extractedData['data']['Male'].toString()) / total) *
-                        100)
-                    .toStringAsFixed(0) +
-                '%');
-        totalFemale =
-            (((double.parse(extractedData['data']['Female'].toString()) /
-                            total) *
-                        100)
-                    .toStringAsFixed(0) +
-                '%');
-        totalUnspecified =
-            (((double.parse(extractedData['data']['Unspecified'].toString()) /
-                            total) *
-                        100)
-                    .toStringAsFixed(0) +
-                '%');
+        totalMale = (((double.parse(extractedData['data']['Male'].toString()) / total) * 100).toStringAsFixed(0) + '%');
+        totalFemale = (((double.parse(extractedData['data']['Female'].toString()) / total) * 100).toStringAsFixed(0) + '%');
+        totalUnspecified = (((double.parse(extractedData['data']['Unspecified'].toString()) / total) * 100).toStringAsFixed(0) + '%');
         print(totalFemale);
         print(totalMale);
         print(totalUnspecified);
 
-        dataMap.putIfAbsent('Male',
-            () => double.parse(extractedData['data']['Male'].toString()));
-        dataMap.putIfAbsent('Female',
-            () => double.parse(extractedData['data']['Female'].toString()));
-        dataMap.putIfAbsent(
-            'Unspecified',
-            () =>
-                double.parse(extractedData['data']['Unspecified'].toString()));
+        dataMap.putIfAbsent('Male', () => double.parse(extractedData['data']['Male'].toString()));
+        dataMap.putIfAbsent('Female', () => double.parse(extractedData['data']['Female'].toString()));
+        dataMap.putIfAbsent('Unspecified', () => double.parse(extractedData['data']['Unspecified'].toString()));
       });
     }
   }
@@ -488,13 +402,9 @@ class EventStatisticState extends State<EventStatistic> {
   Future getTicketStat() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String url = BaseApi().apiUrl +
-        '/analytic_event/ticket?X-API-KEY=$API_KEY&event_id=${widget.eventId}';
+    String url = BaseApi().apiUrl + '/analytic_event/ticket?X-API-KEY=$API_KEY&event_id=${widget.eventId}';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTH_KEY,
-      'cookie': prefs.getString('Session')
-    });
+    final response = await http.get(url, headers: {'Authorization': AUTH_KEY, 'cookie': prefs.getString('Session')});
 
     print(response.statusCode);
 

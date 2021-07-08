@@ -201,7 +201,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
       child: Column(
         children: <Widget>[
           userData == null
-              ? HomeLoadingScreen().EditProfilePictureLoading()
+              ? HomeLoadingScreen().EditProfilePictureLoading(context)
               : Container(
                   height: ScreenUtil.instance.setWidth(200),
                   width: ScreenUtil.instance.setWidth(200),

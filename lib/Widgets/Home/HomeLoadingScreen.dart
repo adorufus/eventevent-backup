@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_placeholder_textlines/placeholder_lines.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:eventevent/Providers/ThemeProvider.dart';
+import 'package:provider/provider.dart';
 
 class HomeLoadingScreen {
+
   static List<dynamic> categoryCount = [
     1,
     2,
@@ -91,7 +94,7 @@ class HomeLoadingScreen {
                 color: Colors.black.withOpacity(0.1),
                 blurRadius: 2,
                 spreadRadius: 1.5)
-          ], color: Colors.white, borderRadius: BorderRadius.circular(30)),
+          ], color: checkForContainerBackgroundColor(context), borderRadius: BorderRadius.circular(30)),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -149,11 +152,10 @@ class HomeLoadingScreen {
             width: MediaQuery.of(context).size.width,
             height: ScreenUtil.instance.setWidth(75),
             padding: EdgeInsets.symmetric(horizontal: 13),
-            color: Colors.white,
             child: AppBar(
               brightness: Brightness.light,
               elevation: 0,
-              backgroundColor: Colors.white,
+              backgroundColor: appBarColor,
               leading: GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
@@ -170,7 +172,6 @@ class HomeLoadingScreen {
         body: Stack(
                 children: <Widget>[
                   Container(
-                    color: Colors.white,
                     child: ListView(
                       shrinkWrap: true,
                       children: <Widget>[
@@ -358,7 +359,7 @@ class HomeLoadingScreen {
                           padding: EdgeInsets.all(15),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
+                              color: checkForContainerBackgroundColor(context),
                               boxShadow: [
                                 BoxShadow(
                                     blurRadius: 5,
@@ -473,7 +474,7 @@ class HomeLoadingScreen {
                               horizontal: 13, vertical: 13),
                           height: ScreenUtil.instance.setWidth(40),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: checkForBackgroundColor(context),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -591,8 +592,8 @@ class HomeLoadingScreen {
           width: MediaQuery.of(context).size.width / 1.2,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
-              boxShadow: <BoxShadow>[
+              color: checkForContainerBackgroundColor(context),
+              boxShadow: Provider.of<ThemeProvider>(context).isDarkMode ? null : <BoxShadow>[
                 BoxShadow(
                     color: Colors.grey, offset: Offset(1, 1), blurRadius: 2)
               ]),
@@ -776,8 +777,8 @@ class HomeLoadingScreen {
           width: MediaQuery.of(context).size.width / 1.2,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
-              boxShadow: <BoxShadow>[
+              color: checkForContainerBackgroundColor(context),
+              boxShadow: Provider.of<ThemeProvider>(context).isDarkMode ? null : <BoxShadow>[
                 BoxShadow(
                     color: Colors.grey, offset: Offset(1, 1), blurRadius: 2)
               ]),
@@ -881,9 +882,9 @@ class HomeLoadingScreen {
     );
   }
 
-  Widget EditProfilePictureLoading(){
+  Widget EditProfilePictureLoading(BuildContext context){
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300],
+      baseColor: checkForContainerBackgroundColor(context),
       highlightColor: Colors.grey[100],
       enabled: true,
       child: Container(
@@ -900,12 +901,10 @@ class HomeLoadingScreen {
 
   Widget withdrawLoading(BuildContext context) {
     return Container(
-      color: Colors.white,
       child: ListView(
         children: <Widget>[
           Container(
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-            color: Colors.white,
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
@@ -913,7 +912,7 @@ class HomeLoadingScreen {
                   child: Text(
                     'WITHDRAW AMOUNT',
                     style: TextStyle(
-                      color: Colors.black54,
+                      color: checkForAppBarTitleColor(context),
                       fontWeight: FontWeight.bold,
                       fontSize: ScreenUtil.instance.setSp(18),
                     ),
@@ -931,7 +930,7 @@ class HomeLoadingScreen {
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: ScreenUtil.instance.setSp(18),
-                          color: Colors.black26),
+                          color: checkForAppBarTitleColor(context),),
                     ),
                     Container(
                       width: 80,
@@ -1002,7 +1001,7 @@ class HomeLoadingScreen {
             child: Text(
               'TRANSFER TO',
               style: TextStyle(
-                  color: Colors.black54,
+                  color: checkForAppBarTitleColor(context),
                   fontWeight: FontWeight.bold,
                   fontSize: ScreenUtil.instance.setSp(18)),
             ),
@@ -1010,7 +1009,6 @@ class HomeLoadingScreen {
           SizedBox(height: ScreenUtil.instance.setWidth(20)),
           Container(
             padding: EdgeInsets.symmetric(vertical: 12),
-            color: Colors.white,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -1166,7 +1164,7 @@ class HomeLoadingScreen {
                 children: <Widget>[
                   Container(
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: checkForContainerBackgroundColor(context),
                         borderRadius: BorderRadius.circular(15)),
                     padding: EdgeInsets.symmetric(horizontal: 13, vertical: 13),
                     child: Column(
@@ -1294,7 +1292,7 @@ class HomeLoadingScreen {
                 Row(
                   children: <Widget>[
                     Shimmer.fromColors(
-                      baseColor: Colors.grey[300],
+                      baseColor: checkForContainerBackgroundColor(context),
                       highlightColor: Colors.grey[100],
                       enabled: true,
                       child: Container(
@@ -1310,9 +1308,8 @@ class HomeLoadingScreen {
                                   blurRadius: 5,
                                   offset: Offset(1, 1))
                             ],
-                            image: DecorationImage(
-                                image: AssetImage('assets/grey-fade.jpg'),
-                                fit: BoxFit.cover)),
+                            color: checkForContainerBackgroundColor(context),
+                            ),
                       ),
                     ),
                     Column(
@@ -1370,7 +1367,7 @@ class HomeLoadingScreen {
                           width: ScreenUtil.instance.setWidth(82.31),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
-                              color: Colors.grey[350]),
+                              color: checkForContainerBackgroundColor(context)),
                         ),
                       ],
                     )
@@ -1381,7 +1378,7 @@ class HomeLoadingScreen {
                   margin: EdgeInsets.symmetric(horizontal: 13, vertical: 28),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: checkForContainerBackgroundColor(context),
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
@@ -1425,7 +1422,7 @@ class HomeLoadingScreen {
                             spreadRadius: 1.5)
                       ]),
                   child: Shimmer.fromColors(
-                    baseColor: Colors.grey[300],
+                    baseColor: checkForContainerBackgroundColor(context),
                     highlightColor: Colors.grey[100],
                     enabled: true,
                     child: ClipRRect(
@@ -1474,7 +1471,7 @@ class HomeLoadingScreen {
             margin: EdgeInsets.only(left: 13, top: 8, bottom: 8, right: 3),
             width: ScreenUtil.instance.setWidth(150),
             decoration: BoxDecoration(
-                color: Colors.white,
+                color: checkForContainerBackgroundColor(context),
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: <BoxShadow>[
                   BoxShadow(
@@ -1485,7 +1482,7 @@ class HomeLoadingScreen {
             child: Column(
               children: <Widget>[
                 Shimmer.fromColors(
-                  baseColor: Colors.grey[300],
+                  baseColor: checkForContainerBackgroundColor(context),
                   highlightColor: Colors.grey[100],
                   enabled: true,
                   child: Container(
@@ -1542,7 +1539,7 @@ class HomeLoadingScreen {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Shimmer.fromColors(
-                  baseColor: Colors.grey[300],
+                  baseColor: checkForContainerBackgroundColor(context),
                   highlightColor: Colors.grey[100],
                   enabled: true,
                   child: Container(
@@ -1572,7 +1569,7 @@ class HomeLoadingScreen {
 
   Widget bannerLoading(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300],
+      baseColor: checkForContainerBackgroundColor(context),
       highlightColor: Colors.grey[100],
       enabled: true,
       child: Container(
@@ -1580,7 +1577,7 @@ class HomeLoadingScreen {
         height: ScreenUtil.instance.setWidth(200),
         margin: EdgeInsets.only(left: 13, right: 13, bottom: 15, top: 13),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: checkForContainerBackgroundColor(context),
           shape: BoxShape.rectangle,
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -1615,7 +1612,7 @@ class HomeLoadingScreen {
               height: ScreenUtil.instance.setWidth(247),
               width: ScreenUtil.instance.setWidth(223),
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: checkForContainerBackgroundColor(context),
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
@@ -1626,7 +1623,7 @@ class HomeLoadingScreen {
               child: Stack(
                 children: <Widget>[
                   Shimmer.fromColors(
-                    baseColor: Colors.grey[300],
+                    baseColor: checkForContainerBackgroundColor(context),
                     highlightColor: Colors.grey[100],
                     enabled: true,
                     child: Container(
@@ -1649,7 +1646,7 @@ class HomeLoadingScreen {
                             EdgeInsets.symmetric(horizontal: 0, vertical: 7),
                         height: ScreenUtil.instance.setWidth(110),
                         decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: checkForContainerBackgroundColor(context),
                             borderRadius: BorderRadius.circular(15)),
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 8),

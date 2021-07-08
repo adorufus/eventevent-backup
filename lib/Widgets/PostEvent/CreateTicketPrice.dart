@@ -35,7 +35,7 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
         key: thisScaffold,
         appBar: AppBar(
           brightness: Brightness.light,
-          backgroundColor: Colors.white,
+          backgroundColor: appBarColor,
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -71,7 +71,6 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
           ],
         ),
         body: Container(
-          color: Colors.white,
           padding: EdgeInsets.only(left: 15, top: 15),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -85,7 +84,7 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
                   Text(
                     'Ticket Price',
                     style: TextStyle(
-                        color: Colors.black54,
+                        color: checkForAppBarTitleColor(context),
                         fontSize: 40,
                         fontWeight: FontWeight.bold),
                   ),
@@ -110,6 +109,7 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
                   onSubmitted: (value) {
                     navigateToNextStep();
                   },
+                  style: TextStyle(color: checkForTextTitleColor(context)),
                   controller: textController,
                   autocorrect: false,
                   autofocus: false,
@@ -129,6 +129,12 @@ class CreateTicketPriceState extends State<CreateTicketPrice> {
                     );
                   },
                   decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: checkForAppBarTitleColor(context)
+                      )
+                    ),
+                    hintStyle: TextStyle(color: checkForTextTitleColor(context)),
                     hintText: 'enter your ticket price',
                   ),
                 ),

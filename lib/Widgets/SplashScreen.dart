@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'RecycleableWidget/WithdrawConfirmation.dart';
 
 class SplashScreen extends StatefulWidget {
   final FirebaseAnalytics analytics;
@@ -50,6 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
               sendAnalytics('Dashboard');
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
+                  // builder: (context) => WithdrawConfirmation(),
                   builder: (context) => DashboardWidget(
                     isRest: false,
                   ),

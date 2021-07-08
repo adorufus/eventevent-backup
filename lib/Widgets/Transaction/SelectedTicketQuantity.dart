@@ -297,7 +297,7 @@ class _SelectedTicketQuantityWidgetState
                     width: ScreenUtil.instance.setWidth(235),
                     height: ScreenUtil.instance.setWidth(15),
                     child: Text(
-                      widget.eventAddress,
+                      widget.eventAddress != null ? widget.eventAddress : '-',
                       overflow: TextOverflow.ellipsis,
                     )),
                 Divider(

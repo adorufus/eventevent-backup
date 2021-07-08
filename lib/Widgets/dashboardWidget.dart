@@ -532,6 +532,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                   setState(() {
                     if (index == 2 && widget.isRest == false) {
                       showModalBottomSheet(
+                        backgroundColor: Colors.black.withOpacity(0),
                         context: context,
                         builder: (context) {
                           return Container(

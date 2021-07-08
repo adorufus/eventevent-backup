@@ -110,6 +110,7 @@ class _UserTimelineItemState extends State<UserTimelineItem> {
     getTimelineList().then((response) {
       print(response.statusCode);
       print(response.body);
+
       var extractedData = json.decode(response.body);
 
       print('Timeline List -> ${response.body.toString()}');

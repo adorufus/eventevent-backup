@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:eventevent/Providers/ThemeProvider.dart';
 import 'package:eventevent/Widgets/TransactionHistory.dart';
 import 'package:eventevent/Widgets/dashboardWidget.dart';
 import 'package:eventevent/helper/ColumnBuilder.dart';
 import 'package:eventevent/helper/countdownCounter.dart';
 import 'package:eventevent/helper/utils.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:provider/provider.dart';
 import 'package:quiver/async.dart';
 
 import 'package:eventevent/helper/API/baseApi.dart';
@@ -180,7 +182,7 @@ class _WaitTransactionState extends State<WaitTransaction>
       key: _scaffoldKey,
       backgroundColor: checkForBackgroundColor(context),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
@@ -210,7 +212,6 @@ class _WaitTransactionState extends State<WaitTransaction>
               children: <Widget>[
                 Container(
                   height: ScreenUtil.instance.setWidth(380),
-                  color: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -379,8 +380,10 @@ class _WaitTransactionState extends State<WaitTransaction>
                             padding: EdgeInsets.only(
                                 left: 15, right: 7, top: 10, bottom: 10),
                             decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: <BoxShadow>[
+                                color: checkForContainerBackgroundColor(context),
+                                boxShadow: Provider.of<ThemeProvider>
+                                  (context).isDarkMode ? null :
+                                    <BoxShadow>[
                                   BoxShadow(
                                       color: Colors.grey,
                                       blurRadius: 1,
@@ -433,7 +436,7 @@ class _WaitTransactionState extends State<WaitTransaction>
                                             fontWeight: FontWeight.bold,
                                             fontSize:
                                                 ScreenUtil.instance.setSp(15),
-                                            color: Colors.black54),
+                                            color: checkForAppBarTitleColor(context)),
                                       ),
                                     ])
                               ],

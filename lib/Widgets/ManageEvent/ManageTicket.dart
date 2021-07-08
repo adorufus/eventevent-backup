@@ -19,8 +19,7 @@ class ManageTicket extends StatefulWidget {
   final String eventID;
   final isLivestream;
 
-  const ManageTicket({Key key, this.eventID, @required this.isLivestream})
-      : super(key: key);
+  const ManageTicket({Key key, this.eventID, @required this.isLivestream}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -59,11 +58,9 @@ class ManageTicketState extends State<ManageTicket> {
             onTap: () {
               Navigator.pop(context);
             },
-            child:
-                Icon(Icons.arrow_back_ios, color: checkForAppBarTitleColor(context), size: 15)),
+            child: Icon(Icons.arrow_back_ios, color: checkForAppBarTitleColor(context), size: 15)),
         centerTitle: true,
-        title:
-            Text('MANAGE TICKETS', style: TextStyle(color: checkForAppBarTitleColor(context))),
+        title: Text('MANAGE TICKETS', style: TextStyle(color: checkForAppBarTitleColor(context))),
       ),
       body: ticketList == null
           ? HomeLoadingScreen().myTicketLoading()
@@ -80,117 +77,71 @@ class ManageTicketState extends State<ManageTicket> {
                       itemBuilder: (BuildContext context, i) {
                         Color itemColor;
                         String itemPriceText;
-                        ticketList.removeWhere((item) =>
-                            item['event']['ticket_type']['type'] ==
-                            'free_limited_seating');
-                        if (ticketList[i]['paid_ticket_type']['type'] ==
-                                'paid' ||
-                            ticketList[i]['paid_ticket_type']['type'] ==
-                                'paid_seating') {
+                        ticketList.removeWhere((item) => item['event']['ticket_type']['type'] == 'free_limited_seating');
+                        if (ticketList[i]['paid_ticket_type']['type'] == 'paid' || ticketList[i]['paid_ticket_type']['type'] == 'paid_seating') {
                           itemColor = Color(0xFF34B323);
                           itemPriceText = 'Rp' +
                               formatPrice(
                                 price: ticketList[i]['final_price'].toString(),
                               );
-                        } else if (ticketList[i]['event']['ticket_type']
-                                ['type'] ==
-                            'no_ticket') {
+                        } else if (ticketList[i]['event']['ticket_type']['type'] == 'no_ticket') {
                           itemColor = Color(0xFF652D90);
                           itemPriceText = 'NO TICKET';
-                        } else if (ticketList[i]['event']['ticket_type']
-                                ['type'] ==
-                            'on_the_spot') {
+                        } else if (ticketList[i]['event']['ticket_type']['type'] == 'on_the_spot') {
                           itemColor = Color(0xFF652D90);
-                          itemPriceText =
-                              ticketList[i]['event']['ticket_type']['name'];
-                        } else if (ticketList[i]['event']['ticket_type']
-                                ['type'] ==
-                            'free') {
+                          itemPriceText = ticketList[i]['event']['ticket_type']['name'];
+                        } else if (ticketList[i]['event']['ticket_type']['type'] == 'free') {
                           itemColor = Color(0xFFFFAA00);
-                          itemPriceText =
-                              ticketList[i]['event']['ticket_type']['name'];
-                        } else if (ticketList[i]['event']['ticket_type']
-                                ['type'] ==
-                            'free') {
+                          itemPriceText = ticketList[i]['event']['ticket_type']['name'];
+                        } else if (ticketList[i]['event']['ticket_type']['type'] == 'free') {
                           itemColor = Color(0xFFFFAA00);
-                          itemPriceText =
-                              ticketList[i]['event']['ticket_type']['name'];
-                        } else if (ticketList[i]['event']['ticket_type']
-                                ['type'] ==
-                            'paid_live_stream') {
+                          itemPriceText = ticketList[i]['event']['ticket_type']['name'];
+                        } else if (ticketList[i]['event']['ticket_type']['type'] == 'paid_live_stream') {
                           itemColor = itemColor = Color(0xFF34B323);
                           itemPriceText = 'Rp' +
                               formatPrice(
                                 price: ticketList[i]['final_price'].toString(),
                               );
-                        } else if (ticketList[i]['event']['ticket_type']
-                                ['type'] ==
-                            'free_live_stream') {
+                        } else if (ticketList[i]['paid_ticket_type']['type'] == 'free_live_stream') {
                           itemColor = Color(0xFFFFAA00);
-                          itemPriceText =
-                              ticketList[i]['event']['ticket_type']['name'];
-                        } else if (ticketList[i]['event']['ticket_type']
-                                    ['type'] ==
-                                'free_limited' ||
-                            ticketList[i]['event']['ticket_type']['type'] ==
-                                'free_limited_seating') {
+                          itemPriceText = ticketList[i]['event']['ticket_type']['name'];
+                        } else if (ticketList[i]['event']['ticket_type']['type'] == 'free_limited' || ticketList[i]['event']['ticket_type']['type'] == 'free_limited_seating') {
                           itemColor = Color(0xFFFFAA00);
-                          itemPriceText =
-                              ticketList[i]['event']['ticket_type']['name'];
+                          itemPriceText = ticketList[i]['event']['ticket_type']['name'];
                         }
 
                         print(ticketID);
                         return GestureDetector(
                           onTap: () async {
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
                             prefs.setString('Previous Widget', 'AddNewTicket');
 
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => EditTicketDetail(
-                                          ticketTitle: ticketList[i]
-                                              ['ticket_name'],
-                                          ticketImage: ticketList[i]
-                                                  .containsKey("ticket_image")
-                                              ? ticketList[i]['ticket_image']
-                                                  ['secure_url']
-                                              : ticketList[i]['event']
-                                                  ['pictureAvatarPath'],
-                                          ticketQuantity: ticketList[i]
-                                              ['quantity'],
-                                          ticketDescription: ticketList[i]
-                                              ['descriptions'],
-                                          ticketSalesStartDate: ticketList[i]
-                                              ['sales_start_date'],
-                                          ticketSalesEndDate: ticketList[i]
-                                              ['sales_end_date'],
-                                          eventStartDate: ticketList[i]['event']
-                                              ['dateStart'],
-                                          eventEndDate: ticketList[i]['event']
-                                              ['dateEnd'],
-                                          eventStartTime: ticketList[i]['event']
-                                              ['timeStart'],
-                                          eventEndTime: ticketList[i]['event']
-                                              ['timeEnd'],
+                                          ticketTitle: ticketList[i]['ticket_name'],
+                                          ticketImage:
+                                              ticketList[i].containsKey("ticket_image") ? ticketList[i]['ticket_image']['secure_url'] : ticketList[i]['event']['pictureAvatarPath'],
+                                          ticketQuantity: ticketList[i]['quantity'],
+                                          ticketDescription: ticketList[i]['descriptions'],
+                                          ticketSalesStartDate: ticketList[i]['sales_start_date'],
+                                          ticketSalesEndDate: ticketList[i]['sales_end_date'],
+                                          eventStartDate: ticketList[i]['event']['dateStart'],
+                                          eventEndDate: ticketList[i]['event']['dateEnd'],
+                                          eventStartTime: ticketList[i]['event']['timeStart'],
+                                          eventEndTime: ticketList[i]['event']['timeEnd'],
                                           ticketDetail: ticketList[i],
                                         )));
                           },
                           child: Container(
                             height: ScreenUtil.instance.setWidth(170),
                             width: MediaQuery.of(context).size.width,
-                            margin: EdgeInsets.only(
-                                left: 14, right: 14, bottom: 10),
+                            margin: EdgeInsets.only(left: 14, right: 14, bottom: 10),
                             decoration: BoxDecoration(
                                 color: checkForContainerBackgroundColor(context),
-                                boxShadow: Provider.of<ThemeProvider>
-                                  (context).isDarkMode ? null : [
-                                  BoxShadow(
-                                      blurRadius: 2,
-                                      spreadRadius: 5,
-                                      color: Color(0xff8a8a8b).withOpacity(0.2))
-                                ],
+                                boxShadow:
+                                    Provider.of<ThemeProvider>(context).isDarkMode ? null : [BoxShadow(blurRadius: 2, spreadRadius: 5, color: Color(0xff8a8a8b).withOpacity(0.2))],
                                 borderRadius: BorderRadius.circular(10)),
                             child: Padding(
                               padding: EdgeInsets.only(left: 11),
@@ -207,31 +158,21 @@ class ManageTicketState extends State<ManageTicket> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
                                       child: Image.network(
-                                        ticketList[i]
-                                                .containsKey("ticket_image")
-                                            ? ticketList[i]['ticket_image']
-                                                ['secure_url']
-                                            : ticketList[i]['event']
-                                                ['pictureAvatarPath'],
+                                        ticketList[i].containsKey("ticket_image") ? ticketList[i]['ticket_image']['secure_url'] : ticketList[i]['event']['pictureAvatarPath'],
                                         fit: BoxFit.fill,
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
-                                      width: ScreenUtil.instance.setWidth(9)),
+                                  SizedBox(width: ScreenUtil.instance.setWidth(9)),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Container(
                                         width: 200,
                                         child: Text(
                                           ticketList[i]['ticket_name'],
-                                          style: TextStyle(
-                                              fontSize:
-                                                  ScreenUtil.instance.setSp(20),
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontSize: ScreenUtil.instance.setSp(20), fontWeight: FontWeight.bold),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
@@ -240,36 +181,19 @@ class ManageTicketState extends State<ManageTicket> {
                                       ),
                                       Container(
                                         padding: EdgeInsets.all(5),
-                                        height: ScreenUtil.instance
-                                            .setWidth(32 * 1.1),
-                                        width: ScreenUtil.instance
-                                            .setWidth(110 * 1.1),
+                                        height: ScreenUtil.instance.setWidth(32 * 1.1),
+                                        width: ScreenUtil.instance.setWidth(110 * 1.1),
                                         decoration: BoxDecoration(
-                                          boxShadow: <BoxShadow>[
-                                            BoxShadow(
-                                                color:
-                                                    itemColor.withOpacity(0.4),
-                                                blurRadius: 2,
-                                                spreadRadius: 1.5)
-                                          ],
+                                          boxShadow: <BoxShadow>[BoxShadow(color: itemColor.withOpacity(0.4), blurRadius: 2, spreadRadius: 1.5)],
                                           color: itemColor,
-                                          borderRadius:
-                                              BorderRadius.circular(30),
+                                          borderRadius: BorderRadius.circular(30),
                                         ),
-                                        child: ticketList[i][
-                                                        'paid_ticket_type_id'] ==
-                                                    '2' ||
-                                                ticketList[i][
-                                                        'paid_ticket_type_id'] ==
-                                                    '7'
+                                        child: ticketList[i]['paid_ticket_type_id'] == '2' || ticketList[i]['paid_ticket_type_id'] == '7'
                                             ? Container()
                                             : Center(
                                                 child: Text(
                                                 itemPriceText,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                               )),
                                       ),
                                       SizedBox(
@@ -277,13 +201,8 @@ class ManageTicketState extends State<ManageTicket> {
                                       ),
                                       Container(
                                         margin: EdgeInsets.only(left: 12),
-                                        child: Text(
-                                            'Ticket(s) left: ${(int.parse(ticketList[i]['quantity']) - int.parse(ticketList[i]['sold']))} / ${ticketList[i]['quantity']}',
-                                            style: TextStyle(
-                                                fontSize: ScreenUtil.instance
-                                                    .setSp(12),
-                                                color: Colors.grey),
-                                            textAlign: TextAlign.center),
+                                        child: Text('Ticket(s) left: ${(int.parse(ticketList[i]['quantity']) - int.parse(ticketList[i]['sold']))} / ${ticketList[i]['quantity']}',
+                                            style: TextStyle(fontSize: ScreenUtil.instance.setSp(12), color: Colors.grey), textAlign: TextAlign.center),
                                       )
                                     ],
                                   ),
@@ -309,8 +228,7 @@ class ManageTicketState extends State<ManageTicket> {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
 
                       prefs.setInt('NEW_EVENT_ID', int.parse(widget.eventID));
                       print(prefs.getInt('NEW_EVENT_ID'));
@@ -337,10 +255,7 @@ class ManageTicketState extends State<ManageTicket> {
                           SizedBox(height: 10),
                           Text(
                             'Add Ticket',
-                            style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(18),
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[300]),
+                            style: TextStyle(fontSize: ScreenUtil.instance.setSp(18), fontWeight: FontWeight.bold, color: Colors.grey[300]),
                           )
                         ],
                       ),
@@ -354,13 +269,9 @@ class ManageTicketState extends State<ManageTicket> {
 
   Future getTicketList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String url = BaseApi().apiUrl +
-        '/ticket_setup/list?X-API-KEY=$API_KEY&eventID=${widget.eventID}';
+    String url = BaseApi().apiUrl + '/ticket_setup/list?X-API-KEY=$API_KEY&eventID=${widget.eventID}';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTH_KEY,
-      'cookie': prefs.getString('Session')
-    });
+    final response = await http.get(url, headers: {'Authorization': AUTH_KEY, 'cookie': prefs.getString('Session')});
 
     print(response.statusCode);
     print(response.body);
@@ -380,13 +291,9 @@ class ManageTicketState extends State<ManageTicket> {
 
   Future getTicketData(String id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String url =
-        BaseApi().apiUrl + '/ticket_setup/tickets?X-API-KEY=$API_KEY&id=$id';
+    String url = BaseApi().apiUrl + '/ticket_setup/tickets?X-API-KEY=$API_KEY&id=$id';
 
-    final response = await http.get(url, headers: {
-      'Authorization': AUTH_KEY,
-      'cookie': prefs.getString('Session')
-    });
+    final response = await http.get(url, headers: {'Authorization': AUTH_KEY, 'cookie': prefs.getString('Session')});
 
     print(response.statusCode);
     print(response.body);

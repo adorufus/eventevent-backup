@@ -123,6 +123,7 @@ class WithdrawConfirmationState extends State<WithdrawConfirmation> {
       backgroundColor: checkForBackgroundColor(context),
       key: scaffoldKey,
       appBar: AppBar(
+        backgroundColor: appBarColor,
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
