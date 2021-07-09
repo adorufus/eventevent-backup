@@ -25,6 +25,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:app_tracking_transparancy/app_tracking_transparancy.dart';
 import 'PostEvent/PostEvent.dart';
 import 'eventCatalogWidget.dart';
 import 'package:rxdart/rxdart.dart';
@@ -150,8 +151,17 @@ class _DashboardWidgetState extends State<DashboardWidget>
     });
   }
 
+  Future<void> initPlatformState() async {
+    if (!mounted) return;
+
+    if(await AppTrackingTransparancy.trackingAuthorizationStatus == TrackingStatus.notDetermined){
+      final TrackingStatus status = await AppTrackingTransparancy.requestTrakingAuthorization();
+    }
+  }
+
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => initPlatformState());
     listenDynamicLink();
 
     _saveCurrentRoute('/Dashboard');

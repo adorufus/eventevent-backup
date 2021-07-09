@@ -125,6 +125,8 @@ dependencies:
 #  flutter_svg: ^0.15.0
   flutter_date_pickers:
     path: flutter_date_pickers
+  app_tracking_transparancy:
+    path: app_tracking_transparancy
 
 dev_dependencies:
   flutter_test:
