@@ -243,18 +243,19 @@ class _EventCatalogState extends State<EventCatalog>
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
-                      child: ProgressiveImage.assetNetwork(
-                          placeholder: 'assets/grey-fade.jpg',
-                          thumbnail: bannerData["image"],
-                          image: bannerData["image"],
-                          width: 350,
-                          height: 180),
-                      // CachedNetworkImage(
-                      //     imageUrl: bannerData["image"]
-                      //         .toString()
-                      //         .replaceAll("\n", ""),
-                      //     fit: BoxFit.cover,
-                      //     placeholder: (context, url) => Container()),
+                      child: 
+                      // ProgressiveImage.assetNetwork(
+                      //     placeholder: 'assets/grey-fade.jpg',
+                      //     thumbnail: bannerData["image"],
+                      //     image: bannerData["image"],
+                      //     width: 350,
+                      //     height: 180),
+                      CachedNetworkImage(
+                          imageUrl: bannerData["image"]
+                              .toString()
+                              .replaceAll("\n", ""),
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Container()),
                     ),
                   ));
             },
