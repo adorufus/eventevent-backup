@@ -32,6 +32,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:app_tracking_transparancy/app_tracking_transparancy.dart';
 import 'Widgets/loginRegisterWidget.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -86,15 +87,10 @@ class _RunAppState extends State<RunApp> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
     // CleverTapPlugin.setDebugLevel(3);
     // CleverTapPlugin.createNotificationChannel("com.eventevent.android", "Eventevent clevertap", "for clevertap notification", 3, true);
     // CleverTapPlugin.registerForPush();
     // var initialUrl = CleverTapPlugin.getInitialUrl();
-  }
-
-  Future<void> initPlatformState() async {
-    if (!mounted) return;
   }
 
   // void activateClevertapHandler() {

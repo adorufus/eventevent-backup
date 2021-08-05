@@ -1,4 +1,6 @@
 PODS:
+  - app_tracking_transparancy (0.0.1):
+    - Flutter
   - auto_orientation (0.0.1):
     - Flutter
   - Bolts (1.9.0):
@@ -262,6 +264,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - app_tracking_transparancy (from `.symlinks/plugins/app_tracking_transparancy/ios`)
   - auto_orientation (from `.symlinks/plugins/auto_orientation/ios`)
   - Branch
   - camera (from `.symlinks/plugins/camera/ios`)
@@ -355,6 +358,8 @@ SPEC REPOS:
     - TOCropViewController
 
 EXTERNAL SOURCES:
+  app_tracking_transparancy:
+    :path: ".symlinks/plugins/app_tracking_transparancy/ios"
   auto_orientation:
     :path: ".symlinks/plugins/auto_orientation/ios"
   camera:
@@ -467,6 +472,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
+  app_tracking_transparancy: 0aea7318d645f183873cd350254926826a25bf57
   auto_orientation: 2941c44ebe5c3d41016001597ab03e81a92a26ce
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   Branch: 9b299693ee54b308ff8c18146afe1f711c2069ec

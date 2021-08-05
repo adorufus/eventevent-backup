@@ -1,0 +1,22 @@
+PODS:
+  - app_tracking_transparancy (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - app_tracking_transparancy (from `.symlinks/plugins/app_tracking_transparancy/ios`)
+  - Flutter (from `Flutter`)
+
+EXTERNAL SOURCES:
+  app_tracking_transparancy:
+    :path: ".symlinks/plugins/app_tracking_transparancy/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  app_tracking_transparancy: 0aea7318d645f183873cd350254926826a25bf57
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+
+PODFILE CHECKSUM: 083258d7f5e80b42ea9bfee905fe93049bc04c64
+
+COCOAPODS: 1.10.1

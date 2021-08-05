@@ -97,6 +97,8 @@
 	<string>EventEvent need to access to your gallery, so you can choose your photo and upload it to EventEvent, maybe for event poster, or for your timeline.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>EventEvent need permission for SpeechRecognition, so you can speak to your audience when broadcasting</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This app uses tracking data to show you personalized event recommendation</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
