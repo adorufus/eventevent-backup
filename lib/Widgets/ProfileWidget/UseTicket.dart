@@ -321,10 +321,22 @@ class UseTicketState extends State<UseTicket> {
                         widget.status == 'expired' ||
                         widget.status == 'used'
                     ? () {
-                        print(widget.status);
+                        if (widget.ticketDetail['livestream']['zoom_id'] !=
+                            "") {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ZoomTicketPage(
+                                  zoomLink: widget.zoomId,
+                                  zoomDesc: widget.zoomDesc),
+                            ),
+                          );
+                        } else {
+                          print(widget.status);
+                        }
                       }
                     : () {
-                        widget.zoomId != ""
+                        widget.ticketDetail['livestream']['zoom_id'] != ""
                             ? Navigator.push(
                                 context,
                                 MaterialPageRoute(

@@ -68,15 +68,17 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
   getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    print('ticket type id: '  + prefs.getString('NEW_EVENT_TICKET_TYPE_ID'));
+    print('ticket type id: ' + prefs.getString('NEW_EVENT_TICKET_TYPE_ID'));
 
     setState(() {
       ticketTypeID = prefs.getString('SETUP_TICKET_PAID_TICKET_TYPE');
       eventNameController.text = prefs.getString('SETUP_TICKET_NAME');
       imageUri = prefs.getString('SETUP_TICKET_POSTER');
       ticketQuantityController.text = prefs.getString('SETUP_TICKET_QTY');
-      priceController.text = ticketTypeID == '5' ||
-                                        ticketTypeID == '10' || ticketTypeID == '7' ? "0" : prefs.getString('SETUP_TICKET_PRICE');
+      priceController.text =
+          ticketTypeID == '5' || ticketTypeID == '10' || ticketTypeID == '7'
+              ? "0"
+              : prefs.getString('SETUP_TICKET_PRICE');
       minTicketController.text = prefs.getString('SETUP_TICKET_MIN_BOUGHT');
       maxTicketController.text = prefs.getString('SETUP_TICKET_MAX_BOUGHT');
       __curValue =
@@ -115,26 +117,28 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
     });
 
     Map ticketDetail = {
-        'id': ticketTypeID,
-        'ticket_name': eventNameController.text,
-        'quantity': ticketQuantityController.text,
-        'price': priceController.text,
-        'min_ticket': minTicketController.text,
-        'max_ticket': maxTicketController.text,
-        'sales_start_date': startDate + ' ' + startTime,
-        'sales_end_date': endDate + ' ' + endTime,
-        'show_remaining_ticket': __curValue.toString(),
-        'single_ticket': __curValue2.toString(),
-        'description': descController.text,
-        'image_url': imageUri != null
-            ? imageUri
-            : ''
-      };
+      'id': ticketTypeID,
+      'ticket_name': eventNameController.text,
+      'quantity': ticketQuantityController.text,
+      'price': priceController.text,
+      'min_ticket': minTicketController.text,
+      'max_ticket': maxTicketController.text,
+      'sales_start_date': startDate + ' ' + startTime,
+      'sales_end_date': endDate + ' ' + endTime,
+      'show_remaining_ticket': __curValue.toString(),
+      'single_ticket': __curValue2.toString(),
+      'description': descController.text,
+      'image_url': imageUri != null ? imageUri : ''
+    };
 
     Navigator.push(
-        context, CupertinoPageRoute(builder: (context) => CreateTicketFinal(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => CreateTicketFinal(
           ticketDetail: ticketDetail,
-        )));
+        ),
+      ),
+    );
   }
 
   @override
@@ -144,8 +148,7 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
     getData();
     locationSubcription =
         location.onLocationChanged().listen((LocationData result) {
-          if(!mounted)
-            return;
+      if (!mounted) return;
       setState(() {
         currentLocation = result;
       });
@@ -192,32 +195,28 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
         },
         child: Container(
           height: 60,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
+          decoration: BoxDecoration(color: Colors.white, boxShadow: [
+            BoxShadow(
                 blurRadius: 2,
                 spreadRadius: 1.5,
                 color: Color(0xff8a8a8b).withOpacity(.3),
-                offset: Offset(0, -1)
-              )
-            ]
-          ),
+                offset: Offset(0, -1))
+          ]),
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 13, vertical: 10),
             height: ScreenUtil.instance.setWidth(50),
             child: ClipRRect(
               clipBehavior: Clip.antiAlias,
               borderRadius: BorderRadius.circular(50),
-                          child: RaisedButton(
+              child: RaisedButton(
                 color: eventajaGreenTeal,
                 onPressed: () {
                   saveFinalData();
                 },
                 child: Text(
                   'CREATE TICKET',
-                  style:
-                      TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -331,7 +330,8 @@ class CreateTicketReviewState extends State<CreateTicketReview> {
                                 height: ScreenUtil.instance.setWidth(50),
                                 padding: EdgeInsets.only(left: 10),
                                 child: ticketTypeID == '5' ||
-                                        ticketTypeID == '10' || ticketTypeID == '7'
+                                        ticketTypeID == '10' ||
+                                        ticketTypeID == '7'
                                     ? Text('FREE',
                                         style: TextStyle(
                                             fontSize:
