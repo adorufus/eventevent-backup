@@ -224,7 +224,7 @@ class _EventCatalogState extends State<EventCatalog>
                     }
                   },
                   child: Container(
-                    width: MediaQuery.of(context).devicePixelRatio * 2645.0,
+                    width: MediaQuery.of(context).size.width,
                     margin: EdgeInsets.only(
                         left: 13, right: 13, bottom: 15, top: 13),
                     decoration: BoxDecoration(
