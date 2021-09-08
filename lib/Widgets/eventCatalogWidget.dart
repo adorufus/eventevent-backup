@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 // import 'package:animations/animations.dart';
 import 'package:eventevent/Database/Database.dart';
@@ -254,7 +255,7 @@ class _EventCatalogState extends State<EventCatalog>
                           imageUrl: bannerData["image"]
                               .toString()
                               .replaceAll("\n", ""),
-                          fit: BoxFit.cover,
+                          fit: Platform.isIOS ? BoxFit.fill : BoxFit.cover,
                           placeholder: (context, url) => Container()),
                     ),
                   ));
